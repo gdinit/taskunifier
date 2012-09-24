@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.taskunifier.com" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.taskunifier.com" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="TaskComplexTypes.xsd"/>
+	<xs:element name="tasks" type="taskstype"/>
+	<xs:element name="task" type="tasktype"/>
+</xs:schema>
