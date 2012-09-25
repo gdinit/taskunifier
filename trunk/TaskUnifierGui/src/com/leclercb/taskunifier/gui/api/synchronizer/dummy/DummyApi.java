@@ -34,6 +34,7 @@ package com.leclercb.taskunifier.gui.api.synchronizer.dummy;
 
 import java.util.Properties;
 
+import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.synchronizer.Connection;
 import com.leclercb.taskunifier.api.synchronizer.Synchronizer;
@@ -87,6 +88,11 @@ public class DummyApi extends SynchronizerApi {
 	@Override
 	public void createRepeatTask(Task task) {
 		PluginRepeatUtils.createRepeatTask(task);
+	}
+	
+	@Override
+	public void flagAsNew(Model model) {
+		
 	}
 	
 	@Override
