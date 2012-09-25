@@ -29,7 +29,7 @@ public class SampleGuiPlugin extends SamplePlugin implements SynchronizerGuiPlug
 	
 	@Override
 	public int getPluginApiVersion() {
-		return 19; // See: Constants.PLUGIN_API_VERSION
+		return 31; // See: Constants.PLUGIN_API_VERSION
 	}
 	
 	@Override

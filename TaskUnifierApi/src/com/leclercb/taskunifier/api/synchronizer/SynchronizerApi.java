@@ -35,6 +35,7 @@ package com.leclercb.taskunifier.api.synchronizer;
 import java.util.Properties;
 
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 
@@ -134,6 +135,8 @@ public abstract class SynchronizerApi {
 	public void createRepeatTask(Task task) {
 		
 	}
+	
+	public abstract void flagAsNew(Model model);
 	
 	public abstract Connection getConnection(Properties properties)
 			throws SynchronizerException;

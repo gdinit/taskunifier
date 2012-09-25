@@ -2,6 +2,7 @@ package com.leclercb.taskunifier.plugin.sample;
 
 import java.util.Properties;
 
+import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.synchronizer.Connection;
 import com.leclercb.taskunifier.api.synchronizer.Synchronizer;
 import com.leclercb.taskunifier.api.synchronizer.SynchronizerApi;
@@ -20,6 +21,11 @@ public class SampleApi extends SynchronizerApi {
 	
 	public SampleApi() {
 		super("SAMPLE", "Sample", "http://www.taskunifier.com");
+	}
+	
+	@Override
+	public void flagAsNew(Model model) {
+		
 	}
 	
 	@Override

@@ -44,6 +44,7 @@ import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.taskunifier.gui.actions.ActionManageSynchronizerPlugins;
 import com.leclercb.taskunifier.gui.actions.ActionPluginConfiguration;
 import com.leclercb.taskunifier.gui.actions.synchronize.ActionSynchronizeAll;
+import com.leclercb.taskunifier.gui.actions.synchronize.ActionSynchronizeCopyAll;
 import com.leclercb.taskunifier.gui.actions.synchronize.ActionSynchronizePushAll;
 import com.leclercb.taskunifier.gui.actions.synchronize.ActionSynchronizeResetAll;
 import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
@@ -236,6 +237,22 @@ public class SynchronizationConfigurationPanel extends DefaultConfigurationPanel
 					"RESET_ALL",
 					null,
 					new ConfigurationFieldType.Button(actionResetAll)));
+			
+			this.addField(new ConfigurationField(
+					"COPY_ALL_LABEL",
+					null,
+					new ConfigurationFieldType.Label(
+							Translations.getString(
+									"configuration.synchronization.copy_all",
+									SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().getApiName()))));
+			
+			ActionSynchronizeCopyAll actionCopyAll = new ActionSynchronizeCopyAll(
+					this.getConfigurationGroup());
+			
+			this.addField(new ConfigurationField(
+					"COPY_ALL",
+					null,
+					new ConfigurationFieldType.Button(actionCopyAll)));
 		}
 		
 		Main.getUserSettings().addPropertyChangeListener(
@@ -283,6 +300,9 @@ public class SynchronizationConfigurationPanel extends DefaultConfigurationPanel
 		
 		if (this.containsId("RESET_ALL"))
 			this.setEnabled("RESET_ALL", enabled);
+		
+		if (this.containsId("COPY_ALL"))
+			this.setEnabled("COPY_ALL", enabled);
 	}
 	
 	@Override
@@ -303,6 +323,8 @@ public class SynchronizationConfigurationPanel extends DefaultConfigurationPanel
 			
 			JLabel resetAllLabel = (JLabel) this.getField("RESET_ALL_LABEL").getType().getFieldComponent();
 			
+			JLabel copyAllLabel = (JLabel) this.getField("COPY_ALL_LABEL").getType().getFieldComponent();
+			
 			synchronizeAllLabel.setText(Translations.getString(
 					"configuration.synchronization.synchronize_all",
 					apiName));
@@ -314,6 +336,10 @@ public class SynchronizationConfigurationPanel extends DefaultConfigurationPanel
 			
 			resetAllLabel.setText(Translations.getString(
 					"configuration.synchronization.reset_all",
+					apiName));
+			
+			copyAllLabel.setText(Translations.getString(
+					"configuration.synchronization.copy_all",
 					apiName));
 		}
 	}
