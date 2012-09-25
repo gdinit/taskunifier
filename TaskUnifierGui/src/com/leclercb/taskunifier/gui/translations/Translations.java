@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.IllegalFormatException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
@@ -136,7 +137,12 @@ public final class Translations {
 	
 	public static String getString(String key, Object... args) {
 		String value = getString(key);
-		return String.format(value, args);
+		
+		try {
+			return String.format(value, args);
+		} catch (IllegalFormatException e) {
+			return value;
+		}
 	}
 	
 }

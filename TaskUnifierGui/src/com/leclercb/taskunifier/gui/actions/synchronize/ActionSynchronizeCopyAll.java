@@ -34,7 +34,7 @@ public class ActionSynchronizeCopyAll extends ActionSynchronize {
 		
 		this.putValue(
 				Action.NAME,
-				Translations.getString("action.synchronize_push_all"));
+				Translations.getString("action.synchronize_copy_all"));
 		
 		this.configurationGroup = configurationGroup;
 	}

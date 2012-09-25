@@ -206,6 +206,11 @@ public class SynchronizationConfigurationPanel extends DefaultConfigurationPanel
 					new ConfigurationFieldType.Button(actionSynchronizeAll)));
 			
 			this.addField(new ConfigurationField(
+					"SEPARATOR_6",
+					null,
+					new ConfigurationFieldType.Separator()));
+			
+			this.addField(new ConfigurationField(
 					"PUSH_ALL_LABEL",
 					null,
 					new ConfigurationFieldType.Label(
@@ -221,6 +226,11 @@ public class SynchronizationConfigurationPanel extends DefaultConfigurationPanel
 					"PUSH_ALL",
 					null,
 					new ConfigurationFieldType.Button(actionPushAll)));
+			
+			this.addField(new ConfigurationField(
+					"SEPARATOR_7",
+					null,
+					new ConfigurationFieldType.Separator()));
 			
 			this.addField(new ConfigurationField(
 					"RESET_ALL_LABEL",
@@ -239,11 +249,17 @@ public class SynchronizationConfigurationPanel extends DefaultConfigurationPanel
 					new ConfigurationFieldType.Button(actionResetAll)));
 			
 			this.addField(new ConfigurationField(
+					"SEPARATOR_8",
+					null,
+					new ConfigurationFieldType.Separator()));
+			
+			this.addField(new ConfigurationField(
 					"COPY_ALL_LABEL",
 					null,
 					new ConfigurationFieldType.Label(
 							Translations.getString(
 									"configuration.synchronization.copy_all",
+									SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().getApiName(),
 									SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().getApiName()))));
 			
 			ActionSynchronizeCopyAll actionCopyAll = new ActionSynchronizeCopyAll(
@@ -340,6 +356,7 @@ public class SynchronizationConfigurationPanel extends DefaultConfigurationPanel
 			
 			copyAllLabel.setText(Translations.getString(
 					"configuration.synchronization.copy_all",
+					apiName,
 					apiName));
 		}
 	}
