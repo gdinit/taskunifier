@@ -8,7 +8,6 @@ components.statusbar.StatusBarElements
 components.tasksearcheredit
 components.tasksearchertree
 main
-swing (as of TUTagList.java)
 utils
 
 REVIEWED

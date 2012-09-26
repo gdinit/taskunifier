@@ -42,6 +42,7 @@ import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.event.listchange.ListChangeSupport;
 import com.leclercb.commons.api.event.listchange.ListChangeSupported;
+import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
 import com.leclercb.taskunifier.api.models.Tag;
 import com.leclercb.taskunifier.api.models.TagList;
 import com.leclercb.taskunifier.api.models.utils.TaskTagList;
@@ -61,7 +62,8 @@ public class TUTagListModel extends DefaultListModel implements ListChangeSuppor
 			cb.addItemListener(this);
 		}
 		
-		TaskTagList.getInstance().addListChangeListener(this);
+		TaskTagList.getInstance().addListChangeListener(
+				new WeakListChangeListener(TaskTagList.getInstance(), this));
 	}
 	
 	public void updateCheckBoxStates(TagList tags) {
@@ -71,7 +73,7 @@ public class TUTagListModel extends DefaultListModel implements ListChangeSuppor
 			boolean selected = false;
 			
 			for (Tag tag : tags) {
-				if (checkBox.getText().equalsIgnoreCase(tag.toString())) {
+				if (new Tag(checkBox.getText()).equals(tag)) {
 					selected = true;
 					break;
 				}
@@ -87,9 +89,8 @@ public class TUTagListModel extends DefaultListModel implements ListChangeSuppor
 		for (int i = 0; i < this.size(); i++) {
 			JCheckBox checkBox = (JCheckBox) this.getElementAt(i);
 			
-			if (new Tag(checkBox.getText()).equals(tag)) {
+			if (new Tag(checkBox.getText()).equals(tag))
 				return checkBox;
-			}
 		}
 		
 		return null;

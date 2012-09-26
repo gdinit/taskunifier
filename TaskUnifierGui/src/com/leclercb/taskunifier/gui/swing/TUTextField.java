@@ -59,7 +59,7 @@ public class TUTextField extends JPanel {
 	private void initialize(String label, String text) {
 		this.textField = new JTextField();
 		
-		this.setLayout(new BorderLayout(3, 0));
+		this.setLayout(new BorderLayout());
 		
 		FormBuilder builder = new FormBuilder(
 				"right:pref, 4dlu, fill:default:grow");

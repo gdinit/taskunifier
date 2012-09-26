@@ -50,12 +50,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
+import com.leclercb.commons.api.event.action.WeakActionListener;
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessage;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 
-public class TUWorkerDialog<T> extends JDialog implements ListChangeListener {
+public class TUWorkerDialog<T> extends JDialog implements ListChangeListener, ActionListener {
 	
 	private TUWorker<T> worker;
 	
@@ -152,20 +153,21 @@ public class TUWorkerDialog<T> extends JDialog implements ListChangeListener {
 		if (visible) {
 			this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			
-			this.worker.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent event) {
-					TUWorkerDialog.this.setCursor(null);
-					TUWorkerDialog.this.setVisible(false);
-					TUWorkerDialog.this.dispose();
-				}
-			});
+			this.worker.addActionListener(new WeakActionListener(
+					this.worker,
+					this));
 			
 			this.worker.execute();
 		}
 		
 		super.setVisible(visible);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		this.setCursor(null);
+		this.setVisible(false);
+		this.dispose();
 	}
 	
 }

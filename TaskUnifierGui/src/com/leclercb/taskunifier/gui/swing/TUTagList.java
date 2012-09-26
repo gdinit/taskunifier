@@ -120,7 +120,7 @@ public class TUTagList extends JPanel {
 			@Override
 			public void listChange(ListChangeEvent event) {
 				Tag tag = (Tag) event.getValue();
-				TagList tags = TagList.fromString(TUTagList.this.text.getText());
+				TagList tags = TUTagList.this.getTags();
 				
 				if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
 					tags.addTag(tag);
