@@ -98,13 +98,7 @@ public class TUTagList extends JPanel {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				String text = TUTagList.this.text.getText();
-				String[] tags = text.split(",");
-				for (int i = 0; i < tags.length; i++) {
-					tags[i] = tags[i].trim();
-				}
-				
-				TUTagList.this.model.updateCheckBoxStates(tags);
+				TUTagList.this.model.updateCheckBoxStates(TUTagList.this.getTags());
 				
 				TUTagList.this.popup.show(
 						TUTagList.this.button,

@@ -64,14 +64,14 @@ public class TUTagListModel extends DefaultListModel implements ListChangeSuppor
 		TaskTagList.getInstance().addListChangeListener(this);
 	}
 	
-	public void updateCheckBoxStates(String[] tags) {
+	public void updateCheckBoxStates(TagList tags) {
 		for (int i = 0; i < this.size(); i++) {
 			JCheckBox checkBox = (JCheckBox) this.getElementAt(i);
 			
 			boolean selected = false;
 			
-			for (String tag : tags) {
-				if (checkBox.getText().equalsIgnoreCase(tag)) {
+			for (Tag tag : tags) {
+				if (checkBox.getText().equalsIgnoreCase(tag.toString())) {
 					selected = true;
 					break;
 				}

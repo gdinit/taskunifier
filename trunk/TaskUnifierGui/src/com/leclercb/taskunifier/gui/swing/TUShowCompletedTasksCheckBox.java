@@ -39,10 +39,11 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JCheckBox;
 
+import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public class TUShowCompletedTasksCheckBox extends JCheckBox {
+public class TUShowCompletedTasksCheckBox extends JCheckBox implements PropertyChangeListener {
 	
 	public TUShowCompletedTasksCheckBox() {
 		super(
@@ -59,16 +60,7 @@ public class TUShowCompletedTasksCheckBox extends JCheckBox {
 		
 		Main.getSettings().addPropertyChangeListener(
 				"tasksearcher.show_completed_tasks",
-				new PropertyChangeListener() {
-					
-					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
-						boolean selected = Main.getSettings().getBooleanProperty(
-								"tasksearcher.show_completed_tasks");
-						TUShowCompletedTasksCheckBox.this.setSelected(selected);
-					}
-					
-				});
+				new WeakPropertyChangeListener(Main.getSettings(), this));
 		
 		this.addActionListener(new ActionListener() {
 			
@@ -80,6 +72,13 @@ public class TUShowCompletedTasksCheckBox extends JCheckBox {
 			}
 			
 		});
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		boolean selected = Main.getSettings().getBooleanProperty(
+				"tasksearcher.show_completed_tasks");
+		this.setSelected(selected);
 	}
 	
 }
