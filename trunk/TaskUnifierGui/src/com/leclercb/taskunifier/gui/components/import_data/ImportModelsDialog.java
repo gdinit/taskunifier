@@ -77,11 +77,12 @@ public class ImportModelsDialog extends AbstractImportDialog {
 	@Override
 	protected void importFromFile(final String file) throws Exception {
 		Synchronizing.getInstance().setSynchronizing(true);
+		SynchronizerUtils.setTaskRepeatEnabled(false);
+		
+		ZipFile zip = null;
 		
 		try {
-			SynchronizerUtils.setTaskRepeatEnabled(false);
-			
-			ZipFile zip = new ZipFile(new File(file));
+			zip = new ZipFile(new File(file));
 			
 			for (Enumeration<?> e = zip.getEntries(); e.hasMoreElements();) {
 				ZipArchiveEntry entry = (ZipArchiveEntry) e.nextElement();
@@ -115,6 +116,13 @@ public class ImportModelsDialog extends AbstractImportDialog {
 							zip.getInputStream(entry));
 			}
 		} finally {
+			try {
+				zip.close();
+			} catch (Exception e) {
+				
+			}
+			
+			SynchronizerUtils.setTaskRepeatEnabled(true);
 			Synchronizing.getInstance().setSynchronizing(false);
 		}
 	}

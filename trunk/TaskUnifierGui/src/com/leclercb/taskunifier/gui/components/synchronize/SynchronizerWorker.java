@@ -246,52 +246,56 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 					
 				});
 				
-				if (this.isStopped())
-					return null;
-				
-				TUSwingUtilities.invokeAndWait(new Runnable() {
-					
-					@Override
-					public void run() {
-						finalConnection.saveParameters(Main.getUserSettings());
-					}
-					
-				});
-				
-				final Synchronizer synchronizer = plugin.getSynchronizerApi().getSynchronizer(
-						Main.getUserSettings(),
-						connection);
-				
-				synchronizer.loadParameters(Main.getUserSettings());
-				
 				try {
-					if (type == Type.PUBLISH) {
-						synchronizer.publish(this.getEDTMonitor());
-					} else if (type == Type.SYNCHRONIZE) {
-						SynchronizerChoice choice = Main.getUserSettings().getEnumProperty(
-								"synchronizer.choice",
-								SynchronizerChoice.class);
-						
-						synchronizer.synchronize(choice, this.getEDTMonitor());
-					}
+					if (this.isStopped())
+						return null;
 					
 					TUSwingUtilities.invokeAndWait(new Runnable() {
 						
 						@Override
 						public void run() {
-							synchronizer.saveParameters(Main.getUserSettings());
+							finalConnection.saveParameters(Main.getUserSettings());
 						}
 						
 					});
-				} catch (SynchronizerException e) {
-					SynchronizerWorker.this.handleSynchronizerException(
-							e,
-							plugin);
 					
-					return null;
+					final Synchronizer synchronizer = plugin.getSynchronizerApi().getSynchronizer(
+							Main.getUserSettings(),
+							connection);
+					
+					synchronizer.loadParameters(Main.getUserSettings());
+					
+					try {
+						if (type == Type.PUBLISH) {
+							synchronizer.publish(this.getEDTMonitor());
+						} else if (type == Type.SYNCHRONIZE) {
+							SynchronizerChoice choice = Main.getUserSettings().getEnumProperty(
+									"synchronizer.choice",
+									SynchronizerChoice.class);
+							
+							synchronizer.synchronize(
+									choice,
+									this.getEDTMonitor());
+						}
+						
+						TUSwingUtilities.invokeAndWait(new Runnable() {
+							
+							@Override
+							public void run() {
+								synchronizer.saveParameters(Main.getUserSettings());
+							}
+							
+						});
+					} catch (SynchronizerException e) {
+						SynchronizerWorker.this.handleSynchronizerException(
+								e,
+								plugin);
+						
+						return null;
+					}
+				} finally {
+					connection.disconnect();
 				}
-				
-				connection.disconnect();
 				
 				TUSwingUtilities.invokeLater(new Runnable() {
 					

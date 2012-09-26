@@ -69,78 +69,73 @@ public class ExportModelsDialog extends AbstractExportDialog {
 	
 	@Override
 	protected void exportToFile(String file) throws Exception {
-		ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(file));
+		ZipOutputStream zos = null;
 		
-		// CONTACTS
-		{
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
+		try {
+			zos = new ZipOutputStream(new FileOutputStream(file));
+			ByteArrayOutputStream output = null;
+			
+			// CONTACTS
+			output = new ByteArrayOutputStream();
 			ContactFactory.getInstance().encodeToXML(output);
 			
 			this.writeIntoZip(zos, "contacts.xml", new ByteArrayInputStream(
 					output.toByteArray()));
-		}
-		
-		// CONTEXTS
-		{
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			
+			// CONTEXTS
+			output = new ByteArrayOutputStream();
 			ContextFactory.getInstance().encodeToXML(output);
 			
 			this.writeIntoZip(zos, "contexts.xml", new ByteArrayInputStream(
 					output.toByteArray()));
-		}
-		
-		// FOLDERS
-		{
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			
+			// FOLDERS
+			output = new ByteArrayOutputStream();
 			FolderFactory.getInstance().encodeToXML(output);
 			
 			this.writeIntoZip(zos, "folders.xml", new ByteArrayInputStream(
 					output.toByteArray()));
-		}
-		
-		// GOALS
-		{
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			
+			// GOALS
+			output = new ByteArrayOutputStream();
 			GoalFactory.getInstance().encodeToXML(output);
 			
 			this.writeIntoZip(
 					zos,
 					"goals.xml",
 					new ByteArrayInputStream(output.toByteArray()));
-		}
-		
-		// LOCATIONS
-		{
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			
+			// LOCATIONS
+			output = new ByteArrayOutputStream();
 			LocationFactory.getInstance().encodeToXML(output);
 			
 			this.writeIntoZip(zos, "locations.xml", new ByteArrayInputStream(
 					output.toByteArray()));
-		}
-		
-		// NOTES
-		{
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			
+			// NOTES
+			output = new ByteArrayOutputStream();
 			NoteFactory.getInstance().encodeToXML(output);
 			
 			this.writeIntoZip(
 					zos,
 					"notes.xml",
 					new ByteArrayInputStream(output.toByteArray()));
-		}
-		
-		// TASKS
-		{
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			
+			// TASKS
+			output = new ByteArrayOutputStream();
 			TaskFactory.getInstance().encodeToXML(output);
 			
 			this.writeIntoZip(
 					zos,
 					"tasks.xml",
 					new ByteArrayInputStream(output.toByteArray()));
+		} finally {
+			try {
+				zos.close();
+			} catch (Exception e) {
+				
+			}
 		}
-		
-		zos.close();
 	}
 	
 	private void writeIntoZip(
