@@ -60,6 +60,7 @@ import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileFilter;
 
 import org.jdesktop.swingx.JXColorSelectionButton;
 
@@ -67,6 +68,7 @@ import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
+import com.leclercb.taskunifier.gui.swing.TUFileField;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public interface ConfigurationFieldType<ComponentType extends JComponent, ValueType> {
@@ -804,6 +806,75 @@ public interface ConfigurationFieldType<ComponentType extends JComponent, ValueT
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
 			this.component.setBackground(ColorChooser.this.getPropertyValue());
+		}
+		
+	}
+	
+	public static class FileChooser extends TUFileField implements ConfigurationFieldType<TUFileField, String>, PropertyChangeListener {
+		
+		private boolean first;
+		private PropertyMap settings;
+		private String propertyName;
+		
+		public FileChooser(
+				PropertyMap settings,
+				String propertyName,
+				String label,
+				boolean open,
+				int fileSelectionMode,
+				FileFilter fileFilter,
+				String appendFileExtention) {
+			super(
+					label,
+					open,
+					settings.getStringProperty(propertyName),
+					fileSelectionMode,
+					fileFilter,
+					appendFileExtention);
+			
+			this.first = true;
+			this.settings = settings;
+			this.propertyName = propertyName;
+		}
+		
+		@Override
+		public void initializeFieldComponent() {
+			this.setFile(this.getPropertyValue());
+			
+			if (this.first) {
+				this.first = false;
+				
+				this.settings.addPropertyChangeListener(
+						propertyName,
+						new WeakPropertyChangeListener(this.settings, this));
+			}
+		}
+		
+		@Override
+		public TUFileField getFieldComponent() {
+			return this;
+		}
+		
+		@Override
+		public String getFieldValue() {
+			return this.getFile();
+		}
+		
+		@Override
+		public String getPropertyValue() {
+			return this.settings.getStringProperty(this.propertyName);
+		}
+		
+		@Override
+		public void saveAndApplyConfig() {
+			this.settings.setStringProperty(
+					this.propertyName,
+					this.getFieldValue());
+		}
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent event) {
+			this.setFile(FileChooser.this.getPropertyValue());
 		}
 		
 	}
