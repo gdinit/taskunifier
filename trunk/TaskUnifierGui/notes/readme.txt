@@ -4,6 +4,7 @@ HISTORY
 Version 3.0.1
 	- Minor:
 		- Bug fixed: Username reset after upgrade
+		- Bug fixed: Repeat task disabled after import models
 
 Version 3.0.0
 	- Major:

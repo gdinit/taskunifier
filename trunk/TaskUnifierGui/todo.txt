@@ -3,4 +3,3 @@
 - Create transaction and send email for previous transactions
 - Finish review
 - Translations
-- Copy all to Toodledo
