@@ -6,9 +6,9 @@
         <appname>TaskUnifier</appname>
         <appversion>@{taskunifier.version}</appversion>
         <authors>
-            <author name="leclercb" email="taskunifier@me.com"/>
+            <author name="Benjamin Leclerc" email="support@taskunifier.com"/>
         </authors>
-        <url>http://www.taskunifier.com/</url>
+        <url>http://www.taskunifier.com</url>
     </info>
     
     <listeners>
