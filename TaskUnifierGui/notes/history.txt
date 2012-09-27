@@ -4,6 +4,7 @@ Version 3.0.1
 		- Bug fixed: Username reset after upgrade
 		- Bug fixed: Repeat task disabled after import models
 		- Reduce task/note table row height
+		- Added system info in about panel
 
 Version 3.0.0
 	- Major:
