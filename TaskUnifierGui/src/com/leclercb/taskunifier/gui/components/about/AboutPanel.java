@@ -36,13 +36,16 @@ import java.util.Properties;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.jdesktop.swingx.JXEditorPane;
 
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.resources.Resources;
+import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
@@ -59,15 +62,33 @@ public class AboutPanel extends JPanel {
 				ImageUtils.getResourceImage("logo.png", 48, 48));
 		JLabel title = new JLabel(Constants.TITLE + " - " + Constants.VERSION);
 		
+		JTabbedPane tabbedPane = new JTabbedPane();
+		
 		JXEditorPane aboutMessage = new JXEditorPane();
 		aboutMessage.setContentType("text/html");
 		aboutMessage.setEditable(false);
 		aboutMessage.setText(this.getAboutMessage());
 		aboutMessage.setCaretPosition(0);
 		
+		JXEditorPane systemMessage = new JXEditorPane();
+		systemMessage.setContentType("text/html");
+		systemMessage.setEditable(false);
+		systemMessage.setText(this.getSystemMessage());
+		systemMessage.setCaretPosition(0);
+		
+		tabbedPane.addTab(
+				Translations.getString("general.about"),
+				ImageUtils.getResourceImage("logo.png", 16, 16),
+				ComponentFactory.createJScrollPane(aboutMessage, true));
+		
+		tabbedPane.addTab(
+				Translations.getString("general.system"),
+				ImageUtils.getResourceImage("settings.png", 16, 16),
+				ComponentFactory.createJScrollPane(systemMessage, true));
+		
 		this.add(icon, "gap 0px 20px");
 		this.add(title, "wrap 20px");
-		this.add(ComponentFactory.createJScrollPane(aboutMessage, true), "span");
+		this.add(tabbedPane, "span");
 	}
 	
 	private String getAboutMessage() {
@@ -78,6 +99,24 @@ public class AboutPanel extends JPanel {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+	
+	private String getSystemMessage() {
+		StringBuffer s = new StringBuffer();
+		s.append("<html>");
+		
+		s.append("<b>Java Version: </b>" + SystemUtils.JAVA_VERSION + "<br />");
+		s.append("<b>Java Home: </b>" + SystemUtils.JAVA_HOME + "<br />");
+		s.append("<b>OS Name: </b>" + SystemUtils.OS_NAME + "<br />");
+		s.append("<b>OS Version: </b>" + SystemUtils.OS_VERSION + "<br />");
+		s.append("<b>OS Architecture: </b>" + SystemUtils.OS_ARCH + "<br />");
+		s.append("<b>User Name: </b>" + SystemUtils.USER_NAME + "<br />");
+		s.append("<b>User Directory: </b>" + SystemUtils.USER_DIR + "<br />");
+		s.append("<b>User Home: </b>" + SystemUtils.USER_HOME + "<br />");
+		
+		s.append("</html>");
+		
+		return s.toString();
 	}
 	
 }
