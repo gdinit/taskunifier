@@ -3,8 +3,10 @@ HISTORY
 
 Version 3.0.1
 	- Minor:
+		- BF 139: Save cell value on focus lost
 		- Bug fixed: Username reset after upgrade
 		- Bug fixed: Repeat task disabled after import models
+		- Reduce task/note table row height
 
 Version 3.0.0
 	- Major:

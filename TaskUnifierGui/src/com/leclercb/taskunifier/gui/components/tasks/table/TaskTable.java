@@ -313,12 +313,12 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 		
 		this.setModel(tableModel);
 		this.setColumnModel(columnModel);
-		this.setRowHeight(24);
+		this.setRowHeight(20);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		this.setShowGrid(true, false);
 		
 		this.putClientProperty("JTable.autoStartsEdit", Boolean.FALSE);
-		this.putClientProperty("terminateEditOnFocusLost", Boolean.FALSE);
+		this.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		
 		this.setSortable(true);
 		this.setSortsOnUpdates(false);
