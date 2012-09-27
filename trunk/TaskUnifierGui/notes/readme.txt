@@ -2,6 +2,8 @@ HISTORY
 -------
 
 Version 3.0.1
+	- Major:
+		- Bug fixed: Change synchronizer plugin error
 	- Minor:
 		- BF 139: Save cell value on focus lost
 		- Bug fixed: Username reset after upgrade
