@@ -165,6 +165,9 @@ public class TaskTasksPanel extends JPanel implements TaskTasksView, ModelSelect
 			public void actionPerformed(ActionEvent evt) {
 				TaskItem[] items = TaskTasksPanel.this.table.getSelectedTaskItems();
 				
+				TaskTasksPanel.this.table.commitChanges();
+				TaskTasksPanel.this.table.getSelectionModel().clearSelection();
+				
 				for (TaskItem item : items)
 					TaskTasksPanel.this.table.getTaskGroup().remove(item);
 			}

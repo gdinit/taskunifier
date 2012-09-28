@@ -147,6 +147,9 @@ public class TaskContactsPanel extends JPanel implements TaskContactsView, Model
 			public void actionPerformed(ActionEvent evt) {
 				ContactItem[] items = TaskContactsPanel.this.table.getSelectedContactItems();
 				
+				TaskContactsPanel.this.table.commitChanges();
+				TaskContactsPanel.this.table.getSelectionModel().clearSelection();
+				
 				for (ContactItem item : items)
 					TaskContactsPanel.this.table.getContactGroup().remove(item);
 			}

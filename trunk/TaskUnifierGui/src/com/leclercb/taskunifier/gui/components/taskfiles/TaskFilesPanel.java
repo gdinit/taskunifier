@@ -123,6 +123,9 @@ public class TaskFilesPanel extends JPanel implements TaskFilesView, ModelSelect
 			public void actionPerformed(ActionEvent evt) {
 				FileItem[] items = TaskFilesPanel.this.table.getSelectedFileItems();
 				
+				TaskFilesPanel.this.table.commitChanges();
+				TaskFilesPanel.this.table.getSelectionModel().clearSelection();
+				
 				for (FileItem item : items)
 					TaskFilesPanel.this.table.getFileGroup().remove(item);
 			}
