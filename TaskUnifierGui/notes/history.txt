@@ -5,6 +5,7 @@ Version 3.0.1
 		- BF 139: Save cell value on focus lost
 		- Bug fixed: Username reset after upgrade
 		- Bug fixed: Repeat task disabled after import models
+		- Bug fixed: Removing task contacts/files/tasks
 		- Reduce task/note table row height
 		- Added system info in about panel
 
