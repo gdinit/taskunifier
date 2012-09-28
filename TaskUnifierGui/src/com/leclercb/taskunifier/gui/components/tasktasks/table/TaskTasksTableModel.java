@@ -34,6 +34,7 @@ package com.leclercb.taskunifier.gui.components.tasktasks.table;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.logging.Level;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -42,6 +43,7 @@ import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.utils.EqualsUtils;
+import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.models.TaskList;
 import com.leclercb.taskunifier.api.models.TaskList.TaskItem;
 import com.leclercb.taskunifier.gui.components.tasktasks.TaskTasksColumn;
@@ -141,10 +143,14 @@ public class TaskTasksTableModel extends AbstractTableModel implements ListChang
 	
 	@Override
 	public void listChange(ListChangeEvent event) {
-		if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
-			this.fireTableRowsInserted(event.getIndex(), event.getIndex());
-		} else if (event.getChangeType() == ListChangeEvent.VALUE_REMOVED) {
-			this.fireTableRowsDeleted(event.getIndex(), event.getIndex());
+		try {
+			if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
+				this.fireTableRowsInserted(event.getIndex(), event.getIndex());
+			} else if (event.getChangeType() == ListChangeEvent.VALUE_REMOVED) {
+				this.fireTableRowsDeleted(event.getIndex(), event.getIndex());
+			}
+		} catch (Exception e) {
+			GuiLogger.getLogger().log(Level.WARNING, e.getMessage(), e);
 		}
 	}
 	
