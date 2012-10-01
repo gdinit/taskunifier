@@ -8,6 +8,7 @@ Version 3.0.1
 		- Bug fixed: Removing task contacts/files/tasks
 		- Reduce task/note table row height
 		- Added system info in about panel
+		- Minor bug fixes
 
 Version 3.0.0
 	- Major:
