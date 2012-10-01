@@ -43,6 +43,7 @@ import javax.swing.JPanel;
 
 import org.jdesktop.swingx.JXHeader;
 
+import com.leclercb.taskunifier.gui.components.help.Help;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
@@ -119,7 +120,8 @@ public class SynchronizerPluginsDialog extends JDialog {
 		JButton okButton = new TUOkButton(listener);
 		JButton cancelButton = new TUCancelButton(listener);
 		
-		JPanel panel = new TUButtonsPanel(okButton, cancelButton);
+		JPanel panel = new TUButtonsPanel(Help.getInstance().getHelpButton(
+				"synchronization"), okButton, cancelButton);
 		
 		this.add(panel, BorderLayout.SOUTH);
 		this.getRootPane().setDefaultButton(okButton);

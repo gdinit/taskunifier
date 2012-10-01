@@ -438,7 +438,9 @@ public class Main {
 					
 					TipsDialog.getInstance().showTipsDialog(true);
 					
-					if (finalUpdateVersion)
+					if (isFirstExecution())
+						ActionHelp.help("taskunifier");
+					else if (finalUpdateVersion)
 						ActionHelp.help("whats_new");
 					
 					handleArguments(args);

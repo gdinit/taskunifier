@@ -308,6 +308,9 @@ public class SynchronizationConfigurationPanel extends DefaultConfigurationPanel
 		if (this.containsId("PUBLISH_EXIT"))
 			this.setEnabled("PUBLISH_EXIT", enabled);
 		
+		if (this.containsId("SYNC_REMINDER_FIELD"))
+			this.setEnabled("SYNC_REMINDER_FIELD", enabled);
+		
 		if (this.containsId("SYNCHRONIZE_ALL"))
 			this.setEnabled("SYNCHRONIZE_ALL", enabled);
 		
