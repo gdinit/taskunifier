@@ -19,6 +19,7 @@
 	<mapID target="note_searcher" url="pages/note_searcher.html" />
 	<mapID target="scheduled_sync" url="pages/scheduled_sync.html" />
 	<mapID target="shortcuts" url="pages/shortcuts.html" />
+	<mapID target="synchronization" url="pages/synchronization.html" />
 	<mapID target="task_batchaddtasks" url="pages/task_batchaddtasks.html" />
 	<mapID target="task_contacts" url="pages/task_contacts.html" />
 	<mapID target="task_files" url="pages/task_files.html" />
@@ -30,6 +31,7 @@
 	<mapID target="task_searcher" url="pages/task_searcher.html" />
 	<mapID target="task_tasks" url="pages/task_tasks.html" />
 	<mapID target="view_calendar" url="pages/view_calendar.html" />
+	<mapID target="view_notes" url="pages/view_notes.html" />
 	<mapID target="view_tasks" url="pages/view_tasks.html" />
 	
 </map>
