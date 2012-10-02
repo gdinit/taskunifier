@@ -12,7 +12,7 @@ APPFILE="$BASEDIR/temp/TaskUnifier.app"
 
 echo "Codesign application file $APPFILE"
 
-codesign -s "Developer ID Application" $APPFILE
+codesign -f -s "Developer ID Application" $APPFILE
 
-exit 0
+exit $?
 

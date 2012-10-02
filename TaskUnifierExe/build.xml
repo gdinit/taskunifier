@@ -116,6 +116,8 @@
 		
 		</jarbundler>
 		
+		<exec executable="${directory.exe}/scripts/mac.codesign.sh" failonerror="true"/>
+		
 		<mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
 		<tar destfile="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/TaskUnifier_${taskunifier.version.underscored}_mac.tar">
 			<tarfileset dir="${directory.exe}/temp">
