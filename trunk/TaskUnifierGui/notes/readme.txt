@@ -3,6 +3,7 @@ HISTORY
 
 Version 3.0.1
 	- Major:
+		- Moutain Lion: Sign Mac version for Gatekeeper
 		- Bug fixed: Change synchronizer plugin error
 	- Minor:
 		- BF 139: Save cell value on focus lost
