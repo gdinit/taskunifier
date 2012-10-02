@@ -6,12 +6,12 @@ then
 	exit 1
 fi
 
-echo "Creating DMG file $DMGFILE"
-
 BASEDIR=`dirname $0`
 BASEDIR="$BASEDIR/.."
 TARFILE="$BASEDIR/binaries/TaskUnifier_$1/TaskUnifier_$1_mac.tar"
 DMGFILE="$BASEDIR/binaries/TaskUnifier_$1/TaskUnifier_$1_mac.dmg"
+
+echo "Creating DMG file $DMGFILE"
 
 mkdir $BASEDIR/temp
 
