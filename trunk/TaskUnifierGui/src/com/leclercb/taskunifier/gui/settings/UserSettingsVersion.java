@@ -64,6 +64,9 @@ public final class UserSettingsVersion {
 		if (version.equals("2.4.0"))
 			version = updateUserSettings_2_4_0_to_3_0_0();
 		
+		if (version.equals("3.0.0"))
+			version = updateUserSettings_3_0_0_to_3_0_1();
+		
 		cleanSettings();
 		
 		Main.getUserSettings().setStringProperty(
@@ -125,6 +128,13 @@ public final class UserSettingsVersion {
 		copyInsideUserFolder("note_searchers.xml", "note_searchers_v3.xml");
 		
 		return "3.0.0";
+	}
+	
+	private static String updateUserSettings_3_0_0_to_3_0_1() {
+		GuiLogger.getLogger().info(
+				"Update user settings from version 3.0.0 to 3.0.1");
+		
+		return "3.0.1";
 	}
 	
 	private static void copyInsideUserFolder(
