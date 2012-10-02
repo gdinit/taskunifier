@@ -266,6 +266,9 @@ public final class SettingsVersion {
 		if (version.equals("2.4.0"))
 			version = updateSettings_2_4_0_to_3_0_0();
 		
+		if (version.equals("3.0.0"))
+			version = updateSettings_3_0_0_to_3_0_1();
+		
 		cleanSettings();
 		
 		Main.getSettings().setStringProperty(
@@ -1907,6 +1910,13 @@ public final class SettingsVersion {
 		Main.getSettings().setStringProperty("window.sub.width", "600");
 		
 		return "3.0.0";
+	}
+	
+	private static String updateSettings_3_0_0_to_3_0_1() {
+		GuiLogger.getLogger().info(
+				"Update settings from version 3.0.0 to 3.0.1");
+		
+		return "3.0.1";
 	}
 	
 	private static void copyToUserFolder(String fileName) {
