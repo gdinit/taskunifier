@@ -46,9 +46,11 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
 import java.util.TimeZone;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 import javax.swing.JButton;
@@ -651,10 +653,6 @@ public class Main {
 	}
 	
 	private static void loadLoggers() {
-		Level apiLogLevel = Level.INFO;
-		Level guiLogLevel = Level.INFO;
-		Level pluginLogLevel = Level.INFO;
-		
 		String apiLogFile = getDataFolder()
 				+ File.separator
 				+ "taskunifier_api.log";
@@ -665,43 +663,34 @@ public class Main {
 				+ File.separator
 				+ "taskunifier_plugin.log";
 		
-		apiLogFile = apiLogFile.replace("%", "%%");
-		guiLogFile = guiLogFile.replace("%", "%%");
-		pluginLogFile = pluginLogFile.replace("%", "%%");
+		addHandlers(ApiLogger.getLogger(), Level.INFO, apiLogFile);
+		addHandlers(GuiLogger.getLogger(), Level.INFO, guiLogFile);
+		addHandlers(PluginLogger.getLogger(), Level.INFO, pluginLogFile);
+	}
+	
+	private static void addHandlers(Logger logger, Level level, String file) {
+		logger.setUseParentHandlers(false);
+		
+		file = file.replace("%", "%%");
 		
 		try {
-			FileHandler handler = new FileHandler(apiLogFile, 50000, 1, true);
+			ConsoleHandler handler = new ConsoleHandler();
 			
-			handler.setLevel(apiLogLevel);
+			handler.setLevel(level);
 			handler.setFormatter(new SimpleFormatter());
 			
-			ApiLogger.getLogger().addHandler(handler);
+			logger.addHandler(handler);
 		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 		try {
-			FileHandler handler = new FileHandler(guiLogFile, 50000, 1, true);
+			FileHandler handler = new FileHandler(file, 50000, 1, true);
 			
-			handler.setLevel(guiLogLevel);
+			handler.setLevel(level);
 			handler.setFormatter(new SimpleFormatter());
 			
-			GuiLogger.getLogger().addHandler(handler);
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			FileHandler handler = new FileHandler(pluginLogFile, 50000, 1, true);
-			
-			handler.setLevel(pluginLogLevel);
-			handler.setFormatter(new SimpleFormatter());
-			
-			PluginLogger.getLogger().addHandler(handler);
+			logger.addHandler(handler);
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -779,6 +768,10 @@ public class Main {
 			Level apiLogLevel = Level.parse(SETTINGS.getStringProperty("logger.api.level"));
 			Level guiLogLevel = Level.parse(SETTINGS.getStringProperty("logger.gui.level"));
 			Level pluginLogLevel = Level.parse(SETTINGS.getStringProperty("logger.plugin.level"));
+			
+			ApiLogger.getLogger().setLevel(apiLogLevel);
+			GuiLogger.getLogger().setLevel(apiLogLevel);
+			PluginLogger.getLogger().setLevel(apiLogLevel);
 			
 			Handler[] handlers;
 			

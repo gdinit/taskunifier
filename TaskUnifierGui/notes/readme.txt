@@ -1,6 +1,10 @@
 HISTORY
 -------
 
+Version 3.0.2
+	- Minor:
+		- Improved loggers
+
 Version 3.0.1
 	- Major:
 		- Moutain Lion: Sign Mac version for Gatekeeper
