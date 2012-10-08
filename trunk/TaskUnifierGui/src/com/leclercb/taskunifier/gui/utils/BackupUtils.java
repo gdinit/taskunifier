@@ -50,6 +50,8 @@ import com.leclercb.commons.api.event.listchange.ListChangeSupported;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.main.main.MainLoadFiles;
+import com.leclercb.taskunifier.gui.main.main.MainSaveFiles;
 
 public final class BackupUtils implements ListChangeSupported {
 	
@@ -181,7 +183,7 @@ public final class BackupUtils implements ListChangeSupported {
 		
 		String folder = Main.getBackupFolder() + File.separator + backupName;
 		
-		Main.copyAllData(folder, null);
+		MainSaveFiles.copyAllData(folder, null);
 		
 		this.backups.add(backupName);
 		
@@ -210,7 +212,7 @@ public final class BackupUtils implements ListChangeSupported {
 			
 			SynchronizerUtils.setTaskRepeatEnabled(false);
 			
-			Main.loadAllData(folder, null);
+			MainLoadFiles.loadAllData(folder, null);
 			
 			SynchronizerUtils.setTaskRepeatEnabled(true);
 		} finally {

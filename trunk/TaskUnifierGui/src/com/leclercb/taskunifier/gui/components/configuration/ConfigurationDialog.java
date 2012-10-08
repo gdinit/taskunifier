@@ -59,6 +59,7 @@ import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGr
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationPanel;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
+import com.leclercb.taskunifier.gui.main.main.MainSaveFiles;
 import com.leclercb.taskunifier.gui.swing.buttons.TUApplyButton;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
@@ -336,8 +337,8 @@ public class ConfigurationDialog extends JDialog implements ConfigurationGroup, 
 			this.publicationConfigurationPanel.saveAndApplyConfig();
 			this.synchronizationConfigurationPanel.saveAndApplyConfig();
 			
-			Main.saveSettings();
-			Main.saveUserSettings();
+			MainSaveFiles.saveSettings();
+			MainSaveFiles.saveUserSettings();
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
 			
