@@ -33,45 +33,29 @@
 package com.leclercb.taskunifier.gui.main;
 
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Properties;
 import java.util.TimeZone;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 
 import org.apache.commons.lang3.SystemUtils;
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.leclercb.commons.api.event.action.ActionSupport;
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
-import com.leclercb.commons.api.logger.ApiLogger;
 import com.leclercb.commons.api.plugins.PluginLoader;
 import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.commons.api.properties.SortedProperties;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.SingleInstanceUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
-import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelDescriptor;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelUtils;
 import com.leclercb.commons.gui.swing.lookandfeel.types.DefaultLookAndFeelDescriptor;
 import com.leclercb.taskunifier.api.models.ContactFactory;
@@ -82,18 +66,8 @@ import com.leclercb.taskunifier.api.models.LocationFactory;
 import com.leclercb.taskunifier.api.models.NoteFactory;
 import com.leclercb.taskunifier.api.models.TaskFactory;
 import com.leclercb.taskunifier.api.properties.ModelIdCoder;
-import com.leclercb.taskunifier.gui.actions.ActionCheckPluginVersion;
-import com.leclercb.taskunifier.gui.actions.ActionCheckVersion;
-import com.leclercb.taskunifier.gui.actions.ActionHelp;
 import com.leclercb.taskunifier.gui.actions.ActionImportComFile;
-import com.leclercb.taskunifier.gui.actions.ActionManageSynchronizerPlugins;
-import com.leclercb.taskunifier.gui.actions.ActionNewWindow;
-import com.leclercb.taskunifier.gui.actions.ActionPublish;
 import com.leclercb.taskunifier.gui.actions.ActionQuit;
-import com.leclercb.taskunifier.gui.actions.ActionResetGeneralSearchers;
-import com.leclercb.taskunifier.gui.actions.ActionReview;
-import com.leclercb.taskunifier.gui.actions.ActionSynchronize;
-import com.leclercb.taskunifier.gui.actions.ActionSynchronizeAndPublish;
 import com.leclercb.taskunifier.gui.api.models.GuiContact;
 import com.leclercb.taskunifier.gui.api.models.GuiContext;
 import com.leclercb.taskunifier.gui.api.models.GuiFolder;
@@ -114,24 +88,20 @@ import com.leclercb.taskunifier.gui.api.plugins.exc.PluginException;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
-import com.leclercb.taskunifier.gui.components.tips.TipsDialog;
-import com.leclercb.taskunifier.gui.components.welcome.LanguageDialog;
-import com.leclercb.taskunifier.gui.components.welcome.WelcomeDialog;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.main.MainLoadFiles;
+import com.leclercb.taskunifier.gui.main.main.MainLoadLoggers;
 import com.leclercb.taskunifier.gui.main.main.MainSaveFiles;
-import com.leclercb.taskunifier.gui.plugins.PluginLogger;
+import com.leclercb.taskunifier.gui.main.main.MainSwingRunnable;
 import com.leclercb.taskunifier.gui.properties.ShortcutKeyCoder;
 import com.leclercb.taskunifier.gui.resources.Resources;
 import com.leclercb.taskunifier.gui.settings.SettingsVersion;
 import com.leclercb.taskunifier.gui.settings.UserSettingsVersion;
 import com.leclercb.taskunifier.gui.swing.EventQueueProxy;
 import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.lookandfeel.JTattooLookAndFeelDescriptor;
 import com.leclercb.taskunifier.gui.threads.Threads;
 import com.leclercb.taskunifier.gui.translations.Translations;
-import com.leclercb.taskunifier.gui.utils.BackupUtils;
 import com.leclercb.taskunifier.gui.utils.CommunicatorUtils;
 import com.leclercb.taskunifier.gui.utils.ProtocolUtils;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
@@ -156,6 +126,10 @@ public class Main {
 	private static PropertyMap SETTINGS;
 	private static PropertyMap USER_SETTINGS;
 	
+	private static String PREVIOUS_VERSION;
+	private static boolean VERSION_UPDATED;
+	private static boolean OUTDATED_PLUGINS;
+	
 	private static PluginLoader<SynchronizerGuiPlugin> API_PLUGINS;
 	
 	public static ActionSupport AFTER_START;
@@ -169,20 +143,16 @@ public class Main {
 		return DEVELOPER_MODE;
 	}
 	
-	private static void setDeveloperMode(boolean developerMode) {
-		DEVELOPER_MODE = developerMode;
-	}
-	
 	public static boolean isFirstExecution() {
 		return FIRST_EXECUTION;
 	}
 	
-	private static void setFirstExecution(boolean firstExecution) {
-		FIRST_EXECUTION = firstExecution;
-	}
-	
 	public static boolean isQuitting() {
 		return QUITTING;
+	}
+	
+	public static void setQuitting(boolean quitting) {
+		QUITTING = quitting;
 	}
 	
 	private static String getLockFile() {
@@ -241,15 +211,23 @@ public class Main {
 		return USER_SETTINGS;
 	}
 	
+	public static String getPreviousVersion() {
+		return PREVIOUS_VERSION;
+	}
+	
+	public static boolean isVersionUpdated() {
+		return VERSION_UPDATED;
+	}
+	
+	public static boolean isOutdatedPlugins() {
+		return OUTDATED_PLUGINS;
+	}
+	
 	public static PluginLoader<SynchronizerGuiPlugin> getApiPlugins() {
 		return API_PLUGINS;
 	}
 	
 	public static void main(final String[] args) {
-		String previousVersion;
-		boolean updateVersion;
-		boolean outdatedPlugins;
-		
 		try {
 			initialize();
 			loadDeveloperMode();
@@ -264,27 +242,27 @@ public class Main {
 						"Another instance of TaskUnifier is running");
 			}
 			
-			loadLoggers();
+			MainLoadLoggers.loadLoggers();
 			loadUncaughtExceptionHandler();
 			loadSettings();
 			loadTimeZone();
 			loadUserId();
 			loadUserFolder();
 			loadBackupFolder();
-			previousVersion = SettingsVersion.updateSettings();
+			PREVIOUS_VERSION = SettingsVersion.updateSettings();
 			loadUserSettings();
 			UserSettingsVersion.updateSettings();
-			loadLoggerLevels();
+			MainLoadLoggers.loadLoggerLevels();
 			loadProxies();
 			loadLocale();
 			loadModels();
 			loadLookAndFeel();
-			outdatedPlugins = loadApiPlugins();
+			OUTDATED_PLUGINS = loadApiPlugins();
 			loadSynchronizer();
 			loadShutdownHook();
 			loadCustomProtocolHandlers();
 			
-			updateVersion = !Constants.VERSION.equals(previousVersion);
+			VERSION_UPDATED = !Constants.VERSION.equals(PREVIOUS_VERSION);
 			
 			Constants.initialize();
 			
@@ -303,183 +281,7 @@ public class Main {
 			return;
 		}
 		
-		final String finalPreviousVersion = previousVersion;
-		final boolean finalUpdateVersion = updateVersion;
-		final boolean finalOutdatedPlugins = outdatedPlugins;
-		
-		TUSwingUtilities.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				String lookAndFeel = SETTINGS.getStringProperty("theme.lookandfeel");
-				
-				try {
-					LookAndFeelDescriptor laf = null;
-					
-					if (lookAndFeel != null) {
-						laf = LookAndFeelUtils.getLookAndFeel(lookAndFeel);
-						if (laf != null)
-							laf.setLookAndFeel();
-					}
-					
-					if (laf == null) {
-						laf = LookAndFeelUtils.getLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-						
-						if (SystemUtils.IS_OS_WINDOWS)
-							laf = LookAndFeelUtils.getLookAndFeel("com.jtattoo.plaf.luna.LunaLookAndFeel$Default");
-						
-						if (SystemUtils.IS_OS_LINUX)
-							laf = LookAndFeelUtils.getLookAndFeel("com.jtattoo.plaf.fast.FastLookAndFeel$Blue");
-						
-						if (laf != null) {
-							laf.setLookAndFeel();
-							
-							SETTINGS.setStringProperty(
-									"theme.lookandfeel",
-									laf.getIdentifier());
-						}
-					}
-				} catch (Throwable t) {
-					GuiLogger.getLogger().log(
-							Level.WARNING,
-							"Error while setting look and feel: \""
-									+ lookAndFeel
-									+ "\"",
-							t);
-					
-					ErrorInfo info = new ErrorInfo(
-							Translations.getString("general.error"),
-							t.getMessage(),
-							null,
-							"GUI",
-							t,
-							Level.WARNING,
-							null);
-					
-					JXErrorPane.showDialog(null, info);
-				}
-				
-				try {
-					JButton quitButton = new JButton(
-							Translations.getString("action.quit"));
-					quitButton.addActionListener(new ActionListener() {
-						
-						@Override
-						public void actionPerformed(ActionEvent event) {
-							QUITTING = true;
-							System.exit(0);
-						}
-						
-					});
-					
-					List<String> messages = new ArrayList<String>();
-					TUButtonsPanel messageButtons = new TUButtonsPanel(
-							quitButton);
-					
-					if ((isFirstExecution() || finalUpdateVersion)
-							&& Constants.BETA) {
-						messages.add(Translations.getString(
-								"welcome.message.beta",
-								Constants.VERSION));
-					}
-					
-					if (isFirstExecution() && SystemUtils.IS_OS_LINUX) {
-						messages.add(Translations.getString(
-								"welcome.message.open_jdk_not_supported",
-								Constants.VERSION));
-					}
-					
-					if (isFirstExecution()
-							|| (finalUpdateVersion && finalPreviousVersion.compareTo("3.0.0") < 0)) {
-						if (Constants.BETA)
-							messages.add(Translations.getString(
-									"welcome.message.license_upgrade_required_beta",
-									Constants.VERSION,
-									Constants.BETA_SYNC_EXP));
-						else
-							messages.add(Translations.getString(
-									"welcome.message.license_upgrade_required",
-									Constants.VERSION));
-					}
-					
-					if (isFirstExecution()) {
-						new LanguageDialog().setVisible(true);
-						new WelcomeDialog(
-								messages.toArray(new String[0]),
-								messageButtons).setVisible(true);
-						
-						ActionResetGeneralSearchers.resetGeneralSearchers();
-					} else if (messages.size() > 0) {
-						new WelcomeDialog(
-								messages.toArray(new String[0]),
-								messageButtons).setVisible(true);
-					}
-					
-					autoBackup();
-					cleanBackups();
-					
-					MacApplication.initializeApplicationAdapter();
-					
-					ActionNewWindow.newWindow();
-					ActionCheckVersion.checkVersion(true);
-					ActionCheckPluginVersion.checkAllPluginVersion(true);
-					
-					Boolean showed = SETTINGS.getBooleanProperty("review.showed");
-					if (showed == null || !showed)
-						ActionReview.review();
-					
-					SETTINGS.setBooleanProperty("review.showed", true);
-					
-					if (finalOutdatedPlugins)
-						ActionManageSynchronizerPlugins.manageSynchronizerPlugins();
-					
-					TipsDialog.getInstance().showTipsDialog(true);
-					
-					if (isFirstExecution())
-						ActionHelp.help("taskunifier");
-					else if (finalUpdateVersion)
-						ActionHelp.help("whats_new");
-					
-					handleArguments(args);
-					
-					boolean syncStart = USER_SETTINGS.getBooleanProperty("synchronizer.sync_start");
-					boolean publishStart = USER_SETTINGS.getBooleanProperty("synchronizer.publish_start");
-					
-					if (isFirstExecution()) {
-						ActionSynchronizeAndPublish.synchronizeAndPublish(false);
-					} else {
-						if (syncStart && publishStart)
-							ActionSynchronizeAndPublish.synchronizeAndPublish(false);
-						else if (syncStart)
-							ActionSynchronize.synchronize(false);
-						else if (publishStart)
-							ActionPublish.publish(false);
-					}
-					
-					Threads.startAll();
-				} catch (Throwable t) {
-					GuiLogger.getLogger().log(
-							Level.SEVERE,
-							"Error while loading gui",
-							t);
-					
-					ErrorInfo info = new ErrorInfo(
-							Translations.getString("general.error"),
-							"Error while loading gui",
-							null,
-							"GUI",
-							t,
-							Level.SEVERE,
-							null);
-					
-					JXErrorPane.showDialog(null, info);
-					
-					QUITTING = true;
-					System.exit(1);
-				}
-			}
-			
-		});
+		TUSwingUtilities.invokeLater(new MainSwingRunnable(args));
 	}
 	
 	private static void secondaryMain(String[] args) {
@@ -524,15 +326,15 @@ public class Main {
 	
 	private static void loadDeveloperMode() {
 		String developerMode = System.getProperty("com.leclercb.taskunifier.developer_mode");
-		setDeveloperMode("true".equals(developerMode));
+		DEVELOPER_MODE = "true".equals(developerMode);
 		
 		if (isDeveloperMode())
 			GuiLogger.getLogger().severe("DEVELOPER MODE");
 	}
 	
 	private static void initialize() throws Exception {
-		setDeveloperMode(false);
-		setFirstExecution(false);
+		DEVELOPER_MODE = false;
+		FIRST_EXECUTION = false;
 		
 		SortedProperties defaultProperties = null;
 		
@@ -555,6 +357,10 @@ public class Main {
 		
 		USER_SETTINGS.addCoder(new ModelIdCoder());
 		USER_SETTINGS.addCoder(new ShortcutKeyCoder());
+		
+		PREVIOUS_VERSION = Constants.VERSION;
+		VERSION_UPDATED = false;
+		OUTDATED_PLUGINS = false;
 		
 		AFTER_START = new ActionSupport(Main.class);
 		BEFORE_EXIT = new ActionSupport(Main.class);
@@ -603,7 +409,7 @@ public class Main {
 			DATA_FOLDER = "data";
 		
 		if (loadFolder(DATA_FOLDER))
-			setFirstExecution(true);
+			FIRST_EXECUTION = true;
 		
 		loadFolder(DATA_FOLDER + File.separator + "users");
 	}
@@ -652,52 +458,6 @@ public class Main {
 		return false;
 	}
 	
-	private static void loadLoggers() {
-		String apiLogFile = getDataFolder()
-				+ File.separator
-				+ "taskunifier_api.log";
-		String guiLogFile = getDataFolder()
-				+ File.separator
-				+ "taskunifier_gui.log";
-		String pluginLogFile = getDataFolder()
-				+ File.separator
-				+ "taskunifier_plugin.log";
-		
-		addHandlers(ApiLogger.getLogger(), Level.INFO, apiLogFile);
-		addHandlers(GuiLogger.getLogger(), Level.INFO, guiLogFile);
-		addHandlers(PluginLogger.getLogger(), Level.INFO, pluginLogFile);
-	}
-	
-	private static void addHandlers(Logger logger, Level level, String file) {
-		logger.setUseParentHandlers(false);
-		
-		file = file.replace("%", "%%");
-		
-		try {
-			ConsoleHandler handler = new ConsoleHandler();
-			
-			handler.setLevel(level);
-			handler.setFormatter(new SimpleFormatter());
-			
-			logger.addHandler(handler);
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			FileHandler handler = new FileHandler(file, 50000, 1, true);
-			
-			handler.setLevel(level);
-			handler.setFormatter(new SimpleFormatter());
-			
-			logger.addHandler(handler);
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	private static void loadUncaughtExceptionHandler() {
 		Toolkit.getDefaultToolkit().getSystemEventQueue().push(
 				new EventQueueProxy());
@@ -716,7 +476,7 @@ public class Main {
 						"Error",
 						JOptionPane.ERROR_MESSAGE);
 			
-			setFirstExecution(true);
+			FIRST_EXECUTION = true;
 		}
 	}
 	
@@ -760,37 +520,6 @@ public class Main {
 		for (String key : USER_SETTINGS.stringPropertyNames()) {
 			String value = USER_SETTINGS.getProperty(key);
 			USER_SETTINGS.setStringProperty(key, value, true);
-		}
-	}
-	
-	private static void loadLoggerLevels() {
-		try {
-			Level apiLogLevel = Level.parse(SETTINGS.getStringProperty("logger.api.level"));
-			Level guiLogLevel = Level.parse(SETTINGS.getStringProperty("logger.gui.level"));
-			Level pluginLogLevel = Level.parse(SETTINGS.getStringProperty("logger.plugin.level"));
-			
-			ApiLogger.getLogger().setLevel(apiLogLevel);
-			GuiLogger.getLogger().setLevel(apiLogLevel);
-			PluginLogger.getLogger().setLevel(apiLogLevel);
-			
-			Handler[] handlers;
-			
-			handlers = ApiLogger.getLogger().getHandlers();
-			for (Handler handler : handlers)
-				handler.setLevel(apiLogLevel);
-			
-			handlers = GuiLogger.getLogger().getHandlers();
-			for (Handler handler : handlers)
-				handler.setLevel(guiLogLevel);
-			
-			handlers = PluginLogger.getLogger().getHandlers();
-			for (Handler handler : handlers)
-				handler.setLevel(pluginLogLevel);
-		} catch (Throwable t) {
-			GuiLogger.getLogger().log(
-					Level.SEVERE,
-					"Error while loading logger levels",
-					t);
 		}
 	}
 	
@@ -949,16 +678,6 @@ public class Main {
 	
 	private static void loadCustomProtocolHandlers() {
 		ProtocolUtils.registerCustomProtocolHandlers();
-	}
-	
-	private static void autoBackup() {
-		int nbHours = SETTINGS.getIntegerProperty("backup.auto_backup_every");
-		BackupUtils.getInstance().autoBackup(nbHours);
-	}
-	
-	private static void cleanBackups() {
-		int nbToKeep = SETTINGS.getIntegerProperty("backup.keep_backups");
-		BackupUtils.getInstance().cleanBackups(nbToKeep);
 	}
 	
 	public static void quit() {

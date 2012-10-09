@@ -37,6 +37,7 @@ import java.awt.PopupMenu;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.logging.Level;
 
 import org.apache.commons.lang3.SystemUtils;
 
@@ -57,6 +58,7 @@ import com.apple.eawt.QuitHandler;
 import com.apple.eawt.QuitResponse;
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
+import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
@@ -71,9 +73,9 @@ import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.main.frames.FrameView;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
-public class MacApplication {
+public final class MacApplication {
 	
-	public MacApplication() {
+	private MacApplication() {
 		
 	}
 	
@@ -145,7 +147,7 @@ public class MacApplication {
 				
 			});
 		} catch (Throwable t) {
-			
+			GuiLogger.getLogger().log(Level.WARNING, t.getMessage(), t);
 		}
 		
 		initializeAppMenu();
@@ -218,7 +220,7 @@ public class MacApplication {
 			Application application = Application.getApplication();
 			application.setDockIconBadge(badge);
 		} catch (Throwable t) {
-			
+			GuiLogger.getLogger().log(Level.WARNING, t.getMessage(), t);
 		}
 	}
 	
@@ -230,7 +232,7 @@ public class MacApplication {
 			Application application = Application.getApplication();
 			application.requestUserAttention(true);
 		} catch (Throwable t) {
-			
+			GuiLogger.getLogger().log(Level.WARNING, t.getMessage(), t);
 		}
 	}
 	
@@ -242,7 +244,7 @@ public class MacApplication {
 			Application application = Application.getApplication();
 			application.setDockMenu(popupMenu);
 		} catch (Throwable t) {
-			
+			GuiLogger.getLogger().log(Level.WARNING, t.getMessage(), t);
 		}
 	}
 	
