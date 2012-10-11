@@ -156,7 +156,7 @@ public final class MacApplication {
 	
 	private static void initializeAppMenu() {
 		TrayPopup popupMenu = new TrayPopup(false);
-		MacApplication.setDockMenu(popupMenu);
+		setDockMenu(popupMenu);
 	}
 	
 	private static void initializeDockIconBadge() {

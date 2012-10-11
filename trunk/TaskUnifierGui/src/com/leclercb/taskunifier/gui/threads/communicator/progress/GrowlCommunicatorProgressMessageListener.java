@@ -32,19 +32,26 @@
  */
 package com.leclercb.taskunifier.gui.threads.communicator.progress;
 
-import com.leclercb.commons.api.progress.ProgressMessage;
+import com.leclercb.commons.api.event.listchange.ListChangeEvent;
+import com.leclercb.commons.api.event.listchange.ListChangeListener;
+import com.leclercb.commons.api.progress.ProgressMessageTransformer;
 import com.leclercb.taskunifier.gui.utils.GrowlUtils;
 import com.leclercb.taskunifier.gui.utils.GrowlUtils.GrowlNotificationList;
 
-public class GrowlCommunicatorProgressMessageListener extends CommunicatorProgressMessageListener {
+public class GrowlCommunicatorProgressMessageListener implements ListChangeListener {
 	
 	public GrowlCommunicatorProgressMessageListener() {
 		
 	}
 	
 	@Override
-	public void showMessage(ProgressMessage message, String content) {
-		GrowlUtils.notify(GrowlNotificationList.COMMUNICATOR, content);
+	public void listChange(ListChangeEvent event) {
+		ProgressMessageTransformer t = CommunicatorProgressMessageTransformer.getInstance();
+		
+		if (t.acceptsEvent(event)) {
+			String content = (String) t.getEventValue(event, null);
+			GrowlUtils.notify(GrowlNotificationList.COMMUNICATOR, content);
+		}
 	}
 	
 }

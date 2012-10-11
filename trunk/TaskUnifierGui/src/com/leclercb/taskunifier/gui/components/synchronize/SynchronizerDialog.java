@@ -38,12 +38,14 @@ import java.util.logging.Level;
 
 import javax.swing.JButton;
 
-import com.leclercb.commons.api.progress.ProgressMessage;
+import com.leclercb.commons.api.event.listchange.ListChangeEvent;
+import com.leclercb.commons.api.event.listchange.ListChangeListener;
+import com.leclercb.commons.api.progress.ProgressMessageTransformer;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.actions.ActionGetSerial;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.api.synchronizer.exc.SynchronizerLicenseException;
-import com.leclercb.taskunifier.gui.components.synchronize.progress.SynchronizerProgressMessageListener;
+import com.leclercb.taskunifier.gui.components.synchronize.progress.SynchronizerProgressMessageTransformer;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -95,12 +97,16 @@ public class SynchronizerDialog extends TUWorkerDialog<Void> {
 	public class SynchronizerDialogWorker extends SynchronizerWorker {
 		
 		public SynchronizerDialogWorker() {
-			super(false, new SynchronizerProgressMessageListener() {
+			super(false, new ListChangeListener() {
 				
 				@Override
-				public void showMessage(ProgressMessage message, String content) {
-					SynchronizerDialog.this.appendToProgressStatus(content
-							+ "\n");
+				public void listChange(ListChangeEvent event) {
+					ProgressMessageTransformer t = SynchronizerProgressMessageTransformer.getInstance();
+					
+					if (t.acceptsEvent(event))
+						SynchronizerDialog.this.appendToProgressStatus(t.getEventValue(
+								event,
+								null) + "\n");
 				}
 				
 			});

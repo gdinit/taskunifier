@@ -33,89 +33,140 @@
 package com.leclercb.taskunifier.gui.components.synchronize.progress;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
-import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessage;
+import com.leclercb.commons.api.progress.ProgressMessageTransformer;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerDefaultProgressMessage;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerMainProgressMessage;
-import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerMainProgressMessage.ProgressMessageType;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerRetrievedModelsProgressMessage;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerUpdatedModelsProgressMessage;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 
-public abstract class SynchronizerProgressMessageListener implements ListChangeListener {
+public class SynchronizerProgressMessageTransformer implements ProgressMessageTransformer {
 	
-	public abstract void showMessage(ProgressMessage message, String content);
+	private static SynchronizerProgressMessageTransformer INSTANCE;
+	
+	public static SynchronizerProgressMessageTransformer getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new SynchronizerProgressMessageTransformer();
+		
+		return INSTANCE;
+	}
+	
+	private SynchronizerProgressMessageTransformer() {
+		
+	}
 	
 	@Override
-	public void listChange(ListChangeEvent event) {
+	public boolean acceptsEvent(ListChangeEvent event) {
+		if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
+			ProgressMessage message = (ProgressMessage) event.getValue();
+			
+			if (message instanceof SynchronizerDefaultProgressMessage) {
+				return true;
+			} else if (message instanceof SynchronizerRetrievedModelsProgressMessage) {
+				SynchronizerRetrievedModelsProgressMessage m = (SynchronizerRetrievedModelsProgressMessage) message;
+				
+				switch (m.getType()) {
+					case PUBLISHER_END:
+					case SYNCHRONIZER_END:
+						return false;
+				}
+				
+				return true;
+			} else if (message instanceof SynchronizerUpdatedModelsProgressMessage) {
+				SynchronizerUpdatedModelsProgressMessage m = (SynchronizerUpdatedModelsProgressMessage) message;
+				
+				switch (m.getType()) {
+					case PUBLISHER_END:
+					case SYNCHRONIZER_END:
+						return false;
+				}
+				
+				return true;
+			} else if (message instanceof SynchronizerMainProgressMessage) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public String getEventValue(ListChangeEvent event, String key) {
 		if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
 			ProgressMessage message = (ProgressMessage) event.getValue();
 			
 			if (message instanceof SynchronizerDefaultProgressMessage) {
 				SynchronizerDefaultProgressMessage m = (SynchronizerDefaultProgressMessage) message;
 				
-				this.showMessage(m, m.getMessage());
+				return m.getMessage();
 			} else if (message instanceof SynchronizerRetrievedModelsProgressMessage) {
 				SynchronizerRetrievedModelsProgressMessage m = (SynchronizerRetrievedModelsProgressMessage) message;
 				
-				if (m.getType().equals(ProgressMessageType.PUBLISHER_END)
-						|| m.getType().equals(
-								ProgressMessageType.SYNCHRONIZER_END))
-					return;
+				switch (m.getType()) {
+					case PUBLISHER_END:
+					case SYNCHRONIZER_END:
+						return null;
+				}
 				
 				String type = TranslationsUtils.translateModelType(
 						m.getModelType(),
 						true);
 				
-				this.showMessage(m, Translations.getString(
+				return Translations.getString(
 						"synchronizer.retrieving_models",
-						type));
+						type);
 			} else if (message instanceof SynchronizerUpdatedModelsProgressMessage) {
 				SynchronizerUpdatedModelsProgressMessage m = (SynchronizerUpdatedModelsProgressMessage) message;
 				
 				String property = null;
 				
-				if (m.getType().equals(ProgressMessageType.PUBLISHER_START))
-					property = "synchronizer.publishing";
-				else if (m.getType().equals(
-						ProgressMessageType.SYNCHRONIZER_START))
-					property = "synchronizer.synchronizing";
+				switch (m.getType()) {
+					case PUBLISHER_START:
+						property = "synchronizer.publishing";
+						break;
+					case SYNCHRONIZER_START:
+						property = "synchronizer.synchronizing";
+						break;
+				}
 				
 				if (property == null)
-					return;
+					return null;
 				
 				String type = TranslationsUtils.translateModelType(
 						m.getModelType(),
 						m.getActionCount() > 1);
 				
-				this.showMessage(m, Translations.getString(
+				return Translations.getString(
 						property,
 						m.getActionCount(),
-						type));
+						type);
 			} else if (message instanceof SynchronizerMainProgressMessage) {
 				SynchronizerMainProgressMessage m = (SynchronizerMainProgressMessage) message;
 				
-				if (m.getType().equals(ProgressMessageType.PUBLISHER_START))
-					this.showMessage(m, Translations.getString(
-							"synchronizer.start_publication",
-							m.getPlugin().getSynchronizerApi().getApiName()));
-				else if (m.getType().equals(ProgressMessageType.PUBLISHER_END))
-					this.showMessage(m, Translations.getString(
-							"synchronizer.publication_completed",
-							m.getPlugin().getSynchronizerApi().getApiName()));
-				else if (m.getType().equals(
-						ProgressMessageType.SYNCHRONIZER_START))
-					this.showMessage(m, Translations.getString(
-							"synchronizer.start_synchronization",
-							m.getPlugin().getSynchronizerApi().getApiName()));
-				else if (m.getType().equals(
-						ProgressMessageType.SYNCHRONIZER_END))
-					this.showMessage(m, Translations.getString(
-							"synchronizer.synchronization_completed",
-							m.getPlugin().getSynchronizerApi().getApiName()));
+				switch (m.getType()) {
+					case PUBLISHER_END:
+						return Translations.getString(
+								"synchronizer.publication_completed",
+								m.getPlugin().getSynchronizerApi().getApiName());
+					case PUBLISHER_START:
+						return Translations.getString(
+								"synchronizer.start_publication",
+								m.getPlugin().getSynchronizerApi().getApiName());
+					case SYNCHRONIZER_END:
+						return Translations.getString(
+								"synchronizer.synchronization_completed",
+								m.getPlugin().getSynchronizerApi().getApiName());
+					case SYNCHRONIZER_START:
+						return Translations.getString(
+								"synchronizer.start_synchronization",
+								m.getPlugin().getSynchronizerApi().getApiName());
+				}
 			}
 		}
+		
+		return null;
 	}
 	
 }

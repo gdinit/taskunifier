@@ -35,7 +35,6 @@ package com.leclercb.taskunifier.gui.utils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -246,38 +245,33 @@ public final class MailUtils {
 	
 	private static String getSubject(Note[] notes) {
 		if (notes == null || notes.length == 0)
-			return "TaskUnifier";
+			return Constants.TITLE;
 		
 		if (notes.length == 1)
-			return "TaskUnifier: " + notes[0].getTitle();
+			return Constants.TITLE + ": " + notes[0].getTitle();
 		
-		return "TaskUnifier: "
+		return Constants.TITLE
+				+ ": "
 				+ notes.length
 				+ " "
-				+ Translations.getString("general.tasks");
+				+ Translations.getString("general.notes");
 	}
 	
 	private static String getSubject(Task[] tasks) {
 		if (tasks == null || tasks.length == 0)
-			return "TaskUnifier";
+			return Constants.TITLE;
 		
 		if (tasks.length == 1)
-			return "TaskUnifier: " + tasks[0].getTitle();
+			return Constants.TITLE + ": " + tasks[0].getTitle();
 		
-		return "TaskUnifier: "
+		return Constants.TITLE
+				+ ": "
 				+ tasks.length
 				+ " "
 				+ Translations.getString("general.tasks");
 	}
 	
 	private static String getBody(Note[] notes, boolean html) {
-		List<NoteColumn> columns = new ArrayList<NoteColumn>(
-				Arrays.asList(NoteColumn.values()));
-		columns.remove(NoteColumn.MODEL);
-		columns.remove(NoteColumn.MODEL_CREATION_DATE);
-		columns.remove(NoteColumn.MODEL_UPDATE_DATE);
-		NoteColumn[] c = columns.toArray(new NoteColumn[0]);
-		
 		String header = Translations.getString("mailto.notes.import_com_file");
 		
 		if (html)
@@ -285,20 +279,15 @@ public final class MailUtils {
 		else
 			header = header + "\n-------------------\n\n";
 		
-		return NoteUtils.toText(notes, c, html, header, null);
+		return NoteUtils.toText(
+				notes,
+				NoteColumn.getUsedColumns(),
+				html,
+				header,
+				null);
 	}
 	
 	private static String getBody(Task[] tasks, boolean html) {
-		List<TaskColumn> columns = new ArrayList<TaskColumn>(
-				Arrays.asList(TaskColumn.values()));
-		columns.remove(TaskColumn.MODEL);
-		columns.remove(TaskColumn.MODEL_CREATION_DATE);
-		columns.remove(TaskColumn.MODEL_UPDATE_DATE);
-		columns.remove(TaskColumn.MODEL_EDIT);
-		columns.remove(TaskColumn.SHOW_CHILDREN);
-		columns.remove(TaskColumn.ORDER);
-		TaskColumn[] c = columns.toArray(new TaskColumn[0]);
-		
 		String header = Translations.getString("mailto.tasks.import_com_file");
 		
 		if (html)
@@ -306,7 +295,12 @@ public final class MailUtils {
 		else
 			header = header + "\n-------------------\n\n";
 		
-		return TaskUtils.toText(tasks, c, html, header, null);
+		return TaskUtils.toText(
+				tasks,
+				TaskColumn.getUsedColumns(),
+				html,
+				header,
+				null);
 	}
 	
 }

@@ -43,6 +43,7 @@ import java.util.logging.Level;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.models.ContactFactory;
@@ -184,8 +185,9 @@ public final class SynchronizerUtils {
 			listIds.add(id);
 		}
 		
-		while (listIds.remove(plugin.getId()))
-			;
+		while (listIds.contains(plugin.getId()))
+			listIds.remove(plugin.getId());
+		
 		listIds.add(plugin.getId());
 		
 		Main.getUserSettings().setStringProperty(
@@ -213,8 +215,8 @@ public final class SynchronizerUtils {
 			listIds.add(id);
 		}
 		
-		while (listIds.remove(plugin.getId()))
-			;
+		while (listIds.contains(plugin.getId()))
+			listIds.remove(plugin.getId());
 		
 		Main.getUserSettings().setStringProperty(
 				"plugin.publisher.ids",
@@ -241,6 +243,8 @@ public final class SynchronizerUtils {
 	}
 	
 	public static void initializeProxy(SynchronizerGuiPlugin plugin) {
+		CheckUtils.isNotNull(plugin);
+		
 		if (!Main.getSettings().getBooleanProperty("proxy.use_system_proxies")
 				&& Main.getSettings().getBooleanProperty("proxy.enabled")) {
 			final String host = Main.getSettings().getStringProperty(
@@ -296,6 +300,8 @@ public final class SynchronizerUtils {
 	}
 	
 	public static void removeProxy(SynchronizerGuiPlugin plugin) {
+		CheckUtils.isNotNull(plugin);
+		
 		plugin.getSynchronizerApi().setProxyHost(null);
 		plugin.getSynchronizerApi().setProxyPort(0);
 		plugin.getSynchronizerApi().setProxyUsername(null);

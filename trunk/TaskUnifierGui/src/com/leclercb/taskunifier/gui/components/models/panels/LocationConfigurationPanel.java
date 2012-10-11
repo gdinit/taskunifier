@@ -42,7 +42,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -177,7 +176,7 @@ public class LocationConfigurationPanel extends JSplitPane implements IModelList
 		builder.appendI15d(
 				"general.location.description",
 				true,
-				new JScrollPane(locationDescription));
+				ComponentFactory.createJScrollPane(locationDescription, true));
 		
 		// Location Latitude
 		builder.appendI15d("general.location.latitude", true, locationLatitude);

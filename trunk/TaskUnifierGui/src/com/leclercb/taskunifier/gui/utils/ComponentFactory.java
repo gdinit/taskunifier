@@ -125,6 +125,7 @@ public final class ComponentFactory {
 				StringValueModel.INSTANCE_INDENTED,
 				IconValueModel.INSTANCE));
 		
+		// FIXME: Fix auto completion
 		if (false) {
 			AutoCompleteDecorator.decorate(
 					comboBox,
@@ -157,6 +158,7 @@ public final class ComponentFactory {
 				StringValueTaskPriority.INSTANCE,
 				IconValueTaskPriority.INSTANCE));
 		
+		// FIXME: Fix auto completion
 		if (false) {
 			AutoCompleteDecorator.decorate(
 					comboBox,
@@ -185,6 +187,7 @@ public final class ComponentFactory {
 		comboBox.setRenderer(new DefaultListRenderer(
 				StringValueTaskRepeatFrom.INSTANCE));
 		
+		// FIXME: Fix auto completion
 		if (false) {
 			AutoCompleteDecorator.decorate(
 					comboBox,
@@ -215,6 +218,7 @@ public final class ComponentFactory {
 		comboBox.setRenderer(new DefaultListRenderer(
 				StringValueTaskStatus.INSTANCE));
 		
+		// FIXME: Fix auto completion
 		if (false) {
 			AutoCompleteDecorator.decorate(
 					comboBox,
@@ -249,11 +253,13 @@ public final class ComponentFactory {
 	
 	public static JSplitPane createThinJSplitPane(int orientation) {
 		JSplitPane splitPane = new JSplitPane(orientation);
+		
 		splitPane.setContinuousLayout(true);
 		splitPane.setDividerSize(1);
 		((BasicSplitPaneUI) splitPane.getUI()).getDivider().setBorder(
 				BorderFactory.createMatteBorder(0, 1, 0, 0, new Color(0xa5a5a5)));
 		splitPane.setBorder(BorderFactory.createEmptyBorder());
+		
 		return splitPane;
 	}
 	
@@ -295,6 +301,7 @@ public final class ComponentFactory {
 				16,
 				null,
 				PostponeType.START_DATE);
+		
 		for (ActionPostponeTasks action : actions) {
 			postponeStartDateMenu.add(action);
 		}
@@ -304,6 +311,7 @@ public final class ComponentFactory {
 				16,
 				null,
 				PostponeType.DUE_DATE);
+		
 		for (ActionPostponeTasks action : actions) {
 			postponeDueDateMenu.add(action);
 		}
@@ -313,6 +321,7 @@ public final class ComponentFactory {
 				16,
 				null,
 				PostponeType.BOTH);
+		
 		for (ActionPostponeTasks action : actions) {
 			postponeBothMenu.add(action);
 		}
@@ -371,6 +380,7 @@ public final class ComponentFactory {
 				PostponeType.START_DATE,
 				16,
 				16);
+		
 		for (ActionPostponeTaskBeans action : actions) {
 			postponeStartDateMenu.add(action);
 		}
@@ -380,6 +390,7 @@ public final class ComponentFactory {
 				PostponeType.DUE_DATE,
 				16,
 				16);
+		
 		for (ActionPostponeTaskBeans action : actions) {
 			postponeDueDateMenu.add(action);
 		}
@@ -389,6 +400,7 @@ public final class ComponentFactory {
 				PostponeType.BOTH,
 				16,
 				16);
+		
 		for (ActionPostponeTaskBeans action : actions) {
 			postponeBothMenu.add(action);
 		}

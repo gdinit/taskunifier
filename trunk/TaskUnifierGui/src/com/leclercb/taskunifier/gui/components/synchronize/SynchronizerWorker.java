@@ -41,6 +41,7 @@ import java.util.logging.Level;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
+import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.synchronizer.Connection;
 import com.leclercb.taskunifier.api.synchronizer.Synchronizer;
@@ -51,7 +52,6 @@ import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerD
 import com.leclercb.taskunifier.gui.actions.ActionPluginConfiguration;
 import com.leclercb.taskunifier.gui.actions.ActionSave;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
-import com.leclercb.taskunifier.gui.components.synchronize.progress.SynchronizerProgressMessageListener;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
@@ -77,15 +77,13 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 	private List<Type> types;
 	
 	private boolean silent;
-	private SynchronizerProgressMessageListener handler;
+	private ListChangeListener handler;
 	
 	public SynchronizerWorker(boolean silent) {
 		this(silent, null);
 	}
 	
-	public SynchronizerWorker(
-			boolean silent,
-			SynchronizerProgressMessageListener handler) {
+	public SynchronizerWorker(boolean silent, ListChangeListener handler) {
 		super(Constants.PROGRESS_MONITOR);
 		
 		this.plugins = new ArrayList<SynchronizerGuiPlugin>();

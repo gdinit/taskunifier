@@ -4,4 +4,3 @@
 - Allow TU 3.x license key to work with TU 2.x
 - Finish review
 - Translations
-- Sign mac app

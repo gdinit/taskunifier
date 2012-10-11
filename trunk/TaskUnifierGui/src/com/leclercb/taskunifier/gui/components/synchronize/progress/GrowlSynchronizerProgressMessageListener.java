@@ -32,14 +32,16 @@
  */
 package com.leclercb.taskunifier.gui.components.synchronize.progress;
 
+import com.leclercb.commons.api.event.listchange.ListChangeEvent;
+import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessage;
+import com.leclercb.commons.api.progress.ProgressMessageTransformer;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerMainProgressMessage;
-import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerMainProgressMessage.ProgressMessageType;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerUpdatedModelsProgressMessage;
 import com.leclercb.taskunifier.gui.utils.GrowlUtils;
 import com.leclercb.taskunifier.gui.utils.GrowlUtils.GrowlNotificationList;
 
-public class GrowlSynchronizerProgressMessageListener extends SynchronizerProgressMessageListener {
+public class GrowlSynchronizerProgressMessageListener implements ListChangeListener {
 	
 	private StringBuilder builder;
 	
@@ -48,26 +50,39 @@ public class GrowlSynchronizerProgressMessageListener extends SynchronizerProgre
 	}
 	
 	@Override
-	public void showMessage(ProgressMessage message, String content) {
-		if (message instanceof SynchronizerUpdatedModelsProgressMessage) {
-			this.builder.append(content + "\n");
-		} else if (message.getClass().equals(
-				SynchronizerMainProgressMessage.class)) {
-			SynchronizerMainProgressMessage m = (SynchronizerMainProgressMessage) message;
-			
-			if (m.getType().equals(ProgressMessageType.PUBLISHER_START)
-					|| m.getType().equals(
-							ProgressMessageType.SYNCHRONIZER_START)) {
-				GrowlUtils.notify(
-						GrowlNotificationList.SYNCHRONIZATION,
-						content);
-			} else {
-				GrowlUtils.notify(
-						GrowlNotificationList.SYNCHRONIZATION,
-						content,
-						this.builder.toString());
+	public void listChange(ListChangeEvent event) {
+		ProgressMessageTransformer t = SynchronizerProgressMessageTransformer.getInstance();
+		
+		if (t.acceptsEvent(event)) {
+			if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
+				ProgressMessage message = (ProgressMessage) event.getValue();
 				
-				this.builder = new StringBuilder();
+				String content = (String) t.getEventValue(event, null);
+				
+				if (message instanceof SynchronizerUpdatedModelsProgressMessage) {
+					this.builder.append(content + "\n");
+				} else if (message.getClass().equals(
+						SynchronizerMainProgressMessage.class)) {
+					SynchronizerMainProgressMessage m = (SynchronizerMainProgressMessage) message;
+					
+					switch (m.getType()) {
+						case PUBLISHER_START:
+							GrowlUtils.notify(
+									GrowlNotificationList.SYNCHRONIZATION,
+									content);
+							
+							break;
+						case SYNCHRONIZER_START:
+							GrowlUtils.notify(
+									GrowlNotificationList.SYNCHRONIZATION,
+									content,
+									this.builder.toString());
+							
+							this.builder = new StringBuilder();
+							
+							break;
+					}
+				}
 			}
 		}
 	}

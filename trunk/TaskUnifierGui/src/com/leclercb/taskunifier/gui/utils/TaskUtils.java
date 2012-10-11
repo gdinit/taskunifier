@@ -530,6 +530,7 @@ public final class TaskUtils {
 		if (task.getDueDate() != null) {
 			boolean useTime = Main.getSettings().getBooleanProperty(
 					"date.use_due_time");
+			
 			double diffDays = DateUtils.getDiffInDays(
 					Calendar.getInstance(),
 					task.getDueDate(),
