@@ -32,22 +32,28 @@
  */
 package com.leclercb.taskunifier.gui.threads.reminder.progress;
 
-import com.leclercb.commons.api.progress.ProgressMessage;
+import com.leclercb.commons.api.event.listchange.ListChangeEvent;
+import com.leclercb.commons.api.event.listchange.ListChangeListener;
+import com.leclercb.commons.api.progress.ProgressMessageTransformer;
 import com.leclercb.taskunifier.gui.utils.GrowlUtils;
 import com.leclercb.taskunifier.gui.utils.GrowlUtils.GrowlNotificationList;
 
-public class GrowlReminderProgressMessageListener extends ReminderProgressMessageListener {
+public class GrowlReminderProgressMessageListener implements ListChangeListener {
 	
 	public GrowlReminderProgressMessageListener() {
 		
 	}
 	
 	@Override
-	public void showMessage(
-			ProgressMessage message,
-			String title,
-			String description) {
-		GrowlUtils.notify(GrowlNotificationList.REMINDER, title, description);
+	public void listChange(ListChangeEvent event) {
+		ProgressMessageTransformer t = ReminderProgressMessageTransformer.getInstance();
+		
+		if (t.acceptsEvent(event)) {
+			GrowlUtils.notify(
+					GrowlNotificationList.REMINDER,
+					(String) t.getEventValue(event, "title"),
+					(String) t.getEventValue(event, "description"));
+		}
 	}
 	
 }

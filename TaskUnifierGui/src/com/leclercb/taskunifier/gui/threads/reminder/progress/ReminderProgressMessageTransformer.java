@@ -30,27 +30,73 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.threads.communicator.progress;
+package com.leclercb.taskunifier.gui.threads.reminder.progress;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
-import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessage;
+import com.leclercb.commons.api.progress.ProgressMessageTransformer;
+import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
+import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
-public abstract class CommunicatorProgressMessageListener implements ListChangeListener {
+public class ReminderProgressMessageTransformer implements ProgressMessageTransformer {
 	
-	public abstract void showMessage(ProgressMessage message, String content);
+	private static ReminderProgressMessageTransformer INSTANCE;
+	
+	public static ReminderProgressMessageTransformer getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new ReminderProgressMessageTransformer();
+		
+		return INSTANCE;
+	}
+	
+	private ReminderProgressMessageTransformer() {
+		
+	}
 	
 	@Override
-	public void listChange(ListChangeEvent event) {
+	public boolean acceptsEvent(ListChangeEvent event) {
 		if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
 			ProgressMessage message = (ProgressMessage) event.getValue();
 			
-			if (message instanceof CommunicatorDefaultProgressMessage) {
-				CommunicatorDefaultProgressMessage m = (CommunicatorDefaultProgressMessage) message;
-				
-				this.showMessage(m, m.getMessage());
+			if (message instanceof ReminderDefaultProgressMessage) {
+				return true;
 			}
 		}
+		
+		return false;
+	}
+	
+	@Override
+	public Object getEventValue(ListChangeEvent event, String key) {
+		if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
+			ProgressMessage message = (ProgressMessage) event.getValue();
+			
+			if (message instanceof ReminderDefaultProgressMessage) {
+				ReminderDefaultProgressMessage m = (ReminderDefaultProgressMessage) message;
+				
+				if (key != null && key.equalsIgnoreCase("description"))
+					return getDescription(m.getTask());
+				else
+					return m.getTask().getTitle();
+			}
+		}
+		
+		return null;
+	}
+	
+	private static String getDescription(Task task) {
+		StringBuffer description = new StringBuffer();
+		
+		if (TaskUtils.isInDueDateReminderZone(task)) {
+			description.append("Due by ");
+			description.append(StringValueCalendar.INSTANCE_DATE_TIME.getString(task.getDueDate()));
+		} else if (TaskUtils.isInStartDateReminderZone(task)) {
+			description.append("Starts on ");
+			description.append(StringValueCalendar.INSTANCE_DATE_TIME.getString(task.getStartDate()));
+		}
+		
+		return description.toString();
 	}
 	
 }

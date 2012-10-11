@@ -30,50 +30,52 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.threads.reminder.progress;
+package com.leclercb.taskunifier.gui.threads.communicator.progress;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
-import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessage;
-import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
-import com.leclercb.taskunifier.gui.utils.TaskUtils;
+import com.leclercb.commons.api.progress.ProgressMessageTransformer;
 
-public abstract class ReminderProgressMessageListener implements ListChangeListener {
+public class CommunicatorProgressMessageTransformer implements ProgressMessageTransformer {
 	
-	public abstract void showMessage(
-			ProgressMessage message,
-			String title,
-			String description);
+	private static CommunicatorProgressMessageTransformer INSTANCE;
+	
+	public static CommunicatorProgressMessageTransformer getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new CommunicatorProgressMessageTransformer();
+		
+		return INSTANCE;
+	}
+	
+	private CommunicatorProgressMessageTransformer() {
+		
+	}
 	
 	@Override
-	public void listChange(ListChangeEvent event) {
+	public boolean acceptsEvent(ListChangeEvent event) {
 		if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
 			ProgressMessage message = (ProgressMessage) event.getValue();
 			
-			if (message instanceof ReminderDefaultProgressMessage) {
-				ReminderDefaultProgressMessage m = (ReminderDefaultProgressMessage) message;
-				
-				this.showMessage(
-						m,
-						m.getTask().getTitle(),
-						getDescription(m.getTask()));
+			if (message instanceof CommunicatorDefaultProgressMessage) {
+				return true;
 			}
 		}
+		
+		return false;
 	}
 	
-	private static String getDescription(Task task) {
-		StringBuffer description = new StringBuffer();
-		
-		if (TaskUtils.isInDueDateReminderZone(task)) {
-			description.append("Due by ");
-			description.append(StringValueCalendar.INSTANCE_DATE_TIME.getString(task.getDueDate()));
-		} else if (TaskUtils.isInStartDateReminderZone(task)) {
-			description.append("Starts on ");
-			description.append(StringValueCalendar.INSTANCE_DATE_TIME.getString(task.getStartDate()));
+	@Override
+	public Object getEventValue(ListChangeEvent event, String key) {
+		if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
+			ProgressMessage message = (ProgressMessage) event.getValue();
+			
+			if (message instanceof CommunicatorDefaultProgressMessage) {
+				CommunicatorDefaultProgressMessage m = (CommunicatorDefaultProgressMessage) message;
+				return m.getMessage();
+			}
 		}
 		
-		return description.toString();
+		return null;
 	}
 	
 }

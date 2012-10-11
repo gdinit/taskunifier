@@ -7,8 +7,7 @@ components.notesearchertree
 components.statusbar.StatusBarElements
 components.tasksearcheredit
 components.tasksearchertree
-main
-utils
+main.Main
 
 REVIEWED
 --------
@@ -17,15 +16,3 @@ components.notesearchertree.draganddrop
 components.notesearchertree.nodes
 components.tasksearchertree.draganddrop
 components.tasksearchertree.nodes
-main.frames
-utils.BackupUtils
-utils.ContactUtils
-utils.CommunicatorUtils
-utils.Growl
-utils.GrowlUtils
-utils.HttpUtils
-utils.ImageUtils
-utils.ProtocolUtils
-utils.SettingUtils
-utils.TimeValue
-utils.UndoSupport

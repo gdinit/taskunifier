@@ -34,6 +34,8 @@ package com.leclercb.taskunifier.gui.utils;
 
 import java.text.SimpleDateFormat;
 
+import com.leclercb.commons.api.utils.CheckUtils;
+
 public final class DateTimeFormatUtils {
 	
 	private DateTimeFormatUtils() {
@@ -105,6 +107,9 @@ public final class DateTimeFormatUtils {
 		private String mask;
 		
 		public DateTimeFormatInfo(SimpleDateFormat format, String mask) {
+			CheckUtils.isNotNull(format);
+			CheckUtils.isNotNull(mask);
+			
 			this.format = format;
 			this.mask = mask;
 		}

@@ -115,14 +115,14 @@ public class MainSwingRunnable implements Runnable {
 			
 			Main.handleArguments(this.args);
 			
-			boolean syncStart = Main.getUserSettings().getBooleanProperty(
-					"synchronizer.sync_start");
-			boolean publishStart = Main.getUserSettings().getBooleanProperty(
-					"synchronizer.publish_start");
-			
 			if (Main.isFirstExecution()) {
 				ActionSynchronizeAndPublish.synchronizeAndPublish(false);
 			} else {
+				boolean syncStart = Main.getUserSettings().getBooleanProperty(
+						"synchronizer.sync_start");
+				boolean publishStart = Main.getUserSettings().getBooleanProperty(
+						"synchronizer.publish_start");
+				
 				if (syncStart && publishStart)
 					ActionSynchronizeAndPublish.synchronizeAndPublish(false);
 				else if (syncStart)
@@ -250,7 +250,6 @@ public class MainSwingRunnable implements Runnable {
 		
 		if (Main.isFirstExecution()) {
 			new LanguageDialog().setVisible(true);
-			
 			new WelcomeDialog(messages.toArray(new String[0]), messageButtons).setVisible(true);
 		} else if (messages.size() > 0) {
 			new WelcomeDialog(messages.toArray(new String[0]), messageButtons).setVisible(true);

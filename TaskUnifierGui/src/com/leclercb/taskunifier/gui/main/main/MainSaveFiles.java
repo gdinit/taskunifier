@@ -172,9 +172,7 @@ public final class MainSaveFiles {
 							+ suffix
 							+ ".xml"));
 			
-			GuiLogger.getLogger().log(
-					Level.INFO,
-					"Saving contacts (" + folder + ")");
+			GuiLogger.getLogger().log(Level.INFO, "Saving contacts: " + folder);
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(
 					Level.SEVERE,
@@ -196,9 +194,7 @@ public final class MainSaveFiles {
 							+ suffix
 							+ ".xml"));
 			
-			GuiLogger.getLogger().log(
-					Level.INFO,
-					"Saving contexts (" + folder + ")");
+			GuiLogger.getLogger().log(Level.INFO, "Saving contexts: " + folder);
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(
 					Level.SEVERE,
@@ -220,9 +216,7 @@ public final class MainSaveFiles {
 							+ suffix
 							+ ".xml"));
 			
-			GuiLogger.getLogger().log(
-					Level.INFO,
-					"Saving folders (" + folder + ")");
+			GuiLogger.getLogger().log(Level.INFO, "Saving folders: " + folder);
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(
 					Level.SEVERE,
@@ -244,9 +238,7 @@ public final class MainSaveFiles {
 							+ suffix
 							+ ".xml"));
 			
-			GuiLogger.getLogger().log(
-					Level.INFO,
-					"Saving goals (" + folder + ")");
+			GuiLogger.getLogger().log(Level.INFO, "Saving goals: " + folder);
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(
 					Level.SEVERE,
@@ -268,9 +260,7 @@ public final class MainSaveFiles {
 							+ suffix
 							+ ".xml"));
 			
-			GuiLogger.getLogger().log(
-					Level.INFO,
-					"Saving locations (" + folder + ")");
+			GuiLogger.getLogger().log(Level.INFO, "Saving locations: " + folder);
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(
 					Level.SEVERE,
@@ -292,9 +282,7 @@ public final class MainSaveFiles {
 							+ suffix
 							+ ".xml"));
 			
-			GuiLogger.getLogger().log(
-					Level.INFO,
-					"Saving notes (" + folder + ")");
+			GuiLogger.getLogger().log(Level.INFO, "Saving notes: " + folder);
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(
 					Level.SEVERE,
@@ -316,9 +304,7 @@ public final class MainSaveFiles {
 							+ suffix
 							+ ".xml"));
 			
-			GuiLogger.getLogger().log(
-					Level.INFO,
-					"Saving tasks (" + folder + ")");
+			GuiLogger.getLogger().log(Level.INFO, "Saving tasks: " + folder);
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(
 					Level.SEVERE,
@@ -347,7 +333,7 @@ public final class MainSaveFiles {
 			
 			GuiLogger.getLogger().log(
 					Level.INFO,
-					"Saving task templates (" + folder + ")");
+					"Saving task templates: " + folder);
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(
 					Level.SEVERE,
@@ -376,7 +362,7 @@ public final class MainSaveFiles {
 			
 			GuiLogger.getLogger().log(
 					Level.INFO,
-					"Saving task searchers (" + folder + ")");
+					"Saving task searchers: " + folder);
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(
 					Level.SEVERE,
@@ -405,7 +391,7 @@ public final class MainSaveFiles {
 			
 			GuiLogger.getLogger().log(
 					Level.INFO,
-					"Saving note searchers (" + folder + ")");
+					"Saving note searchers: " + folder);
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(
 					Level.SEVERE,

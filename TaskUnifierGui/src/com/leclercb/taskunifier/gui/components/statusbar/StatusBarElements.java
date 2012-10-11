@@ -41,9 +41,11 @@ import java.util.TimerTask;
 
 import javax.swing.JLabel;
 
-import com.leclercb.commons.api.progress.ProgressMessage;
+import com.leclercb.commons.api.event.listchange.ListChangeEvent;
+import com.leclercb.commons.api.event.listchange.ListChangeListener;
+import com.leclercb.commons.api.progress.ProgressMessageTransformer;
 import com.leclercb.taskunifier.gui.components.notes.NoteTableView;
-import com.leclercb.taskunifier.gui.components.synchronize.progress.SynchronizerProgressMessageListener;
+import com.leclercb.taskunifier.gui.components.synchronize.progress.SynchronizerProgressMessageTransformer;
 import com.leclercb.taskunifier.gui.components.tasks.TaskTableView;
 import com.leclercb.taskunifier.gui.components.views.NoteView;
 import com.leclercb.taskunifier.gui.components.views.TaskView;
@@ -56,7 +58,7 @@ import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.main.frames.FrameView;
 import com.leclercb.taskunifier.gui.threads.Threads;
-import com.leclercb.taskunifier.gui.threads.communicator.progress.CommunicatorProgressMessageListener;
+import com.leclercb.taskunifier.gui.threads.communicator.progress.CommunicatorProgressMessageTransformer;
 import com.leclercb.taskunifier.gui.threads.scheduledsync.ScheduledSyncThread;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
@@ -69,22 +71,28 @@ final class StatusBarElements {
 	public static final JLabel createSynchronizerStatus() {
 		final JLabel element = new JLabel();
 		
-		Constants.PROGRESS_MONITOR.addListChangeListener(new SynchronizerProgressMessageListener() {
+		Constants.PROGRESS_MONITOR.addListChangeListener(new ListChangeListener() {
 			
 			@Override
-			public void showMessage(ProgressMessage message, String content) {
-				element.setText(Translations.getString("synchronizer.status")
-						+ ": "
-						+ content);
+			public void listChange(ListChangeEvent event) {
+				ProgressMessageTransformer t = SynchronizerProgressMessageTransformer.getInstance();
+				
+				if (t.acceptsEvent(event))
+					element.setText(Translations.getString("synchronizer.status")
+							+ ": "
+							+ t.getEventValue(event, null));
 			}
 			
 		});
 		
-		Constants.PROGRESS_MONITOR.addListChangeListener(new CommunicatorProgressMessageListener() {
+		Constants.PROGRESS_MONITOR.addListChangeListener(new ListChangeListener() {
 			
 			@Override
-			public void showMessage(ProgressMessage message, String content) {
-				element.setText(content);
+			public void listChange(ListChangeEvent event) {
+				ProgressMessageTransformer t = CommunicatorProgressMessageTransformer.getInstance();
+				
+				if (t.acceptsEvent(event))
+					element.setText((String) t.getEventValue(event, null));
 			}
 			
 		});

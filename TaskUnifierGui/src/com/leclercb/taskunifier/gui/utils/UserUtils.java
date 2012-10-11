@@ -127,6 +127,11 @@ public final class UserUtils implements ListChangeSupported {
 			properties.load(new FileInputStream(file));
 			return properties.getProperty("general.user.name");
 		} catch (Exception e) {
+			GuiLogger.getLogger().log(
+					Level.WARNING,
+					"Cannot get user name from settings",
+					e);
+			
 			return null;
 		}
 	}
