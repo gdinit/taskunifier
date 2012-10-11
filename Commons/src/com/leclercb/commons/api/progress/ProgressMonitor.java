@@ -79,17 +79,11 @@ public class ProgressMonitor implements ListChangeSupported {
 		this.messages.clear();
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void addListChangeListener(ListChangeListener listener) {
 		this.listChangeSupport.addListChangeListener(listener);
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void removeListChangeListener(ListChangeListener listener) {
 		this.listChangeSupport.removeListChangeListener(listener);
