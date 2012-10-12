@@ -1,3 +1,35 @@
+/*
+ * TaskUnifier
+ * Copyright (c) 2011, Benjamin Leclerc
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *   - Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ *   - Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *
+ *   - Neither the name of TaskUnifier or the names of its
+ *     contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+ * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 package com.leclercb.taskunifier.gui.components.calendar;
 
 import java.awt.BorderLayout;
@@ -29,7 +61,9 @@ import bizcal.swing.CalendarListener.CalendarAdapter;
 import bizcal.util.DateInterval;
 import bizcal.util.TimeOfDay;
 
+import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
+import com.leclercb.commons.api.properties.events.WeakSavePropertiesListener;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
@@ -45,7 +79,7 @@ import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
-public class TasksCalendarPanel extends JPanel implements TaskCalendarView, SavePropertiesListener {
+public class TasksCalendarPanel extends JPanel implements TaskCalendarView, SavePropertiesListener, PropertyChangeListener {
 	
 	private ModelSelectionChangeSupport modelSelectionChangeSupport;
 	
@@ -64,7 +98,9 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 	
 	public TasksCalendarPanel() {
 		this.modelSelectionChangeSupport = new ModelSelectionChangeSupport(this);
-		Main.getSettings().addSavePropertiesListener(this);
+		
+		Main.getSettings().addSavePropertiesListener(
+				new WeakSavePropertiesListener(Main.getSettings(), this));
 		
 		this.initialize();
 		
@@ -218,15 +254,7 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 				});
 		
 		Main.getSettings().addPropertyChangeListener(
-				"tasksearcher.show_completed_tasks",
-				new PropertyChangeListener() {
-					
-					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
-						TasksCalendarPanel.this.refreshTasks();
-					}
-					
-				});
+				new WeakPropertyChangeListener(Main.getSettings(), this));
 		
 		int zoom = Main.getSettings().getIntegerProperty(
 				"view.calendar.zoom",
@@ -234,19 +262,7 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 		this.calendarPanel.getZoomSlider().setValue(zoom);
 		
 		Main.getSettings().addPropertyChangeListener(
-				"view.calendar.zoom",
-				new PropertyChangeListener() {
-					
-					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
-						int zoom = Main.getSettings().getIntegerProperty(
-								"view.calendar.zoom",
-								80);
-						TasksCalendarPanel.this.calendarPanel.getZoomSlider().setValue(
-								zoom);
-					}
-					
-				});
+				new WeakPropertyChangeListener(Main.getSettings(), this));
 		
 		this.add(this.calendarPanel, BorderLayout.CENTER);
 		
@@ -281,12 +297,15 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 		try {
 			this.dayViewPanel.getView().deselect();
 		} catch (Exception e) {}
+		
 		try {
 			this.weekViewPanel.getView().deselect();
 		} catch (Exception e) {}
+		
 		try {
 			this.monthViewPanel.getView().deselect();
 		} catch (Exception e) {}
+		
 		try {
 			this.listViewPanel.getView().deselect();
 		} catch (Exception e) {}
@@ -309,6 +328,10 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 	}
 	
 	private class TasksCalendarListener extends CalendarAdapter {
+		
+		public TasksCalendarListener() {
+			
+		}
 		
 		@Override
 		public void eventsSelected(List<Event> events) {
@@ -356,8 +379,8 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 		@Override
 		public void moved(
 				Event event,
-				Object orgCalId,
-				Date orgDate,
+				Object oldCalId,
+				Date oldDate,
 				Object newCalId,
 				Date newDate) throws Exception {
 			newDate = this.roundMinutes(newDate);
@@ -365,7 +388,7 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 			for (TasksCalendar calendar : TasksCalendarPanel.this.tasksCalendars)
 				if (calendar.getId().equals(
 						event.get(NamedCalendar.CALENDAR_ID)))
-					calendar.moved(event, orgDate, newDate);
+					calendar.moved(event, oldDate, newDate);
 			
 			TasksCalendarPanel.this.refreshTasks();
 		}
@@ -373,15 +396,15 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 		@Override
 		public void resized(
 				Event event,
-				Object orgCalId,
-				Date orgEndDate,
+				Object oldCalId,
+				Date oldEndDate,
 				Date newEndDate) throws Exception {
 			newEndDate = this.roundMinutes(newEndDate);
 			
 			for (TasksCalendar calendar : TasksCalendarPanel.this.tasksCalendars)
 				if (calendar.getId().equals(
 						event.get(NamedCalendar.CALENDAR_ID)))
-					calendar.resized(event, orgEndDate, newEndDate);
+					calendar.resized(event, oldEndDate, newEndDate);
 			
 			TasksCalendarPanel.this.refreshTasks();
 		}
@@ -426,6 +449,21 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 		Main.getSettings().setIntegerProperty(
 				"view.calendar.zoom",
 				this.calendarPanel.getZoomSlider().getValue());
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+		if (event.getPropertyName().equals("tasksearcher.show_completed_tasks")) {
+			this.refreshTasks();
+		}
+		
+		if (event.getPropertyName().equals("view.calendar.zoom")) {
+			int zoom = Main.getSettings().getIntegerProperty(
+					"view.calendar.zoom",
+					80);
+			
+			this.calendarPanel.getZoomSlider().setValue(zoom);
+		}
 	}
 	
 	@Override

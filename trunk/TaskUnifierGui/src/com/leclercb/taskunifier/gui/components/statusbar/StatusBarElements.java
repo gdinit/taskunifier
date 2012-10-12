@@ -34,7 +34,6 @@ package com.leclercb.taskunifier.gui.components.statusbar;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -43,7 +42,10 @@ import javax.swing.JLabel;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
+import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
+import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessageTransformer;
+import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
 import com.leclercb.taskunifier.gui.components.notes.NoteTableView;
 import com.leclercb.taskunifier.gui.components.synchronize.progress.SynchronizerProgressMessageTransformer;
 import com.leclercb.taskunifier.gui.components.tasks.TaskTableView;
@@ -62,120 +64,90 @@ import com.leclercb.taskunifier.gui.threads.communicator.progress.CommunicatorPr
 import com.leclercb.taskunifier.gui.threads.scheduledsync.ScheduledSyncThread;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-final class StatusBarElements {
+final class StatusBarElements implements ListChangeListener, PropertyChangeListener {
 	
-	private StatusBarElements() {
-		
+	private JLabel synchronizerStatusLabel;
+	private JLabel lastSynchronizationDateLabel;
+	private JLabel scheduledSyncStatusLabel;
+	private JLabel rowCountLabel;
+	private JLabel currentDateTime;
+	
+	public StatusBarElements(int frameId) {
+		this.initializeSynchronizerStatus();
+		this.initializeLastSynchronizationDate();
+		this.initializeScheduledSyncStatus();
+		this.initializeRowCount(frameId);
+		this.initializeCurrentDateTime();
 	}
 	
-	public static final JLabel createSynchronizerStatus() {
-		final JLabel element = new JLabel();
-		
-		Constants.PROGRESS_MONITOR.addListChangeListener(new ListChangeListener() {
-			
-			@Override
-			public void listChange(ListChangeEvent event) {
-				ProgressMessageTransformer t = SynchronizerProgressMessageTransformer.getInstance();
-				
-				if (t.acceptsEvent(event))
-					element.setText(Translations.getString("synchronizer.status")
-							+ ": "
-							+ t.getEventValue(event, null));
-			}
-			
-		});
-		
-		Constants.PROGRESS_MONITOR.addListChangeListener(new ListChangeListener() {
-			
-			@Override
-			public void listChange(ListChangeEvent event) {
-				ProgressMessageTransformer t = CommunicatorProgressMessageTransformer.getInstance();
-				
-				if (t.acceptsEvent(event))
-					element.setText((String) t.getEventValue(event, null));
-			}
-			
-		});
-		
-		element.setText(Translations.getString("synchronizer.status") + ": ");
-		
-		return element;
+	public JLabel getSynchronizerStatusLabel() {
+		return this.synchronizerStatusLabel;
 	}
 	
-	public static final JLabel createLastSynchronizationDate() {
-		final JLabel element = new JLabel();
+	public JLabel getLastSynchronizationDateLabel() {
+		return this.lastSynchronizationDateLabel;
+	}
+	
+	public JLabel getScheduledSyncStatusLabel() {
+		return this.scheduledSyncStatusLabel;
+	}
+	
+	public JLabel getRowCountLabel() {
+		return this.rowCountLabel;
+	}
+	
+	public JLabel getCurrentDateTime() {
+		return this.currentDateTime;
+	}
+	
+	private void initializeSynchronizerStatus() {
+		this.synchronizerStatusLabel = new JLabel();
+		this.synchronizerStatusLabel.setText(Translations.getString("synchronizer.status")
+				+ ": ");
 		
-		final SimpleDateFormat dateFormat = new SimpleDateFormat(
-				Main.getSettings().getStringProperty("date.date_format")
-						+ " "
-						+ Main.getSettings().getStringProperty(
-								"date.time_format"));
+		Constants.PROGRESS_MONITOR.addListChangeListener(new WeakListChangeListener(
+				Constants.PROGRESS_MONITOR,
+				this));
+	}
+	
+	private void initializeLastSynchronizationDate() {
+		this.lastSynchronizationDateLabel = new JLabel();
 		
+		this.updateLastSynchronizationDate();
+		
+		Main.getUserSettings().addPropertyChangeListener(
+				new WeakPropertyChangeListener(Main.getUserSettings(), this));
+	}
+	
+	private void updateLastSynchronizationDate() {
 		String date = Translations.getString("statusbar.never");
 		
-		if (Main.getUserSettings().getCalendarProperty(
-				"synchronizer.last_synchronization_date") != null)
-			date = dateFormat.format(Main.getUserSettings().getCalendarProperty(
-					"synchronizer.last_synchronization_date").getTime());
+		Calendar lastSyncDate = Main.getUserSettings().getCalendarProperty(
+				"synchronizer.last_synchronization_date");
 		
-		element.setText(Translations.getString("statusbar.last_synchronization_date")
+		if (lastSyncDate != null)
+			date = StringValueCalendar.INSTANCE_DATE_TIME.getString(lastSyncDate);
+		
+		this.lastSynchronizationDateLabel.setText(Translations.getString("statusbar.last_synchronization_date")
 				+ ": "
 				+ date);
-		
-		Main.getUserSettings().addPropertyChangeListener(
-				"synchronizer.last_synchronization_date",
-				new PropertyChangeListener() {
-					
-					@Override
-					public void propertyChange(PropertyChangeEvent event) {
-						String date = Translations.getString("statusbar.never");
-						
-						if (Main.getUserSettings().getCalendarProperty(
-								"synchronizer.last_synchronization_date") != null)
-							date = dateFormat.format(Main.getUserSettings().getCalendarProperty(
-									"synchronizer.last_synchronization_date").getTime());
-						
-						element.setText(Translations.getString("statusbar.last_synchronization_date")
-								+ ": "
-								+ date);
-					}
-					
-				});
-		
-		return element;
 	}
 	
-	public static final JLabel createScheduledSyncStatus() {
-		final JLabel element = new JLabel();
+	private void initializeScheduledSyncStatus() {
+		this.scheduledSyncStatusLabel = new JLabel();
 		
-		updateScheduledSyncStatus(element);
+		this.updateScheduledSyncStatus();
 		
 		Main.getUserSettings().addPropertyChangeListener(
-				"synchronizer.scheduler_enabled",
-				new PropertyChangeListener() {
-					
-					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
-						updateScheduledSyncStatus(element);
-					}
-					
-				});
+				new WeakPropertyChangeListener(Main.getUserSettings(), this));
 		
 		Threads.getScheduledSyncThread().addPropertyChangeListener(
-				ScheduledSyncThread.PROP_REMAINING_SLEEP_TIME,
-				new PropertyChangeListener() {
-					
-					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
-						updateScheduledSyncStatus(element);
-					}
-					
-				});
-		
-		return element;
+				new WeakPropertyChangeListener(
+						Threads.getScheduledSyncThread(),
+						this));
 	}
 	
-	private static final void updateScheduledSyncStatus(JLabel element) {
+	private void updateScheduledSyncStatus() {
 		String text = null;
 		
 		if (Main.getUserSettings().getBooleanProperty(
@@ -197,123 +169,149 @@ final class StatusBarElements {
 					Translations.getString("statusbar.never"));
 		}
 		
-		element.setText(text);
+		this.scheduledSyncStatusLabel.setText(text);
 	}
 	
-	public static final JLabel createRowCount(int frameId) {
-		final JLabel element = new JLabel();
+	private void initializeRowCount(int frameId) {
+		this.rowCountLabel = new JLabel();
 		
-		updateRowCount(element);
-		
-		final PropertyChangeListener listener = new PropertyChangeListener() {
-			
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				updateRowCount(element);
-			}
-			
-		};
+		this.updateRowCount();
 		
 		FrameUtils.getFrameView(frameId).addPropertyChangeListener(
 				FrameView.PROP_SELECTED_VIEW,
-				new PropertyChangeListener() {
-					
-					@Override
-					public void propertyChange(PropertyChangeEvent event) {
-						if (event != null
-								&& event.getOldValue() != null
-								&& event.getOldValue() instanceof ViewItem) {
-							ViewItem oldView = (ViewItem) event.getOldValue();
-							
-							if (oldView.getViewType() == ViewType.NOTES) {
-								((NoteView) oldView.getView()).getNoteTableView().removePropertyChangeListener(
-										listener);
-							}
-							
-							if (oldView.getViewType() == ViewType.TASKS) {
-								((TaskView) oldView.getView()).getTaskTableView().removePropertyChangeListener(
-										listener);
-							}
-						}
-						
-						if (ViewList.getInstance().getCurrentView() != null
-								&& ViewList.getInstance().getCurrentView().isLoaded()) {
-							if (ViewUtils.getCurrentViewType() == ViewType.NOTES) {
-								ViewUtils.getCurrentNoteView().getNoteTableView().addPropertyChangeListener(
-										NoteTableView.PROP_NOTE_COUNT,
-										listener);
-							}
-							
-							if (ViewUtils.getCurrentViewType() == ViewType.TASKS) {
-								ViewUtils.getCurrentTaskView().getTaskTableView().addPropertyChangeListener(
-										TaskTableView.PROP_TASK_COUNT,
-										listener);
-							}
-						}
-					}
-					
-				});
-		
-		return element;
+				new WeakPropertyChangeListener(
+						FrameUtils.getFrameView(frameId),
+						this));
 	}
 	
-	private static final void updateRowCount(JLabel element) {
+	private void updateRowCount() {
 		ViewType viewType = ViewUtils.getCurrentViewType();
 		
 		if (viewType == null) {
-			element.setText("");
+			this.rowCountLabel.setText("");
 			return;
 		}
 		
+		int rowCount = 0;
+		
 		switch (viewType) {
 			case NOTES:
-				element.setText(ViewUtils.getCurrentNoteView().getNoteTableView().getNoteCount()
+				rowCount = ViewUtils.getCurrentNoteView().getNoteTableView().getNoteCount();
+				this.rowCountLabel.setText(rowCount
 						+ " "
 						+ Translations.getString("general.notes"));
 				break;
 			case TASKS:
-				element.setText(ViewUtils.getCurrentTaskView().getTaskTableView().getTaskCount()
+				rowCount = ViewUtils.getCurrentTaskView().getTaskTableView().getTaskCount();
+				this.rowCountLabel.setText(rowCount
 						+ " "
 						+ Translations.getString("general.tasks"));
 				break;
 			default:
-				element.setText("");
+				this.rowCountLabel.setText("");
 				break;
 		}
 	}
 	
-	public static final JLabel createCurrentDateTime() {
-		String dateFormat = Main.getSettings().getStringProperty(
-				"date.date_format");
-		String timeFormat = Main.getSettings().getStringProperty(
-				"date.time_format");
+	private void initializeCurrentDateTime() {
+		this.currentDateTime = new JLabel();
 		
-		final SimpleDateFormat format = new SimpleDateFormat(dateFormat
-				+ " "
-				+ timeFormat);
-		final JLabel element = new JLabel();
-		
-		updateCurrentDateTime(element, format);
+		this.updateCurrentDateTime();
 		
 		TimerTask timerTask = new TimerTask() {
 			
 			@Override
 			public void run() {
-				updateCurrentDateTime(element, format);
+				StatusBarElements.this.updateCurrentDateTime();
 			}
 			
 		};
 		
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(timerTask, 10000, 10000);
-		
-		return element;
 	}
 	
-	private static final void updateCurrentDateTime(
-			JLabel element,
-			SimpleDateFormat format) {
-		element.setText(format.format(Calendar.getInstance().getTime()));
+	private final void updateCurrentDateTime() {
+		this.currentDateTime.setText(StringValueCalendar.INSTANCE_DATE_TIME.getString(Calendar.getInstance()));
+	}
+	
+	@Override
+	public void listChange(ListChangeEvent event) {
+		ProgressMessageTransformer t = null;
+		
+		t = SynchronizerProgressMessageTransformer.getInstance();
+		
+		if (t.acceptsEvent(event))
+			this.synchronizerStatusLabel.setText(Translations.getString("synchronizer.status")
+					+ ": "
+					+ t.getEventValue(event, null));
+		
+		t = CommunicatorProgressMessageTransformer.getInstance();
+		
+		if (t.acceptsEvent(event))
+			this.synchronizerStatusLabel.setText((String) t.getEventValue(
+					event,
+					null));
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+		if (event.getPropertyName().equals(
+				"synchronizer.last_synchronization_date")) {
+			this.updateLastSynchronizationDate();
+		}
+		
+		if (event.getPropertyName().equals("synchronizer.scheduler_enabled")) {
+			this.updateScheduledSyncStatus();
+		}
+		
+		if (event.getPropertyName().equals(
+				ScheduledSyncThread.PROP_REMAINING_SLEEP_TIME)) {
+			this.updateScheduledSyncStatus();
+		}
+		
+		if (event.getPropertyName().equals(NoteTableView.PROP_NOTE_COUNT)) {
+			this.updateRowCount();
+		}
+		
+		if (event.getPropertyName().equals(TaskTableView.PROP_TASK_COUNT)) {
+			this.updateRowCount();
+		}
+		
+		if (event.getPropertyName().equals(FrameView.PROP_SELECTED_VIEW)) {
+			if (event != null
+					&& event.getOldValue() != null
+					&& event.getOldValue() instanceof ViewItem) {
+				ViewItem oldView = (ViewItem) event.getOldValue();
+				
+				if (oldView.getViewType() == ViewType.NOTES) {
+					((NoteView) oldView.getView()).getNoteTableView().removePropertyChangeListener(
+							this);
+				}
+				
+				if (oldView.getViewType() == ViewType.TASKS) {
+					((TaskView) oldView.getView()).getTaskTableView().removePropertyChangeListener(
+							this);
+				}
+			}
+			
+			if (ViewList.getInstance().getCurrentView() != null
+					&& ViewList.getInstance().getCurrentView().isLoaded()) {
+				if (ViewUtils.getCurrentViewType() == ViewType.NOTES) {
+					ViewUtils.getCurrentNoteView().getNoteTableView().addPropertyChangeListener(
+							new WeakPropertyChangeListener(
+									ViewUtils.getCurrentNoteView().getNoteTableView(),
+									this));
+				}
+				
+				if (ViewUtils.getCurrentViewType() == ViewType.TASKS) {
+					ViewUtils.getCurrentTaskView().getTaskTableView().addPropertyChangeListener(
+							new WeakPropertyChangeListener(
+									ViewUtils.getCurrentTaskView().getTaskTableView(),
+									this));
+				}
+			}
+		}
 	}
 	
 }

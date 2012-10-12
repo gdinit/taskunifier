@@ -63,6 +63,35 @@ public final class MainLoadFiles {
 		
 	}
 	
+	public static boolean loadFolder(String f) throws Exception {
+		File folder = new File(f);
+		if (!folder.exists()) {
+			if (!folder.mkdir())
+				throw new Exception(String.format(
+						"Error while creating folder \"%1s\"",
+						f));
+			
+			try {
+				folder.setExecutable(true, true);
+				folder.setReadable(true, true);
+				folder.setWritable(true, true);
+			} catch (Throwable t) {
+				GuiLogger.getLogger().log(
+						Level.SEVERE,
+						String.format(
+								"Cannot change folder permissions \"%1s\"",
+								f),
+						t);
+			}
+			
+			return true;
+		} else if (!folder.isDirectory()) {
+			throw new Exception(String.format("\"%1s\" is not a folder", f));
+		}
+		
+		return false;
+	}
+	
 	public static void loadAllData(String folder) {
 		loadAllData(folder, Constants.DEFAULT_SUFFIX);
 	}

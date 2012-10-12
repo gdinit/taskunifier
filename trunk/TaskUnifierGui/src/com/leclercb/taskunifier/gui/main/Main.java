@@ -411,54 +411,25 @@ public class Main {
 		if (DATA_FOLDER == null)
 			DATA_FOLDER = "data";
 		
-		if (loadFolder(DATA_FOLDER))
+		if (MainLoadFiles.loadFolder(DATA_FOLDER))
 			FIRST_EXECUTION = true;
 		
-		loadFolder(DATA_FOLDER + File.separator + "users");
+		MainLoadFiles.loadFolder(DATA_FOLDER + File.separator + "users");
 	}
 	
 	private static void loadUserFolder() throws Exception {
 		USER_FOLDER = getUserFolder(CURRENT_USER_ID);
-		loadFolder(USER_FOLDER);
+		MainLoadFiles.loadFolder(USER_FOLDER);
 	}
 	
 	private static void loadBackupFolder() throws Exception {
 		BACKUP_FOLDER = USER_FOLDER + File.separator + "backup";
-		loadFolder(BACKUP_FOLDER);
+		MainLoadFiles.loadFolder(BACKUP_FOLDER);
 	}
 	
 	private static void loadPluginsFolder() throws Exception {
 		PLUGINS_FOLDER = DATA_FOLDER + File.separator + "plugins";
-		loadFolder(PLUGINS_FOLDER);
-	}
-	
-	public static boolean loadFolder(String f) throws Exception {
-		File folder = new File(f);
-		if (!folder.exists()) {
-			if (!folder.mkdir())
-				throw new Exception(String.format(
-						"Error while creating folder \"%1s\"",
-						f));
-			
-			try {
-				folder.setExecutable(true, true);
-				folder.setReadable(true, true);
-				folder.setWritable(true, true);
-			} catch (Throwable t) {
-				GuiLogger.getLogger().log(
-						Level.SEVERE,
-						String.format(
-								"Cannot change folder permissions \"%1s\"",
-								f),
-						t);
-			}
-			
-			return true;
-		} else if (!folder.isDirectory()) {
-			throw new Exception(String.format("\"%1s\" is not a folder", f));
-		}
-		
-		return false;
+		MainLoadFiles.loadFolder(PLUGINS_FOLDER);
 	}
 	
 	private static void loadUncaughtExceptionHandler() {
