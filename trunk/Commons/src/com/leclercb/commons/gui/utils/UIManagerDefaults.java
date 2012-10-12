@@ -60,8 +60,8 @@ import javax.swing.table.TableCellRenderer;
 public class UIManagerDefaults implements ActionListener, ItemListener {
 	
 	private final static String[] COLUMN_NAMES = { "Key", "Value", "Sample" };
-	private static String selectedItem;
 	
+	private String selectedItem;
 	private JComponent contentPane;
 	private JMenuBar menuBar;
 	private JComboBox comboBox;
@@ -176,8 +176,8 @@ public class UIManagerDefaults implements ActionListener, ItemListener {
 		this.comboBox.addItemListener(this);
 		this.comboBox.requestFocusInWindow();
 		
-		if (selectedItem != null)
-			this.comboBox.setSelectedItem(selectedItem);
+		if (this.selectedItem != null)
+			this.comboBox.setSelectedItem(this.selectedItem);
 	}
 	
 	/*
@@ -348,7 +348,7 @@ public class UIManagerDefaults implements ActionListener, ItemListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		selectedItem = null;
+		this.selectedItem = null;
 		this.resetComponents();
 		this.comboBox.requestFocusInWindow();
 	}
@@ -361,7 +361,7 @@ public class UIManagerDefaults implements ActionListener, ItemListener {
 		String itemName = (String) e.getItem();
 		this.changeTableModel(itemName);
 		this.updateRowHeights();
-		selectedItem = itemName;
+		this.selectedItem = itemName;
 	}
 	
 	/*
