@@ -57,7 +57,7 @@ public class StringValueUser implements StringValue {
 		if (str == null)
 			str = "";
 		
-		if (EqualsUtils.equals(Main.getUserId(), value))
+		if (EqualsUtils.equals(Main.getCurrentUserId(), value))
 			str += " ("
 					+ Translations.getString("manage_users.current_user")
 					+ ")";

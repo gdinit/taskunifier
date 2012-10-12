@@ -514,7 +514,9 @@ public final class SettingsVersion {
 			FileUtils.copyDirectory(
 					new File(oldPluginsDir),
 					new File(Main.getPluginsFolder()));
-		} catch (Throwable t) {}
+		} catch (Throwable t) {
+			GuiLogger.getLogger().log(Level.WARNING, t.getMessage(), t);
+		}
 		
 		return "0.8.4";
 	}
@@ -620,11 +622,12 @@ public final class SettingsVersion {
 		SettingsUtils.resetImportanceColors();
 		SettingsUtils.resetPriorityColors();
 		
-		Main.AFTER_START.addActionListener(new ActionListener() {
+		Main.getActionSupport().addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				SettingsUtils.removeNotCompletedCondition();
+			public void actionPerformed(ActionEvent event) {
+				if (event.getActionCommand().equals("AFTER_START"))
+					SettingsUtils.removeNotCompletedCondition();
 			}
 			
 		});
@@ -736,14 +739,19 @@ public final class SettingsVersion {
 					t);
 		}
 		
-		Main.AFTER_START.addActionListener(new ActionListener() {
+		Main.getActionSupport().addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					SynchronizerUtils.resetAllSynchronizers();
-				} catch (Throwable t) {
-					
+			public void actionPerformed(ActionEvent event) {
+				if (event.getActionCommand().equals("AFTER_START")) {
+					try {
+						SynchronizerUtils.resetAllSynchronizers();
+					} catch (Throwable t) {
+						GuiLogger.getLogger().log(
+								Level.WARNING,
+								t.getMessage(),
+								t);
+					}
 				}
 			}
 			
@@ -903,14 +911,19 @@ public final class SettingsVersion {
 		Main.getSettings().setStringProperty("notecolumn.note.visible", "true");
 		Main.getSettings().setStringProperty("notecolumn.note.width", "100");
 		
-		Main.AFTER_START.addActionListener(new ActionListener() {
+		Main.getActionSupport().addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					SynchronizerUtils.resetAllSynchronizers();
-				} catch (Throwable t) {
-					
+			public void actionPerformed(ActionEvent event) {
+				if (event.getActionCommand().equals("AFTER_START")) {
+					try {
+						SynchronizerUtils.resetAllSynchronizers();
+					} catch (Throwable t) {
+						GuiLogger.getLogger().log(
+								Level.WARNING,
+								t.getMessage(),
+								t);
+					}
 				}
 			}
 			

@@ -108,7 +108,7 @@ public final class UserUtils implements ListChangeSupported {
 					@Override
 					public void propertyChange(PropertyChangeEvent evt) {
 						UserUtils.this.setUserName(
-								Main.getUserId(),
+								Main.getCurrentUserId(),
 								Main.getUserSettings().getStringProperty(
 										"general.user.name"));
 					}
@@ -169,7 +169,7 @@ public final class UserUtils implements ListChangeSupported {
 	}
 	
 	private void setUserName(String userId, String userName, boolean fire) {
-		if (EqualsUtils.equals(Main.getUserId(), userId)) {
+		if (EqualsUtils.equals(Main.getCurrentUserId(), userId)) {
 			if (EqualsUtils.equals(
 					userName,
 					Main.getUserSettings().getStringProperty(
@@ -255,7 +255,7 @@ public final class UserUtils implements ListChangeSupported {
 	}
 	
 	public boolean deleteUser(String userId) {
-		if (EqualsUtils.equals(Main.getUserId(), userId))
+		if (EqualsUtils.equals(Main.getCurrentUserId(), userId))
 			return false;
 		
 		String userName = this.getUserName(userId);
@@ -301,7 +301,7 @@ public final class UserUtils implements ListChangeSupported {
 		this.listChangeSupport.fireListChange(
 				ListChangeEvent.VALUE_CHANGED,
 				-1,
-				Main.getUserId());
+				Main.getCurrentUserId());
 	}
 	
 	public static void updateUserList(JMenu menu) {
