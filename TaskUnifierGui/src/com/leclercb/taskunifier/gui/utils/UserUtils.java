@@ -61,6 +61,7 @@ import com.leclercb.taskunifier.gui.actions.ActionSwitchToUser;
 import com.leclercb.taskunifier.gui.commons.comparators.UserComparator;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.main.main.MainLoadFiles;
 
 public final class UserUtils implements ListChangeSupported {
 	
@@ -232,7 +233,7 @@ public final class UserUtils implements ListChangeSupported {
 		String userFolder = Main.getUserFolder(userId);
 		
 		try {
-			Main.loadFolder(userFolder);
+			MainLoadFiles.loadFolder(userFolder);
 			
 			this.setUserName(userId, userName, false);
 			

@@ -1,10 +1,9 @@
 TO REVIEW
 ---------
 
-components.calendar
+components.calendar.CalendarPanel
 components.notesearcheredit
 components.notesearchertree
-components.statusbar.StatusBarElements
 components.tasksearcheredit
 components.tasksearchertree
 main.Main

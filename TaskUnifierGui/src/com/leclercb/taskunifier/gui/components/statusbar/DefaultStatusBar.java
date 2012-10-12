@@ -32,20 +32,16 @@
  */
 package com.leclercb.taskunifier.gui.components.statusbar;
 
-import javax.swing.JLabel;
-
 import org.jdesktop.swingx.JXStatusBar;
 import org.jdesktop.swingx.JXStatusBar.Constraint.ResizeBehavior;
 
 public class DefaultStatusBar extends JXStatusBar implements StatusBar {
 	
-	private JLabel synchronizerStatus;
-	private JLabel lastSynchronizationDate;
-	private JLabel scheduledSyncStatus;
-	private JLabel rowCount;
-	private JLabel currentDateTime;
+	private StatusBarElements elements;
 	
 	public DefaultStatusBar(int frameId) {
+		this.elements = new StatusBarElements(frameId);
+		
 		this.initialize(frameId);
 	}
 	
@@ -53,24 +49,19 @@ public class DefaultStatusBar extends JXStatusBar implements StatusBar {
 		JXStatusBar.Constraint c = null;
 		
 		c = new JXStatusBar.Constraint(ResizeBehavior.FILL);
-		this.synchronizerStatus = StatusBarElements.createSynchronizerStatus();
-		this.add(this.synchronizerStatus, c);
+		this.add(this.elements.getSynchronizerStatusLabel(), c);
 		
 		c = new JXStatusBar.Constraint(220);
-		this.scheduledSyncStatus = StatusBarElements.createScheduledSyncStatus();
-		this.add(this.scheduledSyncStatus, c);
+		this.add(this.elements.getScheduledSyncStatusLabel(), c);
 		
 		c = new JXStatusBar.Constraint(320);
-		this.lastSynchronizationDate = StatusBarElements.createLastSynchronizationDate();
-		this.add(this.lastSynchronizationDate, c);
+		this.add(this.elements.getLastSynchronizationDateLabel(), c);
 		
 		c = new JXStatusBar.Constraint(100);
-		this.rowCount = StatusBarElements.createRowCount(frameId);
-		this.add(this.rowCount, c);
+		this.add(this.elements.getRowCountLabel(), c);
 		
 		c = new JXStatusBar.Constraint(150);
-		this.currentDateTime = StatusBarElements.createCurrentDateTime();
-		this.add(this.currentDateTime, c);
+		this.add(this.elements.getCurrentDateTime(), c);
 	}
 	
 	@Override

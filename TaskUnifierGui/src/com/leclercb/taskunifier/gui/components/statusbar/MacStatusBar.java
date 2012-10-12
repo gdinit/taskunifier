@@ -33,7 +33,6 @@
 package com.leclercb.taskunifier.gui.components.statusbar;
 
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 
 import com.explodingpixels.macwidgets.BottomBar;
 import com.explodingpixels.macwidgets.BottomBarSize;
@@ -41,38 +40,33 @@ import com.explodingpixels.macwidgets.MacWidgetFactory;
 
 public class MacStatusBar extends BottomBar implements StatusBar {
 	
-	private JLabel synchronizerStatus;
-	private JLabel lastSynchronizationDate;
-	private JLabel scheduledSyncStatus;
-	private JLabel rowCount;
-	private JLabel currentDateTime;
+	private StatusBarElements elements;
 	
 	public MacStatusBar(int frameId) {
 		super(BottomBarSize.LARGE);
+		
+		this.elements = new StatusBarElements(frameId);
 		
 		this.initialize(frameId);
 	}
 	
 	private void initialize(int frameId) {
-		this.synchronizerStatus = StatusBarElements.createSynchronizerStatus();
-		MacWidgetFactory.makeEmphasizedLabel(this.synchronizerStatus);
-		this.addComponentToLeft(this.synchronizerStatus);
+		MacWidgetFactory.makeEmphasizedLabel(this.elements.getSynchronizerStatusLabel());
+		this.addComponentToLeft(this.elements.getSynchronizerStatusLabel());
 		
-		this.scheduledSyncStatus = StatusBarElements.createScheduledSyncStatus();
-		MacWidgetFactory.makeEmphasizedLabel(this.scheduledSyncStatus);
-		this.addComponentToCenter(this.scheduledSyncStatus);
+		MacWidgetFactory.makeEmphasizedLabel(this.elements.getScheduledSyncStatusLabel());
+		this.addComponentToCenter(this.elements.getScheduledSyncStatusLabel());
 		
-		this.lastSynchronizationDate = StatusBarElements.createLastSynchronizationDate();
-		MacWidgetFactory.makeEmphasizedLabel(this.lastSynchronizationDate);
-		this.addComponentToCenter(this.lastSynchronizationDate, 20);
+		MacWidgetFactory.makeEmphasizedLabel(this.elements.getLastSynchronizationDateLabel());
+		this.addComponentToCenter(
+				this.elements.getLastSynchronizationDateLabel(),
+				20);
 		
-		this.rowCount = StatusBarElements.createRowCount(frameId);
-		MacWidgetFactory.makeEmphasizedLabel(this.rowCount);
-		this.addComponentToRight(this.rowCount);
+		MacWidgetFactory.makeEmphasizedLabel(this.elements.getRowCountLabel());
+		this.addComponentToRight(this.elements.getRowCountLabel());
 		
-		this.currentDateTime = StatusBarElements.createCurrentDateTime();
-		MacWidgetFactory.makeEmphasizedLabel(this.currentDateTime);
-		this.addComponentToRight(this.currentDateTime, 20);
+		MacWidgetFactory.makeEmphasizedLabel(this.elements.getCurrentDateTime());
+		this.addComponentToRight(this.elements.getCurrentDateTime(), 20);
 	}
 	
 	@Override
