@@ -45,7 +45,6 @@ import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationPa
 
 public class PluginConfigurationPanel extends ConfigurationPanel {
 	
-	private ConfigurationGroup configuration;
 	private ConfigurationPanel configPanel;
 	
 	public PluginConfigurationPanel(
@@ -63,7 +62,7 @@ public class PluginConfigurationPanel extends ConfigurationPanel {
 		this.setLayout(new BorderLayout());
 		
 		this.configPanel = plugin.getConfigurationPanel(
-				this.configuration,
+				this.getConfigurationGroup(),
 				welcome);
 		
 		String info = plugin.getName()

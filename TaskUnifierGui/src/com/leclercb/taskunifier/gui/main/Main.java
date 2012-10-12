@@ -611,8 +611,10 @@ public class Main {
 					case NO_VALID_PLUGIN:
 					case OUTDATED_PLUGIN:
 						outdatedPlugins = true;
+						break;
 					default:
 						outdatedPlugins = false;
+						break;
 				}
 				
 				GuiLogger.getLogger().warning(e.getMessage());

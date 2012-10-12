@@ -327,7 +327,8 @@ public final class PluginsUtils {
 				
 			});
 		} catch (Exception e) {
-			file.delete();
+			if (file != null)
+				file.delete();
 			
 			PluginLogger.getLogger().log(
 					Level.WARNING,

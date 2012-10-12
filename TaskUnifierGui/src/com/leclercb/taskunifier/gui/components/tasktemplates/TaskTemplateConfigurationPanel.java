@@ -571,8 +571,10 @@ public class TaskTemplateConfigurationPanel extends JSplitPane {
 		
 		@Override
 		public void setValue(Object value) {
-			if (value == null)
+			if (value == null) {
 				this.subject.setValue(null);
+				return;
+			}
 			
 			try {
 				Integer i = Integer.parseInt(value.toString());

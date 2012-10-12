@@ -160,7 +160,7 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 		List<Folder> folders = new ArrayList<Folder>();
 		for (int i = 0; i < parent.getChildCount(); i++) {
 			TreeNode node = parent.getChildAt(i);
-			if (node == null || node instanceof FolderItem) {
+			if (node != null && node instanceof FolderItem) {
 				folders.add(((FolderItem) node).getFolder());
 			}
 		}

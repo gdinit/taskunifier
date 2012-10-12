@@ -315,7 +315,7 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 		List<Model> models = new ArrayList<Model>();
 		for (int i = 0; i < parent.getChildCount(); i++) {
 			TreeNode node = parent.getChildAt(i);
-			if (node == null || node instanceof ModelItem) {
+			if (node != null && node instanceof ModelItem) {
 				models.add(((ModelItem) node).getModel());
 			}
 		}

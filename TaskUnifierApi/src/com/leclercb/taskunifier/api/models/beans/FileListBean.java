@@ -114,7 +114,7 @@ public class FileListBean implements Cloneable, Serializable, Iterable<FileItemB
 	}
 	
 	@XStreamAlias("fileitem")
-	public static class FileItemBean {
+	public static class FileItemBean implements Serializable {
 		
 		@XStreamAlias("file")
 		private String file;
