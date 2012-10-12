@@ -627,8 +627,11 @@ public class PropertyMap extends Properties implements PropertyChangeSupported, 
 				value);
 	}
 	
-	public Object setEnumProperty(String key, Class<?> enumClass, Enum<?> value) {
-		Enum<?> oldValue = this.getEnumProperty(key, value.getClass());
+	public <T extends Enum<?>> Object setEnumProperty(
+			String key,
+			Class<T> enumClass,
+			T value) {
+		T oldValue = this.getEnumProperty(key, enumClass);
 		return this.setProperty(
 				key,
 				(value == null ? "" : value.name()),
@@ -862,7 +865,7 @@ public class PropertyMap extends Properties implements PropertyChangeSupported, 
 	}
 	
 	@Override
-	public synchronized Object setProperty(String key, String value) {
+	public Object setProperty(String key, String value) {
 		return this.setStringProperty(key, value);
 	}
 	

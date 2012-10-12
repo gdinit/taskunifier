@@ -78,7 +78,7 @@ public class PluginLicense {
 	}
 	
 	public void setEmail(String email) {
-		if (email != null && email.length() != 0)
+		if (email != null)
 			email = email.trim();
 		
 		this.email = email;
