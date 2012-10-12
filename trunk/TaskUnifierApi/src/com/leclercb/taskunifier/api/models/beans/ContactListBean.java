@@ -117,7 +117,7 @@ public class ContactListBean implements Cloneable, Serializable, Iterable<Contac
 	}
 	
 	@XStreamAlias("contactitem")
-	public static class ContactItemBean {
+	public static class ContactItemBean implements Serializable {
 		
 		@XStreamAlias("contact")
 		private ModelId contact;

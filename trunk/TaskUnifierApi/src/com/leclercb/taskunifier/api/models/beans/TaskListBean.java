@@ -117,7 +117,7 @@ public class TaskListBean implements Cloneable, Serializable, Iterable<TaskItemB
 	}
 	
 	@XStreamAlias("taskitem")
-	public static class TaskItemBean {
+	public static class TaskItemBean implements Serializable {
 		
 		@XStreamAlias("task")
 		private ModelId task;

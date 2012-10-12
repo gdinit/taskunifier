@@ -556,7 +556,7 @@ public class BatchTaskEditPanel extends JPanel {
 		}
 		
 		// Insert Empty Space
-		if (nbInserted % 2 == 1) {
+		if (nbInserted % 2 != 0) {
 			nbInserted++;
 			builder.getBuilder().append(new JLabel(), 5);
 		}
@@ -616,7 +616,7 @@ public class BatchTaskEditPanel extends JPanel {
 		}
 		
 		// Insert Empty Space
-		if (nbInserted % 2 == 1) {
+		if (nbInserted % 2 != 0) {
 			nbInserted++;
 			builder.getBuilder().append(new JLabel(), 5);
 		}
@@ -692,7 +692,7 @@ public class BatchTaskEditPanel extends JPanel {
 		}
 		
 		// Insert Empty Space
-		if (nbInserted % 2 == 1) {
+		if (nbInserted % 2 != 0) {
 			nbInserted++;
 			builder.getBuilder().append(new JLabel(), 5);
 		}
@@ -808,7 +808,7 @@ public class BatchTaskEditPanel extends JPanel {
 		}
 		
 		// Insert Empty Space
-		if (nbInserted % 2 == 1) {
+		if (nbInserted % 2 != 0) {
 			nbInserted++;
 			builder.getBuilder().append(new JLabel(), 5);
 		}

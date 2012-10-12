@@ -88,7 +88,8 @@ public class CommunicatorThread extends Thread {
 					"Cannot initialize communicator on port " + this.port);
 		} finally {
 			try {
-				serverSocket.close();
+				if (serverSocket != null)
+					serverSocket.close();
 			} catch (IOException e) {
 				GuiLogger.getLogger().warning(
 						"Cannot close communicator on port " + this.port);
