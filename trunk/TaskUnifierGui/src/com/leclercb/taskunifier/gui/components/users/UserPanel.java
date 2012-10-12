@@ -207,7 +207,7 @@ public class UserPanel extends JPanel {
 					public void valueChanged(ListSelectionEvent evt) {
 						boolean isMainUser = EqualsUtils.equals(
 								UserPanel.this.userList.getSelectedUser(),
-								Main.getUserId());
+								Main.getCurrentUserId());
 						
 						UserPanel.this.switchToUserButton.setEnabled(!isMainUser);
 						UserPanel.this.deleteUserButton.setEnabled(!isMainUser);
@@ -221,7 +221,7 @@ public class UserPanel extends JPanel {
 			public void actionPerformed(ActionEvent evt) {
 				boolean isMainUser = EqualsUtils.equals(
 						UserPanel.this.userList.getSelectedUser(),
-						Main.getUserId());
+						Main.getCurrentUserId());
 				
 				UserPanel.this.switchToUserButton.setEnabled(!isMainUser);
 				UserPanel.this.deleteUserButton.setEnabled(!isMainUser);

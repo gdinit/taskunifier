@@ -199,11 +199,12 @@ public final class FrameUtils {
 						
 					});
 			
-			Main.BEFORE_EXIT.addActionListener(new ActionListener() {
+			Main.getActionSupport().addActionListener(new ActionListener() {
 				
 				@Override
 				public void actionPerformed(ActionEvent event) {
-					JIntellitype.getInstance().cleanUp();
+					if (event.getActionCommand().equals("BEFORE_EXIT"))
+						JIntellitype.getInstance().cleanUp();
 				}
 				
 			});

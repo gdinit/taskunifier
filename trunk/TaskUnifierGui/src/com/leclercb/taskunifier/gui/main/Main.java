@@ -55,6 +55,7 @@ import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.commons.api.properties.SortedProperties;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.SingleInstanceUtils;
+import com.leclercb.commons.api.utils.exceptions.SingleInstanceException;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelUtils;
 import com.leclercb.commons.gui.swing.lookandfeel.types.DefaultLookAndFeelDescriptor;
@@ -109,12 +110,12 @@ import com.leclercb.taskunifier.gui.utils.UserUtils;
 
 public class Main {
 	
+	private static String CURRENT_USER_ID;
+	
 	private static boolean QUITTING;
 	
 	private static boolean DEVELOPER_MODE;
 	private static boolean FIRST_EXECUTION;
-	
-	private static String USER_ID;
 	
 	private static String RESOURCES_FOLDER;
 	private static String DATA_FOLDER;
@@ -132,19 +133,10 @@ public class Main {
 	
 	private static PluginLoader<SynchronizerGuiPlugin> API_PLUGINS;
 	
-	public static ActionSupport AFTER_START;
-	public static ActionSupport BEFORE_EXIT;
+	private static ActionSupport ACTION_SUPPORT;
 	
-	public static String getUserId() {
-		return USER_ID;
-	}
-	
-	public static boolean isDeveloperMode() {
-		return DEVELOPER_MODE;
-	}
-	
-	public static boolean isFirstExecution() {
-		return FIRST_EXECUTION;
+	public static String getCurrentUserId() {
+		return CURRENT_USER_ID;
 	}
 	
 	public static boolean isQuitting() {
@@ -153,6 +145,14 @@ public class Main {
 	
 	public static void setQuitting(boolean quitting) {
 		QUITTING = quitting;
+	}
+	
+	public static boolean isDeveloperMode() {
+		return DEVELOPER_MODE;
+	}
+	
+	public static boolean isFirstExecution() {
+		return FIRST_EXECUTION;
 	}
 	
 	private static String getLockFile() {
@@ -227,7 +227,11 @@ public class Main {
 		return API_PLUGINS;
 	}
 	
-	public static void main(final String[] args) {
+	public static ActionSupport getActionSupport() {
+		return ACTION_SUPPORT;
+	}
+	
+	public static void main(final String[] args) throws SingleInstanceException {
 		try {
 			initialize();
 			loadDeveloperMode();
@@ -238,7 +242,7 @@ public class Main {
 			
 			if (!checkSingleInstance(args)) {
 				secondaryMain(args);
-				throw new RuntimeException(
+				throw new SingleInstanceException(
 						"Another instance of TaskUnifier is running");
 			}
 			
@@ -266,8 +270,8 @@ public class Main {
 			
 			Constants.initialize();
 			
-			AFTER_START.fireActionPerformed(0, "AFTER_START");
-		} catch (RuntimeException e) {
+			ACTION_SUPPORT.fireActionPerformed(0, "AFTER_START");
+		} catch (SingleInstanceException e) {
 			throw e;
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
@@ -362,8 +366,7 @@ public class Main {
 		VERSION_UPDATED = false;
 		OUTDATED_PLUGINS = false;
 		
-		AFTER_START = new ActionSupport(Main.class);
-		BEFORE_EXIT = new ActionSupport(Main.class);
+		ACTION_SUPPORT = new ActionSupport(Main.class);
 	}
 	
 	private static void loadResourceFolder() throws Exception {
@@ -415,7 +418,7 @@ public class Main {
 	}
 	
 	private static void loadUserFolder() throws Exception {
-		USER_FOLDER = getUserFolder(USER_ID);
+		USER_FOLDER = getUserFolder(CURRENT_USER_ID);
 		loadFolder(USER_FOLDER);
 	}
 	
@@ -490,20 +493,20 @@ public class Main {
 	}
 	
 	private static void loadUserId() throws Exception {
-		USER_ID = SETTINGS.getStringProperty("general.user.last_user_id");
+		CURRENT_USER_ID = SETTINGS.getStringProperty("general.user.last_user_id");
 		
 		String[] userIds = UserUtils.getInstance().getUserIds();
 		for (String userId : userIds) {
-			if (EqualsUtils.equals(USER_ID, userId))
+			if (EqualsUtils.equals(CURRENT_USER_ID, userId))
 				return;
 		}
 		
 		if (userIds.length == 0) {
-			USER_ID = UserUtils.getInstance().createNewUser("Default");
+			CURRENT_USER_ID = UserUtils.getInstance().createNewUser("Default");
 			return;
 		}
 		
-		USER_ID = userIds[0];
+		CURRENT_USER_ID = userIds[0];
 	}
 	
 	private static void loadUserSettings() throws Exception {
@@ -692,9 +695,9 @@ public class Main {
 		
 		Threads.stopAll();
 		
-		BEFORE_EXIT.fireActionPerformed(0, "BEFORE_EXIT");
+		ACTION_SUPPORT.fireActionPerformed(0, "BEFORE_EXIT");
 		
-		SETTINGS.setStringProperty("general.user.last_user_id", USER_ID);
+		SETTINGS.setStringProperty("general.user.last_user_id", CURRENT_USER_ID);
 		
 		SETTINGS.setCalendarProperty(
 				"general.last_exit_date",
@@ -708,7 +711,7 @@ public class Main {
 	}
 	
 	public static boolean changeUser(String userId) {
-		if (EqualsUtils.equals(userId, USER_ID))
+		if (EqualsUtils.equals(userId, CURRENT_USER_ID))
 			return false;
 		
 		MainSaveFiles.saveAllData();
@@ -717,12 +720,12 @@ public class Main {
 		
 		boolean result = false;
 		
-		String oldUserId = USER_ID;
+		String oldUserId = CURRENT_USER_ID;
 		
 		try {
 			String userName = UserUtils.getInstance().getUserName(userId);
 			
-			USER_ID = userId;
+			CURRENT_USER_ID = userId;
 			loadUserFolder();
 			
 			SynchronizerUtils.resetAllSynchronizersAndDeleteModels();
@@ -741,12 +744,12 @@ public class Main {
 			
 			GuiLogger.getLogger().info("User switched to \"" + userName + "\"");
 		} catch (Exception e) {
-			USER_ID = oldUserId;
+			CURRENT_USER_ID = oldUserId;
 			USER_FOLDER = DATA_FOLDER
 					+ File.separator
 					+ "users"
 					+ File.separator
-					+ USER_ID;
+					+ CURRENT_USER_ID;
 			
 			GuiLogger.getLogger().log(
 					Level.SEVERE,
