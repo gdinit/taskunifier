@@ -235,8 +235,7 @@ public class MainSwingRunnable implements Runnable {
 		}
 		
 		if (Main.isFirstExecution()
-				|| (Main.isVersionUpdated() && Main.getPreviousVersion().compareTo(
-						"3.0.0") < 0)) {
+				|| (Main.isVersionUpdated() && "3.0.0".compareTo(Main.getPreviousVersion()) > 0)) {
 			if (Constants.BETA)
 				messages.add(Translations.getString(
 						"welcome.message.license_upgrade_required_beta",

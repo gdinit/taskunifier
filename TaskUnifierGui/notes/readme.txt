@@ -2,6 +2,8 @@ HISTORY
 -------
 
 Version 3.0.2
+	- Major:
+		- Bug fixed: Error while loading gui
 	- Minor:
 		- Improved loggers
 		- Minor bug fixes
