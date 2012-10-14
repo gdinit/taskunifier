@@ -39,6 +39,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.BorderFactory;
@@ -98,7 +100,15 @@ public class TUWorkerDialog<T> extends JDialog implements ListChangeListener, Ac
 	}
 	
 	public void setWorker(TUWorker<T> worker) {
+		if (this.worker != null)
+			this.worker.removeActionListener(this);
+		
 		this.worker = worker;
+		
+		if (this.worker != null)
+			this.worker.addActionListener(new WeakActionListener(
+					this.worker,
+					this));
 	}
 	
 	public void setSouthComponent(JComponent component) {
@@ -115,6 +125,16 @@ public class TUWorkerDialog<T> extends JDialog implements ListChangeListener, Ac
 		
 		if (this.getOwner() != null)
 			this.setLocationRelativeTo(this.getOwner());
+		
+		this.addWindowListener(new WindowAdapter() {
+			
+			@Override
+			public void windowOpened(WindowEvent event) {
+				TUWorkerDialog.this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				TUWorkerDialog.this.worker.execute();
+			}
+			
+		});
 		
 		this.panel = new JPanel();
 		this.panel.setLayout(new BorderLayout(5, 5));
@@ -149,25 +169,12 @@ public class TUWorkerDialog<T> extends JDialog implements ListChangeListener, Ac
 	}
 	
 	@Override
-	public void setVisible(boolean visible) {
-		if (visible) {
-			this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			
-			this.worker.addActionListener(new WeakActionListener(
-					this.worker,
-					this));
-			
-			this.worker.execute();
-		}
-		
-		super.setVisible(visible);
-	}
-	
-	@Override
 	public void actionPerformed(ActionEvent event) {
-		this.setCursor(null);
-		this.setVisible(false);
-		this.dispose();
+		if (event.getActionCommand().equals(TUWorker.ACTION_FINISHED)) {
+			this.setCursor(null);
+			this.setVisible(false);
+			this.dispose();
+		}
 	}
 	
 }

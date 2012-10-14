@@ -54,6 +54,7 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 
 public abstract class TUWorker<T> extends SwingWorker<T, ProgressMessage> implements ActionSupported, ListChangeListener {
 	
+	public static final String ACTION_STARTED = "ACTION_STARTED";
 	public static final String ACTION_FINISHED = "ACTION_FINISHED";
 	
 	private ActionSupport actionSupport;
@@ -116,6 +117,8 @@ public abstract class TUWorker<T> extends SwingWorker<T, ProgressMessage> implem
 	
 	@Override
 	protected final T doInBackground() throws Exception {
+		this.actionSupport.fireActionPerformed(0, ACTION_STARTED);
+		
 		try {
 			return this.longTask();
 		} catch (final Throwable t) {

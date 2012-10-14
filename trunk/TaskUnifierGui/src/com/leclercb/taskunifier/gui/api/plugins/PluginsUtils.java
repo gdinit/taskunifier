@@ -403,8 +403,8 @@ public final class PluginsUtils {
 						plugin.setStatus(PluginStatus.DELETED);
 					}
 				}
-				
 			}
+			
 		});
 		
 		if (monitor != null)
