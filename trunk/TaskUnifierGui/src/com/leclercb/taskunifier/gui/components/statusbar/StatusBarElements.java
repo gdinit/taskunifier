@@ -279,6 +279,8 @@ final class StatusBarElements implements ListChangeListener, PropertyChangeListe
 		}
 		
 		if (event.getPropertyName().equals(FrameView.PROP_SELECTED_VIEW)) {
+			this.updateRowCount();
+			
 			if (event != null
 					&& event.getOldValue() != null
 					&& event.getOldValue() instanceof ViewItem) {
