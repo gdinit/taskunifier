@@ -1,6 +1,7 @@
 Version 3.0.2
 	- Major:
 		- Bug fixed: Error while loading gui
+		- Bug fixed: Update plugin
 	- Minor:
 		- Improved loggers
 		- Minor bug fixes
