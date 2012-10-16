@@ -272,6 +272,9 @@ public final class SettingsVersion {
 		if (version.equals("3.0.1"))
 			version = updateSettings_3_0_1_to_3_0_2();
 		
+		if (version.equals("3.0.2"))
+			version = updateSettings_3_0_2_to_3_0_3();
+		
 		cleanSettings();
 		
 		Main.getSettings().setStringProperty(
@@ -1940,6 +1943,13 @@ public final class SettingsVersion {
 				"Update settings from version 3.0.1 to 3.0.2");
 		
 		return "3.0.2";
+	}
+	
+	private static String updateSettings_3_0_2_to_3_0_3() {
+		GuiLogger.getLogger().info(
+				"Update settings from version 3.0.2 to 3.0.3");
+		
+		return "3.0.3";
 	}
 	
 	private static void copyToUserFolder(String fileName) {

@@ -60,7 +60,7 @@ public class ActionCreateNewBackup extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		ActionCreateNewBackup.createNewBackup(true);
+		ActionCreateNewBackup.createNewBackup(false);
 	}
 	
 	public static boolean createNewBackup(boolean silent) {
