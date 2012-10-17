@@ -10,7 +10,7 @@ BASEDIR=`dirname $0`
 BASEDIR="$BASEDIR/.."
 APPFILE="$BASEDIR/temp/TaskUnifier.app"
 TARFILE="$BASEDIR/binaries/TaskUnifier_$1/TaskUnifier_$1_mac.tar"
-DMGFILE="$BASEDIR/binaries/TaskUnifier_$1/TaskUnifier_$1_mac.dmg"
+PKGFILE="$BASEDIR/binaries/TaskUnifier_$1/TaskUnifier_$1_mac.pkg"
 
 echo "Creating DMG file $DMGFILE"
 
@@ -20,8 +20,7 @@ tar -C $BASEDIR/temp -xf $TARFILE
 
 rm -f $DMGFILE
 
-hdiutil create -quiet -srcfolder $APPFILE $DMGFILE 2> /dev/null
-hdiutil internet-enable -quiet -yes $DMGFILE 2> /dev/null
+productbuild --component $APPFILE /Applications --sign "Developer ID Application" $PKGFILE
 
 rm -rf $BASEDIR/temp
 

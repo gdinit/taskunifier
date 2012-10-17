@@ -408,6 +408,16 @@ public class Main {
 		if (DATA_FOLDER == null)
 			DATA_FOLDER = System.getProperty("com.leclercb.taskunifier.data_folder");
 		
+		if (DATA_FOLDER == null) {
+			if (SystemUtils.IS_OS_MAC) {
+				if (EqualsUtils.equalsStringIgnoreCase(
+						System.getProperty("com.leclercb.taskunifier.mac_app_store"),
+						"true")) {
+					DATA_FOLDER = System.getProperty("ApplicationSupportDirectory");
+				}
+			}
+		}
+		
 		if (DATA_FOLDER == null)
 			DATA_FOLDER = "data";
 		
