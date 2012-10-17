@@ -95,7 +95,7 @@ public class TUFileDialog extends JDialog {
 				Translations.getString("general.file"),
 				open,
 				null,
-				JFileChooser.FILES_AND_DIRECTORIES,
+				JFileChooser.FILES_ONLY,
 				null,
 				null);
 		this.fileField.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));

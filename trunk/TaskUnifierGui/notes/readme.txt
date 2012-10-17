@@ -6,6 +6,7 @@ Version 3.0.3
 		- Bug fixed: Display message when backup created
 		- BF 170: Incorrect "Next Action" status
 		- Bug fixed: Wysiwyg editor property change listener
+		- Use FileDialog instead of JFileChooser on Mac
 
 Version 3.0.2
 	- Major:

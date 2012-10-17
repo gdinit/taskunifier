@@ -55,8 +55,8 @@ import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.FileUtils;
 import com.leclercb.taskunifier.gui.api.searchers.NoteSearcher;
 import com.leclercb.taskunifier.gui.api.searchers.NoteSearcherType;
-import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
+import com.leclercb.taskunifier.gui.utils.FileChooserUtils;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
@@ -121,16 +121,7 @@ public class NoteSearcherPanel extends JPanel implements PropertyChangeListener 
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				
-				if (NoteSearcherPanel.this.searcher.getIcon() != null) {
-					File file = new File(
-							NoteSearcherPanel.this.searcher.getIcon());
-					fileChooser.setCurrentDirectory(file);
-				}
-				
-				fileChooser.setFileFilter(new FileFilter() {
+				FileFilter fileFilter = new FileFilter() {
 					
 					@Override
 					public String getDescription() {
@@ -159,12 +150,17 @@ public class NoteSearcherPanel extends JPanel implements PropertyChangeListener 
 						return false;
 					}
 					
-				});
+				};
 				
-				int result = fileChooser.showOpenDialog(FrameUtils.getCurrentFrame());
+				String file = FileChooserUtils.getFile(
+						true,
+						NoteSearcherPanel.this.searcher.getIcon(),
+						fileFilter,
+						JFileChooser.FILES_ONLY,
+						null);
 				
-				if (result == JFileChooser.APPROVE_OPTION)
-					NoteSearcherPanel.this.searcher.setIcon(fileChooser.getSelectedFile().getAbsolutePath());
+				if (file != null)
+					NoteSearcherPanel.this.searcher.setIcon(file);
 			}
 			
 		});
