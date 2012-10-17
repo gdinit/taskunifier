@@ -38,7 +38,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Calendar;
 
@@ -60,7 +59,7 @@ import javax.swing.text.html.HTML;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jdesktop.swingx.JXEditorPane;
 
-import com.leclercb.commons.api.event.propertychange.PropertyChangeSupport;
+import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
 import com.leclercb.commons.api.properties.events.WeakSavePropertiesListener;
 import com.leclercb.commons.api.utils.CheckUtils;
@@ -80,9 +79,7 @@ import com.leclercb.taskunifier.gui.utils.DesktopUtils;
 import com.leclercb.taskunifier.gui.utils.ProtocolUtils;
 import com.leclercb.taskunifier.gui.utils.UndoSupport;
 
-public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface, SavePropertiesListener {
-	
-	private PropertyChangeSupport propertyChangeSupport;
+public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface, PropertyChangeSupported, SavePropertiesListener {
 	
 	private UndoSupport undoSupport;
 	
@@ -96,8 +93,6 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 			String text,
 			boolean canEdit,
 			String propertyName) {
-		this.propertyChangeSupport = new PropertyChangeSupport(this);
-		
 		this.propertyName = propertyName;
 		
 		this.initialize(text, canEdit);
@@ -172,7 +167,7 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				if (!WysiwygHTMLEditorPane.this.flagSetText)
-					WysiwygHTMLEditorPane.this.propertyChangeSupport.firePropertyChange(
+					WysiwygHTMLEditorPane.this.firePropertyChange(
 							PROP_TEXT,
 							null,
 							WysiwygHTMLEditorPane.this.getText());
@@ -181,7 +176,7 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				if (!WysiwygHTMLEditorPane.this.flagSetText)
-					WysiwygHTMLEditorPane.this.propertyChangeSupport.firePropertyChange(
+					WysiwygHTMLEditorPane.this.firePropertyChange(
 							PROP_TEXT,
 							null,
 							WysiwygHTMLEditorPane.this.getText());
@@ -190,7 +185,7 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				if (!WysiwygHTMLEditorPane.this.flagSetText)
-					WysiwygHTMLEditorPane.this.propertyChangeSupport.firePropertyChange(
+					WysiwygHTMLEditorPane.this.firePropertyChange(
 							PROP_TEXT,
 							null,
 							WysiwygHTMLEditorPane.this.getText());
@@ -429,34 +424,6 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 		}
 		
 		return null;
-	}
-	
-	@Override
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		this.propertyChangeSupport.addPropertyChangeListener(listener);
-	}
-	
-	@Override
-	public void addPropertyChangeListener(
-			String propertyName,
-			PropertyChangeListener listener) {
-		this.propertyChangeSupport.addPropertyChangeListener(
-				propertyName,
-				listener);
-	}
-	
-	@Override
-	public void removePropertyChangeListener(PropertyChangeListener listener) {
-		this.propertyChangeSupport.removePropertyChangeListener(listener);
-	}
-	
-	@Override
-	public void removePropertyChangeListener(
-			String propertyName,
-			PropertyChangeListener listener) {
-		this.propertyChangeSupport.removePropertyChangeListener(
-				propertyName,
-				listener);
 	}
 	
 	@Override
