@@ -35,24 +35,21 @@ package com.leclercb.taskunifier.gui.swing;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
+import com.leclercb.taskunifier.gui.utils.FileChooserUtils;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class TUFileField extends JPanel {
 	
-	private JFileChooser fileChooser;
 	private JTextField fileTextField;
 	private JButton selectFile;
-	private String appendFileExtention;
 	
 	public TUFileField(
 			String label,
@@ -61,8 +58,13 @@ public class TUFileField extends JPanel {
 			int fileSelectionMode,
 			FileFilter fileFilter,
 			String appendFileExtention) {
-		this.appendFileExtention = appendFileExtention;
-		this.initialize(label, open, file, fileSelectionMode, fileFilter);
+		this.initialize(
+				label,
+				open,
+				file,
+				fileSelectionMode,
+				fileFilter,
+				appendFileExtention);
 	}
 	
 	public String getFile() {
@@ -78,11 +80,8 @@ public class TUFileField extends JPanel {
 			final boolean open,
 			final String file,
 			final int fileSelectionMode,
-			final FileFilter fileFilter) {
-		this.fileChooser = new JFileChooser();
-		this.fileChooser.setFileSelectionMode(fileSelectionMode);
-		this.fileChooser.setFileFilter(fileFilter);
-		
+			final FileFilter fileFilter,
+			final String appendFileExtention) {
 		this.fileTextField = new JTextField();
 		
 		if (file != null)
@@ -96,28 +95,15 @@ public class TUFileField extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TUFileField.this.fileChooser.setCurrentDirectory(new File(
-						TUFileField.this.getFile()));
+				String selectedFile = FileChooserUtils.getFile(
+						open,
+						file,
+						fileFilter,
+						fileSelectionMode,
+						appendFileExtention);
 				
-				int result;
-				
-				if (open)
-					result = TUFileField.this.fileChooser.showOpenDialog(TUFileField.this);
-				else
-					result = TUFileField.this.fileChooser.showSaveDialog(TUFileField.this);
-				
-				if (result == JFileChooser.APPROVE_OPTION) {
-					String file = TUFileField.this.fileChooser.getSelectedFile().getAbsolutePath();
-					TUFileField.this.fileTextField.setText(file);
-					
-					if (TUFileField.this.appendFileExtention != null) {
-						if (!file.endsWith("."
-								+ TUFileField.this.appendFileExtention)) {
-							file += "." + TUFileField.this.appendFileExtention;
-							TUFileField.this.fileTextField.setText(file);
-						}
-					}
-				}
+				if (selectedFile != null)
+					TUFileField.this.fileTextField.setText(selectedFile);
 			}
 			
 		});

@@ -107,7 +107,7 @@ public class TULinkDialog extends JDialog {
 				Translations.getString("general.link"),
 				open,
 				null,
-				JFileChooser.FILES_AND_DIRECTORIES,
+				JFileChooser.FILES_ONLY,
 				null,
 				null);
 		panel.add(this.fileField, BorderLayout.CENTER);

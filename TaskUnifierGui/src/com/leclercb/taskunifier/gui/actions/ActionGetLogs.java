@@ -60,6 +60,7 @@ import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
 import com.leclercb.taskunifier.gui.translations.Translations;
+import com.leclercb.taskunifier.gui.utils.FileChooserUtils;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class ActionGetLogs extends AbstractAction {
@@ -81,18 +82,12 @@ public class ActionGetLogs extends AbstractAction {
 	
 	public static void getLogs() {
 		try {
-			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			int result = fileChooser.showSaveDialog(FrameUtils.getCurrentFrame());
-			
-			if (result != JFileChooser.APPROVE_OPTION)
-				return;
-			
-			String file = fileChooser.getSelectedFile().getAbsolutePath();
-			
-			if (!file.endsWith(".zip")) {
-				file += ".zip";
-			}
+			String file = FileChooserUtils.getFile(
+					false,
+					null,
+					null,
+					JFileChooser.FILES_ONLY,
+					"zip");
 			
 			ZipOutputStream zos = new ZipOutputStream(
 					new FileOutputStream(file));

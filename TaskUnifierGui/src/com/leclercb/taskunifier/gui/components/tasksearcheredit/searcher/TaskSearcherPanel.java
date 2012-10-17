@@ -60,8 +60,8 @@ import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcherType;
 import com.leclercb.taskunifier.gui.commons.models.TaskTemplateModel;
 import com.leclercb.taskunifier.gui.commons.values.StringValueTaskTemplateTitle;
-import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
+import com.leclercb.taskunifier.gui.utils.FileChooserUtils;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
@@ -128,16 +128,7 @@ public class TaskSearcherPanel extends JPanel implements PropertyChangeListener 
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				
-				if (TaskSearcherPanel.this.searcher.getIcon() != null) {
-					File file = new File(
-							TaskSearcherPanel.this.searcher.getIcon());
-					fileChooser.setCurrentDirectory(file);
-				}
-				
-				fileChooser.setFileFilter(new FileFilter() {
+				FileFilter fileFilter = new FileFilter() {
 					
 					@Override
 					public String getDescription() {
@@ -166,12 +157,17 @@ public class TaskSearcherPanel extends JPanel implements PropertyChangeListener 
 						return false;
 					}
 					
-				});
+				};
 				
-				int result = fileChooser.showOpenDialog(FrameUtils.getCurrentFrame());
+				String file = FileChooserUtils.getFile(
+						true,
+						TaskSearcherPanel.this.searcher.getIcon(),
+						fileFilter,
+						JFileChooser.FILES_ONLY,
+						null);
 				
-				if (result == JFileChooser.APPROVE_OPTION)
-					TaskSearcherPanel.this.searcher.setIcon(fileChooser.getSelectedFile().getAbsolutePath());
+				if (file != null)
+					TaskSearcherPanel.this.searcher.setIcon(file);
 			}
 			
 		});
