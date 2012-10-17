@@ -4,6 +4,7 @@ HISTORY
 Version 3.0.3
 	- Minor:
 		- Bug fixed: Display message when backup created
+		- BF 170: Incorrect "Next Action" status
 
 Version 3.0.2
 	- Major:
