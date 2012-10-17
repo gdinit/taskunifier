@@ -5,6 +5,7 @@
 	<property name="directory.api" value="${basedir}/../TaskUnifierApi"/>
 	<property name="directory.exe" value="${basedir}/../TaskUnifierExe"/>
 	<property name="directory.gui" value="${basedir}/../TaskUnifierGui"/>
+	<property name="directory.web" value="${basedir}/../TaskUnifierWebSite"/>
 	
 	<taskdef resource="net/jtools/classloadertask/antlib.xml" classpath="${directory.exe}/tools/ant-classloadertask/ant-classloadertask.jar"/>
 	<taskdef name="izpack" classname="com.izforge.izpack.ant.IzPackTask" classpath="${directory.exe}/tools/izpack/standalone-compiler.jar"/>
@@ -224,6 +225,8 @@
 		<mkdir dir="${directory.exe}/temp"/>
 		<echo file="${directory.exe}/temp/version.txt">${taskunifier.version}</echo>
 		<scp password="${sourceforge.password}" file="${directory.exe}/temp/version.txt" todir="leclercb,taskunifier@web.sourceforge.net:/home/groups/t/ta/taskunifier/htdocs/" trust="true"/>
+		<echo file="${directory.web}/web/version.txt">${taskunifier.version}</echo>
+		<antcall target="clean"/>
 	</target>
 	
 </project>
