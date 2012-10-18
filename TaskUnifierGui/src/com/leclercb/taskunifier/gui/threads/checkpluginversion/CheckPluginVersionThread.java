@@ -39,7 +39,7 @@ public class CheckPluginVersionThread extends Thread {
 	public CheckPluginVersionThread(boolean silent) {
 		super(
 				new CheckPluginVersionRunnable(silent),
-				"CheckPluginVersionThread");
+				"TU_CheckPluginVersionThread");
 	}
 	
 	public CheckPluginVersionThread(
@@ -47,7 +47,7 @@ public class CheckPluginVersionThread extends Thread {
 			SynchronizerGuiPlugin... syncPlugins) {
 		super(
 				new CheckPluginVersionRunnable(silent, syncPlugins),
-				"CheckPluginVersionThread");
+				"TU_CheckPluginVersionThread");
 	}
 	
 }

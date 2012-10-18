@@ -55,7 +55,7 @@ public class ScheduledSyncThread extends Thread implements PropertyChangeSupport
 	private boolean paused;
 	
 	public ScheduledSyncThread() {
-		super("ScheduledSyncThread");
+		super("TU_ScheduledSyncThread");
 		
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
 		

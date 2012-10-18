@@ -39,7 +39,7 @@ import com.leclercb.taskunifier.gui.utils.BackupUtils;
 public class AutoBackupThread extends Thread {
 	
 	public AutoBackupThread() {
-		super("AutoBackupThread");
+		super("TU_AutoBackupThread");
 	}
 	
 	@Override

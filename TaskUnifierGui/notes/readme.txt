@@ -8,6 +8,7 @@ Version 3.0.3
 		- Bug fixed: Wysiwyg editor property change listener
 		- Use FileDialog instead of JFileChooser on Mac
 		- Limit number of syncs without license
+		- Fix of some memory leaks
 
 Version 3.0.2
 	- Major:

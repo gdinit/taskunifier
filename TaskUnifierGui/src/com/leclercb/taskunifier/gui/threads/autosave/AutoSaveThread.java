@@ -39,7 +39,7 @@ import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 public class AutoSaveThread extends Thread {
 	
 	public AutoSaveThread() {
-		super("AutoSaveThread");
+		super("TU_AutoSaveThread");
 	}
 	
 	@Override
