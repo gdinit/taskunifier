@@ -47,6 +47,8 @@ import javax.swing.tree.TreeSelectionModel;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
+import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
+import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.utils.TreeUtils;
 import com.leclercb.taskunifier.api.models.BasicModel;
@@ -115,22 +117,22 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 		this.initializeTagCategory();
 		this.initializePersonalCategory();
 		
-		TaskFactory.getInstance().addListChangeListener(this);
-		TaskFactory.getInstance().addPropertyChangeListener(this);
+		TaskFactory.getInstance().addListChangeListener(
+				new WeakListChangeListener(TaskFactory.getInstance(), this));
+		TaskFactory.getInstance().addPropertyChangeListener(
+				new WeakPropertyChangeListener(TaskFactory.getInstance(), this));
 		
-		TaskSearcherFactory.getInstance().addListChangeListener(this);
-		TaskSearcherFactory.getInstance().addPropertyChangeListener(this);
+		TaskSearcherFactory.getInstance().addListChangeListener(
+				new WeakListChangeListener(
+						TaskSearcherFactory.getInstance(),
+						this));
+		TaskSearcherFactory.getInstance().addPropertyChangeListener(
+				new WeakPropertyChangeListener(
+						TaskSearcherFactory.getInstance(),
+						this));
 		
 		Main.getSettings().addPropertyChangeListener(
-				"tasksearcher.show_completed_tasks",
-				new PropertyChangeListener() {
-					
-					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
-						TaskSearcherTreeModel.this.updateBadges();
-					}
-					
-				});
+				new WeakPropertyChangeListener(Main.getSettings(), this));
 		
 		this.treeSelectionModel.addTreeSelectionListener(new TreeSelectionListener() {
 			
@@ -200,8 +202,12 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 			}
 		}
 		
-		ContextFactory.getInstance().addListChangeListener(this);
-		ContextFactory.getInstance().addPropertyChangeListener(this);
+		ContextFactory.getInstance().addListChangeListener(
+				new WeakListChangeListener(ContextFactory.getInstance(), this));
+		ContextFactory.getInstance().addPropertyChangeListener(
+				new WeakPropertyChangeListener(
+						ContextFactory.getInstance(),
+						this));
 	}
 	
 	private void initializeFolderCategory() {
@@ -229,8 +235,12 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 			}
 		}
 		
-		FolderFactory.getInstance().addListChangeListener(this);
-		FolderFactory.getInstance().addPropertyChangeListener(this);
+		FolderFactory.getInstance().addListChangeListener(
+				new WeakListChangeListener(FolderFactory.getInstance(), this));
+		FolderFactory.getInstance().addPropertyChangeListener(
+				new WeakPropertyChangeListener(
+						FolderFactory.getInstance(),
+						this));
 	}
 	
 	private void initializeGoalCategory() {
@@ -256,8 +266,10 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 			}
 		}
 		
-		GoalFactory.getInstance().addListChangeListener(this);
-		GoalFactory.getInstance().addPropertyChangeListener(this);
+		GoalFactory.getInstance().addListChangeListener(
+				new WeakListChangeListener(GoalFactory.getInstance(), this));
+		GoalFactory.getInstance().addPropertyChangeListener(
+				new WeakPropertyChangeListener(GoalFactory.getInstance(), this));
 	}
 	
 	private void initializeLocationCategory() {
@@ -278,8 +290,12 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 						ModelType.LOCATION,
 						location));
 		
-		LocationFactory.getInstance().addListChangeListener(this);
-		LocationFactory.getInstance().addPropertyChangeListener(this);
+		LocationFactory.getInstance().addListChangeListener(
+				new WeakListChangeListener(LocationFactory.getInstance(), this));
+		LocationFactory.getInstance().addPropertyChangeListener(
+				new WeakPropertyChangeListener(
+						LocationFactory.getInstance(),
+						this));
 	}
 	
 	private void initializeTagCategory() {
@@ -293,7 +309,8 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 		for (Tag tag : tags)
 			this.tagCategory.add(new TagItem(tag));
 		
-		TaskTagList.getInstance().addListChangeListener(this);
+		TaskTagList.getInstance().addListChangeListener(
+				new WeakListChangeListener(TaskTagList.getInstance(), this));
 	}
 	
 	private void initializePersonalCategory() {
@@ -514,6 +531,12 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
+		if (event.getPropertyName().equals("tasksearcher.show_completed_tasks")) {
+			this.updateBadges();
+			
+			return;
+		}
+		
 		if (event.getSource() instanceof Task) {
 			if (!Synchronizing.getInstance().isSynchronizing())
 				if (!event.getPropertyName().equals(ModelNote.PROP_NOTE))

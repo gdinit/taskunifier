@@ -47,7 +47,9 @@ import javax.swing.ToolTipManager;
 import javax.swing.TransferHandler;
 import javax.swing.tree.TreeNode;
 
+import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
+import com.leclercb.commons.api.properties.events.WeakSavePropertiesListener;
 import com.leclercb.commons.gui.utils.TreeUtils;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.Tag;
@@ -62,7 +64,7 @@ import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.TagItem;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.TaskSearcherProvider;
 import com.leclercb.taskunifier.gui.main.Main;
 
-public class TaskSearcherTree extends JTree implements TaskSearcherView, SavePropertiesListener {
+public class TaskSearcherTree extends JTree implements TaskSearcherView, PropertyChangeListener, SavePropertiesListener {
 	
 	private String settingsPrefix;
 	
@@ -72,7 +74,8 @@ public class TaskSearcherTree extends JTree implements TaskSearcherView, SavePro
 	}
 	
 	private void initialize() {
-		Main.getSettings().addSavePropertiesListener(this);
+		Main.getSettings().addSavePropertiesListener(
+				new WeakSavePropertiesListener(Main.getSettings(), this));
 		
 		this.setOpaque(false);
 		this.setRootVisible(false);
@@ -92,15 +95,9 @@ public class TaskSearcherTree extends JTree implements TaskSearcherView, SavePro
 		this.initializeExpandedState();
 		
 		Synchronizing.getInstance().addPropertyChangeListener(
-				new PropertyChangeListener() {
-					
-					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
-						if (!(Boolean) evt.getNewValue())
-							TaskSearcherTree.this.updateBadges();
-					}
-					
-				});
+				new WeakPropertyChangeListener(
+						Synchronizing.getInstance(),
+						this));
 	}
 	
 	public TaskSearcherTreeModel getSearcherModel() {
@@ -268,15 +265,7 @@ public class TaskSearcherTree extends JTree implements TaskSearcherView, SavePro
 		TreeUtils.expandAll(this, true);
 		
 		Main.getSettings().addPropertyChangeListener(
-				this.settingsPrefix + ".category",
-				new PropertyChangeListener() {
-					
-					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
-						TaskSearcherTree.this.updateExpandedState();
-					}
-					
-				});
+				new WeakPropertyChangeListener(Main.getSettings(), this));
 		
 		this.updateExpandedState();
 	}
@@ -303,6 +292,18 @@ public class TaskSearcherTree extends JTree implements TaskSearcherView, SavePro
 						category.getExpandedPropertyName(),
 						this.isExpanded(TreeUtils.getPath(category)));
 			}
+		}
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(Synchronizing.PROP_SYNCHRONIZING)) {
+			if (!(Boolean) evt.getNewValue())
+				this.updateBadges();
+		}
+		
+		if (evt.getPropertyName().equals(this.settingsPrefix + ".category")) {
+			this.updateExpandedState();
 		}
 	}
 	
