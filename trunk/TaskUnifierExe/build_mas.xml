@@ -68,7 +68,7 @@
 			<option value="-Xdock:icon=Contents/Resources/icon.icns"/>
 			
 			<option value="-Dcom.leclercb.taskunifier.resource_folder=$APP_ROOT/Contents/MacOS/resources"/>
-			<option value="-Dcom.leclercb.taskunifier.data_folder=true"/>
+			<option value="-Dcom.leclercb.taskunifier.mac_app_store=true"/>
 
 			<option value="-Dapple.laf.useScreenMenuBar=true"/>
 			<option value="-Dcom.apple.macos.useScreenMenuBar=true"/>
