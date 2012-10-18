@@ -51,6 +51,8 @@ import javax.swing.event.ListSelectionListener;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
+import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
+import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
@@ -59,7 +61,7 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
-public class TaskSorterPanel extends JPanel {
+public class TaskSorterPanel extends JPanel implements ListChangeListener, PropertyChangeListener {
 	
 	private TaskSorter sorter;
 	private TaskSorterTable table;
@@ -184,23 +186,13 @@ public class TaskSorterPanel extends JPanel {
 			
 		});
 		
-		this.sorter.addListChangeListener(new ListChangeListener() {
-			
-			@Override
-			public void listChange(ListChangeEvent event) {
-				TaskSorterPanel.this.allowManualOrdering.setSelected(TaskUtils.isSortByOrder(TaskSorterPanel.this.sorter));
-			}
-			
-		});
+		this.sorter.addListChangeListener(new WeakListChangeListener(
+				this.sorter,
+				this));
 		
-		this.sorter.addPropertyChangeListener(new PropertyChangeListener() {
-			
-			@Override
-			public void propertyChange(PropertyChangeEvent event) {
-				TaskSorterPanel.this.allowManualOrdering.setSelected(TaskUtils.isSortByOrder(TaskSorterPanel.this.sorter));
-			}
-			
-		});
+		this.sorter.addPropertyChangeListener(new WeakPropertyChangeListener(
+				this.sorter,
+				this));
 		
 		JPanel buttonsPanel = new JPanel(new BorderLayout(3, 3));
 		buttonsPanel.add(this.allowManualOrdering, BorderLayout.NORTH);
@@ -210,6 +202,16 @@ public class TaskSorterPanel extends JPanel {
 		buttonsPanel.add(panel, BorderLayout.CENTER);
 		
 		this.add(buttonsPanel, BorderLayout.SOUTH);
+	}
+	
+	@Override
+	public void listChange(ListChangeEvent event) {
+		this.allowManualOrdering.setSelected(TaskUtils.isSortByOrder(this.sorter));
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		this.allowManualOrdering.setSelected(TaskUtils.isSortByOrder(this.sorter));
 	}
 	
 }

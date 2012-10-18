@@ -40,6 +40,8 @@ import javax.swing.tree.TreeNode;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
+import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
+import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilterElement;
 
@@ -48,8 +50,10 @@ public class NoteFilterTreeModel extends DefaultTreeModel implements ListChangeL
 	public NoteFilterTreeModel(NoteFilter filter) {
 		super(new NoteFilterTreeNode(filter));
 		
-		filter.addListChangeListener(this);
-		filter.addPropertyChangeListener(this);
+		filter.addListChangeListener(new WeakListChangeListener(filter, this));
+		filter.addPropertyChangeListener(new WeakPropertyChangeListener(
+				filter,
+				this));
 	}
 	
 	@Override

@@ -1,7 +1,6 @@
 - Fix help files
-- Improve tips
+- Improve help/tips
 - Create transaction and send email for previous transactions
-- Allow TU 3.x license key to work with TU 2.x
 - Fix invalid parent ID
 - Finish review
 - Translations
