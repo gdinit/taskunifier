@@ -61,6 +61,7 @@ import com.leclercb.taskunifier.gui.actions.ActionAddNoteSearcher;
 import com.leclercb.taskunifier.gui.actions.ActionConfiguration;
 import com.leclercb.taskunifier.gui.actions.ActionDeleteNoteSearcher;
 import com.leclercb.taskunifier.gui.actions.ActionEditNoteSearcher;
+import com.leclercb.taskunifier.gui.actions.ActionManageModels;
 import com.leclercb.taskunifier.gui.api.searchers.NoteSearcher;
 import com.leclercb.taskunifier.gui.api.searchers.NoteSearcherType;
 import com.leclercb.taskunifier.gui.api.searchers.filters.FilterLink;
@@ -265,6 +266,7 @@ public class NoteSearcherPanel extends JPanel implements SavePropertiesListener,
 	
 	private void initializeButtons() {
 		JPanel panel = new TUButtonsPanel(true, new JButton(
+				new ActionManageModels(16, 16)), new JButton(
 				new ActionAddNoteSearcher(16, 16)), new JButton(
 				new ActionEditNoteSearcher(16, 16)), new JButton(
 				new ActionDeleteNoteSearcher(16, 16)));
