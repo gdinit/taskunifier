@@ -27,7 +27,56 @@
 		<antcall target="clean"/>
 		<mkdir dir="${directory.exe}/temp"/>
 		
-		TBD
+		<bundleapp 
+				outputdirectory="${directory.exe}/temp"
+				name="TaskUnifier"
+				displayname="TaskUnifier"
+				identifier="com.leclercb.taskunifier"
+				shortversion="${taskunifier.version}"
+				version="${taskunifier.version}"
+				icon="${directory.gui}/resources/icon.icns"
+				mainclassname="com.leclercb.taskunifier.gui.main.Main"
+				copyright="Copyright (c) 2011, Benjamin Leclerc"
+				applicationCategory="public.app-category.productivity">
+
+			<runtime dir="${runtime}/Contents/Home"/>
+
+			<arch name="x86_64"/>
+			<arch name="i386"/>
+			
+			<classpath dir="${directory.gui}/dist">
+				<include name="taskunifiergui.jar" />
+			</classpath>
+			
+			<classpath dir="${directory.gui}">
+				<include name="lib/" />
+				<exclude name="lib/applejavaextensions.jar" />
+			</classpath>
+			
+			<librarypath dir="${directory.gui}">
+				<include name="notes/" />
+				<include name="resources/" />
+			</librarypath>
+
+			<bundledocument extensions="tue"
+					icon="${directory.gui}/resources/icon.icns"
+					name="TaskUnifier Exchange files"
+					role="editor"
+					isPackage="true">
+			</bundledocument>
+
+			<option value="-Xdock:icon=Contents/Resources/icon.icns"/>
+			
+			<option value="-Dcom.leclercb.taskunifier.resource_folder=$APP_ROOT/Contents/MacOS/resources"/>
+			<option value="-Dcom.leclercb.taskunifier.data_folder=true"/>
+
+			<option value="-Dapple.laf.useScreenMenuBar=true"/>
+			<option value="-Dcom.apple.macos.useScreenMenuBar=true"/>
+			<option value="-Dcom.apple.macos.use-file-dialog-packages=true"/>
+
+			<option value="-Xmx512m"/>
+			
+		</bundleapp>
 		
 		<exec executable="${directory.exe}/scripts/mac.codesign.sh" failonerror="true">
 			<arg line="-a"/>
@@ -39,9 +88,11 @@
 			<tarfileset dir="${directory.exe}/temp">
 				<include name="**/*"/>	 
 				<exclude name="**/JavaApplicationStub"/>
+				<TBD>
 			</tarfileset>
 			<tarfileset dir="${directory.exe}/temp" filemode="755">
 				<include name="**/JavaApplicationStub"/>
+				<TBD>
 			</tarfileset>
 		</tar>
 		<antcall target="create-mac-pkg"/>
