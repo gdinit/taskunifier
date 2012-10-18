@@ -179,6 +179,29 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 						if (!plugin.checkLicense()) {
 							noLicense = true;
 							
+							String key = "synchronizer.no_license_count."
+									+ plugin.getId();
+							int noLicenseCount = Main.getSettings().getIntegerProperty(
+									key,
+									0);
+							noLicenseCount++;
+							Main.getSettings().setIntegerProperty(
+									key,
+									noLicenseCount);
+							
+							if (noLicenseCount > Constants.MAX_NO_LICENSE_SYNCS) {
+								this.publish(new SynchronizerDefaultProgressMessage(
+										Translations.getString("synchronizer.max_no_license_syncs_reached")));
+								
+								continue;
+							} else {
+								this.publish(new SynchronizerDefaultProgressMessage(
+										Translations.getString(
+												"synchronizer.max_no_license_syncs_left",
+												Constants.MAX_NO_LICENSE_SYNCS
+														- noLicenseCount)));
+							}
+							
 							int waitTime = Constants.WAIT_NO_LICENSE_TIME;
 							
 							waitTime += NO_LICENSE_COUNT

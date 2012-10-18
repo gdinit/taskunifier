@@ -66,6 +66,7 @@ import com.leclercb.taskunifier.gui.actions.ActionAddTaskSearcher;
 import com.leclercb.taskunifier.gui.actions.ActionConfiguration;
 import com.leclercb.taskunifier.gui.actions.ActionDeleteTaskSearcher;
 import com.leclercb.taskunifier.gui.actions.ActionEditTaskSearcher;
+import com.leclercb.taskunifier.gui.actions.ActionManageModels;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcherFactory;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcherType;
@@ -306,6 +307,7 @@ public class TaskSearcherPanel extends JPanel implements SavePropertiesListener,
 	
 	private void initializeButtons() {
 		JPanel panel = new TUButtonsPanel(true, new JButton(
+				new ActionManageModels(16, 16)), new JButton(
 				new ActionAddTaskSearcher(16, 16)), new JButton(
 				new ActionEditTaskSearcher(16, 16)), new JButton(
 				new ActionDeleteTaskSearcher(16, 16)));
