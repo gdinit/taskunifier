@@ -45,6 +45,8 @@ import javax.swing.tree.TreeSelectionModel;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
+import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
+import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.utils.TreeUtils;
 import com.leclercb.taskunifier.api.models.BasicModel;
@@ -90,11 +92,19 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 		this.initializeFolderCategory();
 		this.initializePersonalCategory();
 		
-		NoteFactory.getInstance().addListChangeListener(this);
-		NoteFactory.getInstance().addPropertyChangeListener(this);
+		NoteFactory.getInstance().addListChangeListener(
+				new WeakListChangeListener(NoteFactory.getInstance(), this));
+		NoteFactory.getInstance().addPropertyChangeListener(
+				new WeakPropertyChangeListener(NoteFactory.getInstance(), this));
 		
-		NoteSearcherFactory.getInstance().addListChangeListener(this);
-		NoteSearcherFactory.getInstance().addPropertyChangeListener(this);
+		NoteSearcherFactory.getInstance().addListChangeListener(
+				new WeakListChangeListener(
+						NoteSearcherFactory.getInstance(),
+						this));
+		NoteSearcherFactory.getInstance().addPropertyChangeListener(
+				new WeakPropertyChangeListener(
+						NoteSearcherFactory.getInstance(),
+						this));
 	}
 	
 	public SearcherItem getDefaultSearcher() {
@@ -137,8 +147,12 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 			}
 		}
 		
-		FolderFactory.getInstance().addListChangeListener(this);
-		FolderFactory.getInstance().addPropertyChangeListener(this);
+		FolderFactory.getInstance().addListChangeListener(
+				new WeakListChangeListener(FolderFactory.getInstance(), this));
+		FolderFactory.getInstance().addPropertyChangeListener(
+				new WeakPropertyChangeListener(
+						FolderFactory.getInstance(),
+						this));
 	}
 	
 	private void initializePersonalCategory() {

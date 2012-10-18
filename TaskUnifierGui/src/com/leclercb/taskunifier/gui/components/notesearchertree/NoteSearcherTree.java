@@ -47,7 +47,9 @@ import javax.swing.ToolTipManager;
 import javax.swing.TransferHandler;
 import javax.swing.tree.TreeNode;
 
+import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
+import com.leclercb.commons.api.properties.events.WeakSavePropertiesListener;
 import com.leclercb.commons.gui.utils.TreeUtils;
 import com.leclercb.taskunifier.api.models.Folder;
 import com.leclercb.taskunifier.api.models.Note;
@@ -60,7 +62,7 @@ import com.leclercb.taskunifier.gui.components.notesearchertree.nodes.SearcherCa
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.main.Main;
 
-public class NoteSearcherTree extends JTree implements NoteSearcherView, SavePropertiesListener {
+public class NoteSearcherTree extends JTree implements NoteSearcherView, PropertyChangeListener, SavePropertiesListener {
 	
 	private String settingsPrefix;
 	
@@ -70,7 +72,8 @@ public class NoteSearcherTree extends JTree implements NoteSearcherView, SavePro
 	}
 	
 	private void initialize() {
-		Main.getSettings().addSavePropertiesListener(this);
+		Main.getSettings().addSavePropertiesListener(
+				new WeakSavePropertiesListener(Main.getSettings(), this));
 		
 		this.setOpaque(false);
 		this.setRootVisible(false);
@@ -90,15 +93,9 @@ public class NoteSearcherTree extends JTree implements NoteSearcherView, SavePro
 		this.initializeExpandedState();
 		
 		Synchronizing.getInstance().addPropertyChangeListener(
-				new PropertyChangeListener() {
-					
-					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
-						if (!(Boolean) evt.getNewValue())
-							NoteSearcherTree.this.updateBadges();
-					}
-					
-				});
+				new WeakPropertyChangeListener(
+						Synchronizing.getInstance(),
+						this));
 	}
 	
 	public NoteSearcherTreeModel getSearcherModel() {
@@ -243,15 +240,7 @@ public class NoteSearcherTree extends JTree implements NoteSearcherView, SavePro
 		TreeUtils.expandAll(this, true);
 		
 		Main.getSettings().addPropertyChangeListener(
-				this.settingsPrefix + ".category",
-				new PropertyChangeListener() {
-					
-					@Override
-					public void propertyChange(PropertyChangeEvent evt) {
-						NoteSearcherTree.this.updateExpandedState();
-					}
-					
-				});
+				new WeakPropertyChangeListener(Main.getSettings(), this));
 		
 		this.updateExpandedState();
 	}
@@ -278,6 +267,18 @@ public class NoteSearcherTree extends JTree implements NoteSearcherView, SavePro
 						category.getExpandedPropertyName(),
 						this.isExpanded(TreeUtils.getPath(category)));
 			}
+		}
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(Synchronizing.PROP_SYNCHRONIZING)) {
+			if (!(Boolean) evt.getNewValue())
+				this.updateBadges();
+		}
+		
+		if (evt.getPropertyName().equals(this.settingsPrefix + ".category")) {
+			this.updateExpandedState();
 		}
 	}
 	

@@ -51,6 +51,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import com.explodingpixels.macwidgets.SourceListStandardColorScheme;
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
+import com.leclercb.commons.api.properties.events.WeakSavePropertiesListener;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.models.ContextFactory;
@@ -107,7 +108,8 @@ public class TaskSearcherPanel extends JPanel implements SavePropertiesListener,
 		
 		this.settingsPrefix = settingsPrefix;
 		
-		Main.getSettings().addSavePropertiesListener(this);
+		Main.getSettings().addSavePropertiesListener(
+				new WeakSavePropertiesListener(Main.getSettings(), this));
 		
 		this.initialize();
 	}
