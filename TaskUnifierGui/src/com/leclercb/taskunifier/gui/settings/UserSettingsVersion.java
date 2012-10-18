@@ -110,16 +110,16 @@ public final class UserSettingsVersion {
 		GuiLogger.getLogger().info(
 				"Update user settings from version 2.4.0 to 3.0.0");
 		
-		Main.getSettings().setStringProperty(
+		Main.getUserSettings().setStringProperty(
 				"synchronizer.publish_background",
 				"false");
-		Main.getSettings().setStringProperty(
+		Main.getUserSettings().setStringProperty(
 				"synchronizer.publish_exit",
 				"false");
-		Main.getSettings().setStringProperty(
+		Main.getUserSettings().setStringProperty(
 				"synchronizer.publish_start",
 				"false");
-		Main.getSettings().setStringProperty(
+		Main.getUserSettings().setStringProperty(
 				"synchronizer.sync_reminder_field",
 				"true");
 		
