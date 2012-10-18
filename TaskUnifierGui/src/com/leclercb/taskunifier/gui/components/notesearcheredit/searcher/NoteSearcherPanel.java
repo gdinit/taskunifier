@@ -51,6 +51,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
+import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.FileUtils;
 import com.leclercb.taskunifier.gui.api.searchers.NoteSearcher;
@@ -71,7 +72,9 @@ public class NoteSearcherPanel extends JPanel implements PropertyChangeListener 
 	public NoteSearcherPanel(NoteSearcher searcher) {
 		this.searcher = searcher;
 		
-		this.searcher.addPropertyChangeListener(this);
+		this.searcher.addPropertyChangeListener(new WeakPropertyChangeListener(
+				this.searcher,
+				this));
 		
 		this.initialize();
 	}

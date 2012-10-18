@@ -40,6 +40,8 @@ import javax.swing.table.DefaultTableModel;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
+import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
+import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorterElement;
 import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
@@ -51,8 +53,12 @@ public class NoteSorterTableModel extends DefaultTableModel implements ListChang
 	
 	public NoteSorterTableModel(NoteSorter sorter) {
 		this.sorter = sorter;
-		this.sorter.addListChangeListener(this);
-		this.sorter.addPropertyChangeListener(this);
+		this.sorter.addListChangeListener(new WeakListChangeListener(
+				this.sorter,
+				this));
+		this.sorter.addPropertyChangeListener(new WeakPropertyChangeListener(
+				this.sorter,
+				this));
 	}
 	
 	public NoteSorter getNoteSorter() {
