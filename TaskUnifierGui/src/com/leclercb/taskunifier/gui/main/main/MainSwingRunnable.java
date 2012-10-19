@@ -242,11 +242,13 @@ public class MainSwingRunnable implements Runnable {
 				messages.add(Translations.getString(
 						"welcome.message.license_upgrade_required_beta",
 						Constants.VERSION,
+						"01/06/2012",
 						Constants.BETA_SYNC_EXP));
 			else
 				messages.add(Translations.getString(
 						"welcome.message.license_upgrade_required",
-						Constants.VERSION));
+						Constants.VERSION,
+						"01/06/2012"));
 		}
 		
 		if (Main.isFirstExecution()) {
