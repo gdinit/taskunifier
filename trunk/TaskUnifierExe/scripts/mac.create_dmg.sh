@@ -9,21 +9,14 @@ fi
 BASEDIR=`dirname $0`
 BASEDIR="$BASEDIR/.."
 APPFILE="$BASEDIR/temp/TaskUnifier.app"
-TARFILE="$BASEDIR/binaries/TaskUnifier_$1/TaskUnifier_$1_mac.tar"
 DMGFILE="$BASEDIR/binaries/TaskUnifier_$1/TaskUnifier_$1_mac.dmg"
 
 echo "Creating DMG file $DMGFILE"
-
-mkdir $BASEDIR/temp
-
-tar -C $BASEDIR/temp -xf $TARFILE
 
 rm -f $DMGFILE
 
 hdiutil create -quiet -srcfolder $APPFILE $DMGFILE 2> /dev/null
 hdiutil internet-enable -quiet -yes $DMGFILE 2> /dev/null
-
-rm -rf $BASEDIR/temp
 
 exit 0
 

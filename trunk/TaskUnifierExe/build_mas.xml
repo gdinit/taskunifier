@@ -22,7 +22,7 @@
 	<classloader loader="system" classpath="${directory.exe}/tools/commons-net/commons-net-2.2.jar"/>
 	<classloader loader="system" classpath="${directory.exe}/tools/jsch/jsch-0.1.44.jar"/>
 	
-	<target depends="taskunifier-version-underscored" name="create-mac-app-store-binary">
+	<target depends="taskunifier-version-underscored" name="create-mac-app-store-binary" if="isMac">
 		<echo message="Creating mac tar file..."/>
 		<antcall target="clean"/>
 		<mkdir dir="${directory.exe}/temp"/>
@@ -39,7 +39,7 @@
 				copyright="Copyright (c) 2011, Benjamin Leclerc"
 				applicationCategory="public.app-category.productivity">
 
-			<runtime dir="${runtime}/Contents/Home"/>
+			<runtime dir="/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home"/>
 
 			<arch name="x86_64"/>
 			<arch name="i386"/>
@@ -72,6 +72,8 @@
 			<option value="-Xmx512m"/>
 			
 		</bundleapp>
+
+		<chmod dir="${directory.exe}/temp" includes="**/JavaAppLauncher" perm="755"/>
 		
 		<copy file="${directory.exe}/scripts/mac/container-migration.plist" tofile="${directory.exe}/temp/TaskUnifier.app/Contents/Resources/container-migration.plist"/>
 		
@@ -81,28 +83,16 @@
 				<include name="resources/" />
 			</fileset>
 		</copy>
-		
+
+		<echo message="Signing mac app..."/>
 		<exec executable="${directory.exe}/scripts/mac.codesign.sh" failonerror="true">
 			<arg line="-a"/>
 		</exec>
 		
 		<mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
 		<mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/mas"/>
-		<tar destfile="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/mas/TaskUnifier_${taskunifier.version.underscored}_mac.tar">
-			<tarfileset dir="${directory.exe}/temp">
-				<include name="**/*"/>	 
-				<exclude name="**/JavaApplicationStub"/>
-			</tarfileset>
-			<tarfileset dir="${directory.exe}/temp" filemode="755">
-				<include name="**/JavaApplicationStub"/>
-			</tarfileset>
-		</tar>
-		<antcall target="create-mac-pkg"/>
-	</target>
-	
-	<target depends="check-os, taskunifier-version-underscored" name="create-mac-pkg" if="isMac">
+		
 		<echo message="Creating mac pkg file..."/>
-		<antcall target="clean"/>
 		<exec executable="${directory.exe}/scripts/mac.create_pkg.sh" failonerror="true">
 			<arg line="${taskunifier.version.underscored}"/>
 		</exec>
