@@ -131,7 +131,10 @@ public final class FileChooserUtils {
 		
 		fileChooser.setVisible(true);
 		
-		return fileChooser.getFile();
+		if (fileChooser.getFile() == null)
+			return null;
+		
+		return fileChooser.getDirectory() + fileChooser.getFile();
 	}
 	
 }
