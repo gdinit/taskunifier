@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ $# > 1 ]
+if [ $# -gt 1 ]
 then
 	echo "Usage: $0 [-a]"
 	exit 1
@@ -27,7 +27,9 @@ PKGFILE="$BASEDIR/temp/TaskUnifier.app"
 if [ $MACAPPSTORE == 0 ]
 then
 
-	echo "Codesign application file ""$APPFILE""..."
+    echo "NORMAL MAC VERSION"
+
+    echo "Codesign application file ""$APPFILE""..."
 	
 	codesign -v -f -s "Developer ID Application"  $APPFILE
 	
@@ -50,6 +52,8 @@ fi
 
 if [ $MACAPPSTORE == 1 ]
 then
+
+    echo "MAC APP STORE VERSION"
 
 	echo "Codesign application file ""$APPFILE""..."
 	
