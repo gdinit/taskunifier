@@ -22,7 +22,7 @@
 	<classloader loader="system" classpath="${directory.exe}/tools/commons-net/commons-net-2.2.jar"/>
 	<classloader loader="system" classpath="${directory.exe}/tools/jsch/jsch-0.1.44.jar"/>
 	
-	<target depends="taskunifier-version-underscored" name="create-mac-app-store-binary" if="isMac">
+	<target depends="taskunifier-version-underscored, check-os" name="create-mac-app-store-binary" if="isMac">
 		<echo message="Creating mac tar file..."/>
 		<antcall target="clean"/>
 		<mkdir dir="${directory.exe}/temp"/>
@@ -68,6 +68,7 @@
 			<option value="-Dapple.laf.useScreenMenuBar=true"/>
 			<option value="-Dcom.apple.macos.useScreenMenuBar=true"/>
 			<option value="-Dcom.apple.macos.use-file-dialog-packages=true"/>
+			<option value="-Dcom.apple.mrj.application.apple.menu.about.name=TaskUnifier"/>
 
 			<option value="-Xmx512m"/>
 			
@@ -90,7 +91,6 @@
 		</exec>
 		
 		<mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
-		<mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/mas"/>
 		
 		<echo message="Creating mac pkg file..."/>
 		<exec executable="${directory.exe}/scripts/mac.create_pkg.sh" failonerror="true">
