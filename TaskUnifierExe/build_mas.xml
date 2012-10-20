@@ -36,7 +36,7 @@
 				version="${taskunifier.version}"
 				icon="${directory.gui}/resources/icon.icns"
 				mainclassname="com.leclercb.taskunifier.gui.main.Main"
-				copyright="Copyright (c) 2011, Benjamin Leclerc"
+				copyright="2011, Benjamin Leclerc"
 				applicationCategory="public.app-category.productivity">
 
 			<runtime dir="/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home"/>
