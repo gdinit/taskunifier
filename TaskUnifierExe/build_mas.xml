@@ -92,11 +92,9 @@
 			<tarfileset dir="${directory.exe}/temp">
 				<include name="**/*"/>	 
 				<exclude name="**/JavaApplicationStub"/>
-				<TBD>
 			</tarfileset>
 			<tarfileset dir="${directory.exe}/temp" filemode="755">
 				<include name="**/JavaApplicationStub"/>
-				<TBD>
 			</tarfileset>
 		</tar>
 		<antcall target="create-mac-pkg"/>
