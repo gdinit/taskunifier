@@ -15,7 +15,7 @@ echo "Creating PKG file $PKGFILE"
 
 rm -f $PKGFILE
 
-productbuild --component $APPFILE /Applications --sign "Developer ID Application" $PKGFILE
+productbuild --component $APPFILE /Applications --sign "Developer ID Installer" $PKGFILE
 
 exit 0
 
