@@ -450,16 +450,8 @@ public class Main {
 	private static void loadSettings() throws Exception {
 		try {
 			SETTINGS.load(new FileInputStream(getSettingsFile()));
-		} catch (Exception e) {
+		} catch (FileNotFoundException e) {
 			SETTINGS.load(Resources.class.getResourceAsStream("default_settings.properties"));
-			
-			if (!isFirstExecution())
-				JOptionPane.showMessageDialog(
-						null,
-						"Settings file not found. A default settings file is loaded.",
-						"Error",
-						JOptionPane.ERROR_MESSAGE);
-			
 			FIRST_EXECUTION = true;
 		}
 	}

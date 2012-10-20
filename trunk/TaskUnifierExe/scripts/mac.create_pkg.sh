@@ -9,7 +9,7 @@ fi
 BASEDIR=`dirname $0`
 BASEDIR="$BASEDIR/.."
 APPFILE="$BASEDIR/temp/TaskUnifier.app"
-PKGFILE="$BASEDIR/binaries/TaskUnifier_$1/mas/TaskUnifier_$1_mac.pkg"
+PKGFILE="$BASEDIR/binaries/TaskUnifier_$1/TaskUnifier_$1_mac.pkg"
 
 echo "Creating PKG file $PKGFILE"
 
