@@ -74,7 +74,7 @@
 		</tar>
     </target>
 	
-	<target depends="taskunifier-version-underscored" name="create-mac-binary">
+	<target depends="taskunifier-version-underscored" name="create-mac-binary" if="isMac">
 		<echo message="Creating mac tar file..."/>
 		<antcall target="clean"/>
 		<mkdir dir="${directory.exe}/temp"/>
@@ -117,24 +117,14 @@
 		
 		</jarbundler>
 		
+		<chmod dir="${directory.exe}/temp" includes="**/JavaApplicationStub" perm="755"/>
+		
+		<echo message="Signing mac app..."/>
 		<exec executable="${directory.exe}/scripts/mac.codesign.sh" failonerror="true"/>
 		
 		<mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
-		<tar destfile="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/TaskUnifier_${taskunifier.version.underscored}_mac.tar">
-			<tarfileset dir="${directory.exe}/temp">
-				<include name="**/*"/>	 
-				<exclude name="**/JavaApplicationStub"/>
-			</tarfileset>
-			<tarfileset dir="${directory.exe}/temp" filemode="755">
-				<include name="**/JavaApplicationStub"/>
-			</tarfileset>
-		</tar>
-		<antcall target="create-mac-dmg"/>
-	</target>
-	
-	<target depends="check-os, taskunifier-version-underscored" name="create-mac-dmg" if="isMac">
+		
 		<echo message="Creating mac dmg file..."/>
-		<antcall target="clean"/>
 		<exec executable="${directory.exe}/scripts/mac.create_dmg.sh" failonerror="true">
 			<arg line="${taskunifier.version.underscored}"/>
 		</exec>
