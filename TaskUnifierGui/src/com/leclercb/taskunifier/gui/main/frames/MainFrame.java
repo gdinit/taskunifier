@@ -51,10 +51,10 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXStatusBar;
 
-import com.jgoodies.common.base.SystemUtils;
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
@@ -371,7 +371,9 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 				this.propertyName + ".location_y");
 		
 		this.setSize(width, height);
-		this.setExtendedState(extendedState);
+		
+		if (!SystemUtils.IS_OS_MAC)
+			this.setExtendedState(extendedState);
 		
 		if (ScreenUtils.isLocationInScreen(new Point(locationX, locationY)))
 			this.setLocation(locationX, locationY);

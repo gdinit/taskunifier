@@ -58,7 +58,7 @@ public final class FileChooserUtils {
 		String selectedFile = null;
 		
 		if (SystemUtils.IS_OS_MAC)
-			selectedFile = getFileAWT(open, file, fileFilter);
+			selectedFile = getFileAWT(open, file, fileSelectionMode, fileFilter);
 		else
 			selectedFile = getFileSwing(
 					open,
@@ -106,7 +106,13 @@ public final class FileChooserUtils {
 	private static String getFileAWT(
 			final boolean open,
 			final String file,
+			int fileSelectionMode,
 			final FileFilter fileFilter) {
+		if (fileSelectionMode == JFileChooser.FILES_ONLY)
+			System.setProperty("apple.awt.fileDialogForDirectories", "false");
+		else
+			System.setProperty("apple.awt.fileDialogForDirectories", "true");
+		
 		FileDialog fileChooser = new FileDialog(FrameUtils.getCurrentFrame());
 		
 		if (open)
