@@ -413,7 +413,9 @@ public class Main {
 				if (EqualsUtils.equalsStringIgnoreCase(
 						System.getProperty("com.leclercb.taskunifier.mac_app_store"),
 						"true")) {
-					DATA_FOLDER = System.getProperty("ApplicationSupportDirectory");
+					DATA_FOLDER = System.getProperty("ApplicationSupportDirectory")
+							+ File.separator
+							+ "TaskUnifier";
 				}
 			}
 		}
