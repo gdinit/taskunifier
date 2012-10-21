@@ -89,7 +89,7 @@ public abstract class Filter<M extends Model, MP extends ModelProperties<M>, F e
 		return this.parent;
 	}
 	
-	private void setParent(F parent) {
+	protected void setParent(F parent) {
 		this.parent = parent;
 	}
 	
