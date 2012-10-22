@@ -60,6 +60,7 @@ import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.main.MainLoadFiles;
 import com.leclercb.taskunifier.gui.main.main.MainSaveFiles;
+import com.leclercb.taskunifier.gui.translations.Translations;
 
 public final class BackupUtils implements ListChangeSupported {
 	
@@ -168,7 +169,7 @@ public final class BackupUtils implements ListChangeSupported {
 	
 	public void autoBackup(int nbHours) {
 		if (this.backups.size() == 0) {
-			this.createNewBackup();
+			this.createNewBackup(Translations.getString("manage_backups.auto_backup_name"));
 			return;
 		}
 		
@@ -179,17 +180,13 @@ public final class BackupUtils implements ListChangeSupported {
 			past.add(Calendar.HOUR_OF_DAY, -nbHours);
 			
 			if (calendar.compareTo(past) <= 0)
-				this.createNewBackup();
+				this.createNewBackup(Translations.getString("manage_backups.auto_backup_name"));
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(
 					Level.WARNING,
 					"Cannot create auto backup",
 					e);
 		}
-	}
-	
-	public String createNewBackup() {
-		return this.createNewBackup(null);
 	}
 	
 	public String createNewBackup(String backupName) {
@@ -281,13 +278,11 @@ public final class BackupUtils implements ListChangeSupported {
 		return this.backups.get(backupFolderName);
 	}
 	
-	public String getBackupNameFromSettings(String backupFolderName) {
+	private String getBackupNameFromSettings(String backupFolderName) {
 		String folder = Main.getBackupFolder(backupFolderName);
 		
 		try {
-			File file = new File(folder
-					+ File.separator
-					+ "settings.properties");
+			File file = new File(folder + File.separator + "backup.properties");
 			Properties properties = new Properties();
 			properties.load(new FileInputStream(file));
 			return properties.getProperty("backup.name");

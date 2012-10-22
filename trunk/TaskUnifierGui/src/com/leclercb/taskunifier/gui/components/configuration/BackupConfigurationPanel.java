@@ -143,7 +143,11 @@ public class BackupConfigurationPanel extends DefaultConfigurationPanel {
 									return;
 								}
 								
-								BackupUtils.getInstance().createNewBackup();
+								BackupUtils.getInstance().createNewBackup(
+										Translations.getString(
+												"manage_backups.before_restore_backup_name",
+												BackupUtils.getInstance().getBackupName(
+														(String) backupList.getSelectedItem())));
 								BackupUtils.getInstance().restoreBackup(
 										(String) backupList.getSelectedItem());
 							}
