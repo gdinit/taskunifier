@@ -3,3 +3,4 @@
 - Create transaction and send email for previous transactions
 - Fix invalid parent ID
 - Translations
+- Fix Growl synchronization completed
