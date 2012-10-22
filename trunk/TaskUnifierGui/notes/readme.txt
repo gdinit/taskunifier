@@ -4,6 +4,7 @@ HISTORY
 Version 3.0.3
 	- Major:
 		- FR 236: Define backup names
+		- Bug fixed: Task table menu error
 	- Minor:
 		- Bug fixed: Display message when backup created
 		- Bug fixed: Wysiwyg editor property change listener

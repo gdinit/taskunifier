@@ -118,49 +118,53 @@ public class ActionAddQuickTask extends AbstractAction {
 		
 		task = task.trim();
 		
-		Pattern pattern = Pattern.compile("[^&@*<>]+");
-		Matcher matcher = pattern.matcher(task);
-		
-		if (!matcher.find())
-			return null;
-		
-		String title = matcher.group();
-		
-		bean.setTitle(title.trim());
-		
-		char lastChar = title.charAt(title.length() - 1);
-		
-		pattern = Pattern.compile("[&@*<>][^&@*<>]+");
-		matcher = pattern.matcher(task);
-		
-		while (matcher.find()) {
-			String s = matcher.group();
+		if (task.length() == 0) {
+			bean.setTitle("");
+		} else {
+			Pattern pattern = Pattern.compile("[^&@*<>]+");
+			Matcher matcher = pattern.matcher(task);
 			
-			if (lastChar != ' ') {
+			if (!matcher.find())
+				return null;
+			
+			String title = matcher.group();
+			
+			bean.setTitle(title.trim());
+			
+			char lastChar = title.charAt(title.length() - 1);
+			
+			pattern = Pattern.compile("[&@*<>][^&@*<>]+");
+			matcher = pattern.matcher(task);
+			
+			while (matcher.find()) {
+				String s = matcher.group();
+				
+				if (lastChar != ' ') {
+					lastChar = s.charAt(s.length() - 1);
+					bean.setTitle(bean.getTitle() + s.trim());
+					continue;
+				}
+				
 				lastChar = s.charAt(s.length() - 1);
-				bean.setTitle(bean.getTitle() + s.trim());
-				continue;
-			}
-			
-			lastChar = s.charAt(s.length() - 1);
-			s = s.trim();
-			
-			char c = s.charAt(0);
-			s = s.substring(1).trim();
-			
-			if (c == '&') { // Tag
-				if (bean.getTags() != null)
-					bean.getTags().addTag(s);
-				else
-					bean.setTags(TagList.fromString(s));
-			} else if (c == '@') { // Context, Folder, Goal, Location
-				findModel(s.toLowerCase(), bean);
-			} else if (c == '*') { // Priority, Status
-				findStatusPriority(s.toLowerCase(), bean);
-			} else if (c == '>') { // Start Date
-				findDate(s, true, bean);
-			} else if (c == '<') { // Due Date
-				findDate(s, false, bean);
+				s = s.trim();
+				
+				char c = s.charAt(0);
+				s = s.substring(1).trim();
+				
+				if (c == '&') { // Tag
+					if (bean.getTags() != null)
+						bean.getTags().addTag(s);
+					else
+						bean.setTags(TagList.fromString(s));
+				} else if (c == '@') { // Context, Folder, Goal, Location
+					findModel(s.toLowerCase(), bean);
+				} else if (c == '*') { // Priority, Status
+					findStatusPriority(s.toLowerCase(), bean);
+				} else if (c == '>') { // Start Date
+					findDate(s, true, bean);
+				} else if (c == '<') { // Due Date
+					findDate(s, false, bean);
+				}
 			}
 		}
 		
