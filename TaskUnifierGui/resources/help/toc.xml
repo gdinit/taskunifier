@@ -6,6 +6,8 @@
 		
 		<tocitem text="Introduction" target="taskunifier" />
 		
+		<tocitem text="Quick Start" target="quick_start" />
+		
 		<tocitem text="What's new" target="whats_new" />
 
 		<tocitem text="Views">
