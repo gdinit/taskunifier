@@ -43,6 +43,7 @@ import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.synchronizer.Connection;
 import com.leclercb.taskunifier.api.synchronizer.Synchronizer;
 import com.leclercb.taskunifier.api.synchronizer.SynchronizerChoice;
@@ -151,7 +152,8 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 						
 						@Override
 						public void run() {
-							BackupUtils.getInstance().createNewBackup();
+							BackupUtils.getInstance().createNewBackup(
+									Translations.getString("manage_backups.before_sync_backup_name"));
 							ActionSave.save();
 						}
 						
@@ -393,24 +395,28 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 			
 			@Override
 			public void run() {
-				PluginLogger.getLogger().log(
-						(e.isExpected() ? Level.INFO : Level.WARNING),
-						e.getMessage(),
-						e);
-				
-				ErrorInfo info = new ErrorInfo(
-						Translations.getString("general.error"),
-						e.getMessage(),
-						null,
-						"GUI",
-						(e.isExpected() ? null : e),
-						(e.isExpected() ? Level.INFO : Level.WARNING),
-						null);
-				
-				JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
-				
-				if (e instanceof SynchronizerSettingsException)
-					ActionPluginConfiguration.pluginConfiguration(plugin);
+				try {
+					PluginLogger.getLogger().log(
+							(e.isExpected() ? Level.INFO : Level.WARNING),
+							e.getMessage(),
+							e);
+					
+					ErrorInfo info = new ErrorInfo(
+							Translations.getString("general.error"),
+							e.getMessage(),
+							null,
+							"GUI",
+							(e.isExpected() ? null : e),
+							(e.isExpected() ? Level.INFO : Level.WARNING),
+							null);
+					
+					JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+					
+					if (e instanceof SynchronizerSettingsException)
+						ActionPluginConfiguration.pluginConfiguration(plugin);
+				} catch (Exception e) {
+					GuiLogger.getLogger().log(Level.WARNING, e.getMessage(), e);
+				}
 			}
 			
 		});
@@ -427,21 +433,30 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 				
 				@Override
 				public void run() {
-					PluginLogger.getLogger().log(
-							Level.WARNING,
-							t.getMessage(),
-							t);
-					
-					ErrorInfo info = new ErrorInfo(
-							Translations.getString("general.error"),
-							t.getMessage(),
-							null,
-							"GUI",
-							t,
-							Level.WARNING,
-							null);
-					
-					JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+					try {
+						PluginLogger.getLogger().log(
+								Level.WARNING,
+								t.getMessage(),
+								t);
+						
+						ErrorInfo info = new ErrorInfo(
+								Translations.getString("general.error"),
+								t.getMessage(),
+								null,
+								"GUI",
+								t,
+								Level.WARNING,
+								null);
+						
+						JXErrorPane.showDialog(
+								FrameUtils.getCurrentFrame(),
+								info);
+					} catch (Exception e) {
+						GuiLogger.getLogger().log(
+								Level.WARNING,
+								e.getMessage(),
+								e);
+					}
 				}
 				
 			});
