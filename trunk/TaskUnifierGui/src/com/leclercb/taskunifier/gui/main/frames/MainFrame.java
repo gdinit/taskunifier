@@ -371,9 +371,7 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 				this.propertyName + ".location_y");
 		
 		this.setSize(width, height);
-		
-		if (!SystemUtils.IS_OS_MAC)
-			this.setExtendedState(extendedState);
+		this.setExtendedState(extendedState);
 		
 		if (ScreenUtils.isLocationInScreen(new Point(locationX, locationY)))
 			this.setLocation(locationX, locationY);
