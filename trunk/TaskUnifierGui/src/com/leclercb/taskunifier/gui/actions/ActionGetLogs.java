@@ -50,12 +50,14 @@ import java.util.zip.ZipOutputStream;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 
+import org.apache.commons.io.IOUtils;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.leclercb.commons.api.logger.ApiLogger;
 import com.leclercb.commons.api.utils.FileUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
+import com.leclercb.taskunifier.gui.components.about.AboutUtils;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
@@ -124,6 +126,11 @@ public class ActionGetLogs extends AbstractAction {
 				writeIntoZip(zos, logFile.getName(), new FileInputStream(
 						logFile));
 			}
+			
+			writeIntoZip(
+					zos,
+					"system_info.txt",
+					IOUtils.toInputStream(AboutUtils.getSystemMessage(false)));
 			
 			zos.close();
 		} catch (Exception e) {

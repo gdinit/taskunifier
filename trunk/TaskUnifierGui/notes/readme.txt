@@ -4,11 +4,12 @@ HISTORY
 Version 3.0.3
 	- Minor:
 		- Bug fixed: Display message when backup created
-		- BF 170: Incorrect "Next Action" status
 		- Bug fixed: Wysiwyg editor property change listener
-		- Use FileDialog instead of JFileChooser on Mac
+		- BF 170: Incorrect "Next Action" status
+		- Use FileDialog instead of JFileChooser for Mac App Store
 		- Limit number of syncs without license
 		- Fix of some memory leaks
+		- Improved get logs feature
 
 Version 3.0.2
 	- Major:
