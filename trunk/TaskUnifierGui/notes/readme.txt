@@ -9,6 +9,7 @@ Version 3.0.3
 		- Bug fixed: Display message when backup created
 		- Bug fixed: Wysiwyg editor property change listener
 		- BF 170: Incorrect "Next Action" status
+		- BF 172: Default order of toolbar actions
 		- Use FileDialog instead of JFileChooser for Mac App Store
 		- Limit number of syncs without license
 		- Fix of some memory leaks
