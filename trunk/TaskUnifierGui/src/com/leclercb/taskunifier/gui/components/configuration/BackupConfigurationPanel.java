@@ -149,6 +149,44 @@ public class BackupConfigurationPanel extends DefaultConfigurationPanel {
 							}
 							
 						})));
+		
+		this.addField(new ConfigurationField(
+				"SET_BACKUP_NAME",
+				null,
+				new ConfigurationFieldType.Button(
+						Translations.getString("configuration.backup.set_backup_name"),
+						new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								if (backupList.getSelectedItem() == null) {
+									ErrorInfo info = new ErrorInfo(
+											Translations.getString("general.error"),
+											Translations.getString("error.no_backup_selected"),
+											null,
+											"GUI",
+											null,
+											Level.INFO,
+											null);
+									
+									JXErrorPane.showDialog(
+											FrameUtils.getCurrentFrame(),
+											info);
+									
+									return;
+								}
+								
+								String backupName = ActionCreateNewBackup.askBackupName();
+								
+								if (backupName == null)
+									return;
+								
+								BackupUtils.getInstance().setBackupName(
+										(String) backupList.getSelectedItem(),
+										backupName);
+							}
+							
+						})));
 	}
 	
 }

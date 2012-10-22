@@ -3,4 +3,3 @@
 - Create transaction and send email for previous transactions
 - Fix invalid parent ID
 - Translations
-- Prepare TU for Mac App Store

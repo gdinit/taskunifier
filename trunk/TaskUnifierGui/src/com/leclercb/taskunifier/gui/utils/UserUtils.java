@@ -38,8 +38,11 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
@@ -49,6 +52,7 @@ import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
@@ -80,7 +84,9 @@ public final class UserUtils implements ListChangeSupported {
 	
 	private UserUtils() {
 		this.listChangeSupport = new ListChangeSupport(BackupUtils.class);
+		
 		this.users = new HashMap<String, String>();
+		
 		this.loadUsers();
 	}
 	
@@ -138,15 +144,7 @@ public final class UserUtils implements ListChangeSupported {
 	}
 	
 	public int getIndexOf(String userId) {
-		int index = 0;
-		for (String id : this.users.keySet()) {
-			if (id.equals(userId))
-				return index;
-			
-			index++;
-		}
-		
-		return -1;
+		return ArrayUtils.indexOf(this.getUserIds(), userId);
 	}
 	
 	public int getUserCount() {
@@ -158,7 +156,10 @@ public final class UserUtils implements ListChangeSupported {
 	}
 	
 	public String[] getUserIds() {
-		return this.users.keySet().toArray(new String[0]);
+		List<String> list = new ArrayList<String>();
+		list.addAll(this.users.keySet());
+		Collections.sort(list);
+		return list.toArray(new String[0]);
 	}
 	
 	public String getUserName(String userId) {

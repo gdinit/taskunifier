@@ -195,6 +195,10 @@ public class Main {
 		return BACKUP_FOLDER;
 	}
 	
+	public static String getBackupFolder(String backupFolderName) {
+		return getBackupFolder() + File.separator + backupFolderName;
+	}
+	
 	public static String getPluginsFolder() {
 		return PLUGINS_FOLDER;
 	}

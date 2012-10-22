@@ -37,6 +37,8 @@ import java.util.Calendar;
 
 import org.jdesktop.swingx.renderer.StringValue;
 
+import com.leclercb.taskunifier.gui.utils.BackupUtils;
+
 public class StringValueBackup implements StringValue {
 	
 	public static final StringValueBackup INSTANCE = new StringValueBackup();
@@ -55,7 +57,16 @@ public class StringValueBackup implements StringValue {
 		try {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(this.format.parse((String) value));
-			return StringValueCalendar.INSTANCE_DATE_TIME.getString(calendar);
+			
+			String backupName = BackupUtils.getInstance().getBackupName(
+					(String) value);
+			
+			if (backupName == null || backupName.length() == 0)
+				return StringValueCalendar.INSTANCE_DATE_TIME.getString(calendar);
+			
+			return StringValueCalendar.INSTANCE_DATE_TIME.getString(calendar)
+					+ " - "
+					+ backupName;
 		} catch (Exception exc) {
 			return " ";
 		}
