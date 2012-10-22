@@ -41,6 +41,7 @@ import javax.swing.filechooser.FileFilter;
 
 import org.apache.commons.lang3.SystemUtils;
 
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 
 public final class FileChooserUtils {
@@ -57,7 +58,10 @@ public final class FileChooserUtils {
 			String appendFileExtention) {
 		String selectedFile = null;
 		
-		if (SystemUtils.IS_OS_MAC)
+		if (SystemUtils.IS_OS_MAC
+				&& EqualsUtils.equalsStringIgnoreCase(
+						System.getProperty("com.leclercb.taskunifier.mac_app_store"),
+						"true"))
 			selectedFile = getFileAWT(open, file, fileSelectionMode, fileFilter);
 		else
 			selectedFile = getFileSwing(
