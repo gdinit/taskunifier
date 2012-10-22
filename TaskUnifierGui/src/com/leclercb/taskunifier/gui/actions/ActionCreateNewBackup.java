@@ -63,13 +63,23 @@ public class ActionCreateNewBackup extends AbstractAction {
 		ActionCreateNewBackup.createNewBackup(false);
 	}
 	
-	public static boolean createNewBackup(boolean silent) {
-		boolean result = BackupUtils.getInstance().createNewBackup();
+	public static String createNewBackup(boolean silent) {
+		String backupName = null;
+		
+		if (!silent) {
+			backupName = askBackupName();
+			
+			if (backupName == null)
+				return null;
+		}
+		
+		String backupFolderName = BackupUtils.getInstance().createNewBackup(
+				backupName);
 		
 		if (silent)
-			return result;
+			return backupFolderName;
 		
-		if (result) {
+		if (backupFolderName != null) {
 			JOptionPane.showMessageDialog(
 					FrameUtils.getCurrentFrame(),
 					Translations.getString("action.create_new_backup.success"),
@@ -88,7 +98,15 @@ public class ActionCreateNewBackup extends AbstractAction {
 			JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
 		}
 		
-		return result;
+		return backupFolderName;
+	}
+	
+	public static String askBackupName() {
+		return JOptionPane.showInputDialog(
+				FrameUtils.getCurrentFrame(),
+				Translations.getString("manage_backups.new_backup_name"),
+				Translations.getString("general.manage_backups"),
+				JOptionPane.QUESTION_MESSAGE);
 	}
 	
 }
