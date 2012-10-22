@@ -416,8 +416,13 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 			public void mouseClicked(MouseEvent event) {
 				if (event.getButton() == MouseEvent.BUTTON1
 						&& event.getClickCount() == 2) {
-					int rowIndex = NoteTable.this.getRowSorter().convertRowIndexToModel(
-							NoteTable.this.rowAtPoint(event.getPoint()));
+					int rowIndex = NoteTable.this.rowAtPoint(event.getPoint());
+					
+					if (rowIndex == -1)
+						return;
+					
+					rowIndex = NoteTable.this.getRowSorter().convertRowIndexToModel(
+							rowIndex);
 					
 					int colIndex = NoteTable.this.columnAtPoint(event.getPoint());
 					
@@ -454,27 +459,34 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 				// Or BUTTON3 due to a bug with OSX
 				if (event.isPopupTrigger()
 						|| event.getButton() == MouseEvent.BUTTON3) {
-					int rowIndex = NoteTable.this.getRowSorter().convertRowIndexToModel(
-							NoteTable.this.rowAtPoint(event.getPoint()));
+					int rowIndex = NoteTable.this.rowAtPoint(event.getPoint());
 					
-					Note note = ((NoteTableModel) NoteTable.this.getModel()).getNote(rowIndex);
-					
-					if (note == null)
-						return;
-					
-					NoteTable.this.commitChanges();
-					
-					boolean found = false;
-					Note[] selectedNotes = NoteTable.this.getSelectedNotes();
-					for (Note selectedNote : selectedNotes) {
-						if (selectedNote.equals(note)) {
-							found = true;
-							break;
+					if (rowIndex != -1) {
+						rowIndex = NoteTable.this.getRowSorter().convertRowIndexToModel(
+								rowIndex);
+						
+						Note note = ((NoteTableModel) NoteTable.this.getModel()).getNote(rowIndex);
+						
+						if (note != null) {
+							NoteTable.this.commitChanges();
+							
+							boolean found = false;
+							Note[] selectedNotes = NoteTable.this.getSelectedNotes();
+							for (Note selectedNote : selectedNotes) {
+								if (selectedNote.equals(note)) {
+									found = true;
+									break;
+								}
+							}
+							
+							if (!found)
+								NoteTable.this.setSelectedNotes(new Note[] { note });
+						} else {
+							NoteTable.this.setSelectedNotes(new Note[] {});
 						}
+					} else {
+						NoteTable.this.setSelectedNotes(new Note[] {});
 					}
-					
-					if (!found)
-						NoteTable.this.setSelectedNotes(new Note[] { note });
 					
 					NoteTable.this.noteTableMenu.show(
 							event.getComponent(),

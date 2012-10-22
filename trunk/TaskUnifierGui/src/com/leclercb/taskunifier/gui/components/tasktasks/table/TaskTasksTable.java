@@ -162,8 +162,13 @@ public class TaskTasksTable extends JXTable implements SavePropertiesListener {
 				if (event.getButton() == MouseEvent.BUTTON1
 						&& event.getClickCount() == 2) {
 					try {
-						int rowIndex = TaskTasksTable.this.getRowSorter().convertRowIndexToModel(
-								TaskTasksTable.this.rowAtPoint(event.getPoint()));
+						int rowIndex = TaskTasksTable.this.rowAtPoint(event.getPoint());
+						
+						if (rowIndex == -1)
+							return;
+						
+						rowIndex = TaskTasksTable.this.getRowSorter().convertRowIndexToModel(
+								rowIndex);
 						
 						int colIndex = TaskTasksTable.this.columnAtPoint(event.getPoint());
 						

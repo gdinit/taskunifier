@@ -161,8 +161,13 @@ public class TaskFilesTable extends JXTable implements SavePropertiesListener {
 				if (event.getButton() == MouseEvent.BUTTON1
 						&& event.getClickCount() == 2) {
 					try {
-						int rowIndex = TaskFilesTable.this.getRowSorter().convertRowIndexToModel(
-								TaskFilesTable.this.rowAtPoint(event.getPoint()));
+						int rowIndex = TaskFilesTable.this.rowAtPoint(event.getPoint());
+						
+						rowIndex = TaskFilesTable.this.getRowSorter().convertRowIndexToModel(
+								rowIndex);
+						
+						if (rowIndex == -1)
+							return;
 						
 						int colIndex = TaskFilesTable.this.columnAtPoint(event.getPoint());
 						
