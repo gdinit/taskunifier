@@ -457,8 +457,13 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 				if (event.getButton() == MouseEvent.BUTTON1
 						&& event.getClickCount() == 2) {
 					try {
-						int rowIndex = TaskTable.this.getRowSorter().convertRowIndexToModel(
-								TaskTable.this.rowAtPoint(event.getPoint()));
+						int rowIndex = TaskTable.this.rowAtPoint(event.getPoint());
+						
+						if (rowIndex == -1)
+							return;
+						
+						rowIndex = TaskTable.this.getRowSorter().convertRowIndexToModel(
+								rowIndex);
 						
 						int colIndex = TaskTable.this.columnAtPoint(event.getPoint());
 						
@@ -532,27 +537,34 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 				// Or BUTTON3 due to a bug with OSX
 				if (event.isPopupTrigger()
 						|| event.getButton() == MouseEvent.BUTTON3) {
-					int rowIndex = TaskTable.this.getRowSorter().convertRowIndexToModel(
-							TaskTable.this.rowAtPoint(event.getPoint()));
+					int rowIndex = TaskTable.this.rowAtPoint(event.getPoint());
 					
-					Task task = ((TaskTableModel) TaskTable.this.getModel()).getTask(rowIndex);
-					
-					if (task == null)
-						return;
-					
-					TaskTable.this.commitChanges();
-					
-					boolean found = false;
-					Task[] selectedTasks = TaskTable.this.getSelectedTasks();
-					for (Task selectedTask : selectedTasks) {
-						if (selectedTask.equals(task)) {
-							found = true;
-							break;
+					if (rowIndex != -1) {
+						rowIndex = TaskTable.this.getRowSorter().convertRowIndexToModel(
+								rowIndex);
+						
+						Task task = ((TaskTableModel) TaskTable.this.getModel()).getTask(rowIndex);
+						
+						if (task != null) {
+							TaskTable.this.commitChanges();
+							
+							boolean found = false;
+							Task[] selectedTasks = TaskTable.this.getSelectedTasks();
+							for (Task selectedTask : selectedTasks) {
+								if (selectedTask.equals(task)) {
+									found = true;
+									break;
+								}
+							}
+							
+							if (!found)
+								TaskTable.this.setSelectedTasks(new Task[] { task });
+						} else {
+							TaskTable.this.setSelectedTasks(new Task[] {});
 						}
+					} else {
+						TaskTable.this.setSelectedTasks(new Task[] {});
 					}
-					
-					if (!found)
-						TaskTable.this.setSelectedTasks(new Task[] { task });
 					
 					TaskTable.this.taskTableMenu.show(
 							event.getComponent(),
