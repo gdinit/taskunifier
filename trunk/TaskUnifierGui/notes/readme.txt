@@ -1,7 +1,11 @@
 HISTORY
 -------
 
-Version 3.0.3
+Version 3.1.0
+	- Minor:
+		- Bug fixed: Growl notification on Mac OS
+
+Version 3.0.3 BETA
 	- Major:
 		- FR 236: Define backup names
 		- Bug fixed: Task table menu error
@@ -15,7 +19,7 @@ Version 3.0.3
 		- Fix of some memory leaks
 		- Improved get logs feature
 
-Version 3.0.2
+Version 3.0.2 BETA
 	- Major:
 		- Bug fixed: Error while loading gui
 		- Bug fixed: Update plugin
@@ -23,7 +27,7 @@ Version 3.0.2
 		- Improved loggers
 		- Minor bug fixes
 
-Version 3.0.1
+Version 3.0.1 BETA
 	- Major:
 		- Moutain Lion: Sign Mac version for Gatekeeper
 		- Bug fixed: Change synchronizer plugin error
@@ -36,7 +40,7 @@ Version 3.0.1
 		- Added system info in about panel
 		- Minor bug fixes
 
-Version 3.0.0
+Version 3.0.0 BETA
 	- Major:
 		- FR 3495228: Open tabs and windows
 		- New task template window
