@@ -195,6 +195,9 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 								this.publish(new SynchronizerDefaultProgressMessage(
 										Translations.getString("synchronizer.max_no_license_syncs_reached")));
 								
+								this.publish(new SynchronizerDefaultProgressMessage(
+										"----------"));
+								
 								continue;
 							} else {
 								this.publish(new SynchronizerDefaultProgressMessage(
