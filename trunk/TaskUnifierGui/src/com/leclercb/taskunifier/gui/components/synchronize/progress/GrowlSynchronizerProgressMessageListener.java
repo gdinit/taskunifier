@@ -67,12 +67,14 @@ public class GrowlSynchronizerProgressMessageListener implements ListChangeListe
 					
 					switch (m.getType()) {
 						case PUBLISHER_START:
+						case SYNCHRONIZER_START:
 							GrowlUtils.notify(
 									GrowlNotificationList.SYNCHRONIZATION,
 									content);
 							
 							break;
-						case SYNCHRONIZER_START:
+						case PUBLISHER_END:
+						case SYNCHRONIZER_END:
 							GrowlUtils.notify(
 									GrowlNotificationList.SYNCHRONIZATION,
 									content,
