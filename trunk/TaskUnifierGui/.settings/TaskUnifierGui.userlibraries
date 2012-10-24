@@ -30,6 +30,7 @@
         <archive path="/TaskUnifierGui/lib/google/guava-11.0.1.jar"/>
         <archive path="/TaskUnifierGui/lib/google/jackson-core-2.0.5.jar"/>
         <archive path="/TaskUnifierGui/lib/google/jackson-core-asl-1.9.9.jar"/>
+        <archive path="/TaskUnifierGui/lib/google/jackson-databind-2.0.5.jar"/>
         <archive path="/TaskUnifierGui/lib/google/jsr305-1.3.9.jar"/>
         <archive path="/TaskUnifierGui/lib/google/protobuf-java-2.4.1.jar"/>
         <archive path="/TaskUnifierGui/lib/google/xpp3-1.1.4c.jar"/>
