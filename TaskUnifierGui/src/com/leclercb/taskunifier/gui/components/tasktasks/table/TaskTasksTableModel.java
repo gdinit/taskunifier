@@ -156,8 +156,10 @@ public class TaskTasksTableModel extends AbstractTableModel implements ListChang
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
-		int index = this.tasks.getIndexOf((TaskItem) event.getSource());
-		this.fireTableRowsUpdated(index, index);
+		if (this.tasks != null) {
+			int index = this.tasks.getIndexOf((TaskItem) event.getSource());
+			this.fireTableRowsUpdated(index, index);
+		}
 	}
 	
 }
