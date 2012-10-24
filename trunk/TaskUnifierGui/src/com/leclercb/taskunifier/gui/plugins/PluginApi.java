@@ -53,6 +53,62 @@ public final class PluginApi {
 		
 	}
 	
+	public static String getCurrentUserId() {
+		return Main.getCurrentUserId();
+	}
+	
+	public static boolean isFirstExecution() {
+		return Main.isFirstExecution();
+	}
+	
+	public static String getInitSettingsFile() {
+		return Main.getInitSettingsFile();
+	}
+	
+	public static String getSettingsFile() {
+		return Main.getSettingsFile();
+	}
+	
+	public static String getUserSettingsFile() {
+		return Main.getUserSettingsFile();
+	}
+	
+	public static String getResourcesFolder() {
+		return Main.getResourcesFolder();
+	}
+	
+	public static String getDataFolder() {
+		return Main.getDataFolder();
+	}
+	
+	public static String getUserFolder() {
+		return Main.getUserFolder();
+	}
+	
+	public static String getPluginsFolder() {
+		return Main.getPluginsFolder();
+	}
+	
+	public static PropertyMap getInitSettings() {
+		return Main.getInitSettings();
+	}
+	
+	public static PropertyMap getSettings() {
+		return Main.getSettings();
+	}
+	
+	public static PropertyMap getUserSettings() {
+		return Main.getUserSettings();
+	}
+	
+	public static String getPreviousVersion() {
+		return Main.getPreviousVersion();
+	}
+	
+	public static boolean isVersionUpdated() {
+		return Main.isVersionUpdated();
+	}
+	
 	public static void invokeLater(Runnable doRun) {
 		TUSwingUtilities.invokeLater(doRun);
 	}
@@ -71,14 +127,6 @@ public final class PluginApi {
 	
 	public static FrameView getCurrentFrameView() {
 		return FrameUtils.getCurrentFrameView();
-	}
-	
-	public static PropertyMap getSettings() {
-		return Main.getSettings();
-	}
-	
-	public static PropertyMap getUserSettings() {
-		return Main.getUserSettings();
 	}
 	
 	public static SynchronizerGuiPlugin getPlugin(String pluginId) {
