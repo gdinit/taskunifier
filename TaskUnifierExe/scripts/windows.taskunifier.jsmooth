@@ -38,6 +38,7 @@
 <classPath>../temp/TaskUnifier/lib/google/google-oauth-client-java6-1.11.0-beta.jar</classPath>
 <classPath>../temp/TaskUnifier/lib/google/gson-2.1.jar</classPath>
 <classPath>../temp/TaskUnifier/lib/google/guava-11.0.1.jar</classPath>
+<classPath>../temp/TaskUnifier/lib/google/jackson-annotations-2.0.5.jar</classPath>
 <classPath>../temp/TaskUnifier/lib/google/jackson-core-2.0.5.jar</classPath>
 <classPath>../temp/TaskUnifier/lib/google/jackson-core-asl-1.9.9.jar</classPath>
 <classPath>../temp/TaskUnifier/lib/google/jackson-databind-2.0.5.jar</classPath>
