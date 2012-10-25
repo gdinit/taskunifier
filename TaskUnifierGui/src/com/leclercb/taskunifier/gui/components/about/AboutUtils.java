@@ -61,7 +61,8 @@ public final class AboutUtils {
 		String boldEnd = (html ? "</b>" : "");
 		String lineBreak = (html ? "<br />" : "\n");
 		
-		String dataFolder = new File(Main.getInitSettingsFile()).getAbsolutePath();
+		String dataFolder = new File(Main.getDataFolder()).getAbsolutePath();
+		String currentUserId = Main.getCurrentUserId();
 		
 		StringBuffer s = new StringBuffer();
 		
@@ -69,6 +70,11 @@ public final class AboutUtils {
 			s.append("<html>");
 		
 		s.append(boldStart + "Data Folder: " + boldEnd + dataFolder + lineBreak);
+		s.append(boldStart
+				+ "Current User ID: "
+				+ boldEnd
+				+ currentUserId
+				+ lineBreak);
 		s.append(boldStart
 				+ "Java Version: "
 				+ boldEnd
