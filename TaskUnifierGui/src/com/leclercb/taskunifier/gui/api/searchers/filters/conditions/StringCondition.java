@@ -36,6 +36,8 @@ public enum StringCondition implements Condition<String, Object> {
 	
 	CONTAINS,
 	DOES_NOT_CONTAIN,
+	DOES_NOT_END_WITH,
+	DOES_NOT_START_WITH,
 	ENDS_WITH,
 	EQUALS,
 	NOT_EQUALS,
@@ -73,13 +75,17 @@ public enum StringCondition implements Condition<String, Object> {
 			case CONTAINS:
 				return taskString.contains(string);
 			case DOES_NOT_CONTAIN:
-				return !(taskString.contains(string));
+				return !taskString.contains(string);
+			case DOES_NOT_END_WITH:
+				return !taskString.endsWith(string);
+			case DOES_NOT_START_WITH:
+				return !taskString.startsWith(string);
 			case ENDS_WITH:
 				return taskString.endsWith(string);
 			case EQUALS:
 				return taskString.equals(string);
 			case NOT_EQUALS:
-				return !(taskString.equals(string));
+				return !taskString.equals(string);
 			case STARTS_WITH:
 				return taskString.startsWith(string);
 		}
