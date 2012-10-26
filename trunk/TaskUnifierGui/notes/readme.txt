@@ -4,6 +4,7 @@ HISTORY
 Version 3.1.0
 	- Minor:
 		- Bug fixed: Growl notification on Mac OS
+		- Add new conditions: does not end/start with
 
 Version 3.0.3 BETA
 	- Major:
