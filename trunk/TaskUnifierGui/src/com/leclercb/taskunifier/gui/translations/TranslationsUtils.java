@@ -274,6 +274,10 @@ public final class TranslationsUtils {
 					return Translations.getString("filter_condition.contains");
 				case DOES_NOT_CONTAIN:
 					return Translations.getString("filter_condition.does_not_contain");
+				case DOES_NOT_END_WITH:
+					return Translations.getString("filter_condition.does_not_end_with");
+				case DOES_NOT_START_WITH:
+					return Translations.getString("filter_condition.does_not_start_with");
 				case EQUALS:
 					return Translations.getString("filter_condition.equals");
 				case ENDS_WITH:
