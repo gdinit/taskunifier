@@ -42,20 +42,25 @@ import java.awt.event.AdjustmentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 
 import com.leclercb.commons.api.event.action.WeakActionListener;
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessage;
+import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 
 public class TUWorkerDialog<T> extends JDialog implements ListChangeListener, ActionListener {
@@ -64,7 +69,7 @@ public class TUWorkerDialog<T> extends JDialog implements ListChangeListener, Ac
 	
 	private JPanel panel;
 	private JProgressBar progressBar;
-	private JTextArea progressStatus;
+	private JTextPane progressStatus;
 	
 	public TUWorkerDialog(Frame frame, String title) {
 		super(frame);
@@ -81,8 +86,18 @@ public class TUWorkerDialog<T> extends JDialog implements ListChangeListener, Ac
 		}
 	}
 	
+	public void appendToProgressStatus(Icon icon) {
+		if (icon != null)
+			this.progressStatus.insertIcon(icon);
+	}
+	
 	public void appendToProgressStatus(String text) {
-		this.progressStatus.append(text);
+		try {
+			Document document = this.progressStatus.getDocument();
+			document.insertString(document.getLength(), text, null);
+		} catch (BadLocationException e) {
+			GuiLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
+		}
 	}
 	
 	public T getResult() {
@@ -144,7 +159,7 @@ public class TUWorkerDialog<T> extends JDialog implements ListChangeListener, Ac
 		this.progressBar.setIndeterminate(true);
 		this.progressBar.setString("");
 		
-		this.progressStatus = new JTextArea();
+		this.progressStatus = new JTextPane();
 		this.progressStatus.setEditable(false);
 		
 		JScrollPane scrollStatus = ComponentFactory.createJScrollPane(
