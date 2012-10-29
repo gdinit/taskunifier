@@ -57,7 +57,7 @@ public class GrowlSynchronizerProgressMessageListener implements ListChangeListe
 			if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
 				ProgressMessage message = (ProgressMessage) event.getValue();
 				
-				String content = (String) t.getEventValue(event, null);
+				String content = (String) t.getEventValue(event, "message");
 				
 				if (message instanceof SynchronizerUpdatedModelsProgressMessage) {
 					this.builder.append(content + "\n");

@@ -38,6 +38,7 @@ import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.Icon;
 import javax.swing.JLabel;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
@@ -241,10 +242,15 @@ final class StatusBarElements implements ListChangeListener, PropertyChangeListe
 		
 		t = SynchronizerProgressMessageTransformer.getInstance();
 		
-		if (t.acceptsEvent(event))
+		if (t.acceptsEvent(event)) {
+			this.synchronizerStatusLabel.setIcon((Icon) t.getEventValue(
+					event,
+					"icon"));
+			
 			this.synchronizerStatusLabel.setText(Translations.getString("synchronizer.status")
 					+ ": "
-					+ t.getEventValue(event, null));
+					+ t.getEventValue(event, "message"));
+		}
 		
 		t = CommunicatorProgressMessageTransformer.getInstance();
 		

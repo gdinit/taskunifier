@@ -106,7 +106,7 @@ public class SynchronizerDialog extends TUWorkerDialog<Void> {
 					if (t.acceptsEvent(event))
 						SynchronizerDialog.this.appendToProgressStatus(t.getEventValue(
 								event,
-								null) + "\n");
+								"message") + "\n");
 				}
 				
 			});

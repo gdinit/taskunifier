@@ -32,12 +32,26 @@
  */
 package com.leclercb.taskunifier.api.synchronizer.progress.messages;
 
+import javax.swing.Icon;
+
 import com.leclercb.commons.api.progress.DefaultProgressMessage;
 
 public class SynchronizerDefaultProgressMessage extends DefaultProgressMessage implements SynchronizerProgressMessage {
 	
+	private Icon icon;
+	
 	public SynchronizerDefaultProgressMessage(String message) {
+		this(message, null);
+	}
+	
+	public SynchronizerDefaultProgressMessage(String message, Icon icon) {
 		super(message);
+		
+		this.icon = icon;
+	}
+	
+	public Icon getIcon() {
+		return this.icon;
 	}
 	
 }
