@@ -89,7 +89,14 @@ public class ModelSelectionTableColumn extends TUTableColumn<ModelSelectionColum
 	
 	@Override
 	public boolean isSortable() {
-		return true;
+		switch (this.column.getColumn()) {
+			case SELECT:
+				return false;
+			case MODEL:
+				return true;
+			default:
+				return false;
+		}
 	}
 	
 	@Override
