@@ -5,6 +5,7 @@ Version 3.1.0
 	- Minor:
 		- Bug fixed: Growl notification on Mac OS
 		- Add new conditions: does not end/start with
+		- Order context, goal and location lists
 
 Version 3.0.3 BETA
 	- Major:

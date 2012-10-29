@@ -94,9 +94,9 @@ public class ModelSelectionTable extends JXTable implements SavePropertiesListen
 		this.putClientProperty("JTable.autoStartsEdit", Boolean.FALSE);
 		this.putClientProperty("terminateEditOnFocusLost", Boolean.FALSE);
 		
-		this.setSortable(false);
-		this.setSortsOnUpdates(false);
-		this.setSortOrderCycle(SortOrder.ASCENDING, SortOrder.DESCENDING);
+		this.setSortable(true);
+		this.setSortsOnUpdates(true);
+		this.setSortOrderCycle(SortOrder.ASCENDING);
 		this.setSortOrder(1, SortOrder.ASCENDING);
 		this.getSortController().setRowFilter(new ModelRowFilter());
 		
