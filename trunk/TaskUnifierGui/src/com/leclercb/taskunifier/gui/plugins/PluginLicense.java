@@ -148,16 +148,12 @@ public class PluginLicense {
 			throw new SynchronizerNotConnectedException(
 					true,
 					e.getMessage(),
-					PluginApi.getTranslation(
-							"error.not_connected_internet",
-							e.getMessage()));
+					PluginApi.getTranslation("error.not_connected_internet"));
 		} catch (UnknownHostException e) {
 			throw new SynchronizerNotConnectedException(
 					true,
 					e.getMessage(),
-					PluginApi.getTranslation(
-							"error.not_connected_internet",
-							e.getMessage()));
+					PluginApi.getTranslation("error.not_connected_internet"));
 		} catch (Exception e) {
 			throw new SynchronizerLicenseException(e.getMessage(), e);
 		}
