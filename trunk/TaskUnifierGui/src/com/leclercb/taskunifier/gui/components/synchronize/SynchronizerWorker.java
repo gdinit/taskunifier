@@ -49,6 +49,7 @@ import com.leclercb.taskunifier.api.synchronizer.Synchronizer;
 import com.leclercb.taskunifier.api.synchronizer.SynchronizerChoice;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerSettingsException;
+import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerUnknownHostException;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerDefaultProgressMessage;
 import com.leclercb.taskunifier.gui.actions.ActionPluginConfiguration;
 import com.leclercb.taskunifier.gui.actions.ActionSave;
@@ -394,35 +395,42 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 		
 		this.publish(new SynchronizerDefaultProgressMessage(e.getMessage()));
 		
-		TUSwingUtilities.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				try {
-					PluginLogger.getLogger().log(
-							(e.isExpected() ? Level.INFO : Level.WARNING),
-							e.getMessage(),
-							e);
-					
-					ErrorInfo info = new ErrorInfo(
-							Translations.getString("general.error"),
-							e.getMessage(),
-							null,
-							"GUI",
-							(e.isExpected() ? null : e),
-							(e.isExpected() ? Level.INFO : Level.WARNING),
-							null);
-					
-					JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
-					
-					if (e instanceof SynchronizerSettingsException)
-						ActionPluginConfiguration.pluginConfiguration(plugin);
-				} catch (Exception e) {
-					GuiLogger.getLogger().log(Level.WARNING, e.getMessage(), e);
+		if (!this.silent || !(e instanceof SynchronizerUnknownHostException)) {
+			TUSwingUtilities.invokeLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						PluginLogger.getLogger().log(
+								(e.isExpected() ? Level.INFO : Level.WARNING),
+								e.getMessage(),
+								e);
+						
+						ErrorInfo info = new ErrorInfo(
+								Translations.getString("general.error"),
+								e.getMessage(),
+								null,
+								"GUI",
+								(e.isExpected() ? null : e),
+								(e.isExpected() ? Level.INFO : Level.WARNING),
+								null);
+						
+						JXErrorPane.showDialog(
+								FrameUtils.getCurrentFrame(),
+								info);
+						
+						if (e instanceof SynchronizerSettingsException)
+							ActionPluginConfiguration.pluginConfiguration(plugin);
+					} catch (Exception e) {
+						GuiLogger.getLogger().log(
+								Level.WARNING,
+								e.getMessage(),
+								e);
+					}
 				}
-			}
-			
-		});
+				
+			});
+		}
 	}
 	
 	private void handleThrowable(final Throwable t) {
