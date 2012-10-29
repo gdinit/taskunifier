@@ -42,9 +42,9 @@ import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessageTransformer;
 import com.leclercb.commons.gui.logger.GuiLogger;
+import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.gui.actions.ActionGetSerial;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
-import com.leclercb.taskunifier.gui.api.synchronizer.exc.SynchronizerLicenseException;
 import com.leclercb.taskunifier.gui.components.synchronize.progress.SynchronizerProgressMessageTransformer;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
@@ -89,7 +89,7 @@ public class SynchronizerDialog extends TUWorkerDialog<Void> {
 						22,
 						plugin.getLicenseUrl())));
 			}
-		} catch (SynchronizerLicenseException e) {
+		} catch (SynchronizerException e) {
 			GuiLogger.getLogger().log(Level.WARNING, "Cannot check license", e);
 		}
 	}

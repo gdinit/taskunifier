@@ -3,6 +3,7 @@ HISTORY
 
 Version 3.1.0
 	- Minor:
+		- BF 175: Not connected to the internet error
 		- Bug fixed: Growl notification on Mac OS
 		- Add new conditions: does not end/start with
 		- Order context, goal and location lists

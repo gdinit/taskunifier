@@ -33,6 +33,7 @@
 package com.leclercb.taskunifier.gui.plugins;
 
 import java.net.URI;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +45,8 @@ import org.apache.http.message.BasicNameValuePair;
 
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.HttpResponse;
+import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
+import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerUnknownHostException;
 import com.leclercb.taskunifier.gui.api.synchronizer.exc.SynchronizerLicenseException;
 import com.leclercb.taskunifier.gui.utils.HttpUtils;
 
@@ -103,12 +106,12 @@ public class PluginLicense {
 		this.cipher = cipher;
 	}
 	
-	public boolean checkLicense() throws SynchronizerLicenseException {
+	public boolean checkLicense() throws SynchronizerException {
 		return this.checkLicense(true);
 	}
 	
 	public boolean checkLicense(boolean getLicense)
-			throws SynchronizerLicenseException {
+			throws SynchronizerException {
 		if (this.email == null || this.email.length() == 0)
 			return false;
 		
@@ -127,7 +130,7 @@ public class PluginLicense {
 		return false;
 	}
 	
-	private String getLicense() throws SynchronizerLicenseException {
+	private String getLicense() throws SynchronizerException {
 		if (this.email == null || this.email.length() == 0)
 			return null;
 		
@@ -140,6 +143,13 @@ public class PluginLicense {
 			return response.getContent().trim();
 		} catch (SynchronizerLicenseException e) {
 			throw e;
+		} catch (UnknownHostException e) {
+			throw new SynchronizerUnknownHostException(
+					true,
+					e.getMessage(),
+					PluginApi.getTranslation(
+							"error.not_connected_internet",
+							e.getMessage()));
 		} catch (Exception e) {
 			throw new SynchronizerLicenseException(e.getMessage(), e);
 		}
