@@ -1,17 +1,17 @@
 package com.leclercb.taskunifier.api.synchronizer.exc;
 
-public class SynchronizerUnknownHostException extends SynchronizerException {
+public class SynchronizerNotConnectedException extends SynchronizerException {
 	
 	private String host;
 	
-	public SynchronizerUnknownHostException(
+	public SynchronizerNotConnectedException(
 			boolean expected,
 			String host,
 			String message) {
 		this(expected, host, message, null);
 	}
 	
-	public SynchronizerUnknownHostException(
+	public SynchronizerNotConnectedException(
 			boolean expected,
 			String host,
 			String message,
