@@ -62,6 +62,7 @@ import com.leclercb.taskunifier.gui.swing.TUStopableWorker;
 import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.BackupUtils;
+import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 
 public class SynchronizerWorker extends TUStopableWorker<Void> {
@@ -114,7 +115,8 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 		if (!this.isStopped()) {
 			this.getMonitor().addMessage(
 					new SynchronizerDefaultProgressMessage(
-							Translations.getString("synchronizer.cancelled_by_user")));
+							Translations.getString("synchronizer.cancelled_by_user"),
+							ImageUtils.getResourceImage("cancel.png", 16, 16)));
 		}
 		
 		super.stop();
@@ -177,7 +179,8 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 						this.publish(new SynchronizerDefaultProgressMessage(
 								Translations.getString(
 										"synchronizer.checking_license",
-										plugin.getSynchronizerApi().getApiName())));
+										plugin.getSynchronizerApi().getApiName()),
+								ImageUtils.getResourceImage("key.png", 16, 16)));
 						
 						if (!plugin.checkLicense()) {
 							noLicense = true;
@@ -194,7 +197,11 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 							
 							if (noLicenseCount > Constants.MAX_NO_LICENSE_SYNCS) {
 								this.publish(new SynchronizerDefaultProgressMessage(
-										Translations.getString("synchronizer.max_no_license_syncs_reached")));
+										Translations.getString("synchronizer.max_no_license_syncs_reached"),
+										ImageUtils.getResourceImage(
+												"error.png",
+												16,
+												16)));
 								
 								this.publish(new SynchronizerDefaultProgressMessage(
 										"----------"));
@@ -205,7 +212,11 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 										Translations.getString(
 												"synchronizer.max_no_license_syncs_left",
 												Constants.MAX_NO_LICENSE_SYNCS
-														- noLicenseCount)));
+														- noLicenseCount),
+										ImageUtils.getResourceImage(
+												"key.png",
+												16,
+												16)));
 							}
 							
 							int waitTime = Constants.WAIT_NO_LICENSE_TIME;
@@ -216,7 +227,11 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 							this.publish(new SynchronizerDefaultProgressMessage(
 									Translations.getString(
 											"synchronizer.wait_no_license",
-											waitTime)));
+											waitTime),
+									ImageUtils.getResourceImage(
+											"clock.png",
+											16,
+											16)));
 							
 							Thread.sleep(waitTime * 1000);
 							
@@ -229,7 +244,8 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 				this.publish(new SynchronizerDefaultProgressMessage(
 						Translations.getString(
 								"synchronizer.connecting",
-								plugin.getSynchronizerApi().getApiName())));
+								plugin.getSynchronizerApi().getApiName()),
+						ImageUtils.getResourceImage("connection.png", 16, 16)));
 				
 				Connection connection = null;
 				
@@ -340,7 +356,8 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 			}
 			
 			this.publish(new SynchronizerDefaultProgressMessage(
-					Translations.getString("synchronizer.synchronization_fully_completed")));
+					Translations.getString("synchronizer.synchronization_fully_completed"),
+					ImageUtils.getResourceImage("success.png", 16, 16)));
 			
 			if (noLicense)
 				NO_LICENSE_COUNT++;
@@ -393,7 +410,9 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 		if (this.isStopped())
 			return;
 		
-		this.publish(new SynchronizerDefaultProgressMessage(e.getMessage()));
+		this.publish(new SynchronizerDefaultProgressMessage(
+				e.getMessage(),
+				ImageUtils.getResourceImage("error.png", 16, 16)));
 		
 		if (!this.silent || !(e instanceof SynchronizerNotConnectedException)) {
 			TUSwingUtilities.invokeLater(new Runnable() {
@@ -437,7 +456,9 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 		if (this.isStopped())
 			return;
 		
-		this.publish(new SynchronizerDefaultProgressMessage(t.getMessage()));
+		this.publish(new SynchronizerDefaultProgressMessage(
+				t.getMessage(),
+				ImageUtils.getResourceImage("error.png", 16, 16)));
 		
 		if (!this.silent) {
 			TUSwingUtilities.invokeLater(new Runnable() {

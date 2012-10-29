@@ -35,6 +35,7 @@ package com.leclercb.taskunifier.gui.components.synchronize.progress;
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.progress.ProgressMessage;
 import com.leclercb.commons.api.progress.ProgressMessageTransformer;
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerDefaultProgressMessage;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerMainProgressMessage;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerRetrievedModelsProgressMessage;
@@ -93,9 +94,19 @@ public class SynchronizerProgressMessageTransformer implements ProgressMessageTr
 	}
 	
 	@Override
-	public String getEventValue(ListChangeEvent event, String key) {
+	public Object getEventValue(ListChangeEvent event, String key) {
 		if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
 			ProgressMessage message = (ProgressMessage) event.getValue();
+			
+			if (EqualsUtils.equalsStringIgnoreCase(key, "icon")) {
+				if (message instanceof SynchronizerDefaultProgressMessage) {
+					SynchronizerDefaultProgressMessage m = (SynchronizerDefaultProgressMessage) message;
+					
+					return m.getIcon();
+				}
+				
+				return null;
+			}
 			
 			if (message instanceof SynchronizerDefaultProgressMessage) {
 				SynchronizerDefaultProgressMessage m = (SynchronizerDefaultProgressMessage) message;
