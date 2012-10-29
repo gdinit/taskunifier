@@ -36,6 +36,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.logging.Level;
 
+import javax.swing.Icon;
 import javax.swing.JButton;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
@@ -49,6 +50,7 @@ import com.leclercb.taskunifier.gui.components.synchronize.progress.Synchronizer
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
+import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class SynchronizerDialog extends TUWorkerDialog<Void> {
 	
@@ -103,10 +105,21 @@ public class SynchronizerDialog extends TUWorkerDialog<Void> {
 				public void listChange(ListChangeEvent event) {
 					ProgressMessageTransformer t = SynchronizerProgressMessageTransformer.getInstance();
 					
-					if (t.acceptsEvent(event))
-						SynchronizerDialog.this.appendToProgressStatus(t.getEventValue(
-								event,
-								"message") + "\n");
+					if (t.acceptsEvent(event)) {
+						Icon icon = (Icon) t.getEventValue(event, "icon");
+						
+						if (icon == null)
+							SynchronizerDialog.this.appendToProgressStatus(ImageUtils.getResourceImage(
+									"transparent.png",
+									16,
+									16));
+						else
+							SynchronizerDialog.this.appendToProgressStatus(icon);
+						
+						SynchronizerDialog.this.appendToProgressStatus("   "
+								+ t.getEventValue(event, "message")
+								+ "\n");
+					}
 				}
 				
 			});
