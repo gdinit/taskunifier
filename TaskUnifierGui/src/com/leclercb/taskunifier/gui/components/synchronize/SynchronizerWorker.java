@@ -48,8 +48,8 @@ import com.leclercb.taskunifier.api.synchronizer.Connection;
 import com.leclercb.taskunifier.api.synchronizer.Synchronizer;
 import com.leclercb.taskunifier.api.synchronizer.SynchronizerChoice;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
+import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerNotConnectedException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerSettingsException;
-import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerUnknownHostException;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerDefaultProgressMessage;
 import com.leclercb.taskunifier.gui.actions.ActionPluginConfiguration;
 import com.leclercb.taskunifier.gui.actions.ActionSave;
@@ -395,7 +395,7 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 		
 		this.publish(new SynchronizerDefaultProgressMessage(e.getMessage()));
 		
-		if (!this.silent || !(e instanceof SynchronizerUnknownHostException)) {
+		if (!this.silent || !(e instanceof SynchronizerNotConnectedException)) {
 			TUSwingUtilities.invokeLater(new Runnable() {
 				
 				@Override

@@ -32,6 +32,7 @@
  */
 package com.leclercb.taskunifier.gui.plugins;
 
+import java.net.NoRouteToHostException;
 import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ import org.apache.http.message.BasicNameValuePair;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
-import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerUnknownHostException;
+import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerNotConnectedException;
 import com.leclercb.taskunifier.gui.api.synchronizer.exc.SynchronizerLicenseException;
 import com.leclercb.taskunifier.gui.utils.HttpUtils;
 
@@ -143,8 +144,15 @@ public class PluginLicense {
 			return response.getContent().trim();
 		} catch (SynchronizerLicenseException e) {
 			throw e;
+		} catch (NoRouteToHostException e) {
+			throw new SynchronizerNotConnectedException(
+					true,
+					e.getMessage(),
+					PluginApi.getTranslation(
+							"error.not_connected_internet",
+							e.getMessage()));
 		} catch (UnknownHostException e) {
-			throw new SynchronizerUnknownHostException(
+			throw new SynchronizerNotConnectedException(
 					true,
 					e.getMessage(),
 					PluginApi.getTranslation(
