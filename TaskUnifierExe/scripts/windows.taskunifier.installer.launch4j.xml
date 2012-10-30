@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <launch4jConfig>
-	<dontWrapJar>true</dontWrapJar>
+	<dontWrapJar>false</dontWrapJar>
 	<headerType>gui</headerType>
 	<jar>../temp/TaskUnifierInstaller.jar</jar>
 	<outfile>../temp/TaskUnifierInstaller.exe</outfile>
