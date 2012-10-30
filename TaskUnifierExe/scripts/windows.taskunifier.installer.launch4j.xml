@@ -2,9 +2,9 @@
 <launch4jConfig>
 	<dontWrapJar>true</dontWrapJar>
 	<headerType>gui</headerType>
-	<jar>../temp/TaskUnifier/TaskUnifier.jar</jar>
-	<outfile>../temp/TaskUnifier/TaskUnifier.exe</outfile>
-	<errTitle>TaskUnifier</errTitle>
+	<jar>../temp/TaskUnifierInstaller.jar</jar>
+	<outfile>../temp/TaskUnifierInstaller.exe</outfile>
+	<errTitle>TaskUnifier Installer</errTitle>
 	<cmdLine></cmdLine>
 	<chdir></chdir>
 	<priority>normal</priority>
@@ -20,19 +20,17 @@
 		<maxVersion></maxVersion>
 		<jdkPreference>preferJre</jdkPreference>
 		<maxHeapSize>512</maxHeapSize>
-		<opt>-Dcom.leclercb.taskunifier.resource_folder="resources"</opt>
-		<opt>-Dcom.leclercb.taskunifier.data_folder="%APPDATA%/TaskUnifier"</opt>
 	</jre>
 	<versionInfo>
 		<fileVersion>1.0.0.0</fileVersion>
 		<txtFileVersion>1.0</txtFileVersion>
-		<fileDescription>TaskUnifier Application</fileDescription>
+		<fileDescription>TaskUnifier Installer Application</fileDescription>
 		<copyright>2011, Benjamin Leclerc</copyright>
 		<productVersion>1.0.0.0</productVersion>
 		<txtProductVersion>1.0</txtProductVersion>
-		<productName>TaskUnifier</productName>
+		<productName>TaskUnifier Installer</productName>
 		<companyName></companyName>
-		<internalName>TaskUnifier</internalName>
-		<originalFilename>TaskUnifier.exe</originalFilename>
+		<internalName>TaskUnifierInstaller</internalName>
+		<originalFilename>TaskUnifierInstaller.exe</originalFilename>
 	</versionInfo>
 </launch4jConfig>
