@@ -134,7 +134,7 @@
 	<target depends="taskunifier-version-underscored" name="create-windows-binary">
 		<echo message="Creating windows zip file..."/>
     	<antcall target="create-binary"/>
-		<launch4j configFile="${directory.exe}/scripts/windows.taskunifier.launch4j.xml" />
+		<!-- <launch4j configFile="${directory.exe}/scripts/windows.taskunifier.launch4j.xml" /> -->
 		<jsmoothgen project="${directory.exe}/scripts/windows.taskunifier.jsmooth.xml" skeletonroot="${directory.exe}/tools/jsmooth/skeletons"/>
 		<mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
 	    <zip destfile="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/TaskUnifier_${taskunifier.version.underscored}_windows.zip" basedir="${directory.exe}/temp"/>
@@ -151,7 +151,7 @@
 			basedir="${directory.exe}/temp/TaskUnifier"
 			compression="deflate"
 			compressionlevel="9"/>
-		<launch4j configFile="${directory.exe}/scripts/windows.taskunifier.installer.launch4j.xml" />
+		<!-- <launch4j configFile="${directory.exe}/scripts/windows.taskunifier.installer.launch4j.xml" /> -->
 		<jsmoothgen project="${directory.exe}/scripts/windows.taskunifier.installer.jsmooth.xml" skeletonroot="${directory.exe}/tools/jsmooth/skeletons"/>
 		<zip destfile="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/TaskUnifier_${taskunifier.version.underscored}_installer_windows.zip" basedir="${directory.exe}/temp" includes="TaskUnifierInstaller.exe"/>
 	</target>
