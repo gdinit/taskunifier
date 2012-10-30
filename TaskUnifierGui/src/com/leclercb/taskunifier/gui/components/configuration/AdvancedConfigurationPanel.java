@@ -64,6 +64,15 @@ public class AdvancedConfigurationPanel extends DefaultConfigurationPanel {
 		}
 		
 		this.addField(new ConfigurationField(
+				"SHOW_REMINDERS_ENABLED",
+				null,
+				false,
+				new ConfigurationFieldType.CheckBox(
+						Main.getSettings(),
+						"general.show_reminders.enabled",
+						Translations.getString("configuration.advanced.show_reminders_enabled"))));
+		
+		this.addField(new ConfigurationField(
 				"COMMUNICATOR_ENABLED",
 				null,
 				true,
