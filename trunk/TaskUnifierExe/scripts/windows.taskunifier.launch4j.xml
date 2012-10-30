@@ -2,7 +2,7 @@
 <launch4jConfig>
 	<dontWrapJar>true</dontWrapJar>
 	<headerType>gui</headerType>
-	<jar>../temp/TaskUnifier/TaskUnifier.jar</jar>
+	<jar>TaskUnifier.jar</jar>
 	<outfile>../temp/TaskUnifier/TaskUnifier.exe</outfile>
 	<errTitle>TaskUnifier</errTitle>
 	<cmdLine></cmdLine>
