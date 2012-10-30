@@ -8,6 +8,7 @@ Version 3.1.0
 		- Add new conditions: does not end/start with
 		- Order context, goal and location lists
 		- Add icons to the status bar
+		- Setting show reminders
 
 Version 3.0.3 BETA
 	- Major:

@@ -47,6 +47,7 @@ import com.leclercb.taskunifier.gui.actions.ActionTaskReminders;
 import com.leclercb.taskunifier.gui.components.reminder.ReminderDialog;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.constants.Constants;
+import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.threads.reminder.progress.ReminderDefaultProgressMessage;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
@@ -70,6 +71,11 @@ class ReminderRunnable implements Runnable, PropertyChangeListener, ListChangeLi
 		while (!Thread.currentThread().isInterrupted()) {
 			try {
 				Thread.sleep(SLEEP_TIME);
+				
+				Boolean showRemindersEnabled = Main.getSettings().getBooleanProperty(
+						"general.show_reminders.enabled");
+				if (showRemindersEnabled == null || !showRemindersEnabled)
+					continue;
 				
 				if (Synchronizing.getInstance().isSynchronizing())
 					continue;
