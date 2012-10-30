@@ -8,7 +8,7 @@
 	<JVMSearchPath>jview</JVMSearchPath>
 	<arguments></arguments>
 	<currentDirectory>${EXECUTABLEPATH}</currentDirectory>
-	<embeddedJar>false</embeddedJar>
+	<embeddedJar>true</embeddedJar>
 	<executableName>../temp/TaskUnifierInstaller.exe</executableName>
 	<iconLocation>../temp/TaskUnifier/resources/images/logo.png</iconLocation>
 	<initialMemoryHeap>-1</initialMemoryHeap>
