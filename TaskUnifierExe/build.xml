@@ -76,7 +76,7 @@
     </target>
 	
 	<target depends="taskunifier-version-underscored, check-os" name="create-mac-binary" if="isMac">
-		<echo message="Creating mac tar file..."/>
+		<echo message="Creating mac app file..."/>
 		<antcall target="clean"/>
 		<mkdir dir="${directory.exe}/temp"/>
 		
