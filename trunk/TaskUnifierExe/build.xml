@@ -141,7 +141,7 @@
 		<antcall target="create-installer-windows"/>
 	</target>
 	
-	<target name="create-installer-windows, check-os" if="isWindows">
+	<target depends="taskunifier-version-underscored, check-os" name="create-installer-windows" if="isWindows">
 		<echo message="Creating windows installer zip file..."/>
 		<copy file="${directory.exe}/scripts/windows.taskunifier.assoc.bat" tofile="${directory.exe}/temp/TaskUnifier/TaskUnifierAssoc.bat"/>
 		<izpack input="${directory.exe}/scripts/taskunifier.izpack.xml"
