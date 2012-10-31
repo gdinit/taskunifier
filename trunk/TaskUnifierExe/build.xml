@@ -131,7 +131,7 @@
 		</exec>
 	</target>
 	
-	<target depends="taskunifier-version-underscored" name="create-windows-binary" if="isWindows">
+	<target depends="taskunifier-version-underscored, check-os" name="create-windows-binary" if="isWindows">
 		<echo message="Creating windows zip file..."/>
     	<antcall target="create-binary"/>
 		<launch4j configFile="${directory.exe}/scripts/windows.taskunifier.launch4j.xml" fileVersion="${taskunifier.version}.0" txtFileVersion="${taskunifier.version}" productVersion="${taskunifier.version}.0" txtProductVersion="${taskunifier.version}" />
@@ -141,7 +141,7 @@
 		<antcall target="create-installer-windows"/>
 	</target>
 	
-	<target name="create-installer-windows" if="isWindows">
+	<target name="create-installer-windows, check-os" if="isWindows">
 		<echo message="Creating windows installer zip file..."/>
 		<copy file="${directory.exe}/scripts/windows.taskunifier.assoc.bat" tofile="${directory.exe}/temp/TaskUnifier/TaskUnifierAssoc.bat"/>
 		<izpack input="${directory.exe}/scripts/taskunifier.izpack.xml"
