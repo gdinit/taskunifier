@@ -1,7 +1,11 @@
 HISTORY
 -------
 
-Version 3.0.4
+Version 3.1.0
+	- Minor:
+		- Improved Windows native launcher
+
+Version 3.0.4 BETA
 	- Minor:
 		- BF 175: Not connected to the internet error
 		- Bug fixed: Growl notification on Mac OS

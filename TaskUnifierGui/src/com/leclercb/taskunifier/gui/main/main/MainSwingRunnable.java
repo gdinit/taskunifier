@@ -228,12 +228,6 @@ public class MainSwingRunnable implements Runnable {
 					Constants.VERSION));
 		}
 		
-		if (Main.isFirstExecution() && SystemUtils.IS_OS_LINUX) {
-			messages.add(Translations.getString(
-					"welcome.message.open_jdk_not_supported",
-					Constants.VERSION));
-		}
-		
 		if (Main.isFirstExecution()
 				|| (Main.isVersionUpdated()
 						&& Main.getPreviousVersion() != null && Main.getPreviousVersion().compareTo(
