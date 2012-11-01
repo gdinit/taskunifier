@@ -73,8 +73,11 @@ public final class UserSettingsVersion {
 		if (version.equals("3.0.2"))
 			version = updateUserSettings_3_0_2_to_3_0_3();
 		
-		if (version.equals("3.0.4"))
+		if (version.equals("3.0.3"))
 			version = updateUserSettings_3_0_3_to_3_0_4();
+		
+		if (version.equals("3.0.4"))
+			version = updateUserSettings_3_0_4_to_3_1_0();
 		
 		cleanSettings();
 		
@@ -165,6 +168,13 @@ public final class UserSettingsVersion {
 				"Update user settings from version 3.0.3 to 3.0.4");
 		
 		return "3.0.4";
+	}
+	
+	private static String updateUserSettings_3_0_4_to_3_1_0() {
+		GuiLogger.getLogger().info(
+				"Update user settings from version 3.0.4 to 3.1.0");
+		
+		return "3.1.0";
 	}
 	
 	private static void copyInsideUserFolder(
