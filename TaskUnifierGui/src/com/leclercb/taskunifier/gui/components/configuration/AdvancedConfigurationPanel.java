@@ -52,7 +52,7 @@ public class AdvancedConfigurationPanel extends DefaultConfigurationPanel {
 	}
 	
 	private void initialize() {
-		if (SystemUtils.IS_OS_MAC) {
+		if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_WINDOWS) {
 			this.addField(new ConfigurationField(
 					"GROWL_ENABLED",
 					null,
@@ -61,6 +61,17 @@ public class AdvancedConfigurationPanel extends DefaultConfigurationPanel {
 							Main.getSettings(),
 							"general.growl.enabled",
 							Translations.getString("configuration.advanced.growl_enabled"))));
+		}
+		
+		if (SystemUtils.IS_OS_WINDOWS) {
+			this.addField(new ConfigurationField(
+					"SNARL_ENABLED",
+					null,
+					true,
+					new ConfigurationFieldType.CheckBox(
+							Main.getSettings(),
+							"general.snarl.enabled",
+							Translations.getString("configuration.advanced.snarl_enabled"))));
 		}
 		
 		this.addField(new ConfigurationField(
