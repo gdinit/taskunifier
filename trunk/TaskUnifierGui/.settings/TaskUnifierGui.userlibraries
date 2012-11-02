@@ -17,6 +17,7 @@
         <archive path="/TaskUnifierGui/lib/mac_widgets.jar"/>
         <archive path="/TaskUnifierGui/lib/miglayout-4.0-swing.jar"/>
         <archive path="/TaskUnifierGui/lib/netty-3.5.9.final.jar"/>
+        <archive path="/TaskUnifierGui/lib/snarlnetworkebridge-1.1-v3.jar"/>
         <archive path="/TaskUnifierGui/lib/swingx-all-1.6.4.jar"/>
         <archive path="/TaskUnifierGui/lib/google/commons-logging-1.1.1.jar"/>
         <archive path="/TaskUnifierGui/lib/google/google-api-client-1.11.0-beta.jar"/>
