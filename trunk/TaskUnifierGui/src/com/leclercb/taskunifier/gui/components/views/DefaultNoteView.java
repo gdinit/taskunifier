@@ -46,12 +46,12 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.UIManager;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXSearchField;
 import org.jdesktop.swingx.painter.Painter;
 
 import com.explodingpixels.macwidgets.SourceListStandardColorScheme;
-import com.jgoodies.common.base.SystemUtils;
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelUtils;
 import com.leclercb.taskunifier.gui.commons.events.NoteSearcherSelectionChangeEvent;

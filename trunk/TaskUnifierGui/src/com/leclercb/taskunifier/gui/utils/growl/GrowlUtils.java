@@ -30,7 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.utils;
+package com.leclercb.taskunifier.gui.utils.growl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,25 +99,36 @@ public final class GrowlUtils {
 	private static Growl GROWL;
 	
 	static {
-		if (!SystemUtils.IS_OS_MAC
-				|| !Main.getSettings().getBooleanProperty(
-						"general.growl.enabled")) {
-			GROWL = null;
-		} else {
-			try {
-				GROWL = new Growl(
+		initialize();
+	}
+	
+	private static void initialize() {
+		try {
+			if (!Main.getSettings().getBooleanProperty("general.growl.enabled")) {
+				GROWL = null;
+				return;
+			}
+			
+			if (SystemUtils.IS_OS_MAC) {
+				GROWL = new GrowlForMac(
 						Constants.TITLE,
 						GrowlNotificationList.getAllNotificationsList(),
 						GrowlNotificationList.getEnabledNotificationsList());
 				
-				GuiLogger.getLogger().info("Growl support enabled");
-			} catch (Throwable t) {
-				GROWL = null;
-				GuiLogger.getLogger().log(
-						Level.WARNING,
-						"Cannot initialize Growl",
-						t);
 			}
+			
+			if (SystemUtils.IS_OS_WINDOWS) {
+				GROWL = new GrowlForWindows();
+			}
+			
+			GROWL.registerApplication();
+			GuiLogger.getLogger().info("Growl support enabled");
+		} catch (Throwable t) {
+			GROWL = null;
+			GuiLogger.getLogger().log(
+					Level.WARNING,
+					"Cannot initialize Growl",
+					t);
 		}
 	}
 	
@@ -133,7 +144,6 @@ public final class GrowlUtils {
 			return;
 		
 		try {
-			GROWL.registerApplication();
 			GROWL.notify(list.getNotificationList(), title, description);
 		} catch (Throwable t) {
 			GuiLogger.getLogger().log(

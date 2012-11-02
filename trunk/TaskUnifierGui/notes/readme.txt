@@ -4,6 +4,7 @@ HISTORY
 Version 3.1.0
 	- Minor:
 		- Improved Windows native launcher
+		- Growl support on Windows
 
 Version 3.0.4 BETA
 	- Minor:

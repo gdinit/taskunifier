@@ -50,13 +50,13 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.jdesktop.swingx.JXComboBox;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 import org.jdesktop.swingx.renderer.DefaultListRenderer;
 
 import com.explodingpixels.macwidgets.IAppWidgetFactory;
-import com.jgoodies.common.base.SystemUtils;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelUtils;
 import com.leclercb.taskunifier.api.models.Model;

@@ -30,7 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.utils;
+package com.leclercb.taskunifier.gui.utils.growl;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -38,7 +38,7 @@ import javax.script.ScriptException;
 
 import com.leclercb.commons.api.utils.CheckUtils;
 
-public class Growl {
+public class GrowlForMac implements Growl {
 	
 	private static final String GROWL_APPLICATION = "com.Growl.GrowlHelperApp";
 	
@@ -47,7 +47,7 @@ public class Growl {
 	private String[] enabledNotificationsList;
 	private ScriptEngine appleScriptEngine;
 	
-	public Growl(
+	public GrowlForMac(
 			String applicationName,
 			String[] allNotificationsList,
 			String[] enabledNotificationsList) {
@@ -85,7 +85,8 @@ public class Growl {
 		return count > 0;
 	}
 	
-	public void registerApplication() throws ScriptException {
+	@Override
+	public void registerApplication() throws Exception {
 		String script = this.script().add("tell application id ").quote(
 				GROWL_APPLICATION).nextRow("set the allNotificationsList to ").array(
 				this.allNotificationsList).nextRow(
@@ -98,13 +99,14 @@ public class Growl {
 		this.executeScript(script);
 	}
 	
-	public void notify(String notificationList, String title)
-			throws ScriptException {
+	@Override
+	public void notify(String notificationList, String title) throws Exception {
 		this.notify(notificationList, title, "");
 	}
 	
+	@Override
 	public void notify(String notificationList, String title, String description)
-			throws ScriptException {
+			throws Exception {
 		if (description == null)
 			description = "";
 		
@@ -115,6 +117,11 @@ public class Growl {
 				this.applicationName).nextRow("end tell").get();
 		
 		this.executeScript(script);
+	}
+	
+	@Override
+	public void close() throws Exception {
+		
 	}
 	
 	@SuppressWarnings("unchecked")
