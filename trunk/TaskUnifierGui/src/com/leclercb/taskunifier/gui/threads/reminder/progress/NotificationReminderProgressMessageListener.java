@@ -30,27 +30,29 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.threads.communicator.progress;
+package com.leclercb.taskunifier.gui.threads.reminder.progress;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessageTransformer;
-import com.leclercb.taskunifier.gui.utils.growl.GrowlUtils;
-import com.leclercb.taskunifier.gui.utils.growl.GrowlUtils.GrowlNotificationList;
+import com.leclercb.taskunifier.gui.utils.notifications.NotificationList;
+import com.leclercb.taskunifier.gui.utils.notifications.NotificationUtils;
 
-public class GrowlCommunicatorProgressMessageListener implements ListChangeListener {
+public class NotificationReminderProgressMessageListener implements ListChangeListener {
 	
-	public GrowlCommunicatorProgressMessageListener() {
+	public NotificationReminderProgressMessageListener() {
 		
 	}
 	
 	@Override
 	public void listChange(ListChangeEvent event) {
-		ProgressMessageTransformer t = CommunicatorProgressMessageTransformer.getInstance();
+		ProgressMessageTransformer t = ReminderProgressMessageTransformer.getInstance();
 		
 		if (t.acceptsEvent(event)) {
-			String content = (String) t.getEventValue(event, null);
-			GrowlUtils.notify(GrowlNotificationList.COMMUNICATOR, content);
+			NotificationUtils.notify(
+					NotificationList.REMINDER,
+					(String) t.getEventValue(event, "title"),
+					(String) t.getEventValue(event, "description"));
 		}
 	}
 	

@@ -30,29 +30,62 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.threads.reminder.progress;
+package com.leclercb.taskunifier.gui.components.synchronize.progress;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
+import com.leclercb.commons.api.progress.ProgressMessage;
 import com.leclercb.commons.api.progress.ProgressMessageTransformer;
-import com.leclercb.taskunifier.gui.utils.growl.GrowlUtils;
-import com.leclercb.taskunifier.gui.utils.growl.GrowlUtils.GrowlNotificationList;
+import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerMainProgressMessage;
+import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerUpdatedModelsProgressMessage;
+import com.leclercb.taskunifier.gui.utils.notifications.NotificationList;
+import com.leclercb.taskunifier.gui.utils.notifications.NotificationUtils;
 
-public class GrowlReminderProgressMessageListener implements ListChangeListener {
+public class NotificationSynchronizerProgressMessageListener implements ListChangeListener {
 	
-	public GrowlReminderProgressMessageListener() {
-		
+	private StringBuilder builder;
+	
+	public NotificationSynchronizerProgressMessageListener() {
+		this.builder = new StringBuilder();
 	}
 	
 	@Override
 	public void listChange(ListChangeEvent event) {
-		ProgressMessageTransformer t = ReminderProgressMessageTransformer.getInstance();
+		ProgressMessageTransformer t = SynchronizerProgressMessageTransformer.getInstance();
 		
 		if (t.acceptsEvent(event)) {
-			GrowlUtils.notify(
-					GrowlNotificationList.REMINDER,
-					(String) t.getEventValue(event, "title"),
-					(String) t.getEventValue(event, "description"));
+			if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
+				ProgressMessage message = (ProgressMessage) event.getValue();
+				
+				String content = (String) t.getEventValue(event, "message");
+				
+				if (message instanceof SynchronizerUpdatedModelsProgressMessage) {
+					this.builder.append(content + "\n");
+				} else if (message.getClass().equals(
+						SynchronizerMainProgressMessage.class)) {
+					SynchronizerMainProgressMessage m = (SynchronizerMainProgressMessage) message;
+					
+					switch (m.getType()) {
+						case PUBLISHER_START:
+						case SYNCHRONIZER_START:
+							NotificationUtils.notify(
+									NotificationList.SYNCHRONIZATION,
+									content);
+							
+							break;
+						case PUBLISHER_END:
+						case SYNCHRONIZER_END:
+							NotificationUtils.notify(
+									NotificationList.SYNCHRONIZATION,
+									content,
+									this.builder.toString());
+							
+							this.builder = new StringBuilder();
+							
+							break;
+					}
+				}
+			}
 		}
 	}
 	

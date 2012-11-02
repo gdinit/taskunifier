@@ -30,56 +30,38 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.utils.growl;
+package com.leclercb.taskunifier.gui.utils.notifications.snarl;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
+import net.snarl.SnarlNetworkBridge;
 
-import com.google.code.jgntp.Gntp;
-import com.google.code.jgntp.GntpApplicationInfo;
-import com.google.code.jgntp.GntpClient;
-import com.google.code.jgntp.GntpNotificationInfo;
+import com.leclercb.taskunifier.gui.constants.Constants;
 
-public class GrowlForWindows implements Growl {
+public class SnarlForWindows implements Snarl {
 	
-	private GntpClient client;
-	private GntpApplicationInfo applicationInfo;
-	
-	public GrowlForWindows() {
-		this.initialize();
-	}
-	
-	private void initialize() {
-		this.applicationInfo = Gntp.appInfo("TaskUnifier").build();
-		this.client = Gntp.client(this.applicationInfo).forHost("localhost").build();
-		this.client.register();
+	public SnarlForWindows() {
+		
 	}
 	
 	@Override
 	public void registerApplication() throws Exception {
-		this.client.register();
+		SnarlNetworkBridge.snRegisterConfig(Constants.TITLE, "localhost");
 	}
 	
 	@Override
-	public void notify(String notificationList, String title) throws Exception {
-		this.notify(notificationList, title, null);
+	public void notify(String alert, String title) throws Exception {
+		this.notify(alert, title, null);
 	}
 	
 	@Override
-	public void notify(String notificationList, String title, String description)
+	public void notify(String alert, String title, String description)
 			throws Exception {
-		GntpNotificationInfo notificationInfo = Gntp.notificationInfo(
-				this.applicationInfo,
-				notificationList).build();
-		
-		this.client.notify(
-				Gntp.notification(notificationInfo, title).text(description).build(),
-				2,
-				SECONDS);
+		SnarlNetworkBridge.snRegisterAlert(alert);
+		SnarlNetworkBridge.snShowMessage(alert, title, description);
 	}
 	
 	@Override
 	public void close() throws Exception {
-		this.client.shutdown(2, SECONDS);
+		
 	}
 	
 }

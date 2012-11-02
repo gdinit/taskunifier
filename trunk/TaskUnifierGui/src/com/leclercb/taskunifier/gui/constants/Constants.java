@@ -55,11 +55,11 @@ import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorterElement;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
 import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
-import com.leclercb.taskunifier.gui.components.synchronize.progress.GrowlSynchronizerProgressMessageListener;
+import com.leclercb.taskunifier.gui.components.synchronize.progress.NotificationSynchronizerProgressMessageListener;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
 import com.leclercb.taskunifier.gui.main.Main;
-import com.leclercb.taskunifier.gui.threads.communicator.progress.GrowlCommunicatorProgressMessageListener;
-import com.leclercb.taskunifier.gui.threads.reminder.progress.GrowlReminderProgressMessageListener;
+import com.leclercb.taskunifier.gui.threads.communicator.progress.NotificationCommunicatorProgressMessageListener;
+import com.leclercb.taskunifier.gui.threads.reminder.progress.NotificationReminderProgressMessageListener;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.UndoSupport;
@@ -119,10 +119,10 @@ public final class Constants {
 	}
 	
 	public static void initialize() {
-		// Growl Listeners
-		Constants.PROGRESS_MONITOR.addListChangeListener(new GrowlCommunicatorProgressMessageListener());
-		Constants.PROGRESS_MONITOR.addListChangeListener(new GrowlSynchronizerProgressMessageListener());
-		Constants.PROGRESS_MONITOR.addListChangeListener(new GrowlReminderProgressMessageListener());
+		// Notification Listeners
+		Constants.PROGRESS_MONITOR.addListChangeListener(new NotificationCommunicatorProgressMessageListener());
+		Constants.PROGRESS_MONITOR.addListChangeListener(new NotificationSynchronizerProgressMessageListener());
+		Constants.PROGRESS_MONITOR.addListChangeListener(new NotificationReminderProgressMessageListener());
 		
 		// Initialize Searchers
 		initializeNoteSearcher();

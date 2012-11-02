@@ -30,7 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.utils.growl;
+package com.leclercb.taskunifier.gui.utils.notifications.growl;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -101,7 +101,7 @@ public class GrowlForMac implements Growl {
 	
 	@Override
 	public void notify(String notificationList, String title) throws Exception {
-		this.notify(notificationList, title, "");
+		this.notify(notificationList, title, null);
 	}
 	
 	@Override

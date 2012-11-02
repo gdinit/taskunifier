@@ -30,73 +30,23 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.utils.growl;
+package com.leclercb.taskunifier.gui.utils.notifications.snarl;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 
 import org.apache.commons.lang3.SystemUtils;
 
 import com.leclercb.commons.gui.logger.GuiLogger;
-import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.utils.notifications.NotificationList;
 
-public final class GrowlUtils {
+public final class SnarlUtils {
 	
-	private GrowlUtils() {
+	private SnarlUtils() {
 		
 	}
 	
-	public static enum GrowlNotificationList {
-		
-		COMMUNICATOR("Communicator", true),
-		REMINDER("Reminder", true),
-		SYNCHRONIZATION("Synchronization", true);
-		
-		private String notificationList;
-		private boolean enabled;
-		
-		private GrowlNotificationList(String notificationList, boolean enabled) {
-			this.notificationList = notificationList;
-			this.enabled = enabled;
-		}
-		
-		public String getNotificationList() {
-			return this.notificationList;
-		}
-		
-		public boolean isEnabled() {
-			return this.enabled;
-		}
-		
-		@Override
-		public String toString() {
-			return this.notificationList;
-		}
-		
-		public static String[] getAllNotificationsList() {
-			List<String> list = new ArrayList<String>();
-			for (GrowlNotificationList g : GrowlNotificationList.values()) {
-				list.add(g.getNotificationList());
-			}
-			
-			return list.toArray(new String[0]);
-		}
-		
-		public static String[] getEnabledNotificationsList() {
-			List<String> list = new ArrayList<String>();
-			for (GrowlNotificationList g : GrowlNotificationList.values()) {
-				if (g.isEnabled())
-					list.add(g.getNotificationList());
-			}
-			
-			return list.toArray(new String[0]);
-		}
-		
-	}
-	
-	private static Growl GROWL;
+	private static Snarl SNARL;
 	
 	static {
 		initialize();
@@ -104,51 +54,43 @@ public final class GrowlUtils {
 	
 	private static void initialize() {
 		try {
-			if (!Main.getSettings().getBooleanProperty("general.growl.enabled")) {
-				GROWL = null;
+			if (!Main.getSettings().getBooleanProperty("general.snarl.enabled")) {
+				SNARL = null;
 				return;
 			}
 			
-			if (SystemUtils.IS_OS_MAC) {
-				GROWL = new GrowlForMac(
-						Constants.TITLE,
-						GrowlNotificationList.getAllNotificationsList(),
-						GrowlNotificationList.getEnabledNotificationsList());
-				
-			}
-			
 			if (SystemUtils.IS_OS_WINDOWS) {
-				GROWL = new GrowlForWindows();
+				SNARL = new SnarlForWindows();
 			}
 			
-			GROWL.registerApplication();
-			GuiLogger.getLogger().info("Growl support enabled");
+			SNARL.registerApplication();
+			GuiLogger.getLogger().info("Snarl support enabled");
 		} catch (Throwable t) {
-			GROWL = null;
+			SNARL = null;
 			GuiLogger.getLogger().log(
 					Level.WARNING,
-					"Cannot initialize Growl",
+					"Cannot initialize Snarl",
 					t);
 		}
 	}
 	
-	public static void notify(GrowlNotificationList list, String title) {
+	public static void notify(NotificationList list, String title) {
 		notify(list, title, "");
 	}
 	
 	public static void notify(
-			GrowlNotificationList list,
+			NotificationList list,
 			String title,
 			String description) {
-		if (GROWL == null)
+		if (SNARL == null)
 			return;
 		
 		try {
-			GROWL.notify(list.getNotificationList(), title, description);
+			SNARL.notify(list.getNotificationList(), title, description);
 		} catch (Throwable t) {
 			GuiLogger.getLogger().log(
 					Level.WARNING,
-					"Cannot send message to Growl",
+					"Cannot send message to Snarl",
 					t);
 		}
 	}

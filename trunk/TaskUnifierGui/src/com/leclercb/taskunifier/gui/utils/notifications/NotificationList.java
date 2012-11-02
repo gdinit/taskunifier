@@ -30,20 +30,55 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.utils.growl;
+package com.leclercb.taskunifier.gui.utils.notifications;
 
-public interface Growl {
+import java.util.ArrayList;
+import java.util.List;
+
+public enum NotificationList {
 	
-	public abstract void registerApplication() throws Exception;
+	COMMUNICATOR("Communicator", true),
+	REMINDER("Reminder", true),
+	SYNCHRONIZATION("Synchronization", true);
 	
-	public abstract void notify(String notificationList, String title)
-			throws Exception;
+	private String notificationList;
+	private boolean enabled;
 	
-	public abstract void notify(
-			String notificationList,
-			String title,
-			String description) throws Exception;
+	private NotificationList(String notificationList, boolean enabled) {
+		this.notificationList = notificationList;
+		this.enabled = enabled;
+	}
 	
-	public abstract void close() throws Exception;
+	public String getNotificationList() {
+		return this.notificationList;
+	}
+	
+	public boolean isEnabled() {
+		return this.enabled;
+	}
+	
+	@Override
+	public String toString() {
+		return this.notificationList;
+	}
+	
+	public static String[] getAllNotificationsList() {
+		List<String> list = new ArrayList<String>();
+		for (NotificationList g : NotificationList.values()) {
+			list.add(g.getNotificationList());
+		}
+		
+		return list.toArray(new String[0]);
+	}
+	
+	public static String[] getEnabledNotificationsList() {
+		List<String> list = new ArrayList<String>();
+		for (NotificationList g : NotificationList.values()) {
+			if (g.isEnabled())
+				list.add(g.getNotificationList());
+		}
+		
+		return list.toArray(new String[0]);
+	}
 	
 }
