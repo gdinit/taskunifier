@@ -41,8 +41,8 @@ import java.util.logging.Level;
 import javax.swing.UIManager;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
 
-import com.jgoodies.common.base.SystemUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.actions.ActionResetGeneralSearchers;
 import com.leclercb.taskunifier.gui.constants.Constants;
@@ -1968,6 +1968,13 @@ public final class SettingsVersion {
 	private static String updateSettings_3_0_4_to_3_1_0() {
 		GuiLogger.getLogger().info(
 				"Update settings from version 3.0.4 to 3.1.0");
+		
+		if (SystemUtils.IS_OS_MAC)
+			Main.getSettings().setBooleanProperty("general.growl.enabled", true);
+		else
+			Main.getSettings().setBooleanProperty(
+					"general.growl.enabled",
+					false);
 		
 		return "3.1.0";
 	}

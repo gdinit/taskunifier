@@ -38,8 +38,8 @@ import com.leclercb.commons.api.progress.ProgressMessage;
 import com.leclercb.commons.api.progress.ProgressMessageTransformer;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerMainProgressMessage;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerUpdatedModelsProgressMessage;
-import com.leclercb.taskunifier.gui.utils.GrowlUtils;
-import com.leclercb.taskunifier.gui.utils.GrowlUtils.GrowlNotificationList;
+import com.leclercb.taskunifier.gui.utils.growl.GrowlUtils;
+import com.leclercb.taskunifier.gui.utils.growl.GrowlUtils.GrowlNotificationList;
 
 public class GrowlSynchronizerProgressMessageListener implements ListChangeListener {
 	

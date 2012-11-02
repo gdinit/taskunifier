@@ -24,6 +24,7 @@
 	<classPath>../temp/TaskUnifier/lib/jtattoo.jar</classPath>
 	<classPath>../temp/TaskUnifier/lib/mac_widgets.jar</classPath>
 	<classPath>../temp/TaskUnifier/lib/miglayout-4.0-swing.jar</classPath>
+	<classPath>../temp/TaskUnifier/lib/netty-3.5.9.final.jar</classPath>
 	<classPath>../temp/TaskUnifier/lib/swingx-all-1.6.4.jar</classPath>
 	<classPath>../temp/TaskUnifier/lib/taskunifierapi.jar</classPath>
 	<classPath>../temp/TaskUnifier/lib/google/commons-logging-1.1.1.jar</classPath>

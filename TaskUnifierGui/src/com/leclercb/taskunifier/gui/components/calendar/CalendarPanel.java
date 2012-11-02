@@ -73,6 +73,7 @@ import lu.tudor.santec.bizcal.views.DayViewPanel;
 import lu.tudor.santec.bizcal.widgets.ButtonPanel;
 import lu.tudor.santec.bizcal.widgets.CheckBoxPanel;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.jdesktop.swingx.JXMonthView;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXSearchField;
@@ -81,7 +82,6 @@ import org.jdesktop.swingx.painter.Painter;
 import bizcal.swing.DayView;
 
 import com.explodingpixels.macwidgets.SourceListStandardColorScheme;
-import com.jgoodies.common.base.SystemUtils;
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
 import com.leclercb.commons.api.properties.events.WeakSavePropertiesListener;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelUtils;

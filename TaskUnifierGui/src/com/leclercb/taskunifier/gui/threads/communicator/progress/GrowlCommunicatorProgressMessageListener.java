@@ -35,8 +35,8 @@ package com.leclercb.taskunifier.gui.threads.communicator.progress;
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessageTransformer;
-import com.leclercb.taskunifier.gui.utils.GrowlUtils;
-import com.leclercb.taskunifier.gui.utils.GrowlUtils.GrowlNotificationList;
+import com.leclercb.taskunifier.gui.utils.growl.GrowlUtils;
+import com.leclercb.taskunifier.gui.utils.growl.GrowlUtils.GrowlNotificationList;
 
 public class GrowlCommunicatorProgressMessageListener implements ListChangeListener {
 	
