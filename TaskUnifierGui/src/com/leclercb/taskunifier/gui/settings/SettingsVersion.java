@@ -1976,6 +1976,8 @@ public final class SettingsVersion {
 					"general.growl.enabled",
 					false);
 		
+		Main.getSettings().setBooleanProperty("general.snarl.enabled", false);
+		
 		return "3.1.0";
 	}
 	
