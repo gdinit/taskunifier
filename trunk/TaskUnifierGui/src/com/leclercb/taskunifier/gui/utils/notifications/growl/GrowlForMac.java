@@ -34,45 +34,47 @@ package com.leclercb.taskunifier.gui.utils.notifications.growl;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 
-import com.leclercb.commons.api.utils.CheckUtils;
+import org.apache.commons.lang3.SystemUtils;
 
-public class GrowlForMac implements Growl {
+import com.leclercb.taskunifier.gui.constants.Constants;
+import com.leclercb.taskunifier.gui.utils.notifications.NotificationList;
+import com.leclercb.taskunifier.gui.utils.notifications.Notifier;
+import com.leclercb.taskunifier.gui.utils.notifications.exceptions.NotifierException;
+import com.leclercb.taskunifier.gui.utils.notifications.exceptions.NotifierOSException;
+
+public class GrowlForMac implements Notifier {
 	
 	private static final String GROWL_APPLICATION = "com.Growl.GrowlHelperApp";
 	
-	private final String applicationName;
-	private String[] allNotificationsList;
-	private String[] enabledNotificationsList;
 	private ScriptEngine appleScriptEngine;
 	
-	public GrowlForMac(
-			String applicationName,
-			String[] allNotificationsList,
-			String[] enabledNotificationsList) {
-		CheckUtils.isNotNull(applicationName);
-		CheckUtils.isNotNull(allNotificationsList);
-		CheckUtils.isNotNull(enabledNotificationsList);
+	public GrowlForMac() {
 		
-		this.applicationName = applicationName;
-		this.allNotificationsList = allNotificationsList;
-		this.enabledNotificationsList = enabledNotificationsList;
-		
-		this.initialize();
 	}
 	
-	private void initialize() {
+	@Override
+	public String getName() {
+		return "Growl for Mac";
+	}
+	
+	@Override
+	public void open() throws NotifierException {
+		if (!SystemUtils.IS_OS_MAC)
+			throw new NotifierOSException();
+		
 		ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
 		this.appleScriptEngine = scriptEngineManager.getEngineByName("AppleScript");
 		
 		if (this.appleScriptEngine == null) {
-			throw new RuntimeException("No AppleScriptEngine available");
+			throw new NotifierException("No AppleScriptEngine available");
 		}
 		
 		if (!this.isGrowlEnabled()) {
-			throw new RuntimeException("No Growl process was found");
+			throw new NotifierException("No Growl process was found");
 		}
+		
+		this.registerApplication();
 	}
 	
 	private boolean isGrowlEnabled() {
@@ -85,14 +87,13 @@ public class GrowlForMac implements Growl {
 		return count > 0;
 	}
 	
-	@Override
-	public void registerApplication() throws Exception {
+	private void registerApplication() throws NotifierException {
 		String script = this.script().add("tell application id ").quote(
 				GROWL_APPLICATION).nextRow("set the allNotificationsList to ").array(
-				this.allNotificationsList).nextRow(
+				NotificationList.getAllNotificationsList()).nextRow(
 				"set the enabledNotificationsList to ").array(
-				this.enabledNotificationsList).nextRow(
-				"register as application ").quote(this.applicationName).add(
+				NotificationList.getEnabledNotificationsList()).nextRow(
+				"register as application ").quote(Constants.TITLE).add(
 				" all notifications allNotificationsList default notifications enabledNotificationsList").nextRow(
 				"end tell").get();
 		
@@ -100,43 +101,48 @@ public class GrowlForMac implements Growl {
 	}
 	
 	@Override
-	public void notify(String notificationList, String title) throws Exception {
-		this.notify(notificationList, title, null);
+	public void notify(NotificationList list, String title)
+			throws NotifierException {
+		this.notify(list, title, null);
 	}
 	
 	@Override
-	public void notify(String notificationList, String title, String description)
-			throws Exception {
+	public void notify(NotificationList list, String title, String description)
+			throws NotifierException {
 		if (description == null)
 			description = "";
 		
 		String script = this.script().add("tell application id ").quote(
 				GROWL_APPLICATION).nextRow("notify with name ").quote(
-				notificationList).add(" title ").quote(title).add(
-				" description ").quote(description).add(" application name ").quote(
-				this.applicationName).nextRow("end tell").get();
+				list.getName()).add(" title ").quote(title).add(" description ").quote(
+				description).add(" application name ").quote(Constants.TITLE).nextRow(
+				"end tell").get();
 		
 		this.executeScript(script);
 	}
 	
 	@Override
-	public void close() throws Exception {
+	public void close() throws NotifierException {
 		
 	}
 	
 	@SuppressWarnings("unchecked")
 	private <T> T executeScript(String script, T defaultValue) {
 		try {
-			return (T) this.appleScriptEngine.eval(
-					script,
-					this.appleScriptEngine.getContext());
-		} catch (ScriptException e) {
+			return (T) this.executeScript(script);
+		} catch (Exception e) {
 			return defaultValue;
 		}
 	}
 	
-	private void executeScript(String script) throws ScriptException {
-		this.appleScriptEngine.eval(script, this.appleScriptEngine.getContext());
+	private Object executeScript(String script) throws NotifierException {
+		try {
+			return this.appleScriptEngine.eval(
+					script,
+					this.appleScriptEngine.getContext());
+		} catch (Exception e) {
+			throw new NotifierException("Cannot execute script", e);
+		}
 	}
 	
 	private ScriptBuilder script() {

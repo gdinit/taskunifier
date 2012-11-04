@@ -30,20 +30,8 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.utils.notifications.growl;
+package com.leclercb.taskunifier.gui.utils.notifications.exceptions;
 
-public interface Growl {
-	
-	public abstract void registerApplication() throws Exception;
-	
-	public abstract void notify(String notificationList, String title)
-			throws Exception;
-	
-	public abstract void notify(
-			String notificationList,
-			String title,
-			String description) throws Exception;
-	
-	public abstract void close() throws Exception;
+public class NotifierOSException extends NotifierException {
 	
 }
