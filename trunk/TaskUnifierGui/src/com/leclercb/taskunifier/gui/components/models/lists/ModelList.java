@@ -92,7 +92,7 @@ public abstract class ModelList extends JPanel implements IModelList {
 		
 		this.modelList = new JXList();
 		this.modelList.setModel(model);
-		this.modelList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.modelList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		this.modelList.setCellRenderer(new DefaultListRenderer(
 				StringValueModel.INSTANCE_INDENTED,
 				IconValueModel.INSTANCE));
@@ -115,10 +115,10 @@ public abstract class ModelList extends JPanel implements IModelList {
 					return;
 				
 				if (ModelList.this.modelList.getSelectedValue() == null) {
-					ModelList.this.modelSelected(null);
+					ModelList.this.modelsSelected(null);
 					ModelList.this.removeButton.setEnabled(false);
 				} else {
-					ModelList.this.modelSelected(ModelList.this.getSelectedModel());
+					ModelList.this.modelsSelected(ModelList.this.getSelectedModels());
 					ModelList.this.removeButton.setEnabled(true);
 				}
 			}
@@ -168,8 +168,10 @@ public abstract class ModelList extends JPanel implements IModelList {
 					ModelList.this.setSelectedModel(model);
 					ComponentUtils.focusAndSelectTextInTextField(ModelList.this.titleField);
 				} else {
-					Model model = ModelList.this.getSelectedModel();
-					ModelList.this.removeModel(model);
+					Model[] models = ModelList.this.getSelectedModels();
+					for (Model model : models) {
+						ModelList.this.removeModel(model);
+					}
 				}
 			}
 			
@@ -197,8 +199,18 @@ public abstract class ModelList extends JPanel implements IModelList {
 	}
 	
 	@Override
-	public Model getSelectedModel() {
-		return (Model) this.modelList.getSelectedValue();
+	public Model[] getSelectedModels() {
+		Object[] values = this.modelList.getSelectedValues();
+		
+		if (values == null)
+			return new Model[0];
+		
+		Model[] models = new Model[values.length];
+		for (int i = 0; i < values.length; i++) {
+			models[i] = (Model) values[i];
+		}
+		
+		return models;
 	}
 	
 	@Override
@@ -210,6 +222,6 @@ public abstract class ModelList extends JPanel implements IModelList {
 	
 	public abstract void removeModel(Model model);
 	
-	public abstract void modelSelected(Model model);
+	public abstract void modelsSelected(Model[] models);
 	
 }

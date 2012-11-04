@@ -78,8 +78,8 @@ public class FolderConfigurationPanel extends JSplitPane implements IModelList {
 	}
 	
 	@Override
-	public Model getSelectedModel() {
-		return this.modelList.getSelectedModel();
+	public Model[] getSelectedModels() {
+		return this.modelList.getSelectedModels();
 	}
 	
 	@Override
@@ -135,7 +135,12 @@ public class FolderConfigurationPanel extends JSplitPane implements IModelList {
 			}
 			
 			@Override
-			public void modelSelected(Model model) {
+			public void modelsSelected(Model[] models) {
+				Model model = null;
+				
+				if (models != null && models.length == 1)
+					model = models[0];
+				
 				this.adapter.setBean(model != null ? (Folder) model : null);
 				
 				folderTitle.setEnabled(model != null);
@@ -182,7 +187,7 @@ public class FolderConfigurationPanel extends JSplitPane implements IModelList {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				((GuiFolder) FolderConfigurationPanel.this.modelList.getSelectedModel()).setColor(null);
+				((GuiFolder) FolderConfigurationPanel.this.modelList.getSelectedModels()[0]).setColor(null);
 			}
 			
 		});

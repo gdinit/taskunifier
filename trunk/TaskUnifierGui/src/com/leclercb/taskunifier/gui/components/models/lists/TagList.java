@@ -77,7 +77,7 @@ public abstract class TagList extends JPanel implements ITagList {
 		
 		this.tagList = new JXList();
 		this.tagList.setModel(model);
-		this.tagList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		this.tagList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		
 		this.tagList.setAutoCreateRowSorter(true);
 		this.tagList.setComparator(TaskTagComparator.INSTANCE);
@@ -97,10 +97,10 @@ public abstract class TagList extends JPanel implements ITagList {
 					return;
 				
 				if (TagList.this.tagList.getSelectedValue() == null) {
-					TagList.this.tagSelected(null);
+					TagList.this.tagsSelected(null);
 					TagList.this.removeButton.setEnabled(false);
 				} else {
-					TagList.this.tagSelected(TagList.this.getSelectedTag());
+					TagList.this.tagsSelected(TagList.this.getSelectedTags());
 					TagList.this.removeButton.setEnabled(true);
 				}
 			}
@@ -145,8 +145,11 @@ public abstract class TagList extends JPanel implements ITagList {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				if (event.getActionCommand().equals("REMOVE")) {
-					Tag tag = TagList.this.getSelectedTag();
-					TagList.this.removeTag(tag);
+					Tag[] tags = TagList.this.getSelectedTags();
+					
+					for (Tag tag : tags) {
+						TagList.this.removeTag(tag);
+					}
 				}
 			}
 			
@@ -161,8 +164,18 @@ public abstract class TagList extends JPanel implements ITagList {
 	}
 	
 	@Override
-	public Tag getSelectedTag() {
-		return (Tag) this.tagList.getSelectedValue();
+	public Tag[] getSelectedTags() {
+		Object[] values = this.tagList.getSelectedValues();
+		
+		if (values == null)
+			return new Tag[0];
+		
+		Tag[] tags = new Tag[values.length];
+		for (int i = 0; i < values.length; i++) {
+			tags[i] = (Tag) values[i];
+		}
+		
+		return tags;
 	}
 	
 	@Override
@@ -172,6 +185,6 @@ public abstract class TagList extends JPanel implements ITagList {
 	
 	public abstract void removeTag(Tag tag);
 	
-	public abstract void tagSelected(Tag tag);
+	public abstract void tagsSelected(Tag[] tags);
 	
 }
