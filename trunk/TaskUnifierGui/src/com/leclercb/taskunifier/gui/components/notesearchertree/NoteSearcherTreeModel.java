@@ -403,10 +403,18 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 		SearcherCategory[] categories = this.getCategories();
 		for (SearcherCategory category : categories) {
 			for (int i = 0; i < category.getChildCount(); i++)
-				((SearcherNode) category.getChildAt(i)).updateBadgeCount();
+				this.updateBadges((SearcherNode) category.getChildAt(i));
 		}
 		
 		this.nodeChanged((TreeNode) this.getRoot());
+	}
+	
+	private void updateBadges(SearcherNode node) {
+		node.updateBadgeCount();
+		
+		for (int i = 0; i < node.getChildCount(); i++) {
+			this.updateBadges((SearcherNode) node.getChildAt(i));
+		}
 	}
 	
 	private void updateSelection() {
