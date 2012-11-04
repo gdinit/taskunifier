@@ -85,8 +85,8 @@ public class GoalConfigurationPanel extends JSplitPane implements IModelList {
 	}
 	
 	@Override
-	public Model getSelectedModel() {
-		return this.modelList.getSelectedModel();
+	public Model[] getSelectedModels() {
+		return this.modelList.getSelectedModels();
 	}
 	
 	@Override
@@ -151,7 +151,12 @@ public class GoalConfigurationPanel extends JSplitPane implements IModelList {
 			}
 			
 			@Override
-			public void modelSelected(Model model) {
+			public void modelsSelected(Model[] models) {
+				Model model = null;
+				
+				if (models != null && models.length == 1)
+					model = models[0];
+				
 				this.adapter.setBean(model != null ? (Goal) model : null);
 				
 				goalTitle.setEnabled(model != null);
@@ -196,7 +201,11 @@ public class GoalConfigurationPanel extends JSplitPane implements IModelList {
 			
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				Goal goal = (Goal) GoalConfigurationPanel.this.modelList.getSelectedModel();
+				Goal goal = null;
+				Model[] models = GoalConfigurationPanel.this.modelList.getSelectedModels();
+				
+				if (models != null && models.length == 1)
+					goal = (Goal) models[0];
 				
 				if (goal == null) {
 					goalContributes.setEnabled(false);
@@ -225,7 +234,7 @@ public class GoalConfigurationPanel extends JSplitPane implements IModelList {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				((GuiGoal) GoalConfigurationPanel.this.modelList.getSelectedModel()).setColor(null);
+				((GuiGoal) GoalConfigurationPanel.this.modelList.getSelectedModels()[0]).setColor(null);
 			}
 			
 		});

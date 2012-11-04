@@ -80,8 +80,8 @@ public class ContactConfigurationPanel extends JSplitPane implements IModelList 
 	}
 	
 	@Override
-	public Model getSelectedModel() {
-		return this.modelList.getSelectedModel();
+	public Model[] getSelectedModels() {
+		return this.modelList.getSelectedModels();
 	}
 	
 	@Override
@@ -147,7 +147,12 @@ public class ContactConfigurationPanel extends JSplitPane implements IModelList 
 			}
 			
 			@Override
-			public void modelSelected(Model model) {
+			public void modelsSelected(Model[] models) {
+				Model model = null;
+				
+				if (models != null && models.length == 1)
+					model = models[0];
+				
 				this.adapter.setBean(model != null ? (Contact) model : null);
 				
 				contactCurrentUser.setEnabled(model != null);
@@ -204,7 +209,7 @@ public class ContactConfigurationPanel extends JSplitPane implements IModelList 
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				((GuiContact) ContactConfigurationPanel.this.modelList.getSelectedModel()).setColor(null);
+				((GuiContact) ContactConfigurationPanel.this.modelList.getSelectedModels()[0]).setColor(null);
 			}
 			
 		});
@@ -219,7 +224,11 @@ public class ContactConfigurationPanel extends JSplitPane implements IModelList 
 			
 			@Override
 			public void itemStateChanged(ItemEvent event) {
-				Model model = ContactConfigurationPanel.this.modelList.getSelectedModel();
+				Model model = null;
+				Model[] models = ContactConfigurationPanel.this.modelList.getSelectedModels();
+				
+				if (models != null && models.length == 1)
+					model = models[0];
 				
 				if (EqualsUtils.equals(model, ContactUtils.getCurrentUser())) {
 					if (!contactCurrentUser.isSelected())

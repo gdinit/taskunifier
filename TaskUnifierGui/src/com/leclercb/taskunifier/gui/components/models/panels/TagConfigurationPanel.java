@@ -61,8 +61,8 @@ public class TagConfigurationPanel extends JSplitPane implements ITagList {
 	}
 	
 	@Override
-	public Tag getSelectedTag() {
-		return this.tagList.getSelectedTag();
+	public Tag[] getSelectedTags() {
+		return this.tagList.getSelectedTags();
 	}
 	
 	@Override
@@ -90,7 +90,12 @@ public class TagConfigurationPanel extends JSplitPane implements ITagList {
 			}
 			
 			@Override
-			public void tagSelected(Tag tag) {
+			public void tagsSelected(Tag[] tags) {
+				Tag tag = null;
+				
+				if (tags != null && tags.length == 1)
+					tag = tags[0];
+				
 				tagTitle.setText(tag != null ? tag.toString() : null);
 				
 				tagTitle.setEnabled(tag != null);
@@ -122,7 +127,7 @@ public class TagConfigurationPanel extends JSplitPane implements ITagList {
 				Tag tag = new Tag(tagTitle.getText());
 				
 				TaskTagList.getInstance().editTag(
-						TagConfigurationPanel.this.tagList.getSelectedTag(),
+						TagConfigurationPanel.this.tagList.getSelectedTags()[0],
 						tag);
 				
 				if (ViewUtils.getCurrentCalendarView() != null)

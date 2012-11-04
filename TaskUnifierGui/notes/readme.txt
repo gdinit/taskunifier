@@ -3,7 +3,9 @@ HISTORY
 
 Version 3.1.0
 	- Minor:
+		- Bug fixed: Default column order
 		- Bug fixed: Refresh badges for sub-models
+		- Manage multiple models at the same time
 		- Improved Windows native launcher
 		- Growl support on Windows
 		- Snarl support on Windows

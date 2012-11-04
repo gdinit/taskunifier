@@ -36,7 +36,7 @@ import com.leclercb.taskunifier.api.models.Tag;
 
 public interface ITagList {
 	
-	public abstract Tag getSelectedTag();
+	public abstract Tag[] getSelectedTags();
 	
 	public abstract void setSelectedTag(Tag tag);
 	

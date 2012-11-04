@@ -36,7 +36,7 @@ import com.leclercb.taskunifier.api.models.Model;
 
 public interface IModelList {
 	
-	public abstract Model getSelectedModel();
+	public abstract Model[] getSelectedModels();
 	
 	public abstract void setSelectedModel(Model model);
 	
