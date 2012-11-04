@@ -30,17 +30,24 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.utils.notifications.snarl;
+package com.leclercb.taskunifier.gui.utils.notifications.exceptions;
 
-public interface Snarl {
+public class NotifierException extends Exception {
 	
-	public abstract void registerApplication() throws Exception;
+	public NotifierException() {
+		super();
+	}
 	
-	public abstract void notify(String alert, String title) throws Exception;
+	public NotifierException(String message, Throwable cause) {
+		super(message, cause);
+	}
 	
-	public abstract void notify(String alert, String title, String description)
-			throws Exception;
+	public NotifierException(String message) {
+		super(message);
+	}
 	
-	public abstract void close() throws Exception;
+	public NotifierException(Throwable cause) {
+		super(cause);
+	}
 	
 }

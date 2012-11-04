@@ -32,13 +32,78 @@
  */
 package com.leclercb.taskunifier.gui.utils.notifications;
 
-import com.leclercb.taskunifier.gui.utils.notifications.growl.GrowlUtils;
-import com.leclercb.taskunifier.gui.utils.notifications.snarl.SnarlUtils;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+
+import com.leclercb.commons.gui.logger.GuiLogger;
+import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.utils.notifications.exceptions.NotifierOSException;
+import com.leclercb.taskunifier.gui.utils.notifications.growl.GrowlForMac;
+import com.leclercb.taskunifier.gui.utils.notifications.growl.GrowlForWindows;
+import com.leclercb.taskunifier.gui.utils.notifications.snarl.SnarlForWindows;
 
 public final class NotificationUtils {
 	
+	private static List<Notifier> NOTIFIERS = new ArrayList<Notifier>();
+	
 	private NotificationUtils() {
 		
+	}
+	
+	static {
+		loadNotifier("general.growl.enabled", GrowlForMac.class);
+		loadNotifier("general.growl.enabled", GrowlForWindows.class);
+		loadNotifier("general.snarl.enabled", SnarlForWindows.class);
+		
+		Main.getActionSupport().addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				if (!event.getActionCommand().equals("BEFORE_EXIT"))
+					return;
+				
+				for (Notifier notifier : NOTIFIERS) {
+					try {
+						notifier.close();
+						GuiLogger.getLogger().log(
+								Level.INFO,
+								"Notifier closed: " + notifier.getName());
+					} catch (Exception e) {
+						GuiLogger.getLogger().log(
+								Level.WARNING,
+								"Cannot close notifier " + notifier.getName(),
+								e);
+					}
+				}
+			}
+			
+		});
+	}
+	
+	public static <N extends Notifier> void loadNotifier(
+			String propertyName,
+			Class<N> cls) {
+		try {
+			if (!Main.getSettings().getBooleanProperty(propertyName))
+				return;
+			
+			Notifier notifier = cls.newInstance();
+			notifier.open();
+			NOTIFIERS.add(notifier);
+			GuiLogger.getLogger().log(
+					Level.INFO,
+					"Notifier loaded: " + cls.getName());
+		} catch (NotifierOSException e) {
+			
+		} catch (Exception e) {
+			GuiLogger.getLogger().log(
+					Level.WARNING,
+					"Cannot load notifier: " + cls.getName(),
+					e);
+		}
 	}
 	
 	public static void notify(NotificationList list, String title) {
@@ -49,8 +114,16 @@ public final class NotificationUtils {
 			NotificationList list,
 			String title,
 			String description) {
-		GrowlUtils.notify(list, title, description);
-		SnarlUtils.notify(list, title, description);
+		for (Notifier notifier : NOTIFIERS) {
+			try {
+				notifier.notify(list, title, description);
+			} catch (Exception e) {
+				GuiLogger.getLogger().log(
+						Level.WARNING,
+						"Cannot send message to " + notifier.getName(),
+						e);
+			}
+		}
 	}
 	
 }

@@ -41,16 +41,16 @@ public enum NotificationList {
 	REMINDER("Reminder", true),
 	SYNCHRONIZATION("Synchronization", true);
 	
-	private String notificationList;
+	private String name;
 	private boolean enabled;
 	
-	private NotificationList(String notificationList, boolean enabled) {
-		this.notificationList = notificationList;
+	private NotificationList(String name, boolean enabled) {
+		this.name = name;
 		this.enabled = enabled;
 	}
 	
-	public String getNotificationList() {
-		return this.notificationList;
+	public String getName() {
+		return this.name;
 	}
 	
 	public boolean isEnabled() {
@@ -59,13 +59,13 @@ public enum NotificationList {
 	
 	@Override
 	public String toString() {
-		return this.notificationList;
+		return this.name;
 	}
 	
 	public static String[] getAllNotificationsList() {
 		List<String> list = new ArrayList<String>();
 		for (NotificationList g : NotificationList.values()) {
-			list.add(g.getNotificationList());
+			list.add(g.getName());
 		}
 		
 		return list.toArray(new String[0]);
@@ -75,7 +75,7 @@ public enum NotificationList {
 		List<String> list = new ArrayList<String>();
 		for (NotificationList g : NotificationList.values()) {
 			if (g.isEnabled())
-				list.add(g.getNotificationList());
+				list.add(g.getName());
 		}
 		
 		return list.toArray(new String[0]);

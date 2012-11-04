@@ -34,33 +34,48 @@ package com.leclercb.taskunifier.gui.utils.notifications.snarl;
 
 import net.snarl.SnarlNetworkBridge;
 
-import com.leclercb.taskunifier.gui.constants.Constants;
+import org.apache.commons.lang3.SystemUtils;
 
-public class SnarlForWindows implements Snarl {
+import com.leclercb.taskunifier.gui.constants.Constants;
+import com.leclercb.taskunifier.gui.utils.notifications.NotificationList;
+import com.leclercb.taskunifier.gui.utils.notifications.Notifier;
+import com.leclercb.taskunifier.gui.utils.notifications.exceptions.NotifierException;
+import com.leclercb.taskunifier.gui.utils.notifications.exceptions.NotifierOSException;
+
+public class SnarlForWindows implements Notifier {
 	
 	public SnarlForWindows() {
 		
 	}
 	
 	@Override
-	public void registerApplication() throws Exception {
+	public String getName() {
+		return "Snarl for Windows";
+	}
+	
+	@Override
+	public void open() throws NotifierException {
+		if (!SystemUtils.IS_OS_WINDOWS)
+			throw new NotifierOSException();
+		
 		SnarlNetworkBridge.snRegisterConfig(Constants.TITLE, "localhost");
 	}
 	
 	@Override
-	public void notify(String alert, String title) throws Exception {
-		this.notify(alert, title, null);
+	public void notify(NotificationList list, String title)
+			throws NotifierException {
+		this.notify(list, title, null);
 	}
 	
 	@Override
-	public void notify(String alert, String title, String description)
-			throws Exception {
-		SnarlNetworkBridge.snRegisterAlert(alert);
-		SnarlNetworkBridge.snShowMessage(alert, title, description);
+	public void notify(NotificationList list, String title, String description)
+			throws NotifierException {
+		SnarlNetworkBridge.snRegisterAlert(list.getName());
+		SnarlNetworkBridge.snShowMessage(list.getName(), title, description);
 	}
 	
 	@Override
-	public void close() throws Exception {
+	public void close() throws NotifierException {
 		
 	}
 	

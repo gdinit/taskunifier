@@ -30,69 +30,24 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.utils.notifications.snarl;
+package com.leclercb.taskunifier.gui.utils.notifications;
 
-import java.util.logging.Level;
+import com.leclercb.taskunifier.gui.utils.notifications.exceptions.NotifierException;
 
-import org.apache.commons.lang3.SystemUtils;
-
-import com.leclercb.commons.gui.logger.GuiLogger;
-import com.leclercb.taskunifier.gui.main.Main;
-import com.leclercb.taskunifier.gui.utils.notifications.NotificationList;
-
-public final class SnarlUtils {
+public interface Notifier {
 	
-	private SnarlUtils() {
-		
-	}
+	public abstract String getName();
 	
-	private static Snarl SNARL;
+	public abstract void open() throws NotifierException;
 	
-	static {
-		initialize();
-	}
+	public abstract void notify(NotificationList list, String title)
+			throws NotifierException;
 	
-	private static void initialize() {
-		try {
-			if (!Main.getSettings().getBooleanProperty("general.snarl.enabled")) {
-				SNARL = null;
-				return;
-			}
-			
-			if (SystemUtils.IS_OS_WINDOWS) {
-				SNARL = new SnarlForWindows();
-			}
-			
-			SNARL.registerApplication();
-			GuiLogger.getLogger().info("Snarl support enabled");
-		} catch (Throwable t) {
-			SNARL = null;
-			GuiLogger.getLogger().log(
-					Level.WARNING,
-					"Cannot initialize Snarl",
-					t);
-		}
-	}
-	
-	public static void notify(NotificationList list, String title) {
-		notify(list, title, "");
-	}
-	
-	public static void notify(
+	public abstract void notify(
 			NotificationList list,
 			String title,
-			String description) {
-		if (SNARL == null)
-			return;
-		
-		try {
-			SNARL.notify(list.getNotificationList(), title, description);
-		} catch (Throwable t) {
-			GuiLogger.getLogger().log(
-					Level.WARNING,
-					"Cannot send message to Snarl",
-					t);
-		}
-	}
+			String description) throws NotifierException;
+	
+	public abstract void close() throws NotifierException;
 	
 }
