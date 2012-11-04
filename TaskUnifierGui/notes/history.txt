@@ -1,5 +1,6 @@
 Version 3.1.0
 	- Minor:
+		- Bug fixed: Refresh badges for sub-models
 		- Improved Windows native launcher
 		- Growl support on Windows
 		- Snarl support on Windows
