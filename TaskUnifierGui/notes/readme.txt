@@ -5,6 +5,7 @@ Version 3.1.0
 	- Minor:
 		- Bug fixed: Default column order
 		- Bug fixed: Refresh badges for sub-models
+		- Bug fixed: Clear type fonts in searcher list
 		- Manage multiple models at the same time
 		- Improved Windows native launcher
 		- Growl support on Windows
