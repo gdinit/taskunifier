@@ -189,41 +189,44 @@ public final class NoteUtils {
 				if (column == null)
 					continue;
 				
-				String content = null;
-				Object value = column.getProperty(note);
-				
-				switch (column) {
-					case FOLDER:
-						content = StringValueModel.INSTANCE.getString(value);
-						break;
-					case MODEL:
-						content = StringValueModelId.INSTANCE.getString(value);
-						break;
-					case MODEL_CREATION_DATE:
-						content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
-						break;
-					case MODEL_UPDATE_DATE:
-						content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
-						break;
-					case NOTE:
-						content = (value == null ? null : "\n"
-								+ value.toString());
-						break;
-					case TITLE:
-						content = (value == null ? null : value.toString());
-						break;
-				}
-				
-				if (content == null)
-					content = "";
-				
-				row[i++] = content;
+				row[i++] = toString(note, column);
 			}
 			
 			data.add(row);
 		}
 		
 		return data.toArray(new String[0][]);
+	}
+	
+	public static String toString(Note note, NoteColumn column) {
+		String content = null;
+		Object value = column.getProperty(note);
+		
+		switch (column) {
+			case FOLDER:
+				content = StringValueModel.INSTANCE.getString(value);
+				break;
+			case MODEL:
+				content = StringValueModelId.INSTANCE.getString(value);
+				break;
+			case MODEL_CREATION_DATE:
+				content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
+				break;
+			case MODEL_UPDATE_DATE:
+				content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
+				break;
+			case NOTE:
+				content = (value == null ? null : "\n" + value.toString());
+				break;
+			case TITLE:
+				content = (value == null ? null : value.toString());
+				break;
+		}
+		
+		if (content == null)
+			content = "";
+		
+		return content;
 	}
 	
 	public static boolean showNote(Note note, NoteFilter filter) {
