@@ -78,10 +78,12 @@ public class ActionPrint extends AbstractViewAction {
 			
 			switch (viewType) {
 				case NOTES:
-					ViewUtils.getCurrentNoteView().getNoteTableView().printNotes();
+					ViewUtils.getCurrentNoteView().getNoteTableView().printNotes(
+							false);
 					break;
 				case TASKS:
-					ViewUtils.getCurrentTaskView().getTaskTableView().printTasks();
+					ViewUtils.getCurrentTaskView().getTaskTableView().printTasks(
+							false);
 					break;
 			}
 		} catch (Exception e) {

@@ -46,7 +46,7 @@ public final class PrintUtils {
 	
 	public static void printTable(TableReport tableReport)
 			throws PrinterException {
-		PrintDialog dialog = new PrintDialog(tableReport.getPrintTable());
+		PrintDialog dialog = new PrintDialog(tableReport.getTable());
 		dialog.setVisible(true);
 		
 		if (dialog.isCancelled())

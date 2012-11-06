@@ -45,12 +45,11 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.jdesktop.swingx.JXTable;
 
 import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.gui.components.print.PrintTable;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
-public class TaskPrintTable extends JXTable implements PrintTable {
+public class TaskPrintTable extends JXTable {
 	
 	public TaskPrintTable(
 			TUTableProperties<TaskColumn> tableProperties,
@@ -96,11 +95,6 @@ public class TaskPrintTable extends JXTable implements PrintTable {
 		this.setColumnControlVisible(true);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		this.packAll();
-	}
-	
-	@Override
-	public JTable getJTable() {
-		return this;
 	}
 	
 }

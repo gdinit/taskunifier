@@ -51,7 +51,6 @@ import javax.swing.table.TableColumnModel;
 
 public class TableReport implements Printable {
 	
-	private PrintTable printTable;
 	private JTable table;
 	private JTableHeader header;
 	private TableColumnModel colModel;
@@ -65,29 +64,28 @@ public class TableReport implements Printable {
 	private final Rectangle hclip = new Rectangle(0, 0, 0, 0);
 	private final Rectangle tempRect = new Rectangle(0, 0, 0, 0);
 	private static final int H_F_SPACE = 8;
-	private static final float HEADER_FONT_SIZE = 18.0f;
-	private static final float FOOTER_FONT_SIZE = 12.0f;
+	private static final float HEADER_FONT_SIZE = 12.0f;
+	private static final float FOOTER_FONT_SIZE = 8.0f;
 	private Font headerFont;
 	private Font footerFont;
 	private JTable.PrintMode printMode;
 	private double scalingFactor = 1.0D;
 	
 	public TableReport(
-			PrintTable printTable,
+			JTable table,
 			JTable.PrintMode printMode,
 			double scalingFactor,
 			MessageFormat headerFormat,
 			MessageFormat footerFormat) {
-		this.printTable = printTable;
-		this.table = printTable.getJTable();
+		this.table = table;
 		this.printMode = printMode;
 		this.scalingFactor = scalingFactor;
 		this.headerFormat = headerFormat;
 		this.footerFormat = footerFormat;
 	}
 	
-	public PrintTable getPrintTable() {
-		return this.printTable;
+	public JTable getTable() {
+		return this.table;
 	}
 	
 	@Override

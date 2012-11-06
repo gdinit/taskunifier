@@ -54,7 +54,7 @@ public interface NoteTableView extends ModelSelectionChangeSupported, PropertyCh
 	
 	public abstract void refreshNotes();
 	
-	public abstract void printNotes() throws Exception;
+	public abstract void printNotes(boolean selection) throws Exception;
 	
 	public abstract void pasteNote();
 	

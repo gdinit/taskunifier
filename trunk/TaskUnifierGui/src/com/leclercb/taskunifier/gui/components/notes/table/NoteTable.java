@@ -132,6 +132,18 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 		}
 	}
 	
+	public Note[] getNotes() {
+		List<Note> notes = new ArrayList<Note>();
+		for (int i = 0; i < this.getModel().getRowCount(); i++) {
+			Note note = this.getNote(i);
+			
+			if (note != null)
+				notes.add(note);
+		}
+		
+		return notes.toArray(new Note[0]);
+	}
+	
 	@Override
 	public Note[] getSelectedNotes() {
 		int[] indexes = this.getSelectedRows();
@@ -237,13 +249,19 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 	}
 	
 	@Override
-	public void printNotes() throws HeadlessException, PrinterException {
+	public void printNotes(boolean selection) throws HeadlessException,
+			PrinterException {
+		Note[] notes = null;
+		
+		if (selection)
+			notes = this.getSelectedNotes();
+		else
+			notes = this.getNotes();
+		
 		TableReport tableReport = new TableReport(
-				new NotePrintTable(
-						this.tableProperties,
-						this.getSelectedNotes()),
+				new NotePrintTable(this.tableProperties, notes),
 				PrintMode.NORMAL,
-				0.5,
+				0.7,
 				new MessageFormat(Constants.TITLE
 						+ " - "
 						+ this.getNoteSearcher().getTitle()),
