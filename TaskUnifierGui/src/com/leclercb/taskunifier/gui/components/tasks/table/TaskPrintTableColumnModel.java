@@ -30,37 +30,27 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.notes.table;
+package com.leclercb.taskunifier.gui.components.tasks.table;
 
-import javax.swing.JTable;
-
-import org.jdesktop.swingx.JXTable;
-
-import com.leclercb.taskunifier.api.models.Note;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.swing.table.TUTableColumn;
+import com.leclercb.taskunifier.gui.swing.table.TUTableColumnModel;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
+import com.leclercb.taskunifier.gui.swing.table.TUTableProperties.TableColumnProperties;
 
-public class NotePrintTable extends JXTable {
+public class TaskPrintTableColumnModel extends TUTableColumnModel<TaskColumn> {
 	
-	public NotePrintTable(
-			TUTableProperties<NoteColumn> tableProperties,
-			Note[] notes) {
-		this.initialize(tableProperties, notes);
-	}
-	
-	private void initialize(
-			final TUTableProperties<NoteColumn> tableProperties,
-			final Note[] notes) {
-		NotePrintTableColumnModel columnModel = new NotePrintTableColumnModel(
-				tableProperties);
-		NotePrintTableModel tableModel = new NotePrintTableModel(notes);
-		
-		this.setModel(tableModel);
-		this.setColumnModel(columnModel);
-		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		this.setShowGrid(true, false);
-		this.setColumnControlVisible(true);
-		this.packAll();
+	public TaskPrintTableColumnModel(
+			final TUTableProperties<TaskColumn> tableProperties) {
+		super(new TableColumnInstantiator<TaskColumn>() {
+			
+			@Override
+			public TUTableColumn<TaskColumn> newTableColumnInstance(
+					TableColumnProperties<TaskColumn> column) {
+				return new TaskPrintTableColumn(column);
+			}
+			
+		}, tableProperties);
 	}
 	
 }

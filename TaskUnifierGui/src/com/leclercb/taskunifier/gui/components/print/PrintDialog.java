@@ -76,14 +76,14 @@ public class PrintDialog extends JDialog {
 	private void initialize(JComponent component) {
 		this.setModal(true);
 		this.setTitle(Translations.getString("general.print"));
-		this.setSize(600, 350);
+		this.setSize(700, 400);
 		this.setResizable(false);
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		
 		JXHeader header = new JXHeader();
-		header.setTitle(Translations.getString("general.print"));
-		header.setDescription(Translations.getString("print.print_description"));
+		header.setTitle(Translations.getString("header.title.print"));
+		header.setDescription(Translations.getString("header.description.print"));
 		header.setIcon(ImageUtils.getResourceImage("print.png", 32, 32));
 		this.add(header, BorderLayout.NORTH);
 		

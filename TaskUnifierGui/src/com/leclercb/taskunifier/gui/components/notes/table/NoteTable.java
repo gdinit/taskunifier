@@ -259,7 +259,10 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 			notes = this.getNotes();
 		
 		TableReport tableReport = new TableReport(
-				new NotePrintTable(this.tableProperties, notes),
+				new NotePrintTable(new TUTableProperties<NoteColumn>(
+						NoteColumn.class,
+						this.tableProperties.getPropertyName() + ".print",
+						false), notes),
 				PrintMode.NORMAL,
 				0.7,
 				new MessageFormat(Constants.TITLE

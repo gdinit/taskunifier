@@ -32,22 +32,13 @@
  */
 package com.leclercb.taskunifier.gui.components.tasks.table;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.jdesktop.swingx.JXTable;
 
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
-import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
 public class TaskPrintTable extends JXTable {
 	
@@ -60,40 +51,15 @@ public class TaskPrintTable extends JXTable {
 	private void initialize(
 			final TUTableProperties<TaskColumn> tableProperties,
 			final Task[] tasks) {
-		List<TaskColumn> allColumns = new ArrayList<TaskColumn>(
-				Arrays.asList(TaskColumn.getUsableColumns(false)));
-		List<TaskColumn> columns = new ArrayList<TaskColumn>();
+		TaskPrintTableColumnModel columnModel = new TaskPrintTableColumnModel(
+				tableProperties);
+		TaskPrintTableModel tableModel = new TaskPrintTableModel(tasks);
 		
-		for (TaskColumn column : allColumns) {
-			if (!tableProperties.get(column).isVisible())
-				continue;
-			
-			columns.add(column);
-		}
-		
-		Collections.sort(columns, new Comparator<TaskColumn>() {
-			
-			@Override
-			public int compare(TaskColumn c1, TaskColumn c2) {
-				Integer o1 = tableProperties.get(c1).getOrder();
-				Integer o2 = tableProperties.get(c2).getOrder();
-				
-				return o1.compareTo(o2);
-			}
-			
-		});
-		
-		String[][] data = TaskUtils.toStringData(
-				tasks,
-				columns.toArray(new TaskColumn[0]));
-		String[] columnNames = data[0];
-		data = ArrayUtils.remove(data, 0);
-		
-		DefaultTableModel model = new DefaultTableModel(data, columnNames);
-		
-		this.setModel(model);
-		this.setColumnControlVisible(true);
+		this.setModel(tableModel);
+		this.setColumnModel(columnModel);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		this.setShowGrid(true, false);
+		this.setColumnControlVisible(true);
 		this.packAll();
 	}
 	

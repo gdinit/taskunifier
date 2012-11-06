@@ -30,37 +30,64 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.notes.table;
+package com.leclercb.taskunifier.gui.components.tasks.table;
 
-import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
 
-import org.jdesktop.swingx.JXTable;
+import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
 
-import com.leclercb.taskunifier.api.models.Note;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
-import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
-
-public class NotePrintTable extends JXTable {
+public class TaskPrintTableModel extends AbstractTableModel {
 	
-	public NotePrintTable(
-			TUTableProperties<NoteColumn> tableProperties,
-			Note[] notes) {
-		this.initialize(tableProperties, notes);
+	private Task[] tasks;
+	
+	public TaskPrintTableModel(Task[] tasks) {
+		CheckUtils.isNotNull(tasks);
+		this.tasks = tasks;
 	}
 	
-	private void initialize(
-			final TUTableProperties<NoteColumn> tableProperties,
-			final Note[] notes) {
-		NotePrintTableColumnModel columnModel = new NotePrintTableColumnModel(
-				tableProperties);
-		NotePrintTableModel tableModel = new NotePrintTableModel(notes);
+	public Task getTask(int row) {
+		return this.tasks[row];
+	}
+	
+	public TaskColumn getTaskColumn(int col) {
+		return TaskColumn.values()[col];
+	}
+	
+	@Override
+	public int getColumnCount() {
+		return TaskColumn.values().length;
+	}
+	
+	@Override
+	public int getRowCount() {
+		return this.tasks.length;
+	}
+	
+	@Override
+	public String getColumnName(int col) {
+		return TaskColumn.values()[col].getLabel();
+	}
+	
+	@Override
+	public Class<?> getColumnClass(int col) {
+		return TaskColumn.values()[col].getType();
+	}
+	
+	@Override
+	public Object getValueAt(int row, int col) {
+		return TaskColumn.values()[col].getProperty(this.tasks[row]);
+	}
+	
+	@Override
+	public boolean isCellEditable(int row, int col) {
+		return false;
+	}
+	
+	@Override
+	public void setValueAt(Object value, int row, int col) {
 		
-		this.setModel(tableModel);
-		this.setColumnModel(columnModel);
-		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		this.setShowGrid(true, false);
-		this.setColumnControlVisible(true);
-		this.packAll();
 	}
 	
 }
