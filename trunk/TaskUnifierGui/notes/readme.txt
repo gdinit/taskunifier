@@ -2,6 +2,8 @@ HISTORY
 -------
 
 Version 3.1.0
+	- Major:
+		- Improved printing feature
 	- Minor:
 		- Bug fixed: Default column order
 		- Bug fixed: Refresh badges for sub-models
