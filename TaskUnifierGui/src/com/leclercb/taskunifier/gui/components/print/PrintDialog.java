@@ -33,17 +33,23 @@
 package com.leclercb.taskunifier.gui.components.print;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComponent;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 import org.jdesktop.swingx.JXHeader;
 
+import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
@@ -54,10 +60,58 @@ import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class PrintDialog extends JDialog {
 	
+	private static PrintDialog INSTANCE;
+	
+	public static PrintDialog getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new PrintDialog();
+		
+		return INSTANCE;
+	}
+	
+	private PrintableReport printableReport;
+	private String propertyName;
+	
+	private JPanel panel;
 	private boolean cancelled;
 	
-	public PrintDialog(JComponent component) {
-		this.initialize(component);
+	private JComboBox orientation;
+	private JSpinner scalingFactor;
+	
+	private PrintDialog() {
+		this.initialize();
+	}
+	
+	public PrintableReport getPrintableReport() {
+		return this.printableReport;
+	}
+	
+	public void setPrintableReport(PrintableReport printableReport) {
+		CheckUtils.isNotNull(printableReport);
+		this.printableReport = printableReport;
+		
+		this.panel.add(
+				ComponentFactory.createJScrollPane(
+						printableReport.getComponent(),
+						true),
+				BorderLayout.CENTER);
+	}
+	
+	public String getPropertyName() {
+		return this.propertyName;
+	}
+	
+	public void setPropertyName(String propertyName) {
+		CheckUtils.isNotNull(propertyName);
+		this.propertyName = propertyName;
+		
+		int orientation = Main.getSettings().getIntegerProperty(
+				propertyName + ".orientation");
+		this.orientation.setSelectedItem(PrintUtils.getOrientationRequested(orientation));
+		
+		double scalingFactor = Main.getSettings().getDoubleProperty(
+				propertyName + ".scaling_factor");
+		this.scalingFactor.setValue(scalingFactor);
 	}
 	
 	@Override
@@ -73,7 +127,7 @@ public class PrintDialog extends JDialog {
 		return this.cancelled;
 	}
 	
-	private void initialize(JComponent component) {
+	private void initialize() {
 		this.setModal(true);
 		this.setTitle(Translations.getString("general.print"));
 		this.setSize(700, 400);
@@ -87,15 +141,35 @@ public class PrintDialog extends JDialog {
 		header.setIcon(ImageUtils.getResourceImage("print.png", 32, 32));
 		this.add(header, BorderLayout.NORTH);
 		
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		this.add(panel, BorderLayout.CENTER);
+		JPanel printPanel = new JPanel();
+		printPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		panel.add(
-				ComponentFactory.createJScrollPane(component, true),
-				BorderLayout.CENTER);
+		this.orientation = new JComboBox(new Object[] {
+				OrientationRequested.LANDSCAPE,
+				OrientationRequested.PORTRAIT,
+				OrientationRequested.REVERSE_LANDSCAPE,
+				OrientationRequested.REVERSE_PORTRAIT });
 		
-		this.initializeButtonsPanel(panel);
+		this.scalingFactor = new JSpinner();
+		this.scalingFactor.setModel(new SpinnerNumberModel(
+				0.10,
+				0.10,
+				2.00,
+				0.10));
+		
+		this.scalingFactor.setEditor(new JSpinner.NumberEditor(
+				this.scalingFactor,
+				"##0%"));
+		
+		printPanel.add(this.orientation);
+		printPanel.add(this.scalingFactor);
+		
+		this.panel = new JPanel(new BorderLayout());
+		this.panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		this.panel.add(printPanel, BorderLayout.NORTH);
+		this.add(this.panel, BorderLayout.CENTER);
+		
+		this.initializeButtonsPanel(this.panel);
 	}
 	
 	private void initializeButtonsPanel(JPanel panel) {
@@ -103,10 +177,22 @@ public class PrintDialog extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (e.getActionCommand().equals("PRINT"))
+				if (e.getActionCommand().equals("PRINT")) {
+					if (PrintDialog.this.propertyName != null) {
+						Main.getSettings().setIntegerProperty(
+								PrintDialog.this.propertyName + ".orientation",
+								((OrientationRequested) PrintDialog.this.orientation.getSelectedItem()).getValue());
+						
+						Main.getSettings().setDoubleProperty(
+								PrintDialog.this.propertyName
+										+ ".scaling_factor",
+								(Double) PrintDialog.this.scalingFactor.getValue());
+					}
+					
 					PrintDialog.this.cancelled = false;
-				else
+				} else {
 					PrintDialog.this.cancelled = true;
+				}
 				
 				PrintDialog.this.setVisible(false);
 			}
@@ -115,7 +201,9 @@ public class PrintDialog extends JDialog {
 		
 		JButton printButton = new TUPrintButton(listener);
 		JButton cancelButton = new TUCancelButton(listener);
-		JPanel buttonsPanel = new TUButtonsPanel(printButton, cancelButton);
+		TUButtonsPanel buttonsPanel = new TUButtonsPanel(
+				printButton,
+				cancelButton);
 		
 		panel.add(buttonsPanel, BorderLayout.SOUTH);
 		this.getRootPane().setDefaultButton(printButton);
