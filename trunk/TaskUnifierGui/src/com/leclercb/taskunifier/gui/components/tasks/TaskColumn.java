@@ -95,6 +95,24 @@ public enum TaskColumn implements ModelProperties<Task>, TUColumn<Task>, Propert
 	
 	public static final String PROP_USED = "used";
 	
+	public static TaskColumn[] getUsableColumns() {
+		return getUsedColumns(true);
+	}
+	
+	public static TaskColumn[] getUsableColumns(boolean includeNote) {
+		List<TaskColumn> columns = new ArrayList<TaskColumn>();
+		
+		for (TaskColumn column : values()) {
+			if (column.isUsable())
+				columns.add(column);
+		}
+		
+		if (!includeNote)
+			columns.remove(TaskColumn.NOTE);
+		
+		return columns.toArray(new TaskColumn[0]);
+	}
+	
 	public static TaskColumn[] getUsedColumns() {
 		return getUsedColumns(true);
 	}

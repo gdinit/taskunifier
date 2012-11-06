@@ -62,7 +62,7 @@ public class TaskPrintTable extends JXTable implements PrintTable {
 			final TUTableProperties<TaskColumn> tableProperties,
 			final Task[] tasks) {
 		List<TaskColumn> allColumns = new ArrayList<TaskColumn>(
-				Arrays.asList(TaskColumn.getUsedColumns(false)));
+				Arrays.asList(TaskColumn.getUsableColumns(false)));
 		List<TaskColumn> columns = new ArrayList<TaskColumn>();
 		
 		for (TaskColumn column : allColumns) {

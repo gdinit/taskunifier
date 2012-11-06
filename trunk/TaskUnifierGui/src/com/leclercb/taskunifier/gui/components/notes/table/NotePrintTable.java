@@ -62,7 +62,7 @@ public class NotePrintTable extends JXTable implements PrintTable {
 			final TUTableProperties<NoteColumn> tableProperties,
 			final Note[] notes) {
 		List<NoteColumn> allColumns = new ArrayList<NoteColumn>(
-				Arrays.asList(NoteColumn.getUsedColumns(false)));
+				Arrays.asList(NoteColumn.getUsableColumns(false)));
 		List<NoteColumn> columns = new ArrayList<NoteColumn>();
 		
 		for (NoteColumn column : allColumns) {
