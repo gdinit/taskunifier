@@ -41,20 +41,29 @@ import javax.print.attribute.standard.JobName;
 import javax.print.attribute.standard.OrientationRequested;
 
 import com.leclercb.taskunifier.gui.constants.Constants;
+import com.leclercb.taskunifier.gui.main.Main;
 
 public final class PrintUtils {
 	
-	public static void printTable(TableReport tableReport)
+	public static void printTable(String propertyName, TableReport tableReport)
 			throws PrinterException {
-		PrintDialog dialog = new PrintDialog(tableReport.getTable());
-		dialog.setVisible(true);
+		PrintDialog.getInstance().setPropertyName(propertyName);
+		PrintDialog.getInstance().setPrintableReport(tableReport);
+		PrintDialog.getInstance().setVisible(true);
 		
-		if (dialog.isCancelled())
+		if (PrintDialog.getInstance().isCancelled())
 			return;
 		
 		PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
 		attributes.add(new JobName(Constants.TITLE, null));
-		attributes.add(OrientationRequested.LANDSCAPE);
+		
+		int orientation = Main.getSettings().getIntegerProperty(
+				propertyName + ".orientation");
+		attributes.add(PrintUtils.getOrientationRequested(orientation));
+		
+		double scalingFactor = Main.getSettings().getDoubleProperty(
+				propertyName + ".scaling_factor");
+		tableReport.setScalingFactor(scalingFactor);
 		
 		PrinterJob printerJob = PrinterJob.getPrinterJob();
 		
@@ -63,6 +72,22 @@ public final class PrintUtils {
 		if (printerJob.printDialog(attributes)) {
 			printerJob.print(attributes);
 		}
+	}
+	
+	public static OrientationRequested getOrientationRequested(int value) {
+		if (OrientationRequested.LANDSCAPE.getValue() == value)
+			return OrientationRequested.LANDSCAPE;
+		
+		if (OrientationRequested.PORTRAIT.getValue() == value)
+			return OrientationRequested.PORTRAIT;
+		
+		if (OrientationRequested.REVERSE_LANDSCAPE.getValue() == value)
+			return OrientationRequested.REVERSE_LANDSCAPE;
+		
+		if (OrientationRequested.REVERSE_PORTRAIT.getValue() == value)
+			return OrientationRequested.REVERSE_PORTRAIT;
+		
+		return OrientationRequested.LANDSCAPE;
 	}
 	
 }

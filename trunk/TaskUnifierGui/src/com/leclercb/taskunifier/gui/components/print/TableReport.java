@@ -49,7 +49,7 @@ import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
-public class TableReport implements Printable {
+public class TableReport implements PrintableReport, Printable {
 	
 	private JTable table;
 	private JTableHeader header;
@@ -84,8 +84,45 @@ public class TableReport implements Printable {
 		this.footerFormat = footerFormat;
 	}
 	
-	public JTable getTable() {
+	@Override
+	public JTable getComponent() {
 		return this.table;
+	}
+	
+	@Override
+	public JTable.PrintMode getPrintMode() {
+		return this.printMode;
+	}
+	
+	@Override
+	public void setPrintMode(JTable.PrintMode printMode) {
+		this.printMode = printMode;
+	}
+	
+	@Override
+	public double getScalingFactor() {
+		return this.scalingFactor;
+	}
+	
+	@Override
+	public void setScalingFactor(double scalingFactor) {
+		this.scalingFactor = scalingFactor;
+	}
+	
+	private void initialize() {
+		this.header = this.table.getTableHeader();
+		this.colModel = this.table.getColumnModel();
+		this.totalColWidth = this.colModel.getTotalColumnWidth();
+		if (this.header != null) {
+			this.hclip.height = this.header.getHeight();
+		}
+		
+		this.headerFont = this.table.getFont().deriveFont(
+				Font.BOLD,
+				HEADER_FONT_SIZE);
+		this.footerFont = this.table.getFont().deriveFont(
+				Font.PLAIN,
+				FOOTER_FONT_SIZE);
 	}
 	
 	@Override
@@ -190,22 +227,6 @@ public class TableReport implements Printable {
 		g2d.drawRect(0, 0, this.clip.width, this.hclip.height
 				+ this.clip.height);
 		return PAGE_EXISTS;
-	}
-	
-	private void initialize() {
-		this.header = this.table.getTableHeader();
-		this.colModel = this.table.getColumnModel();
-		this.totalColWidth = this.colModel.getTotalColumnWidth();
-		if (this.header != null) {
-			this.hclip.height = this.header.getHeight();
-		}
-		
-		this.headerFont = this.table.getFont().deriveFont(
-				Font.BOLD,
-				HEADER_FONT_SIZE);
-		this.footerFont = this.table.getFont().deriveFont(
-				Font.PLAIN,
-				FOOTER_FONT_SIZE);
 	}
 	
 	private void printText(
