@@ -30,37 +30,62 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.notes.table;
+package com.leclercb.taskunifier.gui.components.tasks.table;
+
+import java.awt.Component;
 
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
-import org.jdesktop.swingx.JXTable;
+import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.swing.table.TUTableColumn;
+import com.leclercb.taskunifier.gui.swing.table.TUTableProperties.TableColumnProperties;
+import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
-import com.leclercb.taskunifier.api.models.Note;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
-import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
-
-public class NotePrintTable extends JXTable {
+public class TaskPrintTableColumn extends TUTableColumn<TaskColumn> {
 	
-	public NotePrintTable(
-			TUTableProperties<NoteColumn> tableProperties,
-			Note[] notes) {
-		this.initialize(tableProperties, notes);
+	private static TableCellRenderer RENDERER;
+	
+	static {
+		RENDERER = new DefaultTableCellRenderer() {
+			
+			@Override
+			public Component getTableCellRendererComponent(
+					JTable table,
+					Object value,
+					boolean isSelected,
+					boolean hasFocus,
+					int row,
+					int col) {
+				Component component = super.getTableCellRendererComponent(
+						table,
+						value,
+						isSelected,
+						hasFocus,
+						row,
+						col);
+				
+				Task task = ((TaskPrintTableModel) table.getModel()).getTask(row);
+				
+				col = table.convertColumnIndexToModel(col);
+				TaskColumn column = ((TaskPrintTableModel) table.getModel()).getTaskColumn(col);
+				
+				this.setText(TaskUtils.toString(task, column));
+				return component;
+			}
+			
+		};
 	}
 	
-	private void initialize(
-			final TUTableProperties<NoteColumn> tableProperties,
-			final Note[] notes) {
-		NotePrintTableColumnModel columnModel = new NotePrintTableColumnModel(
-				tableProperties);
-		NotePrintTableModel tableModel = new NotePrintTableModel(notes);
-		
-		this.setModel(tableModel);
-		this.setColumnModel(columnModel);
-		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		this.setShowGrid(true, false);
-		this.setColumnControlVisible(true);
-		this.packAll();
+	public TaskPrintTableColumn(TableColumnProperties<TaskColumn> column) {
+		super(column);
+	}
+	
+	@Override
+	public TableCellRenderer getCellRenderer() {
+		return RENDERER;
 	}
 	
 }

@@ -273,7 +273,10 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 			tasks = this.getTasks();
 		
 		TableReport tableReport = new TableReport(
-				new TaskPrintTable(this.tableProperties, tasks),
+				new TaskPrintTable(new TUTableProperties<TaskColumn>(
+						TaskColumn.class,
+						this.tableProperties.getPropertyName() + ".print",
+						false), tasks),
 				PrintMode.NORMAL,
 				0.7,
 				new MessageFormat(Constants.TITLE

@@ -32,35 +32,62 @@
  */
 package com.leclercb.taskunifier.gui.components.notes.table;
 
-import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
 
-import org.jdesktop.swingx.JXTable;
-
+import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
-import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
 
-public class NotePrintTable extends JXTable {
+public class NotePrintTableModel extends AbstractTableModel {
 	
-	public NotePrintTable(
-			TUTableProperties<NoteColumn> tableProperties,
-			Note[] notes) {
-		this.initialize(tableProperties, notes);
+	private Note[] notes;
+	
+	public NotePrintTableModel(Note[] notes) {
+		CheckUtils.isNotNull(notes);
+		this.notes = notes;
 	}
 	
-	private void initialize(
-			final TUTableProperties<NoteColumn> tableProperties,
-			final Note[] notes) {
-		NotePrintTableColumnModel columnModel = new NotePrintTableColumnModel(
-				tableProperties);
-		NotePrintTableModel tableModel = new NotePrintTableModel(notes);
+	public Note getNote(int row) {
+		return this.notes[row];
+	}
+	
+	public NoteColumn getNoteColumn(int col) {
+		return NoteColumn.values()[col];
+	}
+	
+	@Override
+	public int getColumnCount() {
+		return NoteColumn.values().length;
+	}
+	
+	@Override
+	public int getRowCount() {
+		return this.notes.length;
+	}
+	
+	@Override
+	public String getColumnName(int col) {
+		return NoteColumn.values()[col].getLabel();
+	}
+	
+	@Override
+	public Class<?> getColumnClass(int col) {
+		return NoteColumn.values()[col].getType();
+	}
+	
+	@Override
+	public Object getValueAt(int row, int col) {
+		return NoteColumn.values()[col].getProperty(this.notes[row]);
+	}
+	
+	@Override
+	public boolean isCellEditable(int row, int col) {
+		return false;
+	}
+	
+	@Override
+	public void setValueAt(Object value, int row, int col) {
 		
-		this.setModel(tableModel);
-		this.setColumnModel(columnModel);
-		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		this.setShowGrid(true, false);
-		this.setColumnControlVisible(true);
-		this.packAll();
 	}
 	
 }

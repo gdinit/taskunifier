@@ -32,35 +32,60 @@
  */
 package com.leclercb.taskunifier.gui.components.notes.table;
 
-import javax.swing.JTable;
+import java.awt.Component;
 
-import org.jdesktop.swingx.JXTable;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
 import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
-import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
+import com.leclercb.taskunifier.gui.swing.table.TUTableColumn;
+import com.leclercb.taskunifier.gui.swing.table.TUTableProperties.TableColumnProperties;
+import com.leclercb.taskunifier.gui.utils.NoteUtils;
 
-public class NotePrintTable extends JXTable {
+public class NotePrintTableColumn extends TUTableColumn<NoteColumn> {
 	
-	public NotePrintTable(
-			TUTableProperties<NoteColumn> tableProperties,
-			Note[] notes) {
-		this.initialize(tableProperties, notes);
+	private static TableCellRenderer RENDERER;
+	
+	static {
+		RENDERER = new DefaultTableCellRenderer() {
+			
+			@Override
+			public Component getTableCellRendererComponent(
+					JTable table,
+					Object value,
+					boolean isSelected,
+					boolean hasFocus,
+					int row,
+					int col) {
+				Component component = super.getTableCellRendererComponent(
+						table,
+						value,
+						isSelected,
+						hasFocus,
+						row,
+						col);
+				
+				Note note = ((NotePrintTableModel) table.getModel()).getNote(row);
+				
+				col = table.convertColumnIndexToModel(col);
+				NoteColumn column = ((NotePrintTableModel) table.getModel()).getNoteColumn(col);
+				
+				this.setText(NoteUtils.toString(note, column));
+				return component;
+			}
+			
+		};
 	}
 	
-	private void initialize(
-			final TUTableProperties<NoteColumn> tableProperties,
-			final Note[] notes) {
-		NotePrintTableColumnModel columnModel = new NotePrintTableColumnModel(
-				tableProperties);
-		NotePrintTableModel tableModel = new NotePrintTableModel(notes);
-		
-		this.setModel(tableModel);
-		this.setColumnModel(columnModel);
-		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		this.setShowGrid(true, false);
-		this.setColumnControlVisible(true);
-		this.packAll();
+	public NotePrintTableColumn(TableColumnProperties<NoteColumn> column) {
+		super(column);
+	}
+	
+	@Override
+	public TableCellRenderer getCellRenderer() {
+		return RENDERER;
 	}
 	
 }

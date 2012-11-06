@@ -32,35 +32,25 @@
  */
 package com.leclercb.taskunifier.gui.components.notes.table;
 
-import javax.swing.JTable;
-
-import org.jdesktop.swingx.JXTable;
-
-import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.swing.table.TUTableColumn;
+import com.leclercb.taskunifier.gui.swing.table.TUTableColumnModel;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
+import com.leclercb.taskunifier.gui.swing.table.TUTableProperties.TableColumnProperties;
 
-public class NotePrintTable extends JXTable {
+public class NotePrintTableColumnModel extends TUTableColumnModel<NoteColumn> {
 	
-	public NotePrintTable(
-			TUTableProperties<NoteColumn> tableProperties,
-			Note[] notes) {
-		this.initialize(tableProperties, notes);
-	}
-	
-	private void initialize(
-			final TUTableProperties<NoteColumn> tableProperties,
-			final Note[] notes) {
-		NotePrintTableColumnModel columnModel = new NotePrintTableColumnModel(
-				tableProperties);
-		NotePrintTableModel tableModel = new NotePrintTableModel(notes);
-		
-		this.setModel(tableModel);
-		this.setColumnModel(columnModel);
-		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		this.setShowGrid(true, false);
-		this.setColumnControlVisible(true);
-		this.packAll();
+	public NotePrintTableColumnModel(
+			final TUTableProperties<NoteColumn> tableProperties) {
+		super(new TableColumnInstantiator<NoteColumn>() {
+			
+			@Override
+			public TUTableColumn<NoteColumn> newTableColumnInstance(
+					TableColumnProperties<NoteColumn> column) {
+				return new NotePrintTableColumn(column);
+			}
+			
+		}, tableProperties);
 	}
 	
 }
