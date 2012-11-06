@@ -284,7 +284,7 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 						+ this.getTaskSearcher().getTitle()),
 				new MessageFormat(this.getTaskCount() + " tasks | Page - {0}"));
 		
-		PrintUtils.printTable(tableReport);
+		PrintUtils.printTable("view.tasks.print", tableReport);
 	}
 	
 	@Override

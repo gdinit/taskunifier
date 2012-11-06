@@ -270,7 +270,7 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 						+ this.getNoteSearcher().getTitle()),
 				new MessageFormat(this.getNoteCount() + " notes | Page - {0}"));
 		
-		PrintUtils.printTable(tableReport);
+		PrintUtils.printTable("view.notes.print", tableReport);
 	}
 	
 	@Override
