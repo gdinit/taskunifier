@@ -357,11 +357,6 @@ public final class TaskUtils {
 		CheckUtils.isNotNull(tasks);
 		CheckUtils.isNotNull(columns);
 		
-		boolean useDueTime = Main.getSettings().getBooleanProperty(
-				"date.use_due_time");
-		boolean useStartTime = Main.getSettings().getBooleanProperty(
-				"date.use_start_time");
-		
 		List<String[]> data = new ArrayList<String[]>();
 		
 		int i = 0;
@@ -387,119 +382,127 @@ public final class TaskUtils {
 				if (column == null)
 					continue;
 				
-				String content = null;
-				Object value = column.getProperty(task);
-				
-				switch (column) {
-					case CONTACTS:
-						content = (value == null ? null : value.toString());
-						break;
-					case COMPLETED:
-						content = StringValueBoolean.INSTANCE.getString(value);
-						break;
-					case COMPLETED_ON:
-						content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
-						break;
-					case FOLDER:
-					case PARENT:
-						content = StringValueModel.INSTANCE.getString(value);
-						break;
-					case CONTEXTS:
-					case GOALS:
-					case LOCATIONS:
-						content = StringValueModelList.INSTANCE.getString(value);
-						break;
-					case DUE_DATE:
-						if (useDueTime)
-							content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
-						else
-							content = StringValueCalendar.INSTANCE_DATE.getString(value);
-						break;
-					case FILES:
-						content = (value == null ? null : value.toString());
-						break;
-					case IMPORTANCE:
-						content = (value == null ? null : value.toString());
-						break;
-					case LENGTH:
-						content = StringValueTaskLength.INSTANCE.getString(value);
-						break;
-					case MODEL:
-						content = StringValueModelId.INSTANCE.getString(value);
-						break;
-					case MODEL_EDIT:
-						content = null;
-						break;
-					case MODEL_CREATION_DATE:
-						content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
-						break;
-					case MODEL_UPDATE_DATE:
-						content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
-						break;
-					case NOTE:
-						content = (value == null ? null : "\n"
-								+ value.toString());
-						break;
-					case ORDER:
-						content = StringValueModelOrder.INSTANCE.getString(value);
-						break;
-					case PRIORITY:
-						content = StringValueTaskPriority.INSTANCE.getString(value);
-						break;
-					case PROGRESS:
-						content = StringValueTaskProgress.INSTANCE.getString(value);
-						break;
-					case START_DATE_REMINDER:
-						content = StringValueTaskReminder.INSTANCE.getString(value);
-						break;
-					case DUE_DATE_REMINDER:
-						content = StringValueTaskReminder.INSTANCE.getString(value);
-						break;
-					case REPEAT:
-						content = StringValueTaskRepeat.INSTANCE.getString(value);
-						break;
-					case REPEAT_FROM:
-						content = StringValueTaskRepeatFrom.INSTANCE.getString(value);
-						break;
-					case SHOW_CHILDREN:
-						content = StringValueBoolean.INSTANCE.getString(value);
-						break;
-					case STAR:
-						content = StringValueBoolean.INSTANCE.getString(value);
-						break;
-					case START_DATE:
-						if (useStartTime)
-							content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
-						else
-							content = StringValueCalendar.INSTANCE_DATE.getString(value);
-						break;
-					case STATUS:
-						content = StringValueTaskStatus.INSTANCE.getString(value);
-						break;
-					case TAGS:
-						content = (value == null ? null : value.toString());
-						break;
-					case TASKS:
-						content = (value == null ? null : value.toString());
-						break;
-					case TIMER:
-						content = StringValueTimer.INSTANCE.getString(value);
-						break;
-					case TITLE:
-						content = (value == null ? null : value.toString());
-						break;
-				}
-				
-				if (content == null)
-					content = "";
-				
-				row[i++] = content;
+				row[i++] = toString(task, column);
 			}
 			
 			data.add(row);
 		}
 		
 		return data.toArray(new String[0][]);
+	}
+	
+	public static String toString(Task task, TaskColumn column) {
+		boolean useDueTime = Main.getSettings().getBooleanProperty(
+				"date.use_due_time");
+		boolean useStartTime = Main.getSettings().getBooleanProperty(
+				"date.use_start_time");
+		
+		String content = null;
+		Object value = column.getProperty(task);
+		
+		switch (column) {
+			case CONTACTS:
+				content = (value == null ? null : value.toString());
+				break;
+			case COMPLETED:
+				content = StringValueBoolean.INSTANCE.getString(value);
+				break;
+			case COMPLETED_ON:
+				content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
+				break;
+			case FOLDER:
+			case PARENT:
+				content = StringValueModel.INSTANCE.getString(value);
+				break;
+			case CONTEXTS:
+			case GOALS:
+			case LOCATIONS:
+				content = StringValueModelList.INSTANCE.getString(value);
+				break;
+			case DUE_DATE:
+				if (useDueTime)
+					content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
+				else
+					content = StringValueCalendar.INSTANCE_DATE.getString(value);
+				break;
+			case FILES:
+				content = (value == null ? null : value.toString());
+				break;
+			case IMPORTANCE:
+				content = (value == null ? null : value.toString());
+				break;
+			case LENGTH:
+				content = StringValueTaskLength.INSTANCE.getString(value);
+				break;
+			case MODEL:
+				content = StringValueModelId.INSTANCE.getString(value);
+				break;
+			case MODEL_EDIT:
+				content = null;
+				break;
+			case MODEL_CREATION_DATE:
+				content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
+				break;
+			case MODEL_UPDATE_DATE:
+				content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
+				break;
+			case NOTE:
+				content = (value == null ? null : "\n" + value.toString());
+				break;
+			case ORDER:
+				content = StringValueModelOrder.INSTANCE.getString(value);
+				break;
+			case PRIORITY:
+				content = StringValueTaskPriority.INSTANCE.getString(value);
+				break;
+			case PROGRESS:
+				content = StringValueTaskProgress.INSTANCE.getString(value);
+				break;
+			case START_DATE_REMINDER:
+				content = StringValueTaskReminder.INSTANCE.getString(value);
+				break;
+			case DUE_DATE_REMINDER:
+				content = StringValueTaskReminder.INSTANCE.getString(value);
+				break;
+			case REPEAT:
+				content = StringValueTaskRepeat.INSTANCE.getString(value);
+				break;
+			case REPEAT_FROM:
+				content = StringValueTaskRepeatFrom.INSTANCE.getString(value);
+				break;
+			case SHOW_CHILDREN:
+				content = StringValueBoolean.INSTANCE.getString(value);
+				break;
+			case STAR:
+				content = StringValueBoolean.INSTANCE.getString(value);
+				break;
+			case START_DATE:
+				if (useStartTime)
+					content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
+				else
+					content = StringValueCalendar.INSTANCE_DATE.getString(value);
+				break;
+			case STATUS:
+				content = StringValueTaskStatus.INSTANCE.getString(value);
+				break;
+			case TAGS:
+				content = (value == null ? null : value.toString());
+				break;
+			case TASKS:
+				content = (value == null ? null : value.toString());
+				break;
+			case TIMER:
+				content = StringValueTimer.INSTANCE.getString(value);
+				break;
+			case TITLE:
+				content = (value == null ? null : value.toString());
+				break;
+		}
+		
+		if (content == null)
+			content = "";
+		
+		return content;
 	}
 	
 	public static int getImportance(Task task) {
