@@ -33,7 +33,6 @@
 package com.leclercb.taskunifier.gui.components.tasks.table;
 
 import java.awt.Component;
-import java.awt.HeadlessException;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -48,10 +47,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.standard.JobName;
-import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.DropMode;
@@ -82,6 +77,8 @@ import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionChangeSupport;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionListener;
 import com.leclercb.taskunifier.gui.commons.events.TaskSearcherSelectionChangeEvent;
+import com.leclercb.taskunifier.gui.components.print.PrintUtils;
+import com.leclercb.taskunifier.gui.components.print.TableReport;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
 import com.leclercb.taskunifier.gui.components.tasks.TaskTableView;
 import com.leclercb.taskunifier.gui.components.tasks.table.draganddrop.TaskTransferHandler;
@@ -255,20 +252,19 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 	}
 	
 	@Override
-	public void printTasks() throws HeadlessException, PrinterException {
-		PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
-		attributes.add(new JobName(Constants.TITLE, null));
-		attributes.add(OrientationRequested.LANDSCAPE);
-		
-		this.print(
-				PrintMode.FIT_WIDTH,
+	public void printTasks() throws PrinterException {
+		TableReport tableReport = new TableReport(
+				new TaskPrintTable(
+						this.tableProperties,
+						this.getSelectedTasks()),
+				PrintMode.NORMAL,
+				0.5,
 				new MessageFormat(Constants.TITLE
 						+ " - "
 						+ this.getTaskSearcher().getTitle()),
-				new MessageFormat(this.getTaskCount() + " tasks | Page - {0}"),
-				true,
-				attributes,
-				true);
+				new MessageFormat(this.getTaskCount() + " tasks | Page - {0}"));
+		
+		PrintUtils.printTable(tableReport);
 	}
 	
 	@Override
