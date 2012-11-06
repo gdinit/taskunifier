@@ -59,6 +59,24 @@ public enum NoteColumn implements ModelProperties<Note>, TUColumn<Note>, Propert
 	
 	public static final String PROP_USED = "used";
 	
+	public static NoteColumn[] getUsableColumns() {
+		return getUsedColumns(true);
+	}
+	
+	public static NoteColumn[] getUsableColumns(boolean includeNote) {
+		List<NoteColumn> columns = new ArrayList<NoteColumn>();
+		
+		for (NoteColumn column : values()) {
+			if (column.isUsable())
+				columns.add(column);
+		}
+		
+		if (!includeNote)
+			columns.remove(NoteColumn.NOTE);
+		
+		return columns.toArray(new NoteColumn[0]);
+	}
+	
 	public static NoteColumn[] getUsedColumns() {
 		return getUsedColumns(true);
 	}
