@@ -46,11 +46,10 @@ import org.jdesktop.swingx.JXTable;
 
 import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
-import com.leclercb.taskunifier.gui.components.print.PrintTable;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
 import com.leclercb.taskunifier.gui.utils.NoteUtils;
 
-public class NotePrintTable extends JXTable implements PrintTable {
+public class NotePrintTable extends JXTable {
 	
 	public NotePrintTable(
 			TUTableProperties<NoteColumn> tableProperties,
@@ -62,7 +61,7 @@ public class NotePrintTable extends JXTable implements PrintTable {
 			final TUTableProperties<NoteColumn> tableProperties,
 			final Note[] notes) {
 		List<NoteColumn> allColumns = new ArrayList<NoteColumn>(
-				Arrays.asList(NoteColumn.getUsableColumns(false)));
+				Arrays.asList(NoteColumn.getUsableColumns(true)));
 		List<NoteColumn> columns = new ArrayList<NoteColumn>();
 		
 		for (NoteColumn column : allColumns) {
@@ -71,6 +70,9 @@ public class NotePrintTable extends JXTable implements PrintTable {
 			
 			columns.add(column);
 		}
+		
+		if (!columns.contains(NoteColumn.NOTE))
+			columns.add(NoteColumn.NOTE);
 		
 		Collections.sort(columns, new Comparator<NoteColumn>() {
 			
@@ -96,11 +98,6 @@ public class NotePrintTable extends JXTable implements PrintTable {
 		this.setColumnControlVisible(true);
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		this.packAll();
-	}
-	
-	@Override
-	public JTable getJTable() {
-		return this;
 	}
 	
 }

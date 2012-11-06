@@ -51,7 +51,7 @@ public interface TaskTableView extends TaskSelectionView, ModelSelectionChangeSu
 	
 	public abstract void refreshTasks();
 	
-	public abstract void printTasks() throws Exception;
+	public abstract void printTasks(boolean selection) throws Exception;
 	
 	public abstract void pasteTask();
 	

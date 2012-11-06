@@ -147,6 +147,18 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 		}
 	}
 	
+	public Task[] getTasks() {
+		List<Task> tasks = new ArrayList<Task>();
+		for (int i = 0; i < this.getModel().getRowCount(); i++) {
+			Task task = this.getTask(i);
+			
+			if (task != null)
+				tasks.add(task);
+		}
+		
+		return tasks.toArray(new Task[0]);
+	}
+	
 	@Override
 	public Task[] getSelectedTasks() {
 		int[] indexes = this.getSelectedRows();
@@ -252,13 +264,18 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 	}
 	
 	@Override
-	public void printTasks() throws PrinterException {
+	public void printTasks(boolean selection) throws PrinterException {
+		Task[] tasks = null;
+		
+		if (selection)
+			tasks = this.getSelectedTasks();
+		else
+			tasks = this.getTasks();
+		
 		TableReport tableReport = new TableReport(
-				new TaskPrintTable(
-						this.tableProperties,
-						this.getSelectedTasks()),
+				new TaskPrintTable(this.tableProperties, tasks),
 				PrintMode.NORMAL,
-				0.5,
+				0.7,
 				new MessageFormat(Constants.TITLE
 						+ " - "
 						+ this.getTaskSearcher().getTitle()),

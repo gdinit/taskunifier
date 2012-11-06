@@ -37,19 +37,14 @@ import java.util.logging.Level;
 
 import javax.swing.AbstractAction;
 
-import org.jdesktop.swingx.JXEditorPane;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
 import com.leclercb.taskunifier.gui.components.views.ViewType;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
-import com.leclercb.taskunifier.gui.utils.NoteUtils;
-import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
 public class ActionPrintSelectedModels extends AbstractAction {
 	
@@ -70,31 +65,21 @@ public class ActionPrintSelectedModels extends AbstractAction {
 	
 	public static void print() {
 		try {
-			String text = null;
 			ViewType viewType = ViewUtils.getCurrentViewType();
 			
 			if (viewType == null)
 				return;
 			
-			if (viewType == ViewType.NOTES) {
-				text = NoteUtils.toText(
-						ViewUtils.getSelectedNotes(),
-						NoteColumn.getUsedColumns(),
-						true);
-			} else if (viewType == ViewType.CALENDAR
-					|| viewType == ViewType.TASKS) {
-				text = TaskUtils.toText(
-						ViewUtils.getSelectedTasks(),
-						TaskColumn.getUsedColumns(),
-						true);
+			switch (viewType) {
+				case NOTES:
+					ViewUtils.getCurrentNoteView().getNoteTableView().printNotes(
+							true);
+					break;
+				case TASKS:
+					ViewUtils.getCurrentTaskView().getTaskTableView().printTasks(
+							true);
+					break;
 			}
-			
-			JXEditorPane editor = new JXEditorPane();
-			editor.setEditable(false);
-			editor.setContentType("text/html");
-			editor.setText(text);
-			
-			editor.print();
 		} catch (Exception e) {
 			ErrorInfo info = new ErrorInfo(
 					Translations.getString("general.error"),

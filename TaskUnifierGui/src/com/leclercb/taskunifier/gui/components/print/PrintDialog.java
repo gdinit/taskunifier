@@ -38,6 +38,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
@@ -55,8 +56,8 @@ public class PrintDialog extends JDialog {
 	
 	private boolean cancelled;
 	
-	public PrintDialog(PrintTable printTable) {
-		this.initialize(printTable);
+	public PrintDialog(JComponent component) {
+		this.initialize(component);
 	}
 	
 	@Override
@@ -72,7 +73,7 @@ public class PrintDialog extends JDialog {
 		return this.cancelled;
 	}
 	
-	private void initialize(PrintTable printTable) {
+	private void initialize(JComponent component) {
 		this.setModal(true);
 		this.setTitle(Translations.getString("general.print"));
 		this.setSize(600, 350);
@@ -91,7 +92,7 @@ public class PrintDialog extends JDialog {
 		this.add(panel, BorderLayout.CENTER);
 		
 		panel.add(
-				ComponentFactory.createJScrollPane(printTable.getJTable(), true),
+				ComponentFactory.createJScrollPane(component, true),
 				BorderLayout.CENTER);
 		
 		this.initializeButtonsPanel(panel);
