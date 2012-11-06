@@ -35,14 +35,14 @@ package com.leclercb.taskunifier.gui.components.tasks.table.renderers;
 import java.awt.Component;
 
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.ModelList;
 import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.gui.swing.TUModelListLabel;
 
-public class ModelListRenderer<M extends Model> extends DefaultTableCellRenderer {
+public class ModelListRenderer<M extends Model> implements TableCellRenderer {
 	
 	private TUModelListLabel modelListLabel;
 	
