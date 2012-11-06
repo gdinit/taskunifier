@@ -46,10 +46,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.standard.JobName;
-import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
@@ -88,6 +84,8 @@ import com.leclercb.taskunifier.gui.components.notes.table.highlighters.NoteTool
 import com.leclercb.taskunifier.gui.components.notes.table.menu.NoteTableMenu;
 import com.leclercb.taskunifier.gui.components.notes.table.sorter.NoteRowComparator;
 import com.leclercb.taskunifier.gui.components.notes.table.sorter.NoteRowFilter;
+import com.leclercb.taskunifier.gui.components.print.PrintUtils;
+import com.leclercb.taskunifier.gui.components.print.TableReport;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
@@ -240,13 +238,18 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 	
 	@Override
 	public void printNotes() throws HeadlessException, PrinterException {
-		PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
-		attributes.add(new JobName(Constants.TITLE, null));
-		attributes.add(OrientationRequested.LANDSCAPE);
+		TableReport tableReport = new TableReport(
+				new NotePrintTable(
+						this.tableProperties,
+						this.getSelectedNotes()),
+				PrintMode.NORMAL,
+				0.5,
+				new MessageFormat(Constants.TITLE
+						+ " - "
+						+ this.getNoteSearcher().getTitle()),
+				new MessageFormat(this.getNoteCount() + " notes | Page - {0}"));
 		
-		this.print(PrintMode.FIT_WIDTH, new MessageFormat(Constants.TITLE
-				+ " - Notes"), new MessageFormat(this.getNoteCount()
-				+ " notes | Page - {0}"), true, attributes, true);
+		PrintUtils.printTable(tableReport);
 	}
 	
 	@Override
