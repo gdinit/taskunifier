@@ -109,6 +109,17 @@ public class Folder extends AbstractModelParent<Folder> {
 		return bean;
 	}
 	
+	public boolean isSelfOrParentArchived() {
+		if (this.isArchived())
+			return true;
+		
+		for (Folder parent : this.getAllParents())
+			if (parent.isArchived())
+				return true;
+		
+		return false;
+	}
+	
 	public boolean isArchived() {
 		return this.archived;
 	}
