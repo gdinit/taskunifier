@@ -93,6 +93,7 @@ import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.main.MainLoadFiles;
 import com.leclercb.taskunifier.gui.main.main.MainLoadLoggers;
 import com.leclercb.taskunifier.gui.main.main.MainSaveFiles;
+import com.leclercb.taskunifier.gui.main.main.MainSplashScreen;
 import com.leclercb.taskunifier.gui.main.main.MainSwingRunnable;
 import com.leclercb.taskunifier.gui.properties.ShortcutKeyCoder;
 import com.leclercb.taskunifier.gui.resources.Resources;
@@ -237,37 +238,65 @@ public class Main {
 	
 	public static void main(final String[] args) throws SingleInstanceException {
 		try {
+			MainSplashScreen.getInstance().show();
+			MainSplashScreen.getInstance().update("Loading...");
+			
 			initialize();
 			loadDeveloperMode();
+			MainSplashScreen.getInstance().update("Loading resource folder...");
 			loadResourceFolder();
+			MainSplashScreen.getInstance().update("Loading init settings...");
 			loadInitSettings();
+			MainSplashScreen.getInstance().update("Loading data folder...");
 			loadDataFolder();
+			MainSplashScreen.getInstance().update("Loading plugins folder...");
 			loadPluginsFolder();
 			
+			MainSplashScreen.getInstance().update("Check single instance...");
 			if (!checkSingleInstance(args)) {
 				secondaryMain(args);
 				throw new SingleInstanceException(
 						"Another instance of TaskUnifier is running");
 			}
 			
+			MainSplashScreen.getInstance().update("Loading loggers...");
 			MainLoadLoggers.loadLoggers();
+			MainSplashScreen.getInstance().update(
+					"Loading exception handler...");
 			loadUncaughtExceptionHandler();
+			MainSplashScreen.getInstance().update("Loading settings...");
 			loadSettings();
+			MainSplashScreen.getInstance().update("Loading time zone...");
 			loadTimeZone();
+			MainSplashScreen.getInstance().update("Loading user id...");
 			loadUserId();
+			MainSplashScreen.getInstance().update("Loading user folder...");
 			loadUserFolder();
+			MainSplashScreen.getInstance().update("Loading backup folder...");
 			loadBackupFolder();
+			MainSplashScreen.getInstance().update("Updating settings...");
 			PREVIOUS_VERSION = SettingsVersion.updateSettings();
+			MainSplashScreen.getInstance().update("Loading user settings...");
 			loadUserSettings();
+			MainSplashScreen.getInstance().update("Updating user settings...");
 			UserSettingsVersion.updateSettings();
+			MainSplashScreen.getInstance().update("Loading logger levels...");
 			MainLoadLoggers.loadLoggerLevels();
 			loadProxies();
+			MainSplashScreen.getInstance().update("Loading locale...");
 			loadLocale();
+			MainSplashScreen.getInstance().update("Loading models...");
 			loadModels();
+			MainSplashScreen.getInstance().update("Loading look and feel...");
 			loadLookAndFeel();
+			MainSplashScreen.getInstance().update("Loading plugins...");
 			OUTDATED_PLUGINS = loadApiPlugins();
+			MainSplashScreen.getInstance().update("Loading synchronizer...");
 			loadSynchronizer();
-			loadShutdownHook();
+			MainSplashScreen.getInstance().update("Loading shutdown hooks...");
+			loadShutdownHooks();
+			MainSplashScreen.getInstance().update(
+					"Loading protocol handlers...");
 			loadCustomProtocolHandlers();
 			
 			VERSION_UPDATED = !Constants.VERSION.equals(PREVIOUS_VERSION);
@@ -278,6 +307,8 @@ public class Main {
 		} catch (SingleInstanceException e) {
 			throw e;
 		} catch (Exception e) {
+			MainSplashScreen.getInstance().show();
+			
 			GuiLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
 			
 			JOptionPane.showMessageDialog(
@@ -634,7 +665,7 @@ public class Main {
 		SynchronizerUtils.setTaskRepeatEnabled(true);
 	}
 	
-	private static void loadShutdownHook() {
+	private static void loadShutdownHooks() {
 		QUITTING = false;
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
