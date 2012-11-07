@@ -82,17 +82,26 @@ public class MainSwingRunnable implements Runnable {
 		this.loadLookAndFeel();
 		
 		try {
-			this.showWelcomeWindow();
+			boolean showWelcomeWindow = this.showWelcomeWindow();
 			
 			if (Main.isFirstExecution())
 				ActionResetGeneralSearchers.resetGeneralSearchers();
 			
+			MainSplashScreen.getInstance().update("Auto backup...");
 			this.autoBackup();
+			MainSplashScreen.getInstance().update("Cleaning backups...");
 			this.cleanBackups();
 			
+			MainSplashScreen.getInstance().update(
+					"Initializing application adapter...");
 			MacApplication.initializeApplicationAdapter();
 			
+			MainSplashScreen.getInstance().update("Loading main window...");
 			ActionNewWindow.newWindow();
+			
+			if (!showWelcomeWindow)
+				MainSplashScreen.getInstance().close();
+			
 			ActionCheckVersion.checkVersion(true);
 			ActionCheckPluginVersion.checkAllPluginVersion(true);
 			
@@ -205,7 +214,7 @@ public class MainSwingRunnable implements Runnable {
 		}
 	}
 	
-	private void showWelcomeWindow() {
+	private boolean showWelcomeWindow() {
 		JButton quitButton = new JButton(Translations.getString("action.quit"));
 		
 		quitButton.addActionListener(new ActionListener() {
@@ -246,11 +255,19 @@ public class MainSwingRunnable implements Runnable {
 		}
 		
 		if (Main.isFirstExecution()) {
+			MainSplashScreen.getInstance().close();
+			
 			new LanguageDialog().setVisible(true);
 			new WelcomeDialog(messages.toArray(new String[0]), messageButtons).setVisible(true);
+			return true;
 		} else if (messages.size() > 0) {
+			MainSplashScreen.getInstance().close();
+			
 			new WelcomeDialog(messages.toArray(new String[0]), messageButtons).setVisible(true);
+			return true;
 		}
+		
+		return false;
 	}
 	
 	private void autoBackup() {

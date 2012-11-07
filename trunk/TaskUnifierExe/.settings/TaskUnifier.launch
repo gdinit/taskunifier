@@ -13,5 +13,5 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.leclercb.taskunifier.gui.main.Main"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="TaskUnifierGui"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dcom.leclercb.taskunifier.developer_mode=true"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dcom.leclercb.taskunifier.developer_mode=true -splash:resources/images/splash_screen.png"/>
 </launchConfiguration>
