@@ -37,9 +37,9 @@ import java.util.List;
 
 import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
+import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.Folder;
 import com.leclercb.taskunifier.api.models.FolderFactory;
-import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.ModelParent;
 
 public class FolderModel extends AbstractBasicModelSortedModel {
@@ -67,7 +67,8 @@ public class FolderModel extends AbstractBasicModelSortedModel {
 	@Override
 	public void addElement(Object element) {
 		if (element != null)
-			if (!this.includeArchived && ((Folder) element).isArchived())
+			if (!this.includeArchived
+					&& ((Folder) element).isSelfOrParentArchived())
 				return;
 		
 		super.addElement(element);
@@ -75,20 +76,57 @@ public class FolderModel extends AbstractBasicModelSortedModel {
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
-		if (!((Model) event.getSource()).getModelStatus().isEndUserStatus()
-				|| (!this.includeArchived && ((Folder) event.getSource()).isArchived())) {
-			this.removeElement(event.getSource());
-		} else {
-			int index = this.getIndexOf(event.getSource());
-			
-			if (index == -1) {
-				this.addElement(event.getSource());
-			} else if (event.getPropertyName().equals(ModelParent.PROP_PARENT)) {
-				this.fireStructureChanged(this);
+		Folder folder = (Folder) event.getSource();
+		
+		if (event.getPropertyName().equals(BasicModel.PROP_MODEL_STATUS)) {
+			if (folder.getModelStatus().isEndUserStatus()) {
+				int index = this.getIndexOf(folder);
+				if (index == -1)
+					this.addElement(folder);
 			} else {
-				this.fireContentsChanged(this, index, index);
+				this.removeElement(folder);
 			}
+			
+			return;
 		}
+		
+		if (event.getPropertyName().equals(Folder.PROP_ARCHIVED)
+				&& !this.includeArchived) {
+			if (folder.isSelfOrParentArchived()) {
+				this.removeElement(folder);
+				
+				List<Folder> children = folder.getAllChildren();
+				for (Folder child : children) {
+					this.removeElement(child);
+				}
+			} else {
+				int index = this.getIndexOf(folder);
+				if (index == -1)
+					this.addElement(folder);
+				
+				List<Folder> children = folder.getAllChildren();
+				for (Folder child : children) {
+					if (child.isSelfOrParentArchived())
+						continue;
+					
+					index = this.getIndexOf(child);
+					if (index == -1)
+						this.addElement(child);
+				}
+				
+				this.fireStructureChanged(this);
+			}
+			
+			return;
+		}
+		
+		if (event.getPropertyName().equals(ModelParent.PROP_PARENT)) {
+			this.fireStructureChanged(this);
+			return;
+		}
+		
+		int index = this.getIndexOf(folder);
+		this.fireContentsChanged(this, index, index);
 	}
 	
 }
