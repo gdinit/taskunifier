@@ -34,8 +34,8 @@ package com.leclercb.taskunifier.gui.commons.models;
 
 import java.beans.PropertyChangeEvent;
 
+import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.Goal;
-import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.ModelParent;
 import com.leclercb.taskunifier.api.models.enums.GoalLevel;
 
@@ -56,21 +56,39 @@ public class GoalContributeModel extends GoalModel {
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
-		if (!((Model) event.getSource()).getModelStatus().isEndUserStatus()
-				|| !((Goal) event.getSource()).getLevel().equals(
-						GoalLevel.LIFE_TIME)) {
-			this.removeElement(event.getSource());
-		} else {
-			int index = this.getIndexOf(event.getSource());
-			
-			if (index == -1) {
-				this.addElement(event.getSource());
-			} else if (event.getPropertyName().equals(ModelParent.PROP_PARENT)) {
-				this.fireStructureChanged(this);
+		Goal goal = (Goal) event.getSource();
+		
+		if (event.getPropertyName().equals(BasicModel.PROP_MODEL_STATUS)) {
+			if (goal.getModelStatus().isEndUserStatus()) {
+				int index = this.getIndexOf(goal);
+				if (index == -1)
+					this.addElement(goal);
 			} else {
-				this.fireContentsChanged(this, index, index);
+				this.removeElement(goal);
 			}
+			
+			return;
 		}
+		
+		if (event.getPropertyName().equals(Goal.PROP_CONTRIBUTES)) {
+			if (goal.getLevel().equals(GoalLevel.LIFE_TIME)) {
+				this.removeElement(goal);
+			} else {
+				int index = this.getIndexOf(goal);
+				if (index == -1)
+					this.addElement(goal);
+			}
+			
+			return;
+		}
+		
+		if (event.getPropertyName().equals(ModelParent.PROP_PARENT)) {
+			this.fireStructureChanged(this);
+			return;
+		}
+		
+		int index = this.getIndexOf(goal);
+		this.fireContentsChanged(this, index, index);
 	}
 	
 }

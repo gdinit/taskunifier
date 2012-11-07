@@ -67,7 +67,9 @@ import com.leclercb.taskunifier.gui.api.models.GuiModel;
 import com.leclercb.taskunifier.gui.commons.converters.ColorConverter;
 import com.leclercb.taskunifier.gui.commons.models.GoalContributeModel;
 import com.leclercb.taskunifier.gui.commons.models.GoalModel;
+import com.leclercb.taskunifier.gui.commons.values.IconValueModel;
 import com.leclercb.taskunifier.gui.commons.values.StringValueGoalLevel;
+import com.leclercb.taskunifier.gui.commons.values.StringValueModel;
 import com.leclercb.taskunifier.gui.components.models.lists.IModelList;
 import com.leclercb.taskunifier.gui.components.models.lists.ModelList;
 import com.leclercb.taskunifier.gui.components.models.lists.draganddrop.ModelTransferHandler;
@@ -105,6 +107,11 @@ public class GoalConfigurationPanel extends JSplitPane implements IModelList {
 				true);
 		final JXColorSelectionButton goalColor = new JXColorSelectionButton();
 		final JButton removeColor = new JButton();
+		
+		// Overwrite renderer
+		goalContributes.setRenderer(new DefaultListRenderer(
+				StringValueModel.INSTANCE,
+				IconValueModel.INSTANCE));
 		
 		// Set Disabled
 		goalTitle.setEnabled(false);

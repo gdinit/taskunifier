@@ -224,7 +224,7 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 		
 		for (Folder folder : folders) {
 			if (folder.getModelStatus().isEndUserStatus()) {
-				if (!folder.isArchived()) {
+				if (!folder.isSelfOrParentArchived()) {
 					DefaultMutableTreeNode node = this.folderCategory;
 					
 					if (folder.getParent() != null)

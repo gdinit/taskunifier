@@ -70,19 +70,27 @@ abstract class AbstractBasicModelSortedModel extends DefaultSortedComboBoxModel 
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
-		if (!((BasicModel) event.getSource()).getModelStatus().isEndUserStatus()) {
-			this.removeElement(event.getSource());
-		} else {
-			int index = this.getIndexOf(event.getSource());
-			
-			if (index == -1) {
-				this.addElement(event.getSource());
-			} else if (event.getPropertyName().equals(ModelParent.PROP_PARENT)) {
-				this.fireStructureChanged(this);
+		BasicModel model = (BasicModel) event.getSource();
+		
+		if (event.getPropertyName().equals(BasicModel.PROP_MODEL_STATUS)) {
+			if (model.getModelStatus().isEndUserStatus()) {
+				int index = this.getIndexOf(model);
+				if (index == -1)
+					this.addElement(model);
 			} else {
-				this.fireContentsChanged(this, index, index);
+				this.removeElement(model);
 			}
+			
+			return;
 		}
+		
+		if (event.getPropertyName().equals(ModelParent.PROP_PARENT)) {
+			this.fireStructureChanged(this);
+			return;
+		}
+		
+		int index = this.getIndexOf(model);
+		this.fireContentsChanged(this, index, index);
 	}
 	
 }
