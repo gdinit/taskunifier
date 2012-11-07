@@ -97,10 +97,15 @@ public class DefaultSortedListModel extends AbstractListModel {
 		this.fireIntervalRemoved(this, 0, size);
 	}
 	
+	@Override
+	protected void fireContentsChanged(Object source, int index0, int index1) {
+		this.fireStructureChanged(source);
+	}
+	
 	public void fireStructureChanged(Object source) {
 		if (this.getSize() != 0) {
 			this.model.reSort();
-			this.fireContentsChanged(this, 0, this.getSize() - 1);
+			super.fireContentsChanged(this, 0, this.getSize() - 1);
 		}
 	}
 	

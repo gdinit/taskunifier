@@ -57,7 +57,9 @@ public class DefaultSortedComboBoxModel extends DefaultSortedListModel implement
 	public void setSelectedItem(Object anObject) {
 		if (!EqualsUtils.equals(this.selectedObject, anObject)) {
 			this.selectedObject = anObject;
-			this.fireContentsChanged(this, -1, -1);
+			
+			int index = this.getIndexOf(anObject);
+			this.fireContentsChanged(this, index, index);
 		}
 	}
 	
