@@ -466,7 +466,7 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 					return;
 				
 				if (event.getValue() instanceof Folder)
-					if (((Folder) event.getValue()).isArchived())
+					if (((Folder) event.getValue()).isSelfOrParentArchived())
 						return;
 				
 				ModelItem item = new ModelItem(model.getModelType(), model);
@@ -562,7 +562,7 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 				if (item != null)
 					this.removeNodeFromParent(item);
 			} else if (event.getSource() instanceof Folder
-					&& ((Folder) event.getSource()).isArchived()) {
+					&& ((Folder) event.getSource()).isSelfOrParentArchived()) {
 				if (item != null)
 					this.removeNodeFromParent(item);
 			} else if (item == null) {
@@ -575,6 +575,29 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 							this.findNewIndexInModelCategory(category, model));
 				} catch (Exception e) {
 					this.insertNodeInto(item, category, 0);
+				}
+				
+				if (event.getSource() instanceof Folder) {
+					if (!((Folder) event.getSource()).isSelfOrParentArchived()) {
+						for (Folder child : ((Folder) event.getSource()).getAllChildren()) {
+							if (child.isSelfOrParentArchived())
+								continue;
+							
+							category = this.findItemFromModel(child.getParent());
+							item = new ModelItem(child.getModelType(), child);
+							
+							try {
+								this.insertNodeInto(
+										item,
+										category,
+										this.findNewIndexInModelCategory(
+												category,
+												child));
+							} catch (Exception e) {
+								this.insertNodeInto(item, category, 0);
+							}
+						}
+					}
 				}
 			} else if (event.getPropertyName().equals(BasicModel.PROP_TITLE)
 					|| event.getPropertyName().equals(ModelParent.PROP_PARENT)) {

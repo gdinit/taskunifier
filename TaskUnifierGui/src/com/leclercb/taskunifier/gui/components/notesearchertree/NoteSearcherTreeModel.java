@@ -266,7 +266,7 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 				if (!folder.getModelStatus().isEndUserStatus())
 					return;
 				
-				if (folder.isArchived())
+				if (folder.isSelfOrParentArchived())
 					return;
 				
 				FolderItem item = new FolderItem(folder);
@@ -334,7 +334,7 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 			if (!((Model) event.getSource()).getModelStatus().isEndUserStatus()) {
 				if (item != null)
 					this.removeNodeFromParent(item);
-			} else if (folder.isArchived()) {
+			} else if (folder.isSelfOrParentArchived()) {
 				if (item != null)
 					this.removeNodeFromParent(item);
 			} else if (item == null) {
@@ -347,6 +347,25 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 							this.findNewIndexInFolderCategory(category, folder));
 				} catch (Exception e) {
 					this.insertNodeInto(item, category, 0);
+				}
+				
+				if (!folder.isSelfOrParentArchived()) {
+					category = this.findItemFromFolder(folder.getParent());
+					for (Folder child : folder.getAllChildren()) {
+						category = this.findItemFromFolder(child.getParent());
+						item = new FolderItem(child);
+						
+						try {
+							this.insertNodeInto(
+									item,
+									category,
+									this.findNewIndexInFolderCategory(
+											category,
+											child));
+						} catch (Exception e) {
+							this.insertNodeInto(item, category, 0);
+						}
+					}
 				}
 			} else if (event.getPropertyName().equals(BasicModel.PROP_TITLE)
 					|| event.getPropertyName().equals(ModelParent.PROP_PARENT)) {
