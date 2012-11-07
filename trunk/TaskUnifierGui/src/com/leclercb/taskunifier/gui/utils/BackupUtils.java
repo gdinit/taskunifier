@@ -269,8 +269,10 @@ public final class BackupUtils implements ListChangeSupported {
 			throw new IllegalArgumentException();
 		
 		while (this.backups.size() > nbToKeep) {
-			this.removeBackup(this.backups.get(0));
-			this.backups.remove(0);
+			String backupFolderName = this.getBackup(0);
+			
+			this.removeBackup(backupFolderName);
+			this.backups.remove(backupFolderName);
 		}
 	}
 	
