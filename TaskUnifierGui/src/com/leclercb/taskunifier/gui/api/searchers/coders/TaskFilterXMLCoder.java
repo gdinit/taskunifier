@@ -41,6 +41,7 @@ import org.w3c.dom.NodeList;
 
 import com.leclercb.commons.api.coder.AbstractXMLCoder;
 import com.leclercb.commons.api.coder.exc.FactoryCoderException;
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.XMLUtils;
 import com.leclercb.taskunifier.api.models.ContextFactory;
 import com.leclercb.taskunifier.api.models.FolderFactory;
@@ -189,6 +190,12 @@ public class TaskFilterXMLCoder extends AbstractXMLCoder<TaskFilter> {
 							} catch (Throwable t) {
 								condition = StringCondition.EQUALS;
 								value = valueEnum;
+								
+								if (EqualsUtils.equals(
+										valueStr,
+										"com.leclercb.taskunifier.api.models.enums.TaskStatus#NEXT_ACTION")) {
+									value = "Next Action";
+								}
 							}
 						}
 						
