@@ -4,6 +4,8 @@ HISTORY
 Version 3.1.0
 	- Major:
 		- Improved printing feature
+		- Bug fixed: Sub-models refresh problem
+		- BF 180: Clean old backups
 	- Minor:
 		- Bug fixed: Default column order
 		- Bug fixed: Refresh badges for sub-models
