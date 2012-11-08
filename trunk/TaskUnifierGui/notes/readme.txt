@@ -1,6 +1,10 @@
 HISTORY
 -------
 
+Version 3.1.1
+	- Minor:
+		- Bug fixed: Restore backup with sub-models
+
 Version 3.1.0
 	- Major:
 		- Improved printing feature
