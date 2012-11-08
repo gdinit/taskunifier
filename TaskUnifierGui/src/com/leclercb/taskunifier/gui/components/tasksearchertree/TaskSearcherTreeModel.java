@@ -457,7 +457,9 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 			if (model instanceof ModelParent
 					&& ((ModelParent) model).getParent() != null) {
 				category = this.findItemFromModel(((ModelParent) model).getParent());
-			} else {
+			}
+			
+			if (category == null) {
 				category = this.getCategoryFromModelType(model.getModelType());
 			}
 			
@@ -552,7 +554,9 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 			if (model instanceof ModelParent
 					&& ((ModelParent) model).getParent() != null) {
 				category = this.findItemFromModel(((ModelParent) model).getParent());
-			} else {
+			}
+			
+			if (category == null) {
 				category = this.getCategoryFromModelType(model.getModelType());
 			}
 			

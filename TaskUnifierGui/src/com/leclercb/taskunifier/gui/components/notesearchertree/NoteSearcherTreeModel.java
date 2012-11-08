@@ -258,7 +258,9 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 			
 			if (folder.getParent() != null) {
 				category = this.findItemFromFolder(folder.getParent());
-			} else {
+			}
+			
+			if (category == null) {
 				category = this.folderCategory;
 			}
 			
@@ -325,7 +327,9 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 			
 			if (folder.getParent() != null) {
 				category = this.findItemFromFolder(folder.getParent());
-			} else {
+			}
+			
+			if (category == null) {
 				category = this.folderCategory;
 			}
 			
