@@ -61,7 +61,9 @@
 			<tocitem text="Theme">
 			
 				<tocitem text="General" target="configuration_theme_general" />
-				<tocitem text="Fields" target="configuration_theme_fields" />
+				<tocitem text="Note and task fields" target="configuration_theme_fields" />
+				<tocitem text="Importance" target="configuration_theme_importance" />
+				<tocitem text="Priority" target="configuration_theme_priority" />
 		
 			</tocitem>
 			
