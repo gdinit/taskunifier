@@ -33,6 +33,7 @@
 package com.leclercb.taskunifier.gui.api.searchers.coders;
 
 import java.util.Calendar;
+import java.util.logging.Level;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -42,6 +43,7 @@ import org.w3c.dom.NodeList;
 import com.leclercb.commons.api.coder.AbstractXMLCoder;
 import com.leclercb.commons.api.coder.exc.FactoryCoderException;
 import com.leclercb.commons.api.utils.XMLUtils;
+import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.models.FolderFactory;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.ModelId;
@@ -90,7 +92,10 @@ public class NoteFilterXMLCoder extends AbstractXMLCoder<NoteFilter> {
 							try {
 								column = NoteColumn.valueOf(nElement.item(j).getTextContent());
 							} catch (Throwable t) {
-								
+								GuiLogger.getLogger().log(
+										Level.WARNING,
+										"Invalid filter column",
+										t);
 							}
 						}
 						
