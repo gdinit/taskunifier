@@ -2,6 +2,8 @@ HISTORY
 -------
 
 Version 3.1.1
+	- Major:
+		- Bug fixed: Import old task searchers
 	- Minor:
 		- Bug fixed: Restore backup with sub-models
 
