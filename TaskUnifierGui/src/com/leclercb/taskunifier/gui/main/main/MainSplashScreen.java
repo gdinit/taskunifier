@@ -90,7 +90,12 @@ public final class MainSplashScreen {
 		if (SplashScreen.getSplashScreen() == null)
 			return;
 		
-		SplashScreen.getSplashScreen().close();
+		try {
+			this.g2d = null;
+			SplashScreen.getSplashScreen().close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 }
