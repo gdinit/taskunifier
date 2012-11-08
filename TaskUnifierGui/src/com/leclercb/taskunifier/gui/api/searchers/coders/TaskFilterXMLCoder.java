@@ -33,6 +33,7 @@
 package com.leclercb.taskunifier.gui.api.searchers.coders;
 
 import java.util.Calendar;
+import java.util.logging.Level;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -43,6 +44,7 @@ import com.leclercb.commons.api.coder.AbstractXMLCoder;
 import com.leclercb.commons.api.coder.exc.FactoryCoderException;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.XMLUtils;
+import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.models.ContextFactory;
 import com.leclercb.taskunifier.api.models.FolderFactory;
 import com.leclercb.taskunifier.api.models.GoalFactory;
@@ -92,9 +94,21 @@ public class TaskFilterXMLCoder extends AbstractXMLCoder<TaskFilter> {
 					for (int j = 0; j < nElement.getLength(); j++) {
 						if (nElement.item(j).getNodeName().equals("column")) {
 							try {
-								column = TaskColumn.valueOf(nElement.item(j).getTextContent());
-							} catch (Throwable t) {
+								String col = nElement.item(j).getTextContent();
 								
+								if (EqualsUtils.equals(col, "CONTEXT"))
+									col = "CONTEXTS";
+								else if (EqualsUtils.equals(col, "GOAL"))
+									col = "GOALS";
+								else if (EqualsUtils.equals(col, "LOCATION"))
+									col = "LOCATIONS";
+								
+								column = TaskColumn.valueOf(col);
+							} catch (Throwable t) {
+								GuiLogger.getLogger().log(
+										Level.WARNING,
+										"Invalid filter column",
+										t);
 							}
 						}
 						

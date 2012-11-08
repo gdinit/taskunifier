@@ -32,6 +32,8 @@
  */
 package com.leclercb.taskunifier.gui.api.searchers.coders;
 
+import java.util.logging.Level;
+
 import javax.swing.SortOrder;
 
 import org.w3c.dom.Document;
@@ -41,6 +43,8 @@ import org.w3c.dom.NodeList;
 
 import com.leclercb.commons.api.coder.AbstractXMLCoder;
 import com.leclercb.commons.api.coder.exc.FactoryCoderException;
+import com.leclercb.commons.api.utils.EqualsUtils;
+import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
@@ -66,7 +70,23 @@ public class TaskSorterXMLCoder extends AbstractXMLCoder<TaskSorter> {
 					
 					for (int j = 0; j < nElement.getLength(); j++) {
 						if (nElement.item(j).getNodeName().equals("column")) {
-							column = TaskColumn.valueOf(nElement.item(j).getTextContent());
+							try {
+								String col = nElement.item(j).getTextContent();
+								
+								if (EqualsUtils.equals(col, "CONTEXT"))
+									col = "CONTEXTS";
+								else if (EqualsUtils.equals(col, "GOAL"))
+									col = "GOALS";
+								else if (EqualsUtils.equals(col, "LOCATION"))
+									col = "LOCATIONS";
+								
+								column = TaskColumn.valueOf(col);
+							} catch (Throwable t) {
+								GuiLogger.getLogger().log(
+										Level.WARNING,
+										"Invalid sorter column",
+										t);
+							}
 						}
 						
 						if (nElement.item(j).getNodeName().equals("sortorder")) {
