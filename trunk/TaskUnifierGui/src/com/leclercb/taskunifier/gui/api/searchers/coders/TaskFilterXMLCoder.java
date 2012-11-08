@@ -202,7 +202,13 @@ public class TaskFilterXMLCoder extends AbstractXMLCoder<TaskFilter> {
 										value = e;
 								}
 							} catch (Throwable t) {
-								condition = StringCondition.EQUALS;
+								if (EqualsUtils.equals(
+										condition,
+										EnumCondition.NOT_EQUALS))
+									condition = StringCondition.NOT_EQUALS;
+								else
+									condition = StringCondition.EQUALS;
+								
 								value = valueEnum;
 								
 								if (EqualsUtils.equals(
