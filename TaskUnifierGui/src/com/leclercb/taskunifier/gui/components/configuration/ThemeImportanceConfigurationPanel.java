@@ -46,7 +46,7 @@ import com.leclercb.taskunifier.gui.utils.SettingsUtils;
 public class ThemeImportanceConfigurationPanel extends DefaultConfigurationPanel {
 	
 	public ThemeImportanceConfigurationPanel(ConfigurationGroup configuration) {
-		super(configuration);
+		super(configuration, "configuration_theme_importance");
 		
 		this.initialize();
 		this.pack();

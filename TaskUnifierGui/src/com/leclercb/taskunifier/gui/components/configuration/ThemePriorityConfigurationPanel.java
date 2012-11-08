@@ -48,7 +48,7 @@ import com.leclercb.taskunifier.gui.utils.SettingsUtils;
 public class ThemePriorityConfigurationPanel extends DefaultConfigurationPanel {
 	
 	public ThemePriorityConfigurationPanel(ConfigurationGroup configuration) {
-		super(configuration);
+		super(configuration, "configuration_theme_priority");
 		
 		this.initialize();
 		this.pack();
