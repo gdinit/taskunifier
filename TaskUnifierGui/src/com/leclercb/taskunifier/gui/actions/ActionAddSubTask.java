@@ -132,8 +132,9 @@ public class ActionAddSubTask extends AbstractViewTaskSelectionAction {
 						task);
 			}
 		} else {
-			ViewUtils.getCurrentTaskView().getTaskTableView().setSelectedTasks(
-					new Task[] { task });
+			if (viewType == ViewType.TASKS)
+				ViewUtils.getCurrentTaskView().getTaskTableView().setSelectedTasks(
+						new Task[] { task });
 		}
 		
 		return task;
