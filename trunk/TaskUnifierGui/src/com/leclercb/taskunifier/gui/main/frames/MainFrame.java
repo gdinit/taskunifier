@@ -63,6 +63,7 @@ import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
 import com.leclercb.commons.api.properties.events.WeakSavePropertiesListener;
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelUtils;
 import com.leclercb.commons.gui.utils.ScreenUtils;
 import com.leclercb.taskunifier.gui.actions.ActionRemoveTab;
@@ -371,7 +372,12 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 				this.propertyName + ".location_y");
 		
 		this.setSize(width, height);
-		this.setExtendedState(extendedState);
+		
+		if (!SystemUtils.IS_OS_MAC
+				|| !EqualsUtils.equalsStringIgnoreCase(
+						System.getProperty("com.leclercb.taskunifier.mac_app_store"),
+						"true"))
+			this.setExtendedState(extendedState);
 		
 		if (ScreenUtils.isLocationInScreen(new Point(locationX, locationY)))
 			this.setLocation(locationX, locationY);
