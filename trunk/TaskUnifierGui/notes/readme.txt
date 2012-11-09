@@ -1,6 +1,8 @@
 HISTORY
 -------
 
+Version 3.1.2
+
 Version 3.1.1
 	- Major:
 		- Bug fixed: Import old task searchers
