@@ -124,6 +124,8 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 	
 	@Override
 	protected final Void longTask() throws Exception {
+		GuiLogger.getLogger().log(Level.INFO, "Synchronization started");
+		
 		Synchronizing.getInstance().setSynchronizing(true);
 		
 		if (this.handler != null)
@@ -147,6 +149,13 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 			for (int i = 0; i < this.plugins.size(); i++) {
 				plugin = this.plugins.get(i);
 				Type type = this.types.get(i);
+				
+				GuiLogger.getLogger().log(
+						Level.INFO,
+						"Synchronization ongoing ("
+								+ type
+								+ ") with plugin "
+								+ plugin.getId());
 				
 				if (type == Type.SYNCHRONIZE
 						&& Main.getSettings().getBooleanProperty(
@@ -399,6 +408,8 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 			SynchronizerUtils.setTaskRepeatEnabled(true);
 		} finally {
 			Synchronizing.getInstance().setSynchronizing(false);
+			
+			GuiLogger.getLogger().log(Level.INFO, "Synchronization ended");
 		}
 		
 		super.done();
