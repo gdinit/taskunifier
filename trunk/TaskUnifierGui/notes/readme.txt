@@ -2,6 +2,8 @@ HISTORY
 -------
 
 Version 3.1.2
+	- Major:
+		- Bug fixed: Import old task templates
 
 Version 3.1.1
 	- Major:
