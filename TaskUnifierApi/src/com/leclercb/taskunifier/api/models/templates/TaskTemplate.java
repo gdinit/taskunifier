@@ -53,6 +53,7 @@ import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.api.models.templates.converters.TaskTemplateConverter;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 @XStreamConverter(TaskTemplateConverter.class)
 public class TaskTemplate extends AbstractBasicModel implements Template<Task, TaskBean> {
@@ -79,6 +80,21 @@ public class TaskTemplate extends AbstractBasicModel implements Template<Task, T
 	public static final String PROP_TASK_PRIORITY = "taskPriority";
 	public static final String PROP_TASK_STAR = "taskStar";
 	public static final String PROP_TASK_NOTE = "taskNote";
+	
+	@XStreamOmitField
+	@XStreamAlias("taskcontextforce")
+	// Backward compatibility
+	private boolean taskContextForce;
+	
+	@XStreamOmitField
+	@XStreamAlias("taskgoalforce")
+	// Backward compatibility
+	private boolean taskGoalForce;
+	
+	@XStreamOmitField
+	@XStreamAlias("tasklocationforce")
+	// Backward compatibility
+	private boolean taskLocationForce;
 	
 	@XStreamAlias("tasktitle")
 	private String taskTitle;
