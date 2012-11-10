@@ -222,6 +222,7 @@
 		<echo file="${directory.exe}/temp/version.txt">${taskunifier.version}</echo>
 		<scp password="${sourceforge.password}" file="${directory.exe}/temp/version.txt" todir="leclercb,taskunifier@web.sourceforge.net:/home/groups/t/ta/taskunifier/htdocs/" trust="true"/>
 		<echo file="${directory.web}/web/version.txt">${taskunifier.version}</echo>
+    	<copy file="${directory.gui}/notes/history.txt" tofile="${directory.web}/web/history.txt"/>
 		<antcall target="clean"/>
 	</target>
 	
