@@ -65,7 +65,13 @@ public final class NotificationUtils {
 				if (!event.getActionCommand().equals("BEFORE_EXIT"))
 					return;
 				
-				for (Notifier notifier : NOTIFIERS) {
+				List<Notifier> notifiers = null;
+				
+				synchronized (NOTIFIERS) {
+					notifiers = new ArrayList<Notifier>(NOTIFIERS);
+				}
+				
+				for (Notifier notifier : notifiers) {
 					try {
 						notifier.close();
 						GuiLogger.getLogger().log(
@@ -86,36 +92,28 @@ public final class NotificationUtils {
 	public static <N extends Notifier> void loadNotifier(
 			final String propertyName,
 			final Class<N> cls) {
-		Runnable runnable = new Runnable() {
+		try {
+			if (!Main.getSettings().getBooleanProperty(propertyName))
+				return;
 			
-			@Override
-			public void run() {
-				try {
-					if (!Main.getSettings().getBooleanProperty(propertyName))
-						return;
-					
-					Notifier notifier = cls.newInstance();
-					notifier.open();
-					
-					synchronized (NOTIFIERS) {
-						NOTIFIERS.add(notifier);
-					}
-					
-					GuiLogger.getLogger().log(
-							Level.INFO,
-							"Notifier loaded: " + cls.getName());
-				} catch (NotifierOSException e) {
-					
-				} catch (Exception e) {
-					GuiLogger.getLogger().log(
-							Level.WARNING,
-							"Cannot load notifier: " + cls.getName(),
-							e);
-				}
+			Notifier notifier = cls.newInstance();
+			notifier.open();
+			
+			synchronized (NOTIFIERS) {
+				NOTIFIERS.add(notifier);
 			}
-		};
-		
-		new Thread(runnable).start();
+			
+			GuiLogger.getLogger().log(
+					Level.INFO,
+					"Notifier loaded: " + cls.getName());
+		} catch (NotifierOSException e) {
+			
+		} catch (Exception e) {
+			GuiLogger.getLogger().log(
+					Level.WARNING,
+					"Cannot load notifier: " + cls.getName(),
+					e);
+		}
 	}
 	
 	public static void notify(NotificationList list, String title) {
@@ -126,31 +124,22 @@ public final class NotificationUtils {
 			final NotificationList list,
 			final String title,
 			final String description) {
-		Runnable runnable = new Runnable() {
-			
-			@Override
-			public void run() {
-				List<Notifier> notifiers = null;
-				
-				synchronized (NOTIFIERS) {
-					notifiers = new ArrayList<Notifier>(NOTIFIERS);
-				}
-				
-				for (Notifier notifier : notifiers) {
-					try {
-						notifier.notify(list, title, description);
-					} catch (Exception e) {
-						GuiLogger.getLogger().log(
-								Level.WARNING,
-								"Cannot send message to " + notifier.getName(),
-								e);
-					}
-				}
-			}
-			
-		};
+		List<Notifier> notifiers = null;
 		
-		new Thread(runnable).start();
+		synchronized (NOTIFIERS) {
+			notifiers = new ArrayList<Notifier>(NOTIFIERS);
+		}
+		
+		for (Notifier notifier : notifiers) {
+			try {
+				notifier.notify(list, title, description);
+			} catch (Exception e) {
+				GuiLogger.getLogger().log(
+						Level.WARNING,
+						"Cannot send message to " + notifier.getName(),
+						e);
+			}
+		}
 	}
 	
 }
