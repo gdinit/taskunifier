@@ -1,6 +1,10 @@
 HISTORY
 -------
 
+Version 3.1.3
+	- Minor:
+		- BF 187: Concurrent Snarl notifications
+
 Version 3.1.2
 	- Major:
 		- Bug fixed: Import old task templates
