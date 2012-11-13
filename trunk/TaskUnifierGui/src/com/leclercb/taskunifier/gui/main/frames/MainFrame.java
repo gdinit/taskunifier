@@ -263,10 +263,7 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 		if (this.getFrameId() != view.getFrameId())
 			return;
 		
-		this.mainTabbedPane.addTab(
-				view.getLabel(),
-				view.getIcon(),
-				view.getView().getViewContent());
+		this.mainTabbedPane.addTab("", view.getView().getViewContent());
 		
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setOpaque(false);
