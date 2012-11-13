@@ -73,14 +73,19 @@ public class ImportSettingsDialog extends AbstractImportDialog {
 				"backup",
 				"date",
 				"export",
+				"general.communicator",
+				"general.global_hot_key.quick_task",
+				"general.growl.enabled",
 				"general.locale",
+				"general.show_reminders.enabled",
+				"general.snarl.enabled",
 				"general.toolbar",
 				"import",
 				"modelselection",
 				"note",
 				"notesearcher",
 				"proxy",
-				"synchronizer",
+				"reminder",
 				"task",
 				"taskcontacts",
 				"taskfiles",
@@ -90,7 +95,9 @@ public class ImportSettingsDialog extends AbstractImportDialog {
 				"taskstatuses",
 				"tasktasks",
 				"theme",
-				"view" };
+				"tips",
+				"view",
+				"window.minimize_to_system_tray" };
 		
 		Properties properties = new Properties();
 		properties.load(new FileInputStream(file));
