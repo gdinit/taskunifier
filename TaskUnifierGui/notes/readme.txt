@@ -4,6 +4,7 @@ HISTORY
 Version 3.1.3
 	- Minor:
 		- BF 187: Concurrent Snarl notifications
+		- BF 192: View tabs rendering bug
 
 Version 3.1.2
 	- Major:
