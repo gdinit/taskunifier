@@ -4,8 +4,11 @@ HISTORY
 Version 3.1.3
 	- Minor:
 		- BF 187: Concurrent Snarl notifications
+		- BF 190: Refresh after sync
+		- BF 191: German translations
 		- BF 192: View tabs rendering bug
 		- BF 193: Import/Export settings
+		- BF 194: Reduce min task length in calendar
 
 Version 3.1.2
 	- Major:
