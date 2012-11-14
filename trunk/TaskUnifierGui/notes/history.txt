@@ -8,6 +8,7 @@ Version 3.1.3
 		- BF 192: View tabs rendering bug
 		- BF 193: Import/Export settings
 		- BF 194: Reduce min task length in calendar
+		- BF 196: Default reminder values
 
 Version 3.1.2
 	- Major:

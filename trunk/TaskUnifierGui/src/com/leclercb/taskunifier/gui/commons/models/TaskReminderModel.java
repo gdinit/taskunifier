@@ -37,7 +37,26 @@ import javax.swing.DefaultComboBoxModel;
 public class TaskReminderModel extends DefaultComboBoxModel {
 	
 	public TaskReminderModel() {
-		super(new Integer[] { 0, 5, 15, 30, 60, 60 * 24, 60 * 24 * 7 });
+		super(new Integer[] { 0, // 0 minute
+				1, // 1 minute
+				15, // 15 minutes
+				30, // 30 minutes
+				45, // 45 minutes
+				60, // 1 hour
+				90, // 90 minutes
+				120, // 2 hours
+				180, // 3 hours
+				240, // 4 hours
+				1440, // 1 day
+				2880, // 2 days
+				4320, // 3 days
+				5760, // 4 days
+				7200, // 5 days
+				8640, // 6 days
+				10080, // 7 days
+				20160, // 14 days
+				43200 // 30 days
+				});
 	}
 	
 }

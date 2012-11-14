@@ -49,30 +49,33 @@ public class StringValueTaskReminder implements StringValue {
 		if (value == null || !(value instanceof Integer))
 			return " ";
 		
-		String text = null;
 		Integer reminder = (Integer) value;
 		
-		switch (reminder) {
-			case 0:
-				text = Translations.getString("general.task.reminder.no_reminder");
-				break;
-			case 60:
-				text = Translations.getString("general.task.reminder.one_hour");
-				break;
-			case 60 * 24:
-				text = Translations.getString("general.task.reminder.one_day");
-				break;
-			case 60 * 24 * 7:
-				text = Translations.getString("general.task.reminder.one_week");
-				break;
-			default:
-				text = Translations.getString(
-						"general.task.reminder.x_minutes",
-						reminder);
-				break;
+		if (reminder == 0)
+			return Translations.getString("general.task.reminder.no_reminder");
+		
+		if (reminder % 1440 == 0) {
+			int r = Math.round(reminder / 1440);
+			
+			if (r == 1)
+				return Translations.getString("date.1_day");
+			else
+				return Translations.getString("date.x_days", r);
 		}
 		
-		return text;
+		if (reminder % 60 == 0) {
+			int r = Math.round(reminder / 60);
+			
+			if (r == 1)
+				return Translations.getString("date.1_hour");
+			else
+				return Translations.getString("date.x_hours", r);
+		}
+		
+		if (reminder == 1)
+			return Translations.getString("date.1_minute");
+		else
+			return Translations.getString("date.x_minutes", reminder);
 	}
 	
 }
