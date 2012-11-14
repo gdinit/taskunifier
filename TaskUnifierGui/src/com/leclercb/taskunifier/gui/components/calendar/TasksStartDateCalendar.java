@@ -91,8 +91,8 @@ public class TasksStartDateCalendar extends TasksCalendar {
 			
 			int length = task.getLength();
 			
-			if (length < 30)
-				length = 30;
+			if (length < 15)
+				length = 15;
 			
 			if (!Main.getSettings().getBooleanProperty("date.use_start_time")) {
 				startDate.set(
@@ -165,8 +165,8 @@ public class TasksStartDateCalendar extends TasksCalendar {
 		
 		int length = (int) diff;
 		
-		if (length < 30)
-			length = 30;
+		if (length < 15)
+			length = 15;
 		
 		Calendar startDate = Calendar.getInstance();
 		startDate.setTime(interval.getStartDate());
@@ -198,8 +198,8 @@ public class TasksStartDateCalendar extends TasksCalendar {
 		
 		int length = task.getLength() - (int) diff;
 		
-		if (length < 30)
-			length = 30;
+		if (length < 15)
+			length = 15;
 		
 		Calendar dueDate = Calendar.getInstance();
 		dueDate.setTime(newEndDate);

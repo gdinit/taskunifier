@@ -52,6 +52,7 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerNotConnectedExc
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerSettingsException;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerDefaultProgressMessage;
 import com.leclercb.taskunifier.gui.actions.ActionPluginConfiguration;
+import com.leclercb.taskunifier.gui.actions.ActionRefresh;
 import com.leclercb.taskunifier.gui.actions.ActionSave;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.constants.Constants;
@@ -406,6 +407,8 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 			SynchronizerUtils.removeOldCompletedTasks();
 			
 			SynchronizerUtils.setTaskRepeatEnabled(true);
+			
+			ActionRefresh.refresh();
 		} finally {
 			Synchronizing.getInstance().setSynchronizing(false);
 			

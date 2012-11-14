@@ -91,8 +91,8 @@ public class TasksDueDateCalendar extends TasksCalendar {
 			
 			int length = task.getLength();
 			
-			if (length < 30)
-				length = 30;
+			if (length < 15)
+				length = 15;
 			
 			if (!Main.getSettings().getBooleanProperty("date.use_due_time")) {
 				dueDate.set(
@@ -170,8 +170,8 @@ public class TasksDueDateCalendar extends TasksCalendar {
 		
 		int length = (int) diff;
 		
-		if (length < 30)
-			length = 30;
+		if (length < 15)
+			length = 15;
 		
 		Calendar dueDate = Calendar.getInstance();
 		dueDate.setTime(interval.getEndDate());
@@ -206,8 +206,8 @@ public class TasksDueDateCalendar extends TasksCalendar {
 		
 		int length = task.getLength() - (int) diff;
 		
-		if (length < 30)
-			length = 30;
+		if (length < 15)
+			length = 15;
 		
 		Calendar dueDate = Calendar.getInstance();
 		dueDate.setTime(newEndDate);
