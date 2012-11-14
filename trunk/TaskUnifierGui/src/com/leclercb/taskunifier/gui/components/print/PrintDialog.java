@@ -72,7 +72,7 @@ public class PrintDialog extends JDialog {
 	private PrintableReport printableReport;
 	private String propertyName;
 	
-	private JPanel panel;
+	private JPanel printPanel;
 	private boolean cancelled;
 	
 	private JComboBox orientation;
@@ -90,11 +90,15 @@ public class PrintDialog extends JDialog {
 		CheckUtils.isNotNull(printableReport);
 		this.printableReport = printableReport;
 		
-		this.panel.add(
+		this.printPanel.removeAll();
+		
+		this.printPanel.add(
 				ComponentFactory.createJScrollPane(
 						printableReport.getComponent(),
 						true),
 				BorderLayout.CENTER);
+		
+		this.printPanel.validate();
 	}
 	
 	public String getPropertyName() {
@@ -141,8 +145,8 @@ public class PrintDialog extends JDialog {
 		header.setIcon(ImageUtils.getResourceImage("print.png", 32, 32));
 		this.add(header, BorderLayout.NORTH);
 		
-		JPanel printPanel = new JPanel();
-		printPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		JPanel printOptionsPanel = new JPanel();
+		printOptionsPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		this.orientation = new JComboBox(new Object[] {
 				OrientationRequested.LANDSCAPE,
@@ -161,15 +165,19 @@ public class PrintDialog extends JDialog {
 				this.scalingFactor,
 				"##0%"));
 		
-		printPanel.add(this.orientation);
-		printPanel.add(this.scalingFactor);
+		printOptionsPanel.add(this.orientation);
+		printOptionsPanel.add(this.scalingFactor);
 		
-		this.panel = new JPanel(new BorderLayout());
-		this.panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		this.panel.add(printPanel, BorderLayout.NORTH);
-		this.add(this.panel, BorderLayout.CENTER);
+		this.printPanel = new JPanel();
+		this.printPanel.setLayout(new BorderLayout());
 		
-		this.initializeButtonsPanel(this.panel);
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		mainPanel.add(printOptionsPanel, BorderLayout.NORTH);
+		mainPanel.add(this.printPanel, BorderLayout.CENTER);
+		this.add(mainPanel, BorderLayout.CENTER);
+		
+		this.initializeButtonsPanel(mainPanel);
 	}
 	
 	private void initializeButtonsPanel(JPanel panel) {

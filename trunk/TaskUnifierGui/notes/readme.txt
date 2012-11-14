@@ -2,6 +2,8 @@ HISTORY
 -------
 
 Version 3.1.3
+	- Major:
+		- Print table not updated
 	- Minor:
 		- BF 187: Concurrent Snarl notifications
 		- BF 190: Refresh after sync
