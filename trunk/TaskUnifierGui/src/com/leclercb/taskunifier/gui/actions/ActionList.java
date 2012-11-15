@@ -27,6 +27,7 @@ public enum ActionList {
 	CHANGE_VIEW(Translations.getString("action.change_view"), "change_view_tasks.png", true),
 	CHECK_PLUGIN_VERSION(Translations.getString("action.check_plugin_version"), "download.png", true),
 	CHECK_VERSION(Translations.getString("action.check_version"), "download.png", true),
+	CLOSE_TAB(Translations.getString("action.close_tab"), "tab_remove.png", true),
 	CLOSE_WINDOW(Translations.getString("action.close_window"), "window_remove.png", true),
 	COLLAPSE_ALL(Translations.getString("action.collapse_all"), "collapse.png", true),
 	COMPLETE_TASKS(Translations.getString("action.complete_tasks"), "check.png", true),
@@ -170,6 +171,8 @@ public enum ActionList {
 				return new ActionCheckPluginVersion(width, height, false);
 			case CHECK_VERSION:
 				return new ActionCheckVersion(width, height, false);
+			case CLOSE_TAB:
+				return new ActionCloseTab(width, height);
 			case CLOSE_WINDOW:
 				return new ActionCloseWindow(width, height);
 			case COLLAPSE_ALL:
