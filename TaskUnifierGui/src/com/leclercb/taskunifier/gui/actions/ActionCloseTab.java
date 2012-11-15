@@ -55,10 +55,10 @@ public class ActionCloseTab extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		ActionCloseTab.closeWindow();
+		ActionCloseTab.closeTab();
 	}
 	
-	public static void closeWindow() {
+	public static void closeTab() {
 		ViewItem currentViewItem = ViewList.getInstance().getCurrentView();
 		
 		if (currentViewItem == null)
