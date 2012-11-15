@@ -33,19 +33,22 @@
 package com.leclercb.taskunifier.gui.main.frames;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Frame;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
@@ -66,7 +69,8 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelUtils;
 import com.leclercb.commons.gui.utils.ScreenUtils;
-import com.leclercb.taskunifier.gui.actions.ActionRemoveTab;
+import com.leclercb.taskunifier.gui.actions.ActionAddTab;
+import com.leclercb.taskunifier.gui.actions.ActionCloseTab;
 import com.leclercb.taskunifier.gui.components.menubar.MenuBar;
 import com.leclercb.taskunifier.gui.components.statusbar.DefaultStatusBar;
 import com.leclercb.taskunifier.gui.components.statusbar.MacStatusBar;
@@ -75,6 +79,7 @@ import com.leclercb.taskunifier.gui.components.toolbar.DefaultToolBar;
 import com.leclercb.taskunifier.gui.components.toolbar.MacToolBar;
 import com.leclercb.taskunifier.gui.components.views.ViewItem;
 import com.leclercb.taskunifier.gui.components.views.ViewList;
+import com.leclercb.taskunifier.gui.components.views.ViewType;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
@@ -87,6 +92,8 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 	private String propertyName;
 	private JTabbedPane mainTabbedPane;
 	private ViewItem oldSelectedView;
+	
+	private JPopupMenu tabPopupMenu;
 	
 	private ListChangeListener viewListListChangeListener;
 	private PropertyChangeListener viewListPropertyChangeListener;
@@ -161,6 +168,7 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 		this.mainTabbedPane = new JTabbedPane();
 		this.add(this.mainTabbedPane, BorderLayout.CENTER);
 		
+		this.initializeTabPopupMenu();
 		this.initializeViews();
 		
 		this.mainTabbedPane.addChangeListener(new ChangeListener() {
@@ -176,6 +184,18 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 		this.initializeMenuBar();
 		this.initializeToolBar();
 		this.initializeStatusBar();
+	}
+	
+	private void initializeTabPopupMenu() {
+		this.tabPopupMenu = new JPopupMenu();
+		this.tabPopupMenu.add(new ActionCloseTab(16, 16));
+		this.tabPopupMenu.addSeparator();
+		
+		JMenu addTabMenu = new JMenu(new ActionAddTab(16, 16));
+		this.tabPopupMenu.add(addTabMenu);
+		for (ViewType type : ViewType.values()) {
+			addTabMenu.add(new JMenuItem(new ActionAddTab(16, 16, type)));
+		}
 	}
 	
 	private void initializeViews() {
@@ -273,24 +293,22 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 				view.getIcon(),
 				SwingConstants.LEFT), BorderLayout.CENTER);
 		
-		JButton button = new JButton(ImageUtils.getResourceImage(
-				"remove.png",
-				12,
-				12));
-		button.setBorderPainted(false);
-		button.setContentAreaFilled(false);
-		button.setFocusable(false);
-		
-		button.addActionListener(new ActionListener() {
+		panel.addMouseListener(new MouseAdapter() {
 			
 			@Override
-			public void actionPerformed(ActionEvent event) {
-				ActionRemoveTab.removeTab(view);
+			public void mouseClicked(MouseEvent event) {
+				if (event.isPopupTrigger()
+						|| event.getButton() == MouseEvent.BUTTON3) {
+					MainFrame.this.tabPopupMenu.show(
+							(Component) event.getSource(),
+							0,
+							0);
+				} else {
+					MainFrame.this.setSelectedView(view);
+				}
 			}
 			
 		});
-		
-		panel.add(button, BorderLayout.EAST);
 		
 		this.mainTabbedPane.setTabComponentAt(
 				this.mainTabbedPane.getTabCount() - 1,
