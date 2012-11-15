@@ -66,6 +66,10 @@ public enum ModelCondition implements Condition<Model, Object> {
 					"The property is incompatible with this condition");
 		}
 		
+		if (taskValue instanceof ModelList<?>)
+			if (((ModelList<?>) taskValue).size() == 0)
+				taskValue = null;
+		
 		if (value == null && taskValue == null) {
 			switch (this) {
 				case EQUALS:
