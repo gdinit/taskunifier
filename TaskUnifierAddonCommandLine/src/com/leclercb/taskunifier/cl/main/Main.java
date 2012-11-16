@@ -1,7 +1,9 @@
 package com.leclercb.taskunifier.cl.main;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.FileReader;
 import java.net.Socket;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -26,6 +28,7 @@ public class Main {
 		
 		String title = args[0];
 		int port = 4576;
+		boolean xmlFormat = title.endsWith(".xml");
 		
 		if (args.length == 2) {
 			if (args[1].matches("[0-9]{1,4}")) {
@@ -38,12 +41,31 @@ public class Main {
 		
 		String xml = null;
 		
-		try {
-			xml = createXml(title);
-		} catch (Exception e) {
-			System.err.println("An error occured during the creation of the xml");
-			e.printStackTrace();
-			System.exit(1);
+		if (xmlFormat) {
+			BufferedReader reader = null;
+			
+			try {
+				StringBuffer xmlBuffer = new StringBuffer();
+				String currentLine;
+				reader = new BufferedReader(new FileReader(title));
+				
+				while ((currentLine = reader.readLine()) != null)
+					xmlBuffer.append(currentLine);
+				
+				xml = xmlBuffer.toString();
+			} catch (Exception e) {
+				System.err.println("An error occured while reading the xml file");
+				e.printStackTrace();
+				System.exit(1);
+			}
+		} else {
+			try {
+				xml = createXml(title);
+			} catch (Exception e) {
+				System.err.println("An error occured during the creation of the xml");
+				e.printStackTrace();
+				System.exit(1);
+			}
 		}
 		
 		try {
@@ -58,6 +80,7 @@ public class Main {
 	
 	private static void exitAndPrintUsage() {
 		System.err.println("Usage: \"quick task\" [port]");
+		System.err.println("Usage: file.xml [port]");
 		System.exit(1);
 	}
 	
