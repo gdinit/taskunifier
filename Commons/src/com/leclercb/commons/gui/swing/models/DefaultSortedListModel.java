@@ -102,6 +102,13 @@ public class DefaultSortedListModel extends AbstractListModel {
 		this.fireStructureChanged(source);
 	}
 	
+	protected void superFireContentsChanged(
+			Object source,
+			int index0,
+			int index1) {
+		super.fireContentsChanged(source, index0, index1);
+	}
+	
 	public void fireStructureChanged(Object source) {
 		if (this.getSize() != 0) {
 			this.model.reSort();
