@@ -3,6 +3,7 @@ HISTORY
 
 Version 3.1.3
 	- Major:
+		- BF 189: Filters table not correctly displayed
 	- Minor:
 		- Improved tabs
 		- Print table not updated
