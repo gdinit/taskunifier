@@ -121,7 +121,17 @@ public class GoalConfigurationPanel extends JSplitPane implements IModelList {
 		removeColor.setEnabled(false);
 		
 		// Initialize Model List
-		this.modelList = new ModelList(new GoalModel(false), goalTitle) {
+		this.modelList = new ModelList(new GoalModel(false) {
+			
+			@Override
+			protected void fireContentsChanged(
+					Object source,
+					int index0,
+					int index1) {
+				this.superFireContentsChanged(source, index0, index1);
+			}
+			
+		}, goalTitle) {
 			
 			private BeanAdapter<Goal> adapter;
 			

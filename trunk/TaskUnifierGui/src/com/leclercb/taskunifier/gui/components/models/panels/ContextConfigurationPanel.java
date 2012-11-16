@@ -100,7 +100,17 @@ public class ContextConfigurationPanel extends JSplitPane implements IModelList 
 		removeColor.setEnabled(false);
 		
 		// Initialize Model List
-		this.modelList = new ModelList(new ContextModel(false), contextTitle) {
+		this.modelList = new ModelList(new ContextModel(false) {
+			
+			@Override
+			protected void fireContentsChanged(
+					Object source,
+					int index0,
+					int index1) {
+				this.superFireContentsChanged(source, index0, index1);
+			}
+			
+		}, contextTitle) {
 			
 			private BeanAdapter<Context> adapter;
 			

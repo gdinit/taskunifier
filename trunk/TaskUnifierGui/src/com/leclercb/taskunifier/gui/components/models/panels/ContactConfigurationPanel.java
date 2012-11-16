@@ -111,7 +111,17 @@ public class ContactConfigurationPanel extends JSplitPane implements IModelList 
 		removeColor.setEnabled(false);
 		
 		// Initialize Model List
-		this.modelList = new ModelList(new ContactModel(false), contactTitle) {
+		this.modelList = new ModelList(new ContactModel(false) {
+			
+			@Override
+			protected void fireContentsChanged(
+					Object source,
+					int index0,
+					int index1) {
+				this.superFireContentsChanged(source, index0, index1);
+			}
+			
+		}, contactTitle) {
 			
 			private BeanAdapter<Contact> adapter;
 			

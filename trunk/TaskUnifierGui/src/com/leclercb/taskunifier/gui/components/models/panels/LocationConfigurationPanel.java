@@ -108,7 +108,17 @@ public class LocationConfigurationPanel extends JSplitPane implements IModelList
 		removeColor.setEnabled(false);
 		
 		// Initialize Model List
-		this.modelList = new ModelList(new LocationModel(false), locationTitle) {
+		this.modelList = new ModelList(new LocationModel(false) {
+			
+			@Override
+			protected void fireContentsChanged(
+					Object source,
+					int index0,
+					int index1) {
+				this.superFireContentsChanged(source, index0, index1);
+			}
+			
+		}, locationTitle) {
 			
 			private BeanAdapter<Location> adapter;
 			
