@@ -109,6 +109,26 @@ public class TableReport implements PrintableReport, Printable {
 		this.scalingFactor = scalingFactor;
 	}
 	
+	@Override
+	public MessageFormat getHeaderFormat() {
+		return this.headerFormat;
+	}
+	
+	@Override
+	public void setHeaderFormat(MessageFormat headerFormat) {
+		this.headerFormat = headerFormat;
+	}
+	
+	@Override
+	public MessageFormat getFooterFormat() {
+		return this.footerFormat;
+	}
+	
+	@Override
+	public void setFooterFormat(MessageFormat footerFormat) {
+		this.footerFormat = footerFormat;
+	}
+	
 	private void initialize() {
 		this.header = this.table.getTableHeader();
 		this.colModel = this.table.getColumnModel();

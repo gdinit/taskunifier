@@ -34,6 +34,7 @@ package com.leclercb.taskunifier.gui.components.print;
 
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.text.MessageFormat;
 
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
@@ -64,6 +65,9 @@ public final class PrintUtils {
 		double scalingFactor = Main.getSettings().getDoubleProperty(
 				propertyName + ".scaling_factor");
 		tableReport.setScalingFactor(scalingFactor);
+		
+		tableReport.setHeaderFormat(new MessageFormat(
+				PrintDialog.getInstance().getReportTitle()));
 		
 		PrinterJob printerJob = PrinterJob.getPrinterJob();
 		

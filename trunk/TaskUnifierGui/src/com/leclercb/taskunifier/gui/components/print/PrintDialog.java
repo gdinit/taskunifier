@@ -44,6 +44,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 import org.jdesktop.swingx.JXHeader;
@@ -77,9 +78,14 @@ public class PrintDialog extends JDialog {
 	
 	private JComboBox orientation;
 	private JSpinner scalingFactor;
+	private JTextField reportTitle;
 	
 	private PrintDialog() {
 		this.initialize();
+	}
+	
+	public String getReportTitle() {
+		return this.reportTitle.getText();
 	}
 	
 	public PrintableReport getPrintableReport() {
@@ -89,6 +95,8 @@ public class PrintDialog extends JDialog {
 	public void setPrintableReport(PrintableReport printableReport) {
 		CheckUtils.isNotNull(printableReport);
 		this.printableReport = printableReport;
+		
+		this.reportTitle.setText(this.printableReport.getHeaderFormat().toPattern());
 		
 		this.printPanel.removeAll();
 		
@@ -165,8 +173,11 @@ public class PrintDialog extends JDialog {
 				this.scalingFactor,
 				"##0%"));
 		
+		this.reportTitle = new JTextField(25);
+		
 		printOptionsPanel.add(this.orientation);
 		printOptionsPanel.add(this.scalingFactor);
+		printOptionsPanel.add(this.reportTitle);
 		
 		this.printPanel = new JPanel();
 		this.printPanel.setLayout(new BorderLayout());
