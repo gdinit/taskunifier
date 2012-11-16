@@ -94,7 +94,8 @@ public class TaskFilterTreeNode implements TreeNode {
 		if (node instanceof TaskFilterElementTreeNode)
 			return this.filter.getIndexOf(((TaskFilterElementTreeNode) node).getElement());
 		
-		return this.filter.getIndexOf(((TaskFilterTreeNode) node).getFilter());
+		return this.filter.getIndexOf(((TaskFilterTreeNode) node).getFilter())
+				+ this.filter.getElementCount();
 	}
 	
 	@Override
