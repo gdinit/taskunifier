@@ -32,6 +32,8 @@
  */
 package com.leclercb.taskunifier.gui.components.print;
 
+import java.text.MessageFormat;
+
 import javax.swing.JComponent;
 import javax.swing.JTable;
 
@@ -46,5 +48,13 @@ public interface PrintableReport {
 	public abstract double getScalingFactor();
 	
 	public abstract void setScalingFactor(double scalingFactor);
+	
+	public abstract MessageFormat getHeaderFormat();
+	
+	public abstract void setHeaderFormat(MessageFormat headerFormat);
+	
+	public abstract MessageFormat getFooterFormat();
+	
+	public abstract void setFooterFormat(MessageFormat footerFormat);
 	
 }

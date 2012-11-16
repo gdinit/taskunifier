@@ -6,6 +6,7 @@ Version 3.1.3
 	- Minor:
 		- Improved tabs
 		- Print table not updated
+		- Change printed report title
 		- Bug fixed: Model list condition
 		- BF 187: Concurrent Snarl notifications
 		- BF 190: Refresh after sync
