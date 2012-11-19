@@ -365,7 +365,7 @@ public enum TaskColumn implements ModelProperties<Task>, TUColumn<Task>, Propert
 				
 				break;
 			case LOCATIONS:
-				if (value instanceof Location) {
+				if (value instanceof Model) {
 					task.getLocations().clear();
 					task.getLocations().add((Location) value);
 				} else {
