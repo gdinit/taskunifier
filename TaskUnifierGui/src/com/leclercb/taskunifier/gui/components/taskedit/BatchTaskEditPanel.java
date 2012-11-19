@@ -128,8 +128,11 @@ public class BatchTaskEditPanel extends JPanel {
 	private JTextField taskTitle;
 	private TUTagList taskTags;
 	private JComboBox taskFolder;
+	private JComboBox taskContext;
 	private TUModelListField<Context> taskContexts;
+	private JComboBox taskGoal;
 	private TUModelListField<Goal> taskGoals;
+	private JComboBox taskLocation;
 	private TUModelListField<Location> taskLocations;
 	private JComboBox taskParent;
 	private JSpinner taskProgress;
@@ -181,19 +184,37 @@ public class BatchTaskEditPanel extends JPanel {
 			
 			if (this.taskContextCheckBox.isSelected()) {
 				for (Task task : this.tasks) {
-					task.setContexts(this.taskContexts.getModelList());
+					if (TaskColumn.MULTIPLE_CONTEXTS) {
+						task.setContexts(this.taskContexts.getModelList());
+					} else {
+						task.getContexts().clear();
+						task.getContexts().add(
+								(Context) this.taskContext.getSelectedItem());
+					}
 				}
 			}
 			
 			if (this.taskGoalCheckBox.isSelected()) {
 				for (Task task : this.tasks) {
-					task.setGoals(this.taskGoals.getModelList());
+					if (TaskColumn.MULTIPLE_GOALS) {
+						task.setGoals(this.taskGoals.getModelList());
+					} else {
+						task.getGoals().clear();
+						task.getGoals().add(
+								(Goal) this.taskGoal.getSelectedItem());
+					}
 				}
 			}
 			
 			if (this.taskLocationCheckBox.isSelected()) {
 				for (Task task : this.tasks) {
-					task.setLocations(this.taskLocations.getModelList());
+					if (TaskColumn.MULTIPLE_LOCATIONS) {
+						task.setLocations(this.taskLocations.getModelList());
+					} else {
+						task.getLocations().clear();
+						task.getLocations().add(
+								(Location) this.taskLocation.getSelectedItem());
+					}
 				}
 			}
 			
@@ -413,8 +434,11 @@ public class BatchTaskEditPanel extends JPanel {
 		this.taskTitle = new JTextField();
 		this.taskTags = new TUTagList();
 		this.taskFolder = ComponentFactory.createModelComboBox(null, true);
+		this.taskContext = ComponentFactory.createModelComboBox(null, true);
 		this.taskContexts = new TUModelListField<Context>(ModelType.CONTEXT);
+		this.taskGoal = ComponentFactory.createModelComboBox(null, true);
 		this.taskGoals = new TUModelListField<Goal>(ModelType.GOAL);
+		this.taskLocation = ComponentFactory.createModelComboBox(null, true);
 		this.taskLocations = new TUModelListField<Location>(ModelType.LOCATION);
 		this.taskParent = ComponentFactory.createModelComboBox(null, false);
 		this.taskProgress = new JSpinner();
@@ -473,9 +497,15 @@ public class BatchTaskEditPanel extends JPanel {
 		this.taskFolderCheckBox.addItemListener(new EnabledActionListener(
 				this.taskFolder));
 		this.taskContextCheckBox.addItemListener(new EnabledActionListener(
+				this.taskContext));
+		this.taskContextCheckBox.addItemListener(new EnabledActionListener(
 				this.taskContexts));
 		this.taskGoalCheckBox.addItemListener(new EnabledActionListener(
+				this.taskGoal));
+		this.taskGoalCheckBox.addItemListener(new EnabledActionListener(
 				this.taskGoals));
+		this.taskLocationCheckBox.addItemListener(new EnabledActionListener(
+				this.taskLocation));
 		this.taskLocationCheckBox.addItemListener(new EnabledActionListener(
 				this.taskLocations));
 		this.taskParentCheckBox.addItemListener(new EnabledActionListener(
@@ -655,12 +685,19 @@ public class BatchTaskEditPanel extends JPanel {
 		if (TaskColumn.GOALS.isUsed()) {
 			nbInserted++;
 			builder.appendI15d("general.task.goal", true, this.taskGoalCheckBox);
-			builder.append(this.createPanel(
-					this.taskGoals,
-					new JButton(new ActionManageModels(
-							16,
-							16,
-							ModelConfigurationTab.GOALS))));
+			
+			if (TaskColumn.MULTIPLE_GOALS)
+				builder.append(this.createPanel(this.taskGoals, new JButton(
+						new ActionManageModels(
+								16,
+								16,
+								ModelConfigurationTab.GOALS))));
+			else
+				builder.append(this.createPanel(this.taskGoal, new JButton(
+						new ActionManageModels(
+								16,
+								16,
+								ModelConfigurationTab.GOALS))));
 		}
 		
 		// Task Context
@@ -670,11 +707,19 @@ public class BatchTaskEditPanel extends JPanel {
 					"general.task.context",
 					true,
 					this.taskContextCheckBox);
-			builder.append(this.createPanel(this.taskContexts, new JButton(
-					new ActionManageModels(
-							16,
-							16,
-							ModelConfigurationTab.CONTEXTS))));
+			
+			if (TaskColumn.MULTIPLE_CONTEXTS)
+				builder.append(this.createPanel(this.taskContexts, new JButton(
+						new ActionManageModels(
+								16,
+								16,
+								ModelConfigurationTab.CONTEXTS))));
+			else
+				builder.append(this.createPanel(this.taskContext, new JButton(
+						new ActionManageModels(
+								16,
+								16,
+								ModelConfigurationTab.CONTEXTS))));
 		}
 		
 		// Task Location
@@ -684,11 +729,20 @@ public class BatchTaskEditPanel extends JPanel {
 					"general.task.location",
 					true,
 					this.taskLocationCheckBox);
-			builder.append(this.createPanel(this.taskLocations, new JButton(
-					new ActionManageModels(
-							16,
-							16,
-							ModelConfigurationTab.LOCATIONS))));
+			
+			if (TaskColumn.MULTIPLE_LOCATIONS)
+				builder.append(this.createPanel(
+						this.taskLocations,
+						new JButton(new ActionManageModels(
+								16,
+								16,
+								ModelConfigurationTab.LOCATIONS))));
+			else
+				builder.append(this.createPanel(this.taskLocation, new JButton(
+						new ActionManageModels(
+								16,
+								16,
+								ModelConfigurationTab.LOCATIONS))));
 		}
 		
 		// Insert Empty Space
@@ -845,8 +899,11 @@ public class BatchTaskEditPanel extends JPanel {
 			this.taskTitle.setText("");
 			this.taskTags.setTags("");
 			this.taskFolder.setSelectedItem(null);
+			this.taskContext.setSelectedItem(null);
 			this.taskContexts.setModelList(null);
+			this.taskGoal.setSelectedItem(null);
 			this.taskGoals.setModelList(null);
+			this.taskLocation.setSelectedItem(null);
 			this.taskLocations.setModelList(null);
 			this.taskParent.setSelectedItem(null);
 			this.taskProgress.setValue(0.0);
@@ -871,9 +928,34 @@ public class BatchTaskEditPanel extends JPanel {
 			this.taskTitle.setText(task.getTitle());
 			this.taskTags.setTags(task.getTags());
 			this.taskFolder.setSelectedItem(task.getFolder());
-			this.taskContexts.setModelList(task.getContexts());
-			this.taskGoals.setModelList(task.getGoals());
-			this.taskLocations.setModelList(task.getLocations());
+			
+			if (TaskColumn.MULTIPLE_CONTEXTS) {
+				this.taskContexts.setModelList(task.getContexts());
+			} else {
+				if (task.getContexts().size() > 0)
+					this.taskContext.setSelectedItem(task.getContexts().get(0));
+				else
+					this.taskContext.setSelectedItem(null);
+			}
+			
+			if (TaskColumn.MULTIPLE_GOALS) {
+				this.taskGoals.setModelList(task.getGoals());
+			} else {
+				if (task.getGoals().size() > 0)
+					this.taskGoal.setSelectedItem(task.getGoals().get(0));
+				else
+					this.taskGoal.setSelectedItem(null);
+			}
+			
+			if (TaskColumn.MULTIPLE_LOCATIONS) {
+				this.taskLocations.setModelList(task.getLocations());
+			} else {
+				if (task.getLocations().size() > 0)
+					this.taskLocation.setSelectedItem(task.getLocations().get(0));
+				else
+					this.taskLocation.setSelectedItem(null);
+			}
+			
 			this.taskParent.setSelectedItem(task.getParent());
 			this.taskProgress.setValue(task.getProgress());
 			this.taskCompleted.setSelected(task.isCompleted());

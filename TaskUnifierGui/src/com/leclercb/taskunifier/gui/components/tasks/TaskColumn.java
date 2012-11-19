@@ -45,6 +45,7 @@ import com.leclercb.taskunifier.api.models.Context;
 import com.leclercb.taskunifier.api.models.Folder;
 import com.leclercb.taskunifier.api.models.Goal;
 import com.leclercb.taskunifier.api.models.Location;
+import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.ModelList;
 import com.leclercb.taskunifier.api.models.TagList;
 import com.leclercb.taskunifier.api.models.Task;
@@ -94,6 +95,13 @@ public enum TaskColumn implements ModelProperties<Task>, TUColumn<Task>, Propert
 	FILES(String.class, Translations.getString("general.task.files"), false, true);
 	
 	public static final String PROP_USED = "used";
+	
+	public static final Boolean MULTIPLE_CONTEXTS = Main.getSettings().getBooleanProperty(
+			"theme.task.field.contexts.multiple");
+	public static final Boolean MULTIPLE_GOALS = Main.getSettings().getBooleanProperty(
+			"theme.task.field.goals.multiple");
+	public static final Boolean MULTIPLE_LOCATIONS = Main.getSettings().getBooleanProperty(
+			"theme.task.field.locations.multiple");
 	
 	public static TaskColumn[] getUsableColumns() {
 		return getUsedColumns(true);
@@ -243,11 +251,26 @@ public enum TaskColumn implements ModelProperties<Task>, TUColumn<Task>, Propert
 			case FOLDER:
 				return task.getFolder();
 			case CONTEXTS:
-				return task.getContexts();
+				if (MULTIPLE_CONTEXTS)
+					return task.getContexts();
+				else if (task.getContexts().size() > 0)
+					return task.getContexts().get(0);
+				else
+					return null;
 			case GOALS:
-				return task.getGoals();
+				if (MULTIPLE_GOALS)
+					return task.getGoals();
+				else if (task.getGoals().size() > 0)
+					return task.getGoals().get(0);
+				else
+					return null;
 			case LOCATIONS:
-				return task.getLocations();
+				if (MULTIPLE_LOCATIONS)
+					return task.getLocations();
+				else if (task.getLocations().size() > 0)
+					return task.getLocations().get(0);
+				else
+					return null;
 			case PARENT:
 				return task.getParent();
 			case PROGRESS:
@@ -324,13 +347,31 @@ public enum TaskColumn implements ModelProperties<Task>, TUColumn<Task>, Propert
 				task.setFolder((Folder) value);
 				break;
 			case CONTEXTS:
-				task.setContexts((ModelList<Context>) value);
+				if (value instanceof Model) {
+					task.getContexts().clear();
+					task.getContexts().add((Context) value);
+				} else {
+					task.setContexts((ModelList<Context>) value);
+				}
+				
 				break;
 			case GOALS:
-				task.setGoals((ModelList<Goal>) value);
+				if (value instanceof Model) {
+					task.getGoals().clear();
+					task.getGoals().add((Goal) value);
+				} else {
+					task.setGoals((ModelList<Goal>) value);
+				}
+				
 				break;
 			case LOCATIONS:
-				task.setLocations((ModelList<Location>) value);
+				if (value instanceof Location) {
+					task.getLocations().clear();
+					task.getLocations().add((Location) value);
+				} else {
+					task.setLocations((ModelList<Location>) value);
+				}
+				
 				break;
 			case PARENT:
 				task.setParent((Task) value);
