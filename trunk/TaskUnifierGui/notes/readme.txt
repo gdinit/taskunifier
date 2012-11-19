@@ -1,6 +1,10 @@
 HISTORY
 -------
 
+Version 3.1.4
+	- Minor:
+		- FR 250: Select only one context/goal/location
+
 Version 3.1.3
 	- Major:
 		- BF 189: Filters table not correctly displayed
