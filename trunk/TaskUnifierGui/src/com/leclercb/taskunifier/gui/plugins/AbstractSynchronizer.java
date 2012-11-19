@@ -241,7 +241,7 @@ public abstract class AbstractSynchronizer implements Synchronizer {
 			}
 			
 			if (model.getModelStatus().equals(ModelStatus.TO_DELETE))
-				if (model.getModelReferenceId(this.keyId) == null)
+				if (model.getModelReferenceId(this.keyId) != null)
 					actionCount++;
 			
 		}
