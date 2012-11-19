@@ -73,11 +73,14 @@ import com.leclercb.taskunifier.gui.commons.values.StringValueTaskStatus;
 import com.leclercb.taskunifier.gui.commons.values.StringValueTaskTitle;
 import com.leclercb.taskunifier.gui.commons.values.StringValueTimer;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.table.editors.ContextEditor;
 import com.leclercb.taskunifier.gui.components.tasks.table.editors.ContextsEditor;
 import com.leclercb.taskunifier.gui.components.tasks.table.editors.DateEditor;
 import com.leclercb.taskunifier.gui.components.tasks.table.editors.FolderEditor;
+import com.leclercb.taskunifier.gui.components.tasks.table.editors.GoalEditor;
 import com.leclercb.taskunifier.gui.components.tasks.table.editors.GoalsEditor;
 import com.leclercb.taskunifier.gui.components.tasks.table.editors.LengthEditor;
+import com.leclercb.taskunifier.gui.components.tasks.table.editors.LocationEditor;
 import com.leclercb.taskunifier.gui.components.tasks.table.editors.LocationsEditor;
 import com.leclercb.taskunifier.gui.components.tasks.table.editors.PriorityEditor;
 import com.leclercb.taskunifier.gui.components.tasks.table.editors.ProgressEditor;
@@ -178,11 +181,28 @@ public class TaskTableColumn extends TUTableColumn<TaskColumn> {
 				StringValueModel.INSTANCE,
 				IconValueModel.INSTANCE));
 		
-		CONTEXTS_RENDERER = new ModelListRenderer<Context>(ModelType.CONTEXT);
+		if (TaskColumn.MULTIPLE_CONTEXTS)
+			CONTEXTS_RENDERER = new ModelListRenderer<Context>(
+					ModelType.CONTEXT);
+		else
+			CONTEXTS_RENDERER = new DefaultTableRenderer(new MappedValue(
+					StringValueModel.INSTANCE,
+					IconValueModel.INSTANCE));
 		
-		GOALS_RENDERER = new ModelListRenderer<Goal>(ModelType.GOAL);
+		if (TaskColumn.MULTIPLE_GOALS)
+			GOALS_RENDERER = new ModelListRenderer<Goal>(ModelType.GOAL);
+		else
+			GOALS_RENDERER = new DefaultTableRenderer(new MappedValue(
+					StringValueModel.INSTANCE,
+					IconValueModel.INSTANCE));
 		
-		LOCATIONS_RENDERER = new ModelListRenderer<Location>(ModelType.LOCATION);
+		if (TaskColumn.MULTIPLE_LOCATIONS)
+			LOCATIONS_RENDERER = new ModelListRenderer<Location>(
+					ModelType.LOCATION);
+		else
+			LOCATIONS_RENDERER = new DefaultTableRenderer(new MappedValue(
+					StringValueModel.INSTANCE,
+					IconValueModel.INSTANCE));
 		
 		MODEL_EDIT_RENDERER = new DefaultTableRenderer(new MappedValue(
 				null,
@@ -249,13 +269,28 @@ public class TaskTableColumn extends TUTableColumn<TaskColumn> {
 		TITLE_RENDERER = new DefaultTableRenderer(StringValueTaskTitle.INSTANCE);
 		
 		BOOLEAN_EDITOR = new JXTable.BooleanEditor();
-		CONTEXTS_EDITOR = new ContextsEditor();
+		
+		if (TaskColumn.MULTIPLE_CONTEXTS)
+			CONTEXTS_EDITOR = new ContextsEditor();
+		else
+			CONTEXTS_EDITOR = new ContextEditor();
+		
 		DUE_DATE_EDITOR = new DateEditor(Main.getSettings().getBooleanProperty(
 				"date.use_due_time"));
 		FOLDER_EDITOR = new FolderEditor();
-		GOALS_EDITOR = new GoalsEditor();
+		
+		if (TaskColumn.MULTIPLE_GOALS)
+			GOALS_EDITOR = new GoalsEditor();
+		else
+			GOALS_EDITOR = new GoalEditor();
+		
 		LENGTH_EDITOR = new LengthEditor();
-		LOCATIONS_EDITOR = new LocationsEditor();
+		
+		if (TaskColumn.MULTIPLE_LOCATIONS)
+			LOCATIONS_EDITOR = new LocationsEditor();
+		else
+			LOCATIONS_EDITOR = new LocationEditor();
+		
 		PROGRESS_EDITOR = new ProgressEditor();
 		REMINDER_EDITOR = new ReminderEditor();
 		REPEAT_EDITOR = new RepeatEditor();

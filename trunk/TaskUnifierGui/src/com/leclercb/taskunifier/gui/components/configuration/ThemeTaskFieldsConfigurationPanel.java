@@ -44,6 +44,7 @@ import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGr
 import com.leclercb.taskunifier.gui.components.configuration.api.DefaultConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class ThemeTaskFieldsConfigurationPanel extends DefaultConfigurationPanel {
 	
@@ -55,6 +56,38 @@ public class ThemeTaskFieldsConfigurationPanel extends DefaultConfigurationPanel
 	}
 	
 	private void initialize() {
+		this.addField(new ConfigurationField(
+				"MULTIPLE_CONTEXTS",
+				null,
+				true,
+				new ConfigurationFieldType.CheckBox(
+						Main.getSettings(),
+						"theme.task.field.contexts.multiple",
+						Translations.getString("configuration.theme.allow_multiple_contexts"))));
+		
+		this.addField(new ConfigurationField(
+				"MULTIPLE_GOALS",
+				null,
+				true,
+				new ConfigurationFieldType.CheckBox(
+						Main.getSettings(),
+						"theme.task.field.goals.multiple",
+						Translations.getString("configuration.theme.allow_multiple_goals"))));
+		
+		this.addField(new ConfigurationField(
+				"MULTIPLE_LOCATIONS",
+				null,
+				true,
+				new ConfigurationFieldType.CheckBox(
+						Main.getSettings(),
+						"theme.task.field.locations.multiple",
+						Translations.getString("configuration.theme.allow_multiple_locations"))));
+		
+		this.addField(new ConfigurationField(
+				"SEPARATOR_1",
+				null,
+				new ConfigurationFieldType.Separator()));
+		
 		List<TaskColumn> columns = new ArrayList<TaskColumn>(
 				Arrays.asList(TaskColumn.values()));
 		
