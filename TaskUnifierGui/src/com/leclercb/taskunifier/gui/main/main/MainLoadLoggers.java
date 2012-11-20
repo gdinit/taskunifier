@@ -78,8 +78,8 @@ public final class MainLoadLoggers {
 					"logger.plugin.level"));
 			
 			ApiLogger.getLogger().setLevel(apiLogLevel);
-			GuiLogger.getLogger().setLevel(apiLogLevel);
-			PluginLogger.getLogger().setLevel(apiLogLevel);
+			GuiLogger.getLogger().setLevel(guiLogLevel);
+			PluginLogger.getLogger().setLevel(pluginLogLevel);
 			
 			Handler[] handlers;
 			
