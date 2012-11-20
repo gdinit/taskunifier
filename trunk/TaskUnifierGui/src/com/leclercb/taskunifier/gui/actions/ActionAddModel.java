@@ -30,16 +30,44 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.models.lists;
+package com.leclercb.taskunifier.gui.actions;
 
-import com.leclercb.taskunifier.api.models.Model;
+import java.awt.event.ActionEvent;
 
-public interface IModelList {
+import com.leclercb.taskunifier.api.models.ModelType;
+import com.leclercb.taskunifier.gui.components.models.ModelConfigurationDialog;
+import com.leclercb.taskunifier.gui.translations.Translations;
+import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
+import com.leclercb.taskunifier.gui.utils.ImageUtils;
+
+public class ActionAddModel extends AbstractViewAction {
 	
-	public abstract void addNewModel();
+	private ModelType type;
 	
-	public abstract Model[] getSelectedModels();
+	public ActionAddModel(ModelType type, int width, int height) {
+		super(
+				Translations.getString(
+						"action.add_model",
+						TranslationsUtils.translateModelType(type, false)),
+				ImageUtils.getResourceImage("folder.png", width, height));
+		
+		this.type = type;
+		
+		this.putValue(
+				SHORT_DESCRIPTION,
+				Translations.getString(
+						"action.add_model",
+						TranslationsUtils.translateModelType(type, false)));
+	}
 	
-	public abstract void setSelectedModel(Model model);
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		ActionAddModel.addModel(this.type);
+	}
+	
+	public static void addModel(ModelType type) {
+		ModelConfigurationDialog.getInstance().setVisible(true);
+		ModelConfigurationDialog.getInstance().addNewModel(type);
+	}
 	
 }

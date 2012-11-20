@@ -77,6 +77,11 @@ public class ContextConfigurationPanel extends JSplitPane implements IModelList 
 	}
 	
 	@Override
+	public void addNewModel() {
+		this.modelList.addNewModel();
+	}
+	
+	@Override
 	public Model[] getSelectedModels() {
 		return this.modelList.getSelectedModels();
 	}

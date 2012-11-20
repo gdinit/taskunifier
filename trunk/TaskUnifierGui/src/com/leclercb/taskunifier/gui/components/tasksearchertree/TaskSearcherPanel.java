@@ -33,6 +33,9 @@
 package com.leclercb.taskunifier.gui.components.tasksearchertree;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -41,6 +44,7 @@ import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.SortOrder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -60,9 +64,11 @@ import com.leclercb.taskunifier.api.models.GoalFactory;
 import com.leclercb.taskunifier.api.models.LocationFactory;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.ModelId;
+import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.Tag;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.properties.ModelIdCoder;
+import com.leclercb.taskunifier.gui.actions.ActionAddModel;
 import com.leclercb.taskunifier.gui.actions.ActionAddTaskSearcher;
 import com.leclercb.taskunifier.gui.actions.ActionConfiguration;
 import com.leclercb.taskunifier.gui.actions.ActionDeleteTaskSearcher;
@@ -86,6 +92,7 @@ import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.ModelItem;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.SearcherItem;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.TagItem;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.swing.buttons.TUAddButton;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 
@@ -308,9 +315,34 @@ public class TaskSearcherPanel extends JPanel implements SavePropertiesListener,
 	}
 	
 	private void initializeButtons() {
+		final JPopupMenu popupMenu = new JPopupMenu();
+		popupMenu.add(new ActionAddTaskSearcher(16, 16));
+		popupMenu.addSeparator();
+		popupMenu.add(new ActionAddModel(ModelType.CONTACT, 16, 16));
+		popupMenu.add(new ActionAddModel(ModelType.CONTEXT, 16, 16));
+		popupMenu.add(new ActionAddModel(ModelType.FOLDER, 16, 16));
+		popupMenu.add(new ActionAddModel(ModelType.GOAL, 16, 16));
+		popupMenu.add(new ActionAddModel(ModelType.LOCATION, 16, 16));
+		
+		ActionListener listener = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				if (event.getActionCommand().equals("ADD")) {
+					popupMenu.show((Component) event.getSource(), 0, 0);
+					popupMenu.show(
+							(Component) event.getSource(),
+							0,
+							-popupMenu.getHeight());
+				}
+			}
+			
+		};
+		
+		JButton addButton = new TUAddButton(listener);
+		
 		JPanel panel = new TUButtonsPanel(true, new JButton(
-				new ActionManageModels(16, 16)), new JButton(
-				new ActionAddTaskSearcher(16, 16)), new JButton(
+				new ActionManageModels(16, 16)), addButton, new JButton(
 				new ActionEditTaskSearcher(16, 16)), new JButton(
 				new ActionDeleteTaskSearcher(16, 16)));
 		panel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -326,14 +358,14 @@ public class TaskSearcherPanel extends JPanel implements SavePropertiesListener,
 		}
 		
 		ModelConfigurationDialog dialog = ModelConfigurationDialog.getInstance();
-		dialog.setSelectedModel(item.getModelType(), item.getModel());
 		dialog.setVisible(true);
+		dialog.setSelectedModel(item.getModelType(), item.getModel());
 	}
 	
 	private void openManageTags(TagItem item) {
 		ModelConfigurationDialog dialog = ModelConfigurationDialog.getInstance();
-		dialog.setSelectedTag(item.getTag());
 		dialog.setVisible(true);
+		dialog.setSelectedTag(item.getTag());
 	}
 	
 	@Override
