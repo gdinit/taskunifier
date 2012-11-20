@@ -11,6 +11,7 @@ public enum ActionList {
 	
 	SEPARATOR(Translations.getString("general.separator"), "separator.png", true),
 	ABOUT(Translations.getString("action.about"), "information.png", true),
+	ADD_MODEL(Translations.getString("action.add_model"), "add.png", false),
 	ADD_NOTE(Translations.getString("action.add_note"), "note.png", true),
 	ADD_NOTE_SEARCHER(Translations.getString("action.add_note_searcher"), "add.png", true),
 	ADD_QUICK_TASK(Translations.getString("action.add_task"), "task.png", false),
@@ -136,6 +137,8 @@ public enum ActionList {
 				return null;
 			case ABOUT:
 				return new ActionAbout(width, height);
+			case ADD_MODEL:
+				return null;
 			case ADD_NOTE:
 				return new ActionAddNote(width, height);
 			case ADD_NOTE_SEARCHER:

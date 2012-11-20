@@ -107,32 +107,20 @@ public class ModelConfigurationDialog extends JDialog {
 		this.tabbedPane.setSelectedIndex(tab.ordinal());
 	}
 	
-	public void setSelectedModel(ModelType type, Model model) {
-		int index = -1;
+	public void addNewModel(ModelType type) {
+		int index = modelTypeToTabIndex(type);
 		
-		switch (type) {
-			case CONTACT:
-				index = 0;
-				break;
-			case CONTEXT:
-				index = 1;
-				break;
-			case FOLDER:
-				index = 2;
-				break;
-			case GOAL:
-				index = 3;
-				break;
-			case LOCATION:
-				index = 4;
-				break;
-			case NOTE:
-				index = -1;
-				break;
-			case TASK:
-				index = -1;
-				break;
-		}
+		if (index == -1)
+			return;
+		
+		this.tabbedPane.setSelectedIndex(index);
+		
+		IModelList list = (IModelList) this.tabbedPane.getSelectedComponent();
+		list.addNewModel();
+	}
+	
+	public void setSelectedModel(ModelType type, Model model) {
+		int index = modelTypeToTabIndex(type);
 		
 		if (index == -1)
 			return;
@@ -153,12 +141,13 @@ public class ModelConfigurationDialog extends JDialog {
 	}
 	
 	private void initialize() {
-		this.setModal(true);
+		this.setModal(false);
 		this.setTitle(Translations.getString("general.manage_models"));
 		this.setSize(800, 500);
 		this.setResizable(true);
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
+		this.setAlwaysOnTop(true);
 		
 		JXHeader header = new JXHeader();
 		header.setTitle(Translations.getString("header.title.manage_models"));
@@ -222,6 +211,28 @@ public class ModelConfigurationDialog extends JDialog {
 				listener,
 				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
 				JComponent.WHEN_IN_FOCUSED_WINDOW);
+	}
+	
+	private static int modelTypeToTabIndex(ModelType type) {
+		if (type == null)
+			return -1;
+		
+		switch (type) {
+			case CONTACT:
+				return 0;
+			case CONTEXT:
+				return 1;
+			case FOLDER:
+				return 2;
+			case GOAL:
+				return 3;
+			case LOCATION:
+				return 4;
+			case NOTE:
+			case TASK:
+			default:
+				return -1;
+		}
 	}
 	
 }

@@ -163,10 +163,7 @@ public abstract class ModelList extends JPanel implements IModelList {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				if (event.getActionCommand().equals("ADD")) {
-					ModelList.this.rowFilter.setTitle(null);
-					Model model = ModelList.this.addModel();
-					ModelList.this.setSelectedModel(model);
-					ComponentUtils.focusAndSelectTextInTextField(ModelList.this.titleField);
+					ModelList.this.addNewModel();
 				} else {
 					Model[] models = ModelList.this.getSelectedModels();
 					for (Model model : models) {
@@ -218,10 +215,18 @@ public abstract class ModelList extends JPanel implements IModelList {
 		this.modelList.setSelectedValue(model, true);
 	}
 	
-	public abstract Model addModel();
+	@Override
+	public void addNewModel() {
+		this.rowFilter.setTitle(null);
+		Model model = this.addModel();
+		this.setSelectedModel(model);
+		ComponentUtils.focusAndSelectTextInTextField(this.titleField);
+	}
 	
-	public abstract void removeModel(Model model);
+	protected abstract Model addModel();
 	
-	public abstract void modelsSelected(Model[] models);
+	protected abstract void removeModel(Model model);
+	
+	protected abstract void modelsSelected(Model[] models);
 	
 }

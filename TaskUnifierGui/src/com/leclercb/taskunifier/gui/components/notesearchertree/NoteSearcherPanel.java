@@ -33,6 +33,9 @@
 package com.leclercb.taskunifier.gui.components.notesearchertree;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.logging.Level;
@@ -40,6 +43,7 @@ import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
@@ -58,6 +62,7 @@ import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.api.properties.ModelIdCoder;
+import com.leclercb.taskunifier.gui.actions.ActionAddModel;
 import com.leclercb.taskunifier.gui.actions.ActionAddNoteSearcher;
 import com.leclercb.taskunifier.gui.actions.ActionConfiguration;
 import com.leclercb.taskunifier.gui.actions.ActionDeleteNoteSearcher;
@@ -78,6 +83,7 @@ import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
 import com.leclercb.taskunifier.gui.components.notesearchertree.nodes.FolderItem;
 import com.leclercb.taskunifier.gui.components.notesearchertree.nodes.SearcherItem;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.swing.buttons.TUAddButton;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 
@@ -267,9 +273,34 @@ public class NoteSearcherPanel extends JPanel implements SavePropertiesListener,
 	}
 	
 	private void initializeButtons() {
+		final JPopupMenu popupMenu = new JPopupMenu();
+		popupMenu.add(new ActionAddNoteSearcher(16, 16));
+		popupMenu.addSeparator();
+		popupMenu.add(new ActionAddModel(ModelType.CONTACT, 16, 16));
+		popupMenu.add(new ActionAddModel(ModelType.CONTEXT, 16, 16));
+		popupMenu.add(new ActionAddModel(ModelType.FOLDER, 16, 16));
+		popupMenu.add(new ActionAddModel(ModelType.GOAL, 16, 16));
+		popupMenu.add(new ActionAddModel(ModelType.LOCATION, 16, 16));
+		
+		ActionListener listener = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				if (event.getActionCommand().equals("ADD")) {
+					popupMenu.show((Component) event.getSource(), 0, 0);
+					popupMenu.show(
+							(Component) event.getSource(),
+							0,
+							-popupMenu.getHeight());
+				}
+			}
+			
+		};
+		
+		JButton addButton = new TUAddButton(listener);
+		
 		JPanel panel = new TUButtonsPanel(true, new JButton(
-				new ActionManageModels(16, 16)), new JButton(
-				new ActionAddNoteSearcher(16, 16)), new JButton(
+				new ActionManageModels(16, 16)), addButton, new JButton(
 				new ActionEditNoteSearcher(16, 16)), new JButton(
 				new ActionDeleteNoteSearcher(16, 16)));
 		panel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -285,8 +316,8 @@ public class NoteSearcherPanel extends JPanel implements SavePropertiesListener,
 		}
 		
 		ModelConfigurationDialog dialog = ModelConfigurationDialog.getInstance();
-		dialog.setSelectedModel(ModelType.FOLDER, item.getFolder());
 		dialog.setVisible(true);
+		dialog.setSelectedModel(ModelType.FOLDER, item.getFolder());
 	}
 	
 	@Override
