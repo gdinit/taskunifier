@@ -11,7 +11,7 @@ public enum ActionList {
 	
 	SEPARATOR(Translations.getString("general.separator"), "separator.png", true),
 	ABOUT(Translations.getString("action.about"), "information.png", true),
-	ADD_MODEL(Translations.getString("action.add_model"), "add.png", false),
+	ADD_MODEL(Translations.getString("action.add_model"), "folder.png", false),
 	ADD_NOTE(Translations.getString("action.add_note"), "note.png", true),
 	ADD_NOTE_SEARCHER(Translations.getString("action.add_note_searcher"), "add.png", true),
 	ADD_QUICK_TASK(Translations.getString("action.add_task"), "task.png", false),
