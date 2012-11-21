@@ -358,14 +358,14 @@ public class TaskSearcherPanel extends JPanel implements SavePropertiesListener,
 		}
 		
 		ModelConfigurationDialog dialog = ModelConfigurationDialog.getInstance();
-		dialog.setVisible(true);
 		dialog.setSelectedModel(item.getModelType(), item.getModel());
+		dialog.setVisible(true);
 	}
 	
 	private void openManageTags(TagItem item) {
 		ModelConfigurationDialog dialog = ModelConfigurationDialog.getInstance();
-		dialog.setVisible(true);
 		dialog.setSelectedTag(item.getTag());
+		dialog.setVisible(true);
 	}
 	
 	@Override
