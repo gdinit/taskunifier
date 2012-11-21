@@ -35,6 +35,8 @@ package com.leclercb.taskunifier.gui.main.frames;
 import java.awt.event.KeyEvent;
 import java.io.Serializable;
 
+import javax.swing.KeyStroke;
+
 public class ShortcutKey implements Serializable {
 	
 	private int keyCode;
@@ -47,6 +49,10 @@ public class ShortcutKey implements Serializable {
 		
 		this.keyCode = keyCode;
 		this.modifiers = modifiers;
+	}
+	
+	public KeyStroke getKeyStroke() {
+		return KeyStroke.getKeyStroke(this.keyCode, this.modifiers);
 	}
 	
 	public int getKeyCode() {

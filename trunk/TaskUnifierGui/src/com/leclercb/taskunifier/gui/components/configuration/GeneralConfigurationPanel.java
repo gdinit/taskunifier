@@ -32,8 +32,6 @@
  */
 package com.leclercb.taskunifier.gui.components.configuration;
 
-import org.apache.commons.lang3.SystemUtils;
-
 import com.leclercb.taskunifier.gui.actions.ActionResetGeneralSearchers;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
@@ -78,14 +76,12 @@ public class GeneralConfigurationPanel extends DefaultConfigurationPanel {
 					null,
 					new ConfigurationFieldType.Separator()));
 			
-			if (SystemUtils.IS_OS_WINDOWS) {
-				this.addField(new ConfigurationField(
-						"QUICK_TASK_GLOBAL_HOT_KEY",
-						Translations.getString("configuration.general.global_hot_key.quick_task"),
-						new ShortcutKeyFieldType(
-								Main.getSettings(),
-								"general.global_hot_key.quick_task")));
-			}
+			this.addField(new ConfigurationField(
+					"QUICK_TASK_GLOBAL_HOT_KEY",
+					Translations.getString("configuration.general.global_hot_key.quick_task"),
+					new ShortcutKeyFieldType(
+							Main.getSettings(),
+							"general.global_hot_key.quick_task")));
 			
 			this.addField(new ConfigurationField(
 					"MINIMIZE_TO_SYSTEM_TRAY",

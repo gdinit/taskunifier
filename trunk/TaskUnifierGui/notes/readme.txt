@@ -4,6 +4,7 @@ HISTORY
 Version 3.1.4
 	- Major:
 		- Smarter add button
+		- BF 211: Add global hot key for Mac and Linux
 	- Minor:
 		- FR 250: Select only one context/goal/location
 		- BF 195: Invalid number of tasks being synchronized
