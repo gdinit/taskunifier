@@ -71,7 +71,10 @@ import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.gui.actions.ActionManageModels;
 import com.leclercb.taskunifier.gui.actions.ActionPostponeTaskBeans;
 import com.leclercb.taskunifier.gui.api.models.beans.GuiTaskBean;
+import com.leclercb.taskunifier.gui.commons.models.ContextModel;
 import com.leclercb.taskunifier.gui.commons.models.FolderModel;
+import com.leclercb.taskunifier.gui.commons.models.GoalModel;
+import com.leclercb.taskunifier.gui.commons.models.LocationModel;
 import com.leclercb.taskunifier.gui.commons.models.TaskModel;
 import com.leclercb.taskunifier.gui.commons.models.TaskPriorityModel;
 import com.leclercb.taskunifier.gui.commons.models.TaskReminderModel;
@@ -692,18 +695,20 @@ public class BatchTaskEditPanel extends JPanel {
 			nbInserted++;
 			builder.appendI15d("general.task.goal", true, this.taskGoalCheckBox);
 			
-			if (TaskColumn.MULTIPLE_GOALS)
+			if (TaskColumn.MULTIPLE_GOALS) {
 				builder.append(this.createPanel(this.taskGoals, new JButton(
 						new ActionManageModels(
 								16,
 								16,
 								ModelConfigurationTab.GOALS))));
-			else
+			} else {
+				this.taskGoal.setModel(new GoalModel(true));
 				builder.append(this.createPanel(this.taskGoal, new JButton(
 						new ActionManageModels(
 								16,
 								16,
 								ModelConfigurationTab.GOALS))));
+			}
 		}
 		
 		// Task Context
@@ -714,18 +719,20 @@ public class BatchTaskEditPanel extends JPanel {
 					true,
 					this.taskContextCheckBox);
 			
-			if (TaskColumn.MULTIPLE_CONTEXTS)
+			if (TaskColumn.MULTIPLE_CONTEXTS) {
 				builder.append(this.createPanel(this.taskContexts, new JButton(
 						new ActionManageModels(
 								16,
 								16,
 								ModelConfigurationTab.CONTEXTS))));
-			else
+			} else {
+				this.taskContext.setModel(new ContextModel(true));
 				builder.append(this.createPanel(this.taskContext, new JButton(
 						new ActionManageModels(
 								16,
 								16,
 								ModelConfigurationTab.CONTEXTS))));
+			}
 		}
 		
 		// Task Location
@@ -736,19 +743,21 @@ public class BatchTaskEditPanel extends JPanel {
 					true,
 					this.taskLocationCheckBox);
 			
-			if (TaskColumn.MULTIPLE_LOCATIONS)
+			if (TaskColumn.MULTIPLE_LOCATIONS) {
 				builder.append(this.createPanel(
 						this.taskLocations,
 						new JButton(new ActionManageModels(
 								16,
 								16,
 								ModelConfigurationTab.LOCATIONS))));
-			else
+			} else {
+				this.taskLocation.setModel(new LocationModel(true));
 				builder.append(this.createPanel(this.taskLocation, new JButton(
 						new ActionManageModels(
 								16,
 								16,
 								ModelConfigurationTab.LOCATIONS))));
+			}
 		}
 		
 		// Insert Empty Space
