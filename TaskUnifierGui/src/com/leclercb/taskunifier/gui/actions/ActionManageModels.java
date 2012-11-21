@@ -71,11 +71,11 @@ public class ActionManageModels extends AbstractAction {
 	}
 	
 	public static void manageModels(ModelConfigurationTab tab) {
-		ModelConfigurationDialog.getInstance().setVisible(true);
-		
 		if (tab != null)
 			ModelConfigurationDialog.getInstance().setSelectedModelConfigurationTab(
 					tab);
+		
+		ModelConfigurationDialog.getInstance().setVisible(true);
 	}
 	
 }
