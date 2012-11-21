@@ -8,6 +8,7 @@ Version 3.1.4
 	- Minor:
 		- FR 250: Select only one context/goal/location
 		- BF 195: Invalid number of tasks being synchronized
+		- BF 210: Select a word in the note editor
 
 Version 3.1.3
 	- Major:
