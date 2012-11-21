@@ -40,14 +40,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import org.apache.commons.lang3.SystemUtils;
-
-import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.actions.ActionQuit;
 import com.leclercb.taskunifier.gui.components.quickaddtask.QuickAddTaskDialog;
@@ -56,14 +52,17 @@ import com.leclercb.taskunifier.gui.components.views.ViewItem;
 import com.leclercb.taskunifier.gui.components.views.ViewList;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
-import com.melloware.jintellitype.HotkeyListener;
-import com.melloware.jintellitype.JIntellitype;
+import com.tulskiy.keymaster.common.HotKey;
+import com.tulskiy.keymaster.common.HotKeyListener;
+import com.tulskiy.keymaster.common.Provider;
 
 public final class FrameUtils {
 	
 	private FrameUtils() {
 		
 	}
+	
+	private static Provider PROVIDER;
 	
 	private static int FRAME_ID = 0;
 	
@@ -143,47 +142,7 @@ public final class FrameUtils {
 	
 	private static void initializeGlobalHotKey() {
 		try {
-			if (!SystemUtils.IS_OS_WINDOWS)
-				return;
-			
-			String file = "JIntellitype64.dll";
-			
-			if (System.getProperty("sun.arch.data.model") != null) {
-				if (EqualsUtils.equals(
-						System.getProperty("sun.arch.data.model"),
-						"32")) {
-					file = "JIntellitype.dll";
-				}
-			} else {
-				try {
-					JIntellitype.setLibraryLocation(Main.getResourcesFolder()
-							+ File.separator
-							+ "dlls"
-							+ File.separator
-							+ file);
-					
-					JIntellitype.getInstance();
-				} catch (Throwable t) {
-					file = "JIntellitype.dll";
-				}
-			}
-			
-			JIntellitype.setLibraryLocation(Main.getResourcesFolder()
-					+ File.separator
-					+ "dlls"
-					+ File.separator
-					+ file);
-			
-			JIntellitype.getInstance().addHotKeyListener(new HotkeyListener() {
-				
-				@Override
-				public void onHotKey(int id) {
-					if (id == 1) {
-						QuickAddTaskDialog.getInstance().setVisible(true);
-					}
-				}
-				
-			});
+			PROVIDER = Provider.getCurrentProvider(true);
 			
 			registerGlobalHotKey();
 			
@@ -203,17 +162,19 @@ public final class FrameUtils {
 				
 				@Override
 				public void actionPerformed(ActionEvent event) {
-					if (event.getActionCommand().equals("BEFORE_EXIT"))
-						JIntellitype.getInstance().cleanUp();
+					if (event.getActionCommand().equals("BEFORE_EXIT")) {
+						if (PROVIDER != null) {
+							PROVIDER.reset();
+							PROVIDER.stop();
+						}
+					}
 				}
 				
 			});
-			
-			GuiLogger.getLogger().info("Global hot key registered");
 		} catch (Throwable t) {
 			GuiLogger.getLogger().log(
 					Level.WARNING,
-					"Cannot initialize global hot key",
+					"Cannot initialize global hot key provider",
 					t);
 		}
 	}
@@ -224,13 +185,19 @@ public final class FrameUtils {
 					"general.global_hot_key.quick_task",
 					ShortcutKey.class);
 			
-			if (key == null)
+			if (key == null || PROVIDER == null)
 				return;
 			
-			JIntellitype.getInstance().registerSwingHotKey(
-					1,
-					key.getModifiers(),
-					key.getKeyChar());
+			PROVIDER.register(key.getKeyStroke(), new HotKeyListener() {
+				
+				@Override
+				public void onHotKey(HotKey key) {
+					QuickAddTaskDialog.getInstance().setVisible(true);
+				}
+				
+			});
+			
+			GuiLogger.getLogger().info("Global hot key registered");
 		} catch (Throwable t) {
 			GuiLogger.getLogger().log(
 					Level.WARNING,
@@ -241,7 +208,10 @@ public final class FrameUtils {
 	
 	private static void unregisterGlobalHotKey() {
 		try {
-			JIntellitype.getInstance().unregisterHotKey(1);
+			if (PROVIDER != null)
+				PROVIDER.reset();
+			
+			GuiLogger.getLogger().info("Global hot key unregistered");
 		} catch (Throwable t) {
 			GuiLogger.getLogger().log(
 					Level.WARNING,
