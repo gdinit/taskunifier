@@ -188,8 +188,10 @@ public class BatchTaskEditPanel extends JPanel {
 						task.setContexts(this.taskContexts.getModelList());
 					} else {
 						task.getContexts().clear();
-						task.getContexts().add(
-								(Context) this.taskContext.getSelectedItem());
+						
+						if (this.taskContext.getSelectedItem() != null)
+							task.getContexts().add(
+									(Context) this.taskContext.getSelectedItem());
 					}
 				}
 			}
@@ -200,6 +202,8 @@ public class BatchTaskEditPanel extends JPanel {
 						task.setGoals(this.taskGoals.getModelList());
 					} else {
 						task.getGoals().clear();
+						
+						if (this.taskGoal.getSelectedItem() != null)
 						task.getGoals().add(
 								(Goal) this.taskGoal.getSelectedItem());
 					}
@@ -212,6 +216,8 @@ public class BatchTaskEditPanel extends JPanel {
 						task.setLocations(this.taskLocations.getModelList());
 					} else {
 						task.getLocations().clear();
+						
+						if (this.taskLocation.getSelectedItem() != null)
 						task.getLocations().add(
 								(Location) this.taskLocation.getSelectedItem());
 					}

@@ -87,8 +87,6 @@ public class WysiwygHTMLEditorKit extends HTMLEditorKit {
 					super.mouseClicked(e);
 					editor.setEditable(true);
 					
-					editor.setSelectionStart(0);
-					editor.setSelectionEnd(0);
 					editor.requestFocus();
 				}
 			}
