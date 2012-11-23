@@ -64,6 +64,7 @@ import com.leclercb.taskunifier.gui.actions.ActionCompleteTasks;
 import com.leclercb.taskunifier.gui.actions.ActionConfiguration;
 import com.leclercb.taskunifier.gui.actions.ActionCopy;
 import com.leclercb.taskunifier.gui.actions.ActionCreateNewBackup;
+import com.leclercb.taskunifier.gui.actions.ActionCreateTaskTemplateFromTask;
 import com.leclercb.taskunifier.gui.actions.ActionCut;
 import com.leclercb.taskunifier.gui.actions.ActionDelete;
 import com.leclercb.taskunifier.gui.actions.ActionDonate;
@@ -261,6 +262,7 @@ public class MenuBar extends JMenuBar implements ListChangeListener, PropertyCha
 		tasksMenu.addSeparator();
 		
 		tasksMenu.add(new ActionManageTaskTemplates(16, 16));
+		tasksMenu.add(new ActionCreateTaskTemplateFromTask(16, 16));
 		tasksMenu.add(new ActionTaskReminders(16, 16));
 		
 		tasksMenu.addSeparator();

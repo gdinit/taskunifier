@@ -45,6 +45,7 @@ import javax.swing.KeyStroke;
 
 import org.jdesktop.swingx.JXHeader;
 
+import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
 import com.leclercb.taskunifier.gui.components.help.Help;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
@@ -63,6 +64,8 @@ public class TaskTemplateConfigurationDialog extends JDialog {
 		return INSTANCE;
 	}
 	
+	private TaskTemplateConfigurationPanel templateConfigurationPanel;
+	
 	private TaskTemplateConfigurationDialog() {
 		this.initialize();
 	}
@@ -74,6 +77,10 @@ public class TaskTemplateConfigurationDialog extends JDialog {
 		}
 		
 		super.setVisible(visible);
+	}
+	
+	public void setSelectedTemplate(TaskTemplate template) {
+		this.templateConfigurationPanel.setSelectedTemplate(template);
 	}
 	
 	private void initialize() {
@@ -89,8 +96,10 @@ public class TaskTemplateConfigurationDialog extends JDialog {
 		header.setDescription(Translations.getString("header.description.manage_task_templates"));
 		header.setIcon(ImageUtils.getResourceImage("template.png", 32, 32));
 		
+		this.templateConfigurationPanel = new TaskTemplateConfigurationPanel();
+		
 		this.add(header, BorderLayout.NORTH);
-		this.add(new TaskTemplateConfigurationPanel(), BorderLayout.CENTER);
+		this.add(this.templateConfigurationPanel, BorderLayout.CENTER);
 		
 		this.initializeButtonsPanel();
 	}

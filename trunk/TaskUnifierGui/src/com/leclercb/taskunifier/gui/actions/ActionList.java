@@ -38,6 +38,7 @@ public enum ActionList {
 	CREATE_NEW_BACKUP(Translations.getString("action.create_new_backup"), "save.png", true),
 	CREATE_NOTE_FROM_CLIPBOARD(Translations.getString("action.create_note_from_clipboard"), "information.png", true),
 	CREATE_TASK_FROM_CLIPBOARD(Translations.getString("action.create_task_from_clipboard"), "information.png", true),
+	CREATE_TASK_TEMPLATE_FROM_TASK(Translations.getString("action.create_task_template_from_task"), "template.png", true),
 	CUT(Translations.getString("action.cut"), "cut.png", false),
 	DELETE(Translations.getString("action.delete"), "remove.png", true),
 	DELETE_NOTE_SEARCHER(Translations.getString("action.delete_note_searcher"), "remove.png", true),
@@ -194,6 +195,8 @@ public enum ActionList {
 				return new ActionCreateNoteFromClipboard(width, height);
 			case CREATE_TASK_FROM_CLIPBOARD:
 				return new ActionCreateTaskFromClipboard(width, height);
+			case CREATE_TASK_TEMPLATE_FROM_TASK:
+				return new ActionCreateTaskTemplateFromTask(width, height);
 			case CUT:
 				return new ActionCut(width, height);
 			case DELETE:

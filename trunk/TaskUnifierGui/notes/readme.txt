@@ -6,6 +6,7 @@ Version 3.1.4
 		- Smarter add button
 		- BF 211: Add global hot key for Mac and Linux
 	- Minor:
+		- FR 248: Create template from task
 		- FR 250: Select only one context/goal/location
 		- BF 195: Invalid number of tasks being synchronized
 		- BF 210: Select a word in the note editor

@@ -66,11 +66,11 @@ public class NoteTemplate extends AbstractBasicModel implements Template<Note, N
 	private String noteNote;
 	
 	public NoteTemplate() {
-		super(new ModelId(), "");
+		this(new ModelId(), "");
 	}
 	
 	public NoteTemplate(String title) {
-		super(new ModelId(), title);
+		this(new ModelId(), title);
 	}
 	
 	public NoteTemplate(ModelId modelId, String title) {

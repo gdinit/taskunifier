@@ -96,6 +96,8 @@ import com.leclercb.taskunifier.gui.utils.TaskStatusList;
 
 public class TaskTemplateConfigurationPanel extends JSplitPane {
 	
+	private TaskTemplateList templateList;
+	
 	private JTextField templateTitle;
 	private TUShortcutField templateShortcut;
 	
@@ -123,6 +125,10 @@ public class TaskTemplateConfigurationPanel extends JSplitPane {
 	
 	public TaskTemplateConfigurationPanel() {
 		this.initialize();
+	}
+	
+	public void setSelectedTemplate(TaskTemplate template) {
+		this.templateList.setSelectedTemplate(template);
 	}
 	
 	private void initialize() {
@@ -158,10 +164,9 @@ public class TaskTemplateConfigurationPanel extends JSplitPane {
 		this.taskNote = new WysiwygHTMLEditorPane("", false, null);
 		
 		// Initialize Model List
-		final TaskTemplateList modelList = new TaskTemplateList(
-				this.templateTitle);
+		this.templateList = new TaskTemplateList(this.templateTitle);
 		
-		this.setLeftComponent(modelList);
+		this.setLeftComponent(this.templateList);
 		
 		JPanel rightPanel = new JPanel();
 		rightPanel.setBorder(new EmptyBorder(5, 5, 5, 5));

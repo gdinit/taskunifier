@@ -36,6 +36,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import com.leclercb.taskunifier.api.models.ModelId;
+import com.leclercb.taskunifier.api.models.Task;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -71,6 +72,12 @@ public class TaskTemplateFactory extends AbstractTemplateFactory<TaskTemplate> {
 	@Override
 	public TaskTemplate create(ModelId modelId, String title) {
 		TaskTemplate template = new TaskTemplate(modelId, title);
+		this.register(template);
+		return template;
+	}
+	
+	public TaskTemplate create(Task task) {
+		TaskTemplate template = new TaskTemplate(task);
 		this.register(template);
 		return template;
 	}
