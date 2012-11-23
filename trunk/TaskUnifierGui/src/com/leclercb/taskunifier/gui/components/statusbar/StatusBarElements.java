@@ -46,7 +46,9 @@ import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessageTransformer;
+import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
+import com.leclercb.taskunifier.gui.commons.values.StringValueTaskLength;
 import com.leclercb.taskunifier.gui.components.notes.NoteTableView;
 import com.leclercb.taskunifier.gui.components.synchronize.progress.SynchronizerProgressMessageTransformer;
 import com.leclercb.taskunifier.gui.components.tasks.TaskTableView;
@@ -193,20 +195,34 @@ final class StatusBarElements implements ListChangeListener, PropertyChangeListe
 			return;
 		}
 		
-		int rowCount = 0;
-		
 		switch (viewType) {
 			case NOTES:
-				rowCount = ViewUtils.getCurrentNoteView().getNoteTableView().getNoteCount();
+				int rowCount = ViewUtils.getCurrentNoteView().getNoteTableView().getNoteCount();
 				this.rowCountLabel.setText(rowCount
 						+ " "
 						+ Translations.getString("general.notes"));
 				break;
 			case TASKS:
-				rowCount = ViewUtils.getCurrentTaskView().getTaskTableView().getTaskCount();
-				this.rowCountLabel.setText(rowCount
+				Task[] tasks = ViewUtils.getCurrentTaskView().getTaskTableView().getTasks();
+				int totalLength = 0;
+				int totalTime = 0;
+				
+				for (Task task : tasks) {
+					totalLength += task.getLength() * 60;
+					totalTime += task.getTimer().getTimerValue();
+				}
+				
+				totalLength /= 60;
+				totalTime /= 60;
+				
+				this.rowCountLabel.setText(tasks.length
 						+ " "
-						+ Translations.getString("general.tasks"));
+						+ Translations.getString("general.tasks")
+						+ " ("
+						+ StringValueTaskLength.INSTANCE.getString(totalTime)
+						+ " / "
+						+ StringValueTaskLength.INSTANCE.getString(totalLength)
+						+ ")");
 				break;
 			default:
 				this.rowCountLabel.setText("");

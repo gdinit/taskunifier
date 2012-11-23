@@ -57,7 +57,7 @@ public class DefaultStatusBar extends JXStatusBar implements StatusBar {
 		c = new JXStatusBar.Constraint(320);
 		this.add(this.elements.getLastSynchronizationDateLabel(), c);
 		
-		c = new JXStatusBar.Constraint(100);
+		c = new JXStatusBar.Constraint(150);
 		this.add(this.elements.getRowCountLabel(), c);
 		
 		c = new JXStatusBar.Constraint(150);

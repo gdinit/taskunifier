@@ -44,6 +44,8 @@ public interface NoteTableView extends ModelSelectionChangeSupported, PropertyCh
 	
 	public abstract TUTableProperties<NoteColumn> getTableProperties();
 	
+	public abstract Note[] getNotes();
+	
 	public abstract int getNoteCount();
 	
 	public abstract Note[] getSelectedNotes();
