@@ -47,6 +47,8 @@ public class ThemeConfigurationPanel extends ConfigurationPanel {
 	private JTabbedPane tabbedPane;
 	
 	private ConfigurationPanel generalConfigurationPanel;
+	private ConfigurationPanel noteColumnsConfigurationPanel;
+	private ConfigurationPanel taskColumnsConfigurationPanel;
 	private ConfigurationPanel noteFieldsConfigurationPanel;
 	private ConfigurationPanel taskFieldsConfigurationPanel;
 	private ConfigurationPanel priorityConfigurationPanel;
@@ -66,6 +68,8 @@ public class ThemeConfigurationPanel extends ConfigurationPanel {
 		this.add(this.tabbedPane, BorderLayout.CENTER);
 		
 		this.initializeGeneralPanel();
+		this.initializeNoteColumnsPanel();
+		this.initializeTaskColumnsPanel();
 		this.initializeNoteFieldsPanel();
 		this.initializeTaskFieldsPanel();
 		this.initializePriorityPanel();
@@ -79,6 +83,26 @@ public class ThemeConfigurationPanel extends ConfigurationPanel {
 				Translations.getString("configuration.tab.general"),
 				ComponentFactory.createJScrollPane(
 						this.generalConfigurationPanel,
+						false));
+	}
+	
+	private void initializeNoteColumnsPanel() {
+		this.noteColumnsConfigurationPanel = new ThemeNoteColumnsConfigurationPanel(
+				this);
+		this.tabbedPane.addTab(
+				Translations.getString("configuration.tab.note_columns"),
+				ComponentFactory.createJScrollPane(
+						this.noteColumnsConfigurationPanel,
+						false));
+	}
+	
+	private void initializeTaskColumnsPanel() {
+		this.taskColumnsConfigurationPanel = new ThemeTaskColumnsConfigurationPanel(
+				this);
+		this.tabbedPane.addTab(
+				Translations.getString("configuration.tab.task_columns"),
+				ComponentFactory.createJScrollPane(
+						this.taskColumnsConfigurationPanel,
 						false));
 	}
 	
@@ -125,6 +149,8 @@ public class ThemeConfigurationPanel extends ConfigurationPanel {
 	@Override
 	public void saveAndApplyConfig() {
 		this.generalConfigurationPanel.saveAndApplyConfig();
+		this.noteColumnsConfigurationPanel.saveAndApplyConfig();
+		this.taskColumnsConfigurationPanel.saveAndApplyConfig();
 		this.noteFieldsConfigurationPanel.saveAndApplyConfig();
 		this.taskFieldsConfigurationPanel.saveAndApplyConfig();
 		this.priorityConfigurationPanel.saveAndApplyConfig();
@@ -134,6 +160,8 @@ public class ThemeConfigurationPanel extends ConfigurationPanel {
 	@Override
 	public void cancelConfig() {
 		this.generalConfigurationPanel.cancelConfig();
+		this.noteColumnsConfigurationPanel.cancelConfig();
+		this.taskColumnsConfigurationPanel.cancelConfig();
 		this.noteFieldsConfigurationPanel.cancelConfig();
 		this.taskFieldsConfigurationPanel.cancelConfig();
 		this.priorityConfigurationPanel.cancelConfig();

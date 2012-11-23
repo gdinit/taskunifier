@@ -90,24 +90,15 @@ public class TUTableProperties<E extends Enum<?>> implements PropertyChangeListe
 			TableColumnProperties<E> properties = this.columns.get(column);
 			
 			properties.setOrder(Main.getSettings().getIntegerProperty(
-					propertyName
-							+ ".column."
-							+ column.name().toLowerCase()
-							+ ".order",
+					properties.getOrderPropertyName(),
 					0));
 			
 			properties.setWidth(Main.getSettings().getIntegerProperty(
-					propertyName
-							+ ".column."
-							+ column.name().toLowerCase()
-							+ ".width",
+					properties.getWidthPropertyName(),
 					100));
 			
 			properties.setVisible(Main.getSettings().getBooleanProperty(
-					propertyName
-							+ ".column."
-							+ column.name().toLowerCase()
-							+ ".visible",
+					properties.getVisiblePropertyName(),
 					true));
 		}
 		
@@ -133,24 +124,15 @@ public class TUTableProperties<E extends Enum<?>> implements PropertyChangeListe
 				TableColumnProperties<E> properties = this.columns.get(column);
 				
 				if (evt.getPropertyName().equals(
-						this.propertyName
-								+ "."
-								+ column.name().toLowerCase()
-								+ ".order"))
+						properties.getOrderPropertyName()))
 					properties.setOrder(Integer.parseInt(evt.getNewValue().toString()));
 				
 				if (evt.getPropertyName().equals(
-						this.propertyName
-								+ "."
-								+ column.name().toLowerCase()
-								+ ".width"))
+						properties.getWidthPropertyName()))
 					properties.setWidth(Integer.parseInt(evt.getNewValue().toString()));
 				
 				if (evt.getPropertyName().equals(
-						this.propertyName
-								+ "."
-								+ column.name().toLowerCase()
-								+ ".visible"))
+						properties.getVisiblePropertyName()))
 					properties.setVisible(Boolean.parseBoolean(evt.getNewValue().toString()));
 			}
 		}
@@ -187,6 +169,13 @@ public class TUTableProperties<E extends Enum<?>> implements PropertyChangeListe
 			return this.column;
 		}
 		
+		public String getOrderPropertyName() {
+			return this.tableProperties.getPropertyName()
+					+ ".column."
+					+ this.column.name().toLowerCase()
+					+ ".order";
+		}
+		
 		public int getOrder() {
 			return this.order;
 		}
@@ -200,10 +189,7 @@ public class TUTableProperties<E extends Enum<?>> implements PropertyChangeListe
 			
 			if (!this.tableProperties.isReadOnly()) {
 				Main.getSettings().setIntegerProperty(
-						this.tableProperties.getPropertyName()
-								+ ".column."
-								+ this.column.name().toLowerCase()
-								+ ".order",
+						this.getOrderPropertyName(),
 						order);
 			}
 			
@@ -211,6 +197,13 @@ public class TUTableProperties<E extends Enum<?>> implements PropertyChangeListe
 					PROP_ORDER,
 					oldOrder,
 					order);
+		}
+		
+		public String getWidthPropertyName() {
+			return this.tableProperties.getPropertyName()
+					+ ".column."
+					+ this.column.name().toLowerCase()
+					+ ".width";
 		}
 		
 		public int getWidth() {
@@ -226,10 +219,7 @@ public class TUTableProperties<E extends Enum<?>> implements PropertyChangeListe
 			
 			if (!this.tableProperties.isReadOnly()) {
 				Main.getSettings().setIntegerProperty(
-						this.tableProperties.getPropertyName()
-								+ ".column."
-								+ this.column.name().toLowerCase()
-								+ ".width",
+						this.getWidthPropertyName(),
 						width);
 			}
 			
@@ -237,6 +227,13 @@ public class TUTableProperties<E extends Enum<?>> implements PropertyChangeListe
 					PROP_WIDTH,
 					oldWidth,
 					width);
+		}
+		
+		public String getVisiblePropertyName() {
+			return this.tableProperties.getPropertyName()
+					+ ".column."
+					+ this.column.name().toLowerCase()
+					+ ".visible";
 		}
 		
 		public boolean isVisible() {
@@ -252,10 +249,7 @@ public class TUTableProperties<E extends Enum<?>> implements PropertyChangeListe
 			
 			if (!this.tableProperties.isReadOnly()) {
 				Main.getSettings().setBooleanProperty(
-						this.tableProperties.getPropertyName()
-								+ ".column."
-								+ this.column.name().toLowerCase()
-								+ ".visible",
+						this.getVisiblePropertyName(),
 						visible);
 			}
 			

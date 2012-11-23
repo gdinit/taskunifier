@@ -79,11 +79,11 @@ public abstract class TUTableColumn<E extends Enum<?>> extends TableColumnExt im
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(TableColumnProperties.PROP_VISIBLE)) {
-			TUTableColumn.this.setVisible((Boolean) evt.getNewValue());
+			this.setVisible((Boolean) evt.getNewValue());
 		}
 		
 		if (evt.getPropertyName().equals(TableColumnProperties.PROP_WIDTH)) {
-			TUTableColumn.this.setPreferredWidth((Integer) evt.getNewValue());
+			this.setPreferredWidth((Integer) evt.getNewValue());
 		}
 	}
 	
