@@ -297,14 +297,14 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 			
 			@Override
 			public void mouseClicked(MouseEvent event) {
+				MainFrame.this.setSelectedView(view);
+				
 				if (event.isPopupTrigger()
 						|| event.getButton() == MouseEvent.BUTTON3) {
 					MainFrame.this.tabPopupMenu.show(
 							(Component) event.getSource(),
 							0,
 							0);
-				} else {
-					MainFrame.this.setSelectedView(view);
 				}
 			}
 			
