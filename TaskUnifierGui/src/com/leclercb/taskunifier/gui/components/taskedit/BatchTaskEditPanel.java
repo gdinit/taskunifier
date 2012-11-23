@@ -93,7 +93,6 @@ import com.leclercb.taskunifier.gui.swing.TUSpinnerTimeEditor;
 import com.leclercb.taskunifier.gui.swing.TUSpinnerTimeModel;
 import com.leclercb.taskunifier.gui.swing.TUTagList;
 import com.leclercb.taskunifier.gui.swing.TUTimerField;
-import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.DateTimeFormatUtils;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
@@ -890,8 +889,6 @@ public class BatchTaskEditPanel extends JPanel {
 				BorderFactory.createLineBorder(Color.GRAY));
 		
 		JPanel notePanel = new JPanel(new BorderLayout());
-		notePanel.add(new JLabel(Translations.getString("general.task.note")
-				+ ":"), BorderLayout.NORTH);
 		notePanel.add(this.taskNoteCheckBox, BorderLayout.WEST);
 		notePanel.add(this.taskNote.getComponent(), BorderLayout.CENTER);
 		

@@ -51,6 +51,7 @@ import com.leclercb.taskunifier.gui.actions.ActionAddSubTaskAtSameLevel;
 import com.leclercb.taskunifier.gui.actions.ActionAddTask;
 import com.leclercb.taskunifier.gui.actions.ActionAddTemplateTask;
 import com.leclercb.taskunifier.gui.actions.ActionCollapseAll;
+import com.leclercb.taskunifier.gui.actions.ActionCreateTaskTemplateFromTask;
 import com.leclercb.taskunifier.gui.actions.ActionDelete;
 import com.leclercb.taskunifier.gui.actions.ActionDuplicateTasks;
 import com.leclercb.taskunifier.gui.actions.ActionEditTasks;
@@ -90,6 +91,7 @@ public class TaskTableMenu extends JPopupMenu implements ListChangeListener, Pro
 		this.add(new JMenuItem(new ActionExpandAll(16, 16)));
 		this.add(new JMenuItem(new ActionSelectParentTasks(16, 16)));
 		this.addSeparator();
+		this.add(new ActionCreateTaskTemplateFromTask(16, 16));
 		this.add(new ActionMailTo(16, 16));
 		this.add(new ActionPrintSelectedModels(16, 16));
 		this.addSeparator();
