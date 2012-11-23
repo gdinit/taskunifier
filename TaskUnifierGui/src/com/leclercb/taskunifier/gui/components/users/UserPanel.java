@@ -101,7 +101,6 @@ public class UserPanel extends JPanel {
 		}
 		
 		UserUtils.getInstance().setUserName(user, this.userName.getText());
-		this.userName.setText("");
 		
 		this.actionSupport.fireActionPerformed(0, ACTION_CHANGE_USER_NAME);
 	}
@@ -209,6 +208,11 @@ public class UserPanel extends JPanel {
 								UserPanel.this.userList.getSelectedUser(),
 								Main.getCurrentUserId());
 						
+						String user = UserPanel.this.userList.getSelectedUser();
+						String username = UserUtils.getInstance().getUserName(
+								user);
+						
+						UserPanel.this.userName.setText(username);
 						UserPanel.this.switchToUserButton.setEnabled(!isMainUser);
 						UserPanel.this.deleteUserButton.setEnabled(!isMainUser);
 					}
