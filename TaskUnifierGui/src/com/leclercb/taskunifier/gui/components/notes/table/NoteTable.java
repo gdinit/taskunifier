@@ -132,6 +132,7 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 		}
 	}
 	
+	@Override
 	public Note[] getNotes() {
 		List<Note> notes = new ArrayList<Note>();
 		for (int i = 0; i < this.getModel().getRowCount(); i++) {

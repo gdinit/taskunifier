@@ -147,6 +147,7 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 		}
 	}
 	
+	@Override
 	public Task[] getTasks() {
 		List<Task> tasks = new ArrayList<Task>();
 		for (int i = 0; i < this.getModel().getRowCount(); i++) {

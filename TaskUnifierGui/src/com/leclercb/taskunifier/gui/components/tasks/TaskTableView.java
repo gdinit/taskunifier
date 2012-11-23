@@ -45,6 +45,8 @@ public interface TaskTableView extends TaskSelectionView, ModelSelectionChangeSu
 	
 	public abstract TUTableProperties<TaskColumn> getTableProperties();
 	
+	public abstract Task[] getTasks();
+	
 	public abstract int getTaskCount();
 	
 	public abstract void setSelectedTaskAndStartEdit(Task task);
