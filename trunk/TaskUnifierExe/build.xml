@@ -10,7 +10,6 @@
 	<taskdef resource="net/jtools/classloadertask/antlib.xml" classpath="${directory.exe}/tools/ant-classloadertask/ant-classloadertask.jar"/>
 	<taskdef name="izpack" classname="com.izforge.izpack.ant.IzPackTask" classpath="${directory.exe}/tools/izpack/standalone-compiler.jar"/>
 	<taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" classpath="${directory.exe}/tools/jarbundler/jarbundler-2.2.0.jar"/>
-	<taskdef name="jsmoothgen" classname="net.charabia.jsmoothgen.ant.JSmoothGen" classpath="${directory.exe}/tools/jsmooth/jsmoothgen-ant.jar"/>
 	<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${directory.exe}/tools/launch4j/launch4j.jar:${directory.exe}/tools/launch4j/xstream.jar" />
 	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
@@ -135,7 +134,6 @@
 		<echo message="Creating windows zip file..."/>
     	<antcall target="create-binary"/>
 		<launch4j configFile="${directory.exe}/scripts/windows.taskunifier.launch4j.xml" fileVersion="${taskunifier.version}.0" txtFileVersion="${taskunifier.version}" productVersion="${taskunifier.version}.0" txtProductVersion="${taskunifier.version}" />
-		<!-- <jsmoothgen project="${directory.exe}/scripts/windows.taskunifier.jsmooth.xml" skeletonroot="${directory.exe}/tools/jsmooth/skeletons"/> -->
 		<mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
 	    <zip destfile="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/TaskUnifier_${taskunifier.version.underscored}_windows.zip" basedir="${directory.exe}/temp"/>
 		<antcall target="create-installer-windows"/>
@@ -152,7 +150,6 @@
 			compression="deflate"
 			compressionlevel="9"/>
 		<launch4j configFile="${directory.exe}/scripts/windows.taskunifier.installer.launch4j.xml" fileVersion="${taskunifier.version}.0" txtFileVersion="${taskunifier.version}" productVersion="${taskunifier.version}.0" txtProductVersion="${taskunifier.version}" />
-		<!-- <jsmoothgen project="${directory.exe}/scripts/windows.taskunifier.installer.jsmooth.xml" skeletonroot="${directory.exe}/tools/jsmooth/skeletons"/> -->
 		<zip destfile="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/TaskUnifier_${taskunifier.version.underscored}_installer_windows.zip" basedir="${directory.exe}/temp" includes="TaskUnifierInstaller.exe"/>
 	</target>
 	
