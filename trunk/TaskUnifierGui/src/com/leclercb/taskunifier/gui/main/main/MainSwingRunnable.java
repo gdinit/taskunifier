@@ -50,8 +50,6 @@ import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelDescriptor;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelUtils;
 import com.leclercb.taskunifier.gui.actions.ActionCheckPluginVersion;
 import com.leclercb.taskunifier.gui.actions.ActionCheckVersion;
-import com.leclercb.taskunifier.gui.actions.ActionHelp;
-import com.leclercb.taskunifier.gui.actions.ActionManageSynchronizerPlugins;
 import com.leclercb.taskunifier.gui.actions.ActionNewWindow;
 import com.leclercb.taskunifier.gui.actions.ActionPublish;
 import com.leclercb.taskunifier.gui.actions.ActionResetGeneralSearchers;
@@ -190,7 +188,7 @@ public class MainSwingRunnable implements Runnable {
 					"Error while setting look and feel: \""
 							+ lookAndFeel
 							+ "\"",
-							t);
+					t);
 			
 			ErrorInfo info = new ErrorInfo(
 					Translations.getString("general.error"),
@@ -237,7 +235,7 @@ public class MainSwingRunnable implements Runnable {
 		if (Main.isFirstExecution()
 				|| (Main.isVersionUpdated()
 						&& Main.getPreviousVersion() != null && Main.getPreviousVersion().compareTo(
-								"3.0.0") < 0)) {
+						"3.0.0") < 0)) {
 			if (Constants.BETA)
 				messages.add(Translations.getString(
 						"welcome.message.license_upgrade_required_beta",
