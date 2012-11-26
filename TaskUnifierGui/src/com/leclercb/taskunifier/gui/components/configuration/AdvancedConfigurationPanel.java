@@ -84,6 +84,15 @@ public class AdvancedConfigurationPanel extends DefaultConfigurationPanel {
 						Translations.getString("configuration.advanced.show_reminders_enabled"))));
 		
 		this.addField(new ConfigurationField(
+				"HIDE_TOOLBAR",
+				null,
+				true,
+				new ConfigurationFieldType.CheckBox(
+						Main.getSettings(),
+						"general.toolbar.hide",
+						Translations.getString("configuration.advanced.hide_toolbar"))));
+		
+		this.addField(new ConfigurationField(
 				"COMMUNICATOR_ENABLED",
 				null,
 				true,
