@@ -89,9 +89,9 @@ public class ConfigurationDialog extends JDialog implements ConfigurationGroup, 
 		THEME,
 		TOOLBAR,
 		LISTS,
-		ADVANCED,
 		PUBLICATION,
-		SYNCHRONIZATION;
+		SYNCHRONIZATION,
+		ADVANCED;
 		
 	}
 	
@@ -105,9 +105,9 @@ public class ConfigurationDialog extends JDialog implements ConfigurationGroup, 
 	private ConfigurationPanel themeConfigurationPanel;
 	private ConfigurationPanel toolbarConfigurationPanel;
 	private ConfigurationPanel listsConfigurationPanel;
-	private ConfigurationPanel advancedConfigurationPanel;
 	private ConfigurationPanel publicationConfigurationPanel;
 	private ConfigurationPanel synchronizationConfigurationPanel;
+	private ConfigurationPanel advancedConfigurationPanel;
 	
 	private ConfigurationDialog() {
 		this.initialize();
@@ -159,9 +159,9 @@ public class ConfigurationDialog extends JDialog implements ConfigurationGroup, 
 		this.initializeThemePanel();
 		this.initializeToolbarPanel();
 		this.initializeListsPanel();
-		this.initializeAdvancedPanel();
 		this.initializePublicationPanel();
 		this.initializeSynchronizationPanel();
+		this.initializeAdvancedPanel();
 		
 		Main.getUserSettings().addReloadPropertiesListener(
 				new WeakReloadPropertiesListener(Main.getUserSettings(), this));
@@ -292,15 +292,6 @@ public class ConfigurationDialog extends JDialog implements ConfigurationGroup, 
 						false));
 	}
 	
-	private void initializeAdvancedPanel() {
-		this.advancedConfigurationPanel = new AdvancedConfigurationPanel(this);
-		this.tabbedPane.addTab(
-				Translations.getString("configuration.tab.advanced"),
-				ComponentFactory.createJScrollPane(
-						this.advancedConfigurationPanel,
-						false));
-	}
-	
 	private void initializePublicationPanel() {
 		this.publicationConfigurationPanel = new PublicationConfigurationPanel(
 				this);
@@ -322,6 +313,15 @@ public class ConfigurationDialog extends JDialog implements ConfigurationGroup, 
 						false));
 	}
 	
+	private void initializeAdvancedPanel() {
+		this.advancedConfigurationPanel = new AdvancedConfigurationPanel(this);
+		this.tabbedPane.addTab(
+				Translations.getString("configuration.tab.advanced"),
+				ComponentFactory.createJScrollPane(
+						this.advancedConfigurationPanel,
+						false));
+	}
+	
 	@Override
 	public void saveAndApplyConfig() {
 		try {
@@ -333,9 +333,9 @@ public class ConfigurationDialog extends JDialog implements ConfigurationGroup, 
 			this.themeConfigurationPanel.saveAndApplyConfig();
 			this.listsConfigurationPanel.saveAndApplyConfig();
 			this.toolbarConfigurationPanel.saveAndApplyConfig();
-			this.advancedConfigurationPanel.saveAndApplyConfig();
 			this.publicationConfigurationPanel.saveAndApplyConfig();
 			this.synchronizationConfigurationPanel.saveAndApplyConfig();
+			this.advancedConfigurationPanel.saveAndApplyConfig();
 			
 			MainSaveFiles.saveSettings();
 			MainSaveFiles.saveUserSettings();
@@ -371,8 +371,8 @@ public class ConfigurationDialog extends JDialog implements ConfigurationGroup, 
 			this.themeConfigurationPanel.cancelConfig();
 			this.listsConfigurationPanel.cancelConfig();
 			this.toolbarConfigurationPanel.cancelConfig();
-			this.advancedConfigurationPanel.cancelConfig();
 			this.publicationConfigurationPanel.cancelConfig();
+			this.advancedConfigurationPanel.cancelConfig();
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
 			

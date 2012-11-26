@@ -428,6 +428,9 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 	}
 	
 	private void initializeToolBar() {
+		if (Main.getSettings().getBooleanProperty("general.toolbar.hide"))
+			return;
+		
 		if (SystemUtils.IS_OS_MAC && LookAndFeelUtils.isSytemLookAndFeel()) {
 			this.add(new MacToolBar().getComponent(), BorderLayout.NORTH);
 		} else {

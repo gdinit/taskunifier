@@ -65,31 +65,31 @@ public final class UserSettingsVersion {
 			version = updateUserSettings_2_4_0_to_3_0_0();
 		
 		if (version.equals("3.0.0"))
-			version = updateUserSettings_3_0_0_to_3_0_1();
+			version = updateUserSettings("3.0.0", "3.0.1");
 		
 		if (version.equals("3.0.1"))
-			version = updateUserSettings_3_0_1_to_3_0_2();
+			version = updateUserSettings("3.0.1", "3.0.2");
 		
 		if (version.equals("3.0.2"))
-			version = updateUserSettings_3_0_2_to_3_0_3();
+			version = updateUserSettings("3.0.2", "3.0.3");
 		
 		if (version.equals("3.0.3"))
-			version = updateUserSettings_3_0_3_to_3_0_4();
+			version = updateUserSettings("3.0.3", "3.0.4");
 		
 		if (version.equals("3.0.4"))
-			version = updateUserSettings_3_0_4_to_3_1_0();
+			version = updateUserSettings("3.0.4", "3.1.0");
 		
 		if (version.equals("3.1.0"))
-			version = updateUserSettings_3_1_0_to_3_1_1();
+			version = updateUserSettings("3.1.0", "3.1.1");
 		
 		if (version.equals("3.1.1"))
-			version = updateUserSettings_3_1_1_to_3_1_2();
+			version = updateUserSettings("3.1.1", "3.1.2");
 		
 		if (version.equals("3.1.2"))
-			version = updateUserSettings_3_1_2_to_3_1_3();
+			version = updateUserSettings("3.1.2", "3.1.3");
 		
 		if (version.equals("3.1.3"))
-			version = updateUserSettings_3_1_3_to_3_1_4();
+			version = updateUserSettings("3.1.3", "3.1.4");
 		
 		cleanSettings();
 		
@@ -124,22 +124,16 @@ public final class UserSettingsVersion {
 		}
 	}
 	
+	private static String updateUserSettings(String from, String to) {
+		GuiLogger.getLogger().info(
+				"Update user settings from version " + from + " to " + to);
+		
+		return to;
+	}
+	
 	private static String updateUserSettings_2_4_0_to_3_0_0() {
 		GuiLogger.getLogger().info(
 				"Update user settings from version 2.4.0 to 3.0.0");
-		
-		Main.getUserSettings().setStringProperty(
-				"synchronizer.publish_background",
-				"false");
-		Main.getUserSettings().setStringProperty(
-				"synchronizer.publish_exit",
-				"false");
-		Main.getUserSettings().setStringProperty(
-				"synchronizer.publish_start",
-				"false");
-		Main.getUserSettings().setStringProperty(
-				"synchronizer.sync_reminder_field",
-				"true");
 		
 		copyInsideUserFolder("contexts.xml", "contexts_v3.xml");
 		copyInsideUserFolder("folders.xml", "folders_v3.xml");
@@ -152,69 +146,6 @@ public final class UserSettingsVersion {
 		copyInsideUserFolder("note_searchers.xml", "note_searchers_v3.xml");
 		
 		return "3.0.0";
-	}
-	
-	private static String updateUserSettings_3_0_0_to_3_0_1() {
-		GuiLogger.getLogger().info(
-				"Update user settings from version 3.0.0 to 3.0.1");
-		
-		return "3.0.1";
-	}
-	
-	private static String updateUserSettings_3_0_1_to_3_0_2() {
-		GuiLogger.getLogger().info(
-				"Update user settings from version 3.0.1 to 3.0.2");
-		
-		return "3.0.2";
-	}
-	
-	private static String updateUserSettings_3_0_2_to_3_0_3() {
-		GuiLogger.getLogger().info(
-				"Update user settings from version 3.0.2 to 3.0.3");
-		
-		return "3.0.3";
-	}
-	
-	private static String updateUserSettings_3_0_3_to_3_0_4() {
-		GuiLogger.getLogger().info(
-				"Update user settings from version 3.0.3 to 3.0.4");
-		
-		return "3.0.4";
-	}
-	
-	private static String updateUserSettings_3_0_4_to_3_1_0() {
-		GuiLogger.getLogger().info(
-				"Update user settings from version 3.0.4 to 3.1.0");
-		
-		return "3.1.0";
-	}
-	
-	private static String updateUserSettings_3_1_0_to_3_1_1() {
-		GuiLogger.getLogger().info(
-				"Update user settings from version 3.1.0 to 3.1.1");
-		
-		return "3.1.1";
-	}
-	
-	private static String updateUserSettings_3_1_1_to_3_1_2() {
-		GuiLogger.getLogger().info(
-				"Update user settings from version 3.1.1 to 3.1.2");
-		
-		return "3.1.2";
-	}
-	
-	private static String updateUserSettings_3_1_2_to_3_1_3() {
-		GuiLogger.getLogger().info(
-				"Update user settings from version 3.1.2 to 3.1.3");
-		
-		return "3.1.3";
-	}
-	
-	private static String updateUserSettings_3_1_3_to_3_1_4() {
-		GuiLogger.getLogger().info(
-				"Update user settings from version 3.1.3 to 3.1.4");
-		
-		return "3.1.4";
 	}
 	
 	private static void copyInsideUserFolder(
