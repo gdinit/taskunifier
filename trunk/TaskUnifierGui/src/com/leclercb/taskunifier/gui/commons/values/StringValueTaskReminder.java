@@ -55,7 +55,7 @@ public class StringValueTaskReminder implements StringValue {
 			return Translations.getString("general.task.reminder.no_reminder");
 		
 		if (reminder % 1440 == 0) {
-			int r = Math.round(reminder / 1440);
+			int r = reminder / 1440;
 			
 			if (r == 1)
 				return Translations.getString("date.1_day");
@@ -64,7 +64,7 @@ public class StringValueTaskReminder implements StringValue {
 		}
 		
 		if (reminder % 60 == 0) {
-			int r = Math.round(reminder / 60);
+			int r = reminder / 60;
 			
 			if (r == 1)
 				return Translations.getString("date.1_hour");
