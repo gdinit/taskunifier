@@ -106,20 +106,12 @@ public class MainSwingRunnable implements Runnable {
 			
 			Boolean showed = Main.getSettings().getBooleanProperty(
 					"review.showed");
-			if (showed == null || !showed)
+			if (!Main.isFirstExecution() && (showed == null || !showed)) {
 				ActionReview.review();
-			
-			Main.getSettings().setBooleanProperty("review.showed", true);
-			
-			if (Main.isOutdatedPlugins())
-				ActionManageSynchronizerPlugins.manageSynchronizerPlugins();
+				Main.getSettings().setBooleanProperty("review.showed", true);
+			}
 			
 			TipsDialog.getInstance().showTipsDialog(true);
-			
-			if (Main.isFirstExecution())
-				ActionHelp.help("taskunifier");
-			else if (Main.isVersionUpdated())
-				ActionHelp.help("whats_new");
 			
 			Main.handleArguments(this.args);
 			
@@ -198,7 +190,7 @@ public class MainSwingRunnable implements Runnable {
 					"Error while setting look and feel: \""
 							+ lookAndFeel
 							+ "\"",
-					t);
+							t);
 			
 			ErrorInfo info = new ErrorInfo(
 					Translations.getString("general.error"),
@@ -213,6 +205,7 @@ public class MainSwingRunnable implements Runnable {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private void showWelcomeWindow() {
 		if (Main.isFirstExecution()) {
 			MainSplashScreen.getInstance().close();
@@ -244,7 +237,7 @@ public class MainSwingRunnable implements Runnable {
 		if (Main.isFirstExecution()
 				|| (Main.isVersionUpdated()
 						&& Main.getPreviousVersion() != null && Main.getPreviousVersion().compareTo(
-						"3.0.0") < 0)) {
+								"3.0.0") < 0)) {
 			if (Constants.BETA)
 				messages.add(Translations.getString(
 						"welcome.message.license_upgrade_required_beta",
