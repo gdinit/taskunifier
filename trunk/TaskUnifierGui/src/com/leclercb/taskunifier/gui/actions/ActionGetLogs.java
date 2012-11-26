@@ -91,6 +91,9 @@ public class ActionGetLogs extends AbstractAction {
 					JFileChooser.FILES_ONLY,
 					"zip");
 			
+			if (file == null)
+				return;
+			
 			ZipOutputStream zos = new ZipOutputStream(
 					new FileOutputStream(file));
 			
