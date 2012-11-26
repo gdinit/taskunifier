@@ -119,6 +119,8 @@ public final class HttpUtils {
 			connection = (HttpURLConnection) uri.toURL().openConnection(proxy);
 		}
 		
+		connection.setUseCaches(false);
+		
 		if (!get && parameters != null && parameters.size() != 0) {
 			connection.setDoOutput(true);
 			IOUtils.write(
