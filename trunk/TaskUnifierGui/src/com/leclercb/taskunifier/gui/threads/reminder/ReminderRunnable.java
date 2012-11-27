@@ -32,6 +32,7 @@
  */
 package com.leclercb.taskunifier.gui.threads.reminder;
 
+import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -105,6 +106,8 @@ class ReminderRunnable implements Runnable, PropertyChangeListener, ListChangeLi
 									
 									Constants.PROGRESS_MONITOR.addMessage(new ReminderDefaultProgressMessage(
 											task));
+									
+									Toolkit.getDefaultToolkit().beep();
 									
 									reminders = true;
 								}
