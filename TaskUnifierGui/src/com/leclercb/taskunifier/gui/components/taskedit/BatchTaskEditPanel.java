@@ -57,6 +57,7 @@ import ca.odell.glazedlists.EventList;
 import ca.odell.glazedlists.SortedList;
 import ca.odell.glazedlists.swing.EventComboBoxModel;
 
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.models.Context;
 import com.leclercb.taskunifier.api.models.Folder;
@@ -451,8 +452,9 @@ public class BatchTaskEditPanel extends JPanel {
 		this.taskParent = ComponentFactory.createModelComboBox(null, false);
 		this.taskProgress = new JSpinner();
 		this.taskCompleted = new JCheckBox();
+		TUPostponeCalendar taskStartDateCal = new TUPostponeCalendar(true);
 		this.taskStartDate = new JDateChooser(
-				new TUPostponeCalendar(false),
+				taskStartDateCal,
 				null,
 				null,
 				new JTextFieldDateEditor(startDateFormat, null, '_') {
@@ -463,12 +465,25 @@ public class BatchTaskEditPanel extends JPanel {
 					}
 					
 				});
+		taskStartDateCal.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				if (EqualsUtils.equals(
+						TUPostponeCalendar.NO_DATE_COMMAND,
+						evt.getActionCommand())) {
+					BatchTaskEditPanel.this.taskStartDate.setDate(null);
+				}
+			}
+			
+		});
 		this.taskStartDatePostponeButton = ComponentFactory.createPostponeButton(
 				16,
 				16,
 				postponeListener);
+		TUPostponeCalendar taskDueDateCal = new TUPostponeCalendar(true);
 		this.taskDueDate = new JDateChooser(
-				new TUPostponeCalendar(false),
+				taskDueDateCal,
 				null,
 				null,
 				new JTextFieldDateEditor(dueDateFormat, null, '_') {
@@ -479,6 +494,18 @@ public class BatchTaskEditPanel extends JPanel {
 					}
 					
 				});
+		taskDueDateCal.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				if (EqualsUtils.equals(
+						TUPostponeCalendar.NO_DATE_COMMAND,
+						evt.getActionCommand())) {
+					BatchTaskEditPanel.this.taskDueDate.setDate(null);
+				}
+			}
+			
+		});
 		this.taskDueDatePostponeButton = ComponentFactory.createPostponeButton(
 				16,
 				16,

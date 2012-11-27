@@ -10,6 +10,7 @@ Version 3.1.4
 		- FR 263: Beep for task reminders
 		- FR 264: Hide toolbar
 		- FR 269: Enter length with minutes only
+		- FR 274: No date button in task edit window
 		- BF 195: Invalid number of tasks being synchronized
 		- BF 210: Select a word in the note editor
 
