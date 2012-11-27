@@ -53,7 +53,7 @@ public class TUSpinnerTimeEditor extends JSpinner.DefaultEditor {
 			throw new IllegalArgumentException();
 		}
 		
-		final Pattern pattern = Pattern.compile("([0-9]+)(:|.|h)([0-5]?[0-9])");
+		final Pattern pattern = Pattern.compile("([0-9]+)((:|.|h)([0-5]?[0-9]))?");
 		DefaultFormatter formatter = new DefaultFormatter() {
 			
 			@Override
@@ -69,8 +69,15 @@ public class TUSpinnerTimeEditor extends JSpinner.DefaultEditor {
 					throw new ParseException("Pattern did not match", 0);
 				}
 				
-				int hour = Integer.parseInt(matcher.group(1));
-				int minute = Integer.parseInt(matcher.group(3));
+				int hour = 0;
+				int minute = 0;
+				
+				if (matcher.group(4) == null) {
+					minute = Integer.parseInt(matcher.group(1));
+				} else if (matcher.groupCount() == 4) {
+					hour = Integer.parseInt(matcher.group(1));
+					minute = Integer.parseInt(matcher.group(4));
+				}
 				
 				return (hour * 60) + minute;
 			}

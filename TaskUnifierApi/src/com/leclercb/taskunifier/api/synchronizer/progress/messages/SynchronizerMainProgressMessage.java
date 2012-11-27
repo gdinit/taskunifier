@@ -60,8 +60,7 @@ public class SynchronizerMainProgressMessage implements SynchronizerProgressMess
 		return this.plugin;
 	}
 	
-	public void setPlugin(SynchronizerPlugin plugin) {
-		CheckUtils.isNotNull(plugin);
+	private void setPlugin(SynchronizerPlugin plugin) {
 		this.plugin = plugin;
 	}
 	

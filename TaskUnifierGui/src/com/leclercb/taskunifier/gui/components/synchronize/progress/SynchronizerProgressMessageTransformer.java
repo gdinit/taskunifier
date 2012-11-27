@@ -156,23 +156,28 @@ public class SynchronizerProgressMessageTransformer implements ProgressMessageTr
 			} else if (message instanceof SynchronizerMainProgressMessage) {
 				SynchronizerMainProgressMessage m = (SynchronizerMainProgressMessage) message;
 				
+				String apiName = "?";
+				
+				if (m.getPlugin() != null)
+					apiName = m.getPlugin().getSynchronizerApi().getApiName();
+				
 				switch (m.getType()) {
 					case PUBLISHER_END:
 						return Translations.getString(
 								"synchronizer.publication_completed",
-								m.getPlugin().getSynchronizerApi().getApiName());
+								apiName);
 					case PUBLISHER_START:
 						return Translations.getString(
 								"synchronizer.start_publication",
-								m.getPlugin().getSynchronizerApi().getApiName());
+								apiName);
 					case SYNCHRONIZER_END:
 						return Translations.getString(
 								"synchronizer.synchronization_completed",
-								m.getPlugin().getSynchronizerApi().getApiName());
+								apiName);
 					case SYNCHRONIZER_START:
 						return Translations.getString(
 								"synchronizer.start_synchronization",
-								m.getPlugin().getSynchronizerApi().getApiName());
+								apiName);
 				}
 			}
 		}
