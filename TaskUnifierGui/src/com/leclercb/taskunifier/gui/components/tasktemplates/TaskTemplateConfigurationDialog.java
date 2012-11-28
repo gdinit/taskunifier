@@ -39,7 +39,6 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
@@ -47,13 +46,13 @@ import org.jdesktop.swingx.JXHeader;
 
 import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
 import com.leclercb.taskunifier.gui.components.help.Help;
-import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
+import com.leclercb.taskunifier.gui.swing.TUDialog;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class TaskTemplateConfigurationDialog extends JDialog {
+public class TaskTemplateConfigurationDialog extends TUDialog {
 	
 	private static TaskTemplateConfigurationDialog INSTANCE = null;
 	
@@ -70,15 +69,6 @@ public class TaskTemplateConfigurationDialog extends JDialog {
 		this.initialize();
 	}
 	
-	@Override
-	public void setVisible(boolean visible) {
-		if (visible) {
-			this.setLocationRelativeTo(FrameUtils.getCurrentFrame());
-		}
-		
-		super.setVisible(visible);
-	}
-	
 	public void setSelectedTemplate(TaskTemplate template) {
 		this.templateConfigurationPanel.setSelectedTemplate(template);
 	}
@@ -90,6 +80,8 @@ public class TaskTemplateConfigurationDialog extends JDialog {
 		this.setResizable(true);
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
+		
+		this.loadWindowSettings("window.task_template");
 		
 		JXHeader header = new JXHeader();
 		header.setTitle(Translations.getString("header.title.manage_task_templates"));
