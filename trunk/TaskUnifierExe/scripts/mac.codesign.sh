@@ -40,11 +40,11 @@ then
 	
 	echo "Codesign sign all libraries..."
 	
-	find $APPFILE/Contents/ -type f \( -name "*.jar" -or -name "*.dylib" \) -exec codesign --verbose -f -s "Developer ID Application: Benjamin Leclerc" {} \;
+	find $APPFILE/Contents/ \( -name "*.jar" -or -name "*.dylib" \) -exec codesign --verbose -f -s "Developer ID Application: Benjamin Leclerc" {} \;
 	
 	echo "Verify all libraries have been signed..."
 	
-	find $APPFILE/Contents/ -type f \( -name "*.jar" -or -name "*.dylib" \) -exec codesign --verbose --verify {} \;
+	find $APPFILE/Contents/ \( -name "*.jar" -or -name "*.dylib" \) -exec codesign --verbose --verify {} \;
 	
 	exit 0
 	
@@ -66,11 +66,11 @@ then
 	
 	echo "Codesign sign all libraries..."
 	
-	find $APPFILE/Contents/ -type f \( -name "*.jar" -or -name "*.dylib" \) -exec codesign --verbose -f -s "3rd Party Mac Developer Application: Benjamin Leclerc" --entitlements $BASEDIR/scripts/mac/entitlements.plist {} \;
+	find $APPFILE/Contents/ \( -name "*.jar" -or -name "*.dylib" \) -exec codesign --verbose -f -s "3rd Party Mac Developer Application: Benjamin Leclerc" --entitlements $BASEDIR/scripts/mac/entitlements.plist {} \;
 	
 	echo "Verify all libraries have been signed..."
 	
-	find $APPFILE/Contents/ -type f \( -name "*.jar" -or -name "*.dylib" \) -exec codesign --verbose --verify {} \;
+	find $APPFILE/Contents/ \( -name "*.jar" -or -name "*.dylib" \) -exec codesign --verbose --verify {} \;
 	
 	exit 0
 	
