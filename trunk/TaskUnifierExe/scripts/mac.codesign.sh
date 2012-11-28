@@ -57,7 +57,7 @@ then
 
 	echo "Codesign application file ""$APPFILE""..."
 	
-	codesign -v -f -s "Developer ID Application" --entitlements $BASEDIR/scripts/mac/entitlements.plist $APPFILE
+	codesign -v -f -s "Mac Submission" --entitlements $BASEDIR/scripts/mac/entitlements.plist $APPFILE
 	
 	if [ $? != 0 ]
 	then
@@ -66,11 +66,11 @@ then
 	
 	echo "Codesign sign all libraries..."
 	
-	find $APPFILE/Contents/ -type f \( -name "*.jar" -or -name "*.dylib" \) -exec codesign --verbose -f -s "Developer ID Application" --entitlements $BASEDIR/scripts/mac/entitlements.plist {} \;
+	find $APPFILE/Contents/ -type f \( -name "*.jar" -or -name "*.dylib" -or -name "*.jdk" \) -exec codesign --verbose -f -s "Developer ID Application" --entitlements $BASEDIR/scripts/mac/entitlements.plist {} \;
 	
 	echo "Verify all libraries have been signed..."
 	
-	find $APPFILE/Contents/ -type f \( -name "*.jar" -or -name "*.dylib" \) -exec codesign --verbose --verify {} \;
+	find $APPFILE/Contents/ -type f \( -name "*.jar" -or -name "*.dylib" -or -name "*.jdk" \) -exec codesign --verbose --verify {} \;
 	
 	exit 0
 	
