@@ -44,8 +44,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import javax.swing.JDialog;
-
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.actions.ActionQuit;
 import com.leclercb.taskunifier.gui.components.quickaddtask.QuickAddTaskDialog;
@@ -194,13 +192,7 @@ public final class FrameUtils {
 				
 				@Override
 				public void onHotKey(HotKey key) {
-					JDialog dialog = QuickAddTaskDialog.getInstance();
-					
-					dialog.setVisible(true);
-					
-					dialog.setAlwaysOnTop(true);
-					dialog.toFront();
-					dialog.setAlwaysOnTop(false);
+					QuickAddTaskDialog.getInstance().setVisible(true);
 				}
 				
 			});

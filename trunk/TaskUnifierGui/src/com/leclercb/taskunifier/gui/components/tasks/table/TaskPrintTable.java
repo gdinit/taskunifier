@@ -38,6 +38,10 @@ import org.jdesktop.swingx.JXTable;
 
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskHighlightPredicate;
+import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskHighlighter;
+import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskTitleHighlightPredicate;
+import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskTitleHighlighter;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
 
 public class TaskPrintTable extends JXTable {
@@ -60,7 +64,14 @@ public class TaskPrintTable extends JXTable {
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		this.setShowGrid(true, false);
 		this.setColumnControlVisible(true);
-		this.packAll();
+		
+		this.initializeHighlighters();
+	}
+	
+	private void initializeHighlighters() {
+		this.setHighlighters(
+				new TaskHighlighter(new TaskHighlightPredicate()),
+				new TaskTitleHighlighter(new TaskTitleHighlightPredicate()));
 	}
 	
 }

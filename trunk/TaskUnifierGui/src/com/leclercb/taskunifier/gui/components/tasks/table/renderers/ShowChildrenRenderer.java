@@ -36,14 +36,16 @@ import java.awt.Component;
 
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
+
+import org.jdesktop.swingx.renderer.DefaultTableRenderer;
+import org.jdesktop.swingx.renderer.JRendererLabel;
 
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.api.models.GuiTask;
 import com.leclercb.taskunifier.gui.components.tasks.table.TaskTable;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ShowChildrenRenderer extends DefaultTableCellRenderer {
+public class ShowChildrenRenderer extends DefaultTableRenderer {
 	
 	public ShowChildrenRenderer() {
 		
@@ -57,7 +59,7 @@ public class ShowChildrenRenderer extends DefaultTableCellRenderer {
 			boolean hasFocus,
 			int row,
 			int column) {
-		Component component = super.getTableCellRendererComponent(
+		JRendererLabel component = (JRendererLabel) super.getTableCellRendererComponent(
 				table,
 				value,
 				isSelected,
@@ -65,9 +67,9 @@ public class ShowChildrenRenderer extends DefaultTableCellRenderer {
 				row,
 				column);
 		
-		this.setHorizontalAlignment(SwingConstants.CENTER);
-		this.setText("");
-		this.setIcon(null);
+		component.setHorizontalAlignment(SwingConstants.CENTER);
+		component.setText("");
+		component.setIcon(null);
 		
 		if (value == null)
 			return component;
@@ -84,9 +86,15 @@ public class ShowChildrenRenderer extends DefaultTableCellRenderer {
 		
 		if (hasChildren)
 			if (task.isShowChildren())
-				this.setIcon(ImageUtils.getResourceImage("collapse.png", 16, 16));
+				component.setIcon(ImageUtils.getResourceImage(
+						"collapse.png",
+						16,
+						16));
 			else
-				this.setIcon(ImageUtils.getResourceImage("expand.png", 16, 16));
+				component.setIcon(ImageUtils.getResourceImage(
+						"expand.png",
+						16,
+						16));
 		
 		return component;
 	}

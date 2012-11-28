@@ -35,8 +35,10 @@ package com.leclercb.taskunifier.gui.components.tasks.table;
 import java.awt.Component;
 
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
+
+import org.jdesktop.swingx.renderer.DefaultTableRenderer;
+import org.jdesktop.swingx.renderer.JRendererLabel;
 
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
@@ -49,7 +51,7 @@ public class TaskPrintTableColumn extends TUTableColumn<TaskColumn> {
 	private static TableCellRenderer RENDERER;
 	
 	static {
-		RENDERER = new DefaultTableCellRenderer() {
+		RENDERER = new DefaultTableRenderer() {
 			
 			@Override
 			public Component getTableCellRendererComponent(
@@ -59,7 +61,7 @@ public class TaskPrintTableColumn extends TUTableColumn<TaskColumn> {
 					boolean hasFocus,
 					int row,
 					int col) {
-				Component component = super.getTableCellRendererComponent(
+				JRendererLabel component = (JRendererLabel) super.getTableCellRendererComponent(
 						table,
 						value,
 						isSelected,
@@ -72,7 +74,7 @@ public class TaskPrintTableColumn extends TUTableColumn<TaskColumn> {
 				col = table.convertColumnIndexToModel(col);
 				TaskColumn column = ((TaskPrintTableModel) table.getModel()).getTaskColumn(col);
 				
-				this.setText(TaskUtils.toString(task, column));
+				component.setText(TaskUtils.toString(task, column));
 				return component;
 			}
 			
