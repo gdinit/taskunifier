@@ -69,6 +69,11 @@ public class QuickAddTaskDialog extends TUDialog {
 		}
 		
 		super.setVisible(visible);
+		
+		if (visible) {
+			this.setAlwaysOnTop(true);
+			this.setAlwaysOnTop(false);
+		}
 	}
 	
 	private void initialize() {
