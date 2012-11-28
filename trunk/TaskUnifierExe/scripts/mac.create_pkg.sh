@@ -15,7 +15,7 @@ echo "Creating PKG file $PKGFILE"
 
 rm -f $PKGFILE
 
-productbuild --component $APPFILE /Applications --sign "Mac Installer" $PKGFILE
+productbuild --component $APPFILE /Applications --sign "3rd Party Mac Developer Installer: Benjamin Leclerc" $PKGFILE
 
 exit 0
 
