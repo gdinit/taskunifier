@@ -55,6 +55,8 @@ public final class PrintUtils {
 		if (PrintDialog.getInstance().isCancelled())
 			return;
 		
+		tableReport.getComponent().clearSelection();
+		
 		PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
 		attributes.add(new JobName(Constants.TITLE, null));
 		

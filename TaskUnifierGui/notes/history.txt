@@ -6,6 +6,7 @@ Version 3.1.4
 		- BF 211: Add global hot key for Mac and Linux
 		- BF 213: Sync error: Value is null
 	- Minor:
+		- Indent subtasks in print report
 		- FR 250: Select only one context/goal/location
 		- FR 263: Beep for task reminders
 		- FR 264: Hide toolbar
