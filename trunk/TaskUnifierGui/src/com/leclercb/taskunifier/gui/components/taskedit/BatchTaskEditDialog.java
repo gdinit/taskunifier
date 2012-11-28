@@ -49,7 +49,6 @@ import javax.swing.KeyStroke;
 import org.jdesktop.swingx.JXHeader;
 
 import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.TUDialog;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
@@ -96,7 +95,6 @@ public class BatchTaskEditDialog extends TUDialog {
 	public void setVisible(boolean visible) {
 		if (visible) {
 			this.cancelled = false;
-			this.setLocationRelativeTo(FrameUtils.getCurrentFrame());
 		}
 		
 		super.setVisible(visible);
