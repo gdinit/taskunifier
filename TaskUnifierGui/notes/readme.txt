@@ -1,6 +1,10 @@
 HISTORY
 -------
 
+Version 3.1.5
+	- Minor:
+		- BF 217: Non-filtered tasks
+
 Version 3.1.4
 	- Major:
 		- Smarter add button
