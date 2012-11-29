@@ -563,7 +563,7 @@ public final class TaskUtils {
 				containsCompleted(filter),
 				false,
 				true,
-				false);
+				true);
 	}
 	
 	public static boolean showTask(Task task, TaskFilter filter) {
@@ -573,7 +573,7 @@ public final class TaskUtils {
 				containsCompleted(filter),
 				false,
 				false,
-				false);
+				true);
 	}
 	
 	public static boolean showUnindentTask(Task task, TaskFilter filter) {
