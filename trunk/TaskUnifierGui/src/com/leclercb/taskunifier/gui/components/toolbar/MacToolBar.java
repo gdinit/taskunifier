@@ -185,7 +185,7 @@ public class MacToolBar extends UnifiedToolBar implements SavePropertiesListener
 						continue;
 					}
 					
-					Action a = l.newInstance(24, 24);
+					Action a = l.newInstance(20, 20);
 					
 					if (a == null)
 						continue;
