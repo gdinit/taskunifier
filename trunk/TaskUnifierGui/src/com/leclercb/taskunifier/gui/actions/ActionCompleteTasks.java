@@ -99,8 +99,6 @@ public class ActionCompleteTasks extends AbstractViewTaskSelectionAction {
 		for (Task task : tasks) {
 			task.setCompleted(completed);
 		}
-		
-		ViewUtils.refreshTasks();
 	}
 	
 }

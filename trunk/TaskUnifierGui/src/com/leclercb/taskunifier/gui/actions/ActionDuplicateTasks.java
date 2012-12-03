@@ -92,7 +92,6 @@ public class ActionDuplicateTasks extends AbstractViewTaskSelectionAction {
 			Synchronizing.getInstance().setSynchronizing(false);
 		}
 		
-		ViewUtils.refreshTasks();
 		ViewUtils.setSelectedTasks(newTasks.values().toArray(new Task[0]));
 	}
 	

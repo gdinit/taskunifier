@@ -119,7 +119,6 @@ public class ActionAddSubTask extends AbstractViewTaskSelectionAction {
 		task.getLocations().addAll(parent.getLocations());
 		
 		ViewUtils.addExtraTasks(task);
-		ViewUtils.refreshTasks();
 		
 		if (edit) {
 			if (viewType == ViewType.CALENDAR
