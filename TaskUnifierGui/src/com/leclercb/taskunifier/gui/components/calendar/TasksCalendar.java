@@ -41,23 +41,35 @@ import lu.tudor.santec.bizcal.NamedCalendar;
 import bizcal.common.Event;
 import bizcal.util.DateInterval;
 
+import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
-import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
 
 public abstract class TasksCalendar extends NamedCalendar {
 	
-	public TasksCalendar(String name, String description, Color color) {
+	protected List<Event> events;
+	protected TaskCalendarView view;
+	
+	public TasksCalendar(TaskCalendarView view, String name) {
+		this(view, name, null, null);
+	}
+	
+	public TasksCalendar(TaskCalendarView view, String name, String description) {
+		this(view, name, description, null);
+	}
+	
+	public TasksCalendar(
+			TaskCalendarView view,
+			String name,
+			String description,
+			Color color) {
 		super(name, description, color);
-	}
-	
-	public TasksCalendar(String name, String description) {
-		super(name, description);
-	}
-	
-	public TasksCalendar(String name) {
-		super(name);
+		
+		CheckUtils.isNotNull(view);
+		this.view = view;
+		
+		this.events = new ArrayList<Event>();
 	}
 	
 	@Override
@@ -78,16 +90,14 @@ public abstract class TasksCalendar extends NamedCalendar {
 		return null;
 	}
 	
-	public abstract void updateEvents(
-			boolean showCompletedTasks,
-			TaskSearcher searcher);
+	public abstract void updateEvents();
 	
-	public abstract void newEvent(DateInterval interval) throws Exception;
+	public abstract Event newEvent(DateInterval interval) throws Exception;
 	
-	public abstract void moved(Event event, Date oldDate, Date newDate)
+	public abstract Event moved(Event event, Date oldDate, Date newDate)
 			throws Exception;
 	
-	public abstract void resized(Event event, Date oldEndDate, Date newEndDate)
+	public abstract Event resized(Event event, Date oldEndDate, Date newEndDate)
 			throws Exception;
 	
 	public static Task getTask(Event event) {

@@ -41,7 +41,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -81,6 +80,8 @@ import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
 public class TasksCalendarPanel extends JPanel implements TaskCalendarView, SavePropertiesListener, PropertyChangeListener {
 	
+	private boolean skipRefresh;
+	
 	private ModelSelectionChangeSupport modelSelectionChangeSupport;
 	
 	private ObservableEventList eventDataList;
@@ -91,12 +92,13 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 	private MonthViewPanel monthViewPanel;
 	
 	private TasksCalendar[] tasksCalendars = new TasksCalendar[] {
-			new TasksStartDateCalendar(),
-			new TasksDueDateCalendar() };
+			new TasksStartDateCalendar(this),
+			new TasksDueDateCalendar(this) };
 	
 	private CalendarPanel calendarPanel;
 	
 	public TasksCalendarPanel() {
+		this.skipRefresh = false;
 		this.modelSelectionChangeSupport = new ModelSelectionChangeSupport(this);
 		
 		Main.getSettings().addSavePropertiesListener(
@@ -276,23 +278,18 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	public synchronized void refreshTasks() {
-		boolean selected = Main.getSettings().getBooleanProperty(
-				"tasksearcher.show_completed_tasks");
-		TaskSearcher searcher = this.calendarPanel.getTaskSearcherPanel().getSelectedTaskSearcher();
+		if (this.skipRefresh)
+			return;
 		
 		for (TasksCalendar calendar : this.tasksCalendars)
-			calendar.updateEvents(selected, searcher);
+			calendar.updateEvents();
 		
-		List<Event> allActiveEvents = new ArrayList<Event>();
+		List<Event> allEvents = new ArrayList<Event>();
 		
 		for (NamedCalendar nc : this.calendarPanel.getCalendars()) {
-			if (nc.isActive())
-				allActiveEvents.addAll(nc.getEvents(null, null));
+			allEvents.addAll(nc.getEvents(null, null));
 		}
-		
-		Collections.sort(allActiveEvents);
 		
 		try {
 			this.dayViewPanel.getView().deselect();
@@ -313,7 +310,7 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 		TasksCalendarPanel.this.modelSelectionChangeSupport.fireModelSelectionChange(new Task[0]);
 		
 		this.eventDataList.clear();
-		this.eventDataList.addAll(allActiveEvents);
+		this.eventDataList.addAll(allEvents);
 	}
 	
 	@Override
@@ -356,14 +353,20 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 		
 		@Override
 		public void newEvent(Object id, DateInterval interval) throws Exception {
-			interval.setStartDate(this.roundMinutes(interval.getStartDate()));
-			interval.setEndDate(this.roundMinutes(interval.getEndDate()));
+			TasksCalendarPanel.this.skipRefresh = true;
 			
-			for (TasksCalendar calendar : TasksCalendarPanel.this.tasksCalendars)
-				if (calendar.isSelected())
-					calendar.newEvent(interval);
-			
-			TasksCalendarPanel.this.refreshTasks();
+			try {
+				interval.setStartDate(this.roundMinutes(interval.getStartDate()));
+				interval.setEndDate(this.roundMinutes(interval.getEndDate()));
+				
+				for (TasksCalendar calendar : TasksCalendarPanel.this.tasksCalendars) {
+					if (calendar.isSelected()) {
+						TasksCalendarPanel.this.eventDataList.add(calendar.newEvent(interval));
+					}
+				}
+			} finally {
+				TasksCalendarPanel.this.skipRefresh = false;
+			}
 		}
 		
 		@Override
@@ -383,14 +386,22 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 				Date oldDate,
 				Object newCalId,
 				Date newDate) throws Exception {
-			newDate = this.roundMinutes(newDate);
+			TasksCalendarPanel.this.skipRefresh = true;
 			
-			for (TasksCalendar calendar : TasksCalendarPanel.this.tasksCalendars)
-				if (calendar.getId().equals(
-						event.get(NamedCalendar.CALENDAR_ID)))
-					calendar.moved(event, oldDate, newDate);
-			
-			TasksCalendarPanel.this.refreshTasks();
+			try {
+				newDate = this.roundMinutes(newDate);
+				
+				for (TasksCalendar calendar : TasksCalendarPanel.this.tasksCalendars) {
+					if (calendar.getId().equals(
+							event.get(NamedCalendar.CALENDAR_ID))) {
+						event = calendar.moved(event, oldDate, newDate);
+						TasksCalendarPanel.this.eventDataList.remove(event);
+						TasksCalendarPanel.this.eventDataList.add(event);
+					}
+				}
+			} finally {
+				TasksCalendarPanel.this.skipRefresh = false;
+			}
 		}
 		
 		@Override
@@ -399,14 +410,22 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 				Object oldCalId,
 				Date oldEndDate,
 				Date newEndDate) throws Exception {
-			newEndDate = this.roundMinutes(newEndDate);
+			TasksCalendarPanel.this.skipRefresh = true;
 			
-			for (TasksCalendar calendar : TasksCalendarPanel.this.tasksCalendars)
-				if (calendar.getId().equals(
-						event.get(NamedCalendar.CALENDAR_ID)))
-					calendar.resized(event, oldEndDate, newEndDate);
-			
-			TasksCalendarPanel.this.refreshTasks();
+			try {
+				newEndDate = this.roundMinutes(newEndDate);
+				
+				for (TasksCalendar calendar : TasksCalendarPanel.this.tasksCalendars) {
+					if (calendar.getId().equals(
+							event.get(NamedCalendar.CALENDAR_ID))) {
+						event = calendar.resized(event, oldEndDate, newEndDate);
+						TasksCalendarPanel.this.eventDataList.remove(event);
+						TasksCalendarPanel.this.eventDataList.add(event);
+					}
+				}
+			} finally {
+				TasksCalendarPanel.this.skipRefresh = false;
+			}
 		}
 		
 		public Date roundMinutes(Date date) {
