@@ -31,6 +31,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.LayoutManager;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -46,6 +47,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 import bizcal.common.CalendarModel;
 import bizcal.common.CalendarViewConfig;
@@ -79,6 +81,7 @@ public class ColumnHeaderPanel {
 	private boolean showExtraDateHeaders = false;
 	private CalendarViewConfig config;
 	private boolean isMonthView = false;
+	private Font font = UIManager.getFont("Label.font");
 	
 	// // formater for month view
 	// DateFormat monthDateFormat = new SimpleDateFormat("EEEE",
@@ -99,6 +102,8 @@ public class ColumnHeaderPanel {
 				Color.WHITE,
 				GRADIENT_COLOR);
 		this.gradientArea.setBorder(false);
+		
+		this.font = this.font.deriveFont((float) 11);
 	}
 	
 	public ColumnHeaderPanel(CalendarViewConfig config, int fixedDayCount) {
@@ -152,6 +157,8 @@ public class ColumnHeaderPanel {
 					JLabel headerLabel = new JLabel(
 							cal.getSummary(),
 							SwingConstants.CENTER);
+					headerLabel.setFont(this.font.deriveFont((float) 12));
+					headerLabel.setForeground(Color.DARK_GRAY);
 					headerLabel.addMouseListener(new CalHeaderMouseListener(
 							cal.getId()));
 					headerLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -196,7 +203,8 @@ public class ColumnHeaderPanel {
 					/* ------------------------------------------------------- */
 					JLabel header = new JLabel(dateStr, SwingConstants.CENTER);
 					header.setAlignmentY(2);
-					// header.setFont(font);
+					header.setFont(this.font);
+					header.setForeground(Color.DARK_GRAY);
 					header.setToolTipText(toolTipFormat.format(date));
 					
 					if (this.model.isRedDay(date))

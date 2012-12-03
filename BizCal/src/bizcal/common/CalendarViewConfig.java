@@ -38,7 +38,7 @@ public class CalendarViewConfig {
 	private boolean showTime = true;
 	private CalendarModel callback;
 	private boolean showTopHeader = true;
-	private Font font = new Font("Verdana", Font.PLAIN, 10);
+	private Font font = new Font("Arial", Font.PLAIN, 8);
 	// private Color primaryColor = new Color(182,202,184);
 	private Color primaryColor = new Color(100, 100, 245);
 	private Color secondaryColor = new Color(255, 255, 255);
