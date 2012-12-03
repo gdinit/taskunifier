@@ -95,7 +95,7 @@ public class TULinkDialog extends JDialog {
 	private void initialize(boolean open, String title) {
 		this.setModal(true);
 		this.setTitle(title);
-		this.setSize(400, 150);
+		this.setSize(400, 180);
 		this.setResizable(true);
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);

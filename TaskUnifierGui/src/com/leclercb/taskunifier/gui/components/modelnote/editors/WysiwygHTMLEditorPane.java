@@ -126,7 +126,7 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 		if (WysiwygHTMLEditorPane.this.flagSetText)
 			return;
 		
-		this.toolBar.setVisible(canEdit);
+		this.toolBar.setEnabled(canEdit);
 		this.htmlNote.setEditable(canEdit);
 		this.htmlNote.setEnabled(canEdit);
 		
@@ -150,6 +150,7 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 	
 	private void initialize(final String text, final boolean canEdit) {
 		this.setLayout(new BorderLayout());
+		this.setOpaque(false);
 		
 		this.undoSupport = new UndoSupport();
 		
@@ -214,6 +215,7 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 		}
 		
 		this.toolBar = new JToolBar(SwingConstants.HORIZONTAL);
+		this.toolBar.setOpaque(false);
 		this.toolBar.setFloatable(false);
 		
 		this.toolBar.add(this.undoSupport.getUndoAction());
@@ -266,38 +268,40 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				TULinkDialog dialog = new TULinkDialog(
-						true,
-						Translations.getString("general.link"));
-				dialog.setFile("http://");
-				dialog.setVisible(true);
-				
-				if (dialog.isCancelled()) {
-					WysiwygHTMLEditorPane.this.htmlNote.requestFocus();
-					return;
-				}
-				
-				String url = dialog.getFile();
-				String label = dialog.getLabel();
-				
-				try {
-					File file = new File(url);
-					if (file.exists())
-						url = file.toURI().toURL().toExternalForm();
-				} catch (Throwable t) {
+				if (this.editor.isEditable()) {
+					TULinkDialog dialog = new TULinkDialog(
+							true,
+							Translations.getString("general.link"));
+					dialog.setFile("http://");
+					dialog.setVisible(true);
 					
+					if (dialog.isCancelled()) {
+						WysiwygHTMLEditorPane.this.htmlNote.requestFocus();
+						return;
+					}
+					
+					String url = dialog.getFile();
+					String label = dialog.getLabel();
+					
+					try {
+						File file = new File(url);
+						if (file.exists())
+							url = file.toURI().toURL().toExternalForm();
+					} catch (Throwable t) {
+						
+					}
+					
+					if (label == null || label.length() == 0) {
+						label = dialog.getFile();
+					}
+					
+					this.setHtml("<a href=\""
+							+ StringEscapeUtils.escapeHtml4(url)
+							+ "\">"
+							+ StringEscapeUtils.escapeHtml4(label)
+							+ "</a>");
+					super.actionPerformed(event);
 				}
-				
-				if (label == null || label.length() == 0) {
-					label = dialog.getFile();
-				}
-				
-				this.setHtml("<a href=\""
-						+ StringEscapeUtils.escapeHtml4(url)
-						+ "\">"
-						+ StringEscapeUtils.escapeHtml4(label)
-						+ "</a>");
-				super.actionPerformed(event);
 			}
 			
 		});
