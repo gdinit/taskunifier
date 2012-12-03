@@ -30,7 +30,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.LayoutManager;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -226,8 +225,6 @@ public class DayView extends CalendarView {
 		
 		this.addDraggingComponents(this.calPanel);
 		
-		Font hourFont = this.getDayViewConfig().getFont().deriveFont((float) 12);
-		hourFont = hourFont.deriveFont(Font.BOLD);
 		/* ------------------------------------------------------- */
 		// create a color for the lines
 		/* ------------------------------------------------------- */
@@ -511,8 +508,6 @@ public class DayView extends CalendarView {
 		
 	}
 	
-	// F�r in ett events start- eller slutdatum, h�jden p� f�nstret samt
-	// intervallet som positionen ska ber�knas utifr�n
 	/**
 	 * Returns the y position for the date and the day
 	 * 
@@ -856,10 +851,7 @@ public class DayView extends CalendarView {
 							- CAPTION_ROW_HEIGHT0;
 					int colWidth = DayView.this.getXPos(i + 1)
 							- DayView.this.getXPos(i);
-					// Obs. tempor�r l�sning med korrigering med +2. L�gg
-					// till
-					// korrigeringen p� r�tt st�lle
-					// kan h�ra ihop synkning av tidsaxel och muslyssnare
+					
 					int vLineTop = captionYOffset + CAPTION_ROW_HEIGHT0 + 2;
 					if (dayNo == 0
 							&& (DayView.this.getSelectedCalendars().size() > 1)) {

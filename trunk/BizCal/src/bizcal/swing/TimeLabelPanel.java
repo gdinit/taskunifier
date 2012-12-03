@@ -99,8 +99,9 @@ public class TimeLabelPanel {
 		this.hourFormat = new SimpleDateFormat("HH");
 		this.hourFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 		
-		this.hourFont = this.font.deriveFont((float) 12);
-		this.hourFont = this.hourFont.deriveFont(Font.BOLD);
+		this.font = this.font.deriveFont((float) 8);
+		
+		this.hourFont = this.font.deriveFont((float) 10);
 		/* ------------------------------------------------------- */
 		this.refresh();
 		/* ================================================== */
@@ -132,6 +133,7 @@ public class TimeLabelPanel {
 				String timeTxt = this.hourFormat.format(date);
 				JLabel timeLabel = new JLabel(timeTxt);
 				timeLabel.setVerticalTextPosition(SwingConstants.CENTER);
+				timeLabel.setForeground(Color.DARK_GRAY);
 				timeLabel.setFont(this.hourFont);
 				this.panel.add(timeLabel);
 				this.hourLabels.add(timeLabel);
@@ -143,6 +145,7 @@ public class TimeLabelPanel {
 				
 				timeTxt = "15";
 				timeLabel = new JLabel(timeTxt);
+				timeLabel.setForeground(Color.DARK_GRAY);
 				timeLabel.setFont(this.font);
 				this.panel.add(timeLabel);
 				this.minuteLabels.add(timeLabel);
@@ -156,6 +159,7 @@ public class TimeLabelPanel {
 				
 				timeTxt = "45";
 				timeLabel = new JLabel(timeTxt);
+				timeLabel.setForeground(Color.DARK_GRAY);
 				timeLabel.setFont(this.font);
 				this.panel.add(timeLabel);
 				this.minuteLabels.add(timeLabel);
@@ -255,7 +259,7 @@ public class TimeLabelPanel {
 					/* ------------------------------------------------------- */
 					JLabel hourLabel = TimeLabelPanel.this.hourLabels.get(i);
 					hourLabel.setBounds(
-							0,
+							5,
 							(int) (i * rowHeight),
 							colWidth,
 							(int) rowHeight);
