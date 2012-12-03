@@ -2,6 +2,8 @@ HISTORY
 -------
 
 Version 3.1.5
+	- Major:
+		- Improved calendar
 	- Minor:
 		- BF 217: Non-filtered tasks
 
