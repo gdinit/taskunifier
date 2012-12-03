@@ -43,8 +43,8 @@ import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class WysiwygInsertHTMLAction extends AbstractAction {
 	
-	private JEditorPane editor;
-	private Action action;
+	protected JEditorPane editor;
+	protected Action action;
 	
 	public WysiwygInsertHTMLAction(
 			JEditorPane editor,
@@ -75,8 +75,10 @@ public class WysiwygInsertHTMLAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		this.action.actionPerformed(event);
-		this.editor.requestFocus();
+		if (this.editor.isEditable()) {
+			this.action.actionPerformed(event);
+			this.editor.requestFocus();
+		}
 	}
 	
 }

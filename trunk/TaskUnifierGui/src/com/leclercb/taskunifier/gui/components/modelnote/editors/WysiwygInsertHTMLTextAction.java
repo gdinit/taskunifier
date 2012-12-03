@@ -49,9 +49,9 @@ import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class WysiwygInsertHTMLTextAction extends AbstractAction {
 	
-	private JEditorPane editor;
-	private String html;
-	private HTML.Tag tag;
+	protected JEditorPane editor;
+	protected String html;
+	protected HTML.Tag tag;
 	
 	public WysiwygInsertHTMLTextAction(
 			JEditorPane editor,
@@ -93,20 +93,34 @@ public class WysiwygInsertHTMLTextAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		HTMLDocument document = (HTMLDocument) this.editor.getDocument();
-		HTMLEditorKit editorKit = (HTMLEditorKit) this.editor.getEditorKit();
-		int offset = this.editor.getCaretPosition();
-		
-		try {
-			document.insertString(offset, " ", null);
-			editorKit.insertHTML(document, offset, this.html, 0, 0, this.tag);
-		} catch (BadLocationException e) {
-			GuiLogger.getLogger().log(Level.WARNING, "Wysiwyg action error", e);
-		} catch (IOException e) {
-			GuiLogger.getLogger().log(Level.WARNING, "Wysiwyg action error", e);
+		if (this.editor.isEditable()) {
+			HTMLDocument document = (HTMLDocument) this.editor.getDocument();
+			HTMLEditorKit editorKit = (HTMLEditorKit) this.editor.getEditorKit();
+			int offset = this.editor.getCaretPosition();
+			
+			try {
+				document.insertString(offset, " ", null);
+				editorKit.insertHTML(
+						document,
+						offset,
+						this.html,
+						0,
+						0,
+						this.tag);
+			} catch (BadLocationException e) {
+				GuiLogger.getLogger().log(
+						Level.WARNING,
+						"Wysiwyg action error",
+						e);
+			} catch (IOException e) {
+				GuiLogger.getLogger().log(
+						Level.WARNING,
+						"Wysiwyg action error",
+						e);
+			}
+			
+			this.editor.requestFocus();
 		}
-		
-		this.editor.requestFocus();
 	}
 	
 }

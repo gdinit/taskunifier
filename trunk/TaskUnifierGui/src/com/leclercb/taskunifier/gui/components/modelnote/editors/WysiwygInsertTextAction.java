@@ -46,8 +46,8 @@ import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class WysiwygInsertTextAction extends AbstractAction {
 	
-	private JEditorPane editor;
-	private String text;
+	protected JEditorPane editor;
+	protected String text;
 	
 	public WysiwygInsertTextAction(
 			JEditorPane editor,
@@ -78,16 +78,21 @@ public class WysiwygInsertTextAction extends AbstractAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		HTMLDocument document = (HTMLDocument) this.editor.getDocument();
-		int offset = this.editor.getCaretPosition();
-		
-		try {
-			document.insertString(offset, this.text, null);
-		} catch (BadLocationException e) {
-			GuiLogger.getLogger().log(Level.WARNING, "Wysiwyg action error", e);
+		if (this.editor.isEditable()) {
+			HTMLDocument document = (HTMLDocument) this.editor.getDocument();
+			int offset = this.editor.getCaretPosition();
+			
+			try {
+				document.insertString(offset, this.text, null);
+			} catch (BadLocationException e) {
+				GuiLogger.getLogger().log(
+						Level.WARNING,
+						"Wysiwyg action error",
+						e);
+			}
+			
+			this.editor.requestFocus();
 		}
-		
-		this.editor.requestFocus();
 	}
 	
 }
