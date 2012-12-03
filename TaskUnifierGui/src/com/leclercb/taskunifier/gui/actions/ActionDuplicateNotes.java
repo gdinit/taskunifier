@@ -76,7 +76,6 @@ public class ActionDuplicateNotes extends AbstractViewNoteSelectionAction {
 		for (Note note : notes)
 			newNotes.add(NoteFactory.getInstance().create(note));
 		
-		ViewUtils.refreshNotes();
 		ViewUtils.setSelectedNotes(newNotes.toArray(new Note[0]));
 	}
 	

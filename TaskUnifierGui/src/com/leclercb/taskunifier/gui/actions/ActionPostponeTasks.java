@@ -153,8 +153,6 @@ public class ActionPostponeTasks extends AbstractViewAction {
 				task.setDueDate(newDueDate);
 			}
 		}
-		
-		ViewUtils.refreshTasks();
 	}
 	
 	public static ActionPostponeTasks[] createDefaultActions(

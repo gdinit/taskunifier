@@ -89,8 +89,6 @@ public class ActionEditTasks extends AbstractViewTaskSelectionAction {
 		dialog.setVisible(true);
 		boolean edited = !dialog.isCancelled();
 		
-		ViewUtils.refreshTasks();
-		
 		if (edited) {
 			if (select)
 				ViewUtils.setSelectedTasks(tasks);

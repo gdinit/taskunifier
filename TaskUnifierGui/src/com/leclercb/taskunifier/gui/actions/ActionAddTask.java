@@ -105,7 +105,6 @@ public class ActionAddTask extends AbstractAction {
 			task.setTitle(title);
 		
 		ViewUtils.addExtraTasks(task);
-		ViewUtils.refreshTasks();
 		
 		if (edit) {
 			if (viewType == ViewType.CALENDAR
@@ -146,7 +145,6 @@ public class ActionAddTask extends AbstractAction {
 		}
 		
 		ViewUtils.addExtraTasks(task);
-		ViewUtils.refreshTasks();
 		
 		if (edit) {
 			if (viewType == ViewType.CALENDAR

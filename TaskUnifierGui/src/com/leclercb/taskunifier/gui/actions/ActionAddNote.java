@@ -86,7 +86,6 @@ public class ActionAddNote extends AbstractAction {
 			note.setTitle(title);
 		
 		ViewUtils.addExtraNotes(note);
-		ViewUtils.refreshNotes();
 		
 		if (edit) {
 			ViewUtils.getCurrentNoteView().getNoteTableView().setSelectedNoteAndStartEdit(
@@ -115,7 +114,6 @@ public class ActionAddNote extends AbstractAction {
 		}
 		
 		ViewUtils.addExtraNotes(note);
-		ViewUtils.refreshNotes();
 		
 		if (edit) {
 			ViewUtils.getCurrentNoteView().getNoteTableView().setSelectedNoteAndStartEdit(

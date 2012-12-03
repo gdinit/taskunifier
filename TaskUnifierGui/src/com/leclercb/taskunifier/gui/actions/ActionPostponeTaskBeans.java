@@ -44,7 +44,6 @@ import javax.swing.AbstractAction;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.beans.TaskBean;
 import com.leclercb.taskunifier.gui.commons.comparators.TimeValueComparator;
-import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.TaskPostponeList;
@@ -154,8 +153,6 @@ public class ActionPostponeTaskBeans extends AbstractAction {
 				task.setDueDate(newDueDate);
 			}
 		}
-		
-		ViewUtils.refreshTasks();
 	}
 	
 	public static ActionPostponeTaskBeans[] createDefaultActions(
