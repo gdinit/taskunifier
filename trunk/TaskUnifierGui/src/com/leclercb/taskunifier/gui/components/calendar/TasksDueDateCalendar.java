@@ -32,7 +32,6 @@
  */
 package com.leclercb.taskunifier.gui.components.calendar;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +45,6 @@ import com.leclercb.taskunifier.api.models.TaskFactory;
 import com.leclercb.taskunifier.gui.actions.ActionAddTask;
 import com.leclercb.taskunifier.gui.actions.ActionEditTasks;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
@@ -54,106 +52,104 @@ import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
 public class TasksDueDateCalendar extends TasksCalendar {
 	
-	private List<Event> events;
-	
-	public TasksDueDateCalendar() {
+	public TasksDueDateCalendar(TaskCalendarView view) {
 		super(
+				view,
 				Translations.getString("calendar.tasks_by_due_date"),
 				Translations.getString("calendar.tasks_by_due_date"),
 				null);
-		this.events = new ArrayList<Event>();
-		
 		this.setId("tasksduedatecalendar");
 	}
 	
 	@Override
-	public void updateEvents(boolean showCompletedTasks, TaskSearcher searcher) {
+	public void updateEvents() {
 		this.events.clear();
-		
-		TaskColumn[] columns = TaskColumn.getUsedColumns(false);
 		
 		List<Task> tasks = TaskFactory.getInstance().getList();
 		for (Task task : tasks) {
-			if (!task.getModelStatus().isEndUserStatus())
-				continue;
+			Event event = this.taskToEvent(task, null);
 			
-			if (!showCompletedTasks && task.isCompleted())
-				continue;
-			
-			if (task.getDueDate() == null)
-				continue;
-			
-			if (searcher != null
-					&& !TaskUtils.showUnindentTask(task, searcher.getFilter()))
-				continue;
-			
-			Calendar dueDate = task.getDueDate();
-			
-			int length = task.getLength();
-			
-			if (length < 15)
-				length = 15;
-			
-			if (!Main.getSettings().getBooleanProperty("date.use_due_time")) {
-				dueDate.set(
-						Calendar.HOUR_OF_DAY,
-						Main.getSettings().getIntegerProperty(
-								"date.day_end_hour"));
-				dueDate.set(Calendar.MINUTE, 0);
-				dueDate.set(Calendar.SECOND, 0);
-				dueDate.set(Calendar.MILLISECOND, 0);
-			} else if (dueDate.get(Calendar.HOUR_OF_DAY) == 0
-					&& dueDate.get(Calendar.MINUTE) == 0) {
-				dueDate.set(
-						Calendar.HOUR_OF_DAY,
-						Main.getSettings().getIntegerProperty(
-								"date.day_end_hour"));
-				dueDate.set(Calendar.MINUTE, 0);
-				dueDate.set(Calendar.SECOND, 0);
-				dueDate.set(Calendar.MILLISECOND, 0);
-				
-				length = (Main.getSettings().getIntegerProperty(
-						"date.day_end_hour") - Main.getSettings().getIntegerProperty(
-						"date.day_start_hour")) * 60;
-			}
-			
-			Calendar startDate = DateUtils.cloneCalendar(dueDate);
-			startDate.add(Calendar.MINUTE, -length);
-			
-			Event event = new Event();
-			event.setId(task.getModelId());
-			event.set(CALENDAR_ID, this.getId());
-			event.setEditable(true);
-			event.setSelectable(true);
-			event.setDescription(task.getTitle());
-			event.setToolTip("<html><i>"
-					+ Translations.getString("calendar.task_by_due_date")
-					+ "</i><br />"
-					+ TaskUtils.toText(new Task[] { task }, columns, true)
-					+ "</html>");
-			event.setStart(startDate.getTime());
-			event.setEnd(dueDate.getTime());
-			event.setColor(Main.getSettings().getColorProperty(
-					"theme.color.importance." + TaskUtils.getImportance(task)));
-			
-			if (task.isCompleted())
-				event.setIcon(ImageUtils.getResourceImage(
-						"checkbox_selected.png",
-						16,
-						16));
-			else if (task.isOverDue(false))
-				event.setIcon(ImageUtils.getResourceImage(
-						"warning_red.png",
-						16,
-						16));
-			else
-				event.setIcon(ImageUtils.getResourceImage(
-						"warning_green.png",
-						16,
-						16));
-			
-			this.events.add(event);
+			if (event != null)
+				this.events.add(event);
 		}
+	}
+	
+	private Event taskToEvent(Task task, Event event) {
+		if (!task.getModelStatus().isEndUserStatus())
+			return null;
+		
+		boolean showCompletedTasks = Main.getSettings().getBooleanProperty(
+				"tasksearcher.show_completed_tasks");
+		
+		if (!showCompletedTasks && task.isCompleted())
+			return null;
+		
+		if (task.getDueDate() == null)
+			return null;
+		
+		TaskSearcher searcher = this.view.getTaskSearcherView().getSelectedTaskSearcher();
+		
+		if (searcher != null
+				&& !TaskUtils.showUnindentTask(task, searcher.getFilter()))
+			return null;
+		
+		Calendar dueDate = task.getDueDate();
+		
+		int length = task.getLength();
+		
+		if (length < 15)
+			length = 15;
+		
+		if (!Main.getSettings().getBooleanProperty("date.use_due_time")) {
+			dueDate.set(
+					Calendar.HOUR_OF_DAY,
+					Main.getSettings().getIntegerProperty("date.day_end_hour"));
+			dueDate.set(Calendar.MINUTE, 0);
+			dueDate.set(Calendar.SECOND, 0);
+			dueDate.set(Calendar.MILLISECOND, 0);
+		} else if (dueDate.get(Calendar.HOUR_OF_DAY) == 0
+				&& dueDate.get(Calendar.MINUTE) == 0) {
+			dueDate.set(
+					Calendar.HOUR_OF_DAY,
+					Main.getSettings().getIntegerProperty("date.day_end_hour"));
+			dueDate.set(Calendar.MINUTE, 0);
+			dueDate.set(Calendar.SECOND, 0);
+			dueDate.set(Calendar.MILLISECOND, 0);
+			
+			length = (Main.getSettings().getIntegerProperty("date.day_end_hour") - Main.getSettings().getIntegerProperty(
+					"date.day_start_hour")) * 60;
+		}
+		
+		Calendar startDate = DateUtils.cloneCalendar(dueDate);
+		startDate.add(Calendar.MINUTE, -length);
+		
+		if (event == null)
+			event = new Event();
+		
+		event.setId(task.getModelId());
+		event.set(CALENDAR_ID, this.getId());
+		event.setEditable(true);
+		event.setSelectable(true);
+		event.setDescription(task.getTitle());
+		event.setStart(startDate.getTime());
+		event.setEnd(dueDate.getTime());
+		event.setColor(Main.getSettings().getColorProperty(
+				"theme.color.importance." + TaskUtils.getImportance(task)));
+		
+		if (task.isCompleted())
+			event.setIcon(ImageUtils.getResourceImage(
+					"checkbox_selected.png",
+					16,
+					16));
+		else if (task.isOverDue(false))
+			event.setIcon(ImageUtils.getResourceImage("warning_red.png", 16, 16));
+		else
+			event.setIcon(ImageUtils.getResourceImage(
+					"warning_green.png",
+					16,
+					16));
+		
+		return event;
 	}
 	
 	@Override
@@ -162,7 +158,7 @@ public class TasksDueDateCalendar extends TasksCalendar {
 	}
 	
 	@Override
-	public void newEvent(DateInterval interval) throws Exception {
+	public Event newEvent(DateInterval interval) throws Exception {
 		Task task = ActionAddTask.addTask((String) null, false);
 		
 		long diff = interval.getDuration();
@@ -181,10 +177,13 @@ public class TasksDueDateCalendar extends TasksCalendar {
 		
 		if (!ActionEditTasks.editTasks(new Task[] { task }, true))
 			TaskFactory.getInstance().markDeleted(task);
+		
+		return this.taskToEvent(task, null);
 	}
 	
 	@Override
-	public void moved(Event event, Date oldDate, Date newDate) throws Exception {
+	public Event moved(Event event, Date oldDate, Date newDate)
+			throws Exception {
 		Task task = TasksCalendar.getTask(event);
 		
 		int length = task.getLength();
@@ -194,10 +193,12 @@ public class TasksDueDateCalendar extends TasksCalendar {
 		dueDate.add(Calendar.MINUTE, length);
 		
 		task.setDueDate(dueDate);
+		
+		return this.taskToEvent(task, event);
 	}
 	
 	@Override
-	public void resized(Event event, Date oldEndDate, Date newEndDate)
+	public Event resized(Event event, Date oldEndDate, Date newEndDate)
 			throws Exception {
 		Task task = TasksCalendar.getTask(event);
 		
@@ -214,6 +215,8 @@ public class TasksDueDateCalendar extends TasksCalendar {
 		
 		task.setLength(length);
 		task.setDueDate(dueDate);
+		
+		return this.taskToEvent(task, event);
 	}
 	
 }
