@@ -72,8 +72,6 @@
  */
 package lu.tudor.santec.bizcal;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -146,16 +144,6 @@ public class EventModel extends CalendarModel.BaseImpl implements Observer {
 	public static final int TYPE_DAY = 1;
 	public static final int TYPE_WEEK = 2;
 	public static final int TYPE_MONTH = 3;
-	
-	// private DateFormat weekNumberFormat = new SimpleDateFormat("W. '" +
-	// BizCalTranslations.getString("calendar.week") + "'",
-	// Translatrix.getLocale());
-	private DateFormat weekNumberFormat = new SimpleDateFormat("'"
-			+ BizCalTranslations.getString("calendar.week")
-			+ "'", BizCalTranslations.getLocale());
-	private DateFormat monthFormatter = new SimpleDateFormat(
-			"MMMMMM yyyy",
-			BizCalTranslations.getLocale());
 	
 	private ObservableEventList events = null;
 	
@@ -289,16 +277,12 @@ public class EventModel extends CalendarModel.BaseImpl implements Observer {
 					// start = DateUtil.getStartOfWeek(date);
 					start = DateUtil.setDayOfWeek(date, this.weekStart);
 					end = DateUtil.getDiffDay(start, this.days);
-					this.cal.setSummary(BizCalTranslations.getString("bizcal.WEEK_VIEW")
-							+ " - "
-							+ this.weekNumberFormat.format(start));
+					this.cal.setSummary(BizCalTranslations.getString("bizcal.WEEK_VIEW"));
 					break;
 				case TYPE_MONTH:
 					start = DateUtil.round2Month(date);
 					end = DateUtil.getDiffDay(start, 31);
-					this.cal.setSummary(BizCalTranslations.getString("bizcal.MONTH_VIEW")
-							+ " - "
-							+ this.monthFormatter.format(start));
+					this.cal.setSummary(BizCalTranslations.getString("bizcal.MONTH_VIEW"));
 					break;
 				default:
 					break;

@@ -134,6 +134,7 @@ public class TasksStartDateCalendar extends TasksCalendar {
 		event.setEditable(true);
 		event.setSelectable(true);
 		event.setDescription(task.getTitle());
+		event.setToolTip(task.getNote());
 		event.setStart(startDate.getTime());
 		event.setEnd(dueDate.getTime());
 		event.setColor(Main.getSettings().getColorProperty(
