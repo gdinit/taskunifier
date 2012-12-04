@@ -3,6 +3,7 @@ package lu.tudor.santec.bizcal.views;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JToggleButton;
+import javax.swing.UIManager;
 
 import lu.tudor.santec.bizcal.AbstractCalendarView;
 import lu.tudor.santec.bizcal.CalendarIcons;
@@ -51,11 +53,16 @@ public class WeekListViewPanel extends AbstractCalendarView {
 		
 		this.setLayout(new BorderLayout());
 		
+		Font font = UIManager.getFont("Label.font");
+		font = font.deriveFont((float) 12);
+		
 		this.gp = new GradientArea(
 				GradientArea.TOP_BOTTOM,
 				this.secondaryColor,
 				this.primaryColor);
-		this.gp.setPreferredSize(new Dimension(30, 30));
+		this.gp.setPreferredSize(new Dimension(30, 35));
+		this.gp.setFont(font);
+		this.gp.setForeground(Color.DARK_GRAY);
 		
 		this.add(this.gp, BorderLayout.NORTH);
 		
@@ -100,10 +107,7 @@ public class WeekListViewPanel extends AbstractCalendarView {
 			this.gp.setText(
 					"<html><center>"
 							+ BizCalTranslations.getString("bizcal.LIST_VIEW")
-							+ "<br>"
-							+ this.config.getDayFormat().format(start)
-							+ " - "
-							+ this.config.getDayFormat().format(end),
+							+ "</center></html>",
 					true);
 		} catch (Exception e) {
 			logger.log(Level.WARNING, "setTitle failed", e);
