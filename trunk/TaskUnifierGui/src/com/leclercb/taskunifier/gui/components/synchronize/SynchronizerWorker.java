@@ -363,6 +363,9 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 				
 				this.publish(new SynchronizerDefaultProgressMessage(
 						"----------"));
+				
+				if (this.isStopped())
+					return null;
 			}
 			
 			this.publish(new SynchronizerDefaultProgressMessage(

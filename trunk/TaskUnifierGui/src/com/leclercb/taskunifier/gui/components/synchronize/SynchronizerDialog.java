@@ -70,6 +70,12 @@ public class SynchronizerDialog extends TUWorkerDialog<Void> {
 			
 			@Override
 			public void windowClosing(WindowEvent e) {
+				if (worker.isDone()) {
+					System.out.println("isdone");
+					SynchronizerDialog.this.setCursor(null);
+					SynchronizerDialog.this.setVisible(false);
+				}
+				
 				worker.stop();
 			}
 			
