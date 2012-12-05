@@ -3,6 +3,8 @@ HISTORY
 
 Version 3.1.5
 	- Major:
+		- BF 214: Sync dialog not closed after sleep
+		- BF 221: Sync dialog not closed
 	- Minor:
 		- Improved calendar
 		- BF 217: Non-filtered tasks
