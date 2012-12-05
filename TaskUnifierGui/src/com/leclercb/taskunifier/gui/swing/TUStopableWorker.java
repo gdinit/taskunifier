@@ -52,7 +52,7 @@ public abstract class TUStopableWorker<T> extends TUWorker<T> {
 			return;
 		
 		this.stopped = true;
-		this.cancel(true);
+		this.cancel(false);
 	}
 	
 	protected final void executeNonAtomicAction(Runnable runnable) {
