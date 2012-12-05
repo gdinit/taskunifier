@@ -413,9 +413,9 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 			Synchronizing.getInstance().setSynchronizing(false);
 			
 			GuiLogger.getLogger().log(Level.INFO, "Synchronization ended");
+			
+			super.done();
 		}
-		
-		super.done();
 	}
 	
 	private void handleSynchronizerException(

@@ -56,7 +56,6 @@ import javax.swing.SwingConstants;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
-import com.leclercb.commons.api.event.action.WeakActionListener;
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessage;
@@ -121,9 +120,7 @@ public class TUWorkerDialog<T> extends JDialog implements ListChangeListener, Ac
 		this.worker = worker;
 		
 		if (this.worker != null)
-			this.worker.addActionListener(new WeakActionListener(
-					this.worker,
-					this));
+			this.worker.addActionListener(this);
 	}
 	
 	public void setSouthComponent(JComponent component) {
