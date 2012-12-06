@@ -53,7 +53,6 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerSettingsExcepti
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerDefaultProgressMessage;
 import com.leclercb.taskunifier.gui.actions.ActionPluginConfiguration;
 import com.leclercb.taskunifier.gui.actions.ActionRefresh;
-import com.leclercb.taskunifier.gui.actions.ActionSave;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
@@ -167,7 +166,6 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 						public void run() {
 							BackupUtils.getInstance().createNewBackup(
 									Translations.getString("manage_backups.before_sync_backup_name"));
-							ActionSave.save();
 						}
 						
 					});
