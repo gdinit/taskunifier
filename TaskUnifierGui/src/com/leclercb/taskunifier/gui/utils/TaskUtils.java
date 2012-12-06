@@ -561,7 +561,7 @@ public final class TaskUtils {
 				task,
 				filter,
 				containsCompleted(filter),
-				false,
+				true,
 				true,
 				true);
 	}
