@@ -190,11 +190,11 @@ public class FrameArea extends JComponent implements ComponentListener {
 		
 		if (this.event != null && this.event.isBackground()) {
 			/* ------------------------------------------------------- */
-			this.fontColor = Color.BLACK;
+			this.fontColor = this.event.getColor().darker().darker();
 			/* ------------------------------------------------------- */
 		} else {
 			/* ------------------------------------------------------- */
-			this.fontColor = computeForeground(this.bgColor);
+			this.fontColor = this.event.getColor().darker().darker();
 			/* ------------------------------------------------------- */
 		}
 		/* ------------------------------------------------------- */
@@ -380,7 +380,7 @@ public class FrameArea extends JComponent implements ComponentListener {
 		gbi.setStroke(new BasicStroke(1.0f));
 		
 		// ===========================================================
-		// draw backgorund marker event
+		// draw background marker event
 		//
 		// ===========================================================
 		if (this.isBackgroundMarker) {
@@ -412,6 +412,8 @@ public class FrameArea extends JComponent implements ComponentListener {
 			/* ------------------------------------------------------- */
 		}
 		
+		gbi.setStroke(new BasicStroke(2.0f));
+		
 		// ===========================================================
 		// draw round rectangle
 		//
@@ -430,7 +432,7 @@ public class FrameArea extends JComponent implements ComponentListener {
 			/* ------------------------------------------------------- */
 			if (this.border
 					&& (this.event == null || !this.event.isBackground())) {
-				gbi.setPaint(Color.black);
+				gbi.setPaint(backGroundColor.darker());
 				gbi.draw(new RoundRectangle2D.Double(
 						1,
 						1,
@@ -467,6 +469,8 @@ public class FrameArea extends JComponent implements ComponentListener {
 			}
 			/* ------------------------------------------------------- */
 		}
+		
+		gbi.setStroke(new BasicStroke(1.0f));
 		
 		g2.drawImage(buffImg, null, 0, 0);
 		/* ------------------------------------------------------- */
@@ -1083,12 +1087,6 @@ public class FrameArea extends JComponent implements ComponentListener {
 		if (bg == null) {
 			return Color.WHITE;
 		}
-		// Δe = sqrt(pow(ΔL) + pow(Δa) + pow(Δb))
-		//
-		// a well trained human can detect colors that have a Δe=2
-		// so we must choose a Δe that fits the capability of John Doe
-		// ============================================================
-		// first we must convert the RGB colors to LAB
 		
 		// LAB of white
 		int[] labWhite = new int[3];

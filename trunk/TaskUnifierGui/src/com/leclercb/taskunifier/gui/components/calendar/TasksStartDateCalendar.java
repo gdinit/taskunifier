@@ -129,6 +129,7 @@ public class TasksStartDateCalendar extends TasksCalendar {
 		if (event == null)
 			event = new Event();
 		
+		event.setShowHeader(false);
 		event.setId(task.getModelId());
 		event.set(CALENDAR_ID, this.getId());
 		event.setEditable(true);
