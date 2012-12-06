@@ -367,6 +367,8 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 			} finally {
 				TasksCalendarPanel.this.skipRefresh = false;
 			}
+			
+			TasksCalendarPanel.this.refreshTasks();
 		}
 		
 		@Override
@@ -402,6 +404,8 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 			} finally {
 				TasksCalendarPanel.this.skipRefresh = false;
 			}
+			
+			TasksCalendarPanel.this.refreshTasks();
 		}
 		
 		@Override
@@ -426,6 +430,8 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 			} finally {
 				TasksCalendarPanel.this.skipRefresh = false;
 			}
+			
+			TasksCalendarPanel.this.refreshTasks();
 		}
 		
 		public Date roundMinutes(Date date) {
