@@ -77,6 +77,10 @@ public abstract class AbstractSynchronizer implements Synchronizer {
 		return this.connection;
 	}
 	
+	public String getKeyId() {
+		return this.keyId;
+	}
+	
 	public abstract SynchronizerPlugin getPlugin();
 	
 	@Override
