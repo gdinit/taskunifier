@@ -190,7 +190,19 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 										plugin.getSynchronizerApi().getApiName()),
 								ImageUtils.getResourceImage("key.png", 16, 16)));
 						
-						if (!plugin.checkLicense()) {
+						boolean checkLicense = false;
+						
+						try {
+							checkLicense = plugin.checkLicense();
+						} catch (SynchronizerException exc) {
+							GuiLogger.getLogger().log(
+									Level.WARNING,
+									"Cannot check license of plugin "
+											+ plugin.getId(),
+									exc);
+						}
+						
+						if (!checkLicense) {
 							noLicense = true;
 							
 							String key = "synchronizer.no_license_count."
