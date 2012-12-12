@@ -1,3 +1,0 @@
-- Fix help files
-- Improve help/tips
-- Translations
