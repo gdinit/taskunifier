@@ -77,9 +77,7 @@
 		
 		<copy file="${directory.exe}/scripts/mac/container-migration.plist" tofile="${directory.exe}/temp/TaskUnifier.app/Contents/Resources/container-migration.plist"/>
 		
-		<replace file="${directory.exe}/temp/TaskUnifier.app/Contents/PlugIns/jdk1.7.0_09.jdk/Contents/Info.plist" 
-			token="com.oracle.java.7u09.jdk" 
-			value="com.leclercb.taskunifier"/>
+		<delete file="${directory.exe}/temp/TaskUnifier.app/Contents/PlugIns/jdk1.7.0_09.jdk/Contents/Info.plist"/>
 		
 		<copy todir="${directory.exe}/temp/TaskUnifier.app/Contents/Resources">
 			<fileset dir="${directory.gui}">
