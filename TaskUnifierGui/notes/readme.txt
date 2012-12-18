@@ -1,6 +1,9 @@
 HISTORY
 -------
 
+Version 3.1.6
+	- Minor:
+
 Version 3.1.5
 	- Major:
 		- BF 214: Sync dialog not closed after sleep
