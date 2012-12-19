@@ -663,6 +663,7 @@ public class Main {
 	
 	private static void loadSynchronizer() throws Exception {
 		SynchronizerUtils.setTaskRepeatEnabled(true);
+		SynchronizerUtils.setTaskRulesEnabled(true);
 	}
 	
 	private static void loadShutdownHooks() {
@@ -745,8 +746,10 @@ public class Main {
 			reloadUserSettings();
 			
 			SynchronizerUtils.setTaskRepeatEnabled(false);
+			SynchronizerUtils.setTaskRulesEnabled(false);
 			MainLoadFiles.loadAllData(getUserFolder());
 			SynchronizerUtils.setTaskRepeatEnabled(true);
+			SynchronizerUtils.setTaskRulesEnabled(true);
 			
 			UserUtils.getInstance().fireSwitchedUser();
 			

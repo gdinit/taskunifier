@@ -78,6 +78,7 @@ public class ImportModelsDialog extends AbstractImportDialog {
 	protected void importFromFile(final String file) throws Exception {
 		Synchronizing.getInstance().setSynchronizing(true);
 		SynchronizerUtils.setTaskRepeatEnabled(false);
+		SynchronizerUtils.setTaskRulesEnabled(false);
 		
 		ZipFile zip = null;
 		
@@ -123,6 +124,7 @@ public class ImportModelsDialog extends AbstractImportDialog {
 			}
 			
 			SynchronizerUtils.setTaskRepeatEnabled(true);
+			SynchronizerUtils.setTaskRulesEnabled(true);
 			Synchronizing.getInstance().setSynchronizing(false);
 		}
 	}

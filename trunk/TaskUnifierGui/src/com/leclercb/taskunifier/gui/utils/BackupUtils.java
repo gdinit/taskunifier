@@ -226,10 +226,12 @@ public final class BackupUtils implements ListChangeSupported {
 			String folder = Main.getBackupFolder(backupFolderName);
 			
 			SynchronizerUtils.setTaskRepeatEnabled(false);
+			SynchronizerUtils.setTaskRulesEnabled(false);
 			
 			MainLoadFiles.loadAllData(folder, null);
 			
 			SynchronizerUtils.setTaskRepeatEnabled(true);
+			SynchronizerUtils.setTaskRulesEnabled(true);
 		} finally {
 			Synchronizing.getInstance().setSynchronizing(false);
 		}

@@ -145,6 +145,7 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 			});
 			
 			SynchronizerUtils.setTaskRepeatEnabled(false);
+			SynchronizerUtils.setTaskRulesEnabled(false);
 			
 			for (int i = 0; i < this.plugins.size(); i++) {
 				plugin = this.plugins.get(i);
@@ -420,6 +421,7 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 			SynchronizerUtils.removeOldCompletedTasks();
 			
 			SynchronizerUtils.setTaskRepeatEnabled(true);
+			SynchronizerUtils.setTaskRulesEnabled(true);
 			
 			ActionRefresh.refresh();
 		} finally {
