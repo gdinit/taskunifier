@@ -54,6 +54,7 @@ import com.leclercb.taskunifier.api.models.LocationFactory;
 import com.leclercb.taskunifier.api.models.NoteFactory;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
+import com.leclercb.taskunifier.gui.api.rules.TaskRuleFactory;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
@@ -67,6 +68,7 @@ public final class SynchronizerUtils {
 	}
 	
 	private static boolean TASK_REPEAT_ENABLED = false;
+	private static boolean TASK_RULES_ENABLED = false;
 	
 	static {
 		TaskFactory.getInstance().addPropertyChangeListener(
@@ -75,21 +77,37 @@ public final class SynchronizerUtils {
 					
 					@Override
 					public void propertyChange(PropertyChangeEvent evt) {
-						if (!TASK_REPEAT_ENABLED)
-							return;
+						if (TASK_REPEAT_ENABLED) {
+							Task task = (Task) evt.getSource();
+							
+							if (task == null || !task.isCompleted())
+								return;
+							
+							Synchronizing.getInstance().setSynchronizing(true);
+							
+							try {
+								getSynchronizerPlugin().getSynchronizerApi().createRepeatTask(
+										task);
+							} finally {
+								Synchronizing.getInstance().setSynchronizing(
+										false);
+							}
+						}
 						
-						Task task = (Task) evt.getSource();
-						
-						if (task == null || !task.isCompleted())
-							return;
-						
-						Synchronizing.getInstance().setSynchronizing(true);
-						
-						try {
-							getSynchronizerPlugin().getSynchronizerApi().createRepeatTask(
-									task);
-						} finally {
-							Synchronizing.getInstance().setSynchronizing(false);
+						if (TASK_RULES_ENABLED) {
+							Task task = (Task) evt.getSource();
+							
+							if (task == null)
+								return;
+							
+							Synchronizing.getInstance().setSynchronizing(true);
+							
+							try {
+								TaskRuleFactory.getInstance().execute(task);
+							} finally {
+								Synchronizing.getInstance().setSynchronizing(
+										false);
+							}
 						}
 					}
 					
@@ -98,6 +116,10 @@ public final class SynchronizerUtils {
 	
 	public static void setTaskRepeatEnabled(boolean enabled) {
 		TASK_REPEAT_ENABLED = enabled;
+	}
+	
+	public static void setTaskRulesEnabled(boolean enabled) {
+		TASK_RULES_ENABLED = enabled;
 	}
 	
 	public static SynchronizerGuiPlugin getPlugin(String pluginId) {
