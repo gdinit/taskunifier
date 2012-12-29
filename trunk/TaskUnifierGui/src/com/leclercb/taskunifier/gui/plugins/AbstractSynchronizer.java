@@ -347,23 +347,30 @@ public abstract class AbstractSynchronizer implements Synchronizer {
 		modelsToDelete.clear();
 		
 		// Start Add Action
-		if (type == ModelType.TASK) {
-			// Update all the children
-			for (Model model : models) {
-				Task task = (Task) model;
-				if (task.getModelStatus().isEndUserStatus()) {
-					if (task.getModelReferenceId("toodledo") == null
-							|| task.getModelStatus().equals(
-									ModelStatus.TO_UPDATE)) {
-						for (Task child : task.getAllChildren()) {
-							if (child.getModelStatus().isEndUserStatus()) {
-								child.setModelStatus(ModelStatus.TO_UPDATE);
+		TUSwingUtilities.invokeAndWait(new Runnable() {
+			
+			@Override
+			public void run() {
+				if (type == ModelType.TASK) {
+					// Update all the children
+					for (Model model : models) {
+						Task task = (Task) model;
+						if (task.getModelStatus().isEndUserStatus()) {
+							if (task.getModelReferenceId("toodledo") == null
+									|| task.getModelStatus().equals(
+											ModelStatus.TO_UPDATE)) {
+								for (Task child : task.getAllChildren()) {
+									if (child.getModelStatus().isEndUserStatus()) {
+										child.setModelStatus(ModelStatus.TO_UPDATE);
+									}
+								}
 							}
 						}
 					}
 				}
 			}
-		}
+			
+		});
 		
 		for (Model model : models) {
 			if (model.getModelStatus().isEndUserStatus()) {
