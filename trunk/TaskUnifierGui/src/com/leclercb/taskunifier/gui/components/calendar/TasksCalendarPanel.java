@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -277,6 +278,7 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 		return TasksCalendar.getTasks(Arrays.asList(events));
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized void refreshTasks() {
 		if (this.skipRefresh)
@@ -308,6 +310,8 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 		} catch (Exception e) {}
 		
 		TasksCalendarPanel.this.modelSelectionChangeSupport.fireModelSelectionChange(new Task[0]);
+		
+		Collections.sort(allEvents);
 		
 		this.eventDataList.clear();
 		this.eventDataList.addAll(allEvents);
