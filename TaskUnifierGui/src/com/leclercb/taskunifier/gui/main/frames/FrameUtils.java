@@ -44,6 +44,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import org.apache.commons.lang3.SystemUtils;
+
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.actions.ActionQuit;
 import com.leclercb.taskunifier.gui.components.quickaddtask.QuickAddTaskDialog;
@@ -141,6 +143,9 @@ public final class FrameUtils {
 	}
 	
 	private static void initializeGlobalHotKey() {
+		if (!SystemUtils.IS_OS_WINDOWS && !SystemUtils.IS_OS_MAC)
+			return;
+		
 		try {
 			PROVIDER = Provider.getCurrentProvider(true);
 			
