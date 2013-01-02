@@ -5,6 +5,7 @@ import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class TaskRule extends AbstractBasicModel {
 	
@@ -12,9 +13,13 @@ public class TaskRule extends AbstractBasicModel {
 	public static final String PROP_FILTER = "filter";
 	public static final String PROP_ACTION = "action";
 	
+	@XStreamAlias("enabled")
 	private boolean enabled;
 	
+	@XStreamAlias("filter")
 	private TaskFilter filter;
+	
+	@XStreamAlias("action")
 	private TaskRuleAction action;
 	
 	public TaskRule() {

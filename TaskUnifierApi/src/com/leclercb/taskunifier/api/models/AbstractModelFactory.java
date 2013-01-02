@@ -49,6 +49,7 @@ import com.leclercb.commons.api.logger.ApiLogger;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.models.beans.ModelBean;
+import com.leclercb.taskunifier.api.xstream.TUXStream;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -536,7 +537,7 @@ public abstract class AbstractModelFactory<OM extends Model, OMB extends ModelBe
 	@SuppressWarnings("unchecked")
 	@Override
 	public MB[] decodeBeansFromXML(InputStream input) {
-		XStream xstream = new XStream(
+		XStream xstream = new TUXStream(
 				new PureJavaReflectionProvider(),
 				new DomDriver("UTF-8"));
 		xstream.setMode(XStream.NO_REFERENCES);
@@ -551,7 +552,7 @@ public abstract class AbstractModelFactory<OM extends Model, OMB extends ModelBe
 	
 	@Override
 	public void encodeBeansToXML(OutputStream output, MB[] beans) {
-		XStream xstream = new XStream(
+		XStream xstream = new TUXStream(
 				new PureJavaReflectionProvider(),
 				new DomDriver("UTF-8"));
 		xstream.setMode(XStream.NO_REFERENCES);

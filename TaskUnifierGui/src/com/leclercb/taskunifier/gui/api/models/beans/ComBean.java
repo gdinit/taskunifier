@@ -37,6 +37,7 @@ import java.io.OutputStream;
 
 import com.leclercb.taskunifier.api.models.templates.NoteTemplateFactory;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplateFactory;
+import com.leclercb.taskunifier.api.xstream.TUXStream;
 import com.leclercb.taskunifier.gui.api.models.beans.converters.ComNoteBeanWithTemplateConverter;
 import com.leclercb.taskunifier.gui.api.models.beans.converters.ComTaskBeanWithTemplateConverter;
 import com.thoughtworks.xstream.XStream;
@@ -115,7 +116,7 @@ public class ComBean {
 	}
 	
 	public static void encodeToXML(OutputStream output, ComBean bean) {
-		XStream xstream = new XStream(
+		XStream xstream = new TUXStream(
 				new PureJavaReflectionProvider(),
 				new DomDriver("UTF-8"));
 		xstream.setMode(XStream.NO_REFERENCES);
@@ -138,7 +139,7 @@ public class ComBean {
 	}
 	
 	public static ComBean decodeFromXML(InputStream input) {
-		XStream xstream = new XStream(
+		XStream xstream = new TUXStream(
 				new PureJavaReflectionProvider(),
 				new DomDriver("UTF-8"));
 		xstream.setMode(XStream.NO_REFERENCES);

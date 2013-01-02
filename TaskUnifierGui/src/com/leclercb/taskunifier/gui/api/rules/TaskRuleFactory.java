@@ -38,6 +38,7 @@ import java.io.OutputStream;
 import com.leclercb.taskunifier.api.models.AbstractBasicModelFactory;
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.api.xstream.TUXStream;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -88,7 +89,7 @@ public class TaskRuleFactory extends AbstractBasicModelFactory<TaskRule> {
 	
 	@Override
 	public void decodeFromXML(InputStream input) {
-		XStream xstream = new XStream(
+		XStream xstream = new TUXStream(
 				new PureJavaReflectionProvider(),
 				new DomDriver("UTF-8"));
 		xstream.setMode(XStream.NO_REFERENCES);
@@ -104,7 +105,7 @@ public class TaskRuleFactory extends AbstractBasicModelFactory<TaskRule> {
 	
 	@Override
 	public void encodeToXML(OutputStream output) {
-		XStream xstream = new XStream(
+		XStream xstream = new TUXStream(
 				new PureJavaReflectionProvider(),
 				new DomDriver("UTF-8"));
 		xstream.setMode(XStream.NO_REFERENCES);
