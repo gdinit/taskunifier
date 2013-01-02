@@ -43,6 +43,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
@@ -123,7 +124,8 @@ public class BatchTaskEditDialog extends TUDialog {
 			
 			@Override
 			public void windowClosing(WindowEvent e) {
-				BatchTaskEditDialog.this.cancelled = true;
+				boolean saveChanges = BatchTaskEditDialog.this.askSaveChanges();
+				BatchTaskEditDialog.this.cancelled = !saveChanges;
 				BatchTaskEditDialog.this.setTasks(null);
 				BatchTaskEditDialog.this.setVisible(false);
 			}
@@ -159,7 +161,8 @@ public class BatchTaskEditDialog extends TUDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				BatchTaskEditDialog.this.cancelled = true;
+				boolean saveChanges = BatchTaskEditDialog.this.askSaveChanges();
+				BatchTaskEditDialog.this.cancelled = !saveChanges;
 				BatchTaskEditDialog.this.setTasks(null);
 				BatchTaskEditDialog.this.setVisible(false);
 			}
@@ -185,6 +188,32 @@ public class BatchTaskEditDialog extends TUDialog {
 				cancelListener,
 				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
 				JComponent.WHEN_IN_FOCUSED_WINDOW);
+	}
+	
+	private boolean askSaveChanges() {
+		if (!this.batchTaskEditPanel.isChanged())
+			return false;
+		
+		String[] options = new String[] {
+				Translations.getString("general.yes"),
+				Translations.getString("general.no") };
+		
+		int result = JOptionPane.showOptionDialog(
+				this,
+				Translations.getString("general.save_changes"),
+				Translations.getString("general.question"),
+				JOptionPane.YES_NO_CANCEL_OPTION,
+				JOptionPane.QUESTION_MESSAGE,
+				null,
+				options,
+				options[0]);
+		
+		if (result == JOptionPane.YES_OPTION) {
+			this.batchTaskEditPanel.editTasks();
+			return true;
+		}
+		
+		return false;
 	}
 	
 }

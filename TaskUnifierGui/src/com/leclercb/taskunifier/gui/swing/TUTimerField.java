@@ -135,4 +135,12 @@ public class TUTimerField extends JPanel {
 		});
 	}
 	
+	public void addChangeListener(ChangeListener listener) {
+		this.timeSpinner.addChangeListener(listener);
+	}
+	
+	public void removeChangeListener(ChangeListener listener) {
+		this.timeSpinner.removeChangeListener(listener);
+	}
+	
 }

@@ -5,6 +5,8 @@ Version 3.1.6
 		- BF 241: Quick task when mutiple contexts/goals/locations not allowed
 		- BF 242: Freeze on some linux distros
 		- BF 245: Help issue "Show completed tasks at the end"
+		- FR 290: Auto-completion
+		- FR 298: Save confirmation in task edit window
 
 Version 3.1.5
 	- Major:
