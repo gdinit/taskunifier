@@ -33,6 +33,8 @@
 package com.leclercb.taskunifier.gui.actions;
 
 import java.awt.event.ActionEvent;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.AbstractAction;
 
@@ -49,6 +51,8 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class ActionAddTab extends AbstractAction {
+	
+	private static Map<ViewType, Integer> COUNT_MAP = new HashMap<ViewType, Integer>();
 	
 	private ViewType type;
 	
@@ -104,24 +108,35 @@ public class ActionAddTab extends AbstractAction {
 		if (frameView == null)
 			return;
 		
+		if (!COUNT_MAP.containsKey(type)) {
+			COUNT_MAP.put(type, 2);
+		} else {
+			COUNT_MAP.put(type, COUNT_MAP.get(type) + 1);
+		}
+		
+		String count = "";
+		
+		if (COUNT_MAP.get(type) > 1)
+			count = " " + COUNT_MAP.get(type);
+		
 		if (type == ViewType.CALENDAR) {
 			viewItem = new ViewItem(
 					ViewType.CALENDAR,
-					Translations.getString("general.calendar"),
+					Translations.getString("general.calendar") + count,
 					ImageUtils.getResourceImage("calendar.png", 16, 16),
 					frameView.getFrameId());
 			viewItem.setView(new DefaultCalendarView());
 		} else if (type == ViewType.NOTES) {
 			viewItem = new ViewItem(
 					ViewType.NOTES,
-					Translations.getString("general.notes"),
+					Translations.getString("general.notes") + count,
 					ImageUtils.getResourceImage("note.png", 16, 16),
 					frameView.getFrameId());
 			viewItem.setView(new DefaultNoteView());
 		} else if (type == ViewType.TASKS) {
 			viewItem = new ViewItem(
 					ViewType.TASKS,
-					Translations.getString("general.tasks"),
+					Translations.getString("general.tasks") + count,
 					ImageUtils.getResourceImage("task.png", 16, 16),
 					frameView.getFrameId());
 			viewItem.setView(new DefaultTaskView());
