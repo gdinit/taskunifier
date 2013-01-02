@@ -73,6 +73,7 @@ public enum ActionList {
 	MANAGE_MODELS(Translations.getString("action.manage_models"), "folder.png", true),
 	MANAGE_PUBLISHER_PLUGINS(Translations.getString("action.manage_publisher_plugins"), "download.png", true),
 	MANAGE_SYNCHRONIZER_PLUGINS(Translations.getString("action.manage_synchronizer_plugins"), "download.png", true),
+	MANAGE_TASK_RULES(Translations.getString("action.manage_task_rules"), "rule.png", false),
 	MANAGE_TASK_TEMPLATES(Translations.getString("action.manage_task_templates"), "template.png", true),
 	MANAGE_USERS(Translations.getString("action.manage_users"), "user.png", true),
 	NEW_WINDOW(Translations.getString("action.new_window"), "window_add.png", true),
@@ -264,6 +265,8 @@ public enum ActionList {
 				return new ActionManagePublisherPlugins(width, height);
 			case MANAGE_SYNCHRONIZER_PLUGINS:
 				return new ActionManageSynchronizerPlugins(width, height);
+			case MANAGE_TASK_RULES:
+				return new ActionManageTaskRules(width, height);
 			case MANAGE_TASK_TEMPLATES:
 				return new ActionManageTaskTemplates(width, height);
 			case MANAGE_USERS:
