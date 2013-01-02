@@ -156,6 +156,10 @@ public class Main {
 		return FIRST_EXECUTION;
 	}
 	
+	public static boolean isProVersion() {
+		return true;
+	}
+	
 	private static String getLockFile() {
 		return DATA_FOLDER + File.separator + "taskunifier.lock";
 	}
