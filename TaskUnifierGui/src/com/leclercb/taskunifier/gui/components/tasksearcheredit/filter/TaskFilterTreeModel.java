@@ -72,9 +72,11 @@ public class TaskFilterTreeModel extends DefaultTreeModel implements ListChangeL
 			this.filter.addPropertyChangeListener(new WeakPropertyChangeListener(
 					this.filter,
 					this));
+			
+			this.setRoot(new TaskFilterTreeNode(this.filter));
+		} else {
+			this.setRoot(null);
 		}
-		
-		this.setRoot(new TaskFilterTreeNode(filter));
 	}
 	
 	@Override

@@ -30,29 +30,50 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.api.searchers.filters;
+package com.leclercb.taskunifier.gui.components.taskrules;
 
-import com.leclercb.taskunifier.api.models.Note;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import javax.swing.JSplitPane;
+import javax.swing.JTextField;
 
-public class NoteFilter extends Filter<Note, NoteColumn, NoteFilter, NoteFilterElement> implements Cloneable {
+import com.leclercb.taskunifier.gui.api.rules.TaskRule;
+import com.leclercb.taskunifier.gui.components.taskruleedit.TaskRuleEditPanel;
+
+public class TaskRuleConfigurationPanel extends JSplitPane {
 	
-	public NoteFilter() {
-		
+	private TaskRuleList ruleList;
+	private TaskRuleEditPanel ruleEditPanel;
+	
+	public TaskRuleConfigurationPanel() {
+		this.initialize();
 	}
 	
-	@Override
-	public NoteFilter clone() {
-		NoteFilter filter = new NoteFilter();
-		filter.setLink(this.getLink());
+	public void setSelectedRule(TaskRule rule) {
+		this.ruleList.setSelectedRule(rule);
+	}
+	
+	private void initialize() {
+		// Initialize Rule Edit Panel
+		this.ruleEditPanel = new TaskRuleEditPanel();
+		this.setRightComponent(this.ruleEditPanel);
 		
-		for (NoteFilterElement e : this.getElements())
-			filter.addElement(e.clone());
+		// Initialize Model List
+		this.ruleList = new TaskRuleList(this.ruleEditPanel.getRuleTitle());
+		this.setLeftComponent(this.ruleList);
 		
-		for (NoteFilter f : this.getFilters())
-			filter.addFilter(f.clone());
+		this.setDividerLocation(250);
+	}
+	
+	private class TaskRuleList extends com.leclercb.taskunifier.gui.components.taskrules.TaskRuleList {
 		
-		return filter;
+		public TaskRuleList(JTextField ruleTitle) {
+			super(ruleTitle);
+		}
+		
+		@Override
+		public void ruleSelected(TaskRule rule) {
+			TaskRuleConfigurationPanel.this.ruleEditPanel.setRule(rule);
+		}
+		
 	}
 	
 }

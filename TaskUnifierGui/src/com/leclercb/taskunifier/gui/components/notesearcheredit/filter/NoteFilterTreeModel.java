@@ -54,7 +54,7 @@ public class NoteFilterTreeModel extends DefaultTreeModel implements ListChangeL
 	}
 	
 	public NoteFilter getFilter() {
-		return filter;
+		return this.filter;
 	}
 	
 	public void setFilter(NoteFilter filter) {
@@ -66,13 +66,17 @@ public class NoteFilterTreeModel extends DefaultTreeModel implements ListChangeL
 		this.filter = filter;
 		
 		if (this.filter != null) {
-			this.filter.addListChangeListener(new WeakListChangeListener(filter, this));
+			this.filter.addListChangeListener(new WeakListChangeListener(
+					filter,
+					this));
 			this.filter.addPropertyChangeListener(new WeakPropertyChangeListener(
 					this.filter,
 					this));
+			
+			this.setRoot(new NoteFilterTreeNode(this.filter));
+		} else {
+			this.setRoot(null);
 		}
-		
-		this.setRoot(new NoteFilterTreeNode(filter));
 	}
 	
 	@Override

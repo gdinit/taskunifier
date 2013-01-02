@@ -42,7 +42,7 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
 public class TaskRuleActionApplyTemplate implements TaskRuleAction {
-
+	
 	private TaskFilter filter;
 	private TaskTemplate template;
 	
