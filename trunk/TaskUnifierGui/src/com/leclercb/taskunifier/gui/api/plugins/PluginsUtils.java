@@ -47,6 +47,7 @@ import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.FileUtils;
 import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.commons.gui.logger.GuiLogger;
+import com.leclercb.taskunifier.api.xstream.TUXStream;
 import com.leclercb.taskunifier.gui.api.plugins.exc.PluginException;
 import com.leclercb.taskunifier.gui.api.plugins.exc.PluginExceptionType;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
@@ -441,7 +442,7 @@ public final class PluginsUtils {
 				monitor.addMessage(new DefaultProgressMessage(
 						Translations.getString("manage_plugins.progress.analysing_plugin_database")));
 			
-			XStream xstream = new XStream(
+			XStream xstream = new TUXStream(
 					new PureJavaReflectionProvider(),
 					new DomDriver("UTF-8"));
 			xstream.setMode(XStream.NO_REFERENCES);
