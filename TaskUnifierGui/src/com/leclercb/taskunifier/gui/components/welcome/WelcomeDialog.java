@@ -130,7 +130,7 @@ public class WelcomeDialog extends JDialog implements ConfigurationGroup {
 	private void initialize() {
 		this.setModal(true);
 		this.setTitle(Translations.getString("general.welcome"));
-		this.setSize(900, 700);
+		this.setSize(900, 500);
 		this.setResizable(true);
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
