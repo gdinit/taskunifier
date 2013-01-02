@@ -47,13 +47,32 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilterElement;
 
 public class NoteFilterTreeModel extends DefaultTreeModel implements ListChangeListener, PropertyChangeListener {
 	
-	public NoteFilterTreeModel(NoteFilter filter) {
-		super(new NoteFilterTreeNode(filter));
+	private NoteFilter filter;
+	
+	public NoteFilterTreeModel() {
+		super(null);
+	}
+	
+	public NoteFilter getFilter() {
+		return filter;
+	}
+	
+	public void setFilter(NoteFilter filter) {
+		if (this.filter != null) {
+			this.filter.removeListChangeListener(this);
+			this.filter.removePropertyChangeListener(this);
+		}
 		
-		filter.addListChangeListener(new WeakListChangeListener(filter, this));
-		filter.addPropertyChangeListener(new WeakPropertyChangeListener(
-				filter,
-				this));
+		this.filter = filter;
+		
+		if (this.filter != null) {
+			this.filter.addListChangeListener(new WeakListChangeListener(filter, this));
+			this.filter.addPropertyChangeListener(new WeakPropertyChangeListener(
+					this.filter,
+					this));
+		}
+		
+		this.setRoot(new NoteFilterTreeNode(filter));
 	}
 	
 	@Override

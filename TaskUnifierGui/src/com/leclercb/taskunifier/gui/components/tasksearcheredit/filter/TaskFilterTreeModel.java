@@ -47,13 +47,34 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilterElement;
 
 public class TaskFilterTreeModel extends DefaultTreeModel implements ListChangeListener, PropertyChangeListener {
 	
-	public TaskFilterTreeModel(TaskFilter filter) {
-		super(new TaskFilterTreeNode(filter));
+	private TaskFilter filter;
+	
+	public TaskFilterTreeModel() {
+		super(null);
+	}
+	
+	public TaskFilter getFilter() {
+		return this.filter;
+	}
+	
+	public void setFilter(TaskFilter filter) {
+		if (this.filter != null) {
+			this.filter.removeListChangeListener(this);
+			this.filter.removePropertyChangeListener(this);
+		}
 		
-		filter.addListChangeListener(new WeakListChangeListener(filter, this));
-		filter.addPropertyChangeListener(new WeakPropertyChangeListener(
-				filter,
-				this));
+		this.filter = filter;
+		
+		if (this.filter != null) {
+			this.filter.addListChangeListener(new WeakListChangeListener(
+					filter,
+					this));
+			this.filter.addPropertyChangeListener(new WeakPropertyChangeListener(
+					this.filter,
+					this));
+		}
+		
+		this.setRoot(new TaskFilterTreeNode(filter));
 	}
 	
 	@Override

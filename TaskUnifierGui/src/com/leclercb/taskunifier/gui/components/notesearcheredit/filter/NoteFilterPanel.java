@@ -65,10 +65,22 @@ public class NoteFilterPanel extends JPanel {
 	private JButton addFilterButton;
 	private JButton removeButton;
 	
-	public NoteFilterPanel(NoteFilter filter) {
+	public NoteFilterPanel() {
+		this.initialize();
+	}
+	
+	public NoteFilter getFilter() {
+		return this.tree.getFilter();
+	}
+	
+	public void setFilter(NoteFilter filter) {
+		this.tree.setFilter(filter);
 		this.filter = filter;
 		
-		this.initialize();
+		this.autoFillButton.setEnabled(filter != null);
+		this.addElementButton.setEnabled(filter != null);
+		this.addFilterButton.setEnabled(filter != null);
+		this.removeButton.setEnabled(filter != null);
 	}
 	
 	public NoteFilterTree getTree() {
@@ -78,7 +90,7 @@ public class NoteFilterPanel extends JPanel {
 	private void initialize() {
 		this.setLayout(new BorderLayout());
 		
-		this.tree = new NoteFilterTree(this.filter);
+		this.tree = new NoteFilterTree();
 		this.tree.getSelectionModel().addTreeSelectionListener(
 				new TreeSelectionListener() {
 					
