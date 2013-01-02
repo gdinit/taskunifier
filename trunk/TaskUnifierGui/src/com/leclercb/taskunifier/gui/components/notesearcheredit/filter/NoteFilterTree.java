@@ -53,13 +53,24 @@ import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class NoteFilterTree extends JTree {
 	
-	public NoteFilterTree(NoteFilter filter) {
-		super(new NoteFilterTreeModel(filter));
+	public NoteFilterTree() {
 		this.initialize();
 	}
 	
+	public NoteFilter getFilter() {
+		return this.getNoteFilterTreeModel().getFilter();
+	}
+	
+	public void setFilter(NoteFilter filter) {
+		this.getNoteFilterTreeModel().setFilter(filter);
+	}
+	
+	private NoteFilterTreeModel getNoteFilterTreeModel() {
+		return (NoteFilterTreeModel) this.getModel();
+	}
+	
 	private void initialize() {
-		// Warning: might not work with all UIs
+		this.setModel(new NoteFilterTreeModel());
 		this.setLargeModel(true);
 		this.setRootVisible(true);
 		

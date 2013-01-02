@@ -53,13 +53,25 @@ import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class TaskFilterTree extends JTree {
 	
-	public TaskFilterTree(TaskFilter filter) {
-		super(new TaskFilterTreeModel(filter));
+	public TaskFilterTree() {
 		this.initialize();
 	}
 	
+	public TaskFilter getFilter() {
+		return this.getTaskFilterTreeModel().getFilter();
+	}
+	
+	public void setFilter(TaskFilter filter) {
+		this.getTaskFilterTreeModel().setFilter(filter);
+	}
+	
+	private TaskFilterTreeModel getTaskFilterTreeModel() {
+		return (TaskFilterTreeModel) this.getModel();
+	}
+	
 	private void initialize() {
-		// Warning: might not work with all UIs
+		this.setModel(new TaskFilterTreeModel());
+		
 		this.setLargeModel(true);
 		this.setRootVisible(true);
 		

@@ -65,10 +65,22 @@ public class TaskFilterPanel extends JPanel {
 	private JButton addFilterButton;
 	private JButton removeButton;
 	
-	public TaskFilterPanel(TaskFilter filter) {
+	public TaskFilterPanel() {
+		this.initialize();
+	}
+	
+	public TaskFilter getFilter() {
+		return this.tree.getFilter();
+	}
+	
+	public void setFilter(TaskFilter filter) {
+		this.tree.setFilter(filter);
 		this.filter = filter;
 		
-		this.initialize();
+		this.autoFillButton.setEnabled(filter != null);
+		this.addElementButton.setEnabled(filter != null);
+		this.addFilterButton.setEnabled(filter != null);
+		this.removeButton.setEnabled(filter != null);
 	}
 	
 	public TaskFilterTree getTree() {
@@ -78,7 +90,7 @@ public class TaskFilterPanel extends JPanel {
 	private void initialize() {
 		this.setLayout(new BorderLayout());
 		
-		this.tree = new TaskFilterTree(this.filter);
+		this.tree = new TaskFilterTree();
 		this.tree.getSelectionModel().addTreeSelectionListener(
 				new TreeSelectionListener() {
 					

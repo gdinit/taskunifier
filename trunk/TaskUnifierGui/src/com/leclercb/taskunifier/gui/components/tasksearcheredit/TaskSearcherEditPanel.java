@@ -71,7 +71,8 @@ public class TaskSearcherEditPanel extends JPanel implements TreeSelectionListen
 		this.elementPanel = new TaskFilterElementPanel();
 		this.sorterPanel = new TaskSorterPanel(this.searcher.getSorter());
 		
-		this.filterPanel = new TaskFilterPanel(this.searcher.getFilter());
+		this.filterPanel = new TaskFilterPanel();
+		this.filterPanel.setFilter(this.searcher.getFilter());
 		this.filterPanel.getTree().addTreeSelectionListener(this);
 		
 		this.searcherPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));

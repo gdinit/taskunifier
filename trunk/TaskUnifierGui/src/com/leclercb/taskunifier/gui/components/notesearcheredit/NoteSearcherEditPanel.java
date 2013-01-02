@@ -71,7 +71,8 @@ public class NoteSearcherEditPanel extends JPanel implements TreeSelectionListen
 		this.elementPanel = new NoteFilterElementPanel();
 		this.sorterPanel = new NoteSorterPanel(this.searcher.getSorter());
 		
-		this.filterPanel = new NoteFilterPanel(this.searcher.getFilter());
+		this.filterPanel = new NoteFilterPanel();
+		this.filterPanel.setFilter(this.searcher.getFilter());
 		this.filterPanel.getTree().addTreeSelectionListener(this);
 		
 		this.searcherPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
