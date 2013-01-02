@@ -33,20 +33,27 @@
 package com.leclercb.taskunifier.gui.components.views;
 
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 
 import javax.swing.Icon;
 
 import com.leclercb.commons.api.event.action.ActionSupport;
 import com.leclercb.commons.api.event.action.ActionSupported;
+import com.leclercb.commons.api.event.propertychange.PropertyChangeSupport;
+import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 
-public class ViewItem implements ActionSupported {
+public class ViewItem implements ActionSupported, PropertyChangeSupported {
+	
+	public static final String PROP_LABEL = "label";
+	public static final String PROP_ICON = "icon";
 	
 	public static final String ACTION_VIEW_LOADED = "ACTION_VIEW_LOADED";
 	
 	private ActionSupport actionSupport;
+	private PropertyChangeSupport propertyChangeSupport;
 	
 	private ViewType viewType;
 	private View view;
@@ -60,6 +67,7 @@ public class ViewItem implements ActionSupported {
 		CheckUtils.isNotNull(icon);
 		
 		this.actionSupport = new ActionSupport(this);
+		this.propertyChangeSupport = new PropertyChangeSupport(this);
 		
 		this.viewType = viewType;
 		this.view = null;
@@ -107,8 +115,23 @@ public class ViewItem implements ActionSupported {
 		return this.label;
 	}
 	
+	public void setLabel(String label) {
+		String oldLabel = this.label;
+		this.label = label;
+		this.propertyChangeSupport.firePropertyChange(
+				PROP_LABEL,
+				oldLabel,
+				label);
+	}
+	
 	public Icon getIcon() {
 		return this.icon;
+	}
+	
+	public void setIcon(Icon icon) {
+		Icon oldIcon = this.icon;
+		this.icon = icon;
+		this.propertyChangeSupport.firePropertyChange(PROP_ICON, oldIcon, icon);
 	}
 	
 	public int getFrameId() {
@@ -128,6 +151,34 @@ public class ViewItem implements ActionSupported {
 	@Override
 	public void removeActionListener(ActionListener listener) {
 		this.actionSupport.removeActionListener(listener);
+	}
+	
+	@Override
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		this.propertyChangeSupport.addPropertyChangeListener(listener);
+	}
+	
+	@Override
+	public void addPropertyChangeListener(
+			String propertyName,
+			PropertyChangeListener listener) {
+		this.propertyChangeSupport.addPropertyChangeListener(
+				propertyName,
+				listener);
+	}
+	
+	@Override
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		this.propertyChangeSupport.removePropertyChangeListener(listener);
+	}
+	
+	@Override
+	public void removePropertyChangeListener(
+			String propertyName,
+			PropertyChangeListener listener) {
+		this.propertyChangeSupport.removePropertyChangeListener(
+				propertyName,
+				listener);
 	}
 	
 }

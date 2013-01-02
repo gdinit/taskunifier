@@ -71,6 +71,7 @@ import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelUtils;
 import com.leclercb.commons.gui.utils.ScreenUtils;
 import com.leclercb.taskunifier.gui.actions.ActionAddTab;
 import com.leclercb.taskunifier.gui.actions.ActionCloseTab;
+import com.leclercb.taskunifier.gui.actions.ActionRenameTab;
 import com.leclercb.taskunifier.gui.components.menubar.MenuBar;
 import com.leclercb.taskunifier.gui.components.statusbar.DefaultStatusBar;
 import com.leclercb.taskunifier.gui.components.statusbar.MacStatusBar;
@@ -188,6 +189,7 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 	
 	private void initializeTabPopupMenu() {
 		this.tabPopupMenu = new JPopupMenu();
+		this.tabPopupMenu.add(new ActionRenameTab(16, 16));
 		this.tabPopupMenu.add(new ActionCloseTab(16, 16));
 		this.tabPopupMenu.addSeparator();
 		
@@ -288,10 +290,12 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setOpaque(false);
 		
-		panel.add(new JLabel(
+		final JLabel label = new JLabel(
 				view.getLabel(),
 				view.getIcon(),
-				SwingConstants.LEFT), BorderLayout.CENTER);
+				SwingConstants.LEFT);
+		
+		panel.add(label, BorderLayout.CENTER);
 		
 		panel.addMouseListener(new MouseAdapter() {
 			
@@ -306,6 +310,19 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 							0,
 							0);
 				}
+			}
+			
+		});
+		
+		view.addPropertyChangeListener(new PropertyChangeListener() {
+			
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getPropertyName().equals(ViewItem.PROP_ICON))
+					label.setIcon(view.getIcon());
+				
+				if (evt.getPropertyName().equals(ViewItem.PROP_LABEL))
+					label.setText(view.getLabel());
 			}
 			
 		});

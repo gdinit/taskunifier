@@ -88,6 +88,7 @@ public enum ActionList {
 	REDO(Translations.getString("action.redo"), "redo.png", true),
 	REFRESH(Translations.getString("action.refresh"), "synchronize.png", false),
 	REMOVE_TAB(Translations.getString("action.remove_tab"), "tab_remove.png", true),
+	RENAME_TAB(Translations.getString("action.rename_tab"), "tab_add.png", true),
 	RESET_GENERAL_SEARCHERS(Translations.getString("action.reset_general_searchers"), "undo.png", false),
 	REVIEW(Translations.getString("action.review"), "information.png", true),
 	SAVE(Translations.getString("action.save"), "save.png", false),
@@ -293,6 +294,8 @@ public enum ActionList {
 				return new ActionRefresh(width, height);
 			case REMOVE_TAB:
 				return new ActionRemoveTab(width, height);
+			case RENAME_TAB:
+				return new ActionRenameTab(width, height);
 			case RESET_GENERAL_SEARCHERS:
 				return new ActionResetGeneralSearchers(width, height);
 			case REVIEW:
