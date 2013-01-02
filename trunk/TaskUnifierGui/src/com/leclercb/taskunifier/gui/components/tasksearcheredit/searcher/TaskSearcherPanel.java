@@ -54,6 +54,7 @@ import javax.swing.filechooser.FileFilter;
 import org.jdesktop.swingx.renderer.DefaultListRenderer;
 
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
+import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.FileUtils;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
@@ -76,6 +77,7 @@ public class TaskSearcherPanel extends JPanel implements PropertyChangeListener 
 	private JComboBox searcherTemplate;
 	
 	public TaskSearcherPanel(TaskSearcher searcher) {
+		CheckUtils.isNotNull(searcher);
 		this.searcher = searcher;
 		
 		this.searcher.addPropertyChangeListener(new WeakPropertyChangeListener(
