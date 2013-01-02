@@ -112,7 +112,6 @@ public final class ComponentFactory {
 				});
 	}
 	
-	@SuppressWarnings("unused")
 	public static JXComboBox createModelComboBox(
 			ComboBoxModel model,
 			boolean autoComplete) {
@@ -125,8 +124,7 @@ public final class ComponentFactory {
 				StringValueModel.INSTANCE_INDENTED,
 				IconValueModel.INSTANCE));
 		
-		// FIXME: Fix auto completion
-		if (false) {
+		if (autoComplete) {
 			AutoCompleteDecorator.decorate(
 					comboBox,
 					new ObjectToStringConverter() {
@@ -145,7 +143,6 @@ public final class ComponentFactory {
 		return comboBox;
 	}
 	
-	@SuppressWarnings("unused")
 	public static JXComboBox createTaskPriorityComboBox(
 			ComboBoxModel model,
 			boolean autoComplete) {
@@ -158,8 +155,7 @@ public final class ComponentFactory {
 				StringValueTaskPriority.INSTANCE,
 				IconValueTaskPriority.INSTANCE));
 		
-		// FIXME: Fix auto completion
-		if (false) {
+		if (autoComplete) {
 			AutoCompleteDecorator.decorate(
 					comboBox,
 					new ObjectToStringConverter() {
@@ -175,7 +171,6 @@ public final class ComponentFactory {
 		return comboBox;
 	}
 	
-	@SuppressWarnings("unused")
 	public static JXComboBox createTaskRepeatFromComboBox(
 			ComboBoxModel model,
 			boolean autoComplete) {
@@ -187,8 +182,7 @@ public final class ComponentFactory {
 		comboBox.setRenderer(new DefaultListRenderer(
 				StringValueTaskRepeatFrom.INSTANCE));
 		
-		// FIXME: Fix auto completion
-		if (false) {
+		if (autoComplete) {
 			AutoCompleteDecorator.decorate(
 					comboBox,
 					new ObjectToStringConverter() {
@@ -204,7 +198,6 @@ public final class ComponentFactory {
 		return comboBox;
 	}
 	
-	@SuppressWarnings("unused")
 	public static JXComboBox createTaskStatusComboBox(
 			ComboBoxModel model,
 			boolean autoComplete) {
@@ -218,8 +211,7 @@ public final class ComponentFactory {
 		comboBox.setRenderer(new DefaultListRenderer(
 				StringValueTaskStatus.INSTANCE));
 		
-		// FIXME: Fix auto completion
-		if (false) {
+		if (autoComplete) {
 			AutoCompleteDecorator.decorate(
 					comboBox,
 					new ObjectToStringConverter() {

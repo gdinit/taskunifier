@@ -38,6 +38,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.logging.Level;
 
 import javax.swing.BorderFactory;
@@ -50,6 +52,10 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import org.jdesktop.swingx.renderer.DefaultListRenderer;
 
@@ -104,6 +110,7 @@ import com.toedter.calendar.JTextFieldDateEditor;
 
 public class BatchTaskEditPanel extends JPanel {
 	
+	private boolean changed;
 	private Task[] tasks;
 	
 	private JCheckBox taskTitleCheckBox;
@@ -156,10 +163,15 @@ public class BatchTaskEditPanel extends JPanel {
 	private HTMLEditorInterface taskNote;
 	
 	public BatchTaskEditPanel() {
+		this.changed = false;
 		this.tasks = null;
 		
 		this.initialize();
 		this.reinitializeFields(null);
+	}
+	
+	public boolean isChanged() {
+		return this.changed;
 	}
 	
 	public void editTasks() {
@@ -449,7 +461,7 @@ public class BatchTaskEditPanel extends JPanel {
 		this.taskGoals = new TUModelListField<Goal>(ModelType.GOAL);
 		this.taskLocation = ComponentFactory.createModelComboBox(null, true);
 		this.taskLocations = new TUModelListField<Location>(ModelType.LOCATION);
-		this.taskParent = ComponentFactory.createModelComboBox(null, false);
+		this.taskParent = ComponentFactory.createModelComboBox(null, true);
 		this.taskProgress = new JSpinner();
 		this.taskCompleted = new JCheckBox();
 		TUPostponeCalendar taskStartDateCal = new TUPostponeCalendar(true);
@@ -524,6 +536,34 @@ public class BatchTaskEditPanel extends JPanel {
 				true);
 		this.taskStar = new JCheckBox();
 		this.taskNote = new WysiwygHTMLEditorPane("", false, null);
+		
+		this.taskTitle.getDocument().addDocumentListener(new ChangesListener());
+		// this.taskTags.addActionListener(new ChangeListener());
+		this.taskFolder.addItemListener(new ChangesListener());
+		this.taskContext.addItemListener(new ChangesListener());
+		this.taskGoal.addItemListener(new ChangesListener());
+		this.taskLocation.addItemListener(new ChangesListener());
+		this.taskParent.addItemListener(new ChangesListener());
+		this.taskProgress.addChangeListener(new ChangesListener());
+		this.taskCompleted.addItemListener(new ChangesListener());
+		this.taskStartDate.addPropertyChangeListener(
+				"date",
+				new ChangesListener());
+		this.taskDueDate.addPropertyChangeListener(
+				"date",
+				new ChangesListener());
+		this.taskStartDateReminder.addItemListener(new ChangesListener());
+		this.taskDueDateReminder.addItemListener(new ChangesListener());
+		this.taskRepeat.addItemListener(new ChangesListener());
+		this.taskRepeatFrom.addItemListener(new ChangesListener());
+		this.taskStatus.addItemListener(new ChangesListener());
+		this.taskLength.addChangeListener(new ChangesListener());
+		this.taskTimer.addChangeListener(new ChangesListener());
+		this.taskPriority.addItemListener(new ChangesListener());
+		this.taskStar.addItemListener(new ChangesListener());
+		this.taskNote.addPropertyChangeListener(
+				HTMLEditorInterface.PROP_TEXT,
+				new ChangesListener());
 		
 		this.taskTitleCheckBox.addItemListener(new EnabledActionListener(
 				this.taskTitle));
@@ -1056,6 +1096,8 @@ public class BatchTaskEditPanel extends JPanel {
 		this.taskPriorityCheckBox.setVisible(visible);
 		this.taskStarCheckBox.setVisible(visible);
 		this.taskNoteCheckBox.setVisible(visible);
+		
+		this.changed = false;
 	}
 	
 	private JPanel createPanel(JComponent component, JButton button) {
@@ -1068,7 +1110,7 @@ public class BatchTaskEditPanel extends JPanel {
 		return panel;
 	}
 	
-	private static class EnabledActionListener implements ItemListener {
+	private class EnabledActionListener extends ChangesListener {
 		
 		private JComponent component;
 		
@@ -1078,10 +1120,55 @@ public class BatchTaskEditPanel extends JPanel {
 		
 		@Override
 		public void itemStateChanged(ItemEvent event) {
+			super.itemStateChanged(event);
+			
 			if (event.getStateChange() == ItemEvent.SELECTED)
 				this.component.setEnabled(true);
 			else if (event.getStateChange() == ItemEvent.DESELECTED)
 				this.component.setEnabled(false);
+		}
+		
+	}
+	
+	private class ChangesListener implements ActionListener, ChangeListener, DocumentListener, ItemListener, PropertyChangeListener {
+		
+		public ChangesListener() {
+			
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			BatchTaskEditPanel.this.changed = true;
+		}
+		
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			BatchTaskEditPanel.this.changed = true;
+		}
+		
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			BatchTaskEditPanel.this.changed = true;
+		}
+		
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			BatchTaskEditPanel.this.changed = true;
+		}
+		
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			BatchTaskEditPanel.this.changed = true;
+		}
+		
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			BatchTaskEditPanel.this.changed = true;
+		}
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent e) {
+			BatchTaskEditPanel.this.changed = true;
 		}
 		
 	}
