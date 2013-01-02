@@ -47,8 +47,12 @@ import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
 import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
-@XStreamAlias("element")
+@XStreamAlias("taskelement")
 public class TaskFilterElement extends FilterElement<Task, TaskColumn, TaskFilter> implements Cloneable {
+	
+	public TaskFilterElement() {
+		
+	}
 	
 	public TaskFilterElement(
 			TaskColumn property,

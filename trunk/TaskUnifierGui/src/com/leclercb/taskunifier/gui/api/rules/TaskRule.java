@@ -32,6 +32,7 @@
  */
 package com.leclercb.taskunifier.gui.api.rules;
 
+import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.AbstractBasicModel;
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.Task;
@@ -66,6 +67,7 @@ public class TaskRule extends AbstractBasicModel {
 		super(modelId, title);
 		
 		this.setEnabled(true);
+		this.setFilter(new TaskFilter());
 	}
 	
 	@Override
@@ -94,6 +96,7 @@ public class TaskRule extends AbstractBasicModel {
 	}
 	
 	public void setFilter(TaskFilter filter) {
+		CheckUtils.isNotNull(filter);
 		TaskFilter oldFilter = this.filter;
 		this.filter = filter;
 		this.updateProperty(PROP_FILTER, oldFilter, filter);

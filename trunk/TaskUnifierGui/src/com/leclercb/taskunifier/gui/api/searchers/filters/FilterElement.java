@@ -70,6 +70,10 @@ public abstract class FilterElement<M extends Model, MP extends ModelProperties<
 	@XStreamAlias("value")
 	private Object value;
 	
+	public FilterElement() {
+		
+	}
+	
 	public FilterElement(MP property, Condition<?, ?> condition, Object value) {
 		this.checkAndSet(property, condition, value);
 	}
