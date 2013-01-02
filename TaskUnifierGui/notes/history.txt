@@ -7,6 +7,7 @@ Version 3.1.6
 		- BF 245: Help issue "Show completed tasks at the end"
 		- FR 282: Windows size compatible with notebooks
 		- FR 290: Auto-completion
+		- FR 293: Rename tab
 		- FR 298: Save confirmation in task edit window
 
 Version 3.1.5
