@@ -9,6 +9,7 @@ Version 3.1.6
 		- FR 290: Auto-completion
 		- FR 293: Rename tab
 		- FR 298: Save confirmation in task edit window
+		- Skip unused fields in XML files
 
 Version 3.1.5
 	- Major:
