@@ -108,7 +108,7 @@ public class BatchTaskEditDialog extends TUDialog {
 	private void initialize() {
 		this.setModal(true);
 		this.setTitle(Translations.getString("batch_task_edit"));
-		this.setSize(900, 700);
+		this.setSize(900, 500);
 		this.setResizable(true);
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);

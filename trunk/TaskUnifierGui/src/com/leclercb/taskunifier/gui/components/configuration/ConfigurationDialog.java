@@ -42,7 +42,6 @@ import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
@@ -60,6 +59,7 @@ import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationPa
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.main.main.MainSaveFiles;
+import com.leclercb.taskunifier.gui.swing.TUDialog;
 import com.leclercb.taskunifier.gui.swing.buttons.TUApplyButton;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
@@ -68,7 +68,7 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ConfigurationDialog extends JDialog implements ConfigurationGroup, ReloadPropertiesListener {
+public class ConfigurationDialog extends TUDialog implements ConfigurationGroup, ReloadPropertiesListener {
 	
 	private static ConfigurationDialog INSTANCE;
 	
@@ -130,10 +130,12 @@ public class ConfigurationDialog extends JDialog implements ConfigurationGroup, 
 	private void initialize() {
 		this.setModal(true);
 		this.setTitle(Translations.getString("general.configuration"));
-		this.setSize(900, 700);
-		this.setResizable(false);
+		this.setSize(900, 500);
+		this.setResizable(true);
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
+		
+		this.loadWindowSettings("window.configuration");
 		
 		JXHeader header = new JXHeader();
 		header.setTitle(Translations.getString("header.title.configuration"));
