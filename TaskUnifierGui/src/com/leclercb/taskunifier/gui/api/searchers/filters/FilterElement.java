@@ -47,6 +47,7 @@ import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
+@XStreamAlias("element")
 public abstract class FilterElement<M extends Model, MP extends ModelProperties<M>, F extends Filter<M, MP, F, ? extends FilterElement<M, MP, F>>> implements PropertyChangeSupported {
 	
 	public static final String PROP_PROPERTY = "property";

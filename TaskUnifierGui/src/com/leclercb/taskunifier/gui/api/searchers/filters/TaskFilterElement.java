@@ -45,7 +45,9 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.DaysConditi
 import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
 import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
+@XStreamAlias("element")
 public class TaskFilterElement extends FilterElement<Task, TaskColumn, TaskFilter> implements Cloneable {
 	
 	public TaskFilterElement(
