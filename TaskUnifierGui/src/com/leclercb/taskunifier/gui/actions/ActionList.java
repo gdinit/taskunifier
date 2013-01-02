@@ -53,6 +53,7 @@ public enum ActionList {
 	EXPORT_MODELS(Translations.getString("action.export_models"), "upload.png", true),
 	EXPORT_NOTE_SEARCHERS(Translations.getString("action.export_note_searchers"), "upload.png", true),
 	EXPORT_SETTINGS(Translations.getString("action.export_settings"), "upload.png", true),
+	EXPORT_TASK_RULES(Translations.getString("action.export_task_rules"), "upload.png", true),
 	EXPORT_TASK_SEARCHERS(Translations.getString("action.export_task_searchers"), "upload.png", true),
 	EXPORT_TASK_TEMPLATES(Translations.getString("action.export_task_templates"), "upload.png", true),
 	EXPORT_VCARD(Translations.getString("action.export_vcard"), "upload.png", true),
@@ -63,6 +64,7 @@ public enum ActionList {
 	IMPORT_MODELS(Translations.getString("action.import_models"), "download.png", true),
 	IMPORT_NOTE_SEARCHERS(Translations.getString("action.import_note_searchers"), "download.png", true),
 	IMPORT_SETTINGS(Translations.getString("action.import_settings"), "download.png", true),
+	IMPORT_TASK_RULES(Translations.getString("action.import_task_rules"), "download.png", true),
 	IMPORT_TASK_SEARCHERS(Translations.getString("action.import_task_searchers"), "download.png", true),
 	IMPORT_TASK_TEMPLATES(Translations.getString("action.import_task_templates"), "download.png", true),
 	IMPORT_VCARD(Translations.getString("action.import_vcard"), "download.png", true),
@@ -227,6 +229,8 @@ public enum ActionList {
 				return new ActionExportNoteSearchers(width, height);
 			case EXPORT_SETTINGS:
 				return new ActionExportSettings(width, height);
+			case EXPORT_TASK_RULES:
+				return new ActionExportTaskRules(width, height);
 			case EXPORT_TASK_SEARCHERS:
 				return new ActionExportTaskSearchers(width, height);
 			case EXPORT_TASK_TEMPLATES:
@@ -245,6 +249,8 @@ public enum ActionList {
 				return new ActionImportNoteSearchers(width, height);
 			case IMPORT_SETTINGS:
 				return new ActionImportSettings(width, height);
+			case IMPORT_TASK_RULES:
+				return new ActionImportTaskRules(width, height);
 			case IMPORT_TASK_SEARCHERS:
 				return new ActionImportTaskSearchers(width, height);
 			case IMPORT_TASK_TEMPLATES:

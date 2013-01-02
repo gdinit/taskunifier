@@ -49,6 +49,7 @@ import com.leclercb.taskunifier.api.models.NoteFactory;
 import com.leclercb.taskunifier.api.models.TaskFactory;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplateFactory;
 import com.leclercb.taskunifier.gui.actions.ActionResetGeneralSearchers;
+import com.leclercb.taskunifier.gui.api.rules.TaskRuleFactory;
 import com.leclercb.taskunifier.gui.api.searchers.NoteSearcherFactory;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcherFactory;
 import com.leclercb.taskunifier.gui.api.searchers.coders.NoteSearcherFactoryXMLCoder;
@@ -98,6 +99,7 @@ public final class MainLoadFiles {
 	
 	public static void loadAllData(String folder, String suffix) {
 		loadModels(folder, suffix);
+		loadTaskRules(folder, suffix);
 		loadTaskTemplates(folder, suffix);
 		loadTaskSearchers(folder, suffix);
 		loadNoteSearchers(folder, suffix);
@@ -276,6 +278,35 @@ public final class MainLoadFiles {
 		}
 		
 		ModelVersion.updateModels();
+	}
+	
+	private static void loadTaskRules(String folder, String suffix) {
+		if (suffix == null)
+			suffix = "";
+		
+		try {
+			TaskRuleFactory.getInstance().deleteAll();
+			
+			TaskRuleFactory.getInstance().decodeFromXML(
+					new FileInputStream(folder
+							+ File.separator
+							+ "task_rules"
+							+ suffix
+							+ ".xml"));
+		} catch (FileNotFoundException e) {
+			
+		} catch (Exception e) {
+			GuiLogger.getLogger().log(
+					Level.SEVERE,
+					"Error while loading task rules",
+					e);
+			
+			JOptionPane.showMessageDialog(
+					null,
+					e.getMessage(),
+					Translations.getString("general.error"),
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	private static void loadTaskTemplates(String folder, String suffix) {

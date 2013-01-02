@@ -47,6 +47,7 @@ import com.leclercb.taskunifier.api.models.LocationFactory;
 import com.leclercb.taskunifier.api.models.NoteFactory;
 import com.leclercb.taskunifier.api.models.TaskFactory;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplateFactory;
+import com.leclercb.taskunifier.gui.api.rules.TaskRuleFactory;
 import com.leclercb.taskunifier.gui.api.searchers.coders.NoteSearcherFactoryXMLCoder;
 import com.leclercb.taskunifier.gui.api.searchers.coders.TaskSearcherFactoryXMLCoder;
 import com.leclercb.taskunifier.gui.constants.Constants;
@@ -65,6 +66,7 @@ public final class MainSaveFiles {
 	
 	public static void copyAllData(String folder, String suffix) {
 		saveModels(folder, suffix);
+		saveTaskRules(folder, suffix);
 		saveTaskTemplates(folder, suffix);
 		saveTaskSearchers(folder, suffix);
 		saveNoteSearchers(folder, suffix);
@@ -76,6 +78,7 @@ public final class MainSaveFiles {
 	
 	public static void saveAllData(String suffix) {
 		saveModels(Main.getUserFolder(), suffix);
+		saveTaskRules(Main.getUserFolder(), suffix);
 		saveTaskTemplates(Main.getUserFolder(), suffix);
 		saveTaskSearchers(Main.getUserFolder(), suffix);
 		saveNoteSearchers(Main.getUserFolder(), suffix);
@@ -309,6 +312,35 @@ public final class MainSaveFiles {
 			GuiLogger.getLogger().log(
 					Level.SEVERE,
 					"Error while saving tasks",
+					e);
+			
+			JOptionPane.showMessageDialog(
+					null,
+					e.getMessage(),
+					Translations.getString("general.error"),
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	private static void saveTaskRules(String folder, String suffix) {
+		if (suffix == null)
+			suffix = "";
+		
+		try {
+			TaskRuleFactory.getInstance().encodeToXML(
+					new FileOutputStream(folder
+							+ File.separator
+							+ "task_rules"
+							+ suffix
+							+ ".xml"));
+			
+			GuiLogger.getLogger().log(
+					Level.INFO,
+					"Saving task rules: " + folder);
+		} catch (Exception e) {
+			GuiLogger.getLogger().log(
+					Level.SEVERE,
+					"Error while saving task rules",
 					e);
 			
 			JOptionPane.showMessageDialog(
