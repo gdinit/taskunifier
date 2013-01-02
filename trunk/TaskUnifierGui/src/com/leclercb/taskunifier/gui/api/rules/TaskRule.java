@@ -116,6 +116,9 @@ public class TaskRule extends AbstractBasicModel {
 		if (!TaskUtils.showUnindentTask(task, this.filter))
 			return;
 		
+		if (!this.enabled)
+			return;
+		
 		if (this.action != null)
 			this.action.execute(task);
 	}
