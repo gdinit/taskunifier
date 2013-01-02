@@ -32,32 +32,39 @@
  */
 package com.leclercb.taskunifier.gui.api.rules.actions;
 
+import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
-import com.leclercb.taskunifier.gui.actions.ActionAddTask;
+import com.leclercb.taskunifier.api.models.TaskFactory;
 import com.leclercb.taskunifier.gui.api.rules.TaskRuleAction;
+import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
 import com.leclercb.taskunifier.gui.translations.Translations;
+import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
-public class TaskRuleActionAddTask implements TaskRuleAction {
+public class TaskRuleActionDeleteTasks implements TaskRuleAction {
 	
-	private TaskTemplate template;
+	private TaskFilter filter;
 	
-	public TaskRuleActionAddTask() {
-		this(null);
-	}
-	
-	public TaskRuleActionAddTask(TaskTemplate template) {
-		this.template = template;
+	public TaskRuleActionDeleteTasks(TaskFilter filter) {
+		CheckUtils.isNotNull(filter);
+		this.filter = filter;
 	}
 	
 	@Override
 	public String getLabel() {
-		return Translations.getString("taskrule.action.add_task");
+		return Translations.getString("taskrule.action.delete_tasks");
 	}
 	
 	@Override
 	public void execute(Task task) {
-		ActionAddTask.addTask(this.template, null, false);
+		for (Task t : TaskFactory.getInstance().getList()) {
+			if (!t.getModelStatus().isEndUserStatus())
+				continue;
+			
+			if (!TaskUtils.showUnindentTask(t, this.filter))
+				continue;
+			
+			TaskFactory.getInstance().markToDelete(t);
+		}
 	}
 	
 }
