@@ -33,7 +33,9 @@
 package com.leclercb.taskunifier.gui.api.rules;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.leclercb.taskunifier.gui.api.rules.actions.TaskRuleActionAddSubTask;
 import com.leclercb.taskunifier.gui.api.rules.actions.TaskRuleActionAddTask;
@@ -52,20 +54,40 @@ public class TaskRuleActions {
 		return INSTANCE;
 	}
 	
-	private List<Class<?>> actions;
+	private Map<Class<?>, String> actions;
 	
 	public TaskRuleActions() {
-		this.actions = new ArrayList<Class<?>>();
+		this.actions = new HashMap<Class<?>, String>();
 		
-		this.addRuleActionClass(TaskRuleActionAddSubTask.class);
-		this.addRuleActionClass(TaskRuleActionAddTask.class);
-		this.addRuleActionClass(TaskRuleActionApplyTemplate.class);
-		this.addRuleActionClass(TaskRuleActionCompleteTasks.class);
-		this.addRuleActionClass(TaskRuleActionDeleteTasks.class);
+		this.addRuleActionClass(
+				TaskRuleActionAddSubTask.class,
+				TaskRuleActionAddSubTask.getLabel());
+		this.addRuleActionClass(
+				TaskRuleActionAddTask.class,
+				TaskRuleActionAddTask.getLabel());
+		this.addRuleActionClass(
+				TaskRuleActionApplyTemplate.class,
+				TaskRuleActionApplyTemplate.getLabel());
+		this.addRuleActionClass(
+				TaskRuleActionCompleteTasks.class,
+				TaskRuleActionCompleteTasks.getLabel());
+		this.addRuleActionClass(
+				TaskRuleActionDeleteTasks.class,
+				TaskRuleActionDeleteTasks.getLabel());
 	}
 	
-	public <A extends TaskRuleAction> void addRuleActionClass(Class<A> action) {
-		this.actions.add(action);
+	public <A extends TaskRuleAction> void addRuleActionClass(
+			Class<A> action,
+			String label) {
+		this.actions.put(action, label);
+	}
+	
+	public String getActionLabel(Class<?> action) {
+		return this.actions.get(action);
+	}
+	
+	public List<Class<?>> getActions() {
+		return new ArrayList<Class<?>>(this.actions.keySet());
 	}
 	
 }

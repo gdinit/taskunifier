@@ -88,11 +88,11 @@ public class TaskRuleEditPanel extends JPanel implements TreeSelectionListener {
 		JTabbedPane tabbedPane = new JTabbedPane();
 		
 		tabbedPane.addTab(
-				Translations.getString("searcheredit.tab.general"),
+				Translations.getString("ruleedit.tab.general"),
 				this.rulePanel);
 		
 		tabbedPane.addTab(
-				Translations.getString("searcheredit.tab.filter"),
+				Translations.getString("ruleedit.tab.filter"),
 				filterPanel);
 		
 		this.add(tabbedPane, BorderLayout.CENTER);

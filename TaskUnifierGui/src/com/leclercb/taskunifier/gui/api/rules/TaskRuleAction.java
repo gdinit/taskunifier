@@ -36,8 +36,8 @@ import com.leclercb.taskunifier.api.models.Task;
 
 public interface TaskRuleAction {
 	
-	public abstract String getLabel();
-	
 	public abstract void execute(Task task);
+	
+	public abstract void configure();
 	
 }

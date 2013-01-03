@@ -33,30 +33,46 @@
 package com.leclercb.taskunifier.gui.components.taskruleedit.rule;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.logging.Level;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
+import org.apache.commons.lang3.ArrayUtils;
+import org.jdesktop.swingx.JXComboBox;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
+import org.jdesktop.swingx.renderer.DefaultListRenderer;
+
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.gui.api.rules.TaskRule;
+import com.leclercb.taskunifier.gui.api.rules.TaskRuleAction;
+import com.leclercb.taskunifier.gui.api.rules.TaskRuleActions;
+import com.leclercb.taskunifier.gui.commons.values.StringValueTaskRuleAction;
+import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
+import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
 
-public class TaskRulePanel extends JPanel implements PropertyChangeSupported, PropertyChangeListener {
+public class TaskRulePanel extends JPanel implements PropertyChangeListener {
 	
 	private TaskRule rule;
 	
 	private JTextField ruleTitle;
 	private JCheckBox ruleEnabled;
+	private JXComboBox ruleAction;
+	private JButton ruleActionConfiguration;
 	
 	public TaskRulePanel() {
 		this.initialize();
@@ -127,6 +143,58 @@ public class TaskRulePanel extends JPanel implements PropertyChangeSupported, Pr
 		
 		builder.appendI15d("ruleedit.rule.enabled", true, this.ruleEnabled);
 		
+		// Action
+		JPanel ruleActionPanel = new JPanel(new BorderLayout(5, 5));
+		
+		this.ruleAction = new JXComboBox(ArrayUtils.add(
+				TaskRuleActions.getInstance().getActions().toArray(),
+				0,
+				null));
+		this.ruleAction.setRenderer(new DefaultListRenderer(
+				StringValueTaskRuleAction.INSTANCE));
+		this.ruleAction.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				try {
+					Class<?> action = (Class<?>) TaskRulePanel.this.ruleAction.getSelectedItem();
+					TaskRuleAction a = (TaskRuleAction) action.newInstance();
+					TaskRulePanel.this.rule.setAction(a);
+				} catch (Exception exc) {
+					ErrorInfo info = new ErrorInfo(
+							Translations.getString("general.error"),
+							exc.getMessage(),
+							null,
+							"GUI",
+							null,
+							Level.INFO,
+							null);
+					
+					JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+					
+					return;
+				}
+			}
+			
+		});
+		
+		this.ruleActionConfiguration = new JButton(
+				Translations.getString("general.configure"));
+		this.ruleActionConfiguration.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (TaskRulePanel.this.rule.getAction() != null)
+					TaskRulePanel.this.rule.getAction().configure();
+			}
+			
+		});
+		
+		ruleActionPanel.add(this.ruleAction, BorderLayout.CENTER);
+		ruleActionPanel.add(this.ruleActionConfiguration, BorderLayout.EAST);
+		
+		builder.appendI15d("ruleedit.rule.action", true, ruleActionPanel);
+		
 		// Lay out the panel
 		panel.add(builder.getPanel(), BorderLayout.CENTER);
 		
@@ -145,6 +213,16 @@ public class TaskRulePanel extends JPanel implements PropertyChangeSupported, Pr
 					this.ruleEnabled.isSelected(),
 					evt.getNewValue()))
 				this.ruleEnabled.setSelected((Boolean) evt.getNewValue());
+		}
+		
+		if (evt.getPropertyName().equals(TaskRule.PROP_ACTION)) {
+			Class<?> action = null;
+			
+			if (this.rule.getAction() != null)
+				action = this.rule.getAction().getClass();
+			
+			if (!EqualsUtils.equals(this.ruleAction.getSelectedItem(), action))
+				this.ruleAction.setSelectedItem(action);
 		}
 	}
 	
