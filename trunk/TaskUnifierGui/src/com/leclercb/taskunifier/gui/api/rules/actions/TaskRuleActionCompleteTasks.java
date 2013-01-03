@@ -32,26 +32,33 @@
  */
 package com.leclercb.taskunifier.gui.api.rules.actions;
 
-import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
 import com.leclercb.taskunifier.gui.api.rules.TaskRuleAction;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class TaskRuleActionCompleteTasks implements TaskRuleAction {
 	
+	@XStreamAlias("filter")
 	private TaskFilter filter;
 	
-	public TaskRuleActionCompleteTasks(TaskFilter filter) {
-		CheckUtils.isNotNull(filter);
-		this.filter = filter;
+	public TaskRuleActionCompleteTasks() {
+		this(null);
 	}
 	
-	@Override
-	public String getLabel() {
-		return Translations.getString("taskrule.action.complete_tasks");
+	public TaskRuleActionCompleteTasks(TaskFilter filter) {
+		this.setFilter(filter);
+	}
+	
+	public TaskFilter getFilter() {
+		return this.filter;
+	}
+	
+	public void setFilter(TaskFilter filter) {
+		this.filter = filter;
 	}
 	
 	@Override
@@ -65,6 +72,20 @@ public class TaskRuleActionCompleteTasks implements TaskRuleAction {
 			
 			t.setCompleted(true);
 		}
+	}
+	
+	@Override
+	public void configure() {
+		
+	}
+	
+	@Override
+	public String toString() {
+		return Translations.getString("taskrule.action.complete_tasks");
+	}
+	
+	public static String getLabel() {
+		return Translations.getString("taskrule.action.complete_tasks");
 	}
 	
 }

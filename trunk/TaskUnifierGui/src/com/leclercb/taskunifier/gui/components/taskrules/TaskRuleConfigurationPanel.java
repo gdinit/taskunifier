@@ -56,7 +56,7 @@ public class TaskRuleConfigurationPanel extends JSplitPane {
 		this.ruleEditPanel = new TaskRuleEditPanel();
 		this.setRightComponent(this.ruleEditPanel);
 		
-		// Initialize Model List
+		// Initialize Rule List
 		this.ruleList = new TaskRuleList(this.ruleEditPanel.getRuleTitle());
 		this.setLeftComponent(this.ruleList);
 		

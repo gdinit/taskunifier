@@ -37,9 +37,11 @@ import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
 import com.leclercb.taskunifier.gui.actions.ActionAddTask;
 import com.leclercb.taskunifier.gui.api.rules.TaskRuleAction;
 import com.leclercb.taskunifier.gui.translations.Translations;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class TaskRuleActionAddTask implements TaskRuleAction {
 	
+	@XStreamAlias("template")
 	private TaskTemplate template;
 	
 	public TaskRuleActionAddTask() {
@@ -47,17 +49,34 @@ public class TaskRuleActionAddTask implements TaskRuleAction {
 	}
 	
 	public TaskRuleActionAddTask(TaskTemplate template) {
-		this.template = template;
+		this.setTemplate(template);
 	}
 	
-	@Override
-	public String getLabel() {
-		return Translations.getString("taskrule.action.add_task");
+	public TaskTemplate getTemplate() {
+		return this.template;
+	}
+	
+	public void setTemplate(TaskTemplate template) {
+		this.template = template;
 	}
 	
 	@Override
 	public void execute(Task task) {
 		ActionAddTask.addTask(this.template, null, false);
+	}
+	
+	@Override
+	public void configure() {
+		
+	}
+	
+	@Override
+	public String toString() {
+		return Translations.getString("taskrule.action.add_task");
+	}
+	
+	public static String getLabel() {
+		return Translations.getString("taskrule.action.add_task");
 	}
 	
 }
