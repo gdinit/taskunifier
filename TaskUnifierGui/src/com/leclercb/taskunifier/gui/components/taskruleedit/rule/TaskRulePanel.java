@@ -56,6 +56,7 @@ import org.jdesktop.swingx.renderer.DefaultListRenderer;
 
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.utils.EqualsUtils;
+import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.gui.api.rules.TaskRule;
 import com.leclercb.taskunifier.gui.api.rules.TaskRuleAction;
@@ -96,9 +97,24 @@ public class TaskRulePanel extends JPanel implements PropertyChangeListener {
 			
 			this.ruleTitle.setText(rule.getTitle());
 			this.ruleEnabled.setSelected(rule.isEnabled());
+			
+			Class<?> action = null;
+			
+			if (this.rule.getAction() != null)
+				action = this.rule.getAction().getClass();
+			
+			this.ruleAction.setSelectedItem(action);
+		} else {
+			this.ruleTitle.setText(null);
+			this.ruleEnabled.setSelected(false);
+			this.ruleAction.setSelectedItem(null);
 		}
 		
 		this.ruleTitle.setEnabled(rule != null);
+		this.ruleEnabled.setEnabled(rule != null);
+		this.ruleAction.setEnabled(rule != null);
+		this.ruleActionConfiguration.setEnabled(rule != null
+				&& rule.getAction() != null);
 	}
 	
 	public JTextField getRuleTitle() {
@@ -136,6 +152,9 @@ public class TaskRulePanel extends JPanel implements PropertyChangeListener {
 			
 			@Override
 			public void itemStateChanged(ItemEvent e) {
+				if (TaskRulePanel.this.rule == null)
+					return;
+				
 				TaskRulePanel.this.rule.setEnabled(TaskRulePanel.this.ruleEnabled.isSelected());
 			}
 			
@@ -156,8 +175,17 @@ public class TaskRulePanel extends JPanel implements PropertyChangeListener {
 			
 			@Override
 			public void itemStateChanged(ItemEvent e) {
+				if (TaskRulePanel.this.rule == null)
+					return;
+				
 				try {
 					Class<?> action = (Class<?>) TaskRulePanel.this.ruleAction.getSelectedItem();
+					
+					if (action == null) {
+						TaskRulePanel.this.rule.setAction(null);
+						return;
+					}
+					
 					TaskRuleAction a = (TaskRuleAction) action.newInstance();
 					TaskRulePanel.this.rule.setAction(a);
 				} catch (Exception exc) {
@@ -172,7 +200,10 @@ public class TaskRulePanel extends JPanel implements PropertyChangeListener {
 					
 					JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
 					
-					return;
+					GuiLogger.getLogger().log(
+							Level.WARNING,
+							"Cannot change rule action",
+							exc);
 				}
 			}
 			
@@ -199,6 +230,11 @@ public class TaskRulePanel extends JPanel implements PropertyChangeListener {
 		panel.add(builder.getPanel(), BorderLayout.CENTER);
 		
 		this.add(panel, BorderLayout.NORTH);
+		
+		this.ruleTitle.setEnabled(false);
+		this.ruleEnabled.setEnabled(false);
+		this.ruleAction.setEnabled(false);
+		this.ruleActionConfiguration.setEnabled(false);
 	}
 	
 	@Override
