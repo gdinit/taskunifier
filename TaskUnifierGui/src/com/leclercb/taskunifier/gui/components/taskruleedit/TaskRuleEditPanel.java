@@ -73,7 +73,6 @@ public class TaskRuleEditPanel extends JPanel implements TreeSelectionListener {
 		
 		this.rulePanel = new TaskRulePanel();
 		this.elementPanel = new TaskFilterElementPanel();
-		this.elementPanel.setAllowCompareModel(true);
 		
 		this.filterPanel = new TaskFilterPanel();
 		this.filterPanel.getTree().addTreeSelectionListener(this);

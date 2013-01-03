@@ -62,8 +62,8 @@ public abstract class Filter<M extends Model, MP extends ModelProperties<M>, F e
 	@XStreamOmitField
 	private transient PropertyChangeSupport propertyChangeSupport;
 	
-	@XStreamOmitField
-	private transient F parent;
+	@XStreamAlias("parent")
+	private F parent;
 	
 	@XStreamAlias("link")
 	private FilterLink link;

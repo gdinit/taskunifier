@@ -60,8 +60,8 @@ public abstract class FilterElement<M extends Model, MP extends ModelProperties<
 	private transient PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(
 			this);
 	
-	@XStreamOmitField
-	private transient F parent;
+	@XStreamAlias("parent")
+	private F parent;
 	
 	@XStreamAlias("property")
 	private MP property;

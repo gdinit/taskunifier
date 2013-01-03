@@ -32,20 +32,29 @@
  */
 package com.leclercb.taskunifier.gui.api.rules.actions;
 
+import javax.swing.border.EmptyBorder;
+
+import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
 import com.leclercb.taskunifier.gui.actions.ActionAddSubTask;
 import com.leclercb.taskunifier.gui.api.rules.TaskRuleAction;
+import com.leclercb.taskunifier.gui.api.rules.TaskRuleActionConfigurationDialog;
+import com.leclercb.taskunifier.gui.components.tasktemplates.TaskTemplatePanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
+import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class TaskRuleActionAddSubTask implements TaskRuleAction {
+	
+	private static TaskRuleActionConfigurationDialog DIALOG;
+	private static TaskTemplatePanel TASK_TEMPLATE_PANEL;
 	
 	@XStreamAlias("template")
 	private TaskTemplate template;
 	
 	public TaskRuleActionAddSubTask() {
-		this(null);
+		this(new TaskTemplate());
 	}
 	
 	public TaskRuleActionAddSubTask(TaskTemplate template) {
@@ -57,6 +66,7 @@ public class TaskRuleActionAddSubTask implements TaskRuleAction {
 	}
 	
 	public void setTemplate(TaskTemplate template) {
+		CheckUtils.isNotNull(template);
 		this.template = template;
 	}
 	
@@ -67,7 +77,21 @@ public class TaskRuleActionAddSubTask implements TaskRuleAction {
 	
 	@Override
 	public void configure() {
+		if (DIALOG == null) {
+			DIALOG = new TaskRuleActionConfigurationDialog(
+					"title",
+					"description");
+			
+			TASK_TEMPLATE_PANEL = new TaskTemplatePanel();
+			TASK_TEMPLATE_PANEL.setBorder(new EmptyBorder(5, 5, 5, 5));
+			
+			DIALOG.addTab("a", ComponentFactory.createJScrollPane(
+					TASK_TEMPLATE_PANEL,
+					false));
+		}
 		
+		TASK_TEMPLATE_PANEL.setTemplate(this.template);
+		DIALOG.setVisible(true);
 	}
 	
 	@Override

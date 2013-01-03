@@ -92,7 +92,7 @@ public class TaskRuleFactory extends AbstractBasicModelFactory<TaskRule> {
 		XStream xstream = new TUXStream(
 				new PureJavaReflectionProvider(),
 				new DomDriver("UTF-8"));
-		xstream.setMode(XStream.NO_REFERENCES);
+		xstream.setMode(XStream.ID_REFERENCES);
 		xstream.alias("rules", TaskRule[].class);
 		xstream.alias("rule", TaskRule.class);
 		xstream.processAnnotations(TaskRule.class);
@@ -108,7 +108,7 @@ public class TaskRuleFactory extends AbstractBasicModelFactory<TaskRule> {
 		XStream xstream = new TUXStream(
 				new PureJavaReflectionProvider(),
 				new DomDriver("UTF-8"));
-		xstream.setMode(XStream.NO_REFERENCES);
+		xstream.setMode(XStream.ID_REFERENCES);
 		xstream.alias("rules", TaskRule[].class);
 		xstream.alias("rule", TaskRule.class);
 		xstream.processAnnotations(TaskRule.class);
