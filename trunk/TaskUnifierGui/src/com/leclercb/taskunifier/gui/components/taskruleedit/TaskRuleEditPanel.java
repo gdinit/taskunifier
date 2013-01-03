@@ -61,7 +61,7 @@ public class TaskRuleEditPanel extends JPanel implements TreeSelectionListener {
 	
 	public void setRule(TaskRule rule) {
 		this.rulePanel.setRule(rule);
-		this.filterPanel.setFilter(rule.getFilter());
+		this.filterPanel.setFilter((rule == null ? null : rule.getFilter()));
 	}
 	
 	public JTextField getRuleTitle() {
