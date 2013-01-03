@@ -147,7 +147,8 @@ public class TaskFilterPanel extends JPanel {
 						TaskFilterPanel.this.filter.addElement(new TaskFilterElement(
 								TaskColumn.MODEL,
 								ModelCondition.EQUALS,
-								task));
+								task,
+								false));
 					}
 				} else if (event.getActionCommand().startsWith("ADD")) {
 					TreeNode node = (TreeNode) TaskFilterPanel.this.tree.getLastSelectedPathComponent();
@@ -159,7 +160,8 @@ public class TaskFilterPanel extends JPanel {
 						TaskFilterElement element = new TaskFilterElement(
 								TaskColumn.TITLE,
 								StringCondition.EQUALS,
-								"");
+								"",
+								false);
 						
 						((TaskFilterTreeNode) node).getFilter().addElement(
 								element);

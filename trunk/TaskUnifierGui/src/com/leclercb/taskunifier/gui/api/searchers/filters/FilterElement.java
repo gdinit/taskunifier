@@ -43,6 +43,7 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.gui.api.models.properties.ModelProperties;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.Condition;
+import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -53,6 +54,7 @@ public abstract class FilterElement<M extends Model, MP extends ModelProperties<
 	public static final String PROP_PROPERTY = "property";
 	public static final String PROP_CONDITION = "condition";
 	public static final String PROP_VALUE = "value";
+	public static final String PROP_COMPARE_MODEL = "compareModel";
 	
 	@XStreamOmitField
 	private transient PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(
@@ -70,15 +72,26 @@ public abstract class FilterElement<M extends Model, MP extends ModelProperties<
 	@XStreamAlias("value")
 	private Object value;
 	
+	@XStreamAlias("comparemodel")
+	private boolean compareModel;
+	
 	public FilterElement() {
 		
 	}
 	
-	public FilterElement(MP property, Condition<?, ?> condition, Object value) {
-		this.checkAndSet(property, condition, value);
+	public FilterElement(
+			MP property,
+			Condition<?, ?> condition,
+			Object value,
+			boolean compareModel) {
+		this.checkAndSet(property, condition, value, compareModel);
 	}
 	
-	public void checkAndSet(MP property, Condition<?, ?> condition, Object value) {
+	public void checkAndSet(
+			MP property,
+			Condition<?, ?> condition,
+			Object value,
+			boolean compareModel) {
 		CheckUtils.isNotNull(property);
 		CheckUtils.isNotNull(condition);
 		
@@ -89,6 +102,7 @@ public abstract class FilterElement<M extends Model, MP extends ModelProperties<
 		events.add(this.setProperty(property));
 		events.add(this.setCondition(condition));
 		events.add(this.setValue(value));
+		events.add(this.setCompareModel(compareModel));
 		
 		for (PropertyChangeEvent event : events)
 			this.propertyChangeSupport.firePropertyChange(event);
@@ -142,6 +156,20 @@ public abstract class FilterElement<M extends Model, MP extends ModelProperties<
 		return new PropertyChangeEvent(this, PROP_VALUE, oldValue, value);
 	}
 	
+	public boolean isCompareModel() {
+		return this.compareModel;
+	}
+	
+	private PropertyChangeEvent setCompareModel(boolean compareModel) {
+		boolean oldCompareModel = this.compareModel;
+		this.compareModel = compareModel;
+		return new PropertyChangeEvent(
+				this,
+				PROP_COMPARE_MODEL,
+				oldCompareModel,
+				compareModel);
+	}
+	
 	private void check(MP property, Condition<?, ?> condition, Object value) {
 		if (value != null && !condition.getValueType().isInstance(value))
 			throw new IllegalArgumentException("Value is not an instance of "
@@ -152,18 +180,32 @@ public abstract class FilterElement<M extends Model, MP extends ModelProperties<
 					"The property is incompatible with this condition");
 	}
 	
-	public boolean include(M model) {
+	public boolean include(M model, M comparedModel) {
 		Object taskValue = this.property.getProperty(model);
-		return this.condition.include(this.value, taskValue);
+		
+		Object value = this.value;
+		
+		if (this.compareModel && comparedModel != null) {
+			value = this.getComparedModelValue(comparedModel);
+		}
+		
+		return this.condition.include(value, taskValue);
 	}
+	
+	public abstract Object getComparedModelValue(M comparedModel);
 	
 	@Override
 	public String toString() {
+		String value = (this.getValue() == null ? "" : this.getValue().toString());
+		
+		if (this.isCompareModel())
+			value = Translations.getString("filter.updated_task_value");
+		
 		return this.getProperty()
 				+ " "
 				+ TranslationsUtils.translateFilterCondition(this.getCondition())
 				+ " \""
-				+ (this.getValue() == null ? "" : this.getValue())
+				+ value
 				+ "\"";
 	}
 	

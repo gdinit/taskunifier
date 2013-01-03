@@ -56,11 +56,11 @@ public enum NumberCondition implements Condition<Number, Number> {
 	}
 	
 	@Override
-	public boolean include(Object objectValue, Object objectTaskValue) {
+	public boolean include(Object objectValue, Object objectModelValue) {
 		Number value = (Number) objectValue;
-		Number taskValue = (Number) objectTaskValue;
+		Number modelValue = (Number) objectModelValue;
 		
-		if (value == null && taskValue == null) {
+		if (value == null && modelValue == null) {
 			switch (this) {
 				case EQUALS:
 					return true;
@@ -69,7 +69,7 @@ public enum NumberCondition implements Condition<Number, Number> {
 			}
 		}
 		
-		if (value == null || taskValue == null) {
+		if (value == null || modelValue == null) {
 			switch (this) {
 				case NOT_EQUALS:
 					return true;
@@ -80,17 +80,17 @@ public enum NumberCondition implements Condition<Number, Number> {
 		
 		switch (this) {
 			case EQUALS:
-				return taskValue.doubleValue() == value.doubleValue();
+				return modelValue.doubleValue() == value.doubleValue();
 			case GREATER_THAN:
-				return taskValue.doubleValue() > value.doubleValue();
+				return modelValue.doubleValue() > value.doubleValue();
 			case GREATER_THAN_OR_EQUALS:
-				return taskValue.doubleValue() >= value.doubleValue();
+				return modelValue.doubleValue() >= value.doubleValue();
 			case LESS_THAN:
-				return taskValue.doubleValue() < value.doubleValue();
+				return modelValue.doubleValue() < value.doubleValue();
 			case LESS_THAN_OR_EQUALS:
-				return taskValue.doubleValue() <= value.doubleValue();
+				return modelValue.doubleValue() <= value.doubleValue();
 			case NOT_EQUALS:
-				return taskValue.doubleValue() != value.doubleValue();
+				return modelValue.doubleValue() != value.doubleValue();
 		}
 		
 		return false;

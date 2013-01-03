@@ -55,22 +55,22 @@ public enum ModelCondition implements Condition<Model, Object> {
 	}
 	
 	@Override
-	public boolean include(Object objectValue, Object objectTaskValue) {
+	public boolean include(Object objectValue, Object objectModelValue) {
 		Model value = (Model) objectValue;
-		Object taskValue = objectTaskValue;
+		Object modelValue = objectModelValue;
 		
-		if (taskValue != null
-				&& !(taskValue instanceof Model)
-				&& !(taskValue instanceof ModelList<?>)) {
+		if (modelValue != null
+				&& !(modelValue instanceof Model)
+				&& !(modelValue instanceof ModelList<?>)) {
 			throw new IllegalArgumentException(
 					"The property is incompatible with this condition");
 		}
 		
-		if (taskValue instanceof ModelList<?>)
-			if (((ModelList<?>) taskValue).size() == 0)
-				taskValue = null;
+		if (modelValue instanceof ModelList<?>)
+			if (((ModelList<?>) modelValue).size() == 0)
+				modelValue = null;
 		
-		if (value == null && taskValue == null) {
+		if (value == null && modelValue == null) {
 			switch (this) {
 				case EQUALS:
 					return true;
@@ -79,7 +79,7 @@ public enum ModelCondition implements Condition<Model, Object> {
 			}
 		}
 		
-		if (value == null || taskValue == null) {
+		if (value == null || modelValue == null) {
 			switch (this) {
 				case NOT_EQUALS:
 					return true;
@@ -88,22 +88,22 @@ public enum ModelCondition implements Condition<Model, Object> {
 			}
 		}
 		
-		if (taskValue instanceof Model) {
+		if (modelValue instanceof Model) {
 			switch (this) {
 				case EQUALS:
-					return taskValue.equals(value);
+					return modelValue.equals(value);
 				case NOT_EQUALS:
-					return !(taskValue.equals(value));
+					return !(modelValue.equals(value));
 					
 			}
 		}
 		
-		if (taskValue instanceof ModelList<?>) {
+		if (modelValue instanceof ModelList<?>) {
 			switch (this) {
 				case EQUALS:
-					return ((ModelList<?>) taskValue).contains(value);
+					return ((ModelList<?>) modelValue).contains(value);
 				case NOT_EQUALS:
-					return !((ModelList<?>) taskValue).contains(value);
+					return !((ModelList<?>) modelValue).contains(value);
 					
 			}
 		}

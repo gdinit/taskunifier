@@ -184,15 +184,18 @@ public class NoteSearcherPanel extends JPanel implements SavePropertiesListener,
 			searchFilter.addElement(new NoteFilterElement(
 					NoteColumn.TITLE,
 					StringCondition.CONTAINS,
-					this.filter));
+					this.filter,
+					false));
 			searchFilter.addElement(new NoteFilterElement(
 					NoteColumn.NOTE,
 					StringCondition.CONTAINS,
-					this.filter));
+					this.filter,
+					false));
 			searchFilter.addElement(new NoteFilterElement(
 					NoteColumn.FOLDER,
 					StringCondition.CONTAINS,
-					this.filter));
+					this.filter,
+					false));
 		}
 		
 		if (this.notes != null) {
@@ -200,7 +203,8 @@ public class NoteSearcherPanel extends JPanel implements SavePropertiesListener,
 				extraFilter.addElement(new NoteFilterElement(
 						NoteColumn.MODEL,
 						ModelCondition.EQUALS,
-						note));
+						note,
+						false));
 			}
 			
 			mainFilter.addFilter(extraFilter);

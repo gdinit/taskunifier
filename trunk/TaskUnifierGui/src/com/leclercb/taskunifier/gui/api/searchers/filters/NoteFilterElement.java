@@ -47,8 +47,9 @@ public class NoteFilterElement extends FilterElement<Note, NoteColumn, NoteFilte
 	public NoteFilterElement(
 			NoteColumn property,
 			Condition<?, ?> condition,
-			Object value) {
-		super(property, condition, value);
+			Object value,
+			boolean compareModel) {
+		super(property, condition, value, compareModel);
 	}
 	
 	@Override
@@ -56,7 +57,13 @@ public class NoteFilterElement extends FilterElement<Note, NoteColumn, NoteFilte
 		return new NoteFilterElement(
 				this.getProperty(),
 				this.getCondition(),
-				this.getValue());
+				this.getValue(),
+				this.isCompareModel());
+	}
+	
+	@Override
+	public Object getComparedModelValue(Note comparedModel) {
+		return this.getProperty().getProperty(comparedModel);
 	}
 	
 }

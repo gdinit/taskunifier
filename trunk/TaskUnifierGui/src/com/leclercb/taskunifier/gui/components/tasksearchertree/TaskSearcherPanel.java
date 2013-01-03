@@ -198,31 +198,38 @@ public class TaskSearcherPanel extends JPanel implements SavePropertiesListener,
 			searchFilter.addElement(new TaskFilterElement(
 					TaskColumn.TITLE,
 					StringCondition.CONTAINS,
-					this.filter));
+					this.filter,
+					false));
 			searchFilter.addElement(new TaskFilterElement(
 					TaskColumn.TAGS,
 					StringCondition.CONTAINS,
-					this.filter));
+					this.filter,
+					false));
 			searchFilter.addElement(new TaskFilterElement(
 					TaskColumn.NOTE,
 					StringCondition.CONTAINS,
-					this.filter));
+					this.filter,
+					false));
 			searchFilter.addElement(new TaskFilterElement(
 					TaskColumn.CONTEXTS,
 					StringCondition.CONTAINS,
-					this.filter));
+					this.filter,
+					false));
 			searchFilter.addElement(new TaskFilterElement(
 					TaskColumn.FOLDER,
 					StringCondition.CONTAINS,
-					this.filter));
+					this.filter,
+					false));
 			searchFilter.addElement(new TaskFilterElement(
 					TaskColumn.GOALS,
 					StringCondition.CONTAINS,
-					this.filter));
+					this.filter,
+					false));
 			searchFilter.addElement(new TaskFilterElement(
 					TaskColumn.LOCATIONS,
 					StringCondition.CONTAINS,
-					this.filter));
+					this.filter,
+					false));
 		}
 		
 		if (this.tasks != null) {
@@ -230,7 +237,8 @@ public class TaskSearcherPanel extends JPanel implements SavePropertiesListener,
 				extraFilter.addElement(new TaskFilterElement(
 						TaskColumn.MODEL,
 						ModelCondition.EQUALS,
-						task));
+						task,
+						false));
 			}
 			
 			mainFilter.addFilter(extraFilter);

@@ -58,18 +58,18 @@ public enum StringCondition implements Condition<String, Object> {
 	}
 	
 	@Override
-	public boolean include(Object objectValue, Object objectTaskValue) {
+	public boolean include(Object objectValue, Object objectModelValue) {
 		String value = (objectValue == null ? null : objectValue.toString());
-		String taskValue = (objectTaskValue == null ? null : objectTaskValue.toString());
+		String modelValue = (objectModelValue == null ? null : objectModelValue.toString());
 		
 		if (value == null)
 			value = "";
 		
-		if (taskValue == null)
-			taskValue = "";
+		if (modelValue == null)
+			modelValue = "";
 		
 		String string = value.toLowerCase();
-		String taskString = taskValue.toString().toLowerCase();
+		String taskString = modelValue.toString().toLowerCase();
 		
 		switch (this) {
 			case CONTAINS:

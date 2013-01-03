@@ -93,7 +93,8 @@ public class ActionResetGeneralSearchers extends AbstractAction {
 		filter.addElement(new TaskFilterElement(
 				TaskColumn.COMPLETED,
 				StringCondition.EQUALS,
-				"false"));
+				"false",
+				false));
 		
 		TaskSearcherFactory.getInstance().create(
 				TaskSearcherType.GENERAL,
@@ -108,7 +109,8 @@ public class ActionResetGeneralSearchers extends AbstractAction {
 		filter.addElement(new TaskFilterElement(
 				TaskColumn.DUE_DATE,
 				DaysCondition.EQUALS,
-				0));
+				0,
+				false));
 		
 		TaskSearcherFactory.getInstance().create(
 				TaskSearcherType.GENERAL,
@@ -123,7 +125,8 @@ public class ActionResetGeneralSearchers extends AbstractAction {
 		filter.addElement(new TaskFilterElement(
 				TaskColumn.DUE_DATE,
 				DaysCondition.LESS_THAN_USING_TIME,
-				0));
+				0,
+				false));
 		
 		TaskSearcherFactory.getInstance().create(
 				TaskSearcherType.GENERAL,
@@ -138,11 +141,13 @@ public class ActionResetGeneralSearchers extends AbstractAction {
 		filter.addElement(new TaskFilterElement(
 				TaskColumn.DUE_DATE,
 				DaysCondition.LESS_THAN_OR_EQUALS,
-				3));
+				3,
+				false));
 		filter.addElement(new TaskFilterElement(
 				TaskColumn.PRIORITY,
 				EnumCondition.GREATER_THAN_OR_EQUALS,
-				TaskPriority.HIGH));
+				TaskPriority.HIGH,
+				false));
 		
 		TaskSearcherFactory.getInstance().create(
 				TaskSearcherType.GENERAL,
@@ -177,7 +182,8 @@ public class ActionResetGeneralSearchers extends AbstractAction {
 		filter.addElement(new TaskFilterElement(
 				TaskColumn.STAR,
 				StringCondition.EQUALS,
-				"true"));
+				"true",
+				false));
 		
 		TaskSearcherFactory.getInstance().create(
 				TaskSearcherType.GENERAL,
@@ -192,7 +198,8 @@ public class ActionResetGeneralSearchers extends AbstractAction {
 		filter.addElement(new TaskFilterElement(
 				TaskColumn.STATUS,
 				StringCondition.EQUALS,
-				"Next Action"));
+				"Next Action",
+				false));
 		
 		TaskSearcherFactory.getInstance().create(
 				TaskSearcherType.GENERAL,
@@ -207,7 +214,8 @@ public class ActionResetGeneralSearchers extends AbstractAction {
 		filter.addElement(new TaskFilterElement(
 				TaskColumn.COMPLETED,
 				StringCondition.EQUALS,
-				"true"));
+				"true",
+				false));
 		
 		TaskSearcherFactory.getInstance().create(
 				TaskSearcherType.GENERAL,

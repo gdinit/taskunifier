@@ -147,7 +147,8 @@ public class NoteFilterPanel extends JPanel {
 						NoteFilterPanel.this.filter.addElement(new NoteFilterElement(
 								NoteColumn.MODEL,
 								ModelCondition.EQUALS,
-								note));
+								note,
+								false));
 					}
 				} else if (event.getActionCommand().startsWith("ADD")) {
 					TreeNode node = (TreeNode) NoteFilterPanel.this.tree.getLastSelectedPathComponent();
@@ -159,7 +160,8 @@ public class NoteFilterPanel extends JPanel {
 						NoteFilterElement element = new NoteFilterElement(
 								NoteColumn.TITLE,
 								StringCondition.EQUALS,
-								"");
+								"",
+								false);
 						
 						((NoteFilterTreeNode) node).getFilter().addElement(
 								element);

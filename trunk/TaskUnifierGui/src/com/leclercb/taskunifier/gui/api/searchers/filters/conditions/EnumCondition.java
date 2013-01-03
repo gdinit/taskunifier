@@ -56,11 +56,11 @@ public enum EnumCondition implements Condition<Enum<?>, Enum<?>> {
 	}
 	
 	@Override
-	public boolean include(Object objectValue, Object objectTaskValue) {
+	public boolean include(Object objectValue, Object objectModelValue) {
 		Enum<?> value = (Enum<?>) objectValue;
-		Enum<?> taskValue = (Enum<?>) objectTaskValue;
+		Enum<?> modelValue = (Enum<?>) objectModelValue;
 		
-		if (value == null && taskValue == null) {
+		if (value == null && modelValue == null) {
 			switch (this) {
 				case EQUALS:
 					return true;
@@ -69,7 +69,7 @@ public enum EnumCondition implements Condition<Enum<?>, Enum<?>> {
 			}
 		}
 		
-		if (value == null || taskValue == null) {
+		if (value == null || modelValue == null) {
 			switch (this) {
 				case NOT_EQUALS:
 					return true;
@@ -80,17 +80,17 @@ public enum EnumCondition implements Condition<Enum<?>, Enum<?>> {
 		
 		switch (this) {
 			case EQUALS:
-				return taskValue.equals(value);
+				return modelValue.equals(value);
 			case GREATER_THAN:
-				return taskValue.ordinal() > value.ordinal();
+				return modelValue.ordinal() > value.ordinal();
 			case GREATER_THAN_OR_EQUALS:
-				return taskValue.ordinal() >= value.ordinal();
+				return modelValue.ordinal() >= value.ordinal();
 			case LESS_THAN:
-				return taskValue.ordinal() < value.ordinal();
+				return modelValue.ordinal() < value.ordinal();
 			case LESS_THAN_OR_EQUALS:
-				return taskValue.ordinal() <= value.ordinal();
+				return modelValue.ordinal() <= value.ordinal();
 			case NOT_EQUALS:
-				return !(taskValue.equals(value));
+				return !(modelValue.equals(value));
 		}
 		
 		return false;

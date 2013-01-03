@@ -88,7 +88,7 @@ public class TaskRuleActionApplyTemplate implements TaskRuleAction {
 			if (!t.getModelStatus().isEndUserStatus())
 				continue;
 			
-			if (!TaskUtils.showUnindentTask(t, this.filter))
+			if (!TaskUtils.showUnindentTask(t, task, this.filter))
 				continue;
 			
 			this.template.applyTo(t);

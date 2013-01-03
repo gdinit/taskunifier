@@ -105,7 +105,7 @@ public class SearcherItem extends DefaultMutableTreeNode implements SearcherNode
 		int count = 0;
 		int countOverdue = 0;
 		for (Task task : tasks) {
-			if (TaskUtils.badgeTask(task, searcher.getFilter())) {
+			if (TaskUtils.badgeTask(task, null, searcher.getFilter())) {
 				count++;
 				
 				if (!task.isCompleted() && task.isOverDue(!useDueTime))

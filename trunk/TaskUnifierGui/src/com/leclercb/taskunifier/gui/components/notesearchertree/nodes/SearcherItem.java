@@ -101,7 +101,7 @@ public class SearcherItem extends DefaultMutableTreeNode implements SearcherNode
 		
 		int count = 0;
 		for (Note note : notes) {
-			if (NoteUtils.showNote(note, searcher.getFilter())) {
+			if (NoteUtils.showNote(note, null, searcher.getFilter())) {
 				count++;
 			}
 		}

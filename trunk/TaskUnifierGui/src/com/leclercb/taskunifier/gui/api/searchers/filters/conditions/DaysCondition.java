@@ -58,7 +58,7 @@ public enum DaysCondition implements Condition<Integer, Calendar> {
 	
 	@Override
 	public Class<?> getValueType() {
-		return Integer.class;
+		return Object.class;
 	}
 	
 	@Override
@@ -67,73 +67,145 @@ public enum DaysCondition implements Condition<Integer, Calendar> {
 	}
 	
 	@Override
-	public boolean include(Object objectValue, Object objectTaskValue) {
-		Integer value = (Integer) objectValue;
-		Calendar taskValue = (Calendar) objectTaskValue;
+	public boolean include(Object objectValue, Object objectModelValue) {
+		Calendar modelValue = (Calendar) objectModelValue;
 		
-		if (value == null && taskValue == null) {
-			switch (this) {
-				case EQUALS:
-				case WEEK_EQUALS:
-				case MONTH_EQUALS:
-					return true;
-				default:
-					return false;
-			}
+		if (objectValue != null
+				&& !(objectValue instanceof Integer)
+				&& !(objectValue instanceof Calendar)) {
+			throw new IllegalArgumentException(
+					"The property is incompatible with this condition");
 		}
 		
-		if (value == null || taskValue == null) {
+		if (objectValue == null || objectValue instanceof Integer) {
+			Integer value = (Integer) objectValue;
+			
+			if (value == null && modelValue == null) {
+				switch (this) {
+					case EQUALS:
+					case WEEK_EQUALS:
+					case MONTH_EQUALS:
+						return true;
+					default:
+						return false;
+				}
+			}
+			
+			if (value == null || modelValue == null) {
+				switch (this) {
+					case TODAY:
+						if (modelValue == null)
+							return false;
+						break;
+					case NOT_EQUALS:
+					case WEEK_NOT_EQUALS:
+					case MONTH_NOT_EQUALS:
+						return true;
+					default:
+						return false;
+				}
+			}
+			
+			if (this == WEEK_EQUALS)
+				return DateUtils.getDiffInWeeks(
+						Calendar.getInstance(),
+						modelValue) == value;
+			
+			if (this == MONTH_EQUALS)
+				return DateUtils.getDiffInMonths(
+						Calendar.getInstance(),
+						modelValue) == value;
+			
+			if (this == WEEK_NOT_EQUALS)
+				return DateUtils.getDiffInWeeks(
+						Calendar.getInstance(),
+						modelValue) != value;
+			
+			if (this == MONTH_NOT_EQUALS)
+				return DateUtils.getDiffInMonths(
+						Calendar.getInstance(),
+						modelValue) != value;
+			
+			boolean useTime = (this == GREATER_THAN_USING_TIME || this == LESS_THAN_USING_TIME);
+			double diffDays = DateUtils.getDiffInDays(
+					Calendar.getInstance(),
+					modelValue,
+					useTime);
+			
 			switch (this) {
 				case TODAY:
-					if (taskValue == null)
-						return false;
-					break;
+					return diffDays == 0;
+				case EQUALS:
+					return diffDays == value;
+				case GREATER_THAN:
+					return diffDays > value;
+				case GREATER_THAN_OR_EQUALS:
+				case GREATER_THAN_USING_TIME:
+					return diffDays >= value;
+				case LESS_THAN:
+					return diffDays < value;
+				case LESS_THAN_OR_EQUALS:
+				case LESS_THAN_USING_TIME:
+					return diffDays <= value;
 				case NOT_EQUALS:
-				case WEEK_NOT_EQUALS:
-				case MONTH_NOT_EQUALS:
-					return true;
+					return diffDays != value;
 				default:
 					return false;
 			}
-		}
-		
-		if (this == WEEK_EQUALS)
-			return DateUtils.getDiffInWeeks(Calendar.getInstance(), taskValue) == value;
-		
-		if (this == MONTH_EQUALS)
-			return DateUtils.getDiffInMonths(Calendar.getInstance(), taskValue) == value;
-		
-		if (this == WEEK_NOT_EQUALS)
-			return DateUtils.getDiffInWeeks(Calendar.getInstance(), taskValue) != value;
-		
-		if (this == MONTH_NOT_EQUALS)
-			return DateUtils.getDiffInMonths(Calendar.getInstance(), taskValue) != value;
-		
-		boolean useTime = (this == GREATER_THAN_USING_TIME || this == LESS_THAN_USING_TIME);
-		double diffDays = DateUtils.getDiffInDays(
-				Calendar.getInstance(),
-				taskValue,
-				useTime);
-		
-		switch (this) {
-			case TODAY:
-				return diffDays == 0;
-			case EQUALS:
-				return diffDays == value;
-			case GREATER_THAN:
-				return diffDays > value;
-			case GREATER_THAN_OR_EQUALS:
-			case GREATER_THAN_USING_TIME:
-				return diffDays >= value;
-			case LESS_THAN:
-				return diffDays < value;
-			case LESS_THAN_OR_EQUALS:
-			case LESS_THAN_USING_TIME:
-				return diffDays <= value;
-			case NOT_EQUALS:
-				return diffDays != value;
-			default:
-				return false;
+		} else {
+			Calendar value = (Calendar) objectValue;
+			
+			if (modelValue == null) {
+				switch (this) {
+					case TODAY:
+						return false;
+					case NOT_EQUALS:
+					case WEEK_NOT_EQUALS:
+					case MONTH_NOT_EQUALS:
+						return true;
+					default:
+						return false;
+				}
+			}
+			
+			if (this == WEEK_EQUALS)
+				return DateUtils.getDiffInWeeks(value, modelValue) == 0;
+			
+			if (this == MONTH_EQUALS)
+				return DateUtils.getDiffInMonths(value, modelValue) == 0;
+			
+			if (this == WEEK_NOT_EQUALS)
+				return DateUtils.getDiffInWeeks(value, modelValue) != 0;
+			
+			if (this == MONTH_NOT_EQUALS)
+				return DateUtils.getDiffInMonths(value, modelValue) != 0;
+			
+			boolean useTime = (this == GREATER_THAN_USING_TIME || this == LESS_THAN_USING_TIME);
+			double diffDays = DateUtils.getDiffInDays(
+					value,
+					modelValue,
+					useTime);
+			
+			switch (this) {
+				case TODAY:
+					return diffDays == 0;
+				case EQUALS:
+					return diffDays == 0;
+				case GREATER_THAN:
+					return diffDays > 0;
+				case GREATER_THAN_OR_EQUALS:
+				case GREATER_THAN_USING_TIME:
+					return diffDays >= 0;
+				case LESS_THAN:
+					return diffDays < 0;
+				case LESS_THAN_OR_EQUALS:
+				case LESS_THAN_USING_TIME:
+					return diffDays <= 0;
+				case NOT_EQUALS:
+					return diffDays != 0;
+				default:
+					return false;
+			}
 		}
 	}
 	

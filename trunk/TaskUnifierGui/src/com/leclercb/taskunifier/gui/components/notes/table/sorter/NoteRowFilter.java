@@ -65,7 +65,7 @@ public class NoteRowFilter extends RowFilter<TableModel, Integer> {
 	}
 	
 	public boolean include(Note note) {
-		return NoteUtils.showNote(note, this.filter);
+		return NoteUtils.showNote(note, null, this.filter);
 	}
 	
 }
