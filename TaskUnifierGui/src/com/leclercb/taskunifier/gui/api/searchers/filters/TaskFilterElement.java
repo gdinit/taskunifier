@@ -57,8 +57,9 @@ public class TaskFilterElement extends FilterElement<Task, TaskColumn, TaskFilte
 	public TaskFilterElement(
 			TaskColumn property,
 			Condition<?, ?> condition,
-			Object value) {
-		super(property, condition, value);
+			Object value,
+			boolean compareModel) {
+		super(property, condition, value, compareModel);
 	}
 	
 	@Override
@@ -66,11 +67,20 @@ public class TaskFilterElement extends FilterElement<Task, TaskColumn, TaskFilte
 		return new TaskFilterElement(
 				this.getProperty(),
 				this.getCondition(),
-				this.getValue());
+				this.getValue(),
+				this.isCompareModel());
+	}
+	
+	@Override
+	public Object getComparedModelValue(Task comparedModel) {
+		return this.getProperty().getProperty(comparedModel);
 	}
 	
 	@Override
 	public String toString() {
+		if (this.isCompareModel())
+			return super.toString();
+		
 		String str = this.getProperty()
 				+ " "
 				+ TranslationsUtils.translateFilterCondition(this.getCondition())

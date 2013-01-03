@@ -229,7 +229,10 @@ public final class NoteUtils {
 		return content;
 	}
 	
-	public static boolean showNote(Note note, NoteFilter filter) {
+	public static boolean showNote(
+			Note note,
+			Note comparedNote,
+			NoteFilter filter) {
 		if (!note.getModelStatus().isEndUserStatus()) {
 			return false;
 		}
@@ -237,7 +240,7 @@ public final class NoteUtils {
 		if (filter == null)
 			return true;
 		
-		return filter.include(note);
+		return filter.include(note, comparedNote);
 	}
 	
 }

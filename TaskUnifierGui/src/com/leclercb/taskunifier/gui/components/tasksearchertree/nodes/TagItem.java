@@ -97,7 +97,8 @@ public class TagItem extends DefaultMutableTreeNode implements SearcherNode {
 		filter.addElement(new TaskFilterElement(
 				TaskColumn.TAGS,
 				StringCondition.CONTAINS,
-				this.getTag().toString()));
+				this.getTag().toString(),
+				false));
 		filter.addFilter(defaultTaskSearcher.getFilter());
 		
 		this.searcher = new TaskSearcher(
@@ -141,7 +142,7 @@ public class TagItem extends DefaultMutableTreeNode implements SearcherNode {
 		int count = 0;
 		int countOverdue = 0;
 		for (Task task : tasks) {
-			if (TaskUtils.badgeTask(task, searcher.getFilter())) {
+			if (TaskUtils.badgeTask(task, null, searcher.getFilter())) {
 				count++;
 				
 				if (!task.isCompleted() && task.isOverDue(!useDueTime))

@@ -78,7 +78,8 @@ public class ActionAddTaskSearcherSelectedTasks extends AbstractViewAction {
 			filter.addElement(new TaskFilterElement(
 					TaskColumn.MODEL,
 					ModelCondition.EQUALS,
-					task));
+					task,
+					false));
 		}
 		
 		mainFilter.addFilter(filter);

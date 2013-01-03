@@ -90,6 +90,7 @@ public class TaskFilterXMLCoder extends AbstractXMLCoder<TaskFilter> {
 					String conditionClass = null;
 					String enumName = null;
 					String valueStr = null;
+					boolean compareModel = false;
 					
 					for (int j = 0; j < nElement.getLength(); j++) {
 						if (nElement.item(j).getNodeName().equals("column")) {
@@ -125,6 +126,11 @@ public class TaskFilterXMLCoder extends AbstractXMLCoder<TaskFilter> {
 							if (valueStr.equals(NULL_STRING_VALUE))
 								valueStr = null;
 						}
+						
+						if (nElement.item(j).getNodeName().equals(
+								"comparemodel")) {
+							compareModel = Boolean.parseBoolean(nElement.item(j).getTextContent());
+						}
 					}
 					
 					if (column != null
@@ -140,7 +146,8 @@ public class TaskFilterXMLCoder extends AbstractXMLCoder<TaskFilter> {
 						element = new TaskFilterElement(
 								column,
 								condition,
-								value);
+								value,
+								compareModel);
 					} else if (column != null
 							&& conditionClass.equals("DaysCondition")) {
 						DaysCondition condition = DaysCondition.valueOf(enumName);
@@ -153,7 +160,8 @@ public class TaskFilterXMLCoder extends AbstractXMLCoder<TaskFilter> {
 						element = new TaskFilterElement(
 								column,
 								condition,
-								value);
+								value,
+								compareModel);
 					} else if (column != null
 							&& conditionClass.equals("StringCondition")) {
 						StringCondition condition = StringCondition.valueOf(enumName);
@@ -166,7 +174,8 @@ public class TaskFilterXMLCoder extends AbstractXMLCoder<TaskFilter> {
 						element = new TaskFilterElement(
 								column,
 								condition,
-								value);
+								value,
+								compareModel);
 					} else if (column != null
 							&& conditionClass.equals("NumberCondition")) {
 						NumberCondition condition = NumberCondition.valueOf(enumName);
@@ -179,7 +188,8 @@ public class TaskFilterXMLCoder extends AbstractXMLCoder<TaskFilter> {
 						element = new TaskFilterElement(
 								column,
 								condition,
-								value);
+								value,
+								compareModel);
 					} else if (column != null
 							&& conditionClass.equals("EnumCondition")) {
 						Condition<?, ?> condition = EnumCondition.valueOf(enumName);
@@ -222,7 +232,8 @@ public class TaskFilterXMLCoder extends AbstractXMLCoder<TaskFilter> {
 						element = new TaskFilterElement(
 								column,
 								condition,
-								value);
+								value,
+								compareModel);
 					} else if (column != null
 							&& conditionClass.equals("ModelCondition")) {
 						ModelCondition condition = ModelCondition.valueOf(enumName);
@@ -257,7 +268,8 @@ public class TaskFilterXMLCoder extends AbstractXMLCoder<TaskFilter> {
 							element = new TaskFilterElement(
 									column,
 									condition,
-									value);
+									value,
+									compareModel);
 					}
 					
 					if (element != null)
@@ -338,6 +350,10 @@ public class TaskFilterXMLCoder extends AbstractXMLCoder<TaskFilter> {
 			
 			if (e.getValue() == null)
 				value.setTextContent(NULL_STRING_VALUE);
+			
+			Element compareModel = document.createElement("comparemodel");
+			compareModel.setTextContent(e.isCompareModel() + "");
+			element.appendChild(compareModel);
 		}
 		
 		for (TaskFilter f : filter.getFilters()) {

@@ -32,7 +32,7 @@
  */
 package com.leclercb.taskunifier.gui.api.searchers.filters.conditions;
 
-public interface Condition<ValueType, TaskValueType> {
+public interface Condition<ValueType, modelValueType> {
 	
 	public abstract Class<?> getValueType();
 	
@@ -40,6 +40,6 @@ public interface Condition<ValueType, TaskValueType> {
 	
 	public abstract String name();
 	
-	public abstract boolean include(Object value, Object taskValue);
+	public abstract boolean include(Object value, Object modelValue);
 	
 }

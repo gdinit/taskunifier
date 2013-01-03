@@ -55,11 +55,11 @@ public enum CalendarCondition implements Condition<Calendar, Calendar> {
 	}
 	
 	@Override
-	public boolean include(Object objectValue, Object objectTaskValue) {
+	public boolean include(Object objectValue, Object objectModelValue) {
 		Calendar value = (Calendar) objectValue;
-		Calendar taskValue = (Calendar) objectTaskValue;
+		Calendar modelValue = (Calendar) objectModelValue;
 		
-		if (value == null && taskValue == null) {
+		if (value == null && modelValue == null) {
 			switch (this) {
 				case EQUALS:
 					return true;
@@ -68,17 +68,17 @@ public enum CalendarCondition implements Condition<Calendar, Calendar> {
 			}
 		}
 		
-		if (value == null || taskValue == null) {
+		if (value == null || modelValue == null) {
 			return false;
 		}
 		
 		switch (this) {
 			case AFTER:
-				return taskValue.compareTo(value) > 0;
+				return modelValue.compareTo(value) > 0;
 			case BEFORE:
-				return taskValue.compareTo(value) < 0;
+				return modelValue.compareTo(value) < 0;
 			case EQUALS:
-				return taskValue.equals(value);
+				return modelValue.equals(value);
 		}
 		
 		return false;

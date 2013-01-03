@@ -216,15 +216,15 @@ public abstract class Filter<M extends Model, MP extends ModelProperties<M>, F e
 		}
 	}
 	
-	public boolean include(M model) {
+	public boolean include(M model, M comparedModel) {
 		if (this.link == FilterLink.AND) {
 			for (FE element : this.elements) {
-				if (!element.include(model))
+				if (!element.include(model, comparedModel))
 					return false;
 			}
 			
 			for (F filter : this.filters) {
-				if (!filter.include(model))
+				if (!filter.include(model, comparedModel))
 					return false;
 			}
 			
@@ -234,12 +234,12 @@ public abstract class Filter<M extends Model, MP extends ModelProperties<M>, F e
 				return true;
 			
 			for (FE element : this.elements) {
-				if (element.include(model))
+				if (element.include(model, comparedModel))
 					return true;
 			}
 			
 			for (F filter : this.filters) {
-				if (filter.include(model))
+				if (filter.include(model, comparedModel))
 					return true;
 			}
 			

@@ -556,9 +556,13 @@ public final class TaskUtils {
 		return importance;
 	}
 	
-	public static boolean badgeTask(Task task, TaskFilter filter) {
+	public static boolean badgeTask(
+			Task task,
+			Task comparedTask,
+			TaskFilter filter) {
 		return showTask(
 				task,
+				comparedTask,
 				filter,
 				containsCompleted(filter),
 				true,
@@ -566,9 +570,13 @@ public final class TaskUtils {
 				true);
 	}
 	
-	public static boolean showTask(Task task, TaskFilter filter) {
+	public static boolean showTask(
+			Task task,
+			Task comparedTask,
+			TaskFilter filter) {
 		return showTask(
 				task,
+				comparedTask,
 				filter,
 				containsCompleted(filter),
 				false,
@@ -576,9 +584,13 @@ public final class TaskUtils {
 				true);
 	}
 	
-	public static boolean showUnindentTask(Task task, TaskFilter filter) {
+	public static boolean showUnindentTask(
+			Task task,
+			Task comparedTask,
+			TaskFilter filter) {
 		return showTask(
 				task,
+				comparedTask,
 				filter,
 				containsCompleted(filter),
 				true,
@@ -588,6 +600,7 @@ public final class TaskUtils {
 	
 	private static boolean showTask(
 			Task task,
+			Task comparedTask,
 			TaskFilter filter,
 			boolean containsCompleted,
 			boolean skipParentCheck,
@@ -605,6 +618,7 @@ public final class TaskUtils {
 			for (Task child : children) {
 				if (showTask(
 						child,
+						comparedTask,
 						filter,
 						containsCompleted,
 						false,
@@ -641,6 +655,7 @@ public final class TaskUtils {
 		if (!skipShowIfParentShown && task.getParent() != null) {
 			if (showTask(
 					task.getParent(),
+					comparedTask,
 					filter,
 					containsCompleted,
 					true,
@@ -652,7 +667,7 @@ public final class TaskUtils {
 		if (filter == null)
 			return true;
 		
-		return filter.include(task);
+		return filter.include(task, comparedTask);
 	}
 	
 	private static boolean containsCompleted(TaskFilter filter) {

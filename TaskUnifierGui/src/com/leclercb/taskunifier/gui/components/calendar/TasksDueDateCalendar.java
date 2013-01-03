@@ -90,7 +90,7 @@ public class TasksDueDateCalendar extends TasksCalendar {
 		TaskSearcher searcher = this.view.getTaskSearcherView().getSelectedTaskSearcher();
 		
 		if (searcher != null
-				&& !TaskUtils.showUnindentTask(task, searcher.getFilter()))
+				&& !TaskUtils.showUnindentTask(task, null, searcher.getFilter()))
 			return null;
 		
 		Calendar dueDate = task.getDueDate();

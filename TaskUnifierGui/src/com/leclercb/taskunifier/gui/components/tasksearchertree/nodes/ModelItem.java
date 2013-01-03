@@ -165,7 +165,8 @@ public class ModelItem extends DefaultMutableTreeNode implements SearcherNode, P
 		filter.addElement(new TaskFilterElement(
 				column,
 				ModelCondition.EQUALS,
-				this.getModel()));
+				this.getModel(),
+				false));
 		filter.addFilter(defaultTaskSearcher.getFilter());
 		
 		String title = Translations.getString("searcherlist.none");
@@ -226,7 +227,7 @@ public class ModelItem extends DefaultMutableTreeNode implements SearcherNode, P
 		int count = 0;
 		int countOverdue = 0;
 		for (Task task : tasks) {
-			if (TaskUtils.badgeTask(task, searcher.getFilter())) {
+			if (TaskUtils.badgeTask(task, null, searcher.getFilter())) {
 				count++;
 				
 				if (!task.isCompleted() && task.isOverDue(!useDueTime))

@@ -42,6 +42,7 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -70,24 +71,39 @@ import com.leclercb.taskunifier.gui.commons.values.StringValueModel;
 import com.leclercb.taskunifier.gui.commons.values.StringValueTaskPriority;
 import com.leclercb.taskunifier.gui.commons.values.StringValueTaskRepeatFrom;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
 
 public class TaskFilterElementPanel extends JPanel {
 	
 	private TaskFilterElement element;
 	
+	private boolean allowCompareModel;
+	
 	private JXComboBox elementColumn;
 	private JXComboBox elementCondition;
 	private JXComboBox elementValueCb;
 	private JTextField elementValueTf;
+	private JCheckBox elementCompareModel;
 	
 	public TaskFilterElementPanel() {
+		this.allowCompareModel = false;
+		
 		this.initialize();
 		this.setElement(null);
 	}
 	
 	public TaskFilterElement getElement() {
 		return this.element;
+	}
+	
+	public boolean isAllowCompareModel() {
+		return this.allowCompareModel;
+	}
+	
+	public void setAllowCompareModel(boolean allowCompareModel) {
+		this.allowCompareModel = allowCompareModel;
+		this.elementCompareModel.setVisible(allowCompareModel);
 	}
 	
 	public void saveElement() {
@@ -161,18 +177,20 @@ public class TaskFilterElementPanel extends JPanel {
 			this.element.checkAndSet(
 					(TaskColumn) this.elementColumn.getSelectedItem(),
 					(Condition<?, ?>) this.elementCondition.getSelectedItem(),
-					value);
+					value,
+					this.elementCompareModel.isSelected());
 		}
 	}
 	
 	public void setElement(TaskFilterElement element) {
 		if (element == null)
-			this.resetFields(null, null, null);
+			this.resetFields(null, null, null, false);
 		else
 			this.resetFields(
 					element.getProperty(),
 					element.getCondition(),
-					element.getValue());
+					element.getValue(),
+					element.isCompareModel());
 		
 		this.element = element;
 	}
@@ -180,9 +198,13 @@ public class TaskFilterElementPanel extends JPanel {
 	private void resetFields(
 			TaskColumn column,
 			Condition<?, ?> condition,
-			Object value) {
+			Object value,
+			boolean compareModel) {
 		TaskFilterElement currentElement = this.element;
 		this.element = null;
+		
+		this.elementCompareModel.setSelected(compareModel);
+		this.elementCompareModel.setEnabled(column != null);
 		
 		this.elementValueCb.setVisible(false);
 		this.elementValueTf.setVisible(false);
@@ -418,7 +440,8 @@ public class TaskFilterElementPanel extends JPanel {
 				TaskFilterElementPanel.this.resetFields(
 						(TaskColumn) TaskFilterElementPanel.this.elementColumn.getSelectedItem(),
 						null,
-						null);
+						null,
+						TaskFilterElementPanel.this.element.isCompareModel());
 			}
 			
 		});
@@ -453,7 +476,8 @@ public class TaskFilterElementPanel extends JPanel {
 				TaskFilterElementPanel.this.resetFields(
 						(TaskColumn) TaskFilterElementPanel.this.elementColumn.getSelectedItem(),
 						(Condition<?, ?>) TaskFilterElementPanel.this.elementCondition.getSelectedItem(),
-						null);
+						null,
+						TaskFilterElementPanel.this.element.isCompareModel());
 			}
 			
 		});
@@ -467,10 +491,15 @@ public class TaskFilterElementPanel extends JPanel {
 		this.elementValueTf = new JTextField();
 		this.elementValueTf.setEnabled(false);
 		
+		this.elementCompareModel = new JCheckBox(
+				Translations.getString("searcheredit.element.compare_model"));
+		this.elementCompareModel.setVisible(this.allowCompareModel);
+		
 		JPanel valuePanel = new JPanel();
 		valuePanel.setLayout(new BoxLayout(valuePanel, BoxLayout.Y_AXIS));
 		valuePanel.add(this.elementValueCb);
 		valuePanel.add(this.elementValueTf);
+		valuePanel.add(this.elementCompareModel);
 		
 		builder.append(valuePanel);
 		

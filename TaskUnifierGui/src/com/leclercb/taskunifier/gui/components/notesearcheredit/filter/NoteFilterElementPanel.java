@@ -42,6 +42,7 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -59,24 +60,39 @@ import com.leclercb.taskunifier.gui.commons.values.IconValueModel;
 import com.leclercb.taskunifier.gui.commons.values.StringValueFilterCondition;
 import com.leclercb.taskunifier.gui.commons.values.StringValueModel;
 import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
 
 public class NoteFilterElementPanel extends JPanel {
 	
 	private NoteFilterElement element;
 	
+	private boolean allowCompareModel;
+	
 	private JXComboBox elementColumn;
 	private JXComboBox elementCondition;
 	private JXComboBox elementValueCb;
 	private JTextField elementValueTf;
+	private JCheckBox elementCompareModel;
 	
 	public NoteFilterElementPanel() {
+		this.allowCompareModel = false;
+		
 		this.initialize();
 		this.setElement(null);
 	}
 	
 	public NoteFilterElement getElement() {
 		return this.element;
+	}
+	
+	public boolean isAllowCompareModel() {
+		return this.allowCompareModel;
+	}
+	
+	public void setAllowCompareModel(boolean allowCompareModel) {
+		this.allowCompareModel = allowCompareModel;
+		this.elementCompareModel.setVisible(allowCompareModel);
 	}
 	
 	public void saveElement() {
@@ -114,18 +130,20 @@ public class NoteFilterElementPanel extends JPanel {
 			this.element.checkAndSet(
 					(NoteColumn) this.elementColumn.getSelectedItem(),
 					(Condition<?, ?>) this.elementCondition.getSelectedItem(),
-					value);
+					value,
+					this.elementCompareModel.isSelected());
 		}
 	}
 	
 	public void setElement(NoteFilterElement element) {
 		if (element == null)
-			this.resetFields(null, null, null);
+			this.resetFields(null, null, null, false);
 		else
 			this.resetFields(
 					element.getProperty(),
 					element.getCondition(),
-					element.getValue());
+					element.getValue(),
+					element.isCompareModel());
 		
 		this.element = element;
 	}
@@ -133,9 +151,13 @@ public class NoteFilterElementPanel extends JPanel {
 	private void resetFields(
 			NoteColumn column,
 			Condition<?, ?> condition,
-			Object value) {
+			Object value,
+			boolean compareModel) {
 		NoteFilterElement currentElement = this.element;
 		this.element = null;
+		
+		this.elementCompareModel.setSelected(compareModel);
+		this.elementCompareModel.setEnabled(column != null);
 		
 		this.elementValueCb.setVisible(false);
 		this.elementValueTf.setVisible(false);
@@ -257,7 +279,8 @@ public class NoteFilterElementPanel extends JPanel {
 				NoteFilterElementPanel.this.resetFields(
 						(NoteColumn) NoteFilterElementPanel.this.elementColumn.getSelectedItem(),
 						null,
-						null);
+						null,
+						NoteFilterElementPanel.this.element.isCompareModel());
 			}
 			
 		});
@@ -288,7 +311,8 @@ public class NoteFilterElementPanel extends JPanel {
 				NoteFilterElementPanel.this.resetFields(
 						(NoteColumn) NoteFilterElementPanel.this.elementColumn.getSelectedItem(),
 						(Condition<?, ?>) NoteFilterElementPanel.this.elementCondition.getSelectedItem(),
-						null);
+						null,
+						NoteFilterElementPanel.this.element.isCompareModel());
 			}
 			
 		});
@@ -302,10 +326,15 @@ public class NoteFilterElementPanel extends JPanel {
 		this.elementValueTf = new JTextField();
 		this.elementValueTf.setEnabled(false);
 		
+		this.elementCompareModel = new JCheckBox(
+				Translations.getString("searcheredit.element.compare_model"));
+		this.elementCompareModel.setVisible(this.allowCompareModel);
+		
 		JPanel valuePanel = new JPanel();
 		valuePanel.setLayout(new BoxLayout(valuePanel, BoxLayout.Y_AXIS));
 		valuePanel.add(this.elementValueCb);
 		valuePanel.add(this.elementValueTf);
+		valuePanel.add(this.elementCompareModel);
 		
 		builder.append(valuePanel);
 		

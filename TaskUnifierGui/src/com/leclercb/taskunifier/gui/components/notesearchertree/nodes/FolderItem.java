@@ -102,7 +102,8 @@ public class FolderItem extends DefaultMutableTreeNode implements SearcherNode, 
 		filter.addElement(new NoteFilterElement(
 				NoteColumn.FOLDER,
 				ModelCondition.EQUALS,
-				folder));
+				folder,
+				false));
 		filter.addFilter(defaultNoteSearcher.getFilter());
 		
 		String title = Translations.getString("searcherlist.none");
@@ -159,7 +160,7 @@ public class FolderItem extends DefaultMutableTreeNode implements SearcherNode, 
 		
 		int count = 0;
 		for (Note note : notes) {
-			if (NoteUtils.showNote(note, searcher.getFilter())) {
+			if (NoteUtils.showNote(note, null, searcher.getFilter())) {
 				count++;
 			}
 		}
