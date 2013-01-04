@@ -85,7 +85,7 @@ public class GuiContact extends Contact implements GuiModel {
 		
 		Color oldColor = this.color;
 		this.color = color;
-		this.updateProperty(PROP_COLOR, oldColor, color, false);
+		this.updateProperty(PROP_COLOR, oldColor, color, false, false);
 	}
 	
 }

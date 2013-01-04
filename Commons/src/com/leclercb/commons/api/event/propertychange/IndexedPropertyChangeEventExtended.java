@@ -30,62 +30,37 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.api.models;
+package com.leclercb.commons.api.event.propertychange;
 
-import java.awt.Color;
+import java.beans.IndexedPropertyChangeEvent;
 
-import com.leclercb.taskunifier.api.models.Location;
-import com.leclercb.taskunifier.api.models.ModelId;
-import com.leclercb.taskunifier.api.models.beans.LocationBean;
-import com.leclercb.taskunifier.api.models.beans.ModelBean;
-import com.leclercb.taskunifier.gui.api.models.beans.GuiLocationBean;
-
-public class GuiLocation extends Location implements GuiModel {
+public class IndexedPropertyChangeEventExtended extends IndexedPropertyChangeEvent {
 	
-	private Color color;
+	private boolean silent;
 	
-	public GuiLocation(LocationBean bean, boolean loadReferenceIds) {
-		super(bean, loadReferenceIds);
+	public IndexedPropertyChangeEventExtended(
+			Object source,
+			String propertyName,
+			Object oldValue,
+			Object newValue,
+			int index) {
+		this(source, propertyName, oldValue, newValue, index, false);
 	}
 	
-	public GuiLocation(String title) {
-		super(title);
-	}
-	
-	public GuiLocation(ModelId modelId, String title) {
-		super(modelId, title);
-	}
-	
-	@Override
-	public void loadBean(ModelBean bean, boolean loadReferenceIds) {
-		if (bean instanceof GuiLocationBean)
-			this.setColor(((GuiLocationBean) bean).getColor());
+	public IndexedPropertyChangeEventExtended(
+			Object source,
+			String propertyName,
+			Object oldValue,
+			Object newValue,
+			int index,
+			boolean silent) {
+		super(source, propertyName, oldValue, newValue, index);
 		
-		super.loadBean(bean, loadReferenceIds);
+		this.silent = silent;
 	}
 	
-	@Override
-	public GuiLocationBean toBean() {
-		GuiLocationBean bean = (GuiLocationBean) super.toBean();
-		
-		bean.setColor(this.getColor());
-		
-		return bean;
-	}
-	
-	@Override
-	public Color getColor() {
-		return this.color;
-	}
-	
-	@Override
-	public void setColor(Color color) {
-		if (!this.checkBeforeSet(this.getColor(), color))
-			return;
-		
-		Color oldColor = this.color;
-		this.color = color;
-		this.updateProperty(PROP_COLOR, oldColor, color, false, false);
+	public boolean isSilent() {
+		return this.silent;
 	}
 	
 }

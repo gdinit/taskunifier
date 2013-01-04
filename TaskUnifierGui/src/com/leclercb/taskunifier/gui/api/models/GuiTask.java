@@ -96,7 +96,7 @@ public class GuiTask extends Task implements GuiModel {
 		
 		Color oldColor = this.color;
 		this.color = color;
-		this.updateProperty(PROP_COLOR, oldColor, color, false);
+		this.updateProperty(PROP_COLOR, oldColor, color, false, false);
 	}
 	
 	public boolean isShowChildren() {
@@ -113,6 +113,7 @@ public class GuiTask extends Task implements GuiModel {
 				PROP_SHOW_CHILDREN,
 				oldShowChildren,
 				showChildren,
+				false,
 				false);
 	}
 	

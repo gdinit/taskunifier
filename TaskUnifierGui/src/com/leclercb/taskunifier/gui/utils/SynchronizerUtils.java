@@ -43,6 +43,7 @@ import java.util.logging.Level;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.leclercb.commons.api.event.propertychange.PropertyChangeEventExtended;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
@@ -98,18 +99,25 @@ public final class SynchronizerUtils {
 							Task task = (Task) evt.getSource();
 							
 							if (task != null) {
-								Synchronizing.getInstance().setSynchronizing(
-										true);
+								boolean silent = false;
 								
-								try {
-									setTaskRulesEnabled(false);
-									TaskRuleFactory.getInstance().execute(
-											task, 
-											TaskColumn.parsePropertyName(evt.getPropertyName()));
-								} finally {
-									setTaskRulesEnabled(true);
+								if (evt instanceof PropertyChangeEventExtended)
+									silent = ((PropertyChangeEventExtended) evt).isSilent();
+								
+								if (!silent) {
 									Synchronizing.getInstance().setSynchronizing(
-											false);
+											true);
+									
+									try {
+										setTaskRulesEnabled(false);
+										TaskRuleFactory.getInstance().execute(
+												task,
+												TaskColumn.parsePropertyName(evt.getPropertyName()));
+									} finally {
+										setTaskRulesEnabled(true);
+										Synchronizing.getInstance().setSynchronizing(
+												false);
+									}
 								}
 							}
 						}

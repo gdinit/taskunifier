@@ -130,6 +130,10 @@ public class Note extends AbstractModel implements ModelNote, PropertyChangeList
 	}
 	
 	public void setFolder(Folder folder) {
+		this.setFolder(folder, false);
+	}
+	
+	private void setFolder(Folder folder, boolean silent) {
 		if (!this.checkBeforeSet(this.getFolder(), folder))
 			return;
 		
@@ -151,7 +155,7 @@ public class Note extends AbstractModel implements ModelNote, PropertyChangeList
 		if (this.folder != null)
 			this.folder.addPropertyChangeListener(this);
 		
-		this.updateProperty(PROP_FOLDER, oldFolder, folder);
+		this.updateProperty(PROP_FOLDER, oldFolder, folder, silent);
 	}
 	
 	@Override
@@ -176,7 +180,7 @@ public class Note extends AbstractModel implements ModelNote, PropertyChangeList
 			
 			if (folder.getModelStatus().equals(ModelStatus.TO_DELETE)
 					|| folder.getModelStatus().equals(ModelStatus.DELETED))
-				this.setFolder(null);
+				this.setFolder(null, true);
 		}
 	}
 	
