@@ -36,6 +36,8 @@ import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -75,9 +77,21 @@ public class NoteSearcherEditDialog extends JDialog {
 		this.setSize(700, 500);
 		this.setResizable(true);
 		this.setLayout(new BorderLayout());
+		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		
 		if (this.getOwner() != null)
 			this.setLocationRelativeTo(this.getOwner());
+		
+		this.addWindowListener(new WindowAdapter() {
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				NoteSearcherEditDialog.this.searcherEditPanel.close();
+				ViewUtils.refreshNotes();
+				NoteSearcherEditDialog.this.dispose();
+			}
+			
+		});
 		
 		JXHeader header = new JXHeader();
 		header.setTitle(Translations.getString("header.title.edit_searcher"));
