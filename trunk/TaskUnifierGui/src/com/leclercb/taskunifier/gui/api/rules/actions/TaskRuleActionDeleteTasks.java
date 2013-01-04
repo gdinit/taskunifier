@@ -92,6 +92,7 @@ public class TaskRuleActionDeleteTasks implements TaskRuleAction {
 					"description");
 			
 			TASK_FILTER_PANEL = new TaskFilterEditPanel();
+			TASK_FILTER_PANEL.setAllowCompareModel(true);
 			TASK_FILTER_PANEL.setBorder(new EmptyBorder(5, 5, 5, 5));
 			
 			DIALOG.addTab(

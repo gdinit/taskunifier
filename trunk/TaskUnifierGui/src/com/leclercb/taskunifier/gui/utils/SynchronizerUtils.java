@@ -80,33 +80,33 @@ public final class SynchronizerUtils {
 						if (TASK_REPEAT_ENABLED) {
 							Task task = (Task) evt.getSource();
 							
-							if (task == null || !task.isCompleted())
-								return;
-							
-							Synchronizing.getInstance().setSynchronizing(true);
-							
-							try {
-								getSynchronizerPlugin().getSynchronizerApi().createRepeatTask(
-										task);
-							} finally {
+							if (task != null && task.isCompleted()) {
 								Synchronizing.getInstance().setSynchronizing(
-										false);
+										true);
+								
+								try {
+									getSynchronizerPlugin().getSynchronizerApi().createRepeatTask(
+											task);
+								} finally {
+									Synchronizing.getInstance().setSynchronizing(
+											false);
+								}
 							}
 						}
 						
 						if (TASK_RULES_ENABLED) {
 							Task task = (Task) evt.getSource();
 							
-							if (task == null)
-								return;
-							
-							Synchronizing.getInstance().setSynchronizing(true);
-							
-							try {
-								TaskRuleFactory.getInstance().execute(task);
-							} finally {
+							if (task != null) {
 								Synchronizing.getInstance().setSynchronizing(
-										false);
+										true);
+								
+								try {
+									TaskRuleFactory.getInstance().execute(task);
+								} finally {
+									Synchronizing.getInstance().setSynchronizing(
+											false);
+								}
 							}
 						}
 					}

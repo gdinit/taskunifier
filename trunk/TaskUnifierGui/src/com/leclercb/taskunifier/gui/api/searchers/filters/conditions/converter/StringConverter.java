@@ -30,66 +30,38 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.taskruleedit;
+package com.leclercb.taskunifier.gui.api.searchers.filters.conditions.converter;
 
-import java.awt.BorderLayout;
+import com.thoughtworks.xstream.converters.SingleValueConverter;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-
-import com.leclercb.taskunifier.gui.api.rules.TaskRule;
-import com.leclercb.taskunifier.gui.components.taskruleedit.rule.TaskRulePanel;
-import com.leclercb.taskunifier.gui.components.tasksearcheredit.filter.TaskFilterEditPanel;
-import com.leclercb.taskunifier.gui.translations.Translations;
-
-public class TaskRuleEditPanel extends JPanel {
+public class StringConverter implements SingleValueConverter {
 	
-	private TaskRulePanel rulePanel;
-	private TaskFilterEditPanel filterEditPanel;
+	public static StringConverter INSTANCE = new StringConverter();
 	
-	public TaskRuleEditPanel() {
-		this.initialize();
+	public StringConverter() {
+		
 	}
 	
-	public void setRule(TaskRule rule) {
-		this.rulePanel.setRule(rule);
-		this.filterEditPanel.setFilter((rule == null ? null : rule.getFilter()));
+	@SuppressWarnings("rawtypes")
+	@Override
+	public boolean canConvert(Class cls) {
+		return Object.class.isAssignableFrom(cls);
 	}
 	
-	public JTextField getRuleTitle() {
-		return this.rulePanel.getRuleTitle();
+	@Override
+	public Object fromString(String value) {
+		if (value == null || value.length() == 0)
+			return null;
+		
+		return value;
 	}
 	
-	private void initialize() {
-		this.setLayout(new BorderLayout());
+	@Override
+	public String toString(Object value) {
+		if (value == null)
+			return null;
 		
-		this.rulePanel = new TaskRulePanel();
-		this.filterEditPanel = new TaskFilterEditPanel();
-		
-		this.rulePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		this.filterEditPanel.setBorder(BorderFactory.createEmptyBorder(
-				5,
-				5,
-				5,
-				5));
-		
-		JTabbedPane tabbedPane = new JTabbedPane();
-		
-		tabbedPane.addTab(
-				Translations.getString("ruleedit.tab.general"),
-				this.rulePanel);
-		
-		tabbedPane.addTab(
-				Translations.getString("ruleedit.tab.filter"),
-				this.filterEditPanel);
-		
-		this.add(tabbedPane, BorderLayout.CENTER);
-	}
-	
-	public void close() {
-		this.filterEditPanel.close();
+		return value.toString();
 	}
 	
 }

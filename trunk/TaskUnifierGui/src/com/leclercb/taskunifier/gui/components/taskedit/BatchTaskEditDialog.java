@@ -116,11 +116,6 @@ public class BatchTaskEditDialog extends TUDialog {
 		
 		this.loadWindowSettings("window.task_edit");
 		
-		this.header = new JXHeader();
-		this.header.setTitle(Translations.getString("header.title.batch_edit_task"));
-		this.header.setDescription(Translations.getString("header.description.batch_edit_task"));
-		this.header.setIcon(ImageUtils.getResourceImage("edit.png", 32, 32));
-		
 		this.addWindowListener(new WindowAdapter() {
 			
 			@Override
@@ -132,6 +127,11 @@ public class BatchTaskEditDialog extends TUDialog {
 			}
 			
 		});
+		
+		this.header = new JXHeader();
+		this.header.setTitle(Translations.getString("header.title.batch_edit_task"));
+		this.header.setDescription(Translations.getString("header.description.batch_edit_task"));
+		this.header.setIcon(ImageUtils.getResourceImage("edit.png", 32, 32));
 		
 		this.batchTaskEditPanel = new BatchTaskEditPanel();
 		this.batchTaskEditPanel.setBorder(BorderFactory.createEmptyBorder(

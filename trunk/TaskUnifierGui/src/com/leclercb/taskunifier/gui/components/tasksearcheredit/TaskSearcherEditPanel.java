@@ -37,28 +37,24 @@ import java.awt.BorderLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.TreeNode;
 
+import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
-import com.leclercb.taskunifier.gui.components.tasksearcheredit.filter.TaskFilterElementPanel;
-import com.leclercb.taskunifier.gui.components.tasksearcheredit.filter.TaskFilterElementTreeNode;
-import com.leclercb.taskunifier.gui.components.tasksearcheredit.filter.TaskFilterPanel;
+import com.leclercb.taskunifier.gui.components.tasksearcheredit.filter.TaskFilterEditPanel;
 import com.leclercb.taskunifier.gui.components.tasksearcheredit.searcher.TaskSearcherPanel;
 import com.leclercb.taskunifier.gui.components.tasksearcheredit.sorter.TaskSorterPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public class TaskSearcherEditPanel extends JPanel implements TreeSelectionListener {
+public class TaskSearcherEditPanel extends JPanel {
 	
 	private TaskSearcher searcher;
 	
 	private TaskSearcherPanel searcherPanel;
-	private TaskFilterElementPanel elementPanel;
 	private TaskSorterPanel sorterPanel;
-	private TaskFilterPanel filterPanel;
+	private TaskFilterEditPanel filterEditPanel;
 	
 	public TaskSearcherEditPanel(TaskSearcher searcher, boolean showInfoPanel) {
+		CheckUtils.isNotNull(searcher);
 		this.searcher = searcher;
 		
 		this.initialize(showInfoPanel);
@@ -68,21 +64,17 @@ public class TaskSearcherEditPanel extends JPanel implements TreeSelectionListen
 		this.setLayout(new BorderLayout());
 		
 		this.searcherPanel = new TaskSearcherPanel(this.searcher);
-		this.elementPanel = new TaskFilterElementPanel();
 		this.sorterPanel = new TaskSorterPanel(this.searcher.getSorter());
-		
-		this.filterPanel = new TaskFilterPanel();
-		this.filterPanel.setFilter(this.searcher.getFilter());
-		this.filterPanel.getTree().addTreeSelectionListener(this);
+		this.filterEditPanel = new TaskFilterEditPanel();
+		this.filterEditPanel.setFilter(this.searcher.getFilter());
 		
 		this.searcherPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		this.elementPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		this.sorterPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		this.filterPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		
-		JPanel filterPanel = new JPanel(new BorderLayout());
-		filterPanel.add(this.filterPanel, BorderLayout.CENTER);
-		filterPanel.add(this.elementPanel, BorderLayout.SOUTH);
+		this.filterEditPanel.setBorder(BorderFactory.createEmptyBorder(
+				5,
+				5,
+				5,
+				5));
 		
 		JTabbedPane tabbedPane = new JTabbedPane();
 		
@@ -98,29 +90,13 @@ public class TaskSearcherEditPanel extends JPanel implements TreeSelectionListen
 		
 		tabbedPane.addTab(
 				Translations.getString("searcheredit.tab.filter"),
-				filterPanel);
+				this.filterEditPanel);
 		
 		this.add(tabbedPane, BorderLayout.CENTER);
 	}
 	
 	public void close() {
-		this.elementPanel.saveElement();
-	}
-	
-	@Override
-	public void valueChanged(TreeSelectionEvent evt) {
-		this.elementPanel.saveElement();
-		
-		if (this.filterPanel.getTree().getSelectionCount() != 0) {
-			TreeNode node = (TreeNode) this.filterPanel.getTree().getLastSelectedPathComponent();
-			
-			if (node instanceof TaskFilterElementTreeNode) {
-				this.elementPanel.setElement(((TaskFilterElementTreeNode) node).getElement());
-				return;
-			}
-		}
-		
-		this.elementPanel.setElement(null);
+		this.filterEditPanel.close();
 	}
 	
 }

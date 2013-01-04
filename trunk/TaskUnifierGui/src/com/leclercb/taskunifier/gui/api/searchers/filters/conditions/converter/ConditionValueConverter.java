@@ -30,54 +30,33 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.taskrules;
+package com.leclercb.taskunifier.gui.api.searchers.filters.conditions.converter;
 
-import javax.swing.JSplitPane;
-import javax.swing.JTextField;
+import com.leclercb.taskunifier.api.models.beans.converters.ContactConverter;
+import com.leclercb.taskunifier.api.models.beans.converters.ContextConverter;
+import com.leclercb.taskunifier.api.models.beans.converters.FolderConverter;
+import com.leclercb.taskunifier.api.models.beans.converters.GoalConverter;
+import com.leclercb.taskunifier.api.models.beans.converters.LocationConverter;
+import com.leclercb.taskunifier.api.models.beans.converters.MultiConverter;
+import com.leclercb.taskunifier.api.models.beans.converters.NoteConverter;
+import com.leclercb.taskunifier.api.models.beans.converters.TaskConverter;
+import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
+import com.thoughtworks.xstream.mapper.Mapper;
 
-import com.leclercb.taskunifier.gui.api.rules.TaskRule;
-import com.leclercb.taskunifier.gui.components.taskruleedit.TaskRuleEditPanel;
-
-public class TaskRuleConfigurationPanel extends JSplitPane {
+public class ConditionValueConverter extends MultiConverter {
 	
-	private TaskRuleList ruleList;
-	private TaskRuleEditPanel ruleEditPanel;
-	
-	public TaskRuleConfigurationPanel() {
-		this.initialize();
-	}
-	
-	public void setSelectedRule(TaskRule rule) {
-		this.ruleList.setSelectedRule(rule);
-	}
-	
-	private void initialize() {
-		// Initialize Rule Edit Panel
-		this.ruleEditPanel = new TaskRuleEditPanel();
-		this.setRightComponent(this.ruleEditPanel);
-		
-		// Initialize Rule List
-		this.ruleList = new TaskRuleList(this.ruleEditPanel.getRuleTitle());
-		this.setLeftComponent(this.ruleList);
-		
-		this.setDividerLocation(250);
-	}
-	
-	public void close() {
-		this.ruleEditPanel.close();
-	}
-	
-	private class TaskRuleList extends com.leclercb.taskunifier.gui.components.taskrules.TaskRuleList {
-		
-		public TaskRuleList(JTextField ruleTitle) {
-			super(ruleTitle);
-		}
-		
-		@Override
-		public void ruleSelected(TaskRule rule) {
-			TaskRuleConfigurationPanel.this.ruleEditPanel.setRule(rule);
-		}
-		
+	public ConditionValueConverter(
+			Mapper mapper,
+			ReflectionProvider reflectionProvider) {
+		this.addConverter(ContactConverter.INSTANCE);
+		this.addConverter(ContextConverter.INSTANCE);
+		this.addConverter(FolderConverter.INSTANCE);
+		this.addConverter(GoalConverter.INSTANCE);
+		this.addConverter(LocationConverter.INSTANCE);
+		this.addConverter(NoteConverter.INSTANCE);
+		this.addConverter(TaskConverter.INSTANCE);
+		this.addConverter(NumberConverter.INSTANCE);
+		this.addConverter(StringConverter.INSTANCE);
 	}
 	
 }

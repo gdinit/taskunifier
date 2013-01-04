@@ -119,6 +119,7 @@ public class TaskRuleActionApplyTemplate implements TaskRuleAction {
 			TASK_TEMPLATE_PANEL.setBorder(new EmptyBorder(5, 5, 5, 5));
 			
 			TASK_FILTER_PANEL = new TaskFilterEditPanel();
+			TASK_FILTER_PANEL.setAllowCompareModel(true);
 			TASK_FILTER_PANEL.setBorder(new EmptyBorder(5, 5, 5, 5));
 			
 			DIALOG.addTab("a", ComponentFactory.createJScrollPane(

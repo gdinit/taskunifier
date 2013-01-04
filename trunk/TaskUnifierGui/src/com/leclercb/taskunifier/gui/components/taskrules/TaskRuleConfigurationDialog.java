@@ -36,6 +36,8 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -79,9 +81,19 @@ public class TaskRuleConfigurationDialog extends TUDialog {
 		this.setSize(900, 500);
 		this.setResizable(true);
 		this.setLayout(new BorderLayout());
-		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
+		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		
 		this.loadWindowSettings("window.task_rule");
+		
+		this.addWindowListener(new WindowAdapter() {
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				TaskRuleConfigurationDialog.this.ruleConfigurationPanel.close();
+				TaskRuleConfigurationDialog.this.setVisible(false);
+			}
+			
+		});
 		
 		JXHeader header = new JXHeader();
 		header.setTitle(Translations.getString("header.title.manage_task_rules"));
@@ -101,6 +113,7 @@ public class TaskRuleConfigurationDialog extends TUDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
+				TaskRuleConfigurationDialog.this.ruleConfigurationPanel.close();
 				TaskRuleConfigurationDialog.this.setVisible(false);
 			}
 			
