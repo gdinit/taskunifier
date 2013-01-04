@@ -58,6 +58,7 @@ import com.leclercb.taskunifier.gui.api.rules.TaskRuleFactory;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 
@@ -72,7 +73,6 @@ public final class SynchronizerUtils {
 	
 	static {
 		TaskFactory.getInstance().addPropertyChangeListener(
-				Task.PROP_COMPLETED,
 				new PropertyChangeListener() {
 					
 					@Override
@@ -102,8 +102,12 @@ public final class SynchronizerUtils {
 										true);
 								
 								try {
-									TaskRuleFactory.getInstance().execute(task);
+									setTaskRulesEnabled(false);
+									TaskRuleFactory.getInstance().execute(
+											task, 
+											TaskColumn.parsePropertyName(evt.getPropertyName()));
 								} finally {
+									setTaskRulesEnabled(true);
 									Synchronizing.getInstance().setSynchronizing(
 											false);
 								}
