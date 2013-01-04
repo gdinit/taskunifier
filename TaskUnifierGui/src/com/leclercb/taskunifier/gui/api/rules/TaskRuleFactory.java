@@ -39,6 +39,7 @@ import com.leclercb.taskunifier.api.models.AbstractBasicModelFactory;
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.xstream.TUXStream;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -58,12 +59,12 @@ public class TaskRuleFactory extends AbstractBasicModelFactory<TaskRule> {
 		
 	}
 	
-	public void execute(Task task) {
+	public void execute(Task task, TaskColumn column) {
 		for (TaskRule rule : this.getList()) {
 			if (!rule.getModelStatus().isEndUserStatus())
 				continue;
 			
-			rule.execute(task);
+			rule.execute(task, column);
 		}
 	}
 	

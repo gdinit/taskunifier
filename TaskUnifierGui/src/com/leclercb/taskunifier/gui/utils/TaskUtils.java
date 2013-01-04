@@ -564,7 +564,7 @@ public final class TaskUtils {
 				task,
 				comparedTask,
 				filter,
-				containsCompleted(filter),
+				filterContains(filter, TaskColumn.COMPLETED),
 				true,
 				true,
 				true);
@@ -578,7 +578,7 @@ public final class TaskUtils {
 				task,
 				comparedTask,
 				filter,
-				containsCompleted(filter),
+				filterContains(filter, TaskColumn.COMPLETED),
 				false,
 				false,
 				true);
@@ -592,7 +592,7 @@ public final class TaskUtils {
 				task,
 				comparedTask,
 				filter,
-				containsCompleted(filter),
+				filterContains(filter, TaskColumn.COMPLETED),
 				true,
 				true,
 				true);
@@ -670,7 +670,7 @@ public final class TaskUtils {
 		return filter.include(task, comparedTask);
 	}
 	
-	private static boolean containsCompleted(TaskFilter filter) {
+	public static boolean filterContains(TaskFilter filter, TaskColumn column) {
 		if (filter == null)
 			return false;
 		
@@ -678,13 +678,13 @@ public final class TaskUtils {
 		List<TaskFilter> filters = filter.getFilters();
 		
 		for (TaskFilterElement e : elements) {
-			if (e.getProperty() == TaskColumn.COMPLETED) {
+			if (e.getProperty() == column) {
 				return true;
 			}
 		}
 		
 		for (TaskFilter f : filters) {
-			if (containsCompleted(f))
+			if (filterContains(f, column))
 				return true;
 		}
 		
