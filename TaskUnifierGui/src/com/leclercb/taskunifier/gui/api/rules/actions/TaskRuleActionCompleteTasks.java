@@ -32,21 +32,30 @@
  */
 package com.leclercb.taskunifier.gui.api.rules.actions;
 
+import javax.swing.border.EmptyBorder;
+
+import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
 import com.leclercb.taskunifier.gui.api.rules.TaskRuleAction;
+import com.leclercb.taskunifier.gui.api.rules.TaskRuleActionConfigurationDialog;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
+import com.leclercb.taskunifier.gui.components.tasksearcheredit.filter.TaskFilterEditPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
+import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class TaskRuleActionCompleteTasks implements TaskRuleAction {
 	
+	private static TaskRuleActionConfigurationDialog DIALOG;
+	private static TaskFilterEditPanel TASK_FILTER_PANEL;
+	
 	@XStreamAlias("filter")
 	private TaskFilter filter;
 	
 	public TaskRuleActionCompleteTasks() {
-		this(null);
+		this(new TaskFilter());
 	}
 	
 	public TaskRuleActionCompleteTasks(TaskFilter filter) {
@@ -58,6 +67,7 @@ public class TaskRuleActionCompleteTasks implements TaskRuleAction {
 	}
 	
 	public void setFilter(TaskFilter filter) {
+		CheckUtils.isNotNull(filter);
 		this.filter = filter;
 	}
 	
@@ -76,7 +86,21 @@ public class TaskRuleActionCompleteTasks implements TaskRuleAction {
 	
 	@Override
 	public void configure() {
+		if (DIALOG == null) {
+			DIALOG = new TaskRuleActionConfigurationDialog(
+					"title",
+					"description");
+			
+			TASK_FILTER_PANEL = new TaskFilterEditPanel();
+			TASK_FILTER_PANEL.setBorder(new EmptyBorder(5, 5, 5, 5));
+			
+			DIALOG.addTab(
+					"b",
+					ComponentFactory.createJScrollPane(TASK_FILTER_PANEL, false));
+		}
 		
+		TASK_FILTER_PANEL.setFilter(this.filter);
+		DIALOG.setVisible(true);
 	}
 	
 	@Override

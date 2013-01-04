@@ -32,16 +32,27 @@
  */
 package com.leclercb.taskunifier.gui.api.rules.actions;
 
+import javax.swing.border.EmptyBorder;
+
+import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
 import com.leclercb.taskunifier.gui.api.rules.TaskRuleAction;
+import com.leclercb.taskunifier.gui.api.rules.TaskRuleActionConfigurationDialog;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
+import com.leclercb.taskunifier.gui.components.tasksearcheredit.filter.TaskFilterEditPanel;
+import com.leclercb.taskunifier.gui.components.tasktemplates.TaskTemplatePanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
+import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class TaskRuleActionApplyTemplate implements TaskRuleAction {
+	
+	private static TaskRuleActionConfigurationDialog DIALOG;
+	private static TaskTemplatePanel TASK_TEMPLATE_PANEL;
+	private static TaskFilterEditPanel TASK_FILTER_PANEL;
 	
 	@XStreamAlias("filter")
 	private TaskFilter filter;
@@ -50,7 +61,7 @@ public class TaskRuleActionApplyTemplate implements TaskRuleAction {
 	private TaskTemplate template;
 	
 	public TaskRuleActionApplyTemplate() {
-		this(null, null);
+		this(new TaskFilter(), new TaskTemplate());
 	}
 	
 	public TaskRuleActionApplyTemplate(TaskFilter filter, TaskTemplate template) {
@@ -63,6 +74,7 @@ public class TaskRuleActionApplyTemplate implements TaskRuleAction {
 	}
 	
 	public void setFilter(TaskFilter filter) {
+		CheckUtils.isNotNull(filter);
 		this.filter = filter;
 	}
 	
@@ -71,6 +83,7 @@ public class TaskRuleActionApplyTemplate implements TaskRuleAction {
 	}
 	
 	public void setTemplate(TaskTemplate template) {
+		CheckUtils.isNotNull(template);
 		this.template = template;
 	}
 	
@@ -97,7 +110,29 @@ public class TaskRuleActionApplyTemplate implements TaskRuleAction {
 	
 	@Override
 	public void configure() {
+		if (DIALOG == null) {
+			DIALOG = new TaskRuleActionConfigurationDialog(
+					"title",
+					"description");
+			
+			TASK_TEMPLATE_PANEL = new TaskTemplatePanel();
+			TASK_TEMPLATE_PANEL.setBorder(new EmptyBorder(5, 5, 5, 5));
+			
+			TASK_FILTER_PANEL = new TaskFilterEditPanel();
+			TASK_FILTER_PANEL.setBorder(new EmptyBorder(5, 5, 5, 5));
+			
+			DIALOG.addTab("a", ComponentFactory.createJScrollPane(
+					TASK_TEMPLATE_PANEL,
+					false));
+			
+			DIALOG.addTab(
+					"b",
+					ComponentFactory.createJScrollPane(TASK_FILTER_PANEL, false));
+		}
 		
+		TASK_TEMPLATE_PANEL.setTemplate(this.template);
+		TASK_FILTER_PANEL.setFilter(this.filter);
+		DIALOG.setVisible(true);
 	}
 	
 	public static String getLabel() {
