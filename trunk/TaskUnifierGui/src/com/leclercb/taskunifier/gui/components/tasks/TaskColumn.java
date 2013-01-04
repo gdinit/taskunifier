@@ -185,7 +185,7 @@ public enum TaskColumn implements ModelProperties<Task>, TUColumn<Task>, Propert
 	}
 	
 	public String getPropertyName() {
-		return propertyName;
+		return this.propertyName;
 	}
 	
 	private void setPropertyName(String propertyName) {

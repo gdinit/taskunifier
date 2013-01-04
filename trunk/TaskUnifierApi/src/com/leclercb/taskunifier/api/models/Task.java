@@ -315,6 +315,10 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
 	}
 	
 	public void setFolder(Folder folder) {
+		this.setFolder(folder, false);
+	}
+	
+	private void setFolder(Folder folder, boolean silent) {
 		if (!this.checkBeforeSet(this.getFolder(), folder))
 			return;
 		
@@ -336,7 +340,7 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
 		if (this.folder != null)
 			this.folder.addPropertyChangeListener(this);
 		
-		this.updateProperty(PROP_FOLDER, oldFolder, folder);
+		this.updateProperty(PROP_FOLDER, oldFolder, folder, silent);
 	}
 	
 	public ModelList<Context> getContexts() {
@@ -397,9 +401,13 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
 		else
 			this.completedOn = Calendar.getInstance();
 		
-		this.updateProperty(PROP_COMPLETED, oldCompleted, this.completed);
-		this.updateProperty(PROP_COMPLETED_ON, oldCompletedOn, this.completedOn);
-		this.updateProperty(PROP_PROGRESS, oldProgress, progress);
+		this.updateProperty(PROP_COMPLETED, oldCompleted, this.completed, true);
+		this.updateProperty(
+				PROP_COMPLETED_ON,
+				oldCompletedOn,
+				this.completedOn,
+				true);
+		this.updateProperty(PROP_PROGRESS, oldProgress, progress, false);
 	}
 	
 	public boolean isCompleted() {
@@ -425,9 +433,13 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
 		else
 			this.progress = 0;
 		
-		this.updateProperty(PROP_COMPLETED_ON, oldCompletedOn, this.completedOn);
-		this.updateProperty(PROP_PROGRESS, oldProgress, this.progress);
-		this.updateProperty(PROP_COMPLETED, oldCompleted, completed);
+		this.updateProperty(
+				PROP_COMPLETED_ON,
+				oldCompletedOn,
+				this.completedOn,
+				true);
+		this.updateProperty(PROP_PROGRESS, oldProgress, this.progress, true);
+		this.updateProperty(PROP_COMPLETED, oldCompleted, completed, false);
 	}
 	
 	public Calendar getCompletedOn() {
@@ -453,9 +465,13 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
 		else
 			this.progress = 1;
 		
-		this.updateProperty(PROP_COMPLETED, oldCompleted, this.completed);
-		this.updateProperty(PROP_PROGRESS, oldProgress, this.progress);
-		this.updateProperty(PROP_COMPLETED_ON, oldCompletedOn, completedOn);
+		this.updateProperty(PROP_COMPLETED, oldCompleted, this.completed, true);
+		this.updateProperty(PROP_PROGRESS, oldProgress, this.progress, true);
+		this.updateProperty(
+				PROP_COMPLETED_ON,
+				oldCompletedOn,
+				completedOn,
+				false);
 	}
 	
 	public boolean isOverDue(boolean dateOnly) {
@@ -714,27 +730,27 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
 	@Override
 	public void listChange(ListChangeEvent event) {
 		if (event.getSource().equals(this.contexts)) {
-			this.updateProperty(PROP_CONTEXTS, null, this.contexts);
+			this.updateProperty(PROP_CONTEXTS, null, this.contexts, true);
 		}
 		
 		if (event.getSource().equals(this.goals)) {
-			this.updateProperty(PROP_GOALS, null, this.goals);
+			this.updateProperty(PROP_GOALS, null, this.goals, true);
 		}
 		
 		if (event.getSource().equals(this.locations)) {
-			this.updateProperty(PROP_LOCATIONS, null, this.locations);
+			this.updateProperty(PROP_LOCATIONS, null, this.locations, true);
 		}
 		
 		if (event.getSource().equals(this.contacts)) {
-			this.updateProperty(PROP_CONTACTS, null, this.contacts);
+			this.updateProperty(PROP_CONTACTS, null, this.contacts, true);
 		}
 		
 		if (event.getSource().equals(this.tasks)) {
-			this.updateProperty(PROP_TASKS, null, this.tasks);
+			this.updateProperty(PROP_TASKS, null, this.tasks, true);
 		}
 		
 		if (event.getSource().equals(this.files)) {
-			this.updateProperty(PROP_FILES, null, this.files);
+			this.updateProperty(PROP_FILES, null, this.files, true);
 		}
 	}
 	
@@ -746,19 +762,19 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
 			
 			if (folder.getModelStatus().equals(ModelStatus.TO_DELETE)
 					|| folder.getModelStatus().equals(ModelStatus.DELETED))
-				this.setFolder(null);
+				this.setFolder(null, true);
 		}
 		
 		if (event.getSource() instanceof ContactItem) {
-			this.updateProperty(PROP_CONTACTS, null, this.contacts);
+			this.updateProperty(PROP_CONTACTS, null, this.contacts, true);
 		}
 		
 		if (event.getSource() instanceof TaskItem) {
-			this.updateProperty(PROP_TASKS, null, this.tasks);
+			this.updateProperty(PROP_TASKS, null, this.tasks, true);
 		}
 		
 		if (event.getSource() instanceof FileItem) {
-			this.updateProperty(PROP_FILES, null, this.files);
+			this.updateProperty(PROP_FILES, null, this.files, true);
 		}
 	}
 	

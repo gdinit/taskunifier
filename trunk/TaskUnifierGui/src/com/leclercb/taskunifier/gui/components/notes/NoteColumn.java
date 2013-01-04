@@ -51,9 +51,9 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 
 public enum NoteColumn implements ModelProperties<Note>, TUColumn<Note>, PropertyChangeListener, PropertyChangeSupported {
 	
-	MODEL(Note.class, Note.PROP_MODEL_ID,Translations.getString("general.note.id"), false, true),
-	MODEL_CREATION_DATE(Calendar.class, Note.PROP_MODEL_CREATION_DATE,Translations.getString("general.creation_date"), false, true),
-	MODEL_UPDATE_DATE(Calendar.class, Note.PROP_MODEL_UPDATE_DATE,Translations.getString("general.update_date"), false, true),
+	MODEL(Note.class, Note.PROP_MODEL_ID, Translations.getString("general.note.id"), false, true),
+	MODEL_CREATION_DATE(Calendar.class, Note.PROP_MODEL_CREATION_DATE, Translations.getString("general.creation_date"), false, true),
+	MODEL_UPDATE_DATE(Calendar.class, Note.PROP_MODEL_UPDATE_DATE, Translations.getString("general.update_date"), false, true),
 	TITLE(String.class, Note.PROP_TITLE, Translations.getString("general.note.title"), true, true),
 	FOLDER(Folder.class, Note.PROP_FOLDER, Translations.getString("general.note.folder"), true, true),
 	NOTE(String.class, Note.PROP_NOTE, Translations.getString("general.note.note"), false, true);
@@ -141,7 +141,7 @@ public enum NoteColumn implements ModelProperties<Note>, TUColumn<Note>, Propert
 	}
 	
 	public String getPropertyName() {
-		return propertyName;
+		return this.propertyName;
 	}
 	
 	private void setPropertyName(String propertyName) {

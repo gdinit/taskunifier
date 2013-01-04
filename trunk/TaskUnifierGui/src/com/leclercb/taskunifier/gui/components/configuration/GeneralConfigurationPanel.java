@@ -79,12 +79,12 @@ public class GeneralConfigurationPanel extends DefaultConfigurationPanel {
 					new ConfigurationFieldType.Separator()));
 			
 			if (SystemUtils.IS_OS_WINDOWS || SystemUtils.IS_OS_MAC) {
-			this.addField(new ConfigurationField(
-					"QUICK_TASK_GLOBAL_HOT_KEY",
-					Translations.getString("configuration.general.global_hot_key.quick_task"),
-					new ShortcutKeyFieldType(
-							Main.getSettings(),
-							"general.global_hot_key.quick_task")));
+				this.addField(new ConfigurationField(
+						"QUICK_TASK_GLOBAL_HOT_KEY",
+						Translations.getString("configuration.general.global_hot_key.quick_task"),
+						new ShortcutKeyFieldType(
+								Main.getSettings(),
+								"general.global_hot_key.quick_task")));
 			}
 			
 			this.addField(new ConfigurationField(
