@@ -226,6 +226,10 @@ public abstract class AbstractModel implements Model {
 	 */
 	@Override
 	public final void setModelStatus(ModelStatus modelStatus) {
+		this.setModelStatus(modelStatus, false);
+	}
+	
+	private final void setModelStatus(ModelStatus modelStatus, boolean silent) {
 		CheckUtils.isNotNull(modelStatus);
 		
 		if (!this.checkBeforeSet(this.getModelStatus(), modelStatus))
@@ -242,12 +246,13 @@ public abstract class AbstractModel implements Model {
 		this.propertyChangeSupport.firePropertyChange(
 				PROP_MODEL_STATUS,
 				oldModelStatus,
-				modelStatus);
+				modelStatus,
+				silent);
 		
 		if (modelStatus.equals(ModelStatus.TO_UPDATE)
 				|| modelStatus.equals(ModelStatus.TO_DELETE)
 				|| modelStatus.equals(ModelStatus.DELETED))
-			this.setModelUpdateDate(Calendar.getInstance());
+			this.setModelUpdateDate(Calendar.getInstance(), true);
 	}
 	
 	/**
@@ -302,13 +307,20 @@ public abstract class AbstractModel implements Model {
 	 */
 	@Override
 	public final void setModelUpdateDate(Calendar modelUpdateDate) {
+		this.setModelUpdateDate(modelUpdateDate, false);
+	}
+	
+	private final void setModelUpdateDate(
+			Calendar modelUpdateDate,
+			boolean silent) {
 		CheckUtils.isNotNull(modelUpdateDate);
 		Calendar oldUpdateDate = this.modelUpdateDate;
 		this.modelUpdateDate = DateUtils.cloneCalendar(modelUpdateDate);
 		this.propertyChangeSupport.firePropertyChange(
 				PROP_MODEL_UPDATE_DATE,
 				oldUpdateDate,
-				modelUpdateDate);
+				modelUpdateDate,
+				silent);
 	}
 	
 	/**
@@ -423,7 +435,15 @@ public abstract class AbstractModel implements Model {
 			String property,
 			Object oldValue,
 			Object newValue) {
-		this.updateProperty(property, oldValue, newValue, true);
+		this.updateProperty(property, oldValue, newValue, false);
+	}
+	
+	protected final void updateProperty(
+			String property,
+			Object oldValue,
+			Object newValue,
+			boolean silent) {
+		this.updateProperty(property, oldValue, newValue, true, silent);
 	}
 	
 	/**
@@ -443,24 +463,26 @@ public abstract class AbstractModel implements Model {
 			String property,
 			Object oldValue,
 			Object newValue,
-			boolean updateStatus) {
+			boolean updateStatus,
+			boolean silent) {
 		if (updateStatus) {
 			if (this.getModelStatus() == ModelStatus.SHELL
 					|| this.getModelStatus() == ModelStatus.LOADED) {
 				if (oldValue == null
 						|| newValue == null
 						|| !EqualsUtils.equals(oldValue, newValue)) {
-					this.setModelStatus(ModelStatus.TO_UPDATE);
+					this.setModelStatus(ModelStatus.TO_UPDATE, true);
 				}
 			} else if (this.getModelStatus().equals(ModelStatus.TO_UPDATE)) {
-				this.setModelUpdateDate(Calendar.getInstance());
+				this.setModelUpdateDate(Calendar.getInstance(), true);
 			}
 		}
 		
 		this.propertyChangeSupport.firePropertyChange(
 				property,
 				oldValue,
-				newValue);
+				newValue,
+				silent);
 	}
 	
 	/**
@@ -481,7 +503,22 @@ public abstract class AbstractModel implements Model {
 			int index,
 			Object oldValue,
 			Object newValue) {
-		this.updateIndexedProperty(property, index, oldValue, newValue, true);
+		this.updateIndexedProperty(property, index, oldValue, newValue, false);
+	}
+	
+	protected final void updateIndexedProperty(
+			String property,
+			int index,
+			Object oldValue,
+			Object newValue,
+			boolean silent) {
+		this.updateIndexedProperty(
+				property,
+				index,
+				oldValue,
+				newValue,
+				true,
+				silent);
 	}
 	
 	/**
@@ -504,17 +541,18 @@ public abstract class AbstractModel implements Model {
 			int index,
 			Object oldValue,
 			Object newValue,
-			boolean updateStatus) {
+			boolean updateStatus,
+			boolean silent) {
 		if (updateStatus) {
 			if (this.getModelStatus() == ModelStatus.SHELL
 					|| this.getModelStatus() == ModelStatus.LOADED) {
 				if (oldValue == null
 						|| newValue == null
 						|| !EqualsUtils.equals(oldValue, newValue)) {
-					this.setModelStatus(ModelStatus.TO_UPDATE);
+					this.setModelStatus(ModelStatus.TO_UPDATE, true);
 				}
 			} else if (this.getModelStatus().equals(ModelStatus.TO_UPDATE)) {
-				this.setModelUpdateDate(Calendar.getInstance());
+				this.setModelUpdateDate(Calendar.getInstance(), true);
 			}
 		}
 		
@@ -522,7 +560,8 @@ public abstract class AbstractModel implements Model {
 				property,
 				index,
 				oldValue,
-				newValue);
+				newValue,
+				silent);
 	}
 	
 	/**
