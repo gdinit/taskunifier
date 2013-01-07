@@ -91,6 +91,9 @@ public final class PluginRepeatUtils {
 	}
 	
 	public static Task createRepeatTask(Task task, String repeat) {
+		if (!isValidRepeatValue(repeat))
+			return null;
+		
 		CheckUtils.isNotNull(task);
 		
 		Calendar startDate = null;
