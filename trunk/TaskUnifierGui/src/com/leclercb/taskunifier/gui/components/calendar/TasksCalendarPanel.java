@@ -322,7 +322,11 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 		TaskSearcher searcher = this.calendarPanel.getTaskSearcherPanel().getSelectedTaskSearcher();
 		
 		if (searcher != null
-				&& !TaskUtils.showUnindentTask(task, null, searcher.getFilter()))
+				&& !TaskUtils.showUnindentTask(
+						task,
+						null,
+						searcher.getFilter(),
+						false))
 			return false;
 		
 		return true;
