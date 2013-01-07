@@ -73,6 +73,9 @@ public class TaskFilterElement extends FilterElement<Task, TaskColumn, TaskFilte
 	
 	@Override
 	public Object getComparedModelValue(Task comparedModel) {
+		if (this.getProperty() == TaskColumn.PARENT)
+			return comparedModel;
+		
 		return this.getProperty().getProperty(comparedModel);
 	}
 	
