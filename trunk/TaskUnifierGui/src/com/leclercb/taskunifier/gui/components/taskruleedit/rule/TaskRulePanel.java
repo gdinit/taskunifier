@@ -181,16 +181,19 @@ public class TaskRulePanel extends JPanel implements PropertyChangeListener {
 				try {
 					Class<?> action = (Class<?>) TaskRulePanel.this.ruleAction.getSelectedItem();
 					
-					if (action == null) {
-						TaskRulePanel.this.rule.setAction(null);
-						TaskRulePanel.this.ruleActionConfiguration.setEnabled(false);
-						return;
+					if (TaskRulePanel.this.rule.getAction() == null
+							|| !EqualsUtils.equals(
+									TaskRulePanel.this.rule.getAction().getClass(),
+									action)) {
+						if (action == null) {
+							TaskRulePanel.this.rule.setAction(null);
+							TaskRulePanel.this.ruleActionConfiguration.setEnabled(false);
+						} else {
+							TaskRuleAction a = (TaskRuleAction) action.newInstance();
+							TaskRulePanel.this.rule.setAction(a);
+							TaskRulePanel.this.ruleActionConfiguration.setEnabled(true);
+						}
 					}
-					
-					TaskRuleAction a = (TaskRuleAction) action.newInstance();
-					TaskRulePanel.this.rule.setAction(a);
-					
-					TaskRulePanel.this.ruleActionConfiguration.setEnabled(true);
 				} catch (Exception exc) {
 					ErrorInfo info = new ErrorInfo(
 							Translations.getString("general.error"),

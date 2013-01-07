@@ -42,7 +42,6 @@ import com.leclercb.taskunifier.gui.api.rules.TaskRuleActionConfigurationDialog;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
 import com.leclercb.taskunifier.gui.components.tasksearcheredit.filter.TaskFilterEditPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
-import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -88,20 +87,21 @@ public class TaskRuleActionDeleteTasks implements TaskRuleAction {
 	public void configure() {
 		if (DIALOG == null) {
 			DIALOG = new TaskRuleActionConfigurationDialog(
-					"title",
-					"description");
+					Translations.getString("header.title.manage_task_rules.action.delete_task"),
+					Translations.getString("header.description.manage_task_rules.action.complete_task"));
 			
 			TASK_FILTER_PANEL = new TaskFilterEditPanel();
 			TASK_FILTER_PANEL.setAllowCompareModel(true);
 			TASK_FILTER_PANEL.setBorder(new EmptyBorder(5, 5, 5, 5));
 			
 			DIALOG.addTab(
-					"b",
-					ComponentFactory.createJScrollPane(TASK_FILTER_PANEL, false));
+					Translations.getString("ruleedit.action.tab.filter"),
+					TASK_FILTER_PANEL);
 		}
 		
 		TASK_FILTER_PANEL.setFilter(this.filter);
 		DIALOG.setVisible(true);
+		TASK_FILTER_PANEL.close();
 	}
 	
 	@Override

@@ -54,28 +54,19 @@ public class TaskRuleActionApplyTemplate implements TaskRuleAction {
 	private static TaskTemplatePanel TASK_TEMPLATE_PANEL;
 	private static TaskFilterEditPanel TASK_FILTER_PANEL;
 	
-	@XStreamAlias("filter")
-	private TaskFilter filter;
-	
 	@XStreamAlias("template")
 	private TaskTemplate template;
 	
+	@XStreamAlias("filter")
+	private TaskFilter filter;
+	
 	public TaskRuleActionApplyTemplate() {
-		this(new TaskFilter(), new TaskTemplate());
+		this(new TaskTemplate(), new TaskFilter());
 	}
 	
-	public TaskRuleActionApplyTemplate(TaskFilter filter, TaskTemplate template) {
-		this.setFilter(filter);
+	public TaskRuleActionApplyTemplate(TaskTemplate template, TaskFilter filter) {
 		this.setTemplate(template);
-	}
-	
-	public TaskFilter getFilter() {
-		return this.filter;
-	}
-	
-	public void setFilter(TaskFilter filter) {
-		CheckUtils.isNotNull(filter);
-		this.filter = filter;
+		this.setFilter(filter);
 	}
 	
 	public TaskTemplate getTemplate() {
@@ -85,6 +76,15 @@ public class TaskRuleActionApplyTemplate implements TaskRuleAction {
 	public void setTemplate(TaskTemplate template) {
 		CheckUtils.isNotNull(template);
 		this.template = template;
+	}
+	
+	public TaskFilter getFilter() {
+		return this.filter;
+	}
+	
+	public void setFilter(TaskFilter filter) {
+		CheckUtils.isNotNull(filter);
+		this.filter = filter;
 	}
 	
 	@Override
@@ -112,8 +112,8 @@ public class TaskRuleActionApplyTemplate implements TaskRuleAction {
 	public void configure() {
 		if (DIALOG == null) {
 			DIALOG = new TaskRuleActionConfigurationDialog(
-					"title",
-					"description");
+					Translations.getString("header.title.manage_task_rules.action.apply_template"),
+					Translations.getString("header.description.manage_task_rules.action.apply_template"));
 			
 			TASK_TEMPLATE_PANEL = new TaskTemplatePanel();
 			TASK_TEMPLATE_PANEL.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -122,18 +122,21 @@ public class TaskRuleActionApplyTemplate implements TaskRuleAction {
 			TASK_FILTER_PANEL.setAllowCompareModel(true);
 			TASK_FILTER_PANEL.setBorder(new EmptyBorder(5, 5, 5, 5));
 			
-			DIALOG.addTab("a", ComponentFactory.createJScrollPane(
-					TASK_TEMPLATE_PANEL,
-					false));
+			DIALOG.addTab(
+					Translations.getString("ruleedit.action.tab.template"),
+					ComponentFactory.createJScrollPane(
+							TASK_TEMPLATE_PANEL,
+							false));
 			
 			DIALOG.addTab(
-					"b",
-					ComponentFactory.createJScrollPane(TASK_FILTER_PANEL, false));
+					Translations.getString("ruleedit.action.tab.filter"),
+					TASK_FILTER_PANEL);
 		}
 		
 		TASK_TEMPLATE_PANEL.setTemplate(this.template);
 		TASK_FILTER_PANEL.setFilter(this.filter);
 		DIALOG.setVisible(true);
+		TASK_FILTER_PANEL.close();
 	}
 	
 	public static String getLabel() {

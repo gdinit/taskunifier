@@ -79,15 +79,17 @@ public class TaskRuleActionAddTask implements TaskRuleAction {
 	public void configure() {
 		if (DIALOG == null) {
 			DIALOG = new TaskRuleActionConfigurationDialog(
-					"title",
-					"description");
+					Translations.getString("header.title.manage_task_rules.action.add_task"),
+					Translations.getString("header.description.manage_task_rules.action.add_task"));
 			
 			TASK_TEMPLATE_PANEL = new TaskTemplatePanel();
 			TASK_TEMPLATE_PANEL.setBorder(new EmptyBorder(5, 5, 5, 5));
 			
-			DIALOG.addTab("a", ComponentFactory.createJScrollPane(
-					TASK_TEMPLATE_PANEL,
-					false));
+			DIALOG.addTab(
+					Translations.getString("ruleedit.action.tab.template"),
+					ComponentFactory.createJScrollPane(
+							TASK_TEMPLATE_PANEL,
+							false));
 		}
 		
 		TASK_TEMPLATE_PANEL.setTemplate(this.template);

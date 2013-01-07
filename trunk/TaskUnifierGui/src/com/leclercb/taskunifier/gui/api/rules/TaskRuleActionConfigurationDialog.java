@@ -41,12 +41,14 @@ import java.awt.event.KeyEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 
 import org.jdesktop.swingx.JXHeader;
 
 import com.leclercb.taskunifier.gui.swing.TUDialog;
+import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
@@ -102,7 +104,9 @@ public class TaskRuleActionConfigurationDialog extends TUDialog {
 		};
 		
 		JButton okButton = new TUOkButton(listener);
+		JPanel panel = new TUButtonsPanel(okButton);
 		
+		this.add(panel, BorderLayout.SOUTH);
 		this.getRootPane().setDefaultButton(okButton);
 		
 		this.getRootPane().registerKeyboardAction(

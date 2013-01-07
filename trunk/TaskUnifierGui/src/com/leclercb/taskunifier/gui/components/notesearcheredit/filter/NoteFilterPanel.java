@@ -74,8 +74,8 @@ public class NoteFilterPanel extends JPanel {
 	}
 	
 	public void setFilter(NoteFilter filter) {
-		this.tree.setFilter(filter);
 		this.filter = filter;
+		this.tree.setFilter(filter);
 		
 		this.autoFillButton.setEnabled(filter != null);
 		this.addElementButton.setEnabled(filter != null);
