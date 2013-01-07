@@ -74,7 +74,7 @@ public class TaskRowFilter extends RowFilter<TableModel, Integer> {
 		if (indentSubtasks)
 			return TaskUtils.showTask(task, null, this.filter);
 		else
-			return TaskUtils.showUnindentTask(task, null, this.filter);
+			return TaskUtils.showUnindentTask(task, null, this.filter, false);
 	}
 	
 }

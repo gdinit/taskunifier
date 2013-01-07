@@ -567,7 +567,8 @@ public final class TaskUtils {
 				filterContains(filter, TaskColumn.COMPLETED),
 				true,
 				true,
-				true);
+				true,
+				false);
 	}
 	
 	public static boolean showTask(
@@ -581,13 +582,15 @@ public final class TaskUtils {
 				filterContains(filter, TaskColumn.COMPLETED),
 				false,
 				false,
-				true);
+				true,
+				false);
 	}
 	
 	public static boolean showUnindentTask(
 			Task task,
 			Task comparedTask,
-			TaskFilter filter) {
+			TaskFilter filter,
+			boolean skipShowCompleted) {
 		return showTask(
 				task,
 				comparedTask,
@@ -595,7 +598,8 @@ public final class TaskUtils {
 				filterContains(filter, TaskColumn.COMPLETED),
 				true,
 				true,
-				true);
+				true,
+				skipShowCompleted);
 	}
 	
 	private static boolean showTask(
@@ -605,7 +609,8 @@ public final class TaskUtils {
 			boolean containsCompleted,
 			boolean skipParentCheck,
 			boolean skipShowChildren,
-			boolean skipShowIfParentShown) {
+			boolean skipShowIfParentShown,
+			boolean skipShowCompleted) {
 		if (!task.getModelStatus().isEndUserStatus()) {
 			return false;
 		}
@@ -623,7 +628,8 @@ public final class TaskUtils {
 						containsCompleted,
 						false,
 						true,
-						skipShowIfParentShown)) {
+						skipShowIfParentShown,
+						skipShowCompleted)) {
 					result = true;
 					break;
 				}
@@ -646,10 +652,12 @@ public final class TaskUtils {
 					return false;
 		}
 		
-		if (!Main.getSettings().getBooleanProperty(
-				"tasksearcher.show_completed_tasks")) {
-			if (task.isCompleted() && !containsCompleted)
-				return false;
+		if (!skipShowCompleted) {
+			if (!Main.getSettings().getBooleanProperty(
+					"tasksearcher.show_completed_tasks")) {
+				if (task.isCompleted() && !containsCompleted)
+					return false;
+			}
 		}
 		
 		if (!skipShowIfParentShown && task.getParent() != null) {
@@ -660,7 +668,8 @@ public final class TaskUtils {
 					containsCompleted,
 					true,
 					skipShowChildren,
-					skipShowIfParentShown))
+					skipShowIfParentShown,
+					skipShowCompleted))
 				return true;
 		}
 		

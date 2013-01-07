@@ -114,7 +114,7 @@ public class TaskRule extends AbstractBasicModel {
 	}
 	
 	public void execute(Task task, TaskColumn column) {
-		if (!TaskUtils.showUnindentTask(task, null, this.filter))
+		if (!TaskUtils.showUnindentTask(task, null, this.filter, true))
 			return;
 		
 		if (!TaskUtils.filterContains(this.filter, column))

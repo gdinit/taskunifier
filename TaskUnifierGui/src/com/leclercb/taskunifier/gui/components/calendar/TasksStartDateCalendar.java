@@ -93,7 +93,11 @@ public class TasksStartDateCalendar extends TasksCalendar {
 		TaskSearcher searcher = this.view.getTaskSearcherView().getSelectedTaskSearcher();
 		
 		if (searcher != null
-				&& !TaskUtils.showUnindentTask(task, null, searcher.getFilter()))
+				&& !TaskUtils.showUnindentTask(
+						task,
+						null,
+						searcher.getFilter(),
+						false))
 			return null;
 		
 		Calendar startDate = task.getStartDate();

@@ -76,7 +76,7 @@ public class TaskRuleActionDeleteTasks implements TaskRuleAction {
 			if (!t.getModelStatus().isEndUserStatus())
 				continue;
 			
-			if (!TaskUtils.showUnindentTask(t, task, this.filter))
+			if (!TaskUtils.showUnindentTask(t, task, this.filter, true))
 				continue;
 			
 			TaskFactory.getInstance().markToDelete(t);
