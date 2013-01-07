@@ -76,7 +76,7 @@ public final class Constants {
 	public static final String BETA_SYNC_EXP = "01/12/2012";
 	public static final String DEFAULT_SUFFIX = "_v3";
 	
-	public static final int PLUGIN_API_VERSION = 32;
+	public static final int PLUGIN_API_VERSION = 33;
 	public static final int WAIT_NO_LICENSE_TIME = 30;
 	public static final int WAIT_NO_LICENSE_ADDED_TIME = 15;
 	public static final int MAX_NO_LICENSE_SYNCS = 50;
