@@ -78,48 +78,53 @@ public final class SynchronizerUtils {
 					
 					@Override
 					public void propertyChange(PropertyChangeEvent evt) {
-						if (TASK_REPEAT_ENABLED) {
-							Task task = (Task) evt.getSource();
-							
-							if (task != null && task.isCompleted()) {
-								Synchronizing.getInstance().setSynchronizing(
-										true);
-								
-								try {
-									getSynchronizerPlugin().getSynchronizerApi().createRepeatTask(
-											task);
-								} finally {
-									Synchronizing.getInstance().setSynchronizing(
-											false);
-								}
-							}
-						}
+						this.taskRepeatEnabled(evt);
+						this.taskRulesEnabled(evt);
+					}
+					
+					private void taskRepeatEnabled(PropertyChangeEvent evt) {
+						if (!TASK_REPEAT_ENABLED)
+							return;
 						
-						if (TASK_RULES_ENABLED) {
-							Task task = (Task) evt.getSource();
-							
-							if (task != null) {
-								boolean silent = false;
-								
-								if (evt instanceof PropertyChangeEventExtended)
-									silent = ((PropertyChangeEventExtended) evt).isSilent();
-								
-								if (!silent) {
-									Synchronizing.getInstance().setSynchronizing(
-											true);
-									
-									try {
-										setTaskRulesEnabled(false);
-										TaskRuleFactory.getInstance().execute(
-												task,
-												TaskColumn.parsePropertyName(evt.getPropertyName()));
-									} finally {
-										setTaskRulesEnabled(true);
-										Synchronizing.getInstance().setSynchronizing(
-												false);
-									}
-								}
-							}
+						Task task = (Task) evt.getSource();
+						
+						if (task == null)
+							return;
+						
+						if (!evt.getPropertyName().equals(Task.PROP_COMPLETED))
+							return;
+						
+						if (!task.isCompleted())
+							return;
+						
+						getSynchronizerPlugin().getSynchronizerApi().createRepeatTask(
+								task);
+					}
+					
+					private void taskRulesEnabled(PropertyChangeEvent evt) {
+						if (!TASK_RULES_ENABLED)
+							return;
+						
+						Task task = (Task) evt.getSource();
+						
+						if (task == null)
+							return;
+						
+						boolean silent = false;
+						
+						if (evt instanceof PropertyChangeEventExtended)
+							silent = ((PropertyChangeEventExtended) evt).isSilent();
+						
+						if (silent)
+							return;
+						
+						try {
+							setTaskRulesEnabled(false);
+							TaskRuleFactory.getInstance().execute(
+									task,
+									TaskColumn.parsePropertyName(evt.getPropertyName()));
+						} finally {
+							setTaskRulesEnabled(true);
 						}
 					}
 					

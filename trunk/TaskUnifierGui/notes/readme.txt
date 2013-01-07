@@ -13,6 +13,7 @@ Version 3.1.6
 		- FR 293: Rename tab
 		- FR 298: Save confirmation in task edit window
 		- Skip unused fields in XML files
+		- Improved complete task action performance
 
 Version 3.1.5
 	- Major:
