@@ -8,6 +8,7 @@ Version 3.1.6
 		- BF 241: Quick task when mutiple contexts/goals/locations not allowed
 		- BF 242: Freeze on some linux distros
 		- BF 245: Help issue "Show completed tasks at the end"
+		- BF 246: GUI problem with Linux and XFCE
 		- FR 282: Windows size compatible with notebooks
 		- FR 290: Auto-completion
 		- FR 293: Rename tab
