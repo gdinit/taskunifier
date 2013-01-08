@@ -142,7 +142,12 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		this.setIconImage(ImageUtils.getResourceImage("logo.png").getImage());
-		this.setTitle(Constants.TITLE + " - " + Constants.VERSION);
+		
+		if (Main.isProVersion())
+			this.setTitle(Constants.TITLE + " Pro - " + Constants.VERSION);
+		else
+			this.setTitle(Constants.TITLE + " - " + Constants.VERSION);
+		
 		this.loadWindowSettings();
 		
 		this.addWindowListener(new WindowAdapter() {
@@ -383,11 +388,18 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 		
 		this.mainTabbedPane.setSelectedIndex(index);
 		
-		this.setTitle(Constants.TITLE
-				+ " - "
-				+ Constants.VERSION
-				+ " - "
-				+ view.getLabel());
+		if (Main.isProVersion())
+			this.setTitle(Constants.TITLE
+					+ " Pro - "
+					+ Constants.VERSION
+					+ " - "
+					+ view.getLabel());
+		else
+			this.setTitle(Constants.TITLE
+					+ " - "
+					+ Constants.VERSION
+					+ " - "
+					+ view.getLabel());
 		
 		this.firePropertyChange(PROP_SELECTED_VIEW, this.oldSelectedView, view);
 		this.oldSelectedView = view;
