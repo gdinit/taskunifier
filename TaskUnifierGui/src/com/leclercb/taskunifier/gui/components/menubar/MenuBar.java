@@ -91,6 +91,7 @@ import com.leclercb.taskunifier.gui.actions.ActionLogBug;
 import com.leclercb.taskunifier.gui.actions.ActionLogFeatureRequest;
 import com.leclercb.taskunifier.gui.actions.ActionMailTo;
 import com.leclercb.taskunifier.gui.actions.ActionManageBackups;
+import com.leclercb.taskunifier.gui.actions.ActionManageLicense;
 import com.leclercb.taskunifier.gui.actions.ActionManageModels;
 import com.leclercb.taskunifier.gui.actions.ActionManagePublisherPlugins;
 import com.leclercb.taskunifier.gui.actions.ActionManageSynchronizerPlugins;
@@ -140,6 +141,9 @@ public class MenuBar extends JMenuBar implements ListChangeListener, PropertyCha
 	private void initializeFileMenu() {
 		JMenu fileMenu = new JMenu(Translations.getString("menu.file"));
 		this.add(fileMenu);
+		
+		fileMenu.add(new ActionManageLicense(16, 16));
+		fileMenu.addSeparator();
 		
 		fileMenu.add(new ActionNewWindow(16, 16));
 		fileMenu.add(new ActionCloseWindow(16, 16));

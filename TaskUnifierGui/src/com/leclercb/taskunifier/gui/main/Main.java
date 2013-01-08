@@ -118,6 +118,8 @@ public class Main {
 	private static boolean DEVELOPER_MODE;
 	private static boolean FIRST_EXECUTION;
 	
+	private static boolean PRO_VERSION;
+	
 	private static String RESOURCES_FOLDER;
 	private static String DATA_FOLDER;
 	private static String USER_FOLDER;
@@ -157,11 +159,15 @@ public class Main {
 	}
 	
 	public static boolean isProVersion() {
-		return true;
+		return PRO_VERSION;
 	}
 	
 	private static String getLockFile() {
 		return DATA_FOLDER + File.separator + "taskunifier.lock";
+	}
+	
+	public static String getLicenseFile() {
+		return DATA_FOLDER + File.separator + "license.txt";
 	}
 	
 	public static String getInitSettingsFile() {
@@ -289,6 +295,8 @@ public class Main {
 			loadProxies();
 			MainSplashScreen.getInstance().update("Loading locale...");
 			loadLocale();
+			MainSplashScreen.getInstance().update("Checking pro license...");
+			loadProVersion();
 			MainSplashScreen.getInstance().update("Loading models...");
 			loadModels();
 			MainSplashScreen.getInstance().update("Loading look and feel...");
@@ -566,6 +574,14 @@ public class Main {
 		}
 		
 		SETTINGS.setLocaleProperty("general.locale", Translations.getLocale());
+	}
+	
+	private static void loadProVersion() {
+		try {
+			// TODO: check license
+		} catch (Exception e) {
+			
+		}
 	}
 	
 	private static void loadModels() throws Exception {
