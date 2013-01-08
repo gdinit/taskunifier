@@ -43,6 +43,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.logging.Level;
 
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -67,6 +68,7 @@ import com.leclercb.commons.api.properties.events.SavePropertiesListener;
 import com.leclercb.commons.api.properties.events.WeakSavePropertiesListener;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
+import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelUtils;
 import com.leclercb.commons.gui.utils.ScreenUtils;
 import com.leclercb.taskunifier.gui.actions.ActionAddTab;
@@ -392,31 +394,38 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 	}
 	
 	private void loadWindowSettings() {
-		int extendedState = Main.getSettings().getIntegerProperty(
-				this.propertyName + ".extended_state");
-		int width = Main.getSettings().getIntegerProperty(
-				this.propertyName + ".width");
-		int height = Main.getSettings().getIntegerProperty(
-				this.propertyName + ".height");
-		int locationX = Main.getSettings().getIntegerProperty(
-				this.propertyName + ".location_x");
-		int locationY = Main.getSettings().getIntegerProperty(
-				this.propertyName + ".location_y");
-		
-		if (SystemUtils.IS_OS_MAC
-				&& EqualsUtils.equalsStringIgnoreCase(
-						System.getProperty("com.leclercb.taskunifier.mac_app_store"),
-						"true"))
-			this.setExtendedState(Frame.NORMAL);
-		else
-			this.setExtendedState(extendedState);
-		
-		this.setSize(width, height);
-		
-		if (ScreenUtils.isLocationInScreen(new Point(locationX, locationY)))
-			this.setLocation(locationX, locationY);
-		else
-			this.setLocation(0, 0);
+		try {
+			int extendedState = Main.getSettings().getIntegerProperty(
+					this.propertyName + ".extended_state");
+			int width = Main.getSettings().getIntegerProperty(
+					this.propertyName + ".width");
+			int height = Main.getSettings().getIntegerProperty(
+					this.propertyName + ".height");
+			int locationX = Main.getSettings().getIntegerProperty(
+					this.propertyName + ".location_x");
+			int locationY = Main.getSettings().getIntegerProperty(
+					this.propertyName + ".location_y");
+			
+			if (SystemUtils.IS_OS_MAC
+					&& EqualsUtils.equalsStringIgnoreCase(
+							System.getProperty("com.leclercb.taskunifier.mac_app_store"),
+							"true"))
+				this.setExtendedState(Frame.NORMAL);
+			else
+				this.setExtendedState(extendedState);
+			
+			this.setSize(width, height);
+			
+			if (ScreenUtils.isLocationInScreen(new Point(locationX, locationY)))
+				this.setLocation(locationX, locationY);
+			else
+				this.setLocation(0, 0);
+		} catch (Exception e) {
+			GuiLogger.getLogger().log(
+					Level.SEVERE,
+					"Cannot load window settings",
+					e);
+		}
 	}
 	
 	@Override
