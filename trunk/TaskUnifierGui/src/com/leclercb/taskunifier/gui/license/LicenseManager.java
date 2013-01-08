@@ -36,7 +36,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-import org.apache.commons.codec.binary.Base32;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.omg.CORBA_2_3.portable.OutputStream;
@@ -72,27 +72,27 @@ public class LicenseManager {
 	public License readLicense(String input) throws Exception {
 		input = input.trim();
 		
-		Base32 base32 = new Base32(40);
-		byte[] bytes = base32.decode(input);
+		Base64 base64 = new Base64(40);
+		byte[] data = base64.decode(input);
 		
-		byte[] signature = ArrayUtils.subarray(bytes, 0, 128);
-		byte[] data = ArrayUtils.subarray(bytes, 128, bytes.length);
+		byte[] signature = ArrayUtils.subarray(data, 0, 128);
+		byte[] message = ArrayUtils.subarray(data, 128, data.length);
 		
-		if (!this.encryptionManager.verify(data, signature)) {
+		if (!this.encryptionManager.verify(message, signature)) {
 			return null;
 		}
 		
-		return License.parseLicense(new String(data, "UTF-8"));
+		return License.parseLicense(new String(message, "UTF-8"));
 	}
 	
 	public void writeLicense(License license, OutputStream output)
 			throws Exception {
-		byte[] data = license.licenseToString().getBytes("UTF-8");
-		byte[] signature = this.encryptionManager.sign(data);
-		byte[] bytes = ArrayUtils.addAll(signature, data);
+		byte[] message = license.licenseToString().getBytes("UTF-8");
+		byte[] signature = this.encryptionManager.sign(message);
+		byte[] data = ArrayUtils.addAll(signature, message);
 		
-		Base32 base32 = new Base32(40);
-		System.out.println(new String(base32.encode(bytes)));
+		Base64 base64 = new Base64(40);
+		IOUtils.write(base64.encode(data), output);
 	}
 	
 }
