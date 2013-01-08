@@ -45,24 +45,20 @@ import com.leclercb.taskunifier.gui.license.exceptions.LicenseVersionExpiredExce
 
 public class License {
 	
-	public static final String TYPE_LIFETIME = "LIFETIME";
-	public static final String TYPE_SINGLE_VERSION = "SINGLE_VERSION";
-	public static final String TYPE_TRIAL = "TRIAL";
-	
 	private String name;
 	private String email;
 	
-	private String licenseType;
+	private LicenseType licenseType;
 	private String version;
 	private Calendar expiration;
 	
 	private String reference;
 	
 	public License() {
-		this(TYPE_TRIAL);
+		this(LicenseType.TRIAL);
 	}
 	
-	public License(String licenseType) {
+	public License(LicenseType licenseType) {
 		this.setLicenseType(licenseType);
 	}
 	
@@ -82,11 +78,11 @@ public class License {
 		this.email = email;
 	}
 	
-	public String getLicenseType() {
+	public LicenseType getLicenseType() {
 		return this.licenseType;
 	}
 	
-	public void setLicenseType(String licenseType) {
+	public void setLicenseType(LicenseType licenseType) {
 		CheckUtils.isNotNull(licenseType);
 		this.licenseType = licenseType;
 	}
@@ -119,12 +115,13 @@ public class License {
 			throws LicenseException {
 		this.validateExpiration(currentDate);
 		this.validateVersion(currentVersion);
-		
 	}
 	
 	protected void validateExpiration(Calendar currentDate)
 			throws LicenseExpiredException {
-		if (this.getLicenseType().equals(TYPE_TRIAL)) {
+		CheckUtils.isNotNull(currentDate);
+		
+		if (this.getLicenseType().equals(LicenseType.TRIAL)) {
 			if (this.getExpiration() == null
 					|| currentDate.after(this.getExpiration())) {
 				throw new LicenseExpiredException();
@@ -134,7 +131,9 @@ public class License {
 	
 	protected void validateVersion(String currentVersion)
 			throws LicenseVersionExpiredException {
-		if (this.getLicenseType().equals(TYPE_SINGLE_VERSION)) {
+		CheckUtils.isNotNull(currentVersion);
+		
+		if (this.getLicenseType().equals(LicenseType.SINGLE_VERSION)) {
 			if (this.getVersion() == null) {
 				throw new LicenseVersionExpiredException();
 			}
@@ -143,14 +142,13 @@ public class License {
 				throw new LicenseVersionExpiredException();
 			}
 		}
-		
 	}
 	
 	public String licenseToString() throws Exception {
 		PropertyMap p = new PropertyMap();
 		p.setStringProperty("name", this.name);
 		p.setStringProperty("email", this.email);
-		p.setStringProperty("licenseType", this.licenseType);
+		p.setEnumProperty("licenseType", LicenseType.class, this.licenseType);
 		p.setStringProperty("version", this.version);
 		p.setCalendarProperty("expiration", this.expiration);
 		p.setStringProperty("reference", this.reference);
@@ -168,7 +166,7 @@ public class License {
 		License l = new License();
 		l.setName(p.getStringProperty("name"));
 		l.setEmail(p.getStringProperty("email"));
-		l.setLicenseType(p.getStringProperty("licenseType"));
+		l.setLicenseType(p.getEnumProperty("licenseType", LicenseType.class));
 		l.setVersion(p.getStringProperty("version"));
 		l.setExpiration(p.getCalendarProperty("expiration"));
 		l.setReference(p.getStringProperty("reference"));
