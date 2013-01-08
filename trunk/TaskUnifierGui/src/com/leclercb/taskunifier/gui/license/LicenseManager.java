@@ -37,9 +37,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.omg.CORBA_2_3.portable.OutputStream;
 
 public class LicenseManager {
 	
@@ -61,14 +61,6 @@ public class LicenseManager {
 		this.encryptionManager = new EncryptionManager(pubdata, privdata);
 	}
 	
-	public LicenseManager(byte[] publicKey, byte[] privateKey) throws Exception {
-		this.encryptionManager = new EncryptionManager(publicKey, privateKey);
-	}
-	
-	public License readLicense(InputStream input) throws Exception {
-		return this.readLicense(IOUtils.toString(input, "UTF-8"));
-	}
-	
 	public License readLicense(String input) throws Exception {
 		input = input.trim();
 		
@@ -85,14 +77,13 @@ public class LicenseManager {
 		return License.parseLicense(new String(message, "UTF-8"));
 	}
 	
-	public void writeLicense(License license, OutputStream output)
-			throws Exception {
+	public void writeLicense(License license, File file) throws Exception {
 		byte[] message = license.licenseToString().getBytes("UTF-8");
 		byte[] signature = this.encryptionManager.sign(message);
 		byte[] data = ArrayUtils.addAll(signature, message);
 		
 		Base64 base64 = new Base64(40);
-		IOUtils.write(base64.encode(data), output);
+		FileUtils.writeByteArrayToFile(file, base64.encode(data));
 	}
 	
 }
