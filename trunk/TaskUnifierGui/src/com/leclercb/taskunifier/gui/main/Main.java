@@ -579,6 +579,7 @@ public class Main {
 	private static void loadProVersion() {
 		try {
 			// TODO: check license
+			PRO_VERSION = false;
 		} catch (Exception e) {
 			
 		}
