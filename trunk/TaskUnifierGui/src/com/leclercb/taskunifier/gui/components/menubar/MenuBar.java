@@ -91,11 +91,9 @@ import com.leclercb.taskunifier.gui.actions.ActionLogBug;
 import com.leclercb.taskunifier.gui.actions.ActionLogFeatureRequest;
 import com.leclercb.taskunifier.gui.actions.ActionMailTo;
 import com.leclercb.taskunifier.gui.actions.ActionManageBackups;
-import com.leclercb.taskunifier.gui.actions.ActionManageLicense;
 import com.leclercb.taskunifier.gui.actions.ActionManageModels;
 import com.leclercb.taskunifier.gui.actions.ActionManagePublisherPlugins;
 import com.leclercb.taskunifier.gui.actions.ActionManageSynchronizerPlugins;
-import com.leclercb.taskunifier.gui.actions.ActionManageTaskRules;
 import com.leclercb.taskunifier.gui.actions.ActionManageTaskTemplates;
 import com.leclercb.taskunifier.gui.actions.ActionManageUsers;
 import com.leclercb.taskunifier.gui.actions.ActionNewWindow;
@@ -142,8 +140,9 @@ public class MenuBar extends JMenuBar implements ListChangeListener, PropertyCha
 		JMenu fileMenu = new JMenu(Translations.getString("menu.file"));
 		this.add(fileMenu);
 		
-		fileMenu.add(new ActionManageLicense(16, 16));
-		fileMenu.addSeparator();
+		// TODO: PRO
+		// fileMenu.add(new ActionManageLicense(16, 16));
+		// fileMenu.addSeparator();
 		
 		fileMenu.add(new ActionNewWindow(16, 16));
 		fileMenu.add(new ActionCloseWindow(16, 16));
@@ -266,7 +265,8 @@ public class MenuBar extends JMenuBar implements ListChangeListener, PropertyCha
 		
 		tasksMenu.addSeparator();
 		
-		tasksMenu.add(new ActionManageTaskRules(16, 16));
+		// TODO: PRO
+		// tasksMenu.add(new ActionManageTaskRules(16, 16));
 		tasksMenu.add(new ActionManageTaskTemplates(16, 16));
 		tasksMenu.add(new ActionCreateTaskTemplateFromTask(16, 16));
 		tasksMenu.add(new ActionTaskReminders(16, 16));

@@ -39,7 +39,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -83,6 +82,9 @@ public class WelcomeDialog extends JDialog implements ConfigurationGroup {
 		} else {
 			this.panels.add(new WelcomePanel(messages, messageButtons));
 			
+			// TODO: PRO
+			// this.panels.add(new LicensePanel());
+			
 			this.panels.add(new SettingsPanel(
 					Translations.getString("configuration.tab.general"),
 					new GeneralConfigurationPanel(this, false, true)));
@@ -95,6 +97,7 @@ public class WelcomeDialog extends JDialog implements ConfigurationGroup {
 					Translations.getString("configuration.tab.proxy"),
 					new ProxyConfigurationPanel(this, false)));
 			
+			// TODO: hide when non pro
 			this.panels.add(new SettingsPanel(
 					Translations.getString("configuration.tab.synchronization"),
 					new SynchronizationConfigurationPanel(this, true),
@@ -142,7 +145,6 @@ public class WelcomeDialog extends JDialog implements ConfigurationGroup {
 		
 		this.cardPanel = new JPanel();
 		this.cardPanel.setLayout(new CardLayout());
-		this.cardPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 		this.add(this.cardPanel, BorderLayout.CENTER);
 		
 		int i = 0;

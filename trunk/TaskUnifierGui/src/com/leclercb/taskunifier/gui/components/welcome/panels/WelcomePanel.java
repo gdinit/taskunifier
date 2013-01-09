@@ -105,6 +105,12 @@ public class WelcomePanel extends CardPanel {
 			if (messageButtons != null)
 				messagePanel.add(messageButtons, BorderLayout.SOUTH);
 			
+			messagePanel.setBorder(BorderFactory.createEmptyBorder(
+					20,
+					20,
+					20,
+					20));
+			
 			this.add(messagePanel, BorderLayout.CENTER);
 		}
 	}
