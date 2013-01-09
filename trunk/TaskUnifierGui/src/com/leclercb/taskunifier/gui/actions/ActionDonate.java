@@ -34,14 +34,12 @@ package com.leclercb.taskunifier.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
-
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.DesktopUtils;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionDonate extends AbstractAction {
+public class ActionDonate extends AbstractViewAction {
 	
 	public ActionDonate(int width, int height) {
 		super(

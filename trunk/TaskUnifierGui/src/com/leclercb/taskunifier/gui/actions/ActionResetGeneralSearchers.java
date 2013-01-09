@@ -35,7 +35,6 @@ package com.leclercb.taskunifier.gui.actions;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
-import javax.swing.AbstractAction;
 import javax.swing.SortOrder;
 
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
@@ -53,7 +52,7 @@ import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionResetGeneralSearchers extends AbstractAction {
+public class ActionResetGeneralSearchers extends AbstractViewAction {
 	
 	public ActionResetGeneralSearchers(int width, int height) {
 		super(

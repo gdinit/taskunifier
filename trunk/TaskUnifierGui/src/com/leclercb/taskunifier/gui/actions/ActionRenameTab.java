@@ -34,7 +34,6 @@ package com.leclercb.taskunifier.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 
 import com.leclercb.taskunifier.gui.components.views.ViewItem;
@@ -43,7 +42,7 @@ import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionRenameTab extends AbstractAction {
+public class ActionRenameTab extends AbstractViewAction {
 	
 	public ActionRenameTab(int width, int height) {
 		super(

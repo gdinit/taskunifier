@@ -35,7 +35,6 @@ package com.leclercb.taskunifier.gui.actions;
 import java.awt.event.ActionEvent;
 import java.util.logging.Level;
 
-import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 
 import org.jdesktop.swingx.JXErrorPane;
@@ -46,7 +45,7 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.BackupUtils;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionCreateNewBackup extends AbstractAction {
+public class ActionCreateNewBackup extends AbstractViewAction {
 	
 	public ActionCreateNewBackup(int width, int height) {
 		super(

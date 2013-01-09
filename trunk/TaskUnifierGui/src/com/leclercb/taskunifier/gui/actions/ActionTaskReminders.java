@@ -35,8 +35,6 @@ package com.leclercb.taskunifier.gui.actions;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
-
 import org.apache.commons.lang3.SystemUtils;
 
 import com.leclercb.taskunifier.gui.components.reminder.ReminderDialog;
@@ -44,7 +42,7 @@ import com.leclercb.taskunifier.gui.main.MacApplication;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionTaskReminders extends AbstractAction {
+public class ActionTaskReminders extends AbstractViewAction {
 	
 	public ActionTaskReminders(int width, int height) {
 		super(

@@ -38,17 +38,17 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.gui.components.views.ViewList;
 import com.leclercb.taskunifier.gui.components.views.ViewType;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionChangeView extends AbstractAction implements PropertyChangeListener {
+public class ActionChangeView extends AbstractViewAction implements PropertyChangeListener {
 	
 	private int width;
 	private int height;
@@ -134,7 +134,13 @@ public class ActionChangeView extends AbstractAction implements PropertyChangeLi
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		ActionChangeView.this.updateIcon();
+		super.propertyChange(evt);
+		
+		if (EqualsUtils.equals(
+				ViewList.PROP_CURRENT_VIEW,
+				evt.getPropertyName())) {
+			ActionChangeView.this.updateIcon();
+		}
 	}
 	
 }

@@ -36,7 +36,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
@@ -54,7 +53,7 @@ import com.leclercb.commons.gui.swing.undo.events.WeakUndoListener;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionUndo extends AbstractAction implements UndoableEditListener, UndoListener, RedoListener, DiscardAllEditsListener {
+public class ActionUndo extends AbstractViewAction implements UndoableEditListener, UndoListener, RedoListener, DiscardAllEditsListener {
 	
 	private UndoFireManager undoManager;
 	private UndoableEditSupport editSupport;

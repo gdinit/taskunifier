@@ -40,8 +40,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.AbstractAction;
-
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Context;
 import com.leclercb.taskunifier.api.models.ContextFactory;
@@ -67,7 +65,7 @@ import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.TaskStatusList;
 
-public class ActionAddQuickTask extends AbstractAction {
+public class ActionAddQuickTask extends AbstractViewAction {
 	
 	public ActionAddQuickTask(int width, int height) {
 		super(

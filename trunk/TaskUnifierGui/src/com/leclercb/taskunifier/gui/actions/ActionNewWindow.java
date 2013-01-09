@@ -37,7 +37,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
 import com.leclercb.taskunifier.gui.components.views.DefaultCalendarView;
@@ -51,7 +50,7 @@ import com.leclercb.taskunifier.gui.main.frames.FrameView;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionNewWindow extends AbstractAction {
+public class ActionNewWindow extends AbstractViewAction {
 	
 	public ActionNewWindow(int width, int height) {
 		super(

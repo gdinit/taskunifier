@@ -34,13 +34,11 @@ package com.leclercb.taskunifier.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
-
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionCreateNoteFromClipboard extends AbstractAction {
+public class ActionCreateNoteFromClipboard extends AbstractViewAction {
 	
 	public ActionCreateNoteFromClipboard(int width, int height) {
 		super(

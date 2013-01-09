@@ -34,15 +34,13 @@ package com.leclercb.taskunifier.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
-
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.UserUtils;
 
-public class ActionSwitchToUser extends AbstractAction {
+public class ActionSwitchToUser extends AbstractViewAction {
 	
 	private String userId;
 	

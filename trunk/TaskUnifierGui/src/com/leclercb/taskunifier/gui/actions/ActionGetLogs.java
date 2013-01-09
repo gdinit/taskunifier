@@ -47,7 +47,6 @@ import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 
 import org.apache.commons.io.IOUtils;
@@ -65,7 +64,7 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.FileChooserUtils;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionGetLogs extends AbstractAction {
+public class ActionGetLogs extends AbstractViewAction {
 	
 	public ActionGetLogs(int width, int height) {
 		super(

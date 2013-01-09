@@ -36,8 +36,6 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.logging.Level;
 
-import javax.swing.AbstractAction;
-
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
@@ -47,7 +45,7 @@ import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionChangeDataFolderLocation extends AbstractAction {
+public class ActionChangeDataFolderLocation extends AbstractViewAction {
 	
 	public ActionChangeDataFolderLocation(int width, int height) {
 		super(
