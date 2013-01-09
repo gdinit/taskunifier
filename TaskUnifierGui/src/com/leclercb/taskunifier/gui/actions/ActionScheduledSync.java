@@ -36,20 +36,21 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.AbstractAction;
-
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionScheduledSync extends AbstractAction implements PropertyChangeListener {
+public class ActionScheduledSync extends AbstractViewAction implements PropertyChangeListener {
 	
 	private int width;
 	private int height;
 	
 	public ActionScheduledSync(int width, int height) {
 		super(Translations.getString("action.scheduled_sync"));
+		
+		this.setProRequired(true);
 		
 		this.putValue(
 				SHORT_DESCRIPTION,
@@ -86,6 +87,11 @@ public class ActionScheduledSync extends AbstractAction implements PropertyChang
 	}
 	
 	public static void scheduledSync() {
+		if (!Main.isProVersion()) {
+			showProRequired();
+			return;
+		}
+		
 		boolean schedulerEnabled = Main.getUserSettings().getBooleanProperty(
 				"synchronizer.scheduler_enabled");
 		
@@ -96,7 +102,13 @@ public class ActionScheduledSync extends AbstractAction implements PropertyChang
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		ActionScheduledSync.this.updateIcon();
+		super.propertyChange(evt);
+		
+		if (EqualsUtils.equals(
+				"synchronizer.scheduler_enabled",
+				evt.getPropertyName())) {
+			ActionScheduledSync.this.updateIcon();
+		}
 	}
 	
 }

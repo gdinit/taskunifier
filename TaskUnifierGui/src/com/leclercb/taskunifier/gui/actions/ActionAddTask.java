@@ -37,7 +37,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.Calendar;
 
-import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
 import com.leclercb.taskunifier.api.models.ModelStatus;
@@ -52,7 +51,7 @@ import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionAddTask extends AbstractAction {
+public class ActionAddTask extends AbstractViewAction {
 	
 	public ActionAddTask(int width, int height) {
 		super(

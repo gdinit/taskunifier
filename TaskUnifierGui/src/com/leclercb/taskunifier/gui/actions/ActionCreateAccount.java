@@ -34,12 +34,10 @@ package com.leclercb.taskunifier.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
-
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public abstract class ActionCreateAccount extends AbstractAction {
+public abstract class ActionCreateAccount extends AbstractViewAction {
 	
 	public ActionCreateAccount(int width, int height) {
 		super(

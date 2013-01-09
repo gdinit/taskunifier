@@ -34,15 +34,13 @@ package com.leclercb.taskunifier.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
-
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.components.configuration.PluginConfigurationDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 
-public class ActionPluginConfiguration extends AbstractAction {
+public class ActionPluginConfiguration extends AbstractViewAction {
 	
 	private SynchronizerGuiPlugin plugin;
 	

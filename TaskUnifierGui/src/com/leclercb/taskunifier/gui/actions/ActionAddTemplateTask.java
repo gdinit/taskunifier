@@ -37,7 +37,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
@@ -49,7 +48,7 @@ import com.leclercb.taskunifier.gui.main.frames.ShortcutKey;
 import com.leclercb.taskunifier.gui.properties.ShortcutKeyCoder;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionAddTemplateTask extends AbstractAction implements PropertyChangeListener {
+public class ActionAddTemplateTask extends AbstractViewAction implements PropertyChangeListener {
 	
 	public static final String ACTION_ADD_TEMPLATE_TASK = "ACTION_ADD_TEMPLATE_TASK";
 	
@@ -124,6 +123,8 @@ public class ActionAddTemplateTask extends AbstractAction implements PropertyCha
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		super.propertyChange(evt);
+		
 		if (EqualsUtils.equals(BasicModel.PROP_TITLE, evt.getPropertyName())) {
 			ActionAddTemplateTask.this.putValue(
 					NAME,

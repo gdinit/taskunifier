@@ -579,7 +579,7 @@ public class Main {
 	private static void loadProVersion() {
 		try {
 			// TODO: check license
-			PRO_VERSION = false;
+			PRO_VERSION = true;
 		} catch (Exception e) {
 			
 		}

@@ -36,8 +36,6 @@ import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.AbstractAction;
-
 import com.leclercb.taskunifier.gui.components.views.DefaultCalendarView;
 import com.leclercb.taskunifier.gui.components.views.DefaultNoteView;
 import com.leclercb.taskunifier.gui.components.views.DefaultTaskView;
@@ -50,7 +48,7 @@ import com.leclercb.taskunifier.gui.main.frames.FrameView;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionAddTab extends AbstractAction {
+public class ActionAddTab extends AbstractViewAction {
 	
 	private static Map<ViewType, Integer> COUNT_MAP = new HashMap<ViewType, Integer>();
 	

@@ -38,7 +38,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.AbstractAction;
 import javax.swing.JPopupMenu;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
@@ -46,6 +45,7 @@ import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.ModelStatus;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplateFactory;
@@ -53,7 +53,7 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.TemplateUtils;
 
-public class ActionAddTemplateTaskMenu extends AbstractAction implements ListChangeListener, PropertyChangeListener {
+public class ActionAddTemplateTaskMenu extends AbstractViewAction implements ListChangeListener, PropertyChangeListener {
 	
 	private ActionListener listener;
 	private JPopupMenu popupMenu;
@@ -105,10 +105,16 @@ public class ActionAddTemplateTaskMenu extends AbstractAction implements ListCha
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (((ModelStatus) evt.getOldValue()).isEndUserStatus() != ((ModelStatus) evt.getNewValue()).isEndUserStatus()) {
-			TemplateUtils.updateTemplateList(
-					this.listener,
-					ActionAddTemplateTaskMenu.this.popupMenu);
+		super.propertyChange(evt);
+		
+		if (EqualsUtils.equals(
+				BasicModel.PROP_MODEL_STATUS,
+				evt.getPropertyName())) {
+			if (((ModelStatus) evt.getOldValue()).isEndUserStatus() != ((ModelStatus) evt.getNewValue()).isEndUserStatus()) {
+				TemplateUtils.updateTemplateList(
+						this.listener,
+						ActionAddTemplateTaskMenu.this.popupMenu);
+			}
 		}
 	}
 	

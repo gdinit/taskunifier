@@ -34,14 +34,12 @@ package com.leclercb.taskunifier.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
-
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.DesktopUtils;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionGetSerial extends AbstractAction {
+public class ActionGetSerial extends AbstractViewAction {
 	
 	private String url;
 	

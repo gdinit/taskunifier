@@ -36,7 +36,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.AbstractAction;
 import javax.swing.KeyStroke;
 
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
@@ -47,11 +46,12 @@ import com.leclercb.taskunifier.gui.components.synchronize.SynchronizerWorker;
 import com.leclercb.taskunifier.gui.components.synchronize.SynchronizerWorker.Type;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
+import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 
-public class ActionSynchronizeAndPublish extends AbstractAction {
+public class ActionSynchronizeAndPublish extends AbstractViewAction {
 	
 	private boolean background;
 	
@@ -62,6 +62,8 @@ public class ActionSynchronizeAndPublish extends AbstractAction {
 						"synchronize_publish.png",
 						width,
 						height));
+		
+		this.setProRequired(true);
 		
 		this.background = background;
 		
@@ -86,6 +88,11 @@ public class ActionSynchronizeAndPublish extends AbstractAction {
 	public static void synchronizeAndPublish(
 			boolean background,
 			boolean userAction) {
+		if (!Main.isProVersion()) {
+			showProRequired();
+			return;
+		}
+		
 		if (Synchronizing.getInstance().isSynchronizing()) {
 			if (!background)
 				Synchronizing.getInstance().showSynchronizingMessage();

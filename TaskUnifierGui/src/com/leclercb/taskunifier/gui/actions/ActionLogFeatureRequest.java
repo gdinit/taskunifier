@@ -34,13 +34,11 @@ package com.leclercb.taskunifier.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
-
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.DesktopUtils;
 
-public class ActionLogFeatureRequest extends AbstractAction {
+public class ActionLogFeatureRequest extends AbstractViewAction {
 	
 	public ActionLogFeatureRequest() {
 		super(Translations.getString("action.log_feature_request"));

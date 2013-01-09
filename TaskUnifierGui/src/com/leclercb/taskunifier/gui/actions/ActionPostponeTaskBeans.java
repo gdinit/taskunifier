@@ -39,8 +39,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.AbstractAction;
-
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.beans.TaskBean;
 import com.leclercb.taskunifier.gui.commons.comparators.TimeValueComparator;
@@ -49,7 +47,7 @@ import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.TaskPostponeList;
 import com.leclercb.taskunifier.gui.utils.TaskPostponeList.PostponeItem;
 
-public class ActionPostponeTaskBeans extends AbstractAction {
+public class ActionPostponeTaskBeans extends AbstractViewAction {
 	
 	private ActionListener listener;
 	

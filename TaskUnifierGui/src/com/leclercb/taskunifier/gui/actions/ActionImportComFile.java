@@ -40,8 +40,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import javax.swing.AbstractAction;
-
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
@@ -64,7 +62,7 @@ import com.leclercb.taskunifier.gui.threads.communicator.progress.CommunicatorDe
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionImportComFile extends AbstractAction {
+public class ActionImportComFile extends AbstractViewAction {
 	
 	public ActionImportComFile(int width, int height) {
 		super(

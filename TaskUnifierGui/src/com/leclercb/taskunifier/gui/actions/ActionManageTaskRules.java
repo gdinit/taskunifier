@@ -34,18 +34,19 @@ package com.leclercb.taskunifier.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
-
 import com.leclercb.taskunifier.gui.components.taskrules.TaskRuleConfigurationDialog;
+import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionManageTaskRules extends AbstractAction {
+public class ActionManageTaskRules extends AbstractViewAction {
 	
 	public ActionManageTaskRules(int width, int height) {
 		super(
 				Translations.getString("action.manage_task_rules"),
 				ImageUtils.getResourceImage("rule.png", width, height));
+		
+		this.setProRequired(true);
 		
 		this.putValue(
 				SHORT_DESCRIPTION,
@@ -58,6 +59,11 @@ public class ActionManageTaskRules extends AbstractAction {
 	}
 	
 	public static void manageRules() {
+		if (!Main.isProVersion()) {
+			showProRequired();
+			return;
+		}
+		
 		TaskRuleConfigurationDialog.getInstance().setVisible(true);
 	}
 	

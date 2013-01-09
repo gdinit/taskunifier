@@ -34,13 +34,11 @@ package com.leclercb.taskunifier.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
-
 import com.leclercb.taskunifier.gui.components.export_data.ExportTaskRulesDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionExportTaskRules extends AbstractAction {
+public class ActionExportTaskRules extends AbstractViewAction {
 	
 	public ActionExportTaskRules(int width, int height) {
 		super(

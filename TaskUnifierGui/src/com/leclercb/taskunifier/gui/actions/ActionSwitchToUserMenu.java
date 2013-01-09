@@ -35,7 +35,6 @@ package com.leclercb.taskunifier.gui.actions;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
 import javax.swing.JPopupMenu;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
@@ -45,7 +44,7 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.UserUtils;
 
-public class ActionSwitchToUserMenu extends AbstractAction implements ListChangeListener {
+public class ActionSwitchToUserMenu extends AbstractViewAction implements ListChangeListener {
 	
 	private JPopupMenu popupMenu;
 	

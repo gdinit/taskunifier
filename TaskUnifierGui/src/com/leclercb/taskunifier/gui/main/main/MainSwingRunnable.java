@@ -53,7 +53,6 @@ import com.leclercb.taskunifier.gui.actions.ActionCheckVersion;
 import com.leclercb.taskunifier.gui.actions.ActionNewWindow;
 import com.leclercb.taskunifier.gui.actions.ActionPublish;
 import com.leclercb.taskunifier.gui.actions.ActionResetGeneralSearchers;
-import com.leclercb.taskunifier.gui.actions.ActionReview;
 import com.leclercb.taskunifier.gui.actions.ActionSynchronize;
 import com.leclercb.taskunifier.gui.actions.ActionSynchronizeAndPublish;
 import com.leclercb.taskunifier.gui.components.tips.TipsDialog;
@@ -101,13 +100,6 @@ public class MainSwingRunnable implements Runnable {
 			
 			ActionCheckVersion.checkVersion(true);
 			ActionCheckPluginVersion.checkAllPluginVersion(true);
-			
-			Boolean showed = Main.getSettings().getBooleanProperty(
-					"review.showed");
-			if (!Main.isFirstExecution() && (showed == null || !showed)) {
-				ActionReview.review();
-				Main.getSettings().setBooleanProperty("review.showed", true);
-			}
 			
 			TipsDialog.getInstance().showTipsDialog(true);
 			

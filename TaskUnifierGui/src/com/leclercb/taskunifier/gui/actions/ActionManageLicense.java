@@ -34,13 +34,11 @@ package com.leclercb.taskunifier.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
-
 import com.leclercb.taskunifier.gui.components.license.LicenseDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionManageLicense extends AbstractAction {
+public class ActionManageLicense extends AbstractViewAction {
 	
 	public ActionManageLicense(int width, int height) {
 		super(
