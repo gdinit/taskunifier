@@ -38,43 +38,13 @@ import javax.swing.BorderFactory;
 
 import org.jdesktop.swingx.JXHeader;
 
-import com.leclercb.commons.api.utils.CheckUtils;
-import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationPanel;
+import com.leclercb.taskunifier.gui.components.license.LicenseUtils;
+import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class SettingsPanel extends CardPanel {
+public class LicensePanel extends CardPanel {
 	
-	private String title;
-	private ConfigurationPanel panel;
-	private CardInterface cardInterface;
-	
-	public SettingsPanel(String title, ConfigurationPanel panel) {
-		this(title, panel, null);
-	}
-	
-	public SettingsPanel(
-			String title,
-			ConfigurationPanel panel,
-			CardInterface cardInterface) {
-		this.reset(title, panel, cardInterface);
-	}
-	
-	public ConfigurationPanel getConfigurationPanel() {
-		return this.panel;
-	}
-	
-	public void reset(
-			String title,
-			ConfigurationPanel panel,
-			CardInterface cardInterface) {
-		CheckUtils.isNotNull(title);
-		CheckUtils.isNotNull(panel);
-		
-		this.title = title;
-		this.panel = panel;
-		this.cardInterface = cardInterface;
-		
-		this.removeAll();
+	public LicensePanel() {
 		this.initialize();
 	}
 	
@@ -82,40 +52,26 @@ public class SettingsPanel extends CardPanel {
 		this.setLayout(new BorderLayout(20, 20));
 		
 		JXHeader header = new JXHeader();
-		header.setTitle(this.title);
-		header.setIcon(ImageUtils.getResourceImage("settings.png", 32, 32));
+		header.setTitle(Translations.getString("general.license"));
+		header.setIcon(ImageUtils.getResourceImage("key.png", 32, 32));
 		
 		this.add(header, BorderLayout.NORTH);
 		
-		this.panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		com.leclercb.taskunifier.gui.components.license.LicensePanel licensePanel = new com.leclercb.taskunifier.gui.components.license.LicensePanel();
+		licensePanel.setLicense(LicenseUtils.loadLicense());
+		licensePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		
-		this.add(this.panel, BorderLayout.CENTER);
-	}
-	
-	@Override
-	public boolean next() {
-		if (this.cardInterface != null)
-			return this.cardInterface.next();
-		
-		return true;
-	}
-	
-	@Override
-	public void display() {
-		if (this.cardInterface != null)
-			this.cardInterface.display();
+		this.add(licensePanel, BorderLayout.CENTER);
 	}
 	
 	@Override
 	public void saveAndApplyConfig() {
-		if (this.panel != null)
-			this.panel.saveAndApplyConfig();
+		
 	}
 	
 	@Override
 	public void cancelConfig() {
-		if (this.panel != null)
-			this.panel.cancelConfig();
+		
 	}
 	
 }
