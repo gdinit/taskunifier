@@ -113,15 +113,6 @@ public class ConfigurationDialog extends TUDialog implements ConfigurationGroup,
 		this.initialize();
 	}
 	
-	@Override
-	public void setVisible(boolean visible) {
-		if (visible) {
-			this.setLocationRelativeTo(FrameUtils.getCurrentFrame());
-		}
-		
-		super.setVisible(visible);
-	}
-	
 	public void setSelectedConfigurationTab(ConfigurationTab tab) {
 		CheckUtils.isNotNull(tab);
 		this.tabbedPane.setSelectedIndex(tab.ordinal());
