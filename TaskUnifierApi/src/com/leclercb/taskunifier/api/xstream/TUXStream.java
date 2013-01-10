@@ -32,20 +32,14 @@
  */
 package com.leclercb.taskunifier.api.xstream;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConverterLookup;
 import com.thoughtworks.xstream.converters.ConverterRegistry;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.io.HierarchicalStreamDriver;
 import com.thoughtworks.xstream.mapper.Mapper;
-import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 public class TUXStream extends XStream {
-	
-	private List<String> implicitFields = new ArrayList<String>();
 	
 	public TUXStream() {
 		super();
@@ -94,41 +88,6 @@ public class TUXStream extends XStream {
 	
 	public TUXStream(ReflectionProvider reflectionProvider) {
 		super(reflectionProvider);
-	}
-	
-	@Override
-	public void addImplicitCollection(
-			Class ownerType,
-			String fieldName,
-			String itemFieldName,
-			Class itemType) {
-		this.implicitFields.add(fieldName);
-		
-		super.addImplicitCollection(
-				ownerType,
-				fieldName,
-				itemFieldName,
-				itemType);
-	}
-	
-	@Override
-	protected MapperWrapper wrapMapper(MapperWrapper next) {
-		return new MapperWrapper(next) {
-			
-			@SuppressWarnings("rawtypes")
-			@Override
-			public boolean shouldSerializeMember(
-					Class definedIn,
-					String fieldName) {
-				if (!TUXStream.this.implicitFields.contains(fieldName)
-						&& definedIn.equals(Object.class)) {
-					return false;
-				}
-				
-				return super.shouldSerializeMember(definedIn, fieldName);
-			}
-			
-		};
 	}
 	
 }
