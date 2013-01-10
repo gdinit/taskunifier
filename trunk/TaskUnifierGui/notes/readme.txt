@@ -1,6 +1,10 @@
 HISTORY
 -------
 
+Version 3.1.7
+	- Major:
+		- BF 250: Error while loading contexts, goals and locations
+
 Version 3.1.6
 	- Minor:
 		- Bug fixed: Order of tasks in calendar views
