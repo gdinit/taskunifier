@@ -224,6 +224,14 @@ public class MainSwingRunnable implements Runnable {
 					Constants.VERSION));
 		}
 		
+		if (!Main.isFirstExecution()
+				&& Main.isVersionUpdated()
+				&& Main.getPreviousVersion() != null
+				&& Main.getPreviousVersion().equals("3.1.6")) {
+			messages.add("Due to a bug in version 3.1.6, the contexts, goals and locations of the tasks weren't correctly saved. "
+					+ "It is recommended to restore from a backup (File -> Restore backup) or to reload the data from Toodledo (Settings -> Synchronization -> Remove all and synchronize).");
+		}
+		
 		if (Main.isFirstExecution()
 				|| (Main.isVersionUpdated()
 						&& Main.getPreviousVersion() != null && Main.getPreviousVersion().compareTo(
