@@ -101,7 +101,8 @@ public class MainSwingRunnable implements Runnable {
 			ActionCheckVersion.checkVersion(true);
 			ActionCheckPluginVersion.checkAllPluginVersion(true);
 			
-			TipsDialog.getInstance().showTipsDialog(true);
+			if (!Main.isFirstExecution())
+				TipsDialog.getInstance().showTipsDialog(true);
 			
 			Main.handleArguments(this.args);
 			
