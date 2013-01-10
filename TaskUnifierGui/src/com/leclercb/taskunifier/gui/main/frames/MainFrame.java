@@ -143,7 +143,8 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		this.setIconImage(ImageUtils.getResourceImage("logo.png").getImage());
 		
-		if (Main.isProVersion())
+		// TODO: pro
+		if (false)
 			this.setTitle(Constants.TITLE + " Pro - " + Constants.VERSION);
 		else
 			this.setTitle(Constants.TITLE + " - " + Constants.VERSION);
@@ -388,7 +389,8 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 		
 		this.mainTabbedPane.setSelectedIndex(index);
 		
-		if (Main.isProVersion())
+		// TODO: pro
+		if (false)
 			this.setTitle(Constants.TITLE
 					+ " Pro - "
 					+ Constants.VERSION
