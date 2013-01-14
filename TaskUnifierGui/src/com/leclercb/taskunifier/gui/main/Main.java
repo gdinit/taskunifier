@@ -579,10 +579,15 @@ public class Main {
 	private static void loadProVersion() {
 		try {
 			// TODO: check license
+			// LicenseUtils.checkLicense();
 			PRO_VERSION = true;
 		} catch (Exception e) {
-			
+			PRO_VERSION = false;
 		}
+	}
+	
+	public static void reloadProVersion() {
+		loadProVersion();
 	}
 	
 	private static void loadModels() throws Exception {

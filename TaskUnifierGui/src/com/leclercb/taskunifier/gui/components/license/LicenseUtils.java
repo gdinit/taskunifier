@@ -33,6 +33,7 @@
 package com.leclercb.taskunifier.gui.components.license;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.logging.Level;
@@ -64,6 +65,8 @@ public final class LicenseUtils {
 			License l = lm.readLicense(license);
 			
 			return l;
+		} catch (FileNotFoundException e) {
+			
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(Level.SEVERE, "Cannot load license", e);
 		}
@@ -79,6 +82,8 @@ public final class LicenseUtils {
 			
 			File file = new File(Main.getLicenseFile());
 			FileUtils.writeStringToFile(file, license);
+			
+			Main.reloadProVersion();
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(Level.SEVERE, "Cannot save license", e);
 		}
@@ -86,7 +91,17 @@ public final class LicenseUtils {
 	
 	public static void checkLicense() throws LicenseException {
 		License l = loadLicense();
-		l.validate(Calendar.getInstance(), Constants.VERSION);
+		
+		try {
+			l.validate(Calendar.getInstance(), Constants.VERSION);
+		} catch (LicenseException e) {
+			GuiLogger.getLogger().log(
+					Level.SEVERE,
+					"License validation failed",
+					e);
+			
+			throw e;
+		}
 	}
 	
 }

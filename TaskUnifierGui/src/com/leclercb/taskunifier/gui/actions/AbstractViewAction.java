@@ -37,12 +37,15 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
+import javax.swing.JOptionPane;
 
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.gui.components.views.ViewList;
 import com.leclercb.taskunifier.gui.components.views.ViewType;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
+import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
+import com.leclercb.taskunifier.gui.translations.Translations;
 
 public abstract class AbstractViewAction extends AbstractAction implements PropertyChangeListener {
 	
@@ -111,7 +114,36 @@ public abstract class AbstractViewAction extends AbstractAction implements Prope
 	}
 	
 	public static void showProRequired() {
-		// TODO: show pro required
+		TUSwingUtilities.executeOrInvokeAndWait(new Runnable() {
+			
+			@Override
+			public void run() {
+				String[] options = {
+						Translations.getString("license.enter_license"),
+						Translations.getString("license.buy_license"),
+						Translations.getString("general.cancel") };
+				
+				int result = JOptionPane.showOptionDialog(
+						null,
+						Translations.getString("license.pro_version_required"),
+						Translations.getString("general.information"),
+						JOptionPane.YES_NO_CANCEL_OPTION,
+						JOptionPane.INFORMATION_MESSAGE,
+						null,
+						options,
+						options[2]);
+				
+				switch (result) {
+					case 0:
+						ActionManageLicense.manageLicense();
+						break;
+					case 1:
+						// TODO buy license
+						break;
+				}
+			}
+			
+		});
 	}
 	
 }
