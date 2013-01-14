@@ -52,6 +52,10 @@ public class TaskTemplateConfigurationPanel extends JSplitPane {
 		this.templateList.setSelectedTemplate(template);
 	}
 	
+	public void focusAndSelectTextInTextField() {
+		this.templateList.focusAndSelectTextInTextField();
+	}
+	
 	private void initialize() {
 		this.taskTemplatePanel = new TaskTemplatePanel();
 		this.taskTemplatePanel.setBorder(new EmptyBorder(5, 5, 5, 5));

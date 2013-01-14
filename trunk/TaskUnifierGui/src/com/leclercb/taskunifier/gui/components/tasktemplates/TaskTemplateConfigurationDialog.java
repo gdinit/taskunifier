@@ -73,6 +73,10 @@ public class TaskTemplateConfigurationDialog extends TUDialog {
 		this.templateConfigurationPanel.setSelectedTemplate(template);
 	}
 	
+	public void focusAndSelectTextInTextField() {
+		this.templateConfigurationPanel.focusAndSelectTextInTextField();
+	}
+	
 	private void initialize() {
 		this.setModal(true);
 		this.setTitle(Translations.getString("general.manage_task_templates"));

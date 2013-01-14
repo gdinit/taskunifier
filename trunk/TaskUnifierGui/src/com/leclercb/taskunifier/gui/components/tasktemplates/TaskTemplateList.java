@@ -204,6 +204,10 @@ abstract class TaskTemplateList extends JPanel {
 		this.add(panel, BorderLayout.SOUTH);
 	}
 	
+	public void focusAndSelectTextInTextField() {
+		ComponentUtils.focusAndSelectTextInTextField(TaskTemplateList.this.titleField);
+	}
+	
 	public TaskTemplate getSelectedTemplate() {
 		return (TaskTemplate) this.templateList.getSelectedValue();
 	}
