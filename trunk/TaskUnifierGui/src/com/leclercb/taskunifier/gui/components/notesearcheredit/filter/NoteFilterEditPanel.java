@@ -1,6 +1,7 @@
 package com.leclercb.taskunifier.gui.components.notesearcheredit.filter;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 
 import javax.swing.JPanel;
 import javax.swing.event.TreeSelectionEvent;
@@ -11,8 +12,11 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilter;
 
 public class NoteFilterEditPanel extends JPanel implements TreeSelectionListener {
 	
+	private NoteFilterLinkPanel filterLinkPanel;
 	private NoteFilterElementPanel elementPanel;
 	private NoteFilterPanel filterPanel;
+	
+	private JPanel southPanel;
 	
 	public NoteFilterEditPanel() {
 		this.initialize();
@@ -37,13 +41,23 @@ public class NoteFilterEditPanel extends JPanel implements TreeSelectionListener
 	private void initialize() {
 		this.setLayout(new BorderLayout(5, 5));
 		
+		this.southPanel = new JPanel(new CardLayout());
+		
 		this.elementPanel = new NoteFilterElementPanel();
+		this.southPanel.add(this.elementPanel, "ELEMENT");
+		
+		this.filterLinkPanel = new NoteFilterLinkPanel();
+		this.southPanel.add(this.filterLinkPanel, "LINK");
 		
 		this.filterPanel = new NoteFilterPanel();
 		this.filterPanel.getTree().addTreeSelectionListener(this);
 		
 		this.add(this.filterPanel, BorderLayout.CENTER);
-		this.add(this.elementPanel, BorderLayout.SOUTH);
+		this.add(this.southPanel, BorderLayout.SOUTH);
+		
+		((CardLayout) this.southPanel.getLayout()).show(
+				this.southPanel,
+				"ELEMENT");
 	}
 	
 	public void close() {
@@ -58,7 +72,18 @@ public class NoteFilterEditPanel extends JPanel implements TreeSelectionListener
 			TreeNode node = (TreeNode) this.filterPanel.getTree().getLastSelectedPathComponent();
 			
 			if (node instanceof NoteFilterElementTreeNode) {
+				((CardLayout) this.southPanel.getLayout()).show(
+						this.southPanel,
+						"ELEMENT");
 				this.elementPanel.setElement(((NoteFilterElementTreeNode) node).getElement());
+				return;
+			}
+			
+			if (node instanceof NoteFilterTreeNode) {
+				((CardLayout) this.southPanel.getLayout()).show(
+						this.southPanel,
+						"LINK");
+				this.filterLinkPanel.setFilter(((NoteFilterTreeNode) node).getFilter());
 				return;
 			}
 		}
