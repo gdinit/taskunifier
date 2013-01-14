@@ -39,6 +39,7 @@ import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplateFactory;
 import com.leclercb.taskunifier.gui.components.tasktemplates.TaskTemplateConfigurationDialog;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
+import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
@@ -84,6 +85,16 @@ public class ActionCreateTaskTemplateFromTask extends AbstractViewTaskSelectionA
 		
 		TaskTemplateConfigurationDialog.getInstance().setSelectedTemplate(
 				template);
+		
+		TUSwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				TaskTemplateConfigurationDialog.getInstance().focusAndSelectTextInTextField();
+			}
+			
+		});
+		
 		TaskTemplateConfigurationDialog.getInstance().setVisible(true);
 	}
 	

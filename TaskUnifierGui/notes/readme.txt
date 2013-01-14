@@ -4,6 +4,7 @@ HISTORY
 Version 3.1.8
 	- Minor:
 		- BF 254: Filter operator change
+		- Improved create template from task
 
 Version 3.1.7
 	- Major:
