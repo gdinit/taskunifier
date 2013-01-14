@@ -1,6 +1,10 @@
 HISTORY
 -------
 
+Version 3.1.8
+	- Minor:
+		- BF 254: Filter operator change
+
 Version 3.1.7
 	- Major:
 		- BF 250: Error while loading contexts, goals and locations
