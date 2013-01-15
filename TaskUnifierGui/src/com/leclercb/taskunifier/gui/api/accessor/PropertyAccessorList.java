@@ -40,27 +40,27 @@ import java.util.Map;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.models.Model;
 
-public class PropertyAccessorList<M extends Model> {
+public class PropertyAccessorList<M extends Model, PA extends AbstractPropertyAccessor<M>> {
 	
-	private Map<String, AbstractPropertyAccessor<M>> map;
+	private Map<String, PA> map;
 	
 	public PropertyAccessorList() {
-		this.map = new HashMap<String, AbstractPropertyAccessor<M>>();
+		this.map = new HashMap<String, PA>();
 	}
 	
-	public void add(String name, AbstractPropertyAccessor<M> properties) {
+	public void add(String name, PA properties) {
 		this.map.put(name, properties);
 	}
 	
-	public AbstractPropertyAccessor<M> get(String name) {
+	public PA get(String name) {
 		return this.map.get(name);
 	}
 	
-	public AbstractPropertyAccessor<M> parsePropertyName(String propertyName) {
+	public PA parsePropertyName(String propertyName) {
 		if (propertyName == null)
 			return null;
 		
-		for (AbstractPropertyAccessor<M> mp : this.map.values()) {
+		for (PA mp : this.map.values()) {
 			if (EqualsUtils.equals(mp.getPropertyName(), propertyName))
 				return mp;
 		}
@@ -68,15 +68,14 @@ public class PropertyAccessorList<M extends Model> {
 		return null;
 	}
 	
-	public List<AbstractPropertyAccessor<M>> getUsableColumns() {
+	public List<PA> getUsableColumns() {
 		return this.getUsedColumns(true);
 	}
 	
-	public List<AbstractPropertyAccessor<M>> getUsableColumns(
-			boolean includeNote) {
-		List<AbstractPropertyAccessor<M>> list = new ArrayList<AbstractPropertyAccessor<M>>();
+	public List<PA> getUsableColumns(boolean includeNote) {
+		List<PA> list = new ArrayList<PA>();
 		
-		for (AbstractPropertyAccessor<M> mp : this.map.values()) {
+		for (PA mp : this.map.values()) {
 			if (mp.isUsable())
 				list.add(mp);
 		}
@@ -87,14 +86,14 @@ public class PropertyAccessorList<M extends Model> {
 		return list;
 	}
 	
-	public List<AbstractPropertyAccessor<M>> getUsedColumns() {
+	public List<PA> getUsedColumns() {
 		return this.getUsedColumns(true);
 	}
 	
-	public List<AbstractPropertyAccessor<M>> getUsedColumns(boolean includeNote) {
-		List<AbstractPropertyAccessor<M>> list = new ArrayList<AbstractPropertyAccessor<M>>();
+	public List<PA> getUsedColumns(boolean includeNote) {
+		List<PA> list = new ArrayList<PA>();
 		
-		for (AbstractPropertyAccessor<M> mp : this.map.values()) {
+		for (PA mp : this.map.values()) {
 			if (mp.isUsable() && mp.isUsed())
 				list.add(mp);
 		}
