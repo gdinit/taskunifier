@@ -32,16 +32,12 @@
  */
 package com.leclercb.taskunifier.gui.swing.table;
 
-public interface TUColumn<T> {
-	
-	public abstract Class<?> getType();
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+
+public interface TUColumn<T> extends PropertyAccessor<T> {
 	
 	public abstract String getLabel();
 	
 	public abstract boolean isEditable();
-	
-	public abstract Object getProperty(T item);
-	
-	public abstract void setProperty(T item, Object value);
 	
 }

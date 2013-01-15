@@ -30,85 +30,25 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.notes;
+package com.leclercb.taskunifier.gui.api.accessor;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupport;
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
-import com.leclercb.commons.api.utils.EqualsUtils;
-import com.leclercb.taskunifier.api.models.Folder;
-import com.leclercb.taskunifier.api.models.Note;
+import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.table.TUColumn;
-import com.leclercb.taskunifier.gui.translations.Translations;
 
-public enum NoteColumn implements TUColumn<Note>, PropertyChangeListener, PropertyChangeSupported {
-	
-	MODEL(Note.class, Note.PROP_MODEL_ID, Translations.getString("general.note.id"), false, true),
-	MODEL_CREATION_DATE(Calendar.class, Note.PROP_MODEL_CREATION_DATE, Translations.getString("general.creation_date"), false, true),
-	MODEL_UPDATE_DATE(Calendar.class, Note.PROP_MODEL_UPDATE_DATE, Translations.getString("general.update_date"), false, true),
-	TITLE(String.class, Note.PROP_TITLE, Translations.getString("general.note.title"), true, true),
-	FOLDER(Folder.class, Note.PROP_FOLDER, Translations.getString("general.note.folder"), true, true),
-	NOTE(String.class, Note.PROP_NOTE, Translations.getString("general.note.note"), false, true);
+public abstract class AbstractPropertyAccessor<M extends Model> implements PropertyAccessor<M>, TUColumn<M>, PropertyChangeListener, PropertyChangeSupported {
 	
 	public static final String PROP_USED = "used";
 	
-	public static NoteColumn parsePropertyName(String propertyName) {
-		if (propertyName == null)
-			return null;
-		
-		for (NoteColumn column : values()) {
-			if (EqualsUtils.equals(column.getPropertyName(), propertyName))
-				return column;
-		}
-		
-		return null;
-	}
-	
-	public static NoteColumn[] getUsableColumns() {
-		return getUsedColumns(true);
-	}
-	
-	public static NoteColumn[] getUsableColumns(boolean includeNote) {
-		List<NoteColumn> columns = new ArrayList<NoteColumn>();
-		
-		for (NoteColumn column : values()) {
-			if (column.isUsable())
-				columns.add(column);
-		}
-		
-		if (!includeNote)
-			columns.remove(NoteColumn.NOTE);
-		
-		return columns.toArray(new NoteColumn[0]);
-	}
-	
-	public static NoteColumn[] getUsedColumns() {
-		return getUsedColumns(true);
-	}
-	
-	public static NoteColumn[] getUsedColumns(boolean includeNote) {
-		List<NoteColumn> columns = new ArrayList<NoteColumn>();
-		
-		for (NoteColumn column : values()) {
-			if (column.isUsable() && column.isUsed())
-				columns.add(column);
-		}
-		
-		if (!includeNote)
-			columns.remove(NoteColumn.NOTE);
-		
-		return columns.toArray(new NoteColumn[0]);
-	}
-	
 	private PropertyChangeSupport propertyChangeSupport;
 	
+	private String fieldSettingsPropertyName;
 	private Class<?> type;
 	private String propertyName;
 	private String label;
@@ -116,7 +56,8 @@ public enum NoteColumn implements TUColumn<Note>, PropertyChangeListener, Proper
 	private boolean usable;
 	private boolean used;
 	
-	private NoteColumn(
+	public AbstractPropertyAccessor(
+			String fieldSettingsPropertyName,
 			Class<?> type,
 			String propertyName,
 			String label,
@@ -124,6 +65,7 @@ public enum NoteColumn implements TUColumn<Note>, PropertyChangeListener, Proper
 			boolean usable) {
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
 		
+		this.setFieldSettingsPropertyName(fieldSettingsPropertyName);
 		this.setType(type);
 		this.setPropertyName(propertyName);
 		this.setLabel(label);
@@ -131,12 +73,20 @@ public enum NoteColumn implements TUColumn<Note>, PropertyChangeListener, Proper
 		this.setUsable(usable);
 		
 		this.setUsed(Main.getSettings().getBooleanProperty(
-				"note.field." + this.name().toLowerCase() + ".used",
+				fieldSettingsPropertyName + ".used",
 				true));
 		
 		Main.getSettings().addPropertyChangeListener(
-				"note.field." + this.name().toLowerCase() + ".used",
+				fieldSettingsPropertyName + ".used",
 				new WeakPropertyChangeListener(Main.getSettings(), this));
+	}
+	
+	public String getFieldSettingsPropertyName() {
+		return this.fieldSettingsPropertyName;
+	}
+	
+	public void setFieldSettingsPropertyName(String fieldSettingsPropertyName) {
+		this.fieldSettingsPropertyName = fieldSettingsPropertyName;
 	}
 	
 	public String getPropertyName() {
@@ -194,7 +144,7 @@ public enum NoteColumn implements TUColumn<Note>, PropertyChangeListener, Proper
 		this.used = used;
 		
 		Main.getSettings().setBooleanProperty(
-				"note.field." + this.name().toLowerCase() + ".used",
+				this.fieldSettingsPropertyName + ".used",
 				used);
 		
 		this.propertyChangeSupport.firePropertyChange(PROP_USED, oldUsed, used);
@@ -203,53 +153,6 @@ public enum NoteColumn implements TUColumn<Note>, PropertyChangeListener, Proper
 	@Override
 	public String toString() {
 		return this.label;
-	}
-	
-	@Override
-	public Object getProperty(Note note) {
-		if (note == null)
-			return null;
-		
-		switch (this) {
-			case MODEL:
-				return note;
-			case MODEL_CREATION_DATE:
-				return note.getModelCreationDate();
-			case MODEL_UPDATE_DATE:
-				return note.getModelUpdateDate();
-			case TITLE:
-				return note.getTitle();
-			case FOLDER:
-				return note.getFolder();
-			case NOTE:
-				return note.getNote();
-			default:
-				return null;
-		}
-	}
-	
-	@Override
-	public void setProperty(Note note, Object value) {
-		if (note == null)
-			return;
-		
-		switch (this) {
-			case MODEL:
-				break;
-			case MODEL_CREATION_DATE:
-				break;
-			case MODEL_UPDATE_DATE:
-				break;
-			case TITLE:
-				note.setTitle((String) value);
-				break;
-			case FOLDER:
-				note.setFolder((Folder) value);
-				break;
-			case NOTE:
-				note.setNote((String) value);
-				break;
-		}
 	}
 	
 	@Override
