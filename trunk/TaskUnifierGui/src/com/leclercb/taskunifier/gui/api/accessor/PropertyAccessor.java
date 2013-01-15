@@ -30,15 +30,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.api.models.properties;
+package com.leclercb.taskunifier.gui.api.accessor;
 
-import com.leclercb.taskunifier.api.models.Model;
-
-public interface ModelProperties<M extends Model> {
+public interface PropertyAccessor<T> {
 	
-	public abstract Object getProperty(M model);
+	public abstract Object getProperty(T object);
 	
-	public abstract void setProperty(M model, Object value);
+	public abstract void setProperty(T object, Object value);
 	
 	public abstract Class<?> getType();
 	

@@ -40,12 +40,12 @@ import com.leclercb.commons.api.event.propertychange.PropertyChangeSupport;
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Model;
-import com.leclercb.taskunifier.gui.api.models.properties.ModelProperties;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
-public class SorterElement<M extends Model, MP extends ModelProperties<M>> implements PropertyChangeSupported {
+public class SorterElement<M extends Model, MP extends PropertyAccessor<M>> implements PropertyChangeSupported {
 	
 	public static final String PROP_PROPERTY = "property";
 	public static final String PROP_SORT_ORDER = "sortOrder";

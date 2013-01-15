@@ -54,13 +54,12 @@ import com.leclercb.taskunifier.api.models.Timer;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.gui.api.models.GuiTask;
-import com.leclercb.taskunifier.gui.api.models.properties.ModelProperties;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.table.TUColumn;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
-public enum TaskColumn implements ModelProperties<Task>, TUColumn<Task>, PropertyChangeListener, PropertyChangeSupported {
+public enum TaskColumn implements TUColumn<Task>, PropertyChangeListener, PropertyChangeSupported {
 	
 	MODEL(Task.class, Task.PROP_MODEL_ID, Translations.getString("general.task.id"), false, true),
 	MODEL_EDIT(Void.class, null, Translations.getString("general.edit"), false, false),
