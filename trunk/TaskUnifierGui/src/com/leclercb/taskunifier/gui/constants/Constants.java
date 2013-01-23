@@ -54,9 +54,9 @@ import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorterElement;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 import com.leclercb.taskunifier.gui.components.synchronize.progress.NotificationSynchronizerProgressMessageListener;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.threads.communicator.progress.NotificationCommunicatorProgressMessageListener;
 import com.leclercb.taskunifier.gui.threads.reminder.progress.NotificationReminderProgressMessageListener;
@@ -134,11 +134,11 @@ public final class Constants {
 		NoteSorter defaultNoteSorter = new NoteSorter();
 		
 		defaultNoteSorter.addElement(new NoteSorterElement(
-				NoteColumn.FOLDER,
+				NoteColumnList.FOLDER,
 				SortOrder.ASCENDING));
 		
 		defaultNoteSorter.addElement(new NoteSorterElement(
-				NoteColumn.TITLE,
+				NoteColumnList.TITLE,
 				SortOrder.ASCENDING));
 		
 		// Default Note Filter
@@ -182,13 +182,13 @@ public final class Constants {
 		TaskSorter defaultTaskSorter = new TaskSorter();
 		
 		defaultTaskSorter.addElement(new TaskSorterElement(
-				TaskColumn.DUE_DATE,
+				TaskColumnList.DUE_DATE,
 				SortOrder.ASCENDING));
 		defaultTaskSorter.addElement(new TaskSorterElement(
-				TaskColumn.PRIORITY,
+				TaskColumnList.PRIORITY,
 				SortOrder.DESCENDING));
 		defaultTaskSorter.addElement(new TaskSorterElement(
-				TaskColumn.TITLE,
+				TaskColumnList.TITLE,
 				SortOrder.ASCENDING));
 		
 		// Default Task Filter
