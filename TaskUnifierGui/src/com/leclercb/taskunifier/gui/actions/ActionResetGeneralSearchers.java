@@ -48,7 +48,7 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.EnumConditi
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondition;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
@@ -78,19 +78,19 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 		sorter = new TaskSorter();
 		
 		sorter.addElement(new TaskSorterElement(
-				TaskColumn.DUE_DATE,
+				TaskColumnList.getInstance().get("DUE_DATE"),
 				SortOrder.ASCENDING));
 		sorter.addElement(new TaskSorterElement(
-				TaskColumn.PRIORITY,
+				TaskColumnList.getInstance().get("PRIORITY"),
 				SortOrder.DESCENDING));
 		sorter.addElement(new TaskSorterElement(
-				TaskColumn.TITLE,
+				TaskColumnList.getInstance().get("TITLE"),
 				SortOrder.ASCENDING));
 		
 		// Not Completed
 		filter = new TaskFilter();
 		filter.addElement(new TaskFilterElement(
-				TaskColumn.COMPLETED,
+				TaskColumnList.getInstance().get("COMPLETED"),
 				StringCondition.EQUALS,
 				"false",
 				false));
@@ -106,7 +106,7 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 		// Due Today
 		filter = new TaskFilter();
 		filter.addElement(new TaskFilterElement(
-				TaskColumn.DUE_DATE,
+				TaskColumnList.getInstance().get("DUE_DATE"),
 				DaysCondition.EQUALS,
 				0,
 				false));
@@ -122,7 +122,7 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 		// Overdue
 		filter = new TaskFilter();
 		filter.addElement(new TaskFilterElement(
-				TaskColumn.DUE_DATE,
+				TaskColumnList.getInstance().get("DUE_DATE"),
 				DaysCondition.LESS_THAN_USING_TIME,
 				0,
 				false));
@@ -138,12 +138,12 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 		// Hot List
 		filter = new TaskFilter();
 		filter.addElement(new TaskFilterElement(
-				TaskColumn.DUE_DATE,
+				TaskColumnList.getInstance().get("DUE_DATE"),
 				DaysCondition.LESS_THAN_OR_EQUALS,
 				3,
 				false));
 		filter.addElement(new TaskFilterElement(
-				TaskColumn.PRIORITY,
+				TaskColumnList.getInstance().get("PRIORITY"),
 				EnumCondition.GREATER_THAN_OR_EQUALS,
 				TaskPriority.HIGH,
 				false));
@@ -162,10 +162,10 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 		TaskSorter importanceSorter = new TaskSorter();
 		
 		importanceSorter.addElement(new TaskSorterElement(
-				TaskColumn.IMPORTANCE,
+				TaskColumnList.getInstance().get("IMPORTANCE"),
 				SortOrder.DESCENDING));
 		importanceSorter.addElement(new TaskSorterElement(
-				TaskColumn.TITLE,
+				TaskColumnList.getInstance().get("TITLE"),
 				SortOrder.ASCENDING));
 		
 		TaskSearcherFactory.getInstance().create(
@@ -179,7 +179,7 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 		// Starred
 		filter = new TaskFilter();
 		filter.addElement(new TaskFilterElement(
-				TaskColumn.STAR,
+				TaskColumnList.getInstance().get("STAR"),
 				StringCondition.EQUALS,
 				"true",
 				false));
@@ -195,7 +195,7 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 		// Next Action
 		filter = new TaskFilter();
 		filter.addElement(new TaskFilterElement(
-				TaskColumn.STATUS,
+				TaskColumnList.getInstance().get("STATUS"),
 				StringCondition.EQUALS,
 				"Next Action",
 				false));
@@ -211,7 +211,7 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 		// Completed
 		filter = new TaskFilter();
 		filter.addElement(new TaskFilterElement(
-				TaskColumn.COMPLETED,
+				TaskColumnList.getInstance().get("COMPLETED"),
 				StringCondition.EQUALS,
 				"true",
 				false));

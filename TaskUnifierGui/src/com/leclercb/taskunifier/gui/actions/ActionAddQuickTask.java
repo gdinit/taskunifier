@@ -56,7 +56,7 @@ import com.leclercb.taskunifier.api.models.beans.TaskBean;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplateFactory;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.components.views.ViewType;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.main.Main;
@@ -178,7 +178,7 @@ public class ActionAddQuickTask extends AbstractViewAction {
 					if (bean.getContexts() == null)
 						bean.setContexts(new ModelBeanList());
 					
-					if (!TaskColumn.MULTIPLE_CONTEXTS)
+					if (!TaskColumnList.MULTIPLE_CONTEXTS)
 						bean.getContexts().clear();
 					
 					bean.getContexts().add(context.getModelId());
@@ -202,7 +202,7 @@ public class ActionAddQuickTask extends AbstractViewAction {
 					if (bean.getGoals() == null)
 						bean.setGoals(new ModelBeanList());
 					
-					if (!TaskColumn.MULTIPLE_GOALS)
+					if (!TaskColumnList.MULTIPLE_GOALS)
 						bean.getGoals().clear();
 					
 					bean.getGoals().add(goal.getModelId());
@@ -217,7 +217,7 @@ public class ActionAddQuickTask extends AbstractViewAction {
 					if (bean.getLocations() == null)
 						bean.setLocations(new ModelBeanList());
 					
-					if (!TaskColumn.MULTIPLE_LOCATIONS)
+					if (!TaskColumnList.MULTIPLE_LOCATIONS)
 						bean.getLocations().clear();
 					
 					bean.getLocations().add(location.getModelId());
