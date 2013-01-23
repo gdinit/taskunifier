@@ -78,12 +78,14 @@ public class ActionAddTaskSearcher extends AbstractViewAction {
 			return;
 		
 		switch (type) {
-			case TASKS:
-				ViewUtils.getCurrentTaskView().getTaskSearcherView().selectTaskSearcher(
-						searcher);
-				break;
 			case CALENDAR:
 				ViewUtils.getCurrentCalendarView().getTaskSearcherView().selectTaskSearcher(
+						searcher);
+				break;
+			case NOTES:
+				break;
+			case TASKS:
+				ViewUtils.getCurrentTaskView().getTaskSearcherView().selectTaskSearcher(
 						searcher);
 				break;
 		}

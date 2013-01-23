@@ -69,6 +69,8 @@ public class ActionPrintSelectedModels extends AbstractViewAction {
 				return;
 			
 			switch (viewType) {
+				case CALENDAR:
+					break;
 				case NOTES:
 					ViewUtils.getCurrentNoteView().getNoteTableView().printNotes(
 							true);
