@@ -36,8 +36,8 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.AbstractBasicModel;
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -113,7 +113,7 @@ public class TaskRule extends AbstractBasicModel {
 		this.updateProperty(PROP_ACTION, oldAction, action);
 	}
 	
-	public void execute(Task task, TaskColumn column) {
+	public void execute(Task task, PropertyAccessor<Task> column) {
 		if (!TaskUtils.showUnindentTask(task, null, this.filter, true))
 			return;
 		
