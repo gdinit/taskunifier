@@ -32,17 +32,17 @@
  */
 package com.leclercb.taskunifier.gui.components.configuration;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 import com.leclercb.taskunifier.gui.components.configuration.api.DefaultConfigurationPanel;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
@@ -88,31 +88,27 @@ public class ThemeTaskFieldsConfigurationPanel extends DefaultConfigurationPanel
 				null,
 				new ConfigurationFieldType.Separator()));
 		
-		List<TaskColumn> columns = new ArrayList<TaskColumn>(
-				Arrays.asList(TaskColumn.values()));
+		List<PropertyAccessor<Task>> columns = TaskColumnList.getInstance().getUsableColumns();
 		
-		for (TaskColumn column : TaskColumn.values()) {
-			if (!column.isUsable())
-				columns.remove(column);
-		}
-		
-		Collections.sort(columns, new Comparator<TaskColumn>() {
+		Collections.sort(columns, new Comparator<PropertyAccessor<Task>>() {
 			
 			@Override
-			public int compare(TaskColumn c1, TaskColumn c2) {
+			public int compare(
+					PropertyAccessor<Task> c1,
+					PropertyAccessor<Task> c2) {
 				return c1.getLabel().compareTo(c2.getLabel());
 			}
 			
 		});
 		
-		for (TaskColumn column : columns) {
+		for (PropertyAccessor<Task> column : columns) {
 			this.addField(new ConfigurationField(
-					column.name(),
+					column.getName(),
 					null,
 					new ConfigurationFieldType.CheckBox(
 							Main.getSettings(),
 							"task.field."
-									+ column.name().toLowerCase()
+									+ column.getName().toLowerCase()
 									+ ".used",
 							column.getLabel())));
 		}
