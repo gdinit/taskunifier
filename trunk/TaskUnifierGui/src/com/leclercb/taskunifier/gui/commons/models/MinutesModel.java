@@ -34,9 +34,9 @@ package com.leclercb.taskunifier.gui.commons.models;
 
 import javax.swing.DefaultComboBoxModel;
 
-public class TaskReminderModel extends DefaultComboBoxModel {
+public class MinutesModel extends DefaultComboBoxModel {
 	
-	public TaskReminderModel() {
+	public MinutesModel() {
 		super(new Integer[] { 0, // 0 minute
 				1, // 1 minute
 				15, // 15 minutes
