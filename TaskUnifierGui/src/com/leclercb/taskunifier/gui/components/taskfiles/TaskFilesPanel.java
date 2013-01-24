@@ -62,11 +62,11 @@ public class TaskFilesPanel extends JPanel implements TaskFilesView, ModelSelect
 	private Action addAction;
 	private Action removeAction;
 	
-	public TaskFilesPanel(TUTableProperties<TaskFilesColumn> tableProperties) {
+	public TaskFilesPanel(TUTableProperties<FileItem> tableProperties) {
 		this.initialize(tableProperties);
 	}
 	
-	private void initialize(TUTableProperties<TaskFilesColumn> tableProperties) {
+	private void initialize(TUTableProperties<FileItem> tableProperties) {
 		this.setOpaque(false);
 		this.setLayout(new BorderLayout());
 		
