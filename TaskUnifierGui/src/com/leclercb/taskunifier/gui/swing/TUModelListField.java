@@ -49,7 +49,7 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.ModelList;
 import com.leclercb.taskunifier.api.models.ModelType;
-import com.leclercb.taskunifier.gui.components.modelselectiontable.ModelSelectionColumn;
+import com.leclercb.taskunifier.gui.components.modelselectiontable.ModelSelectionColumnList;
 import com.leclercb.taskunifier.gui.components.modelselectiontable.ModelSelectionPanel;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
@@ -148,8 +148,8 @@ public class TUModelListField<M extends Model> extends JPanel {
 		popupPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		
 		this.modelSelectionPanel = new ModelSelectionPanel(
-				new TUTableProperties<ModelSelectionColumn>(
-						ModelSelectionColumn.class,
+				new TUTableProperties<Model>(
+						ModelSelectionColumnList.getInstance(),
 						"modelselection",
 						false), this.modelType);
 		

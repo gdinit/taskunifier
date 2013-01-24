@@ -34,6 +34,10 @@ package com.leclercb.taskunifier.gui.swing.table;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Comparator;
+
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 
 import org.jdesktop.swingx.table.TableColumnExt;
 
@@ -41,20 +45,19 @@ import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties.TableColumnProperties;
 
-public abstract class TUTableColumn<E extends Enum<?>> extends TableColumnExt implements PropertyChangeListener {
+public class TUTableColumn<T> extends TableColumnExt implements PropertyChangeListener {
 	
-	protected TableColumnProperties<E> column;
+	protected TableColumnProperties<T> column;
 	
-	public TUTableColumn(TableColumnProperties<E> column) {
-		super(column.getColumn().ordinal());
+	public TUTableColumn(TableColumnProperties<T> column) {
+		super(column.getTableProperties().getColumns().indexOf(
+				column.getColumn()));
 		
 		CheckUtils.isNotNull(column);
 		this.column = column;
 		
 		this.setIdentifier(column.getColumn());
-		
-		if (column.getColumn() instanceof TUColumn)
-			this.setHeaderValue(((TUColumn<?>) column.getColumn()).getLabel());
+		this.setHeaderValue(column.getColumn().getLabel());
 		
 		this.setPreferredWidth(column.getWidth());
 		this.setVisible(column.isVisible());
@@ -62,6 +65,26 @@ public abstract class TUTableColumn<E extends Enum<?>> extends TableColumnExt im
 		this.column.addPropertyChangeListener(new WeakPropertyChangeListener(
 				this.column,
 				this));
+	}
+	
+	@Override
+	public Comparator<?> getComparator() {
+		return this.column.getColumn().getComparator();
+	}
+	
+	@Override
+	public boolean isSortable() {
+		return this.column.getColumn().isSortable();
+	}
+	
+	@Override
+	public TableCellRenderer getCellRenderer() {
+		return this.column.getColumn().getCellRenderer();
+	}
+	
+	@Override
+	public TableCellEditor getCellEditor() {
+		return this.column.getColumn().getCellEditor();
 	}
 	
 	@Override

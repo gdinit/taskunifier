@@ -42,7 +42,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.text.DefaultFormatter;
 import javax.swing.text.DefaultFormatterFactory;
 
-import com.leclercb.taskunifier.gui.commons.values.StringValueTaskLength;
+import com.leclercb.taskunifier.gui.commons.values.StringValueTime;
 
 public class TUSpinnerTimeEditor extends JSpinner.DefaultEditor {
 	
@@ -58,7 +58,7 @@ public class TUSpinnerTimeEditor extends JSpinner.DefaultEditor {
 			
 			@Override
 			public String valueToString(Object value) throws ParseException {
-				return StringValueTaskLength.INSTANCE.getString(value);
+				return StringValueTime.INSTANCE.getString(value);
 			}
 			
 			@Override

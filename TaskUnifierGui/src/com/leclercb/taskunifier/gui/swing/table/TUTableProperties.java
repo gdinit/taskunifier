@@ -41,37 +41,39 @@ import com.leclercb.commons.api.event.propertychange.PropertyChangeSupport;
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorList;
 import com.leclercb.taskunifier.gui.main.Main;
 
-public class TUTableProperties<E extends Enum<?>> implements PropertyChangeListener {
+public class TUTableProperties<T> implements PropertyChangeListener {
 	
-	private Class<E> cls;
+	private PropertyAccessorList<T> list;
 	private String propertyName;
 	private boolean readOnly;
-	private Map<E, TableColumnProperties<E>> columns;
+	private Map<PropertyAccessor<T>, TableColumnProperties<T>> columns;
 	
 	public TUTableProperties(
-			Class<E> columnEnum,
+			PropertyAccessorList<T> list,
 			String propertyName,
 			boolean readOnly) {
-		CheckUtils.isNotNull(columnEnum);
+		CheckUtils.isNotNull(list);
 		
-		this.cls = columnEnum;
-		this.columns = new HashMap<E, TableColumnProperties<E>>();
+		this.list = list;
+		this.columns = new HashMap<PropertyAccessor<T>, TableColumnProperties<T>>();
 		
-		for (E column : this.cls.getEnumConstants()) {
-			this.columns.put(column, new TableColumnProperties<E>(this, column));
+		for (PropertyAccessor<T> column : this.list.getColumns()) {
+			this.columns.put(column, new TableColumnProperties<T>(this, column));
 		}
 		
 		this.setPropertyName(propertyName);
 		this.setReadOnly(readOnly);
 	}
 	
-	public E[] getColumns() {
-		return this.cls.getEnumConstants();
+	public PropertyAccessorList<T> getColumns() {
+		return this.list;
 	}
 	
-	public TableColumnProperties<E> get(E column) {
+	public TableColumnProperties<T> get(PropertyAccessor<T> column) {
 		return this.columns.get(column);
 	}
 	
@@ -86,8 +88,8 @@ public class TUTableProperties<E extends Enum<?>> implements PropertyChangeListe
 		
 		this.propertyName = propertyName;
 		
-		for (E column : this.cls.getEnumConstants()) {
-			TableColumnProperties<E> properties = this.columns.get(column);
+		for (PropertyAccessor<T> column : this.list.getColumns()) {
+			TableColumnProperties<T> properties = this.columns.get(column);
 			
 			properties.setOrder(Main.getSettings().getIntegerProperty(
 					properties.getOrderPropertyName(),
@@ -120,8 +122,8 @@ public class TUTableProperties<E extends Enum<?>> implements PropertyChangeListe
 			if (evt.getNewValue() == null)
 				return;
 			
-			for (E column : this.cls.getEnumConstants()) {
-				TableColumnProperties<E> properties = this.columns.get(column);
+			for (PropertyAccessor<T> column : this.list.getColumns()) {
+				TableColumnProperties<T> properties = this.columns.get(column);
 				
 				if (evt.getPropertyName().equals(
 						properties.getOrderPropertyName()))
@@ -138,7 +140,7 @@ public class TUTableProperties<E extends Enum<?>> implements PropertyChangeListe
 		}
 	}
 	
-	public static class TableColumnProperties<E extends Enum<?>> implements PropertyChangeSupported {
+	public static class TableColumnProperties<T> implements PropertyChangeSupported {
 		
 		public static final String PROP_ORDER = "order";
 		public static final String PROP_WIDTH = "width";
@@ -146,16 +148,16 @@ public class TUTableProperties<E extends Enum<?>> implements PropertyChangeListe
 		
 		private PropertyChangeSupport propertyChangeSupport;
 		
-		private TUTableProperties<E> tableProperties;
-		private E column;
+		private TUTableProperties<T> tableProperties;
+		private PropertyAccessor<T> column;
 		
 		private int order;
 		private int width;
 		private boolean visible;
 		
 		private TableColumnProperties(
-				TUTableProperties<E> tableProperties,
-				E column) {
+				TUTableProperties<T> tableProperties,
+				PropertyAccessor<T> column) {
 			this.propertyChangeSupport = new PropertyChangeSupport(this);
 			
 			CheckUtils.isNotNull(column);
@@ -165,14 +167,18 @@ public class TUTableProperties<E extends Enum<?>> implements PropertyChangeListe
 			this.column = column;
 		}
 		
-		public E getColumn() {
+		public TUTableProperties<T> getTableProperties() {
+			return this.tableProperties;
+		}
+		
+		public PropertyAccessor<T> getColumn() {
 			return this.column;
 		}
 		
 		public String getOrderPropertyName() {
 			return this.tableProperties.getPropertyName()
 					+ ".column."
-					+ this.column.name().toLowerCase()
+					+ this.column.getName().toLowerCase()
 					+ ".order";
 		}
 		
@@ -202,7 +208,7 @@ public class TUTableProperties<E extends Enum<?>> implements PropertyChangeListe
 		public String getWidthPropertyName() {
 			return this.tableProperties.getPropertyName()
 					+ ".column."
-					+ this.column.name().toLowerCase()
+					+ this.column.getName().toLowerCase()
 					+ ".width";
 		}
 		
@@ -232,7 +238,7 @@ public class TUTableProperties<E extends Enum<?>> implements PropertyChangeListe
 		public String getVisiblePropertyName() {
 			return this.tableProperties.getPropertyName()
 					+ ".column."
-					+ this.column.name().toLowerCase()
+					+ this.column.getName().toLowerCase()
 					+ ".visible";
 		}
 		
