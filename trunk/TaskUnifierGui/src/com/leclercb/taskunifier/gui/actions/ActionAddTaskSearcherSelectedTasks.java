@@ -76,7 +76,7 @@ public class ActionAddTaskSearcherSelectedTasks extends AbstractViewAction {
 		Task[] tasks = ViewUtils.getSelectedTasks();
 		for (Task task : tasks) {
 			filter.addElement(new TaskFilterElement(
-					TaskColumnList.MODEL,
+					TaskColumnList.getInstance().get(TaskColumnList.MODEL),
 					ModelCondition.EQUALS,
 					task,
 					false));

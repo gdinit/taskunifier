@@ -65,7 +65,7 @@ public final class TaskUtils {
 		if (sorter.getElementCount() >= 1)
 			if (EqualsUtils.equals(
 					sorter.getElement(0).getProperty(),
-					TaskColumnList.ORDER)
+					TaskColumnList.getInstance().get(TaskColumnList.ORDER))
 					&& sorter.getElement(0).getSortOrder() == SortOrder.ASCENDING)
 				return true;
 		
@@ -275,7 +275,10 @@ public final class TaskUtils {
 					
 					String text = row[j];
 					
-					if (EqualsUtils.equals(columns.get(j), TaskColumnList.NOTE))
+					if (EqualsUtils.equals(
+							columns.get(j),
+							TaskColumnList.getInstance().get(
+									TaskColumnList.NOTE)))
 						text = Text2HTML.convert(text);
 					else
 						text = StringEscapeUtils.escapeHtml3(text);
@@ -328,7 +331,9 @@ public final class TaskUtils {
 			for (int j = 0; j < row.length; j++) {
 				String text = row[j];
 				
-				if (EqualsUtils.equals(columns.get(j), TaskColumnList.NOTE))
+				if (EqualsUtils.equals(
+						columns.get(j),
+						TaskColumnList.getInstance().get(TaskColumnList.NOTE)))
 					text = Text2HTML.convert(text);
 				else
 					text = StringEscapeUtils.escapeHtml3(text);
@@ -455,7 +460,10 @@ public final class TaskUtils {
 				task,
 				comparedTask,
 				filter,
-				filterContains(filter, TaskColumnList.COMPLETED),
+				filterContains(
+						filter,
+						TaskColumnList.getInstance().get(
+								TaskColumnList.COMPLETED)),
 				true,
 				true,
 				true,
@@ -470,7 +478,10 @@ public final class TaskUtils {
 				task,
 				comparedTask,
 				filter,
-				filterContains(filter, TaskColumnList.COMPLETED),
+				filterContains(
+						filter,
+						TaskColumnList.getInstance().get(
+								TaskColumnList.COMPLETED)),
 				false,
 				false,
 				true,
@@ -486,7 +497,10 @@ public final class TaskUtils {
 				task,
 				comparedTask,
 				filter,
-				filterContains(filter, TaskColumnList.COMPLETED),
+				filterContains(
+						filter,
+						TaskColumnList.getInstance().get(
+								TaskColumnList.COMPLETED)),
 				true,
 				true,
 				true,
