@@ -32,50 +32,26 @@
  */
 package com.leclercb.taskunifier.gui.commons.values;
 
+import java.text.DecimalFormat;
+
 import org.jdesktop.swingx.renderer.StringValue;
 
-import com.leclercb.taskunifier.gui.translations.Translations;
-
-public class StringValueTaskReminder implements StringValue {
+public class StringValueTaskPercentage implements StringValue {
 	
-	public static final StringValueTaskReminder INSTANCE = new StringValueTaskReminder();
+	public static final StringValueTaskPercentage INSTANCE = new StringValueTaskPercentage();
 	
-	private StringValueTaskReminder() {
-		
+	private DecimalFormat format;
+	
+	private StringValueTaskPercentage() {
+		this.format = new DecimalFormat("##0%");
 	}
 	
 	@Override
 	public String getString(Object value) {
-		if (value == null || !(value instanceof Integer))
+		if (value == null || !(value instanceof Double))
 			return " ";
 		
-		Integer reminder = (Integer) value;
-		
-		if (reminder == 0)
-			return Translations.getString("general.task.reminder.no_reminder");
-		
-		if (reminder % 1440 == 0) {
-			int r = reminder / 1440;
-			
-			if (r == 1)
-				return Translations.getString("date.1_day");
-			else
-				return Translations.getString("date.x_days", r);
-		}
-		
-		if (reminder % 60 == 0) {
-			int r = reminder / 60;
-			
-			if (r == 1)
-				return Translations.getString("date.1_hour");
-			else
-				return Translations.getString("date.x_hours", r);
-		}
-		
-		if (reminder == 1)
-			return Translations.getString("date.1_minute");
-		else
-			return Translations.getString("date.x_minutes", reminder);
+		return this.format.format(value);
 	}
 	
 }

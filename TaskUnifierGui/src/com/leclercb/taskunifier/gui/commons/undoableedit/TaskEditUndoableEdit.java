@@ -40,19 +40,19 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class TaskEditUndoableEdit extends AbstractUndoableEdit {
 	
 	private ModelId task;
-	private TaskColumn column;
+	private PropertyAccessor<Task> column;
 	private Object newValue;
 	private Object oldValue;
 	
 	public TaskEditUndoableEdit(
 			ModelId task,
-			TaskColumn column,
+			PropertyAccessor<Task> column,
 			Object newValue,
 			Object oldValue) {
 		CheckUtils.isNotNull(task);

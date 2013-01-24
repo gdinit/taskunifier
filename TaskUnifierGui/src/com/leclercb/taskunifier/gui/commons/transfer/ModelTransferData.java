@@ -44,8 +44,8 @@ import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.api.models.NoteFactory;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.utils.NoteUtils;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
@@ -102,7 +102,7 @@ public class ModelTransferData implements Serializable {
 			
 			return TaskUtils.toHtml(
 					tasks.toArray(new Task[0]),
-					TaskColumn.getUsedColumns());
+					TaskColumnList.getInstance().getUsedColumns());
 		}
 		
 		if (this.type == ModelType.NOTE) {
@@ -124,7 +124,7 @@ public class ModelTransferData implements Serializable {
 			
 			return NoteUtils.toHtml(
 					notes.toArray(new Note[0]),
-					NoteColumn.getUsedColumns());
+					NoteColumnList.getInstance().getUsedColumns());
 		}
 		
 		return null;
@@ -147,7 +147,7 @@ public class ModelTransferData implements Serializable {
 			
 			return TaskUtils.toText(
 					tasks.toArray(new Task[0]),
-					TaskColumn.getUsedColumns(),
+					TaskColumnList.getInstance().getUsedColumns(),
 					html);
 		}
 		
@@ -167,7 +167,7 @@ public class ModelTransferData implements Serializable {
 			
 			return NoteUtils.toText(
 					notes.toArray(new Note[0]),
-					NoteColumn.getUsedColumns(),
+					NoteColumnList.getInstance().getUsedColumns(),
 					html);
 		}
 		

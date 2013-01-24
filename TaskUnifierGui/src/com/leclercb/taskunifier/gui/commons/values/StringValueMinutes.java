@@ -34,28 +34,48 @@ package com.leclercb.taskunifier.gui.commons.values;
 
 import org.jdesktop.swingx.renderer.StringValue;
 
-public class StringValueTaskLength implements StringValue {
+import com.leclercb.taskunifier.gui.translations.Translations;
+
+public class StringValueMinutes implements StringValue {
 	
-	public static final StringValueTaskLength INSTANCE = new StringValueTaskLength();
+	public static final StringValueMinutes INSTANCE = new StringValueMinutes();
 	
-	private StringValueTaskLength() {
+	private StringValueMinutes() {
 		
 	}
 	
 	@Override
 	public String getString(Object value) {
-		if (value == null || !(value instanceof Number))
-			return "00:00";
+		if (value == null || !(value instanceof Integer))
+			return " ";
 		
-		int time = ((Number) value).intValue();
-		int hour = time / 60;
-		int minute = time % 60;
+		Integer reminder = (Integer) value;
 		
-		return (hour < 10 ? "0" : "")
-				+ hour
-				+ ":"
-				+ (minute < 10 ? "0" : "")
-				+ minute;
+		if (reminder == 0)
+			return " ";
+		
+		if (reminder % 1440 == 0) {
+			int r = reminder / 1440;
+			
+			if (r == 1)
+				return Translations.getString("date.1_day");
+			else
+				return Translations.getString("date.x_days", r);
+		}
+		
+		if (reminder % 60 == 0) {
+			int r = reminder / 60;
+			
+			if (r == 1)
+				return Translations.getString("date.1_hour");
+			else
+				return Translations.getString("date.x_hours", r);
+		}
+		
+		if (reminder == 1)
+			return Translations.getString("date.1_minute");
+		else
+			return Translations.getString("date.x_minutes", reminder);
 	}
 	
 }
