@@ -37,6 +37,7 @@ import java.awt.Color;
 import com.jgoodies.binding.value.AbstractConverter;
 import com.jgoodies.binding.value.ValueModel;
 
+@SuppressWarnings("deprecation")
 public class ColorConverter extends AbstractConverter {
 	
 	public ColorConverter(ValueModel subject) {

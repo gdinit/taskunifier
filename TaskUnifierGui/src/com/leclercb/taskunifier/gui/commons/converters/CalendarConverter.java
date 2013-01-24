@@ -38,6 +38,7 @@ import java.util.Date;
 import com.jgoodies.binding.value.AbstractConverter;
 import com.jgoodies.binding.value.ValueModel;
 
+@SuppressWarnings("deprecation")
 public class CalendarConverter extends AbstractConverter {
 	
 	public CalendarConverter(ValueModel subject) {

@@ -37,6 +37,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.jgoodies.binding.value.AbstractConverter;
 import com.jgoodies.binding.value.ValueModel;
 
+@SuppressWarnings("deprecation")
 public class TaskTagsConverter extends AbstractConverter {
 	
 	public TaskTagsConverter(ValueModel subject) {

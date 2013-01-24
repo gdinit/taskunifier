@@ -38,6 +38,7 @@ import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.taskunifier.gui.main.frames.ShortcutKey;
 import com.leclercb.taskunifier.gui.properties.ShortcutKeyCoder;
 
+@SuppressWarnings("deprecation")
 public class TemplateShorcutKeyConverter extends AbstractConverter {
 	
 	public TemplateShorcutKeyConverter(ValueModel subject) {
