@@ -47,11 +47,10 @@ import com.leclercb.commons.api.event.propertychange.PropertyChangeSupport;
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Model;
-import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
-public abstract class Sorter<M extends Model, MP extends PropertyAccessor<M>, SE extends SorterElement<M, MP>> implements PropertyChangeListener, ListChangeSupported, PropertyChangeSupported {
+public abstract class Sorter<M extends Model, SE extends SorterElement<M>> implements PropertyChangeListener, ListChangeSupported, PropertyChangeSupported {
 	
 	@XStreamOmitField
 	private transient ListChangeSupport listChangeSupport;

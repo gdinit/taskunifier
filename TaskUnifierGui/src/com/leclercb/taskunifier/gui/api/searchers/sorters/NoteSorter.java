@@ -33,9 +33,8 @@
 package com.leclercb.taskunifier.gui.api.searchers.sorters;
 
 import com.leclercb.taskunifier.api.models.Note;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
 
-public class NoteSorter extends Sorter<Note, NoteColumn, NoteSorterElement> implements Cloneable {
+public class NoteSorter extends Sorter<Note, NoteSorterElement> implements Cloneable {
 	
 	public NoteSorter() {
 		

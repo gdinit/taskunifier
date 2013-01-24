@@ -45,7 +45,7 @@ import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
-public class SorterElement<M extends Model, MP extends PropertyAccessor<M>> implements PropertyChangeSupported {
+public class SorterElement<M extends Model> implements PropertyChangeSupported {
 	
 	public static final String PROP_PROPERTY = "property";
 	public static final String PROP_SORT_ORDER = "sortOrder";
@@ -54,25 +54,25 @@ public class SorterElement<M extends Model, MP extends PropertyAccessor<M>> impl
 	private transient PropertyChangeSupport propertyChangeSupport;
 	
 	@XStreamAlias("column")
-	private MP property;
+	private PropertyAccessor<M> property;
 	
 	@XStreamAlias("sortorder")
 	private SortOrder sortOrder;
 	
-	public SorterElement(MP property, SortOrder sortOrder) {
+	public SorterElement(PropertyAccessor<M> property, SortOrder sortOrder) {
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
 		
 		this.setProperty(property);
 		this.setSortOrder(sortOrder);
 	}
 	
-	public MP getProperty() {
+	public PropertyAccessor<M> getProperty() {
 		return this.property;
 	}
 	
-	public void setProperty(MP property) {
+	public void setProperty(PropertyAccessor<M> property) {
 		CheckUtils.isNotNull(property);
-		MP oldProperty = this.property;
+		PropertyAccessor<M> oldProperty = this.property;
 		this.property = property;
 		this.propertyChangeSupport.firePropertyChange(
 				PROP_PROPERTY,

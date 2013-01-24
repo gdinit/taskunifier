@@ -35,11 +35,13 @@ package com.leclercb.taskunifier.gui.api.searchers.sorters;
 import javax.swing.SortOrder;
 
 import com.leclercb.taskunifier.api.models.Note;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 
-public class NoteSorterElement extends SorterElement<Note, NoteColumn> implements Cloneable {
+public class NoteSorterElement extends SorterElement<Note> implements Cloneable {
 	
-	public NoteSorterElement(NoteColumn property, SortOrder sortOrder) {
+	public NoteSorterElement(
+			PropertyAccessor<Note> property,
+			SortOrder sortOrder) {
 		super(property, sortOrder);
 	}
 	
