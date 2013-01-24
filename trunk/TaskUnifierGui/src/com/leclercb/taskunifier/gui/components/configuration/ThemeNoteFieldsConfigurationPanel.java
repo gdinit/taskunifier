@@ -32,17 +32,17 @@
  */
 package com.leclercb.taskunifier.gui.components.configuration;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.leclercb.taskunifier.api.models.Note;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 import com.leclercb.taskunifier.gui.components.configuration.api.DefaultConfigurationPanel;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 import com.leclercb.taskunifier.gui.main.Main;
 
 public class ThemeNoteFieldsConfigurationPanel extends DefaultConfigurationPanel {
@@ -55,31 +55,27 @@ public class ThemeNoteFieldsConfigurationPanel extends DefaultConfigurationPanel
 	}
 	
 	private void initialize() {
-		List<NoteColumn> columns = new ArrayList<NoteColumn>(
-				Arrays.asList(NoteColumn.values()));
+		List<PropertyAccessor<Note>> columns = NoteColumnList.getInstance().getUsableColumns();
 		
-		for (NoteColumn column : NoteColumn.values()) {
-			if (!column.isUsable())
-				columns.remove(column);
-		}
-		
-		Collections.sort(columns, new Comparator<NoteColumn>() {
+		Collections.sort(columns, new Comparator<PropertyAccessor<Note>>() {
 			
 			@Override
-			public int compare(NoteColumn c1, NoteColumn c2) {
+			public int compare(
+					PropertyAccessor<Note> c1,
+					PropertyAccessor<Note> c2) {
 				return c1.getLabel().compareTo(c2.getLabel());
 			}
 			
 		});
 		
-		for (NoteColumn column : columns) {
+		for (PropertyAccessor<Note> column : columns) {
 			this.addField(new ConfigurationField(
-					column.name(),
+					column.getName(),
 					null,
 					new ConfigurationFieldType.CheckBox(
 							Main.getSettings(),
 							"note.field."
-									+ column.name().toLowerCase()
+									+ column.getName().toLowerCase()
 									+ ".used",
 							column.getLabel())));
 		}
