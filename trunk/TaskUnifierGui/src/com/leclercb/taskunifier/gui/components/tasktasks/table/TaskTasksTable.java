@@ -180,10 +180,14 @@ public class TaskTasksTable extends JXTable implements SavePropertiesListener {
 						PropertyAccessor<TaskItem> column = (PropertyAccessor<TaskItem>) TaskTasksTable.this.getColumn(
 								colIndex).getIdentifier();
 						
-						if (EqualsUtils.equals(column, TaskTasksColumnList.getInstance().get(
-								TaskTasksColumnList.EDIT))
-								|| EqualsUtils.equals(column, TaskTasksColumnList.getInstance().get(
-										TaskTasksColumnList.SELECT))) {
+						if (EqualsUtils.equals(
+								column,
+								TaskTasksColumnList.getInstance().get(
+										TaskTasksColumnList.EDIT))
+								|| EqualsUtils.equals(
+										column,
+										TaskTasksColumnList.getInstance().get(
+												TaskTasksColumnList.SELECT))) {
 							TaskItem item = ((TaskTasksTableModel) TaskTasksTable.this.getModel()).getTaskItem(rowIndex);
 							
 							if (item == null)
@@ -192,15 +196,19 @@ public class TaskTasksTable extends JXTable implements SavePropertiesListener {
 							if (item.getTask() == null)
 								return;
 							
-							if (EqualsUtils.equals(column, TaskTasksColumnList.getInstance().get(
-									TaskTasksColumnList.EDIT))) {
+							if (EqualsUtils.equals(
+									column,
+									TaskTasksColumnList.getInstance().get(
+											TaskTasksColumnList.EDIT))) {
 								ActionEditTasks.editTasks(
 										new Task[] { item.getTask() },
 										false);
 							}
 							
-							if (EqualsUtils.equals(column, TaskTasksColumnList.getInstance().get(
-									TaskTasksColumnList.SELECT))) {
+							if (EqualsUtils.equals(
+									column,
+									TaskTasksColumnList.getInstance().get(
+											TaskTasksColumnList.SELECT))) {
 								ViewUtils.selectDefaultTaskSearcher();
 								ViewUtils.setSelectedTasks(new Task[] { item.getTask() });
 							}
