@@ -41,9 +41,11 @@ import org.w3c.dom.NodeList;
 
 import com.leclercb.commons.api.coder.AbstractXMLCoder;
 import com.leclercb.commons.api.coder.exc.FactoryCoderException;
+import com.leclercb.taskunifier.api.models.Note;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorterElement;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 
 public class NoteSorterXMLCoder extends AbstractXMLCoder<NoteSorter> {
 	
@@ -61,12 +63,13 @@ public class NoteSorterXMLCoder extends AbstractXMLCoder<NoteSorter> {
 				if (nSorter.item(i).getNodeName().equals("element")) {
 					NodeList nElement = nSorter.item(i).getChildNodes();
 					
-					NoteColumn column = null;
+					PropertyAccessor<Note> column = null;
 					SortOrder sortOrder = null;
 					
 					for (int j = 0; j < nElement.getLength(); j++) {
 						if (nElement.item(j).getNodeName().equals("column")) {
-							column = NoteColumn.valueOf(nElement.item(j).getTextContent());
+							column = NoteColumnList.getInstance().get(
+									nElement.item(j).getTextContent());
 						}
 						
 						if (nElement.item(j).getNodeName().equals("sortorder")) {
@@ -91,7 +94,7 @@ public class NoteSorterXMLCoder extends AbstractXMLCoder<NoteSorter> {
 			root.appendChild(element);
 			
 			Element column = document.createElement("column");
-			column.setTextContent(e.getProperty().name());
+			column.setTextContent(e.getProperty().getName());
 			element.appendChild(column);
 			
 			Element sortOrder = document.createElement("sortorder");

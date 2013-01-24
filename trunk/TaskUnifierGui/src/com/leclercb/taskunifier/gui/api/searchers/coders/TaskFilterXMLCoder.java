@@ -51,7 +51,10 @@ import com.leclercb.taskunifier.api.models.GoalFactory;
 import com.leclercb.taskunifier.api.models.LocationFactory;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.ModelId;
+import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
 import com.leclercb.taskunifier.gui.api.searchers.filters.FilterLink;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilterElement;
@@ -62,7 +65,7 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.EnumConditi
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.ModelCondition;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.NumberCondition;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondition;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 
 public class TaskFilterXMLCoder extends AbstractXMLCoder<TaskFilter> {
 	
@@ -86,7 +89,7 @@ public class TaskFilterXMLCoder extends AbstractXMLCoder<TaskFilter> {
 					NodeList nElement = nFilter.item(i).getChildNodes();
 					TaskFilterElement element = null;
 					
-					TaskColumn column = null;
+					PropertyAccessor<Task> column = null;
 					String conditionClass = null;
 					String enumName = null;
 					String valueStr = null;
@@ -104,7 +107,7 @@ public class TaskFilterXMLCoder extends AbstractXMLCoder<TaskFilter> {
 								else if (EqualsUtils.equals(col, "LOCATION"))
 									col = "LOCATIONS";
 								
-								column = TaskColumn.valueOf(col);
+								column = TaskColumnList.getInstance().get(col);
 							} catch (Throwable t) {
 								GuiLogger.getLogger().log(
 										Level.WARNING,
@@ -241,22 +244,25 @@ public class TaskFilterXMLCoder extends AbstractXMLCoder<TaskFilter> {
 						
 						if (valueStr != null) {
 							try {
-								if (column.equals(TaskColumn.MODEL))
+								if (column.getType() == PropertyAccessorType.TASK)
 									value = TaskFactory.getInstance().get(
 											new ModelId(valueStr));
-								else if (column.equals(TaskColumn.CONTEXTS))
+								else if (column.getType() == PropertyAccessorType.CONTEXT
+										|| column.getType() == PropertyAccessorType.CONTEXTS)
 									value = ContextFactory.getInstance().get(
 											new ModelId(valueStr));
-								else if (column.equals(TaskColumn.FOLDER))
+								else if (column.getType() == PropertyAccessorType.FOLDER)
 									value = FolderFactory.getInstance().get(
 											new ModelId(valueStr));
-								else if (column.equals(TaskColumn.GOALS))
+								else if (column.getType() == PropertyAccessorType.GOAL
+										|| column.getType() == PropertyAccessorType.GOALS)
 									value = GoalFactory.getInstance().get(
 											new ModelId(valueStr));
-								else if (column.equals(TaskColumn.LOCATIONS))
+								else if (column.getType() == PropertyAccessorType.LOCATION
+										|| column.getType() == PropertyAccessorType.LOCATIONS)
 									value = LocationFactory.getInstance().get(
 											new ModelId(valueStr));
-								else if (column.equals(TaskColumn.PARENT))
+								else if (column.getType() == PropertyAccessorType.TASK)
 									value = TaskFactory.getInstance().get(
 											new ModelId(valueStr));
 							} catch (Exception e) {
@@ -296,7 +302,7 @@ public class TaskFilterXMLCoder extends AbstractXMLCoder<TaskFilter> {
 			root.appendChild(element);
 			
 			Element column = document.createElement("column");
-			column.setTextContent(e.getProperty().name());
+			column.setTextContent(e.getProperty().getName());
 			element.appendChild(column);
 			
 			Element condition = document.createElement("condition");
