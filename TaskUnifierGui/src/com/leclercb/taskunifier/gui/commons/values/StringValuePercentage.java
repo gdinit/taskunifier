@@ -36,13 +36,13 @@ import java.text.DecimalFormat;
 
 import org.jdesktop.swingx.renderer.StringValue;
 
-public class StringValueTaskPercentage implements StringValue {
+public class StringValuePercentage implements StringValue {
 	
-	public static final StringValueTaskPercentage INSTANCE = new StringValueTaskPercentage();
+	public static final StringValuePercentage INSTANCE = new StringValuePercentage();
 	
 	private DecimalFormat format;
 	
-	private StringValueTaskPercentage() {
+	private StringValuePercentage() {
 		this.format = new DecimalFormat("##0%");
 	}
 	
