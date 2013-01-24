@@ -46,7 +46,8 @@ import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.models.TaskList;
 import com.leclercb.taskunifier.api.models.TaskList.TaskItem;
-import com.leclercb.taskunifier.gui.components.tasktasks.TaskTasksColumn;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.components.tasktasks.TaskTasksColumnList;
 
 public class TaskTasksTableModel extends AbstractTableModel implements ListChangeListener, PropertyChangeListener {
 	
@@ -91,13 +92,13 @@ public class TaskTasksTableModel extends AbstractTableModel implements ListChang
 		return this.tasks.get(row);
 	}
 	
-	public TaskTasksColumn getTaskTasksColumn(int col) {
-		return TaskTasksColumn.values()[col];
+	public PropertyAccessor<TaskItem> getTaskTasksColumn(int col) {
+		return TaskTasksColumnList.getInstance().getColumn(col);
 	}
 	
 	@Override
 	public int getColumnCount() {
-		return TaskTasksColumn.values().length;
+		return TaskTasksColumnList.getInstance().getSize();
 	}
 	
 	@Override
@@ -110,29 +111,29 @@ public class TaskTasksTableModel extends AbstractTableModel implements ListChang
 	
 	@Override
 	public String getColumnName(int col) {
-		return TaskTasksColumn.values()[col].getLabel();
+		return this.getTaskTasksColumn(col).getLabel();
 	}
 	
 	@Override
 	public Class<?> getColumnClass(int col) {
-		return TaskTasksColumn.values()[col].getType();
+		return this.getTaskTasksColumn(col).getType().getType();
 	}
 	
 	@Override
 	public Object getValueAt(int row, int col) {
 		TaskItem item = this.tasks.get(row);
-		return TaskTasksColumn.values()[col].getProperty(item);
+		return this.getTaskTasksColumn(col).getProperty(item);
 	}
 	
 	@Override
 	public boolean isCellEditable(int row, int col) {
-		return TaskTasksColumn.values()[col].isEditable();
+		return this.getTaskTasksColumn(col).isEditable();
 	}
 	
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		TaskItem item = this.tasks.get(row);
-		TaskTasksColumn column = TaskTasksColumn.values()[col];
+		PropertyAccessor<TaskItem> column = this.getTaskTasksColumn(col);
 		
 		Object oldValue = column.getProperty(item);
 		
