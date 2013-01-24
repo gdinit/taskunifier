@@ -54,6 +54,7 @@ import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.models.GuiModel;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcherType;
@@ -61,7 +62,7 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.FilterLink;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilterElement;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.ModelCondition;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.TUColorBadgeIcon;
@@ -107,12 +108,13 @@ public class ModelItem extends DefaultMutableTreeNode implements SearcherNode, P
 	private void initializeTaskSearcher() {
 		final Model model = this.getModel();
 		final TaskTemplate template = new TaskTemplate("ModelTemplate");
-		TaskColumn column = null;
+		PropertyAccessor<Task> column = null;
 		TaskSearcherType type = null;
 		
 		switch (this.modelType) {
 			case CONTEXT:
-				column = TaskColumn.CONTEXTS;
+				column = TaskColumnList.getInstance().get(
+						TaskColumnList.CONTEXTS);
 				type = TaskSearcherType.CONTEXT;
 				
 				ModelList<Context> contexts = new ModelList<Context>();
@@ -124,14 +126,14 @@ public class ModelItem extends DefaultMutableTreeNode implements SearcherNode, P
 				
 				break;
 			case FOLDER:
-				column = TaskColumn.FOLDER;
+				column = TaskColumnList.getInstance().get(TaskColumnList.FOLDER);
 				type = TaskSearcherType.FOLDER;
 				
 				template.setTaskFolder((Folder) model);
 				
 				break;
 			case GOAL:
-				column = TaskColumn.GOALS;
+				column = TaskColumnList.getInstance().get(TaskColumnList.GOALS);
 				type = TaskSearcherType.GOAL;
 				
 				ModelList<Goal> goals = new ModelList<Goal>();
@@ -143,7 +145,8 @@ public class ModelItem extends DefaultMutableTreeNode implements SearcherNode, P
 				
 				break;
 			case LOCATION:
-				column = TaskColumn.LOCATIONS;
+				column = TaskColumnList.getInstance().get(
+						TaskColumnList.LOCATIONS);
 				type = TaskSearcherType.LOCATION;
 				
 				ModelList<Location> locations = new ModelList<Location>();

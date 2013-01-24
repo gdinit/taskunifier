@@ -79,7 +79,7 @@ import com.leclercb.taskunifier.gui.commons.events.NoteSearcherSelectionChangeSu
 import com.leclercb.taskunifier.gui.commons.events.NoteSearcherSelectionListener;
 import com.leclercb.taskunifier.gui.components.configuration.ConfigurationDialog.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.models.ModelConfigurationDialog;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 import com.leclercb.taskunifier.gui.components.notesearchertree.nodes.FolderItem;
 import com.leclercb.taskunifier.gui.components.notesearchertree.nodes.SearcherItem;
 import com.leclercb.taskunifier.gui.main.Main;
@@ -182,17 +182,17 @@ public class NoteSearcherPanel extends JPanel implements SavePropertiesListener,
 		
 		if (this.filter != null && this.filter.length() != 0) {
 			searchFilter.addElement(new NoteFilterElement(
-					NoteColumn.TITLE,
+					NoteColumnList.getInstance().get(NoteColumnList.TITLE),
 					StringCondition.CONTAINS,
 					this.filter,
 					false));
 			searchFilter.addElement(new NoteFilterElement(
-					NoteColumn.NOTE,
+					NoteColumnList.getInstance().get(NoteColumnList.NOTE),
 					StringCondition.CONTAINS,
 					this.filter,
 					false));
 			searchFilter.addElement(new NoteFilterElement(
-					NoteColumn.FOLDER,
+					NoteColumnList.getInstance().get(NoteColumnList.FOLDER),
 					StringCondition.CONTAINS,
 					this.filter,
 					false));
@@ -201,7 +201,7 @@ public class NoteSearcherPanel extends JPanel implements SavePropertiesListener,
 		if (this.notes != null) {
 			for (Note note : this.notes) {
 				extraFilter.addElement(new NoteFilterElement(
-						NoteColumn.MODEL,
+						NoteColumnList.getInstance().get(NoteColumnList.MODEL),
 						ModelCondition.EQUALS,
 						note,
 						false));

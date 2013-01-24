@@ -50,7 +50,7 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.FilterLink;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilterElement;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondition;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
@@ -95,7 +95,7 @@ public class TagItem extends DefaultMutableTreeNode implements SearcherNode {
 		TaskFilter filter = new TaskFilter();
 		filter.setLink(FilterLink.AND);
 		filter.addElement(new TaskFilterElement(
-				TaskColumn.TAGS,
+				TaskColumnList.getInstance().get(TaskColumnList.TAGS),
 				StringCondition.CONTAINS,
 				this.getTag().toString(),
 				false));

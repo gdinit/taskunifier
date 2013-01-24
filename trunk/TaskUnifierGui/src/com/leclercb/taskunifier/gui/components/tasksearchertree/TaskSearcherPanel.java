@@ -87,7 +87,7 @@ import com.leclercb.taskunifier.gui.commons.events.TaskSearcherSelectionChangeSu
 import com.leclercb.taskunifier.gui.commons.events.TaskSearcherSelectionListener;
 import com.leclercb.taskunifier.gui.components.configuration.ConfigurationDialog.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.models.ModelConfigurationDialog;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.ModelItem;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.SearcherItem;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.TagItem;
@@ -196,37 +196,37 @@ public class TaskSearcherPanel extends JPanel implements SavePropertiesListener,
 		
 		if (this.filter != null && this.filter.length() != 0) {
 			searchFilter.addElement(new TaskFilterElement(
-					TaskColumn.TITLE,
+					TaskColumnList.getInstance().get(TaskColumnList.TITLE),
 					StringCondition.CONTAINS,
 					this.filter,
 					false));
 			searchFilter.addElement(new TaskFilterElement(
-					TaskColumn.TAGS,
+					TaskColumnList.getInstance().get(TaskColumnList.TAGS),
 					StringCondition.CONTAINS,
 					this.filter,
 					false));
 			searchFilter.addElement(new TaskFilterElement(
-					TaskColumn.NOTE,
+					TaskColumnList.getInstance().get(TaskColumnList.NOTE),
 					StringCondition.CONTAINS,
 					this.filter,
 					false));
 			searchFilter.addElement(new TaskFilterElement(
-					TaskColumn.CONTEXTS,
+					TaskColumnList.getInstance().get(TaskColumnList.CONTEXTS),
 					StringCondition.CONTAINS,
 					this.filter,
 					false));
 			searchFilter.addElement(new TaskFilterElement(
-					TaskColumn.FOLDER,
+					TaskColumnList.getInstance().get(TaskColumnList.FOLDER),
 					StringCondition.CONTAINS,
 					this.filter,
 					false));
 			searchFilter.addElement(new TaskFilterElement(
-					TaskColumn.GOALS,
+					TaskColumnList.getInstance().get(TaskColumnList.GOALS),
 					StringCondition.CONTAINS,
 					this.filter,
 					false));
 			searchFilter.addElement(new TaskFilterElement(
-					TaskColumn.LOCATIONS,
+					TaskColumnList.getInstance().get(TaskColumnList.LOCATIONS),
 					StringCondition.CONTAINS,
 					this.filter,
 					false));
@@ -235,7 +235,7 @@ public class TaskSearcherPanel extends JPanel implements SavePropertiesListener,
 		if (this.tasks != null) {
 			for (Task task : this.tasks) {
 				extraFilter.addElement(new TaskFilterElement(
-						TaskColumn.MODEL,
+						TaskColumnList.getInstance().get(TaskColumnList.MODEL),
 						ModelCondition.EQUALS,
 						task,
 						false));
@@ -254,9 +254,8 @@ public class TaskSearcherPanel extends JPanel implements SavePropertiesListener,
 		if (Main.getSettings().getBooleanProperty(
 				"tasksearcher.show_completed_tasks_at_the_end")) {
 			searcher.getSorter().insertElement(
-					new TaskSorterElement(
-							TaskColumn.COMPLETED,
-							SortOrder.ASCENDING),
+					new TaskSorterElement(TaskColumnList.getInstance().get(
+							TaskColumnList.COMPLETED), SortOrder.ASCENDING),
 					0);
 		}
 		
