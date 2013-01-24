@@ -33,9 +33,8 @@
 package com.leclercb.taskunifier.gui.api.searchers.filters;
 
 import com.leclercb.taskunifier.api.models.Note;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
 
-public class NoteFilter extends Filter<Note, NoteColumn, NoteFilter, NoteFilterElement> implements Cloneable {
+public class NoteFilter extends Filter<Note, NoteFilter, NoteFilterElement> implements Cloneable {
 	
 	public NoteFilter() {
 		

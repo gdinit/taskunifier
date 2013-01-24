@@ -51,7 +51,7 @@ import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 @XStreamAlias("element")
-public abstract class FilterElement<M extends Model, MP extends PropertyAccessor<M>, F extends Filter<M, MP, F, ? extends FilterElement<M, MP, F>>> implements PropertyChangeSupported {
+public abstract class FilterElement<M extends Model, F extends Filter<M, F, ? extends FilterElement<M, F>>> implements PropertyChangeSupported {
 	
 	public static final String PROP_PROPERTY = "property";
 	public static final String PROP_CONDITION = "condition";
@@ -66,7 +66,7 @@ public abstract class FilterElement<M extends Model, MP extends PropertyAccessor
 	private F parent;
 	
 	@XStreamAlias("property")
-	private MP property;
+	private PropertyAccessor<M> property;
 	
 	@XStreamAlias("condition")
 	private Condition<?, ?> condition;
@@ -83,7 +83,7 @@ public abstract class FilterElement<M extends Model, MP extends PropertyAccessor
 	}
 	
 	public FilterElement(
-			MP property,
+			PropertyAccessor<M> property,
 			Condition<?, ?> condition,
 			Object value,
 			boolean compareModel) {
@@ -91,7 +91,7 @@ public abstract class FilterElement<M extends Model, MP extends PropertyAccessor
 	}
 	
 	public void checkAndSet(
-			MP property,
+			PropertyAccessor<M> property,
 			Condition<?, ?> condition,
 			Object value,
 			boolean compareModel) {
@@ -119,13 +119,13 @@ public abstract class FilterElement<M extends Model, MP extends PropertyAccessor
 		this.parent = parent;
 	}
 	
-	public MP getProperty() {
+	public PropertyAccessor<M> getProperty() {
 		return this.property;
 	}
 	
-	private PropertyChangeEvent setProperty(MP property) {
+	private PropertyChangeEvent setProperty(PropertyAccessor<M> property) {
 		CheckUtils.isNotNull(property);
-		MP oldProperty = this.property;
+		PropertyAccessor<M> oldProperty = this.property;
 		this.property = property;
 		return new PropertyChangeEvent(
 				this,
@@ -173,12 +173,16 @@ public abstract class FilterElement<M extends Model, MP extends PropertyAccessor
 				compareModel);
 	}
 	
-	private void check(MP property, Condition<?, ?> condition, Object value) {
+	private void check(
+			PropertyAccessor<M> property,
+			Condition<?, ?> condition,
+			Object value) {
 		if (value != null && !condition.getValueType().isInstance(value))
 			throw new IllegalArgumentException("Value is not an instance of "
 					+ condition.getValueType());
 		
-		if (!condition.getModelValueType().isAssignableFrom(property.getType()))
+		if (!condition.getModelValueType().isAssignableFrom(
+				property.getType().getType()))
 			throw new IllegalArgumentException(
 					"The property is incompatible with this condition");
 	}

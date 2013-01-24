@@ -33,9 +33,8 @@
 package com.leclercb.taskunifier.gui.api.searchers.filters;
 
 import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
 
-public class TaskFilter extends Filter<Task, TaskColumn, TaskFilter, TaskFilterElement> implements Cloneable {
+public class TaskFilter extends Filter<Task, TaskFilter, TaskFilterElement> implements Cloneable {
 	
 	public TaskFilter() {
 		

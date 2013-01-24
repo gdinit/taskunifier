@@ -47,12 +47,11 @@ import com.leclercb.commons.api.event.propertychange.PropertyChangeSupport;
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Model;
-import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
-public abstract class Filter<M extends Model, MP extends PropertyAccessor<M>, F extends Filter<M, MP, F, FE>, FE extends FilterElement<M, MP, F>> implements ListChangeListener, PropertyChangeListener, ListChangeSupported, PropertyChangeSupported {
+public abstract class Filter<M extends Model, F extends Filter<M, F, FE>, FE extends FilterElement<M, F>> implements ListChangeListener, PropertyChangeListener, ListChangeSupported, PropertyChangeSupported {
 	
 	public static final String PROP_LINK = "link";
 	

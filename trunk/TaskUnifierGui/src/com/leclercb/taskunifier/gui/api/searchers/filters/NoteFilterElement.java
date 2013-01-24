@@ -33,19 +33,19 @@
 package com.leclercb.taskunifier.gui.api.searchers.filters;
 
 import com.leclercb.taskunifier.api.models.Note;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.Condition;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("noteelement")
-public class NoteFilterElement extends FilterElement<Note, NoteColumn, NoteFilter> implements Cloneable {
+public class NoteFilterElement extends FilterElement<Note, NoteFilter> implements Cloneable {
 	
 	public NoteFilterElement() {
 		
 	}
 	
 	public NoteFilterElement(
-			NoteColumn property,
+			PropertyAccessor<Note> property,
 			Condition<?, ?> condition,
 			Object value,
 			boolean compareModel) {

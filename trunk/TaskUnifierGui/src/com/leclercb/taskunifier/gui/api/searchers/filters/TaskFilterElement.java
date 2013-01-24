@@ -36,26 +36,29 @@ import java.util.Calendar;
 import java.util.logging.Level;
 
 import com.leclercb.commons.api.utils.DateUtils;
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.Condition;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.DaysCondition;
 import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("taskelement")
-public class TaskFilterElement extends FilterElement<Task, TaskColumn, TaskFilter> implements Cloneable {
+public class TaskFilterElement extends FilterElement<Task, TaskFilter> implements Cloneable {
 	
 	public TaskFilterElement() {
 		
 	}
 	
 	public TaskFilterElement(
-			TaskColumn property,
+			PropertyAccessor<Task> property,
 			Condition<?, ?> condition,
 			Object value,
 			boolean compareModel) {
@@ -73,7 +76,7 @@ public class TaskFilterElement extends FilterElement<Task, TaskColumn, TaskFilte
 	
 	@Override
 	public Object getComparedModelValue(Task comparedModel) {
-		if (this.getProperty() == TaskColumn.PARENT)
+		if (EqualsUtils.equals(this.getProperty(), TaskColumnList.getInstance().get(TaskColumnList.PARENT)))
 			return comparedModel;
 		
 		return this.getProperty().getProperty(comparedModel);
@@ -89,21 +92,18 @@ public class TaskFilterElement extends FilterElement<Task, TaskColumn, TaskFilte
 				+ TranslationsUtils.translateFilterCondition(this.getCondition())
 				+ " \"";
 		
-		switch (this.getProperty()) {
-			case SHOW_CHILDREN:
-			case COMPLETED:
-			case STAR:
-				str += TranslationsUtils.translateBoolean(Boolean.parseBoolean(this.getValue().toString()));
-				break;
-			case PRIORITY:
-				str += TranslationsUtils.translateTaskPriority((TaskPriority) this.getValue());
-				break;
-			case REPEAT_FROM:
-				str += TranslationsUtils.translateTaskRepeatFrom((TaskRepeatFrom) this.getValue());
-				break;
-			default:
-				str += (this.getValue() == null ? "" : this.getValue());
-				break;
+		if (this.getValue() == null) {
+			
+		} else if (this.getProperty().getType() == PropertyAccessorType.BOOLEAN) {
+			str += TranslationsUtils.translateBoolean(Boolean.parseBoolean(this.getValue().toString()));
+		} else if (this.getProperty().getType() == PropertyAccessorType.STAR) {
+			str += TranslationsUtils.translateBoolean(Boolean.parseBoolean(this.getValue().toString()));
+		} else if (this.getProperty().getType() == PropertyAccessorType.TASK_PRIORITY) {
+			str += TranslationsUtils.translateTaskPriority((TaskPriority) this.getValue());
+		} else if (this.getProperty().getType() == PropertyAccessorType.TASK_REPEAT_FROM) {
+			str += TranslationsUtils.translateTaskRepeatFrom((TaskRepeatFrom) this.getValue());
+		} else {
+			str += this.getValue();
 		}
 		
 		if (this.getValue() != null

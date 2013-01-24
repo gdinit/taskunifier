@@ -33,9 +33,8 @@
 package com.leclercb.taskunifier.gui.api.searchers.sorters;
 
 import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
 
-public class TaskSorter extends Sorter<Task, TaskColumn, TaskSorterElement> implements Cloneable {
+public class TaskSorter extends Sorter<Task, TaskSorterElement> implements Cloneable {
 	
 	public TaskSorter() {
 		
