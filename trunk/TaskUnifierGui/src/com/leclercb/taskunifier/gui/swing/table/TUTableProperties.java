@@ -61,7 +61,7 @@ public class TUTableProperties<T> implements PropertyChangeListener {
 		this.list = list;
 		this.columns = new HashMap<PropertyAccessor<T>, TableColumnProperties<T>>();
 		
-		for (PropertyAccessor<T> column : this.list.getColumns()) {
+		for (PropertyAccessor<T> column : this.list.getAccessors()) {
 			this.columns.put(column, new TableColumnProperties<T>(this, column));
 		}
 		
@@ -88,7 +88,7 @@ public class TUTableProperties<T> implements PropertyChangeListener {
 		
 		this.propertyName = propertyName;
 		
-		for (PropertyAccessor<T> column : this.list.getColumns()) {
+		for (PropertyAccessor<T> column : this.list.getAccessors()) {
 			TableColumnProperties<T> properties = this.columns.get(column);
 			
 			properties.setOrder(Main.getSettings().getIntegerProperty(
@@ -122,7 +122,7 @@ public class TUTableProperties<T> implements PropertyChangeListener {
 			if (evt.getNewValue() == null)
 				return;
 			
-			for (PropertyAccessor<T> column : this.list.getColumns()) {
+			for (PropertyAccessor<T> column : this.list.getAccessors()) {
 				TableColumnProperties<T> properties = this.columns.get(column);
 				
 				if (evt.getPropertyName().equals(

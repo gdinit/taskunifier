@@ -32,12 +32,45 @@
  */
 package com.leclercb.taskunifier.gui.api.accessor;
 
+import java.util.Comparator;
+
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+
 public interface PropertyAccessor<T> {
+	
+	public static final String PROP_USED = "used";
+	
+	public abstract String getName();
+	
+	public abstract String getLabel();
+	
+	public abstract PropertyAccessorType getType();
+	
+	public abstract String getFieldSettingsPropertyName();
+	
+	public abstract String getPropertyName();
+	
+	public abstract boolean isUsable();
+	
+	public abstract boolean isUsed();
+	
+	public abstract void setUsed(boolean used);
+	
+	public abstract boolean isEditable();
+	
+	public abstract boolean isSortable();
+	
+	public abstract Comparator<?> getComparator();
+	
+	public abstract TableCellRenderer getCellRenderer();
+	
+	public abstract TableCellEditor getCellEditor();
+	
+	public abstract String getPropertyAsString(T object);
 	
 	public abstract Object getProperty(T object);
 	
 	public abstract void setProperty(T object, Object value);
-	
-	public abstract Class<?> getType();
 	
 }

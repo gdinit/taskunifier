@@ -55,7 +55,7 @@ public class ThemeNoteFieldsConfigurationPanel extends DefaultConfigurationPanel
 	}
 	
 	private void initialize() {
-		List<PropertyAccessor<Note>> columns = NoteColumnList.getInstance().getUsableColumns();
+		List<PropertyAccessor<Note>> columns = NoteColumnList.getInstance().getUsableAccessors();
 		
 		Collections.sort(columns, new Comparator<PropertyAccessor<Note>>() {
 			

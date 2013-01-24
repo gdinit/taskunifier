@@ -89,7 +89,7 @@ public class TaskFilesTableModel extends AbstractTableModel implements ListChang
 	}
 	
 	public PropertyAccessor<FileItem> getTaskFilesColumn(int col) {
-		return TaskFilesColumnList.getInstance().getColumn(col);
+		return TaskFilesColumnList.getInstance().getAccessor(col);
 	}
 	
 	@Override

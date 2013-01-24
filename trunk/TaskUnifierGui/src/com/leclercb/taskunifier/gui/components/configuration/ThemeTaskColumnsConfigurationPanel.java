@@ -55,7 +55,7 @@ public class ThemeTaskColumnsConfigurationPanel extends DefaultConfigurationPane
 	}
 	
 	private void initialize() {
-		List<PropertyAccessor<Task>> columns = TaskColumnList.getInstance().getColumns();
+		List<PropertyAccessor<Task>> columns = TaskColumnList.getInstance().getAccessors();
 		
 		Collections.sort(columns, new Comparator<PropertyAccessor<Task>>() {
 			

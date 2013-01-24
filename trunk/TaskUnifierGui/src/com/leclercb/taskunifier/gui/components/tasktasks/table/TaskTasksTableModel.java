@@ -93,7 +93,7 @@ public class TaskTasksTableModel extends AbstractTableModel implements ListChang
 	}
 	
 	public PropertyAccessor<TaskItem> getTaskTasksColumn(int col) {
-		return TaskTasksColumnList.getInstance().getColumn(col);
+		return TaskTasksColumnList.getInstance().getAccessor(col);
 	}
 	
 	@Override
