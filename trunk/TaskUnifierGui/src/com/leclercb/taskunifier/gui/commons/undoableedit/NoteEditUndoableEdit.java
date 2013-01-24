@@ -40,19 +40,19 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.api.models.NoteFactory;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class NoteEditUndoableEdit extends AbstractUndoableEdit {
 	
 	private ModelId note;
-	private NoteColumn column;
+	private PropertyAccessor<Note> column;
 	private Object newValue;
 	private Object oldValue;
 	
 	public NoteEditUndoableEdit(
 			ModelId note,
-			NoteColumn column,
+			PropertyAccessor<Note> column,
 			Object newValue,
 			Object oldValue) {
 		CheckUtils.isNotNull(note);

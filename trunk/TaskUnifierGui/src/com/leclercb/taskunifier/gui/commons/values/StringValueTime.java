@@ -32,26 +32,30 @@
  */
 package com.leclercb.taskunifier.gui.commons.values;
 
-import java.text.DecimalFormat;
-
 import org.jdesktop.swingx.renderer.StringValue;
 
-public class StringValueTaskProgress implements StringValue {
+public class StringValueTime implements StringValue {
 	
-	public static final StringValueTaskProgress INSTANCE = new StringValueTaskProgress();
+	public static final StringValueTime INSTANCE = new StringValueTime();
 	
-	private DecimalFormat format;
-	
-	private StringValueTaskProgress() {
-		this.format = new DecimalFormat("##0%");
+	private StringValueTime() {
+		
 	}
 	
 	@Override
 	public String getString(Object value) {
-		if (value == null || !(value instanceof Double))
-			return " ";
+		if (value == null || !(value instanceof Number))
+			return "00:00";
 		
-		return this.format.format(value);
+		int time = ((Number) value).intValue();
+		int hour = time / 60;
+		int minute = time % 60;
+		
+		return (hour < 10 ? "0" : "")
+				+ hour
+				+ ":"
+				+ (minute < 10 ? "0" : "")
+				+ minute;
 	}
 	
 }
