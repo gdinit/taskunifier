@@ -38,13 +38,12 @@ import java.util.List;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.models.Note;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilter;
-import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
-import com.leclercb.taskunifier.gui.commons.values.StringValueModel;
-import com.leclercb.taskunifier.gui.commons.values.StringValueModelId;
 import com.leclercb.taskunifier.gui.components.modelnote.converters.Text2HTML;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 
 public final class NoteUtils {
 	
@@ -52,13 +51,16 @@ public final class NoteUtils {
 		
 	}
 	
-	public static String toText(Note[] notes, NoteColumn[] columns, boolean html) {
+	public static String toText(
+			Note[] notes,
+			List<PropertyAccessor<Note>> columns,
+			boolean html) {
 		return toText(notes, columns, html, null, null);
 	}
 	
 	public static String toText(
 			Note[] notes,
-			NoteColumn[] columns,
+			List<PropertyAccessor<Note>> columns,
 			boolean html,
 			String header,
 			String footer) {
@@ -90,7 +92,7 @@ public final class NoteUtils {
 					
 					String text = row[j];
 					
-					if (columns[j] == NoteColumn.NOTE)
+					if (EqualsUtils.equals(columns.get(j), NoteColumnList.NOTE))
 						text = Text2HTML.convert(text);
 					else
 						text = StringEscapeUtils.escapeHtml4(text);
@@ -121,7 +123,9 @@ public final class NoteUtils {
 		return buffer.toString();
 	}
 	
-	public static String toHtml(Note[] notes, NoteColumn[] columns) {
+	public static String toHtml(
+			Note[] notes,
+			List<PropertyAccessor<Note>> columns) {
 		String[][] data = toStringData(notes, columns);
 		StringBuffer buffer = new StringBuffer();
 		
@@ -141,7 +145,7 @@ public final class NoteUtils {
 			for (int j = 0; j < row.length; j++) {
 				String text = row[j];
 				
-				if (columns[j] == NoteColumn.NOTE)
+				if (EqualsUtils.equals(columns.get(j), NoteColumnList.NOTE))
 					text = Text2HTML.convert(text);
 				else
 					text = StringEscapeUtils.escapeHtml3(text);
@@ -160,16 +164,18 @@ public final class NoteUtils {
 		return buffer.toString();
 	}
 	
-	public static String[][] toStringData(Note[] notes, NoteColumn[] columns) {
+	public static String[][] toStringData(
+			Note[] notes,
+			List<PropertyAccessor<Note>> columns) {
 		CheckUtils.isNotNull(notes);
 		CheckUtils.isNotNull(columns);
 		
 		List<String[]> data = new ArrayList<String[]>();
 		
 		int i = 0;
-		String[] row = new String[columns.length];
+		String[] row = new String[columns.size()];
 		
-		for (NoteColumn column : columns) {
+		for (PropertyAccessor<Note> column : columns) {
 			if (column == null)
 				continue;
 			
@@ -183,9 +189,9 @@ public final class NoteUtils {
 				continue;
 			
 			i = 0;
-			row = new String[columns.length];
+			row = new String[columns.size()];
 			
-			for (NoteColumn column : columns) {
+			for (PropertyAccessor<Note> column : columns) {
 				if (column == null)
 					continue;
 				
@@ -198,30 +204,8 @@ public final class NoteUtils {
 		return data.toArray(new String[0][]);
 	}
 	
-	public static String toString(Note note, NoteColumn column) {
-		String content = null;
-		Object value = column.getProperty(note);
-		
-		switch (column) {
-			case FOLDER:
-				content = StringValueModel.INSTANCE.getString(value);
-				break;
-			case MODEL:
-				content = StringValueModelId.INSTANCE.getString(value);
-				break;
-			case MODEL_CREATION_DATE:
-				content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
-				break;
-			case MODEL_UPDATE_DATE:
-				content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
-				break;
-			case NOTE:
-				content = (value == null ? null : "\n" + value.toString());
-				break;
-			case TITLE:
-				content = (value == null ? null : value.toString());
-				break;
-		}
+	public static String toString(Note note, PropertyAccessor<Note> column) {
+		String content = column.getPropertyAsString(note);
 		
 		if (content == null)
 			content = "";

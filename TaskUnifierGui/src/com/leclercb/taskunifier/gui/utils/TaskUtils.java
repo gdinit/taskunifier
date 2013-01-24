@@ -45,27 +45,14 @@ import com.leclercb.commons.api.utils.DateUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.models.GuiTask;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilterElement;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
-import com.leclercb.taskunifier.gui.commons.values.StringValueBoolean;
-import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
-import com.leclercb.taskunifier.gui.commons.values.StringValueModel;
-import com.leclercb.taskunifier.gui.commons.values.StringValueModelId;
-import com.leclercb.taskunifier.gui.commons.values.StringValueModelList;
-import com.leclercb.taskunifier.gui.commons.values.StringValueModelOrder;
-import com.leclercb.taskunifier.gui.commons.values.StringValueTaskLength;
-import com.leclercb.taskunifier.gui.commons.values.StringValueTaskPriority;
-import com.leclercb.taskunifier.gui.commons.values.StringValueTaskProgress;
-import com.leclercb.taskunifier.gui.commons.values.StringValueTaskReminder;
-import com.leclercb.taskunifier.gui.commons.values.StringValueTaskRepeat;
-import com.leclercb.taskunifier.gui.commons.values.StringValueTaskRepeatFrom;
-import com.leclercb.taskunifier.gui.commons.values.StringValueTaskStatus;
-import com.leclercb.taskunifier.gui.commons.values.StringValueTimer;
 import com.leclercb.taskunifier.gui.components.modelnote.converters.Text2HTML;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.main.Main;
 
 public final class TaskUtils {
@@ -76,7 +63,9 @@ public final class TaskUtils {
 	
 	public static boolean isSortByOrder(TaskSorter sorter) {
 		if (sorter.getElementCount() >= 1)
-			if (sorter.getElement(0).getProperty() == TaskColumn.ORDER
+			if (EqualsUtils.equals(
+					sorter.getElement(0).getProperty(),
+					TaskColumnList.ORDER)
 					&& sorter.getElement(0).getSortOrder() == SortOrder.ASCENDING)
 				return true;
 		
@@ -245,13 +234,16 @@ public final class TaskUtils {
 		return count;
 	}
 	
-	public static String toText(Task[] tasks, TaskColumn[] columns, boolean html) {
+	public static String toText(
+			Task[] tasks,
+			List<PropertyAccessor<Task>> columns,
+			boolean html) {
 		return toText(tasks, columns, html, null, null);
 	}
 	
 	public static String toText(
 			Task[] tasks,
-			TaskColumn[] columns,
+			List<PropertyAccessor<Task>> columns,
 			boolean html,
 			String header,
 			String footer) {
@@ -283,7 +275,7 @@ public final class TaskUtils {
 					
 					String text = row[j];
 					
-					if (columns[j] == TaskColumn.NOTE)
+					if (EqualsUtils.equals(columns.get(j), TaskColumnList.NOTE))
 						text = Text2HTML.convert(text);
 					else
 						text = StringEscapeUtils.escapeHtml3(text);
@@ -314,7 +306,9 @@ public final class TaskUtils {
 		return buffer.toString();
 	}
 	
-	public static String toHtml(Task[] tasks, TaskColumn[] columns) {
+	public static String toHtml(
+			Task[] tasks,
+			List<PropertyAccessor<Task>> columns) {
 		String[][] data = toStringData(tasks, columns);
 		StringBuffer buffer = new StringBuffer();
 		
@@ -334,7 +328,7 @@ public final class TaskUtils {
 			for (int j = 0; j < row.length; j++) {
 				String text = row[j];
 				
-				if (columns[j] == TaskColumn.NOTE)
+				if (EqualsUtils.equals(columns.get(j), TaskColumnList.NOTE))
 					text = Text2HTML.convert(text);
 				else
 					text = StringEscapeUtils.escapeHtml3(text);
@@ -353,16 +347,18 @@ public final class TaskUtils {
 		return buffer.toString();
 	}
 	
-	public static String[][] toStringData(Task[] tasks, TaskColumn[] columns) {
+	public static String[][] toStringData(
+			Task[] tasks,
+			List<PropertyAccessor<Task>> columns) {
 		CheckUtils.isNotNull(tasks);
 		CheckUtils.isNotNull(columns);
 		
 		List<String[]> data = new ArrayList<String[]>();
 		
 		int i = 0;
-		String[] row = new String[columns.length];
+		String[] row = new String[columns.size()];
 		
-		for (TaskColumn column : columns) {
+		for (PropertyAccessor<Task> column : columns) {
 			if (column == null)
 				continue;
 			
@@ -376,9 +372,9 @@ public final class TaskUtils {
 				continue;
 			
 			i = 0;
-			row = new String[columns.length];
+			row = new String[columns.size()];
 			
-			for (TaskColumn column : columns) {
+			for (PropertyAccessor<Task> column : columns) {
 				if (column == null)
 					continue;
 				
@@ -391,113 +387,8 @@ public final class TaskUtils {
 		return data.toArray(new String[0][]);
 	}
 	
-	public static String toString(Task task, TaskColumn column) {
-		boolean useDueTime = Main.getSettings().getBooleanProperty(
-				"date.use_due_time");
-		boolean useStartTime = Main.getSettings().getBooleanProperty(
-				"date.use_start_time");
-		
-		String content = null;
-		Object value = column.getProperty(task);
-		
-		switch (column) {
-			case CONTACTS:
-				content = (value == null ? null : value.toString());
-				break;
-			case COMPLETED:
-				content = StringValueBoolean.INSTANCE.getString(value);
-				break;
-			case COMPLETED_ON:
-				content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
-				break;
-			case FOLDER:
-			case PARENT:
-				content = StringValueModel.INSTANCE.getString(value);
-				break;
-			case CONTEXTS:
-			case GOALS:
-			case LOCATIONS:
-				content = StringValueModelList.INSTANCE.getString(value);
-				break;
-			case DUE_DATE:
-				if (useDueTime)
-					content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
-				else
-					content = StringValueCalendar.INSTANCE_DATE.getString(value);
-				break;
-			case FILES:
-				content = (value == null ? null : value.toString());
-				break;
-			case IMPORTANCE:
-				content = (value == null ? null : value.toString());
-				break;
-			case LENGTH:
-				content = StringValueTaskLength.INSTANCE.getString(value);
-				break;
-			case MODEL:
-				content = StringValueModelId.INSTANCE.getString(value);
-				break;
-			case MODEL_EDIT:
-				content = null;
-				break;
-			case MODEL_CREATION_DATE:
-				content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
-				break;
-			case MODEL_UPDATE_DATE:
-				content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
-				break;
-			case NOTE:
-				content = (value == null ? null : "\n" + value.toString());
-				break;
-			case ORDER:
-				content = StringValueModelOrder.INSTANCE.getString(value);
-				break;
-			case PRIORITY:
-				content = StringValueTaskPriority.INSTANCE.getString(value);
-				break;
-			case PROGRESS:
-				content = StringValueTaskProgress.INSTANCE.getString(value);
-				break;
-			case START_DATE_REMINDER:
-				content = StringValueTaskReminder.INSTANCE.getString(value);
-				break;
-			case DUE_DATE_REMINDER:
-				content = StringValueTaskReminder.INSTANCE.getString(value);
-				break;
-			case REPEAT:
-				content = StringValueTaskRepeat.INSTANCE.getString(value);
-				break;
-			case REPEAT_FROM:
-				content = StringValueTaskRepeatFrom.INSTANCE.getString(value);
-				break;
-			case SHOW_CHILDREN:
-				content = StringValueBoolean.INSTANCE.getString(value);
-				break;
-			case STAR:
-				content = StringValueBoolean.INSTANCE.getString(value);
-				break;
-			case START_DATE:
-				if (useStartTime)
-					content = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
-				else
-					content = StringValueCalendar.INSTANCE_DATE.getString(value);
-				break;
-			case STATUS:
-				content = StringValueTaskStatus.INSTANCE.getString(value);
-				break;
-			case TAGS:
-				content = (value == null ? null : value.toString());
-				break;
-			case TASKS:
-				content = (value == null ? null : value.toString());
-				break;
-			case TIMER:
-				content = StringValueTimer.INSTANCE.getString(value);
-				break;
-			case TITLE:
-				content = (value == null ? null : value.toString());
-				break;
-		}
+	public static String toString(Task task, PropertyAccessor<Task> column) {
+		String content = column.getPropertyAsString(task);
 		
 		if (content == null)
 			content = "";
@@ -564,7 +455,7 @@ public final class TaskUtils {
 				task,
 				comparedTask,
 				filter,
-				filterContains(filter, TaskColumn.COMPLETED),
+				filterContains(filter, TaskColumnList.COMPLETED),
 				true,
 				true,
 				true,
@@ -579,7 +470,7 @@ public final class TaskUtils {
 				task,
 				comparedTask,
 				filter,
-				filterContains(filter, TaskColumn.COMPLETED),
+				filterContains(filter, TaskColumnList.COMPLETED),
 				false,
 				false,
 				true,
@@ -595,7 +486,7 @@ public final class TaskUtils {
 				task,
 				comparedTask,
 				filter,
-				filterContains(filter, TaskColumn.COMPLETED),
+				filterContains(filter, TaskColumnList.COMPLETED),
 				true,
 				true,
 				true,
@@ -679,7 +570,9 @@ public final class TaskUtils {
 		return filter.include(task, comparedTask);
 	}
 	
-	public static boolean filterContains(TaskFilter filter, TaskColumn column) {
+	public static boolean filterContains(
+			TaskFilter filter,
+			PropertyAccessor<Task> column) {
 		if (filter == null)
 			return false;
 		
@@ -687,7 +580,7 @@ public final class TaskUtils {
 		List<TaskFilter> filters = filter.getFilters();
 		
 		for (TaskFilterElement e : elements) {
-			if (e.getProperty() == column) {
+			if (EqualsUtils.equals(e.getProperty(), column)) {
 				return true;
 			}
 		}

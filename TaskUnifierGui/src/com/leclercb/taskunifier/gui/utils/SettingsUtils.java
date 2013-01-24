@@ -34,11 +34,12 @@ package com.leclercb.taskunifier.gui.utils;
 
 import java.util.List;
 
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcherFactory;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilterElement;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.main.Main;
 
 public final class SettingsUtils {
@@ -107,7 +108,7 @@ public final class SettingsUtils {
 		List<TaskFilter> filters = filter.getFilters();
 		
 		for (TaskFilterElement e : elements) {
-			if (e.getProperty() == TaskColumn.COMPLETED)
+			if (EqualsUtils.equals(e.getProperty(), TaskColumnList.COMPLETED))
 				if (e.getValue().equals(Boolean.FALSE))
 					filter.removeElement(e);
 		}

@@ -63,8 +63,8 @@ import com.leclercb.taskunifier.api.models.beans.ContactListBean.ContactItemBean
 import com.leclercb.taskunifier.gui.api.models.beans.ComBean;
 import com.leclercb.taskunifier.gui.api.models.beans.ComNoteBean;
 import com.leclercb.taskunifier.gui.api.models.beans.ComTaskBean;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -281,7 +281,7 @@ public final class MailUtils {
 		
 		return NoteUtils.toText(
 				notes,
-				NoteColumn.getUsedColumns(),
+				NoteColumnList.getInstance().getUsedColumns(),
 				html,
 				header,
 				null);
@@ -297,7 +297,7 @@ public final class MailUtils {
 		
 		return TaskUtils.toText(
 				tasks,
-				TaskColumn.getUsedColumns(),
+				TaskColumnList.getInstance().getUsedColumns(),
 				html,
 				header,
 				null);
