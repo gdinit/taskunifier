@@ -54,10 +54,11 @@ import org.jdesktop.swingx.painter.Painter;
 import com.explodingpixels.macwidgets.SourceListStandardColorScheme;
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelUtils;
+import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.gui.commons.events.NoteSearcherSelectionChangeEvent;
 import com.leclercb.taskunifier.gui.components.modelnote.ModelNotePanel;
 import com.leclercb.taskunifier.gui.components.modelnote.ModelNoteView;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 import com.leclercb.taskunifier.gui.components.notes.NoteTableView;
 import com.leclercb.taskunifier.gui.components.notes.table.NoteTable;
 import com.leclercb.taskunifier.gui.components.notesearchertree.NoteSearcherPanel;
@@ -250,8 +251,8 @@ public class DefaultNoteView extends JPanel implements NoteView, SavePropertiesL
 	}
 	
 	private void initializeNoteTable(JPanel middlePane) {
-		this.noteTable = new NoteTable(new TUTableProperties<NoteColumn>(
-				NoteColumn.class,
+		this.noteTable = new NoteTable(new TUTableProperties<Note>(
+				NoteColumnList.getInstance(),
 				"note",
 				false));
 		

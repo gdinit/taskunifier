@@ -59,21 +59,25 @@ import com.explodingpixels.macwidgets.SourceListStandardColorScheme;
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelUtils;
+import com.leclercb.taskunifier.api.models.ContactList.ContactItem;
+import com.leclercb.taskunifier.api.models.FileList.FileItem;
+import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.api.models.TaskList.TaskItem;
 import com.leclercb.taskunifier.gui.commons.events.TaskSearcherSelectionChangeEvent;
 import com.leclercb.taskunifier.gui.components.help.Help;
 import com.leclercb.taskunifier.gui.components.modelnote.ModelNotePanel;
 import com.leclercb.taskunifier.gui.components.modelnote.ModelNoteView;
 import com.leclercb.taskunifier.gui.components.quickaddtask.QuickAddTaskPanel;
-import com.leclercb.taskunifier.gui.components.taskcontacts.TaskContactsColumn;
+import com.leclercb.taskunifier.gui.components.taskcontacts.TaskContactsColumnList;
 import com.leclercb.taskunifier.gui.components.taskcontacts.TaskContactsPanel;
-import com.leclercb.taskunifier.gui.components.taskfiles.TaskFilesColumn;
+import com.leclercb.taskunifier.gui.components.taskfiles.TaskFilesColumnList;
 import com.leclercb.taskunifier.gui.components.taskfiles.TaskFilesPanel;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.components.tasks.TaskTableView;
 import com.leclercb.taskunifier.gui.components.tasks.table.TaskTable;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.TaskSearcherPanel;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.TaskSearcherView;
-import com.leclercb.taskunifier.gui.components.tasktasks.TaskTasksColumn;
+import com.leclercb.taskunifier.gui.components.tasktasks.TaskTasksColumnList;
 import com.leclercb.taskunifier.gui.components.tasktasks.TaskTasksPanel;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.TUIndentSubtasksCheckBox;
@@ -302,8 +306,8 @@ public class DefaultTaskView extends JPanel implements TaskView, SavePropertiesL
 	}
 	
 	private void initializeTaskTable(JPanel middlePane) {
-		this.taskTable = new TaskTable(new TUTableProperties<TaskColumn>(
-				TaskColumn.class,
+		this.taskTable = new TaskTable(new TUTableProperties<Task>(
+				TaskColumnList.getInstance(),
 				"task",
 				false));
 		
@@ -341,8 +345,8 @@ public class DefaultTaskView extends JPanel implements TaskView, SavePropertiesL
 	
 	private void initializeTaskContacts(JTabbedPane tabbedPane) {
 		this.taskContacts = new TaskContactsPanel(
-				new TUTableProperties<TaskContactsColumn>(
-						TaskContactsColumn.class,
+				new TUTableProperties<ContactItem>(
+						TaskContactsColumnList.getInstance(),
 						"taskcontacts",
 						false));
 		this.taskContacts.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -354,11 +358,10 @@ public class DefaultTaskView extends JPanel implements TaskView, SavePropertiesL
 	}
 	
 	private void initializeTaskTasks(JTabbedPane tabbedPane) {
-		this.taskTasks = new TaskTasksPanel(
-				new TUTableProperties<TaskTasksColumn>(
-						TaskTasksColumn.class,
-						"tasktasks",
-						false));
+		this.taskTasks = new TaskTasksPanel(new TUTableProperties<TaskItem>(
+				TaskTasksColumnList.getInstance(),
+				"tasktasks",
+				false));
 		this.taskTasks.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		this.taskTable.addModelSelectionChangeListener(this.taskTasks);
 		tabbedPane.addTab(
@@ -368,11 +371,10 @@ public class DefaultTaskView extends JPanel implements TaskView, SavePropertiesL
 	}
 	
 	private void initializeTaskFiles(JTabbedPane tabbedPane) {
-		this.taskFiles = new TaskFilesPanel(
-				new TUTableProperties<TaskFilesColumn>(
-						TaskFilesColumn.class,
-						"taskfiles",
-						false));
+		this.taskFiles = new TaskFilesPanel(new TUTableProperties<FileItem>(
+				TaskFilesColumnList.getInstance(),
+				"taskfiles",
+				false));
 		this.taskFiles.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		this.taskTable.addModelSelectionChangeListener(this.taskFiles);
 		tabbedPane.addTab(
