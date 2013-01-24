@@ -94,7 +94,7 @@ public class ModelSelectionTableModel extends AbstractTableModel implements List
 	}
 	
 	public PropertyAccessor<Model> getModelSelectionColumn(int col) {
-		return ModelSelectionColumnList.getInstance().getColumn(col);
+		return ModelSelectionColumnList.getInstance().getAccessor(col);
 	}
 	
 	@Override

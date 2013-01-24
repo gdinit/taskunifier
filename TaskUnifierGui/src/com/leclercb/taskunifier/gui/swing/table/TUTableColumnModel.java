@@ -67,7 +67,7 @@ public class TUTableColumnModel<T> extends DefaultTableColumnModelExt {
 	}
 	
 	private void initialize() {
-		List<PropertyAccessor<T>> columns = this.tableProperties.getColumns().getColumns();
+		List<PropertyAccessor<T>> columns = this.tableProperties.getColumns().getAccessors();
 		Collections.sort(columns, new Comparator<PropertyAccessor<T>>() {
 			
 			@Override

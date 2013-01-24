@@ -281,7 +281,7 @@ public final class MailUtils {
 		
 		return NoteUtils.toText(
 				notes,
-				NoteColumnList.getInstance().getUsedColumns(),
+				NoteColumnList.getInstance().getUsedAccessors(),
 				html,
 				header,
 				null);
@@ -297,7 +297,7 @@ public final class MailUtils {
 		
 		return TaskUtils.toText(
 				tasks,
-				TaskColumnList.getInstance().getUsedColumns(),
+				TaskColumnList.getInstance().getUsedAccessors(),
 				html,
 				header,
 				null);

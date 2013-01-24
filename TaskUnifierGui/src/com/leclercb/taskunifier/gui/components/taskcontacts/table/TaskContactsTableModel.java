@@ -89,7 +89,7 @@ public class TaskContactsTableModel extends AbstractTableModel implements ListCh
 	}
 	
 	public PropertyAccessor<ContactItem> getTaskContactsColumn(int col) {
-		return TaskContactsColumnList.getInstance().getColumn(col);
+		return TaskContactsColumnList.getInstance().getAccessor(col);
 	}
 	
 	@Override

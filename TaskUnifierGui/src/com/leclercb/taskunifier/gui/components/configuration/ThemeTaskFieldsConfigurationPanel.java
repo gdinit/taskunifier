@@ -88,7 +88,7 @@ public class ThemeTaskFieldsConfigurationPanel extends DefaultConfigurationPanel
 				null,
 				new ConfigurationFieldType.Separator()));
 		
-		List<PropertyAccessor<Task>> columns = TaskColumnList.getInstance().getUsableColumns();
+		List<PropertyAccessor<Task>> columns = TaskColumnList.getInstance().getUsableAccessors();
 		
 		Collections.sort(columns, new Comparator<PropertyAccessor<Task>>() {
 			

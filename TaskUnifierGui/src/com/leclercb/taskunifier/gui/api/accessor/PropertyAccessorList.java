@@ -33,73 +33,96 @@
 package com.leclercb.taskunifier.gui.api.accessor;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.leclercb.commons.api.utils.EqualsUtils;
-import com.leclercb.taskunifier.api.models.Model;
 
-public class PropertyAccessorList<M extends Model, PA extends AbstractPropertyAccessor<M>> {
+public class PropertyAccessorList<T> {
 	
-	private Map<String, PA> map;
+	private String noteAccessorName;
+	private List<PropertyAccessor<T>> list;
 	
-	public PropertyAccessorList() {
-		this.map = new HashMap<String, PA>();
+	public PropertyAccessorList(String noteAccessorName) {
+		this.noteAccessorName = noteAccessorName;
+		this.list = new ArrayList<PropertyAccessor<T>>();
 	}
 	
-	public void add(String name, PA properties) {
-		this.map.put(name, properties);
-	}
-	
-	public PA get(String name) {
-		return this.map.get(name);
-	}
-	
-	public PA parsePropertyName(String propertyName) {
-		if (propertyName == null)
-			return null;
+	public void add(PropertyAccessor<T> accessor) {
+		if (this.list.contains(accessor))
+			throw new IllegalArgumentException("This accessor already exists");
 		
-		for (PA mp : this.map.values()) {
-			if (EqualsUtils.equals(mp.getPropertyName(), propertyName))
-				return mp;
+		this.list.add(accessor);
+	}
+	
+	public PropertyAccessor<T> get(String name) {
+		for (PropertyAccessor<T> accessor : this.list) {
+			if (EqualsUtils.equals(accessor.getName(), name))
+				return accessor;
 		}
 		
 		return null;
 	}
 	
-	public List<PA> getUsableColumns() {
-		return this.getUsedColumns(true);
-	}
-	
-	public List<PA> getUsableColumns(boolean includeNote) {
-		List<PA> list = new ArrayList<PA>();
+	public PropertyAccessor<T> parsePropertyName(String propertyName) {
+		if (propertyName == null)
+			return null;
 		
-		for (PA mp : this.map.values()) {
-			if (mp.isUsable())
-				list.add(mp);
+		for (PropertyAccessor<T> accessor : this.list) {
+			if (EqualsUtils.equals(accessor.getPropertyName(), propertyName))
+				return accessor;
 		}
 		
-		if (!includeNote)
-			list.remove(this.get("NOTE"));
+		return null;
+	}
+	
+	public int getSize() {
+		return this.list.size();
+	}
+	
+	public int indexOf(PropertyAccessor<T> accessor) {
+		return this.list.indexOf(accessor);
+	}
+	
+	public PropertyAccessor<T> getAccessor(int index) {
+		return this.list.get(index);
+	}
+	
+	public List<PropertyAccessor<T>> getAccessors() {
+		return new ArrayList<PropertyAccessor<T>>(this.list);
+	}
+	
+	public List<PropertyAccessor<T>> getUsableAccessors() {
+		return this.getUsableAccessors(true);
+	}
+	
+	public List<PropertyAccessor<T>> getUsableAccessors(boolean includeNote) {
+		List<PropertyAccessor<T>> list = new ArrayList<PropertyAccessor<T>>();
+		
+		for (PropertyAccessor<T> accessor : this.list) {
+			if (accessor.isUsable())
+				list.add(accessor);
+		}
+		
+		if (!includeNote && this.noteAccessorName != null)
+			list.remove(this.get(this.noteAccessorName));
 		
 		return list;
 	}
 	
-	public List<PA> getUsedColumns() {
-		return this.getUsedColumns(true);
+	public List<PropertyAccessor<T>> getUsedAccessors() {
+		return this.getUsedAccessors(true);
 	}
 	
-	public List<PA> getUsedColumns(boolean includeNote) {
-		List<PA> list = new ArrayList<PA>();
+	public List<PropertyAccessor<T>> getUsedAccessors(boolean includeNote) {
+		List<PropertyAccessor<T>> list = new ArrayList<PropertyAccessor<T>>();
 		
-		for (PA mp : this.map.values()) {
-			if (mp.isUsable() && mp.isUsed())
-				list.add(mp);
+		for (PropertyAccessor<T> accessor : this.list) {
+			if (accessor.isUsable() && accessor.isUsed())
+				list.add(accessor);
 		}
 		
-		if (!includeNote)
-			list.remove(this.get("NOTE"));
+		if (!includeNote && this.noteAccessorName != null)
+			list.remove(this.get(this.noteAccessorName));
 		
 		return list;
 	}

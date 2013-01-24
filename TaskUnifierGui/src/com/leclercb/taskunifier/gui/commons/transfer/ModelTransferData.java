@@ -102,7 +102,7 @@ public class ModelTransferData implements Serializable {
 			
 			return TaskUtils.toHtml(
 					tasks.toArray(new Task[0]),
-					TaskColumnList.getInstance().getUsedColumns());
+					TaskColumnList.getInstance().getUsedAccessors());
 		}
 		
 		if (this.type == ModelType.NOTE) {
@@ -124,7 +124,7 @@ public class ModelTransferData implements Serializable {
 			
 			return NoteUtils.toHtml(
 					notes.toArray(new Note[0]),
-					NoteColumnList.getInstance().getUsedColumns());
+					NoteColumnList.getInstance().getUsedAccessors());
 		}
 		
 		return null;
@@ -147,7 +147,7 @@ public class ModelTransferData implements Serializable {
 			
 			return TaskUtils.toText(
 					tasks.toArray(new Task[0]),
-					TaskColumnList.getInstance().getUsedColumns(),
+					TaskColumnList.getInstance().getUsedAccessors(),
 					html);
 		}
 		
@@ -167,7 +167,7 @@ public class ModelTransferData implements Serializable {
 			
 			return NoteUtils.toText(
 					notes.toArray(new Note[0]),
-					NoteColumnList.getInstance().getUsedColumns(),
+					NoteColumnList.getInstance().getUsedAccessors(),
 					html);
 		}
 		
