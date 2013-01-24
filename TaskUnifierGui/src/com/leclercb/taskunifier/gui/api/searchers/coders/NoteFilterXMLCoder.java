@@ -44,10 +44,16 @@ import com.leclercb.commons.api.coder.AbstractXMLCoder;
 import com.leclercb.commons.api.coder.exc.FactoryCoderException;
 import com.leclercb.commons.api.utils.XMLUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
+import com.leclercb.taskunifier.api.models.ContextFactory;
 import com.leclercb.taskunifier.api.models.FolderFactory;
+import com.leclercb.taskunifier.api.models.GoalFactory;
+import com.leclercb.taskunifier.api.models.LocationFactory;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.ModelId;
-import com.leclercb.taskunifier.api.models.NoteFactory;
+import com.leclercb.taskunifier.api.models.Note;
+import com.leclercb.taskunifier.api.models.TaskFactory;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
 import com.leclercb.taskunifier.gui.api.searchers.filters.FilterLink;
 import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilterElement;
@@ -58,7 +64,7 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.EnumConditi
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.ModelCondition;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.NumberCondition;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondition;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 
 public class NoteFilterXMLCoder extends AbstractXMLCoder<NoteFilter> {
 	
@@ -82,7 +88,7 @@ public class NoteFilterXMLCoder extends AbstractXMLCoder<NoteFilter> {
 					NodeList nElement = nFilter.item(i).getChildNodes();
 					NoteFilterElement element = null;
 					
-					NoteColumn column = null;
+					PropertyAccessor<Note> column = null;
 					String conditionClass = null;
 					String enumName = null;
 					String valueStr = null;
@@ -91,7 +97,8 @@ public class NoteFilterXMLCoder extends AbstractXMLCoder<NoteFilter> {
 					for (int j = 0; j < nElement.getLength(); j++) {
 						if (nElement.item(j).getNodeName().equals("column")) {
 							try {
-								column = NoteColumn.valueOf(nElement.item(j).getTextContent());
+								column = NoteColumnList.getInstance().get(
+										nElement.item(j).getTextContent());
 							} catch (Throwable t) {
 								GuiLogger.getLogger().log(
 										Level.WARNING,
@@ -216,11 +223,26 @@ public class NoteFilterXMLCoder extends AbstractXMLCoder<NoteFilter> {
 						
 						if (valueStr != null) {
 							try {
-								if (column.equals(NoteColumn.MODEL))
-									value = NoteFactory.getInstance().get(
+								if (column.getType() == PropertyAccessorType.TASK)
+									value = TaskFactory.getInstance().get(
 											new ModelId(valueStr));
-								else if (column.equals(NoteColumn.FOLDER))
+								else if (column.getType() == PropertyAccessorType.CONTEXT
+										|| column.getType() == PropertyAccessorType.CONTEXTS)
+									value = ContextFactory.getInstance().get(
+											new ModelId(valueStr));
+								else if (column.getType() == PropertyAccessorType.FOLDER)
 									value = FolderFactory.getInstance().get(
+											new ModelId(valueStr));
+								else if (column.getType() == PropertyAccessorType.GOAL
+										|| column.getType() == PropertyAccessorType.GOALS)
+									value = GoalFactory.getInstance().get(
+											new ModelId(valueStr));
+								else if (column.getType() == PropertyAccessorType.LOCATION
+										|| column.getType() == PropertyAccessorType.LOCATIONS)
+									value = LocationFactory.getInstance().get(
+											new ModelId(valueStr));
+								else if (column.getType() == PropertyAccessorType.TASK)
+									value = TaskFactory.getInstance().get(
 											new ModelId(valueStr));
 							} catch (Exception e) {
 								value = null;
@@ -259,7 +281,7 @@ public class NoteFilterXMLCoder extends AbstractXMLCoder<NoteFilter> {
 			root.appendChild(element);
 			
 			Element column = document.createElement("column");
-			column.setTextContent(e.getProperty().name());
+			column.setTextContent(e.getProperty().getName());
 			element.appendChild(column);
 			
 			Element condition = document.createElement("condition");

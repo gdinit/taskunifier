@@ -45,9 +45,11 @@ import com.leclercb.commons.api.coder.AbstractXMLCoder;
 import com.leclercb.commons.api.coder.exc.FactoryCoderException;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
+import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 
 public class TaskSorterXMLCoder extends AbstractXMLCoder<TaskSorter> {
 	
@@ -65,7 +67,7 @@ public class TaskSorterXMLCoder extends AbstractXMLCoder<TaskSorter> {
 				if (nSorter.item(i).getNodeName().equals("element")) {
 					NodeList nElement = nSorter.item(i).getChildNodes();
 					
-					TaskColumn column = null;
+					PropertyAccessor<Task> column = null;
 					SortOrder sortOrder = null;
 					
 					for (int j = 0; j < nElement.getLength(); j++) {
@@ -80,7 +82,7 @@ public class TaskSorterXMLCoder extends AbstractXMLCoder<TaskSorter> {
 								else if (EqualsUtils.equals(col, "LOCATION"))
 									col = "LOCATIONS";
 								
-								column = TaskColumn.valueOf(col);
+								column = TaskColumnList.getInstance().get(col);
 							} catch (Throwable t) {
 								GuiLogger.getLogger().log(
 										Level.WARNING,
@@ -111,7 +113,7 @@ public class TaskSorterXMLCoder extends AbstractXMLCoder<TaskSorter> {
 			root.appendChild(element);
 			
 			Element column = document.createElement("column");
-			column.setTextContent(e.getProperty().name());
+			column.setTextContent(e.getProperty().getName());
 			element.appendChild(column);
 			
 			Element sortOrder = document.createElement("sortorder");
