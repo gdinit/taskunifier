@@ -32,9 +32,10 @@
  */
 package com.leclercb.taskunifier.gui.swing.table;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.swing.table.TableColumn;
 
@@ -42,18 +43,21 @@ import org.jdesktop.swingx.table.DefaultTableColumnModelExt;
 
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.CompareUtils;
-import com.leclercb.taskunifier.gui.components.tasktasks.TaskTasksColumn;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties.TableColumnProperties;
 
-public abstract class TUTableColumnModel<E extends Enum<?>> extends DefaultTableColumnModelExt {
+public class TUTableColumnModel<T> extends DefaultTableColumnModelExt {
 	
-	private TableColumnInstantiator<E> instantiator;
-	private TUTableProperties<E> tableProperties;
+	private TableColumnInstantiator<T> instantiator;
+	private TUTableProperties<T> tableProperties;
+	
+	public TUTableColumnModel(TUTableProperties<T> tableProperties) {
+		this(null, tableProperties);
+	}
 	
 	public TUTableColumnModel(
-			TableColumnInstantiator<E> instantiator,
-			TUTableProperties<E> tableProperties) {
-		CheckUtils.isNotNull(instantiator);
+			TableColumnInstantiator<T> instantiator,
+			TUTableProperties<T> tableProperties) {
 		CheckUtils.isNotNull(tableProperties);
 		
 		this.instantiator = instantiator;
@@ -63,11 +67,11 @@ public abstract class TUTableColumnModel<E extends Enum<?>> extends DefaultTable
 	}
 	
 	private void initialize() {
-		E[] columns = this.tableProperties.getColumns();
-		Arrays.sort(columns, new Comparator<E>() {
+		List<PropertyAccessor<T>> columns = this.tableProperties.getColumns().getColumns();
+		Collections.sort(columns, new Comparator<PropertyAccessor<T>>() {
 			
 			@Override
-			public int compare(E c1, E c2) {
+			public int compare(PropertyAccessor<T> c1, PropertyAccessor<T> c2) {
 				return CompareUtils.compare(
 						TUTableColumnModel.this.tableProperties.get(c1).getOrder(),
 						TUTableColumnModel.this.tableProperties.get(c2).getOrder());
@@ -75,12 +79,13 @@ public abstract class TUTableColumnModel<E extends Enum<?>> extends DefaultTable
 			
 		});
 		
-		for (E column : columns)
-			this.addColumn(this.instantiator.newTableColumnInstance(this.tableProperties.get(column)));
-	}
-	
-	public TaskTasksColumn getTaskTasksColumn(int col) {
-		return (TaskTasksColumn) this.getColumn(col).getIdentifier();
+		for (PropertyAccessor<T> column : columns) {
+			if (this.instantiator != null)
+				this.addColumn(this.instantiator.newTableColumnInstance(this.tableProperties.get(column)));
+			else
+				this.addColumn(new TUTableColumn<T>(
+						this.tableProperties.get(column)));
+		}
 	}
 	
 	@Override
@@ -91,16 +96,16 @@ public abstract class TUTableColumnModel<E extends Enum<?>> extends DefaultTable
 		Enumeration<TableColumn> columns = this.getColumns();
 		while (columns.hasMoreElements()) {
 			@SuppressWarnings("unchecked")
-			E column = (E) columns.nextElement().getIdentifier();
-			TableColumnProperties<E> properties = this.tableProperties.get(column);
+			PropertyAccessor<T> column = (PropertyAccessor<T>) columns.nextElement().getIdentifier();
+			TableColumnProperties<T> properties = this.tableProperties.get(column);
 			properties.setOrder(i++);
 		}
 	}
 	
-	public static interface TableColumnInstantiator<E extends Enum<?>> {
+	public static interface TableColumnInstantiator<T> {
 		
-		public abstract TUTableColumn<E> newTableColumnInstance(
-				TableColumnProperties<E> column);
+		public abstract TUTableColumn<T> newTableColumnInstance(
+				TableColumnProperties<T> column);
 		
 	}
 	
