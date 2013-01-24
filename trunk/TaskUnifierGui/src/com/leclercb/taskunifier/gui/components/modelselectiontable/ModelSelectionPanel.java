@@ -47,7 +47,7 @@ public class ModelSelectionPanel extends JPanel implements ModelSelectionView {
 	private ModelSelectionTable table;
 	
 	public ModelSelectionPanel(
-			TUTableProperties<ModelSelectionColumn> tableProperties,
+			TUTableProperties<Model> tableProperties,
 			ModelType modelType) {
 		this.initialize(tableProperties, modelType);
 	}
@@ -63,7 +63,7 @@ public class ModelSelectionPanel extends JPanel implements ModelSelectionView {
 	}
 	
 	private void initialize(
-			TUTableProperties<ModelSelectionColumn> tableProperties,
+			TUTableProperties<Model> tableProperties,
 			ModelType modelType) {
 		this.setOpaque(false);
 		this.setLayout(new BorderLayout());

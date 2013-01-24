@@ -53,7 +53,8 @@ import com.leclercb.taskunifier.api.models.ModelStatus;
 import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.beans.ModelBean;
 import com.leclercb.taskunifier.api.models.utils.ModelFactoryUtils;
-import com.leclercb.taskunifier.gui.components.modelselectiontable.ModelSelectionColumn;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.components.modelselectiontable.ModelSelectionColumnList;
 
 public class ModelSelectionTableModel extends AbstractTableModel implements ListChangeListener, PropertyChangeListener {
 	
@@ -92,13 +93,13 @@ public class ModelSelectionTableModel extends AbstractTableModel implements List
 		return this.modelFactory.get(row);
 	}
 	
-	public ModelSelectionColumn getModelSelectionColumn(int col) {
-		return ModelSelectionColumn.values()[col];
+	public PropertyAccessor<Model> getModelSelectionColumn(int col) {
+		return ModelSelectionColumnList.getInstance().getColumn(col);
 	}
 	
 	@Override
 	public int getColumnCount() {
-		return ModelSelectionColumn.values().length;
+		return ModelSelectionColumnList.getInstance().getSize();
 	}
 	
 	@Override
@@ -108,12 +109,12 @@ public class ModelSelectionTableModel extends AbstractTableModel implements List
 	
 	@Override
 	public String getColumnName(int col) {
-		return ModelSelectionColumn.values()[col].getLabel();
+		return this.getModelSelectionColumn(col).getLabel();
 	}
 	
 	@Override
 	public Class<?> getColumnClass(int col) {
-		return ModelSelectionColumn.values()[col].getType();
+		return this.getModelSelectionColumn(col).getType().getType();
 	}
 	
 	@Override
@@ -125,12 +126,12 @@ public class ModelSelectionTableModel extends AbstractTableModel implements List
 				return this.selectedModels.contains(model);
 		}
 		
-		return ModelSelectionColumn.values()[col].getProperty(model);
+		return this.getModelSelectionColumn(col).getProperty(model);
 	}
 	
 	@Override
 	public boolean isCellEditable(int row, int col) {
-		return ModelSelectionColumn.values()[col].isEditable();
+		return this.getModelSelectionColumn(col).isEditable();
 	}
 	
 	@Override
