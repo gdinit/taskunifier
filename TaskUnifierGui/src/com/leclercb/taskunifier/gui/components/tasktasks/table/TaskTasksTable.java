@@ -46,22 +46,25 @@ import org.jdesktop.swingx.JXTable;
 
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskList;
 import com.leclercb.taskunifier.api.models.TaskList.TaskItem;
 import com.leclercb.taskunifier.gui.actions.ActionEditTasks;
-import com.leclercb.taskunifier.gui.components.tasktasks.TaskTasksColumn;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.components.tasktasks.TaskTasksColumnList;
 import com.leclercb.taskunifier.gui.components.tasktasks.table.draganddrop.TaskTasksTransferHandler;
 import com.leclercb.taskunifier.gui.components.tasktasks.table.highlighters.TaskAlternateHighlighter;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.swing.table.TUTableColumnModel;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
 
 public class TaskTasksTable extends JXTable implements SavePropertiesListener {
 	
-	private TUTableProperties<TaskTasksColumn> tableProperties;
+	private TUTableProperties<TaskItem> tableProperties;
 	
-	public TaskTasksTable(TUTableProperties<TaskTasksColumn> tableProperties) {
+	public TaskTasksTable(TUTableProperties<TaskItem> tableProperties) {
 		CheckUtils.isNotNull(tableProperties);
 		this.tableProperties = tableProperties;
 		
@@ -116,7 +119,7 @@ public class TaskTasksTable extends JXTable implements SavePropertiesListener {
 	private void initialize() {
 		this.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		
-		TaskTasksTableColumnModel columnModel = new TaskTasksTableColumnModel(
+		TUTableColumnModel<TaskItem> columnModel = new TUTableColumnModel<TaskItem>(
 				this.tableProperties);
 		TaskTasksTableModel tableModel = new TaskTasksTableModel();
 		
@@ -133,7 +136,9 @@ public class TaskTasksTable extends JXTable implements SavePropertiesListener {
 		this.setSortsOnUpdates(false);
 		this.setSortOrderCycle(SortOrder.ASCENDING, SortOrder.DESCENDING);
 		this.setColumnControlVisible(true);
-		this.setSortOrder(TaskTasksColumn.LINK, SortOrder.ASCENDING);
+		this.setSortOrder(
+				TaskTasksColumnList.getInstance().get(TaskTasksColumnList.LINK),
+				SortOrder.ASCENDING);
 		
 		this.initializeSettings();
 		this.initializeDragAndDrop();
@@ -172,11 +177,13 @@ public class TaskTasksTable extends JXTable implements SavePropertiesListener {
 						
 						int colIndex = TaskTasksTable.this.columnAtPoint(event.getPoint());
 						
-						TaskTasksColumn column = (TaskTasksColumn) TaskTasksTable.this.getColumn(
+						PropertyAccessor<TaskItem> column = (PropertyAccessor<TaskItem>) TaskTasksTable.this.getColumn(
 								colIndex).getIdentifier();
 						
-						if (column == TaskTasksColumn.EDIT
-								|| column == TaskTasksColumn.SELECT) {
+						if (EqualsUtils.equals(column, TaskTasksColumnList.getInstance().get(
+								TaskTasksColumnList.EDIT))
+								|| EqualsUtils.equals(column, TaskTasksColumnList.getInstance().get(
+										TaskTasksColumnList.SELECT))) {
 							TaskItem item = ((TaskTasksTableModel) TaskTasksTable.this.getModel()).getTaskItem(rowIndex);
 							
 							if (item == null)
@@ -185,13 +192,15 @@ public class TaskTasksTable extends JXTable implements SavePropertiesListener {
 							if (item.getTask() == null)
 								return;
 							
-							if (column == TaskTasksColumn.EDIT) {
+							if (EqualsUtils.equals(column, TaskTasksColumnList.getInstance().get(
+									TaskTasksColumnList.EDIT))) {
 								ActionEditTasks.editTasks(
 										new Task[] { item.getTask() },
 										false);
 							}
 							
-							if (column == TaskTasksColumn.SELECT) {
+							if (EqualsUtils.equals(column, TaskTasksColumnList.getInstance().get(
+									TaskTasksColumnList.SELECT))) {
 								ViewUtils.selectDefaultTaskSearcher();
 								ViewUtils.setSelectedTasks(new Task[] { item.getTask() });
 							}

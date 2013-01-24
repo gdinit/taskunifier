@@ -44,7 +44,7 @@ import org.jdesktop.swingx.decorator.ComponentAdapter;
 
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.gui.components.tasktasks.TaskTasksColumn;
+import com.leclercb.taskunifier.gui.components.tasktasks.TaskTasksColumnList;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
@@ -94,7 +94,8 @@ public class TaskAlternateHighlighter extends AbstractHighlighter implements Pro
 			ComponentAdapter adapter) {
 		Object value = adapter.getFilteredValueAt(
 				adapter.row,
-				adapter.getColumnIndex(TaskTasksColumn.TASK));
+				adapter.getColumnIndex(TaskTasksColumnList.getInstance().get(
+						TaskTasksColumnList.TASK)));
 		
 		if (value == null || !(value instanceof Task))
 			return renderer;

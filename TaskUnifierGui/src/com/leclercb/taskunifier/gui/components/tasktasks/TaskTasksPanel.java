@@ -70,7 +70,7 @@ public class TaskTasksPanel extends JPanel implements TaskTasksView, ModelSelect
 	private Action removeAction;
 	private Action lockedAction;
 	
-	public TaskTasksPanel(TUTableProperties<TaskTasksColumn> tableProperties) {
+	public TaskTasksPanel(TUTableProperties<TaskItem> tableProperties) {
 		this.initialize(tableProperties);
 		
 		this.task = null;
@@ -110,7 +110,7 @@ public class TaskTasksPanel extends JPanel implements TaskTasksView, ModelSelect
 		}
 	}
 	
-	private void initialize(TUTableProperties<TaskTasksColumn> tableProperties) {
+	private void initialize(TUTableProperties<TaskItem> tableProperties) {
 		this.setOpaque(false);
 		this.setLayout(new BorderLayout());
 		
