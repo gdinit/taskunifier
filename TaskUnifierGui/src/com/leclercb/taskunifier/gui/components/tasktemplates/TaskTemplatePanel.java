@@ -74,11 +74,11 @@ import com.leclercb.taskunifier.gui.actions.ActionManageModels;
 import com.leclercb.taskunifier.gui.commons.converters.TemplateShorcutKeyConverter;
 import com.leclercb.taskunifier.gui.commons.converters.TemplateTimeConverter;
 import com.leclercb.taskunifier.gui.commons.models.FolderModel;
+import com.leclercb.taskunifier.gui.commons.models.MinutesModel;
 import com.leclercb.taskunifier.gui.commons.models.TaskPriorityModel;
-import com.leclercb.taskunifier.gui.commons.models.TaskReminderModel;
 import com.leclercb.taskunifier.gui.commons.models.TaskRepeatFromModel;
 import com.leclercb.taskunifier.gui.commons.models.TaskRepeatModel;
-import com.leclercb.taskunifier.gui.commons.values.StringValueTaskReminder;
+import com.leclercb.taskunifier.gui.commons.values.StringValueMinutes;
 import com.leclercb.taskunifier.gui.components.modelnote.HTMLEditorInterface;
 import com.leclercb.taskunifier.gui.components.modelnote.editors.WysiwygHTMLEditorPane;
 import com.leclercb.taskunifier.gui.components.models.ModelConfigurationDialog.ModelConfigurationTab;
@@ -332,7 +332,7 @@ public class TaskTemplatePanel extends JPanel {
 		
 		// Task Start Date Reminder
 		this.taskStartDateReminder.setRenderer(new DefaultListRenderer(
-				StringValueTaskReminder.INSTANCE));
+				StringValueMinutes.INSTANCE));
 		
 		this.taskStartDateReminder.setEditable(true);
 		
@@ -343,7 +343,7 @@ public class TaskTemplatePanel extends JPanel {
 		
 		// Task Due Date Reminder
 		this.taskDueDateReminder.setRenderer(new DefaultListRenderer(
-				StringValueTaskReminder.INSTANCE));
+				StringValueMinutes.INSTANCE));
 		
 		this.taskDueDateReminder.setEditable(true);
 		
@@ -478,14 +478,14 @@ public class TaskTemplatePanel extends JPanel {
 		StringToIntegerConverter taskDueDateReminderConverter = new StringToIntegerConverter(
 				taskDueDateReminderModel);
 		TaskTemplatePanel.this.taskDueDateReminder.setModel(new ComboBoxAdapter<Integer>(
-				new TaskReminderModel(),
+				new MinutesModel(),
 				taskDueDateReminderConverter));
 		
 		ValueModel taskStartDateReminderModel = this.adapter.getValueModel(TaskTemplate.PROP_TASK_START_DATE_REMINDER);
 		StringToIntegerConverter taskStartDateReminderConverter = new StringToIntegerConverter(
 				taskStartDateReminderModel);
 		TaskTemplatePanel.this.taskStartDateReminder.setModel(new ComboBoxAdapter<Integer>(
-				new TaskReminderModel(),
+				new MinutesModel(),
 				taskStartDateReminderConverter));
 		
 		ValueModel taskRepeatModel = this.adapter.getValueModel(TaskTemplate.PROP_TASK_REPEAT);
