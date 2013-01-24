@@ -134,11 +134,11 @@ public final class Constants {
 		NoteSorter defaultNoteSorter = new NoteSorter();
 		
 		defaultNoteSorter.addElement(new NoteSorterElement(
-				NoteColumnList.FOLDER,
+				NoteColumnList.getInstance().get(NoteColumnList.FOLDER),
 				SortOrder.ASCENDING));
 		
 		defaultNoteSorter.addElement(new NoteSorterElement(
-				NoteColumnList.TITLE,
+				NoteColumnList.getInstance().get(NoteColumnList.TITLE),
 				SortOrder.ASCENDING));
 		
 		// Default Note Filter
@@ -182,13 +182,13 @@ public final class Constants {
 		TaskSorter defaultTaskSorter = new TaskSorter();
 		
 		defaultTaskSorter.addElement(new TaskSorterElement(
-				TaskColumnList.DUE_DATE,
+				TaskColumnList.getInstance().get(TaskColumnList.DUE_DATE),
 				SortOrder.ASCENDING));
 		defaultTaskSorter.addElement(new TaskSorterElement(
-				TaskColumnList.PRIORITY,
+				TaskColumnList.getInstance().get(TaskColumnList.PRIORITY),
 				SortOrder.DESCENDING));
 		defaultTaskSorter.addElement(new TaskSorterElement(
-				TaskColumnList.TITLE,
+				TaskColumnList.getInstance().get(TaskColumnList.TITLE),
 				SortOrder.ASCENDING));
 		
 		// Default Task Filter
