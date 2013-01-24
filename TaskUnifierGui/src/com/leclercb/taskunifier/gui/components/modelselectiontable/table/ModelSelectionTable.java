@@ -43,17 +43,18 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.gui.commons.highlighters.AlternateHighlighter;
-import com.leclercb.taskunifier.gui.components.modelselectiontable.ModelSelectionColumn;
+import com.leclercb.taskunifier.gui.components.modelselectiontable.ModelSelectionColumnList;
 import com.leclercb.taskunifier.gui.components.modelselectiontable.table.sorter.ModelRowFilter;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.swing.table.TUTableColumnModel;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
 
 public class ModelSelectionTable extends JXTable implements SavePropertiesListener {
 	
-	private TUTableProperties<ModelSelectionColumn> tableProperties;
+	private TUTableProperties<Model> tableProperties;
 	
 	public ModelSelectionTable(
-			TUTableProperties<ModelSelectionColumn> tableProperties,
+			TUTableProperties<Model> tableProperties,
 			ModelType modelType) {
 		CheckUtils.isNotNull(tableProperties);
 		this.tableProperties = tableProperties;
@@ -81,7 +82,7 @@ public class ModelSelectionTable extends JXTable implements SavePropertiesListen
 	private void initialize(ModelType modelType) {
 		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
-		ModelSelectionTableColumnModel columnModel = new ModelSelectionTableColumnModel(
+		TUTableColumnModel<Model> columnModel = new TUTableColumnModel<Model>(
 				this.tableProperties);
 		ModelSelectionTableModel tableModel = new ModelSelectionTableModel(
 				modelType);
@@ -97,7 +98,7 @@ public class ModelSelectionTable extends JXTable implements SavePropertiesListen
 		this.setSortable(true);
 		this.setSortsOnUpdates(true);
 		this.setSortOrderCycle(SortOrder.ASCENDING);
-		this.setSortOrder(1, SortOrder.ASCENDING);
+		this.setSortOrder(ModelSelectionColumnList.getInstance().get(ModelSelectionColumnList.MODEL), SortOrder.ASCENDING);
 		this.getSortController().setRowFilter(new ModelRowFilter());
 		
 		this.getTableHeader().setReorderingAllowed(false);

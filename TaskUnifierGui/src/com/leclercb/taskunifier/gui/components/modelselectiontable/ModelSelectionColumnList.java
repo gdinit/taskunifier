@@ -1,5 +1,5 @@
 /*
- * TaskUnifier
+ * NoteUnifier
  * Copyright (c) 2011, Benjamin Leclerc
  * All rights reserved.
  * 
@@ -33,74 +33,85 @@
 package com.leclercb.taskunifier.gui.components.modelselectiontable;
 
 import com.leclercb.taskunifier.api.models.Model;
-import com.leclercb.taskunifier.gui.swing.table.TUColumn;
+import com.leclercb.taskunifier.gui.api.accessor.DefaultPropertyAccessor;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorList;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
+import com.leclercb.taskunifier.gui.commons.values.StringValueModelId;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public enum ModelSelectionColumn implements TUColumn<Model> {
+public class ModelSelectionColumnList extends PropertyAccessorList<Model> {
 	
-	SELECT(Boolean.class, Translations.getString("general.select"), true),
-	MODEL(Model.class, Translations.getString("general.title"), false);
+	public static final String SELECT = "SELECT";
+	public static final String MODEL = "MODEL";
 	
-	private Class<?> type;
-	private String label;
-	private boolean editable;
+	private static ModelSelectionColumnList INSTANCE;
 	
-	private ModelSelectionColumn(Class<?> type, String label, boolean editable) {
-		this.setType(type);
-		this.setLabel(label);
-		this.setEditable(editable);
-	}
-	
-	@Override
-	public Class<?> getType() {
-		return this.type;
-	}
-	
-	private void setType(Class<?> type) {
-		this.type = type;
-	}
-	
-	@Override
-	public String getLabel() {
-		return this.label;
-	}
-	
-	private void setLabel(String label) {
-		this.label = label;
-	}
-	
-	@Override
-	public boolean isEditable() {
-		return this.editable;
-	}
-	
-	private void setEditable(boolean editable) {
-		this.editable = editable;
-	}
-	
-	@Override
-	public String toString() {
-		return this.label;
-	}
-	
-	@Override
-	public Object getProperty(Model model) {
-		if (model == null)
-			return null;
+	public static ModelSelectionColumnList getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new ModelSelectionColumnList();
 		
-		switch (this) {
-			case SELECT:
+		return INSTANCE;
+	}
+	
+	private ModelSelectionColumnList() {
+		this.initialize();
+	}
+	
+	private void initialize() {
+		this.add(new DefaultPropertyAccessor<Model>(
+				"SELECT",
+				null,
+				PropertyAccessorType.BOOLEAN,
+				null,
+				Translations.getString("general.select"),
+				true,
+				true,
+				false) {
+			
+			@Override
+			public String getPropertyAsString(Model model) {
 				return null;
-			case MODEL:
+			}
+			
+			@Override
+			public Object getProperty(Model model) {
+				return null;
+			}
+			
+			@Override
+			public void setProperty(Model model, Object value) {
+				
+			}
+			
+		});
+		
+		this.add(new DefaultPropertyAccessor<Model>(
+				"MODEL",
+				null,
+				PropertyAccessorType.MODEL,
+				null,
+				Translations.getString("general.title"),
+				false,
+				true,
+				true) {
+			
+			@Override
+			public String getPropertyAsString(Model model) {
+				Object value = this.getProperty(model);
+				return StringValueModelId.INSTANCE.getString(value);
+			}
+			
+			@Override
+			public Object getProperty(Model model) {
 				return model;
-			default:
-				return null;
-		}
-	}
-	
-	@Override
-	public void setProperty(Model model, Object value) {
-		
+			}
+			
+			@Override
+			public void setProperty(Model model, Object value) {
+				
+			}
+			
+		});
 	}
 	
 }
