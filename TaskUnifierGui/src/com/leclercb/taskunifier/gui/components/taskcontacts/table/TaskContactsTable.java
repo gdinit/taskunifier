@@ -46,16 +46,16 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.ContactList;
 import com.leclercb.taskunifier.api.models.ContactList.ContactItem;
 import com.leclercb.taskunifier.gui.commons.highlighters.AlternateHighlighter;
-import com.leclercb.taskunifier.gui.components.taskcontacts.TaskContactsColumn;
+import com.leclercb.taskunifier.gui.components.taskcontacts.TaskContactsColumnList;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.swing.table.TUTableColumnModel;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
 
 public class TaskContactsTable extends JXTable implements SavePropertiesListener {
 	
-	private TUTableProperties<TaskContactsColumn> tableProperties;
+	private TUTableProperties<ContactItem> tableProperties;
 	
-	public TaskContactsTable(
-			TUTableProperties<TaskContactsColumn> tableProperties) {
+	public TaskContactsTable(TUTableProperties<ContactItem> tableProperties) {
 		CheckUtils.isNotNull(tableProperties);
 		this.tableProperties = tableProperties;
 		
@@ -110,7 +110,7 @@ public class TaskContactsTable extends JXTable implements SavePropertiesListener
 	private void initialize() {
 		this.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		
-		TaskContactsTableColumnModel columnModel = new TaskContactsTableColumnModel(
+		TUTableColumnModel<ContactItem> columnModel = new TUTableColumnModel<ContactItem>(
 				this.tableProperties);
 		TaskContactsTableModel tableModel = new TaskContactsTableModel();
 		
@@ -127,7 +127,7 @@ public class TaskContactsTable extends JXTable implements SavePropertiesListener
 		this.setSortsOnUpdates(false);
 		this.setSortOrderCycle(SortOrder.ASCENDING, SortOrder.DESCENDING);
 		this.setColumnControlVisible(true);
-		this.setSortOrder(TaskContactsColumn.LINK, SortOrder.ASCENDING);
+		this.setSortOrder(TaskContactsColumnList.getInstance().get(TaskContactsColumnList.LINK), SortOrder.ASCENDING);
 		
 		this.initializeSettings();
 		this.initializeHighlighters();
