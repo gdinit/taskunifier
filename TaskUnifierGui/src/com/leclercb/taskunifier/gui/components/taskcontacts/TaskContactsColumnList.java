@@ -83,11 +83,6 @@ public class TaskContactsColumnList extends PropertyAccessorList<ContactItem> {
 			}
 			
 			@Override
-			public String getPropertyAsString(ContactItem item) {
-				return item.getLink();
-			}
-			
-			@Override
 			public Object getProperty(ContactItem item) {
 				return item.getLink();
 			}
@@ -108,11 +103,6 @@ public class TaskContactsColumnList extends PropertyAccessorList<ContactItem> {
 				true,
 				true,
 				true) {
-			
-			@Override
-			public String getPropertyAsString(ContactItem item) {
-				return item.toString();
-			}
 			
 			@Override
 			public Object getProperty(ContactItem item) {

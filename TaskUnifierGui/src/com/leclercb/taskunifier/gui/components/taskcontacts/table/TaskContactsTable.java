@@ -127,7 +127,10 @@ public class TaskContactsTable extends JXTable implements SavePropertiesListener
 		this.setSortsOnUpdates(false);
 		this.setSortOrderCycle(SortOrder.ASCENDING, SortOrder.DESCENDING);
 		this.setColumnControlVisible(true);
-		this.setSortOrder(TaskContactsColumnList.getInstance().get(TaskContactsColumnList.LINK), SortOrder.ASCENDING);
+		this.setSortOrder(
+				TaskContactsColumnList.getInstance().get(
+						TaskContactsColumnList.LINK),
+				SortOrder.ASCENDING);
 		
 		this.initializeSettings();
 		this.initializeHighlighters();
