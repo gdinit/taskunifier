@@ -39,7 +39,7 @@ import com.leclercb.taskunifier.api.models.ContactList.ContactItem;
 import com.leclercb.taskunifier.gui.api.accessor.DefaultPropertyAccessor;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorList;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
-import com.leclercb.taskunifier.gui.components.taskcontacts.table.editors.LinkEditor;
+import com.leclercb.taskunifier.gui.commons.editors.TaskContactLinkEditor;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class TaskContactsColumnList extends PropertyAccessorList<ContactItem> {
@@ -76,7 +76,7 @@ public class TaskContactsColumnList extends PropertyAccessorList<ContactItem> {
 			@Override
 			public TableCellEditor getCellEditor() {
 				if (this.editor == null) {
-					this.editor = new LinkEditor();
+					this.editor = new TaskContactLinkEditor();
 				}
 				
 				return this.editor;
