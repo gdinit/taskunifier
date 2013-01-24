@@ -46,7 +46,8 @@ import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.models.FileList;
 import com.leclercb.taskunifier.api.models.FileList.FileItem;
-import com.leclercb.taskunifier.gui.components.taskfiles.TaskFilesColumn;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.components.taskfiles.TaskFilesColumnList;
 
 public class TaskFilesTableModel extends AbstractTableModel implements ListChangeListener, PropertyChangeListener {
 	
@@ -87,13 +88,13 @@ public class TaskFilesTableModel extends AbstractTableModel implements ListChang
 		return this.files.get(row);
 	}
 	
-	public TaskFilesColumn getTaskFilesColumn(int col) {
-		return TaskFilesColumn.values()[col];
+	public PropertyAccessor<FileItem> getTaskFilesColumn(int col) {
+		return TaskFilesColumnList.getInstance().getColumn(col);
 	}
 	
 	@Override
 	public int getColumnCount() {
-		return TaskFilesColumn.values().length;
+		return TaskFilesColumnList.getInstance().getSize();
 	}
 	
 	@Override
@@ -106,29 +107,29 @@ public class TaskFilesTableModel extends AbstractTableModel implements ListChang
 	
 	@Override
 	public String getColumnName(int col) {
-		return TaskFilesColumn.values()[col].getLabel();
+		return this.getTaskFilesColumn(col).getLabel();
 	}
 	
 	@Override
 	public Class<?> getColumnClass(int col) {
-		return TaskFilesColumn.values()[col].getType();
+		return this.getTaskFilesColumn(col).getType().getType();
 	}
 	
 	@Override
 	public Object getValueAt(int row, int col) {
 		FileItem item = this.files.get(row);
-		return TaskFilesColumn.values()[col].getProperty(item);
+		return this.getTaskFilesColumn(col).getProperty(item);
 	}
 	
 	@Override
 	public boolean isCellEditable(int row, int col) {
-		return TaskFilesColumn.values()[col].isEditable();
+		return this.getTaskFilesColumn(col).isEditable();
 	}
 	
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		FileItem item = this.files.get(row);
-		TaskFilesColumn column = TaskFilesColumn.values()[col];
+		PropertyAccessor<FileItem> column = this.getTaskFilesColumn(col);
 		
 		Object oldValue = column.getProperty(item);
 		

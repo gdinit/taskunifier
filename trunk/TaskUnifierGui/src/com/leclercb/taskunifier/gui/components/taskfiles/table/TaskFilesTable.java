@@ -47,20 +47,23 @@ import org.jdesktop.swingx.JXTable;
 
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.models.FileList;
 import com.leclercb.taskunifier.api.models.FileList.FileItem;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.commons.highlighters.AlternateHighlighter;
-import com.leclercb.taskunifier.gui.components.taskfiles.TaskFilesColumn;
+import com.leclercb.taskunifier.gui.components.taskfiles.TaskFilesColumnList;
 import com.leclercb.taskunifier.gui.components.taskfiles.table.draganddrop.TaskFilesTransferHandler;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.swing.table.TUTableColumnModel;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
 import com.leclercb.taskunifier.gui.utils.DesktopUtils;
 
 public class TaskFilesTable extends JXTable implements SavePropertiesListener {
 	
-	private TUTableProperties<TaskFilesColumn> tableProperties;
+	private TUTableProperties<FileItem> tableProperties;
 	
-	public TaskFilesTable(TUTableProperties<TaskFilesColumn> tableProperties) {
+	public TaskFilesTable(TUTableProperties<FileItem> tableProperties) {
 		CheckUtils.isNotNull(tableProperties);
 		this.tableProperties = tableProperties;
 		
@@ -115,7 +118,7 @@ public class TaskFilesTable extends JXTable implements SavePropertiesListener {
 	private void initialize() {
 		this.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		
-		TaskFilesTableColumnModel columnModel = new TaskFilesTableColumnModel(
+		TUTableColumnModel<FileItem> columnModel = new TUTableColumnModel<FileItem>(
 				this.tableProperties);
 		TaskFilesTableModel tableModel = new TaskFilesTableModel();
 		
@@ -132,7 +135,9 @@ public class TaskFilesTable extends JXTable implements SavePropertiesListener {
 		this.setSortsOnUpdates(false);
 		this.setSortOrderCycle(SortOrder.ASCENDING, SortOrder.DESCENDING);
 		this.setColumnControlVisible(true);
-		this.setSortOrder(TaskFilesColumn.LINK, SortOrder.ASCENDING);
+		this.setSortOrder(
+				TaskFilesColumnList.getInstance().get(TaskFilesColumnList.LINK),
+				SortOrder.ASCENDING);
 		
 		this.initializeSettings();
 		this.initializeDragAndDrop();
@@ -171,10 +176,13 @@ public class TaskFilesTable extends JXTable implements SavePropertiesListener {
 						
 						int colIndex = TaskFilesTable.this.columnAtPoint(event.getPoint());
 						
-						TaskFilesColumn column = (TaskFilesColumn) TaskFilesTable.this.getColumn(
+						PropertyAccessor<FileItem> column = (PropertyAccessor<FileItem>) TaskFilesTable.this.getColumn(
 								colIndex).getIdentifier();
 						
-						if (column == TaskFilesColumn.OPEN) {
+						if (EqualsUtils.equals(
+								column,
+								TaskFilesColumnList.getInstance().get(
+										TaskFilesColumnList.OPEN))) {
 							FileItem item = ((TaskFilesTableModel) TaskFilesTable.this.getModel()).getFileItem(rowIndex);
 							
 							if (item == null)
