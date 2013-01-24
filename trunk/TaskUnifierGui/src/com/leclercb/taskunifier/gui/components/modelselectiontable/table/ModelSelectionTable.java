@@ -98,7 +98,10 @@ public class ModelSelectionTable extends JXTable implements SavePropertiesListen
 		this.setSortable(true);
 		this.setSortsOnUpdates(true);
 		this.setSortOrderCycle(SortOrder.ASCENDING);
-		this.setSortOrder(ModelSelectionColumnList.getInstance().get(ModelSelectionColumnList.MODEL), SortOrder.ASCENDING);
+		this.setSortOrder(
+				ModelSelectionColumnList.getInstance().get(
+						ModelSelectionColumnList.MODEL),
+				SortOrder.ASCENDING);
 		this.getSortController().setRowFilter(new ModelRowFilter());
 		
 		this.getTableHeader().setReorderingAllowed(false);

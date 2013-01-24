@@ -36,7 +36,6 @@ import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.gui.api.accessor.DefaultPropertyAccessor;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorList;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
-import com.leclercb.taskunifier.gui.commons.values.StringValueModelId;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class ModelSelectionColumnList extends PropertyAccessorList<Model> {
@@ -69,11 +68,6 @@ public class ModelSelectionColumnList extends PropertyAccessorList<Model> {
 				false) {
 			
 			@Override
-			public String getPropertyAsString(Model model) {
-				return null;
-			}
-			
-			@Override
 			public Object getProperty(Model model) {
 				return null;
 			}
@@ -94,12 +88,6 @@ public class ModelSelectionColumnList extends PropertyAccessorList<Model> {
 				false,
 				true,
 				true) {
-			
-			@Override
-			public String getPropertyAsString(Model model) {
-				Object value = this.getProperty(model);
-				return StringValueModelId.INSTANCE.getString(value);
-			}
 			
 			@Override
 			public Object getProperty(Model model) {
