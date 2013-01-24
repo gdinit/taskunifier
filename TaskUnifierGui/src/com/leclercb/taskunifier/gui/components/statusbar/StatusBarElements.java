@@ -48,7 +48,7 @@ import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessageTransformer;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
-import com.leclercb.taskunifier.gui.commons.values.StringValueTaskLength;
+import com.leclercb.taskunifier.gui.commons.values.StringValueTime;
 import com.leclercb.taskunifier.gui.components.notes.NoteTableView;
 import com.leclercb.taskunifier.gui.components.synchronize.progress.SynchronizerProgressMessageTransformer;
 import com.leclercb.taskunifier.gui.components.tasks.TaskTableView;
@@ -219,9 +219,9 @@ final class StatusBarElements implements ListChangeListener, PropertyChangeListe
 						+ " "
 						+ Translations.getString("general.tasks")
 						+ " ("
-						+ StringValueTaskLength.INSTANCE.getString(totalTime)
+						+ StringValueTime.INSTANCE.getString(totalTime)
 						+ " / "
-						+ StringValueTaskLength.INSTANCE.getString(totalLength)
+						+ StringValueTime.INSTANCE.getString(totalLength)
 						+ ")");
 				break;
 			default:

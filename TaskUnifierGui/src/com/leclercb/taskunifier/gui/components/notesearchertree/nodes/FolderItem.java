@@ -54,7 +54,7 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.FilterLink;
 import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilterElement;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.ModelCondition;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.TUColorBadgeIcon;
@@ -100,7 +100,7 @@ public class FolderItem extends DefaultMutableTreeNode implements SearcherNode, 
 		NoteFilter filter = new NoteFilter();
 		filter.setLink(FilterLink.AND);
 		filter.addElement(new NoteFilterElement(
-				NoteColumn.FOLDER,
+				NoteColumnList.getInstance().get(NoteColumnList.FOLDER),
 				ModelCondition.EQUALS,
 				folder,
 				false));
