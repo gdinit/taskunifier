@@ -68,13 +68,11 @@ public class TaskContactsPanel extends JPanel implements TaskContactsView, Model
 	private Action addAction;
 	private Action removeAction;
 	
-	public TaskContactsPanel(
-			TUTableProperties<TaskContactsColumn> tableProperties) {
+	public TaskContactsPanel(TUTableProperties<ContactItem> tableProperties) {
 		this.initialize(tableProperties);
 	}
 	
-	private void initialize(
-			TUTableProperties<TaskContactsColumn> tableProperties) {
+	private void initialize(TUTableProperties<ContactItem> tableProperties) {
 		this.setOpaque(false);
 		this.setLayout(new BorderLayout());
 		

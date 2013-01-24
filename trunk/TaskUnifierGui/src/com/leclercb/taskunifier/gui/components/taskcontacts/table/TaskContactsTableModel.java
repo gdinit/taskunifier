@@ -46,7 +46,8 @@ import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.models.ContactList;
 import com.leclercb.taskunifier.api.models.ContactList.ContactItem;
-import com.leclercb.taskunifier.gui.components.taskcontacts.TaskContactsColumn;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.components.taskcontacts.TaskContactsColumnList;
 
 public class TaskContactsTableModel extends AbstractTableModel implements ListChangeListener, PropertyChangeListener {
 	
@@ -87,13 +88,13 @@ public class TaskContactsTableModel extends AbstractTableModel implements ListCh
 		return this.contacts.get(row);
 	}
 	
-	public TaskContactsColumn getTaskContactsColumn(int col) {
-		return TaskContactsColumn.values()[col];
+	public PropertyAccessor<ContactItem> getTaskContactsColumn(int col) {
+		return TaskContactsColumnList.getInstance().getColumn(col);
 	}
 	
 	@Override
 	public int getColumnCount() {
-		return TaskContactsColumn.values().length;
+		return TaskContactsColumnList.getInstance().getSize();
 	}
 	
 	@Override
@@ -106,29 +107,29 @@ public class TaskContactsTableModel extends AbstractTableModel implements ListCh
 	
 	@Override
 	public String getColumnName(int col) {
-		return TaskContactsColumn.values()[col].getLabel();
+		return this.getTaskContactsColumn(col).getLabel();
 	}
 	
 	@Override
 	public Class<?> getColumnClass(int col) {
-		return TaskContactsColumn.values()[col].getType();
+		return this.getTaskContactsColumn(col).getType().getType();
 	}
 	
 	@Override
 	public Object getValueAt(int row, int col) {
 		ContactItem item = this.contacts.get(row);
-		return TaskContactsColumn.values()[col].getProperty(item);
+		return this.getTaskContactsColumn(col).getProperty(item);
 	}
 	
 	@Override
 	public boolean isCellEditable(int row, int col) {
-		return TaskContactsColumn.values()[col].isEditable();
+		return this.getTaskContactsColumn(col).isEditable();
 	}
 	
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		ContactItem item = this.contacts.get(row);
-		TaskContactsColumn column = TaskContactsColumn.values()[col];
+		PropertyAccessor<ContactItem> column = this.getTaskContactsColumn(col);
 		
 		Object oldValue = column.getProperty(item);
 		
