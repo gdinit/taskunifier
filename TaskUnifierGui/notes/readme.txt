@@ -2,6 +2,8 @@ HISTORY
 -------
 
 Version 3.1.8
+	- Major:
+		- Refactoring of table columns
 	- Minor:
 		- BF 254: Filter operator change
 		- Improved create template from task
