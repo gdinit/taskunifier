@@ -96,21 +96,28 @@ public class TUDialog extends JDialog implements SavePropertiesListener {
 	
 	@Override
 	public void saveProperties() {
-		if (this.windowProperty == null)
-			return;
-		
-		Main.getSettings().setIntegerProperty(
-				this.windowProperty + ".width",
-				TUDialog.this.getWidth());
-		Main.getSettings().setIntegerProperty(
-				this.windowProperty + ".height",
-				TUDialog.this.getHeight());
-		Main.getSettings().setIntegerProperty(
-				this.windowProperty + ".location_x",
-				TUDialog.this.getX());
-		Main.getSettings().setIntegerProperty(
-				this.windowProperty + ".location_y",
-				TUDialog.this.getY());
+		try {
+			if (this.windowProperty == null)
+				return;
+			
+			Main.getSettings().setIntegerProperty(
+					this.windowProperty + ".width",
+					TUDialog.this.getWidth());
+			Main.getSettings().setIntegerProperty(
+					this.windowProperty + ".height",
+					TUDialog.this.getHeight());
+			Main.getSettings().setIntegerProperty(
+					this.windowProperty + ".location_x",
+					TUDialog.this.getX());
+			Main.getSettings().setIntegerProperty(
+					this.windowProperty + ".location_y",
+					TUDialog.this.getY());
+		} catch (Exception e) {
+			GuiLogger.getLogger().log(
+					Level.SEVERE,
+					"Cannot save dialog settings",
+					e);
+		}
 	}
 	
 }
