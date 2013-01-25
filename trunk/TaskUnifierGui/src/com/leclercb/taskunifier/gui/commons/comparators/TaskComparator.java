@@ -33,23 +33,17 @@
 package com.leclercb.taskunifier.gui.commons.comparators;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.SortOrder;
 
-import com.leclercb.commons.api.utils.CompareUtils;
-import com.leclercb.taskunifier.api.models.Folder;
-import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.api.models.Timer;
-import com.leclercb.taskunifier.api.models.enums.TaskPriority;
-import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.main.Main;
 
 public class TaskComparator implements Comparator<Task> {
@@ -87,7 +81,8 @@ public class TaskComparator implements Comparator<Task> {
 		}
 		
 		int result = this.compare(
-				TaskColumn.MODEL_CREATION_DATE,
+				TaskColumnList.getInstance().get(
+						TaskColumnList.MODEL_CREATION_DATE),
 				SortOrder.ASCENDING,
 				task1,
 				task2);
@@ -95,11 +90,15 @@ public class TaskComparator implements Comparator<Task> {
 		if (result != 0)
 			return result;
 		
-		return this.compare(TaskColumn.MODEL, SortOrder.ASCENDING, task1, task2);
+		return this.compare(
+				TaskColumnList.getInstance().get(TaskColumnList.MODEL),
+				SortOrder.ASCENDING,
+				task1,
+				task2);
 	}
 	
 	private int compare(
-			TaskColumn taskColumn,
+			PropertyAccessor<Task> taskColumn,
 			SortOrder sortOrder,
 			Task task1,
 			Task task2) {
@@ -113,7 +112,7 @@ public class TaskComparator implements Comparator<Task> {
 	}
 	
 	private int compareUnindented(
-			TaskColumn taskColumn,
+			PropertyAccessor<Task> taskColumn,
 			SortOrder sortOrder,
 			Task task1,
 			Task task2) {
@@ -124,7 +123,7 @@ public class TaskComparator implements Comparator<Task> {
 	}
 	
 	private int compareIndented(
-			TaskColumn taskColumn,
+			PropertyAccessor<Task> taskColumn,
 			SortOrder sortOrder,
 			Task task1,
 			Task task2) {
@@ -182,7 +181,7 @@ public class TaskComparator implements Comparator<Task> {
 	}
 	
 	private int compare(
-			TaskColumn column,
+			PropertyAccessor<Task> column,
 			Object o1,
 			Object o2,
 			SortOrder sortOrder) {
@@ -195,187 +194,9 @@ public class TaskComparator implements Comparator<Task> {
 		if (o2 == null)
 			return -1;
 		
-		int result = 0;
-		
-		switch (column) {
-			case MODEL:
-				result = CompareUtils.compare(
-						((Task) o1).getModelId(),
-						((Task) o2).getModelId());
-				break;
-			case MODEL_EDIT:
-				result = 0;
-				break;
-			case MODEL_CREATION_DATE:
-				result = this.compareCalendars(
-						(Calendar) o1,
-						(Calendar) o2,
-						true);
-				break;
-			case MODEL_UPDATE_DATE:
-				result = this.compareCalendars(
-						(Calendar) o1,
-						(Calendar) o2,
-						true);
-				break;
-			case SHOW_CHILDREN:
-				result = CompareUtils.compare((Boolean) o1, (Boolean) o2);
-				break;
-			case TITLE:
-				result = CompareUtils.compareStringIgnoreCase(
-						(String) o1,
-						(String) o2);
-				break;
-			case ORDER:
-				result = CompareUtils.compare((Integer) o1, (Integer) o2);
-				break;
-			case CONTACTS:
-				result = CompareUtils.compareStringIgnoreCase(
-						(String) o1,
-						(String) o2);
-				break;
-			case TASKS:
-				result = CompareUtils.compareStringIgnoreCase(
-						(String) o1,
-						(String) o2);
-				break;
-			case FILES:
-				result = CompareUtils.compareStringIgnoreCase(
-						(String) o1,
-						(String) o2);
-				break;
-			case TAGS:
-				result = CompareUtils.compareStringIgnoreCase(
-						(String) o1,
-						(String) o2);
-				break;
-			case FOLDER:
-				result = this.compareModels(((Folder) o1), ((Folder) o2));
-				break;
-			case CONTEXTS:
-				result = o1.toString().compareTo(o2.toString());
-				break;
-			case GOALS:
-				result = o1.toString().compareTo(o2.toString());
-				break;
-			case LOCATIONS:
-				result = o1.toString().compareTo(o2.toString());
-				break;
-			case PARENT:
-				result = this.compareModels(((Task) o1), ((Task) o2));
-				break;
-			case PROGRESS:
-				result = CompareUtils.compare((Double) o1, (Double) o2);
-				break;
-			case COMPLETED:
-				result = CompareUtils.compare((Boolean) o1, (Boolean) o2);
-				break;
-			case COMPLETED_ON:
-				result = this.compareCalendars(
-						(Calendar) o1,
-						(Calendar) o2,
-						false);
-				break;
-			case DUE_DATE:
-				result = this.compareCalendars(
-						(Calendar) o1,
-						(Calendar) o2,
-						false);
-				break;
-			case START_DATE:
-				result = this.compareCalendars(
-						(Calendar) o1,
-						(Calendar) o2,
-						false);
-				break;
-			case DUE_DATE_REMINDER:
-				result = CompareUtils.compare((Integer) o1, (Integer) o2);
-				break;
-			case START_DATE_REMINDER:
-				result = CompareUtils.compare((Integer) o1, (Integer) o2);
-				break;
-			case REPEAT:
-				result = CompareUtils.compareStringIgnoreCase(
-						(String) o1,
-						(String) o2);
-				break;
-			case REPEAT_FROM:
-				result = CompareUtils.compare(
-						(TaskRepeatFrom) o1,
-						(TaskRepeatFrom) o2);
-				break;
-			case STATUS:
-				result = CompareUtils.compareStringIgnoreCase(
-						(String) o1,
-						(String) o2);
-				break;
-			case LENGTH:
-				result = CompareUtils.compare((Integer) o1, (Integer) o2);
-				break;
-			case TIMER:
-				result = CompareUtils.compare(((Timer) o1), ((Timer) o2));
-				break;
-			case PRIORITY:
-				result = CompareUtils.compare(
-						(TaskPriority) o1,
-						(TaskPriority) o2);
-				break;
-			case STAR:
-				result = CompareUtils.compare((Boolean) o1, (Boolean) o2);
-				break;
-			case NOTE:
-				result = CompareUtils.compareStringIgnoreCase(
-						(String) o1,
-						(String) o2);
-				break;
-			case IMPORTANCE:
-				result = CompareUtils.compare((Integer) o1, (Integer) o2);
-				break;
-			default:
-				result = 0;
-				break;
-		}
+		int result = column.getType().compare(o1, o2);
 		
 		return (sortOrder.equals(SortOrder.ASCENDING) ? 1 : -1) * result;
-	}
-	
-	private int compareModels(Model model1, Model model2) {
-		if (model1 == null && model2 == null)
-			return 0;
-		
-		if (model1 == null)
-			return 1;
-		
-		if (model2 == null)
-			return -1;
-		
-		return CompareUtils.compareStringIgnoreCase(
-				model1.getTitle(),
-				model2.getTitle());
-	}
-	
-	private int compareCalendars(
-			Calendar calendar1,
-			Calendar calendar2,
-			boolean raw) {
-		if (calendar1 == null && calendar2 == null)
-			return 0;
-		
-		if (calendar1 == null)
-			return 1;
-		
-		if (calendar2 == null)
-			return -1;
-		
-		if (!raw) {
-			calendar1.set(Calendar.SECOND, 0);
-			calendar1.set(Calendar.MILLISECOND, 0);
-			
-			calendar2.set(Calendar.SECOND, 0);
-			calendar2.set(Calendar.MILLISECOND, 0);
-		}
-		
-		return CompareUtils.compare(calendar1, calendar2);
 	}
 	
 }
