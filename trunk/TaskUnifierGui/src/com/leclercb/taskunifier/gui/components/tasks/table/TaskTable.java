@@ -69,9 +69,11 @@ import org.jdesktop.swingx.JXTable;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.actions.ActionDelete;
 import com.leclercb.taskunifier.gui.actions.ActionEditTasks;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionChangeSupport;
@@ -79,7 +81,7 @@ import com.leclercb.taskunifier.gui.commons.events.ModelSelectionListener;
 import com.leclercb.taskunifier.gui.commons.events.TaskSearcherSelectionChangeEvent;
 import com.leclercb.taskunifier.gui.components.print.PrintUtils;
 import com.leclercb.taskunifier.gui.components.print.TableReport;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.components.tasks.TaskTableView;
 import com.leclercb.taskunifier.gui.components.tasks.table.draganddrop.TaskTransferHandler;
 import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskAlternateHighlighter;
@@ -114,10 +116,10 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 	private ModelSelectionChangeSupport modelSelectionChangeSupport;
 	
 	private TaskRowComparator taskRowComparator;
-	private TUTableProperties<TaskColumn> tableProperties;
+	private TUTableProperties<Task> tableProperties;
 	private TaskTableMenu taskTableMenu;
 	
-	public TaskTable(TUTableProperties<TaskColumn> tableProperties) {
+	public TaskTable(TUTableProperties<Task> tableProperties) {
 		CheckUtils.isNotNull(tableProperties);
 		
 		this.taskRowComparator = new TaskRowComparator();
@@ -129,7 +131,7 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 	}
 	
 	@Override
-	public TUTableProperties<TaskColumn> getTableProperties() {
+	public TUTableProperties<Task> getTableProperties() {
 		return this.tableProperties;
 	}
 	
@@ -218,7 +220,8 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 		for (int i = 0; i < model.getRowCount(); i++) {
 			if (task.equals(model.getTask(i))) {
 				int row = this.getRowSorter().convertRowIndexToView(i);
-				int col = columnModel.getColumnIndex(TaskColumn.TITLE);
+				int col = columnModel.getColumnIndex(TaskColumnList.getInstance().get(
+						TaskColumnList.TITLE));
 				
 				if (row != -1) {
 					if (this.editCellAt(row, col)) {
@@ -258,7 +261,9 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 		
 		this.taskRowComparator.setTaskSearcher(searcher);
 		
-		this.setSortOrder(TaskColumn.MODEL, SortOrder.ASCENDING);
+		this.setSortOrder(
+				TaskColumnList.getInstance().get(TaskColumnList.MODEL),
+				SortOrder.ASCENDING);
 		this.getSortController().setRowFilter(
 				new TaskRowFilter(searcher.getFilter()));
 		this.refreshTasks();
@@ -274,8 +279,8 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 			tasks = this.getTasks();
 		
 		TableReport tableReport = new TableReport(
-				new TaskPrintTable(new TUTableProperties<TaskColumn>(
-						TaskColumn.class,
+				new TaskPrintTable(new TUTableProperties<Task>(
+						TaskColumnList.getInstance(),
 						this.tableProperties.getPropertyName() + ".print",
 						false), tasks),
 				PrintMode.NORMAL,
@@ -418,10 +423,13 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 				Rectangle headerRect = table.getTableHeader().getHeaderRect(
 						colIndex);
 				if (headerRect.contains(evt.getX(), evt.getY())) {
-					TaskColumn column = (TaskColumn) colModel.getColumn(
+					PropertyAccessor<Task> column = (PropertyAccessor<Task>) colModel.getColumn(
 							colIndex).getIdentifier();
 					
-					if (column == TaskColumn.MODEL)
+					if (EqualsUtils.equals(
+							column,
+							TaskColumnList.getInstance().get(
+									TaskColumnList.MODEL)))
 						return;
 					
 					TaskSearcher searcher = TaskTable.this.getTaskSearcher().clone();
@@ -484,14 +492,29 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 						
 						int colIndex = TaskTable.this.columnAtPoint(event.getPoint());
 						
-						TaskColumn column = (TaskColumn) TaskTable.this.getColumn(
+						PropertyAccessor<Task> column = (PropertyAccessor<Task>) TaskTable.this.getColumn(
 								colIndex).getIdentifier();
 						
-						if (column == TaskColumn.CONTACTS
-								|| column == TaskColumn.TASKS
-								|| column == TaskColumn.FILES
-								|| column == TaskColumn.MODEL_EDIT
-								|| column == TaskColumn.NOTE) {
+						if (EqualsUtils.equals(
+								column,
+								TaskColumnList.getInstance().get(
+										TaskColumnList.CONTACTS))
+								|| EqualsUtils.equals(
+										column,
+										TaskColumnList.getInstance().get(
+												TaskColumnList.TASKS))
+								|| EqualsUtils.equals(
+										column,
+										TaskColumnList.getInstance().get(
+												TaskColumnList.FILES))
+								|| EqualsUtils.equals(
+										column,
+										TaskColumnList.getInstance().get(
+												TaskColumnList.MODEL_EDIT))
+								|| EqualsUtils.equals(
+										column,
+										TaskColumnList.getInstance().get(
+												TaskColumnList.NOTE))) {
 							Task task = ((TaskTableModel) TaskTable.this.getModel()).getTask(rowIndex);
 							
 							if (task == null)
@@ -500,34 +523,49 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 							TaskTable.this.commitChanges();
 							TaskTable.this.setSelectedTasks(new Task[] { task });
 							
-							if (column == TaskColumn.CONTACTS) {
+							if (EqualsUtils.equals(
+									column,
+									TaskColumnList.getInstance().get(
+											TaskColumnList.CONTACTS))) {
 								if (ViewUtils.getCurrentTaskView() != null) {
 									ViewUtils.getCurrentTaskView().setSelectedInfoTab(
 											InfoTab.CONTACTS);
 								}
 							}
 							
-							if (column == TaskColumn.TASKS) {
+							if (EqualsUtils.equals(
+									column,
+									TaskColumnList.getInstance().get(
+											TaskColumnList.TASKS))) {
 								if (ViewUtils.getCurrentTaskView() != null) {
 									ViewUtils.getCurrentTaskView().setSelectedInfoTab(
 											InfoTab.TASKS);
 								}
 							}
 							
-							if (column == TaskColumn.FILES) {
+							if (EqualsUtils.equals(
+									column,
+									TaskColumnList.getInstance().get(
+											TaskColumnList.FILES))) {
 								if (ViewUtils.getCurrentTaskView() != null) {
 									ViewUtils.getCurrentTaskView().setSelectedInfoTab(
 											InfoTab.FILES);
 								}
 							}
 							
-							if (column == TaskColumn.MODEL_EDIT) {
+							if (EqualsUtils.equals(
+									column,
+									TaskColumnList.getInstance().get(
+											TaskColumnList.MODEL_EDIT))) {
 								ActionEditTasks.editTasks(
 										new Task[] { task },
 										true);
 							}
 							
-							if (column == TaskColumn.NOTE) {
+							if (EqualsUtils.equals(
+									column,
+									TaskColumnList.getInstance().get(
+											TaskColumnList.NOTE))) {
 								if (ViewUtils.getCurrentTaskView() != null) {
 									ViewUtils.getCurrentTaskView().setSelectedInfoTab(
 											InfoTab.NOTE);
