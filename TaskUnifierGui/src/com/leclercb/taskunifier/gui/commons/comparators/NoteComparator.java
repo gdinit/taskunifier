@@ -32,19 +32,16 @@
  */
 package com.leclercb.taskunifier.gui.commons.comparators;
 
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.SortOrder;
 
-import com.leclercb.commons.api.utils.CompareUtils;
-import com.leclercb.taskunifier.api.models.Folder;
-import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.Note;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorterElement;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 
 public class NoteComparator implements Comparator<Note> {
 	
@@ -83,11 +80,14 @@ public class NoteComparator implements Comparator<Note> {
 				return result;
 		}
 		
-		Object o1 = NoteColumn.MODEL_CREATION_DATE.getProperty(note1);
-		Object o2 = NoteColumn.MODEL_CREATION_DATE.getProperty(note2);
+		Object o1 = NoteColumnList.getInstance().get(
+				NoteColumnList.MODEL_CREATION_DATE).getProperty(note1);
+		Object o2 = NoteColumnList.getInstance().get(
+				NoteColumnList.MODEL_CREATION_DATE).getProperty(note2);
 		
 		int result = this.compare(
-				NoteColumn.MODEL_CREATION_DATE,
+				NoteColumnList.getInstance().get(
+						NoteColumnList.MODEL_CREATION_DATE),
 				o1,
 				o2,
 				SortOrder.ASCENDING);
@@ -95,11 +95,15 @@ public class NoteComparator implements Comparator<Note> {
 		if (result != 0)
 			return result;
 		
-		return this.compare(NoteColumn.MODEL, note1, note2, SortOrder.ASCENDING);
+		return this.compare(
+				NoteColumnList.getInstance().get(NoteColumnList.MODEL),
+				note1,
+				note2,
+				SortOrder.ASCENDING);
 	}
 	
 	private int compare(
-			NoteColumn column,
+			PropertyAccessor<Note> column,
 			Object o1,
 			Object o2,
 			SortOrder sortOrder) {
@@ -112,84 +116,9 @@ public class NoteComparator implements Comparator<Note> {
 		if (o2 == null)
 			return -1;
 		
-		int result = 0;
-		
-		switch (column) {
-			case MODEL:
-				result = CompareUtils.compare(
-						((Note) o1).getModelId(),
-						((Note) o2).getModelId());
-				break;
-			case MODEL_CREATION_DATE:
-				result = this.compareCalendars(
-						(Calendar) o1,
-						(Calendar) o2,
-						true);
-				break;
-			case MODEL_UPDATE_DATE:
-				result = this.compareCalendars(
-						(Calendar) o1,
-						(Calendar) o2,
-						true);
-				break;
-			case TITLE:
-				result = CompareUtils.compareStringIgnoreCase(
-						(String) o1,
-						(String) o2);
-				break;
-			case FOLDER:
-				result = this.compareModels(((Folder) o1), ((Folder) o2));
-				break;
-			case NOTE:
-				result = CompareUtils.compareStringIgnoreCase(
-						(String) o1,
-						(String) o2);
-				break;
-			default:
-				result = 0;
-				break;
-		}
+		int result = column.getType().compare(o1, o2);
 		
 		return (sortOrder.equals(SortOrder.ASCENDING) ? 1 : -1) * result;
-	}
-	
-	private int compareModels(Model model1, Model model2) {
-		if (model1 == null && model2 == null)
-			return 0;
-		
-		if (model1 == null)
-			return 1;
-		
-		if (model2 == null)
-			return -1;
-		
-		return CompareUtils.compareStringIgnoreCase(
-				model1.getTitle(),
-				model2.getTitle());
-	}
-	
-	private int compareCalendars(
-			Calendar calendar1,
-			Calendar calendar2,
-			boolean raw) {
-		if (calendar1 == null && calendar2 == null)
-			return 0;
-		
-		if (calendar1 == null)
-			return 1;
-		
-		if (calendar2 == null)
-			return -1;
-		
-		if (!raw) {
-			calendar1.set(Calendar.SECOND, 0);
-			calendar1.set(Calendar.MILLISECOND, 0);
-			
-			calendar2.set(Calendar.SECOND, 0);
-			calendar2.set(Calendar.MILLISECOND, 0);
-		}
-		
-		return CompareUtils.compare(calendar1, calendar2);
 	}
 	
 }
