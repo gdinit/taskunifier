@@ -34,14 +34,14 @@ package com.leclercb.taskunifier.gui.commons.editors;
 
 import org.jdesktop.swingx.autocomplete.ComboBoxCellEditor;
 
-import com.leclercb.taskunifier.gui.commons.models.TaskPriorityModel;
+import com.leclercb.taskunifier.gui.commons.models.TaskRepeatFromModel;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 
-public class PriorityEditor extends ComboBoxCellEditor {
+public class TaskRepeatFromEditor extends ComboBoxCellEditor {
 	
-	public PriorityEditor() {
-		super(ComponentFactory.createTaskPriorityComboBox(
-				new TaskPriorityModel(false),
+	public TaskRepeatFromEditor() {
+		super(ComponentFactory.createTaskRepeatFromComboBox(
+				new TaskRepeatFromModel(false),
 				true));
 	}
 	
