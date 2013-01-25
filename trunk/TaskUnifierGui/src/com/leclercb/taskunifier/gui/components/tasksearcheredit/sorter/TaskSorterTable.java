@@ -50,7 +50,7 @@ import org.jdesktop.swingx.renderer.DefaultListRenderer;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
 import com.leclercb.taskunifier.gui.commons.values.StringValueSortOrder;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.components.tasksearcheredit.sorter.draganddrop.TaskSorterTransferHandler;
 import com.leclercb.taskunifier.gui.components.tasksearcheredit.sorter.renderers.TaskSorterSortOrderRenderer;
 
@@ -70,8 +70,8 @@ public class TaskSorterTable extends JTable {
 		SORT_ORDER_RENDERER = new TaskSorterSortOrderRenderer();
 		
 		// EDITORS
-		COLUMN_EDITOR = new DefaultCellEditor(
-				new JComboBox(TaskColumn.values()));
+		COLUMN_EDITOR = new DefaultCellEditor(new JComboBox(
+				TaskColumnList.getInstance().getAccessors().toArray()));
 		
 		JComboBox comboBox = null;
 		

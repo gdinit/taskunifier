@@ -42,9 +42,10 @@ import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
+import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class TaskSorterTableModel extends DefaultTableModel implements ListChangeListener, PropertyChangeListener {
@@ -102,7 +103,7 @@ public class TaskSorterTableModel extends DefaultTableModel implements ListChang
 			case 0:
 				return Integer.class;
 			case 1:
-				return TaskColumn.class;
+				return PropertyAccessor.class;
 			case 2:
 				return SortOrder.class;
 			default:
@@ -138,7 +139,8 @@ public class TaskSorterTableModel extends DefaultTableModel implements ListChang
 			case 0:
 				break;
 			case 1:
-				this.sorter.getElement(row).setProperty((TaskColumn) value);
+				this.sorter.getElement(row).setProperty(
+						(PropertyAccessor<Task>) value);
 				break;
 			case 2:
 				this.sorter.getElement(row).setSortOrder((SortOrder) value);

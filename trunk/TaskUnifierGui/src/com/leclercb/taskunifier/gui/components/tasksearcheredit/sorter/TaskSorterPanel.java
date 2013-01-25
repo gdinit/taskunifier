@@ -55,7 +55,7 @@ import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
@@ -120,7 +120,8 @@ public class TaskSorterPanel extends JPanel implements ListChangeListener, Prope
 			public void actionPerformed(ActionEvent event) {
 				if (event.getActionCommand().equals("ADD")) {
 					TaskSorterElement element = new TaskSorterElement(
-							TaskColumn.TITLE,
+							TaskColumnList.getInstance().get(
+									TaskColumnList.TITLE),
 							SortOrder.ASCENDING);
 					
 					TaskSorterPanel.this.sorter.addElement(element);
@@ -173,7 +174,8 @@ public class TaskSorterPanel extends JPanel implements ListChangeListener, Prope
 					
 					TaskSorterPanel.this.sorter.insertElement(
 							new TaskSorterElement(
-									TaskColumn.ORDER,
+									TaskColumnList.getInstance().get(
+											TaskColumnList.ORDER),
 									SortOrder.ASCENDING),
 							0);
 				} else {
