@@ -1,0 +1,6 @@
+1) Configuration panel with a list to add/remove columns
+2) Add column: set property in each task: taskunifier_custom_uuid_type
+	Set settings: task.column.custom.uuid.name = "My Column"
+3) Remove column: remove property in each task
+	Remove setting
+4) Scan task properties to find column, then find name of column with settings
