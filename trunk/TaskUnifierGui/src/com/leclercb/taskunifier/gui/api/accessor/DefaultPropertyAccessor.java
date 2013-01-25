@@ -34,61 +34,107 @@ package com.leclercb.taskunifier.gui.api.accessor;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Comparator;
+
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupport;
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
-import com.leclercb.taskunifier.api.models.Model;
+import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.main.Main;
-import com.leclercb.taskunifier.gui.swing.table.TUColumn;
 
-public abstract class AbstractPropertyAccessor<M extends Model> implements PropertyAccessor<M>, TUColumn<M>, PropertyChangeListener, PropertyChangeSupported {
-	
-	public static final String PROP_USED = "used";
+public abstract class DefaultPropertyAccessor<T> implements PropertyAccessor<T>, PropertyChangeListener, PropertyChangeSupported {
 	
 	private PropertyChangeSupport propertyChangeSupport;
 	
-	private String fieldSettingsPropertyName;
-	private Class<?> type;
-	private String propertyName;
+	private String name;
 	private String label;
-	private boolean editable;
+	private PropertyAccessorType type;
+	private String fieldSettingsPropertyName;
+	private String propertyName;
 	private boolean usable;
 	private boolean used;
+	private boolean editable;
+	private boolean sortable;
 	
-	public AbstractPropertyAccessor(
+	public DefaultPropertyAccessor(
+			String name,
 			String fieldSettingsPropertyName,
-			Class<?> type,
+			PropertyAccessorType type,
 			String propertyName,
 			String label,
 			boolean editable,
-			boolean usable) {
+			boolean usable,
+			boolean sortable) {
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
 		
+		this.setName(name);
 		this.setFieldSettingsPropertyName(fieldSettingsPropertyName);
 		this.setType(type);
 		this.setPropertyName(propertyName);
 		this.setLabel(label);
 		this.setEditable(editable);
 		this.setUsable(usable);
+		this.setSortable(sortable);
 		
-		this.setUsed(Main.getSettings().getBooleanProperty(
-				fieldSettingsPropertyName + ".used",
-				true));
-		
-		Main.getSettings().addPropertyChangeListener(
-				fieldSettingsPropertyName + ".used",
-				new WeakPropertyChangeListener(Main.getSettings(), this));
+		if (this.fieldSettingsPropertyName == null) {
+			this.setUsed(false);
+		} else {
+			this.setUsed(Main.getSettings().getBooleanProperty(
+					fieldSettingsPropertyName + ".used",
+					true));
+			
+			Main.getSettings().addPropertyChangeListener(
+					fieldSettingsPropertyName + ".used",
+					new WeakPropertyChangeListener(Main.getSettings(), this));
+		}
 	}
 	
+	@Override
+	public String getName() {
+		return this.name;
+	}
+	
+	private void setName(String name) {
+		CheckUtils.isNotNull(name);
+		this.name = name;
+	}
+	
+	@Override
+	public String getLabel() {
+		return this.label;
+	}
+	
+	private void setLabel(String label) {
+		CheckUtils.isNotNull(label);
+		this.label = label;
+	}
+	
+	@Override
+	public PropertyAccessorType getType() {
+		return this.type;
+	}
+	
+	private void setType(PropertyAccessorType type) {
+		CheckUtils.isNotNull(type);
+		this.type = type;
+	}
+	
+	@Override
 	public String getFieldSettingsPropertyName() {
 		return this.fieldSettingsPropertyName;
 	}
 	
-	public void setFieldSettingsPropertyName(String fieldSettingsPropertyName) {
+	private void setFieldSettingsPropertyName(String fieldSettingsPropertyName) {
 		this.fieldSettingsPropertyName = fieldSettingsPropertyName;
 	}
 	
+	@Override
 	public String getPropertyName() {
 		return this.propertyName;
 	}
@@ -98,21 +144,34 @@ public abstract class AbstractPropertyAccessor<M extends Model> implements Prope
 	}
 	
 	@Override
-	public Class<?> getType() {
-		return this.type;
+	public boolean isUsable() {
+		return this.usable;
 	}
 	
-	private void setType(Class<?> type) {
-		this.type = type;
+	private void setUsable(boolean usable) {
+		this.usable = usable;
 	}
 	
 	@Override
-	public String getLabel() {
-		return this.label;
+	public boolean isUsed() {
+		return this.used;
 	}
 	
-	private void setLabel(String label) {
-		this.label = label;
+	@Override
+	public void setUsed(boolean used) {
+		if (used == this.isUsed())
+			return;
+		
+		boolean oldUsed = this.isUsed();
+		this.used = used;
+		
+		if (this.fieldSettingsPropertyName != null) {
+			Main.getSettings().setBooleanProperty(
+					this.fieldSettingsPropertyName + ".used",
+					used);
+		}
+		
+		this.propertyChangeSupport.firePropertyChange(PROP_USED, oldUsed, used);
 	}
 	
 	@Override
@@ -124,35 +183,62 @@ public abstract class AbstractPropertyAccessor<M extends Model> implements Prope
 		this.editable = editable;
 	}
 	
-	public boolean isUsable() {
-		return this.usable;
+	@Override
+	public boolean isSortable() {
+		return this.sortable;
 	}
 	
-	public void setUsable(boolean usable) {
-		this.usable = usable;
+	private void setSortable(boolean sortable) {
+		this.sortable = sortable;
 	}
 	
-	public boolean isUsed() {
-		return this.used;
+	@Override
+	public Comparator<?> getComparator() {
+		return this.type.getComparator();
 	}
 	
-	public void setUsed(boolean used) {
-		if (used == this.isUsed())
-			return;
-		
-		boolean oldUsed = this.isUsed();
-		this.used = used;
-		
-		Main.getSettings().setBooleanProperty(
-				this.fieldSettingsPropertyName + ".used",
-				used);
-		
-		this.propertyChangeSupport.firePropertyChange(PROP_USED, oldUsed, used);
+	@Override
+	public TableCellRenderer getCellRenderer() {
+		return this.type.getCellRenderer();
+	}
+	
+	@Override
+	public TableCellEditor getCellEditor() {
+		return this.type.getCellEditor();
+	}
+	
+	@Override
+	public String getPropertyAsString(T object) {
+		Object value = this.getProperty(object);
+		return this.type.getPropertyAsString(value);
 	}
 	
 	@Override
 	public String toString() {
 		return this.label;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o == this) {
+			return true;
+		}
+		
+		if (o instanceof PropertyAccessor) {
+			PropertyAccessor<?> pa = (PropertyAccessor<?>) o;
+			
+			return new EqualsBuilder().append(this.getName(), pa.getName()).isEquals();
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		HashCodeBuilder hashCode = new HashCodeBuilder();
+		hashCode.append(this.getName());
+		
+		return hashCode.toHashCode();
 	}
 	
 	@Override
@@ -185,7 +271,10 @@ public abstract class AbstractPropertyAccessor<M extends Model> implements Prope
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		this.setUsed(Boolean.parseBoolean(evt.getNewValue().toString()));
+		if (evt.getNewValue() == null)
+			this.setUsed(false);
+		else
+			this.setUsed((Boolean) evt.getNewValue());
 	}
 	
 }
