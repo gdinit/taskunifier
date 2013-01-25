@@ -444,22 +444,29 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 	
 	@Override
 	public void saveProperties() {
-		if (this.isVisible()) {
-			Main.getSettings().setIntegerProperty(
-					this.propertyName + ".extended_state",
-					this.getExtendedState());
-			Main.getSettings().setIntegerProperty(
-					this.propertyName + ".width",
-					this.getWidth());
-			Main.getSettings().setIntegerProperty(
-					this.propertyName + ".height",
-					this.getHeight());
-			Main.getSettings().setIntegerProperty(
-					this.propertyName + ".location_x",
-					(int) this.getLocationOnScreen().getX());
-			Main.getSettings().setIntegerProperty(
-					this.propertyName + ".location_y",
-					(int) this.getLocationOnScreen().getY());
+		try {
+			if (this.isVisible()) {
+				Main.getSettings().setIntegerProperty(
+						this.propertyName + ".extended_state",
+						this.getExtendedState());
+				Main.getSettings().setIntegerProperty(
+						this.propertyName + ".width",
+						this.getWidth());
+				Main.getSettings().setIntegerProperty(
+						this.propertyName + ".height",
+						this.getHeight());
+				Main.getSettings().setIntegerProperty(
+						this.propertyName + ".location_x",
+						(int) this.getLocationOnScreen().getX());
+				Main.getSettings().setIntegerProperty(
+						this.propertyName + ".location_y",
+						(int) this.getLocationOnScreen().getY());
+			}
+		} catch (Exception e) {
+			GuiLogger.getLogger().log(
+					Level.SEVERE,
+					"Cannot save window settings",
+					e);
 		}
 	}
 	
