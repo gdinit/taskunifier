@@ -50,7 +50,7 @@ import org.jdesktop.swingx.renderer.DefaultListRenderer;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorterElement;
 import com.leclercb.taskunifier.gui.commons.values.StringValueSortOrder;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 import com.leclercb.taskunifier.gui.components.notesearcheredit.sorter.draganddrop.NoteSorterTransferHandler;
 import com.leclercb.taskunifier.gui.components.notesearcheredit.sorter.renderers.NoteSorterSortOrderRenderer;
 
@@ -70,8 +70,8 @@ public class NoteSorterTable extends JTable {
 		SORT_ORDER_RENDERER = new NoteSorterSortOrderRenderer();
 		
 		// EDITORS
-		COLUMN_EDITOR = new DefaultCellEditor(
-				new JComboBox(NoteColumn.values()));
+		COLUMN_EDITOR = new DefaultCellEditor(new JComboBox(
+				NoteColumnList.getInstance().getAccessors().toArray()));
 		
 		JComboBox comboBox = null;
 		
