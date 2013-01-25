@@ -37,13 +37,16 @@ import java.awt.Component;
 import org.jdesktop.swingx.decorator.ComponentAdapter;
 import org.jdesktop.swingx.decorator.HighlightPredicate;
 
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.commons.api.utils.EqualsUtils;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 
 public class NoteTooltipHighlightPredicate implements HighlightPredicate {
 	
 	@Override
 	public boolean isHighlighted(Component renderer, ComponentAdapter adapter) {
-		if (adapter.getColumnIdentifierAt(adapter.convertColumnIndexToModel(adapter.column)) != NoteColumn.TITLE)
+		if (!EqualsUtils.equals(
+				adapter.getColumnIdentifierAt(adapter.convertColumnIndexToModel(adapter.column)),
+				NoteColumnList.getInstance().get(NoteColumnList.TITLE)))
 			return false;
 		
 		return true;

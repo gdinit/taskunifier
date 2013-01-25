@@ -42,7 +42,7 @@ public interface NoteTableView extends ModelSelectionChangeSupported, PropertyCh
 	
 	public static final String PROP_NOTE_COUNT = "noteCount";
 	
-	public abstract TUTableProperties<NoteColumn> getTableProperties();
+	public abstract TUTableProperties<Note> getTableProperties();
 	
 	public abstract Note[] getNotes();
 	

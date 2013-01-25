@@ -39,12 +39,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
 import com.leclercb.taskunifier.api.models.Note;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.swing.table.TUTableColumn;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties.TableColumnProperties;
-import com.leclercb.taskunifier.gui.utils.NoteUtils;
 
-public class NotePrintTableColumn extends TUTableColumn<NoteColumn> {
+public class NotePrintTableColumn extends TUTableColumn<Note> {
 	
 	private static TableCellRenderer RENDERER;
 	
@@ -70,16 +69,16 @@ public class NotePrintTableColumn extends TUTableColumn<NoteColumn> {
 				Note note = ((NotePrintTableModel) table.getModel()).getNote(row);
 				
 				col = table.convertColumnIndexToModel(col);
-				NoteColumn column = ((NotePrintTableModel) table.getModel()).getNoteColumn(col);
+				PropertyAccessor<Note> column = ((NotePrintTableModel) table.getModel()).getNoteColumn(col);
 				
-				this.setText(NoteUtils.toString(note, column));
+				this.setText(column.getPropertyAsString(note));
 				return component;
 			}
 			
 		};
 	}
 	
-	public NotePrintTableColumn(TableColumnProperties<NoteColumn> column) {
+	public NotePrintTableColumn(TableColumnProperties<Note> column) {
 		super(column);
 	}
 	
