@@ -48,7 +48,7 @@ import javax.swing.event.ListSelectionListener;
 
 import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorterElement;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
@@ -110,7 +110,8 @@ public class NoteSorterPanel extends JPanel {
 			public void actionPerformed(ActionEvent event) {
 				if (event.getActionCommand().equals("ADD")) {
 					NoteSorterElement element = new NoteSorterElement(
-							NoteColumn.TITLE,
+							NoteColumnList.getInstance().get(
+									NoteColumnList.TITLE),
 							SortOrder.ASCENDING);
 					
 					NoteSorterPanel.this.sorter.addElement(element);

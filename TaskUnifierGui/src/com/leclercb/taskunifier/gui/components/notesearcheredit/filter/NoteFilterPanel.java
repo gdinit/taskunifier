@@ -48,7 +48,7 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilterElement;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.ModelCondition;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondition;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -145,7 +145,8 @@ public class NoteFilterPanel extends JPanel {
 					Note[] notes = ViewUtils.getSelectedNotes();
 					for (Note note : notes) {
 						NoteFilterPanel.this.filter.addElement(new NoteFilterElement(
-								NoteColumn.MODEL,
+								NoteColumnList.getInstance().get(
+										NoteColumnList.MODEL),
 								ModelCondition.EQUALS,
 								note,
 								false));
@@ -158,7 +159,8 @@ public class NoteFilterPanel extends JPanel {
 					
 					if (event.getActionCommand().equals("ADD_ELEMENT")) {
 						NoteFilterElement element = new NoteFilterElement(
-								NoteColumn.TITLE,
+								NoteColumnList.getInstance().get(
+										NoteColumnList.TITLE),
 								StringCondition.EQUALS,
 								"",
 								false);
