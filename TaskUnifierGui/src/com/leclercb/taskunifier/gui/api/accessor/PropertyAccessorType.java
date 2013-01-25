@@ -542,7 +542,10 @@ public enum PropertyAccessorType {
 				return CompareUtils.compare((Boolean) o1, (Boolean) o2);
 			case CALENDAR_DATE:
 			case CALENDAR_DATE_TIME:
-				return this.compareCalendars((Calendar) o1, (Calendar) o2, false);
+				return this.compareCalendars(
+						(Calendar) o1,
+						(Calendar) o2,
+						false);
 			case DOUBLE:
 			case PERCENTAGE:
 				return CompareUtils.compare((Double) o1, (Double) o2);

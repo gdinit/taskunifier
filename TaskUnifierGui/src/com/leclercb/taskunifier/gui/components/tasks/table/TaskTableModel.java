@@ -49,10 +49,11 @@ import com.leclercb.taskunifier.api.models.ModelParent;
 import com.leclercb.taskunifier.api.models.ModelStatus;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.models.GuiTask;
 import com.leclercb.taskunifier.gui.commons.undoableedit.TaskEditUndoableEdit;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.utils.UndoSupport;
 
 public class TaskTableModel extends AbstractTableModel implements ListChangeListener, PropertyChangeListener {
@@ -80,13 +81,13 @@ public class TaskTableModel extends AbstractTableModel implements ListChangeList
 		return TaskFactory.getInstance().get(row);
 	}
 	
-	public TaskColumn getTaskColumn(int col) {
-		return TaskColumn.values()[col];
+	public PropertyAccessor<Task> getTaskColumn(int col) {
+		return TaskColumnList.getInstance().getAccessor(col);
 	}
 	
 	@Override
 	public int getColumnCount() {
-		return TaskColumn.values().length;
+		return TaskColumnList.getInstance().getSize();
 	}
 	
 	@Override
@@ -96,29 +97,29 @@ public class TaskTableModel extends AbstractTableModel implements ListChangeList
 	
 	@Override
 	public String getColumnName(int col) {
-		return TaskColumn.values()[col].getLabel();
+		return this.getTaskColumn(col).getLabel();
 	}
 	
 	@Override
 	public Class<?> getColumnClass(int col) {
-		return TaskColumn.values()[col].getType();
+		return this.getTaskColumn(col).getType().getType();
 	}
 	
 	@Override
 	public Object getValueAt(int row, int col) {
 		Task task = TaskFactory.getInstance().get(row);
-		return TaskColumn.values()[col].getProperty(task);
+		return this.getTaskColumn(col).getProperty(task);
 	}
 	
 	@Override
 	public boolean isCellEditable(int row, int col) {
-		return TaskColumn.values()[col].isEditable();
+		return this.getTaskColumn(col).isEditable();
 	}
 	
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		Task task = TaskFactory.getInstance().get(row);
-		TaskColumn column = TaskColumn.values()[col];
+		PropertyAccessor<Task> column = this.getTaskColumn(col);
 		
 		Object oldValue = column.getProperty(task);
 		
