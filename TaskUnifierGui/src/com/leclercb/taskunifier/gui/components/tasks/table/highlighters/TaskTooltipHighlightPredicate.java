@@ -37,29 +37,11 @@ import java.awt.Component;
 import org.jdesktop.swingx.decorator.ComponentAdapter;
 import org.jdesktop.swingx.decorator.HighlightPredicate;
 
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
-
 public class TaskTooltipHighlightPredicate implements HighlightPredicate {
 	
 	@Override
 	public boolean isHighlighted(Component renderer, ComponentAdapter adapter) {
-		TaskColumn column = (TaskColumn) adapter.getColumnIdentifierAt(adapter.convertColumnIndexToModel(adapter.column));
-		
-		switch (column) {
-			case TITLE:
-			case CONTACTS:
-			case TASKS:
-			case FILES:
-			case PROGRESS:
-			case LENGTH:
-			case TIMER:
-			case REPEAT:
-			case START_DATE:
-			case DUE_DATE:
-				return true;
-			default:
-				return false;
-		}
+		return true;
 	}
 	
 }

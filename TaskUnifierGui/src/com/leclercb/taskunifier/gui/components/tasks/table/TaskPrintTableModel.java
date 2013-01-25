@@ -36,7 +36,8 @@ import javax.swing.table.AbstractTableModel;
 
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 
 public class TaskPrintTableModel extends AbstractTableModel {
 	
@@ -51,13 +52,13 @@ public class TaskPrintTableModel extends AbstractTableModel {
 		return this.tasks[row];
 	}
 	
-	public TaskColumn getTaskColumn(int col) {
-		return TaskColumn.values()[col];
+	public PropertyAccessor<Task> getTaskColumn(int col) {
+		return TaskColumnList.getInstance().getAccessor(col);
 	}
 	
 	@Override
 	public int getColumnCount() {
-		return TaskColumn.values().length;
+		return TaskColumnList.getInstance().getSize();
 	}
 	
 	@Override
@@ -67,17 +68,17 @@ public class TaskPrintTableModel extends AbstractTableModel {
 	
 	@Override
 	public String getColumnName(int col) {
-		return TaskColumn.values()[col].getLabel();
+		return this.getTaskColumn(col).getLabel();
 	}
 	
 	@Override
 	public Class<?> getColumnClass(int col) {
-		return TaskColumn.values()[col].getType();
+		return this.getTaskColumn(col).getType().getType();
 	}
 	
 	@Override
 	public Object getValueAt(int row, int col) {
-		return TaskColumn.values()[col].getProperty(this.tasks[row]);
+		return this.getTaskColumn(col).getProperty(this.tasks[row]);
 	}
 	
 	@Override

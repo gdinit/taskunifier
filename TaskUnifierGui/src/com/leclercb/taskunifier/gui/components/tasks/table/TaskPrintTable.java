@@ -37,7 +37,6 @@ import javax.swing.JTable;
 import org.jdesktop.swingx.JXTable;
 
 import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
 import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskHighlightPredicate;
 import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskHighlighter;
 import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskTitleHighlightPredicate;
@@ -46,14 +45,12 @@ import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
 
 public class TaskPrintTable extends JXTable {
 	
-	public TaskPrintTable(
-			TUTableProperties<TaskColumn> tableProperties,
-			Task[] tasks) {
+	public TaskPrintTable(TUTableProperties<Task> tableProperties, Task[] tasks) {
 		this.initialize(tableProperties, tasks);
 	}
 	
 	private void initialize(
-			final TUTableProperties<TaskColumn> tableProperties,
+			final TUTableProperties<Task> tableProperties,
 			final Task[] tasks) {
 		TaskPrintTableColumnModel columnModel = new TaskPrintTableColumnModel(
 				tableProperties);

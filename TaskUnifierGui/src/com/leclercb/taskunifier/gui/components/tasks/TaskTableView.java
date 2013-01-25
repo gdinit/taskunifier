@@ -43,7 +43,7 @@ public interface TaskTableView extends TaskSelectionView, ModelSelectionChangeSu
 	
 	public static final String PROP_TASK_COUNT = "taskCount";
 	
-	public abstract TUTableProperties<TaskColumn> getTableProperties();
+	public abstract TUTableProperties<Task> getTableProperties();
 	
 	public abstract Task[] getTasks();
 	
