@@ -51,7 +51,7 @@ import org.jdesktop.swingx.renderer.JRendererLabel;
 
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
@@ -80,7 +80,8 @@ public class TaskTitleHighlighter extends AbstractHighlighter implements Propert
 		
 		Object value = adapter.getFilteredValueAt(
 				adapter.row,
-				adapter.getColumnIndex(TaskColumn.MODEL));
+				adapter.getColumnIndex(TaskColumnList.getInstance().get(
+						TaskColumnList.MODEL)));
 		
 		if (value == null || !(value instanceof Task))
 			return r;

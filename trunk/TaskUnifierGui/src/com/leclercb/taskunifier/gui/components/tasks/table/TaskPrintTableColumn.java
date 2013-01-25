@@ -41,12 +41,11 @@ import org.jdesktop.swingx.renderer.DefaultTableRenderer;
 import org.jdesktop.swingx.renderer.JRendererLabel;
 
 import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.swing.table.TUTableColumn;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties.TableColumnProperties;
-import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
-public class TaskPrintTableColumn extends TUTableColumn<TaskColumn> {
+public class TaskPrintTableColumn extends TUTableColumn<Task> {
 	
 	private static TableCellRenderer RENDERER;
 	
@@ -72,16 +71,16 @@ public class TaskPrintTableColumn extends TUTableColumn<TaskColumn> {
 				Task task = ((TaskPrintTableModel) table.getModel()).getTask(row);
 				
 				col = table.convertColumnIndexToModel(col);
-				TaskColumn column = ((TaskPrintTableModel) table.getModel()).getTaskColumn(col);
+				PropertyAccessor<Task> column = ((TaskPrintTableModel) table.getModel()).getTaskColumn(col);
 				
-				component.setText(TaskUtils.toString(task, column));
+				component.setText(column.getPropertyAsString(task));
 				return component;
 			}
 			
 		};
 	}
 	
-	public TaskPrintTableColumn(TableColumnProperties<TaskColumn> column) {
+	public TaskPrintTableColumn(TableColumnProperties<Task> column) {
 		super(column);
 	}
 	

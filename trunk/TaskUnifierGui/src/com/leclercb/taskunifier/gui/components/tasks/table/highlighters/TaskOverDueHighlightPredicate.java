@@ -38,7 +38,7 @@ import org.jdesktop.swingx.decorator.ComponentAdapter;
 import org.jdesktop.swingx.decorator.HighlightPredicate;
 
 import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.main.Main;
 
 public class TaskOverDueHighlightPredicate implements HighlightPredicate {
@@ -47,7 +47,8 @@ public class TaskOverDueHighlightPredicate implements HighlightPredicate {
 	public boolean isHighlighted(Component renderer, ComponentAdapter adapter) {
 		Object value = adapter.getFilteredValueAt(
 				adapter.row,
-				adapter.getColumnIndex(TaskColumn.MODEL));
+				adapter.getColumnIndex(TaskColumnList.getInstance().get(
+						TaskColumnList.MODEL)));
 		
 		if (value == null || !(value instanceof Task))
 			return false;

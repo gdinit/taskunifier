@@ -37,14 +37,17 @@ import java.awt.Component;
 import org.jdesktop.swingx.decorator.ComponentAdapter;
 import org.jdesktop.swingx.decorator.HighlightPredicate;
 
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.commons.api.utils.EqualsUtils;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 
 public class TaskRepeatHighlightPredicate implements HighlightPredicate {
 	
 	@Override
 	public boolean isHighlighted(Component renderer, ComponentAdapter adapter) {
-		if (adapter.getColumnIdentifierAt(adapter.convertColumnIndexToModel(adapter.column)) != TaskColumn.REPEAT)
+		if (!EqualsUtils.equals(
+				adapter.getColumnIdentifierAt(adapter.convertColumnIndexToModel(adapter.column)),
+				TaskColumnList.getInstance().get(TaskColumnList.REPEAT)))
 			return false;
 		
 		Object value = adapter.getValue(adapter.convertColumnIndexToModel(adapter.column));
