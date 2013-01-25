@@ -66,15 +66,17 @@ import org.jdesktop.swingx.JXTable;
 
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.gui.actions.ActionDelete;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.searchers.NoteSearcher;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorterElement;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionChangeSupport;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionListener;
 import com.leclercb.taskunifier.gui.commons.events.NoteSearcherSelectionChangeEvent;
 import com.leclercb.taskunifier.gui.commons.highlighters.AlternateHighlighter;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 import com.leclercb.taskunifier.gui.components.notes.NoteTableView;
 import com.leclercb.taskunifier.gui.components.notes.table.draganddrop.NoteTransferHandler;
 import com.leclercb.taskunifier.gui.components.notes.table.highlighters.NoteTitleHighlightPredicate;
@@ -99,10 +101,10 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 	private ModelSelectionChangeSupport noteSelectionChangeSupport;
 	
 	private NoteRowComparator noteRowComparator;
-	private TUTableProperties<NoteColumn> tableProperties;
+	private TUTableProperties<Note> tableProperties;
 	private NoteTableMenu noteTableMenu;
 	
-	public NoteTable(TUTableProperties<NoteColumn> noteColumnsProperties) {
+	public NoteTable(TUTableProperties<Note> noteColumnsProperties) {
 		CheckUtils.isNotNull(noteColumnsProperties);
 		
 		this.noteRowComparator = new NoteRowComparator();
@@ -114,7 +116,7 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 	}
 	
 	@Override
-	public TUTableProperties<NoteColumn> getTableProperties() {
+	public TUTableProperties<Note> getTableProperties() {
 		return this.tableProperties;
 	}
 	
@@ -203,7 +205,8 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 		for (int i = 0; i < model.getRowCount(); i++) {
 			if (note.equals(model.getNote(i))) {
 				int row = this.getRowSorter().convertRowIndexToView(i);
-				int col = columnModel.getColumnIndex(NoteColumn.TITLE);
+				int col = columnModel.getColumnIndex(NoteColumnList.getInstance().get(
+						NoteColumnList.TITLE));
 				
 				if (row != -1) {
 					if (this.editCellAt(row, col)) {
@@ -243,7 +246,9 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 		
 		this.noteRowComparator.setNoteSearcher(searcher);
 		
-		this.setSortOrder(NoteColumn.MODEL, SortOrder.ASCENDING);
+		this.setSortOrder(
+				NoteColumnList.getInstance().get(NoteColumnList.MODEL),
+				SortOrder.ASCENDING);
 		this.getSortController().setRowFilter(
 				new NoteRowFilter(searcher.getFilter()));
 		this.refreshNotes();
@@ -260,8 +265,8 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 			notes = this.getNotes();
 		
 		TableReport tableReport = new TableReport(
-				new NotePrintTable(new TUTableProperties<NoteColumn>(
-						NoteColumn.class,
+				new NotePrintTable(new TUTableProperties<Note>(
+						NoteColumnList.getInstance(),
 						this.tableProperties.getPropertyName() + ".print",
 						false), notes),
 				PrintMode.NORMAL,
@@ -386,10 +391,13 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 				Rectangle headerRect = table.getTableHeader().getHeaderRect(
 						colIndex);
 				if (headerRect.contains(evt.getX(), evt.getY())) {
-					NoteColumn column = (NoteColumn) colModel.getColumn(
+					PropertyAccessor<Note> column = (PropertyAccessor<Note>) colModel.getColumn(
 							colIndex).getIdentifier();
 					
-					if (column == NoteColumn.MODEL)
+					if (EqualsUtils.equals(
+							column,
+							NoteColumnList.getInstance().get(
+									NoteColumnList.MODEL)))
 						return;
 					
 					NoteSearcher searcher = NoteTable.this.getNoteSearcher().clone();
@@ -451,10 +459,13 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 					
 					int colIndex = NoteTable.this.columnAtPoint(event.getPoint());
 					
-					NoteColumn column = (NoteColumn) NoteTable.this.getColumn(
+					PropertyAccessor<Note> column = (PropertyAccessor<Note>) NoteTable.this.getColumn(
 							colIndex).getIdentifier();
 					
-					if (column == NoteColumn.NOTE) {
+					if (EqualsUtils.equals(
+							column,
+							NoteColumnList.getInstance().get(
+									NoteColumnList.NOTE))) {
 						Note note = ((NoteTableModel) NoteTable.this.getModel()).getNote(rowIndex);
 						
 						if (note == null)

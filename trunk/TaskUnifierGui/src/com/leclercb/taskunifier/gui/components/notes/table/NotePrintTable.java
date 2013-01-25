@@ -37,19 +37,16 @@ import javax.swing.JTable;
 import org.jdesktop.swingx.JXTable;
 
 import com.leclercb.taskunifier.api.models.Note;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
 
 public class NotePrintTable extends JXTable {
 	
-	public NotePrintTable(
-			TUTableProperties<NoteColumn> tableProperties,
-			Note[] notes) {
+	public NotePrintTable(TUTableProperties<Note> tableProperties, Note[] notes) {
 		this.initialize(tableProperties, notes);
 	}
 	
 	private void initialize(
-			final TUTableProperties<NoteColumn> tableProperties,
+			final TUTableProperties<Note> tableProperties,
 			final Note[] notes) {
 		NotePrintTableColumnModel columnModel = new NotePrintTableColumnModel(
 				tableProperties);

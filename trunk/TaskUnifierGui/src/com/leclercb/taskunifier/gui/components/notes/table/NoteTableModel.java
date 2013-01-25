@@ -47,8 +47,9 @@ import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.ModelStatus;
 import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.api.models.NoteFactory;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.commons.undoableedit.NoteEditUndoableEdit;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 import com.leclercb.taskunifier.gui.utils.UndoSupport;
 
 public class NoteTableModel extends AbstractTableModel implements ListChangeListener, PropertyChangeListener {
@@ -69,13 +70,13 @@ public class NoteTableModel extends AbstractTableModel implements ListChangeList
 		return NoteFactory.getInstance().get(row);
 	}
 	
-	public NoteColumn getNoteColumn(int col) {
-		return NoteColumn.values()[col];
+	public PropertyAccessor<Note> getNoteColumn(int col) {
+		return NoteColumnList.getInstance().getAccessor(col);
 	}
 	
 	@Override
 	public int getColumnCount() {
-		return NoteColumn.values().length;
+		return NoteColumnList.getInstance().getSize();
 	}
 	
 	@Override
@@ -85,29 +86,29 @@ public class NoteTableModel extends AbstractTableModel implements ListChangeList
 	
 	@Override
 	public String getColumnName(int col) {
-		return NoteColumn.values()[col].getLabel();
+		return this.getNoteColumn(col).getLabel();
 	}
 	
 	@Override
 	public Class<?> getColumnClass(int col) {
-		return NoteColumn.values()[col].getType();
+		return this.getNoteColumn(col).getType().getType();
 	}
 	
 	@Override
 	public Object getValueAt(int row, int col) {
 		Note note = NoteFactory.getInstance().get(row);
-		return NoteColumn.values()[col].getProperty(note);
+		return this.getNoteColumn(col).getProperty(note);
 	}
 	
 	@Override
 	public boolean isCellEditable(int row, int col) {
-		return NoteColumn.values()[col].isEditable();
+		return this.getNoteColumn(col).isEditable();
 	}
 	
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		Note note = NoteFactory.getInstance().get(row);
-		NoteColumn column = NoteColumn.values()[col];
+		PropertyAccessor<Note> column = this.getNoteColumn(col);
 		
 		Object oldValue = column.getProperty(note);
 		

@@ -36,7 +36,8 @@ import javax.swing.table.AbstractTableModel;
 
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Note;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 
 public class NotePrintTableModel extends AbstractTableModel {
 	
@@ -51,13 +52,13 @@ public class NotePrintTableModel extends AbstractTableModel {
 		return this.notes[row];
 	}
 	
-	public NoteColumn getNoteColumn(int col) {
-		return NoteColumn.values()[col];
+	public PropertyAccessor<Note> getNoteColumn(int col) {
+		return NoteColumnList.getInstance().getAccessor(col);
 	}
 	
 	@Override
 	public int getColumnCount() {
-		return NoteColumn.values().length;
+		return NoteColumnList.getInstance().getSize();
 	}
 	
 	@Override
@@ -67,17 +68,17 @@ public class NotePrintTableModel extends AbstractTableModel {
 	
 	@Override
 	public String getColumnName(int col) {
-		return NoteColumn.values()[col].getLabel();
+		return this.getNoteColumn(col).getLabel();
 	}
 	
 	@Override
 	public Class<?> getColumnClass(int col) {
-		return NoteColumn.values()[col].getType();
+		return this.getNoteColumn(col).getType().getType();
 	}
 	
 	@Override
 	public Object getValueAt(int row, int col) {
-		return NoteColumn.values()[col].getProperty(this.notes[row]);
+		return this.getNoteColumn(col).getProperty(this.notes[row]);
 	}
 	
 	@Override

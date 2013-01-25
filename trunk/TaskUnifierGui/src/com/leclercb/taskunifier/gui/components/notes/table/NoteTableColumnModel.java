@@ -32,23 +32,23 @@
  */
 package com.leclercb.taskunifier.gui.components.notes.table;
 
-import com.leclercb.taskunifier.gui.components.notes.NoteColumn;
+import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.gui.components.notes.table.sorter.NoteRowComparator;
 import com.leclercb.taskunifier.gui.swing.table.TUTableColumn;
 import com.leclercb.taskunifier.gui.swing.table.TUTableColumnModel;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties.TableColumnProperties;
 
-public class NoteTableColumnModel extends TUTableColumnModel<NoteColumn> {
+public class NoteTableColumnModel extends TUTableColumnModel<Note> {
 	
 	public NoteTableColumnModel(
-			final TUTableProperties<NoteColumn> tableProperties,
+			final TUTableProperties<Note> tableProperties,
 			final NoteRowComparator comparator) {
-		super(new TableColumnInstantiator<NoteColumn>() {
+		super(new TableColumnInstantiator<Note>() {
 			
 			@Override
-			public TUTableColumn<NoteColumn> newTableColumnInstance(
-					TableColumnProperties<NoteColumn> column) {
+			public TUTableColumn<Note> newTableColumnInstance(
+					TableColumnProperties<Note> column) {
 				return new NoteTableColumn(column, comparator);
 			}
 			
