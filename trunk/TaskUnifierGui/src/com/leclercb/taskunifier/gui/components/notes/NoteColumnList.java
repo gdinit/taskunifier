@@ -33,6 +33,7 @@
 package com.leclercb.taskunifier.gui.components.notes;
 
 import javax.swing.SwingConstants;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import org.jdesktop.swingx.renderer.DefaultTableRenderer;
@@ -46,6 +47,7 @@ import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.gui.api.accessor.DefaultPropertyAccessor;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorList;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
+import com.leclercb.taskunifier.gui.commons.editors.TitleEditor;
 import com.leclercb.taskunifier.gui.commons.values.IconValueNote;
 import com.leclercb.taskunifier.gui.commons.values.StringValueModelId;
 import com.leclercb.taskunifier.gui.commons.values.StringValueNoteTitle;
@@ -165,6 +167,7 @@ public class NoteColumnList extends PropertyAccessorList<Note> {
 				false) {
 			
 			private TableCellRenderer renderer;
+			private TableCellEditor editor;
 			
 			@Override
 			public TableCellRenderer getCellRenderer() {
@@ -174,6 +177,15 @@ public class NoteColumnList extends PropertyAccessorList<Note> {
 				}
 				
 				return this.renderer;
+			}
+			
+			@Override
+			public TableCellEditor getCellEditor() {
+				if (this.editor == null) {
+					this.editor = new TitleEditor();
+				}
+				
+				return this.editor;
 			}
 			
 			@Override
