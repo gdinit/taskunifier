@@ -48,7 +48,7 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilterElement;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.ModelCondition;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondition;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -145,7 +145,8 @@ public class TaskFilterPanel extends JPanel {
 					Task[] tasks = ViewUtils.getSelectedTasks();
 					for (Task task : tasks) {
 						TaskFilterPanel.this.filter.addElement(new TaskFilterElement(
-								TaskColumn.MODEL,
+								TaskColumnList.getInstance().get(
+										TaskColumnList.MODEL),
 								ModelCondition.EQUALS,
 								task,
 								false));
@@ -158,7 +159,8 @@ public class TaskFilterPanel extends JPanel {
 					
 					if (event.getActionCommand().equals("ADD_ELEMENT")) {
 						TaskFilterElement element = new TaskFilterElement(
-								TaskColumn.TITLE,
+								TaskColumnList.getInstance().get(
+										TaskColumnList.TITLE),
 								StringCondition.EQUALS,
 								"",
 								false);
