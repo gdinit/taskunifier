@@ -42,14 +42,14 @@ import org.jdesktop.swingx.decorator.HighlightPredicate;
 import org.jdesktop.swingx.decorator.ToolTipHighlighter;
 
 import com.leclercb.commons.api.utils.DateUtils;
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.Timer;
-import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
-import com.leclercb.taskunifier.gui.commons.values.StringValueTaskLength;
-import com.leclercb.taskunifier.gui.commons.values.StringValueTaskProgress;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.commons.values.StringValuePercentage;
+import com.leclercb.taskunifier.gui.commons.values.StringValueTime;
 import com.leclercb.taskunifier.gui.commons.values.StringValueTimer;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumn;
-import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class TaskTooltipHighlighter extends ToolTipHighlighter {
@@ -60,80 +60,54 @@ public class TaskTooltipHighlighter extends ToolTipHighlighter {
 	
 	@Override
 	protected Component doHighlight(Component renderer, ComponentAdapter adapter) {
-		TaskColumn column = (TaskColumn) adapter.getColumnIdentifierAt(adapter.convertColumnIndexToModel(adapter.column));
+		PropertyAccessor<Task> column = (PropertyAccessor<Task>) adapter.getColumnIdentifierAt(adapter.convertColumnIndexToModel(adapter.column));
 		
-		switch (column) {
-			case CONTACTS:
-				return this.doHighlightContacts(renderer, adapter);
-			case TASKS:
-				return this.doHighlightTasks(renderer, adapter);
-			case FILES:
-				return this.doHighlightFiles(renderer, adapter);
-			case PROGRESS:
-				return this.doHighlightProgress(renderer, adapter);
-			case LENGTH:
-				return this.doHighlightLength(renderer, adapter);
-			case TIMER:
-				return this.doHighlightTimer(renderer, adapter);
-			case START_DATE:
-				return this.doHighlightDate(renderer, adapter, column);
-			case DUE_DATE:
-				return this.doHighlightDate(renderer, adapter, column);
-			default:
-				return super.doHighlight(renderer, adapter);
-		}
+		if (EqualsUtils.equals(
+				column,
+				TaskColumnList.getInstance().get(TaskColumnList.PROGRESS)))
+			return this.doHighlightProgress(renderer, adapter);
+		
+		if (EqualsUtils.equals(
+				column,
+				TaskColumnList.getInstance().get(TaskColumnList.LENGTH)))
+			return this.doHighlightLength(renderer, adapter);
+		
+		if (EqualsUtils.equals(
+				column,
+				TaskColumnList.getInstance().get(TaskColumnList.TIMER)))
+			return this.doHighlightTimer(renderer, adapter);
+		
+		if (EqualsUtils.equals(
+				column,
+				TaskColumnList.getInstance().get(TaskColumnList.START_DATE)))
+			return this.doHighlightDate(renderer, adapter, column);
+		
+		if (EqualsUtils.equals(
+				column,
+				TaskColumnList.getInstance().get(TaskColumnList.DUE_DATE)))
+			return this.doHighlightDate(renderer, adapter, column);
+		
+		return this.doHighlightString(renderer, adapter, column);
 	}
 	
-	protected Component doHighlightContacts(
+	protected Component doHighlightString(
 			Component renderer,
-			ComponentAdapter adapter) {
+			ComponentAdapter adapter,
+			PropertyAccessor<Task> column) {
 		Object value = adapter.getFilteredValueAt(
 				adapter.row,
-				adapter.getColumnIndex(TaskColumn.MODEL));
+				adapter.getColumnIndex(TaskColumnList.getInstance().get(
+						TaskColumnList.MODEL)));
 		
 		if (value == null || !(value instanceof Task))
 			return renderer;
 		
 		final Task task = (Task) value;
 		
-		if (task.getContacts().size() != 0)
-			((JComponent) renderer).setToolTipText(task.getContacts().toString());
+		String toolTip = column.getPropertyAsString(task);
 		
-		return renderer;
-	}
-	
-	protected Component doHighlightTasks(
-			Component renderer,
-			ComponentAdapter adapter) {
-		Object value = adapter.getFilteredValueAt(
-				adapter.row,
-				adapter.getColumnIndex(TaskColumn.MODEL));
-		
-		if (value == null || !(value instanceof Task))
-			return renderer;
-		
-		final Task task = (Task) value;
-		
-		if (task.getTasks().size() != 0)
-			((JComponent) renderer).setToolTipText(task.getTasks().toString());
-		
-		return renderer;
-	}
-	
-	protected Component doHighlightFiles(
-			Component renderer,
-			ComponentAdapter adapter) {
-		Object value = adapter.getFilteredValueAt(
-				adapter.row,
-				adapter.getColumnIndex(TaskColumn.MODEL));
-		
-		if (value == null || !(value instanceof Task))
-			return renderer;
-		
-		final Task task = (Task) value;
-		
-		if (task.getFiles().size() != 0)
-			((JComponent) renderer).setToolTipText(task.getFiles().toString());
+		if (toolTip != null && toolTip.trim().length() != 0)
+			((JComponent) renderer).setToolTipText(toolTip.trim());
 		
 		return renderer;
 	}
@@ -143,7 +117,8 @@ public class TaskTooltipHighlighter extends ToolTipHighlighter {
 			ComponentAdapter adapter) {
 		Object value = adapter.getFilteredValueAt(
 				adapter.row,
-				adapter.getColumnIndex(TaskColumn.MODEL));
+				adapter.getColumnIndex(TaskColumnList.getInstance().get(
+						TaskColumnList.MODEL)));
 		
 		if (value == null || !(value instanceof Task))
 			return renderer;
@@ -169,12 +144,12 @@ public class TaskTooltipHighlighter extends ToolTipHighlighter {
 		if (nbChildren > 0)
 			tooltip = String.format(
 					"%1s (%2s: %3s)",
-					StringValueTaskProgress.INSTANCE.getString(task.getProgress()),
+					StringValuePercentage.INSTANCE.getString(task.getProgress()),
 					Translations.getString("general.subtasks"),
-					StringValueTaskProgress.INSTANCE.getString(progress
+					StringValuePercentage.INSTANCE.getString(progress
 							/ nbChildren));
 		else
-			tooltip = StringValueTaskProgress.INSTANCE.getString(task.getProgress());
+			tooltip = StringValuePercentage.INSTANCE.getString(task.getProgress());
 		
 		((JComponent) renderer).setToolTipText(tooltip);
 		
@@ -186,7 +161,8 @@ public class TaskTooltipHighlighter extends ToolTipHighlighter {
 			ComponentAdapter adapter) {
 		Object value = adapter.getFilteredValueAt(
 				adapter.row,
-				adapter.getColumnIndex(TaskColumn.MODEL));
+				adapter.getColumnIndex(TaskColumnList.getInstance().get(
+						TaskColumnList.MODEL)));
 		
 		if (value == null || !(value instanceof Task))
 			return renderer;
@@ -211,11 +187,11 @@ public class TaskTooltipHighlighter extends ToolTipHighlighter {
 		if (atLeastOneChild)
 			tooltip = String.format(
 					"%1s (%2s: %3s)",
-					StringValueTaskLength.INSTANCE.getString(task.getLength()),
+					StringValueTime.INSTANCE.getString(task.getLength()),
 					Translations.getString("general.total"),
-					StringValueTaskLength.INSTANCE.getString(length));
+					StringValueTime.INSTANCE.getString(length));
 		else
-			tooltip = StringValueTaskLength.INSTANCE.getString(task.getLength());
+			tooltip = StringValueTime.INSTANCE.getString(task.getLength());
 		
 		((JComponent) renderer).setToolTipText(tooltip);
 		
@@ -227,7 +203,8 @@ public class TaskTooltipHighlighter extends ToolTipHighlighter {
 			ComponentAdapter adapter) {
 		Object value = adapter.getFilteredValueAt(
 				adapter.row,
-				adapter.getColumnIndex(TaskColumn.MODEL));
+				adapter.getColumnIndex(TaskColumnList.getInstance().get(
+						TaskColumnList.MODEL)));
 		
 		if (value == null || !(value instanceof Task))
 			return renderer;
@@ -266,22 +243,23 @@ public class TaskTooltipHighlighter extends ToolTipHighlighter {
 	protected Component doHighlightDate(
 			Component renderer,
 			ComponentAdapter adapter,
-			TaskColumn column) {
+			PropertyAccessor<Task> column) {
 		Object value = adapter.getFilteredValueAt(
 				adapter.row,
-				adapter.convertColumnIndexToModel(adapter.column));
+				adapter.getColumnIndex(TaskColumnList.getInstance().get(
+						TaskColumnList.MODEL)));
+		
+		if (value == null || !(value instanceof Task))
+			return renderer;
+		
+		final Task task = (Task) value;
+		
+		value = column.getProperty(task);
+		
 		if (value == null || !(value instanceof Calendar))
 			return renderer;
 		
-		String toolTip = StringValueCalendar.INSTANCE_DATE_TIME.getString(value);
-		
-		if (column == TaskColumn.START_DATE)
-			if (!Main.getSettings().getBooleanProperty("date.use_start_time"))
-				toolTip = StringValueCalendar.INSTANCE_DATE.getString(value);
-		
-		if (column == TaskColumn.DUE_DATE)
-			if (!Main.getSettings().getBooleanProperty("date.use_due_time"))
-				toolTip = StringValueCalendar.INSTANCE_DATE.getString(value);
+		String toolTip = column.getPropertyAsString(task);
 		
 		toolTip = String.format("%1s (%2s)", toolTip, Translations.getString(
 				"date.x_days",
