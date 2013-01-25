@@ -42,6 +42,10 @@ public class PropertyAccessorList<T> {
 	private String noteAccessorName;
 	private List<PropertyAccessor<T>> list;
 	
+	public PropertyAccessorList() {
+		this(null);
+	}
+	
 	public PropertyAccessorList(String noteAccessorName) {
 		this.noteAccessorName = noteAccessorName;
 		this.list = new ArrayList<PropertyAccessor<T>>();
