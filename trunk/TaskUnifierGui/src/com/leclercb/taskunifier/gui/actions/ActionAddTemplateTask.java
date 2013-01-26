@@ -45,7 +45,6 @@ import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
 import com.leclercb.taskunifier.gui.main.frames.ShortcutKey;
-import com.leclercb.taskunifier.gui.properties.ShortcutKeyCoder;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class ActionAddTemplateTask extends AbstractViewAction implements PropertyChangeListener {
@@ -85,7 +84,6 @@ public class ActionAddTemplateTask extends AbstractViewAction implements Propert
 		
 		this.putValue(SHORT_DESCRIPTION, template.getTitle());
 		
-		template.getProperties().addCoder(new ShortcutKeyCoder());
 		ShortcutKey shortcutKey = template.getProperties().getObjectProperty(
 				"shortcut",
 				ShortcutKey.class);
@@ -138,7 +136,6 @@ public class ActionAddTemplateTask extends AbstractViewAction implements Propert
 		}
 		
 		if (EqualsUtils.equals("shortcut", evt.getPropertyName())) {
-			this.template.getProperties().addCoder(new ShortcutKeyCoder());
 			ShortcutKey shortcutKey = this.template.getProperties().getObjectProperty(
 					"shortcut",
 					ShortcutKey.class);

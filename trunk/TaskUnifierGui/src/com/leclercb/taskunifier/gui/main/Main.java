@@ -66,7 +66,6 @@ import com.leclercb.taskunifier.api.models.GoalFactory;
 import com.leclercb.taskunifier.api.models.LocationFactory;
 import com.leclercb.taskunifier.api.models.NoteFactory;
 import com.leclercb.taskunifier.api.models.TaskFactory;
-import com.leclercb.taskunifier.api.properties.ModelIdCoder;
 import com.leclercb.taskunifier.gui.actions.ActionImportComFile;
 import com.leclercb.taskunifier.gui.actions.ActionQuit;
 import com.leclercb.taskunifier.gui.api.models.GuiContact;
@@ -95,7 +94,6 @@ import com.leclercb.taskunifier.gui.main.main.MainLoadLoggers;
 import com.leclercb.taskunifier.gui.main.main.MainSaveFiles;
 import com.leclercb.taskunifier.gui.main.main.MainSplashScreen;
 import com.leclercb.taskunifier.gui.main.main.MainSwingRunnable;
-import com.leclercb.taskunifier.gui.properties.ShortcutKeyCoder;
 import com.leclercb.taskunifier.gui.resources.Resources;
 import com.leclercb.taskunifier.gui.settings.SettingsVersion;
 import com.leclercb.taskunifier.gui.settings.UserSettingsVersion;
@@ -396,18 +394,12 @@ public class Main {
 				new SortedProperties(defaultProperties),
 				defaultProperties);
 		
-		SETTINGS.addCoder(new ModelIdCoder());
-		SETTINGS.addCoder(new ShortcutKeyCoder());
-		
 		defaultProperties = new SortedProperties();
 		defaultProperties.load(Resources.class.getResourceAsStream("default_user_settings.properties"));
 		
 		USER_SETTINGS = new PropertyMap(
 				new SortedProperties(defaultProperties),
 				defaultProperties);
-		
-		USER_SETTINGS.addCoder(new ModelIdCoder());
-		USER_SETTINGS.addCoder(new ShortcutKeyCoder());
 		
 		PREVIOUS_VERSION = Constants.VERSION;
 		VERSION_UPDATED = false;

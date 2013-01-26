@@ -77,6 +77,35 @@ import com.leclercb.commons.api.utils.CheckUtils;
 
 public class PropertyMap extends Properties implements PropertyChangeSupported, SavePropertiesSupported, ReloadPropertiesSupported {
 	
+	private static transient Map<Class<?>, PropertiesCoder<?>> DEFAULT_CODERS;
+	
+	static {
+		DEFAULT_CODERS = new HashMap<Class<?>, PropertiesCoder<?>>();
+		
+		addDefaultCoder(new BooleanCoder());
+		addDefaultCoder(new ByteCoder());
+		addDefaultCoder(new CalendarCoder());
+		addDefaultCoder(new ColorCoder());
+		addDefaultCoder(new DoubleCoder());
+		addDefaultCoder(new FloatCoder());
+		addDefaultCoder(new IntegerCoder());
+		addDefaultCoder(new LocaleCoder());
+		addDefaultCoder(new LongCoder());
+		addDefaultCoder(new SimpleDateFormatCoder());
+		addDefaultCoder(new StringCoder());
+	}
+	
+	public static <T> void addDefaultCoder(PropertiesCoder<T> coder) {
+		DEFAULT_CODERS.put(coder.getCoderClass(), coder);
+	}
+	
+	public static <T> PropertiesCoder<T> removeDefaultCoder(Class<T> cls) {
+		@SuppressWarnings("unchecked")
+		PropertiesCoder<T> coder = (PropertiesCoder<T>) DEFAULT_CODERS.remove(cls);
+		
+		return coder;
+	}
+	
 	private transient PropertyChangeSupport propertyChangeSupport;
 	private transient SavePropertiesSupport savePropertiesSupport;
 	private transient ReloadPropertiesSupport reloadPropertiesSupport;
@@ -110,17 +139,6 @@ public class PropertyMap extends Properties implements PropertyChangeSupported, 
 		this.exceptionProperties = exceptionProperties;
 		
 		this.coders = new HashMap<Class<?>, PropertiesCoder<?>>();
-		this.addCoder(new BooleanCoder());
-		this.addCoder(new ByteCoder());
-		this.addCoder(new CalendarCoder());
-		this.addCoder(new ColorCoder());
-		this.addCoder(new DoubleCoder());
-		this.addCoder(new FloatCoder());
-		this.addCoder(new IntegerCoder());
-		this.addCoder(new LocaleCoder());
-		this.addCoder(new LongCoder());
-		this.addCoder(new SimpleDateFormatCoder());
-		this.addCoder(new StringCoder());
 	}
 	
 	public void replaceKey(String oldKey, String newKey) {
@@ -430,6 +448,7 @@ public class PropertyMap extends Properties implements PropertyChangeSupported, 
 		return this.setObjectProperty(key, cls, value, false);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public <T> Object setObjectProperty(
 			String key,
 			Class<T> cls,
@@ -438,8 +457,10 @@ public class PropertyMap extends Properties implements PropertyChangeSupported, 
 		Object oldValue = this.getObjectProperty(key, cls);
 		
 		try {
-			@SuppressWarnings("unchecked")
 			PropertiesCoder<T> coder = (PropertiesCoder<T>) this.coders.get(cls);
+			
+			if (coder == null)
+				coder = (PropertiesCoder<T>) DEFAULT_CODERS.get(cls);
 			
 			if (coder == null)
 				throw new PropertiesException("No coder found for class: "
