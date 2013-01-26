@@ -30,31 +30,32 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.timevalueedit;
+package com.leclercb.taskunifier.gui.components.propertyaccessoredit;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import org.jdesktop.swingx.renderer.DefaultListRenderer;
 
 import com.leclercb.commons.api.event.action.ActionSupport;
 import com.leclercb.commons.api.event.action.ActionSupported;
-import com.leclercb.commons.gui.utils.FormatterUtils;
-import com.leclercb.taskunifier.gui.commons.values.StringValueCalendarField;
+import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
+import com.leclercb.taskunifier.gui.commons.values.StringValuePropertyAccessorType;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
-import com.leclercb.taskunifier.gui.utils.TimeValue;
+import com.leclercb.taskunifier.gui.utils.TaskCustomColumnList;
 
-public class EditTimeValuePanel extends JPanel implements ActionSupported {
+public class EditTaskPropertyAccessorPanel extends JPanel implements ActionSupported {
 	
 	public static final String ACTION_OK = "ACTION_OK";
 	public static final String ACTION_CANCEL = "ACTION_CANCEL";
@@ -64,12 +65,12 @@ public class EditTimeValuePanel extends JPanel implements ActionSupported {
 	private JButton okButton;
 	private JButton cancelButton;
 	
-	private TimeValue timeValue;
+	private PropertyAccessor<Task> accessor;
 	
-	private JComboBox fieldField;
-	private JFormattedTextField amountField;
+	private JComboBox typeField;
+	private JTextField labelField;
 	
-	public EditTimeValuePanel() {
+	public EditTaskPropertyAccessorPanel() {
 		this.actionSupport = new ActionSupport(this);
 		
 		this.initialize();
@@ -81,22 +82,21 @@ public class EditTimeValuePanel extends JPanel implements ActionSupported {
 		FormBuilder builder = new FormBuilder(
 				"right:pref, 4dlu, fill:default:grow");
 		
-		this.fieldField = new JComboBox(new Integer[] {
-				Calendar.MINUTE,
-				Calendar.HOUR_OF_DAY,
-				Calendar.DAY_OF_MONTH,
-				Calendar.WEEK_OF_YEAR,
-				Calendar.MONTH,
-				Calendar.YEAR });
+		this.typeField = new JComboBox(PropertyAccessorType.values());
 		
-		this.fieldField.setRenderer(new DefaultListRenderer(
-				StringValueCalendarField.INSTANCE));
+		this.typeField.setRenderer(new DefaultListRenderer(
+				StringValuePropertyAccessorType.INSTANCE));
 		
-		this.amountField = new JFormattedTextField(
-				FormatterUtils.getRegexFormatter("^[0-9]{1,4}$"));
+		this.labelField = new JTextField();
 		
-		builder.appendI15d("general.timevalue.field", true, this.fieldField);
-		builder.appendI15d("general.timevalue.amount", true, this.amountField);
+		builder.appendI15d(
+				"general.propertyaccessor.type",
+				true,
+				this.typeField);
+		builder.appendI15d(
+				"general.propertyaccessor.label",
+				true,
+				this.labelField);
 		
 		this.add(builder.getPanel(), BorderLayout.CENTER);
 		
@@ -109,9 +109,9 @@ public class EditTimeValuePanel extends JPanel implements ActionSupported {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				if (event.getActionCommand().equals("OK")) {
-					EditTimeValuePanel.this.actionOk();
+					EditTaskPropertyAccessorPanel.this.actionOk();
 				} else {
-					EditTimeValuePanel.this.actionCancel();
+					EditTaskPropertyAccessorPanel.this.actionCancel();
 				}
 			}
 			
@@ -126,9 +126,15 @@ public class EditTimeValuePanel extends JPanel implements ActionSupported {
 	}
 	
 	public void actionOk() {
-		if (this.timeValue != null) {
-			this.timeValue.setField((Integer) this.fieldField.getSelectedItem());
-			this.timeValue.setAmount(Integer.parseInt(this.amountField.getValue().toString()));
+		PropertyAccessorType type = (PropertyAccessorType) this.typeField.getSelectedItem();
+		String label = this.labelField.getText();
+		
+		if (this.accessor == null) {
+			TaskCustomColumnList.getInstance().addColumn(type, label);
+		} else {
+			TaskCustomColumnList.getInstance().renameColumn(
+					this.accessor,
+					label);
 		}
 		
 		this.actionSupport.fireActionPerformed(0, ACTION_OK);
@@ -146,20 +152,21 @@ public class EditTimeValuePanel extends JPanel implements ActionSupported {
 		return this.cancelButton;
 	}
 	
-	public TimeValue getTimeValue() {
-		return this.timeValue;
+	public PropertyAccessor<Task> getPropertyAccessor() {
+		return this.accessor;
 	}
 	
-	public void setTimeValue(TimeValue timeValue) {
-		this.timeValue = timeValue;
+	public void setPropertyAccessor(PropertyAccessor<Task> accessor) {
+		this.accessor = accessor;
 		
-		if (this.timeValue == null) {
-			this.fieldField.setSelectedItem(new Integer(Calendar.MINUTE));
-			this.amountField.setValue("0");
+		if (this.accessor == null) {
+			this.typeField.setEditable(true);
+			this.typeField.setSelectedItem(PropertyAccessorType.STRING);
+			this.labelField.setText(null);
 		} else {
-			this.fieldField.setSelectedItem(new Integer(
-					this.timeValue.getField()));
-			this.amountField.setValue("" + this.timeValue.getAmount());
+			this.typeField.setEditable(false);
+			this.typeField.setSelectedItem(this.accessor.getType());
+			this.labelField.setText(this.accessor.getLabel());
 		}
 	}
 	

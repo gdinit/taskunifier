@@ -33,6 +33,7 @@
 package com.leclercb.taskunifier.gui.components.tasks;
 
 import java.util.Calendar;
+import java.util.List;
 
 import javax.swing.SwingConstants;
 import javax.swing.table.TableCellEditor;
@@ -57,6 +58,7 @@ import com.leclercb.taskunifier.api.models.Timer;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.gui.api.accessor.DefaultPropertyAccessor;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorList;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
 import com.leclercb.taskunifier.gui.api.models.GuiTask;
@@ -78,6 +80,7 @@ import com.leclercb.taskunifier.gui.commons.values.StringValueTaskStatus;
 import com.leclercb.taskunifier.gui.commons.values.StringValueTaskTitle;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
+import com.leclercb.taskunifier.gui.utils.TaskCustomColumnList;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
 public class TaskColumnList extends PropertyAccessorList<Task> {
@@ -1067,6 +1070,12 @@ public class TaskColumnList extends PropertyAccessorList<Task> {
 			}
 			
 		});
+		
+		List<PropertyAccessor<Task>> accessors = TaskCustomColumnList.getInstance().getPropertyAccessors();
+		
+		for (PropertyAccessor<Task> accessor : accessors) {
+			this.add(accessor);
+		}
 	}
 	
 }
