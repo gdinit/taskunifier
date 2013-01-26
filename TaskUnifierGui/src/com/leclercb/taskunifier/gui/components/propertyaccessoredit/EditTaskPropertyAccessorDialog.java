@@ -30,7 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.timevalueedit;
+package com.leclercb.taskunifier.gui.components.propertyaccessoredit;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -41,24 +41,25 @@ import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
 
+import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
-import com.leclercb.taskunifier.gui.utils.TimeValue;
 
-public class EditTimeValueDialog extends JDialog {
+public class EditTaskPropertyAccessorDialog extends JDialog {
 	
-	private static EditTimeValueDialog INSTANCE;
+	private static EditTaskPropertyAccessorDialog INSTANCE;
 	
-	public static EditTimeValueDialog getInstance() {
+	public static EditTaskPropertyAccessorDialog getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new EditTimeValueDialog();
+			INSTANCE = new EditTaskPropertyAccessorDialog();
 		
 		return INSTANCE;
 	}
 	
-	private EditTimeValuePanel editTimeValuePanel;
+	private EditTaskPropertyAccessorPanel editPropertyAccessorPanel;
 	
-	private EditTimeValueDialog() {
+	private EditTaskPropertyAccessorDialog() {
 		this.initialize();
 	}
 	
@@ -73,49 +74,49 @@ public class EditTimeValueDialog extends JDialog {
 	
 	private void initialize() {
 		this.setModal(true);
-		this.setTitle(Translations.getString("general.edit_timevalue_item"));
+		this.setTitle(Translations.getString("general.edit_property_accessor"));
 		this.setSize(400, 150);
 		this.setResizable(false);
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		
-		this.editTimeValuePanel = new EditTimeValuePanel();
-		this.editTimeValuePanel.setBorder(BorderFactory.createEmptyBorder(
+		this.editPropertyAccessorPanel = new EditTaskPropertyAccessorPanel();
+		this.editPropertyAccessorPanel.setBorder(BorderFactory.createEmptyBorder(
 				10,
 				10,
 				0,
 				10));
 		
-		this.add(this.editTimeValuePanel, BorderLayout.CENTER);
+		this.add(this.editPropertyAccessorPanel, BorderLayout.CENTER);
 		
 		this.addWindowListener(new WindowAdapter() {
 			
 			@Override
 			public void windowClosing(WindowEvent e) {
-				EditTimeValueDialog.this.editTimeValuePanel.actionCancel();
+				EditTaskPropertyAccessorDialog.this.editPropertyAccessorPanel.actionCancel();
 			}
 			
 		});
 		
-		this.editTimeValuePanel.addActionListener(new ActionListener() {
+		this.editPropertyAccessorPanel.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				EditTimeValueDialog.this.setVisible(false);
+				EditTaskPropertyAccessorDialog.this.setVisible(false);
 			}
 			
 		});
 		
 		this.getRootPane().setDefaultButton(
-				this.editTimeValuePanel.getOkButton());
+				this.editPropertyAccessorPanel.getOkButton());
 	}
 	
-	public TimeValue getTimeValue() {
-		return this.editTimeValuePanel.getTimeValue();
+	public PropertyAccessor<Task> getPropertyAccessor() {
+		return this.editPropertyAccessorPanel.getPropertyAccessor();
 	}
 	
-	public void setTimeValue(TimeValue timeValue) {
-		this.editTimeValuePanel.setTimeValue(timeValue);
+	public void setPropertyAccessor(PropertyAccessor<Task> accessor) {
+		this.editPropertyAccessorPanel.setPropertyAccessor(accessor);
 	}
 	
 }

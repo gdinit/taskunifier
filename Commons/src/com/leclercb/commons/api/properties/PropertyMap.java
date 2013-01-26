@@ -311,12 +311,15 @@ public class PropertyMap extends Properties implements PropertyChangeSupported, 
 		return this.getObjectProperty(key, Long.class, def);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public <T> T getObjectProperty(String key, Class<T> cls) {
 		String value = this.properties.getProperty(key);
 		
 		try {
-			@SuppressWarnings("unchecked")
 			PropertiesCoder<T> coder = (PropertiesCoder<T>) this.coders.get(cls);
+			
+			if (coder == null)
+				coder = (PropertiesCoder<T>) DEFAULT_CODERS.get(cls);
 			
 			if (coder == null)
 				throw new PropertiesException("No coder found for class: "

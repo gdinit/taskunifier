@@ -42,11 +42,11 @@ import java.util.regex.Pattern;
 import ca.odell.glazedlists.BasicEventList;
 import ca.odell.glazedlists.EventList;
 import ca.odell.glazedlists.GlazedLists;
-import ca.odell.glazedlists.ObservableElementList;
 import ca.odell.glazedlists.event.ListEventListener;
 
 import com.leclercb.commons.api.glazedlists.ListEventSupported;
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
@@ -67,13 +67,8 @@ public final class TaskCustomColumnList implements ListEventSupported<PropertyAc
 	
 	private EventList<PropertyAccessor<Task>> items;
 	
-	@SuppressWarnings("rawtypes")
 	private TaskCustomColumnList() {
-		ObservableElementList.Connector<PropertyAccessor> connector = GlazedLists.beanConnector(PropertyAccessor.class);
-		
-		this.items = new ObservableElementList<PropertyAccessor<Task>>(
-				new BasicEventList<PropertyAccessor<Task>>(),
-				connector);
+		this.items = new BasicEventList<PropertyAccessor<Task>>();
 		
 		this.initialize();
 	}
@@ -83,7 +78,7 @@ public final class TaskCustomColumnList implements ListEventSupported<PropertyAc
 		
 		Set<Object> keys = null;
 		
-		pattern = Pattern.compile("task\\.custom_field\\.([a-z0-9]+)\\.([a-z0-9_]+)");
+		pattern = Pattern.compile("task\\.custom_field\\.([a-z0-9-]+)\\.([a-z0-9_]+)");
 		
 		keys = Main.getSettings().keySet();
 		for (Object key : keys) {
@@ -95,14 +90,15 @@ public final class TaskCustomColumnList implements ListEventSupported<PropertyAc
 				continue;
 			
 			String id = matcher.group(1);
-			PropertyAccessorType type = PropertyAccessorType.valueOf(matcher.group(2));
+			PropertyAccessorType type = PropertyAccessorType.valueOf(matcher.group(
+					2).toUpperCase());
 			
 			PropertyAccessor<Task> accessor = new TaskPropertyAccessor(
 					id,
 					"task.field." + id,
 					type,
 					"task.custom_field." + id + "." + type.name().toLowerCase(),
-					Main.getSettings().getStringProperty(k),
+					Main.getSettings().getStringProperty(k, "Untitled"),
 					true,
 					true,
 					false);
@@ -111,7 +107,7 @@ public final class TaskCustomColumnList implements ListEventSupported<PropertyAc
 				this.items.add(accessor);
 		}
 		
-		pattern = Pattern.compile("custom_field\\.([a-z0-9]+)\\.([a-z0-9_]+)");
+		pattern = Pattern.compile("custom_field\\.([a-z0-9-]+)\\.([a-z0-9_]+)");
 		
 		List<Task> tasks = TaskFactory.getInstance().getList();
 		for (Task task : tasks) {
@@ -125,7 +121,8 @@ public final class TaskCustomColumnList implements ListEventSupported<PropertyAc
 					continue;
 				
 				String id = matcher.group(1);
-				PropertyAccessorType type = PropertyAccessorType.valueOf(matcher.group(2));
+				PropertyAccessorType type = PropertyAccessorType.valueOf(matcher.group(
+						2).toUpperCase());
 				
 				PropertyAccessor<Task> accessor = new TaskPropertyAccessor(
 						id,
@@ -135,7 +132,9 @@ public final class TaskCustomColumnList implements ListEventSupported<PropertyAc
 								+ id
 								+ "."
 								+ type.name().toLowerCase(),
-						Main.getSettings().getStringProperty(k),
+						Main.getSettings().getStringProperty(
+								"task." + k,
+								"Untitled"),
 						true,
 						true,
 						false);
@@ -154,15 +153,15 @@ public final class TaskCustomColumnList implements ListEventSupported<PropertyAc
 		return new ArrayList<PropertyAccessor<Task>>(this.items);
 	}
 	
-	public void addColumn(PropertyAccessorType type, String name) {
+	public void addColumn(PropertyAccessorType type, String label) {
 		CheckUtils.isNotNull(type);
-		CheckUtils.isNotNull(name);
+		CheckUtils.isNotNull(label);
 		
 		String uuid = UUID.randomUUID().toString();
 		
 		Main.getSettings().setStringProperty(
 				"task.custom_field." + uuid + "." + type.name().toLowerCase(),
-				name);
+				label);
 		
 		List<Task> tasks = TaskFactory.getInstance().getList();
 		for (Task task : tasks) {
@@ -176,7 +175,7 @@ public final class TaskCustomColumnList implements ListEventSupported<PropertyAc
 				"task.field." + uuid,
 				type,
 				"task.custom_field." + uuid + "." + type.name().toLowerCase(),
-				name,
+				label,
 				true,
 				true,
 				false);
@@ -184,16 +183,19 @@ public final class TaskCustomColumnList implements ListEventSupported<PropertyAc
 		this.items.add(accessor);
 	}
 	
-	public void renameColumn(PropertyAccessor<Task> accessor, String name) {
+	public void renameColumn(PropertyAccessor<Task> accessor, String label) {
 		CheckUtils.isNotNull(accessor);
-		CheckUtils.isNotNull(name);
+		CheckUtils.isNotNull(label);
+		
+		if (EqualsUtils.equals(accessor.getLabel(), label))
+			return;
 		
 		String uuid = accessor.getId();
 		String type = accessor.getType().name().toLowerCase();
 		
 		Main.getSettings().setStringProperty(
 				"task.custom_field." + uuid + "." + type,
-				name);
+				label);
 		
 		this.items.remove(accessor);
 		
@@ -202,7 +204,7 @@ public final class TaskCustomColumnList implements ListEventSupported<PropertyAc
 				accessor.getFieldSettingsPropertyName(),
 				accessor.getType(),
 				accessor.getPropertyName(),
-				name,
+				label,
 				accessor.isEditable(),
 				accessor.isUsable(),
 				accessor.isSortable());

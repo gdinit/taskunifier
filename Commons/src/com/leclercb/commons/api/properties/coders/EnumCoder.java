@@ -37,20 +37,24 @@ import com.leclercb.commons.api.utils.CheckUtils;
 
 public class EnumCoder<T extends Enum<?>> extends PropertiesCoder<T> {
 	
-	private Class<?> cls;
+	private Class<T> cls;
 	
-	public EnumCoder(Class<?> cls) {
+	public EnumCoder(Class<T> cls) {
 		CheckUtils.isNotNull(cls);
 		this.cls = cls;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@Override
+	public Class<T> getCoderClass() {
+		return this.cls;
+	}
+	
 	@Override
 	public T decode(String value) throws Exception {
 		if (value == null || value.length() == 0)
 			return null;
 		
-		T[] enumConstants = (T[]) this.cls.getEnumConstants();
+		T[] enumConstants = this.cls.getEnumConstants();
 		for (T enumConstant : enumConstants)
 			if (enumConstant.name().equals(value))
 				return enumConstant;

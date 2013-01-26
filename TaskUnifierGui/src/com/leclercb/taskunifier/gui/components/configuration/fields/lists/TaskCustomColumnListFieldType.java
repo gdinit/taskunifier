@@ -54,6 +54,7 @@ import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.commons.comparators.PropertyAccessorComparator;
 import com.leclercb.taskunifier.gui.commons.values.StringValuePropertyAccessor;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
+import com.leclercb.taskunifier.gui.components.propertyaccessoredit.EditTaskPropertyAccessorDialog;
 import com.leclercb.taskunifier.gui.swing.buttons.TUAddButton;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUEditButton;
@@ -117,7 +118,9 @@ public class TaskCustomColumnListFieldType extends ConfigurationFieldType.Panel 
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				
+				EditTaskPropertyAccessorDialog.getInstance().setPropertyAccessor(
+						null);
+				EditTaskPropertyAccessorDialog.getInstance().setVisible(true);
 			}
 			
 		});
@@ -131,6 +134,9 @@ public class TaskCustomColumnListFieldType extends ConfigurationFieldType.Panel 
 					return;
 				
 				PropertyAccessor<Task> item = (PropertyAccessor<Task>) TaskCustomColumnListFieldType.this.list.getSelectedValue();
+				EditTaskPropertyAccessorDialog.getInstance().setPropertyAccessor(
+						item);
+				EditTaskPropertyAccessorDialog.getInstance().setVisible(true);
 			}
 			
 		});

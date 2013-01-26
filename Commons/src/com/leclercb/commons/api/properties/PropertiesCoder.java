@@ -36,15 +36,19 @@ import java.lang.reflect.ParameterizedType;
 
 public abstract class PropertiesCoder<T> {
 	
-	private final Class<T> type;
+	private Class<T> type;
 	
-	@SuppressWarnings("unchecked")
 	public PropertiesCoder() {
-		ParameterizedType superclass = (ParameterizedType) this.getClass().getGenericSuperclass();
-		this.type = (Class<T>) (superclass).getActualTypeArguments()[0];
+		
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Class<T> getCoderClass() {
+		if (this.type == null) {
+			ParameterizedType superclass = (ParameterizedType) this.getClass().getGenericSuperclass();
+			this.type = (Class<T>) (superclass).getActualTypeArguments()[0];
+		}
+		
 		return this.type;
 	}
 	
