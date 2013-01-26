@@ -58,9 +58,9 @@ public class PropertyAccessorList<T> {
 		this.list.add(accessor);
 	}
 	
-	public PropertyAccessor<T> get(String name) {
+	public PropertyAccessor<T> get(String id) {
 		for (PropertyAccessor<T> accessor : this.list) {
-			if (EqualsUtils.equals(accessor.getName(), name))
+			if (EqualsUtils.equals(accessor.getId(), id))
 				return accessor;
 		}
 		

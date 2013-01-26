@@ -70,12 +70,12 @@ public class ThemeNoteColumnsConfigurationPanel extends DefaultConfigurationPane
 		
 		for (PropertyAccessor<Note> column : columns) {
 			this.addField(new ConfigurationField(
-					column.getName(),
+					column.getId(),
 					null,
 					new ConfigurationFieldType.CheckBox(
 							Main.getSettings(),
 							"note.column."
-									+ column.getName().toLowerCase()
+									+ column.getId().toLowerCase()
 									+ ".visible",
 							column.getLabel())));
 		}

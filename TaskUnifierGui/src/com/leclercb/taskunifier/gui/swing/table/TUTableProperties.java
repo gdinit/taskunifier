@@ -178,7 +178,7 @@ public class TUTableProperties<T> implements PropertyChangeListener {
 		public String getOrderPropertyName() {
 			return this.tableProperties.getPropertyName()
 					+ ".column."
-					+ this.column.getName().toLowerCase()
+					+ this.column.getId().toLowerCase()
 					+ ".order";
 		}
 		
@@ -208,7 +208,7 @@ public class TUTableProperties<T> implements PropertyChangeListener {
 		public String getWidthPropertyName() {
 			return this.tableProperties.getPropertyName()
 					+ ".column."
-					+ this.column.getName().toLowerCase()
+					+ this.column.getId().toLowerCase()
 					+ ".width";
 		}
 		
@@ -238,7 +238,7 @@ public class TUTableProperties<T> implements PropertyChangeListener {
 		public String getVisiblePropertyName() {
 			return this.tableProperties.getPropertyName()
 					+ ".column."
-					+ this.column.getName().toLowerCase()
+					+ this.column.getId().toLowerCase()
 					+ ".visible";
 		}
 		

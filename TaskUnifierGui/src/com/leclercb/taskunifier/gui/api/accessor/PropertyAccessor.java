@@ -41,7 +41,7 @@ public interface PropertyAccessor<T> {
 	
 	public static final String PROP_USED = "used";
 	
-	public abstract String getName();
+	public abstract String getId();
 	
 	public abstract String getLabel();
 	
