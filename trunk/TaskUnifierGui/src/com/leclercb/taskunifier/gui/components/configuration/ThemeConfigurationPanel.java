@@ -47,6 +47,7 @@ public class ThemeConfigurationPanel extends ConfigurationPanel {
 	private JTabbedPane tabbedPane;
 	
 	private ConfigurationPanel generalConfigurationPanel;
+	private ConfigurationPanel taskCustomColumnListConfigurationPanel;
 	private ConfigurationPanel noteColumnsConfigurationPanel;
 	private ConfigurationPanel taskColumnsConfigurationPanel;
 	private ConfigurationPanel noteFieldsConfigurationPanel;
@@ -68,6 +69,7 @@ public class ThemeConfigurationPanel extends ConfigurationPanel {
 		this.add(this.tabbedPane, BorderLayout.CENTER);
 		
 		this.initializeGeneralPanel();
+		this.initializeTaskCustomColumnListPanel();
 		this.initializeNoteColumnsPanel();
 		this.initializeTaskColumnsPanel();
 		this.initializeNoteFieldsPanel();
@@ -83,6 +85,16 @@ public class ThemeConfigurationPanel extends ConfigurationPanel {
 				Translations.getString("configuration.tab.general"),
 				ComponentFactory.createJScrollPane(
 						this.generalConfigurationPanel,
+						false));
+	}
+	
+	private void initializeTaskCustomColumnListPanel() {
+		this.taskCustomColumnListConfigurationPanel = new TaskCustomColumnListConfigurationPanel(
+				this);
+		this.tabbedPane.addTab(
+				Translations.getString("configuration.tab.task_custom_column_list"),
+				ComponentFactory.createJScrollPane(
+						this.taskCustomColumnListConfigurationPanel,
 						false));
 	}
 	
@@ -149,6 +161,7 @@ public class ThemeConfigurationPanel extends ConfigurationPanel {
 	@Override
 	public void saveAndApplyConfig() {
 		this.generalConfigurationPanel.saveAndApplyConfig();
+		this.taskCustomColumnListConfigurationPanel.saveAndApplyConfig();
 		this.noteColumnsConfigurationPanel.saveAndApplyConfig();
 		this.taskColumnsConfigurationPanel.saveAndApplyConfig();
 		this.noteFieldsConfigurationPanel.saveAndApplyConfig();
@@ -160,6 +173,7 @@ public class ThemeConfigurationPanel extends ConfigurationPanel {
 	@Override
 	public void cancelConfig() {
 		this.generalConfigurationPanel.cancelConfig();
+		this.taskCustomColumnListConfigurationPanel.cancelConfig();
 		this.noteColumnsConfigurationPanel.cancelConfig();
 		this.taskColumnsConfigurationPanel.cancelConfig();
 		this.noteFieldsConfigurationPanel.cancelConfig();
