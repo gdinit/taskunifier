@@ -32,21 +32,28 @@
  */
 package com.leclercb.commons.api.properties.coders;
 
+import java.util.Locale;
+
 import com.leclercb.commons.api.properties.PropertiesCoder;
 
-public class BooleanCoder extends PropertiesCoder<Boolean> {
+public class LocaleCoder extends PropertiesCoder<Locale> {
 	
 	@Override
-	public Boolean decode(String value) throws Exception {
+	public Locale decode(String value) throws Exception {
 		if (value == null || value.length() == 0)
 			return null;
 		
-		return Boolean.parseBoolean(value);
+		String[] values = value.split("_");
+		
+		if (values.length == 1)
+			return new Locale(values[0]);
+		else
+			return new Locale(values[0], values[1]);
 	}
 	
 	@Override
-	public String encode(Boolean value) throws Exception {
-		return (value == null ? "" : value + "");
+	public String encode(Locale value) throws Exception {
+		return (value == null ? "" : (value.getLanguage() + "_" + value.getCountry()));
 	}
 	
 }

@@ -32,21 +32,24 @@
  */
 package com.leclercb.commons.api.properties.coders;
 
+import java.awt.Color;
+
 import com.leclercb.commons.api.properties.PropertiesCoder;
 
-public class BooleanCoder extends PropertiesCoder<Boolean> {
+public class ColorCoder extends PropertiesCoder<Color> {
 	
 	@Override
-	public Boolean decode(String value) throws Exception {
+	public Color decode(String value) throws Exception {
 		if (value == null || value.length() == 0)
 			return null;
 		
-		return Boolean.parseBoolean(value);
+		Integer color = Integer.parseInt(value);
+		return new Color(color);
 	}
 	
 	@Override
-	public String encode(Boolean value) throws Exception {
-		return (value == null ? "" : value + "");
+	public String encode(Color value) throws Exception {
+		return (value == null ? "" : value.getRGB() + "");
 	}
 	
 }

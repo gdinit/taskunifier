@@ -34,18 +34,18 @@ package com.leclercb.commons.api.properties.coders;
 
 import com.leclercb.commons.api.properties.PropertiesCoder;
 
-public class BooleanCoder extends PropertiesCoder<Boolean> {
+public class FloatCoder extends PropertiesCoder<Float> {
 	
 	@Override
-	public Boolean decode(String value) throws Exception {
+	public Float decode(String value) throws Exception {
 		if (value == null || value.length() == 0)
 			return null;
 		
-		return Boolean.parseBoolean(value);
+		return Float.parseFloat(value);
 	}
 	
 	@Override
-	public String encode(Boolean value) throws Exception {
+	public String encode(Float value) throws Exception {
 		return (value == null ? "" : value + "");
 	}
 	

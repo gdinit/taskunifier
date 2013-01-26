@@ -55,6 +55,17 @@ import java.util.Set;
 
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupport;
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
+import com.leclercb.commons.api.properties.coders.BooleanCoder;
+import com.leclercb.commons.api.properties.coders.ByteCoder;
+import com.leclercb.commons.api.properties.coders.CalendarCoder;
+import com.leclercb.commons.api.properties.coders.ColorCoder;
+import com.leclercb.commons.api.properties.coders.DoubleCoder;
+import com.leclercb.commons.api.properties.coders.FloatCoder;
+import com.leclercb.commons.api.properties.coders.IntegerCoder;
+import com.leclercb.commons.api.properties.coders.LocaleCoder;
+import com.leclercb.commons.api.properties.coders.LongCoder;
+import com.leclercb.commons.api.properties.coders.SimpleDateFormatCoder;
+import com.leclercb.commons.api.properties.coders.StringCoder;
 import com.leclercb.commons.api.properties.events.ReloadPropertiesListener;
 import com.leclercb.commons.api.properties.events.ReloadPropertiesSupport;
 import com.leclercb.commons.api.properties.events.ReloadPropertiesSupported;
@@ -99,6 +110,17 @@ public class PropertyMap extends Properties implements PropertyChangeSupported, 
 		this.exceptionProperties = exceptionProperties;
 		
 		this.coders = new HashMap<Class<?>, PropertiesCoder<?>>();
+		this.addCoder(new BooleanCoder());
+		this.addCoder(new ByteCoder());
+		this.addCoder(new CalendarCoder());
+		this.addCoder(new ColorCoder());
+		this.addCoder(new DoubleCoder());
+		this.addCoder(new FloatCoder());
+		this.addCoder(new IntegerCoder());
+		this.addCoder(new LocaleCoder());
+		this.addCoder(new LongCoder());
+		this.addCoder(new SimpleDateFormatCoder());
+		this.addCoder(new StringCoder());
 	}
 	
 	public void replaceKey(String oldKey, String newKey) {
@@ -167,151 +189,43 @@ public class PropertyMap extends Properties implements PropertyChangeSupported, 
 	}
 	
 	public Boolean getBooleanProperty(String key) {
-		String value = this.properties.getProperty(key);
-		
-		if (value == null || value.length() == 0)
-			return null;
-		
-		try {
-			return Boolean.parseBoolean(value);
-		} catch (Exception e) {
-			if (this.exceptionProperties != null)
-				return this.exceptionProperties.getBooleanProperty(key);
-			
-			throw new PropertiesException(
-					this.getExceptionMessage(key, value),
-					e);
-		}
+		return this.getObjectProperty(key, Boolean.class);
 	}
 	
 	public Boolean getBooleanProperty(String key, Boolean def) {
-		try {
-			Boolean value = this.getBooleanProperty(key);
-			
-			if (value == null)
-				return def;
-			
-			return value;
-		} catch (PropertiesException e) {
-			return def;
-		}
+		return this.getObjectProperty(key, Boolean.class, def);
 	}
 	
 	public Byte getByteProperty(String key) {
-		String value = this.properties.getProperty(key);
-		
-		if (value == null || value.length() == 0)
-			return null;
-		
-		try {
-			return Byte.parseByte(value);
-		} catch (Exception e) {
-			if (this.exceptionProperties != null)
-				return this.exceptionProperties.getByteProperty(key);
-			
-			throw new PropertiesException(
-					this.getExceptionMessage(key, value),
-					e);
-		}
+		return this.getObjectProperty(key, Byte.class);
 	}
 	
 	public Byte getByteProperty(String key, Byte def) {
-		try {
-			Byte value = this.getByteProperty(key);
-			
-			if (value == null)
-				return def;
-			
-			return value;
-		} catch (PropertiesException e) {
-			return def;
-		}
+		return this.getObjectProperty(key, Byte.class, def);
 	}
 	
 	public Calendar getCalendarProperty(String key) {
-		Long value = this.getLongProperty(key);
-		
-		if (value == null)
-			return null;
-		
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(value);
-		
-		return calendar;
+		return this.getObjectProperty(key, Calendar.class);
 	}
 	
 	public Calendar getCalendarProperty(String key, Calendar def) {
-		try {
-			Calendar value = this.getCalendarProperty(key);
-			
-			if (value == null)
-				return def;
-			
-			return value;
-		} catch (PropertiesException e) {
-			return def;
-		}
+		return this.getObjectProperty(key, Calendar.class, def);
 	}
 	
 	public Color getColorProperty(String key) {
-		Integer value = this.getIntegerProperty(key);
-		
-		if (value == null)
-			return null;
-		
-		try {
-			return new Color(value);
-		} catch (Exception e) {
-			if (this.exceptionProperties != null)
-				return this.exceptionProperties.getColorProperty(key);
-			
-			throw new PropertiesException(this.getExceptionMessage(key, value
-					+ ""), e);
-		}
+		return this.getObjectProperty(key, Color.class);
 	}
 	
 	public Color getColorProperty(String key, Color def) {
-		try {
-			Color value = this.getColorProperty(key);
-			
-			if (value == null)
-				return def;
-			
-			return value;
-		} catch (PropertiesException e) {
-			return def;
-		}
+		return this.getObjectProperty(key, Color.class, def);
 	}
 	
 	public Double getDoubleProperty(String key) {
-		String value = this.properties.getProperty(key);
-		
-		if (value == null || value.length() == 0)
-			return null;
-		
-		try {
-			return Double.parseDouble(value);
-		} catch (Exception e) {
-			if (this.exceptionProperties != null)
-				return this.exceptionProperties.getDoubleProperty(key);
-			
-			throw new PropertiesException(
-					this.getExceptionMessage(key, value),
-					e);
-		}
+		return this.getObjectProperty(key, Double.class);
 	}
 	
 	public Double getDoubleProperty(String key, Double def) {
-		try {
-			Double value = this.getDoubleProperty(key);
-			
-			if (value == null)
-				return def;
-			
-			return value;
-		} catch (PropertiesException e) {
-			return def;
-		}
+		return this.getObjectProperty(key, Double.class, def);
 	}
 	
 	public <T extends Enum<?>> T getEnumProperty(String key, Class<T> enumClass) {
@@ -348,132 +262,35 @@ public class PropertyMap extends Properties implements PropertyChangeSupported, 
 	}
 	
 	public Float getFloatProperty(String key) {
-		String value = this.properties.getProperty(key);
-		
-		if (value == null || value.length() == 0)
-			return null;
-		
-		try {
-			return Float.parseFloat(value);
-		} catch (Exception e) {
-			if (this.exceptionProperties != null)
-				return this.exceptionProperties.getFloatProperty(key);
-			
-			throw new PropertiesException(
-					this.getExceptionMessage(key, value),
-					e);
-		}
+		return this.getObjectProperty(key, Float.class);
 	}
 	
 	public Float getFloatProperty(String key, Float def) {
-		try {
-			Float value = this.getFloatProperty(key);
-			
-			if (value == null)
-				return def;
-			
-			return value;
-		} catch (PropertiesException e) {
-			return def;
-		}
+		return this.getObjectProperty(key, Float.class, def);
 	}
 	
 	public Integer getIntegerProperty(String key) {
-		String value = this.properties.getProperty(key);
-		
-		if (value == null || value.length() == 0)
-			return null;
-		
-		try {
-			return Integer.parseInt(value);
-		} catch (Exception e) {
-			if (this.exceptionProperties != null)
-				return this.exceptionProperties.getIntegerProperty(key);
-			
-			throw new PropertiesException(
-					this.getExceptionMessage(key, value),
-					e);
-		}
+		return this.getObjectProperty(key, Integer.class);
 	}
 	
 	public Integer getIntegerProperty(String key, Integer def) {
-		try {
-			Integer value = this.getIntegerProperty(key);
-			
-			if (value == null)
-				return def;
-			
-			return value;
-		} catch (PropertiesException e) {
-			return def;
-		}
+		return this.getObjectProperty(key, Integer.class, def);
 	}
 	
 	public Locale getLocaleProperty(String key) {
-		String value = this.properties.getProperty(key);
-		
-		if (value == null || value.length() == 0)
-			return null;
-		
-		try {
-			String[] values = value.split("_");
-			
-			if (values.length == 1)
-				return new Locale(values[0]);
-			else
-				return new Locale(values[0], values[1]);
-		} catch (Exception e) {
-			if (this.exceptionProperties != null)
-				return this.exceptionProperties.getLocaleProperty(key);
-			
-			throw new PropertiesException(
-					this.getExceptionMessage(key, value),
-					e);
-		}
+		return this.getObjectProperty(key, Locale.class);
 	}
 	
 	public Locale getLocaleProperty(String key, Locale def) {
-		try {
-			Locale value = this.getLocaleProperty(key);
-			
-			if (value == null)
-				return def;
-			
-			return value;
-		} catch (PropertiesException e) {
-			return def;
-		}
+		return this.getObjectProperty(key, Locale.class, def);
 	}
 	
 	public Long getLongProperty(String key) {
-		String value = this.properties.getProperty(key);
-		
-		if (value == null || value.length() == 0)
-			return null;
-		
-		try {
-			return Long.parseLong(value);
-		} catch (Exception e) {
-			if (this.exceptionProperties != null)
-				return this.exceptionProperties.getLongProperty(key);
-			
-			throw new PropertiesException(
-					this.getExceptionMessage(key, value),
-					e);
-		}
+		return this.getObjectProperty(key, Long.class);
 	}
 	
 	public Long getLongProperty(String key, Long def) {
-		try {
-			Long value = this.getLongProperty(key);
-			
-			if (value == null)
-				return def;
-			
-			return value;
-		} catch (PropertiesException e) {
-			return def;
-		}
+		return this.getObjectProperty(key, Long.class, def);
 	}
 	
 	public <T> T getObjectProperty(String key, Class<T> cls) {
@@ -512,58 +329,21 @@ public class PropertyMap extends Properties implements PropertyChangeSupported, 
 	}
 	
 	public SimpleDateFormat getSimpleDateFormatProperty(String key) {
-		String value = this.properties.getProperty(key);
-		
-		if (value == null || value.length() == 0)
-			return null;
-		
-		try {
-			return new SimpleDateFormat(value);
-		} catch (Exception e) {
-			if (this.exceptionProperties != null)
-				return this.exceptionProperties.getSimpleDateFormatProperty(key);
-			
-			throw new PropertiesException(
-					this.getExceptionMessage(key, value),
-					e);
-		}
+		return this.getObjectProperty(key, SimpleDateFormat.class);
 	}
 	
 	public SimpleDateFormat getSimpleDateFormatProperty(
 			String key,
 			SimpleDateFormat def) {
-		try {
-			SimpleDateFormat value = this.getSimpleDateFormatProperty(key);
-			
-			if (value == null)
-				return def;
-			
-			return value;
-		} catch (PropertiesException e) {
-			return def;
-		}
+		return this.getObjectProperty(key, SimpleDateFormat.class, def);
 	}
 	
 	public String getStringProperty(String key) {
-		String value = this.properties.getProperty(key);
-		
-		if (value == null || value.length() == 0)
-			return null;
-		
-		return value;
+		return this.getObjectProperty(key, String.class);
 	}
 	
 	public String getStringProperty(String key, String def) {
-		try {
-			String value = this.getStringProperty(key);
-			
-			if (value == null)
-				return def;
-			
-			return value;
-		} catch (PropertiesException e) {
-			return def;
-		}
+		return this.getObjectProperty(key, String.class, def);
 	}
 	
 	private Object setProperty(
@@ -583,48 +363,23 @@ public class PropertyMap extends Properties implements PropertyChangeSupported, 
 	}
 	
 	public Object setBooleanProperty(String key, Boolean value) {
-		Boolean oldValue = this.getBooleanProperty(key);
-		return this.setProperty(
-				key,
-				(value == null ? "" : value + ""),
-				oldValue,
-				value);
+		return this.setObjectProperty(key, Boolean.class, value);
 	}
 	
 	public Object setByteProperty(String key, Byte value) {
-		Byte oldValue = this.getByteProperty(key);
-		return this.setProperty(
-				key,
-				(value == null ? "" : value + ""),
-				oldValue,
-				value);
+		return this.setObjectProperty(key, Byte.class, value);
 	}
 	
 	public Object setCalendarProperty(String key, Calendar value) {
-		Calendar oldValue = this.getCalendarProperty(key);
-		return this.setProperty(
-				key,
-				(value == null ? "" : value.getTimeInMillis() + ""),
-				oldValue,
-				value);
+		return this.setObjectProperty(key, Calendar.class, value);
 	}
 	
 	public Object setColorProperty(String key, Color value) {
-		Color oldValue = this.getColorProperty(key);
-		return this.setProperty(
-				key,
-				(value == null ? "" : value.getRGB() + ""),
-				oldValue,
-				value);
+		return this.setObjectProperty(key, Color.class, value);
 	}
 	
 	public Object setDoubleProperty(String key, Double value) {
-		Double oldValue = this.getDoubleProperty(key);
-		return this.setProperty(
-				key,
-				(value == null ? "" : value + ""),
-				oldValue,
-				value);
+		return this.setObjectProperty(key, Double.class, value);
 	}
 	
 	public <T extends Enum<?>> Object setEnumProperty(
@@ -640,36 +395,19 @@ public class PropertyMap extends Properties implements PropertyChangeSupported, 
 	}
 	
 	public Object setFloatProperty(String key, Float value) {
-		Float oldValue = this.getFloatProperty(key);
-		return this.setProperty(
-				key,
-				(value == null ? "" : value + ""),
-				oldValue,
-				value);
+		return this.setObjectProperty(key, Float.class, value);
 	}
 	
 	public Object setIntegerProperty(String key, Integer value) {
-		Integer oldValue = this.getIntegerProperty(key);
-		return this.setProperty(
-				key,
-				(value == null ? "" : value + ""),
-				oldValue,
-				value);
+		return this.setObjectProperty(key, Integer.class, value);
 	}
 	
 	public Object setLocaleProperty(String key, Locale value) {
-		Locale oldValue = this.getLocaleProperty(key);
-		return this.setProperty(key, (value == null ? "" : (value.getLanguage()
-				+ "_" + value.getCountry())), oldValue, value);
+		return this.setObjectProperty(key, Locale.class, value);
 	}
 	
 	public Object setLongProperty(String key, Long value) {
-		Long oldValue = this.getLongProperty(key);
-		return this.setProperty(
-				key,
-				(value == null ? "" : value + ""),
-				oldValue,
-				value);
+		return this.setObjectProperty(key, Long.class, value);
 	}
 	
 	public <T> Object setRawObjectProperty(
@@ -689,6 +427,14 @@ public class PropertyMap extends Properties implements PropertyChangeSupported, 
 	}
 	
 	public <T> Object setObjectProperty(String key, Class<T> cls, T value) {
+		return this.setObjectProperty(key, cls, value, false);
+	}
+	
+	public <T> Object setObjectProperty(
+			String key,
+			Class<T> cls,
+			T value,
+			boolean force) {
 		Object oldValue = this.getObjectProperty(key, cls);
 		
 		try {
@@ -713,25 +459,11 @@ public class PropertyMap extends Properties implements PropertyChangeSupported, 
 	}
 	
 	public Object setSimpleDateFormatProperty(String key, SimpleDateFormat value) {
-		SimpleDateFormat oldValue = this.getSimpleDateFormatProperty(key);
-		return this.setProperty(
-				key,
-				(value == null ? "" : value.toPattern()),
-				oldValue,
-				value);
+		return this.setObjectProperty(key, SimpleDateFormat.class, value);
 	}
 	
 	public Object setStringProperty(String key, String value) {
-		return this.setStringProperty(key, value, false);
-	}
-	
-	public Object setStringProperty(String key, String value, boolean force) {
-		String oldValue = (force ? null : this.getStringProperty(key));
-		return this.setProperty(
-				key,
-				(value == null ? "" : value),
-				oldValue,
-				value);
+		return this.setObjectProperty(key, String.class, value);
 	}
 	
 	private String getExceptionMessage(String key, String value) {
