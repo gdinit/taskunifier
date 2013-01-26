@@ -39,6 +39,13 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ca.odell.glazedlists.BasicEventList;
+import ca.odell.glazedlists.EventList;
+import ca.odell.glazedlists.GlazedLists;
+import ca.odell.glazedlists.ObservableElementList;
+import ca.odell.glazedlists.event.ListEventListener;
+
+import com.leclercb.commons.api.glazedlists.ListEventSupported;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
@@ -47,54 +54,31 @@ import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
 import com.leclercb.taskunifier.gui.api.accessor.TaskPropertyAccessor;
 import com.leclercb.taskunifier.gui.main.Main;
 
-public final class TaskColumnListUtils {
+public final class TaskCustomColumnList implements ListEventSupported<PropertyAccessor<Task>> {
 	
-	private TaskColumnListUtils() {
+	private static TaskCustomColumnList INSTANCE;
+	
+	public static TaskCustomColumnList getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new TaskCustomColumnList();
 		
+		return INSTANCE;
 	}
 	
-	public static void addColumn(PropertyAccessorType type, String name) {
-		CheckUtils.isNotNull(type);
-		CheckUtils.isNotNull(name);
+	private EventList<PropertyAccessor<Task>> items;
+	
+	@SuppressWarnings("rawtypes")
+	private TaskCustomColumnList() {
+		ObservableElementList.Connector<PropertyAccessor> connector = GlazedLists.beanConnector(PropertyAccessor.class);
 		
-		String uuid = UUID.randomUUID().toString();
+		this.items = new ObservableElementList<PropertyAccessor<Task>>(
+				new BasicEventList<PropertyAccessor<Task>>(),
+				connector);
 		
-		Main.getSettings().setStringProperty(
-				"task.custom_field." + uuid + "." + type.name().toLowerCase(),
-				name);
-		
-		List<Task> tasks = TaskFactory.getInstance().getList();
-		for (Task task : tasks) {
-			task.getProperties().setStringProperty(
-					"custom_field." + uuid + "." + type.name().toLowerCase(),
-					null);
-		}
+		this.initialize();
 	}
 	
-	public static void renameColumn(PropertyAccessor<Task> accessor, String name) {
-		String uuid = accessor.getId();
-		String type = accessor.getType().name().toLowerCase();
-		
-		Main.getSettings().setStringProperty(
-				"task.custom_field." + uuid + "." + type,
-				name);
-	}
-	
-	public static void removeColumn(PropertyAccessor<Task> accessor) {
-		String uuid = accessor.getId();
-		String type = accessor.getType().name().toLowerCase();
-		
-		Main.getSettings().remove("task.custom_field." + uuid + "." + type);
-		
-		List<Task> tasks = TaskFactory.getInstance().getList();
-		for (Task task : tasks) {
-			task.getProperties().remove("custom_field." + uuid + "." + type);
-		}
-	}
-	
-	public static List<PropertyAccessor<Task>> getColumns() {
-		List<PropertyAccessor<Task>> columns = new ArrayList<PropertyAccessor<Task>>();
-		
+	private void initialize() {
 		Pattern pattern = null;
 		
 		Set<Object> keys = null;
@@ -123,8 +107,8 @@ public final class TaskColumnListUtils {
 					true,
 					false);
 			
-			if (!columns.contains(accessor))
-				columns.add(accessor);
+			if (!this.items.contains(accessor))
+				this.items.add(accessor);
 		}
 		
 		pattern = Pattern.compile("custom_field\\.([a-z0-9]+)\\.([a-z0-9_]+)");
@@ -156,12 +140,102 @@ public final class TaskColumnListUtils {
 						true,
 						false);
 				
-				if (!columns.contains(accessor))
-					columns.add(accessor);
+				if (!this.items.contains(accessor))
+					this.items.add(accessor);
 			}
 		}
+	}
+	
+	public EventList<PropertyAccessor<Task>> getEventList() {
+		return GlazedLists.readOnlyList(this.items);
+	}
+	
+	public List<PropertyAccessor<Task>> getPropertyAccessors() {
+		return new ArrayList<PropertyAccessor<Task>>(this.items);
+	}
+	
+	public void addColumn(PropertyAccessorType type, String name) {
+		CheckUtils.isNotNull(type);
+		CheckUtils.isNotNull(name);
 		
-		return columns;
+		String uuid = UUID.randomUUID().toString();
+		
+		Main.getSettings().setStringProperty(
+				"task.custom_field." + uuid + "." + type.name().toLowerCase(),
+				name);
+		
+		List<Task> tasks = TaskFactory.getInstance().getList();
+		for (Task task : tasks) {
+			task.getProperties().setStringProperty(
+					"custom_field." + uuid + "." + type.name().toLowerCase(),
+					null);
+		}
+		
+		PropertyAccessor<Task> accessor = new TaskPropertyAccessor(
+				uuid,
+				"task.field." + uuid,
+				type,
+				"task.custom_field." + uuid + "." + type.name().toLowerCase(),
+				name,
+				true,
+				true,
+				false);
+		
+		this.items.add(accessor);
+	}
+	
+	public void renameColumn(PropertyAccessor<Task> accessor, String name) {
+		CheckUtils.isNotNull(accessor);
+		CheckUtils.isNotNull(name);
+		
+		String uuid = accessor.getId();
+		String type = accessor.getType().name().toLowerCase();
+		
+		Main.getSettings().setStringProperty(
+				"task.custom_field." + uuid + "." + type,
+				name);
+		
+		this.items.remove(accessor);
+		
+		accessor = new TaskPropertyAccessor(
+				accessor.getId(),
+				accessor.getFieldSettingsPropertyName(),
+				accessor.getType(),
+				accessor.getPropertyName(),
+				name,
+				accessor.isEditable(),
+				accessor.isUsable(),
+				accessor.isSortable());
+		
+		this.items.add(accessor);
+	}
+	
+	public void removeColumn(PropertyAccessor<Task> accessor) {
+		CheckUtils.isNotNull(accessor);
+		
+		String uuid = accessor.getId();
+		String type = accessor.getType().name().toLowerCase();
+		
+		Main.getSettings().remove("task.custom_field." + uuid + "." + type);
+		
+		List<Task> tasks = TaskFactory.getInstance().getList();
+		for (Task task : tasks) {
+			task.getProperties().remove("custom_field." + uuid + "." + type);
+		}
+		
+		this.items.remove(accessor);
+	}
+	
+	@Override
+	public void addListEventListener(
+			ListEventListener<PropertyAccessor<Task>> listener) {
+		this.items.addListEventListener(listener);
+	}
+	
+	@Override
+	public void removeListEventListener(
+			ListEventListener<PropertyAccessor<Task>> listener) {
+		this.items.removeListEventListener(listener);
 	}
 	
 }
