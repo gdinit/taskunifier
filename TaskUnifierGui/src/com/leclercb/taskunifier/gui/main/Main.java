@@ -544,7 +544,7 @@ public class Main {
 	private static void reloadUserSettings() throws Exception {
 		for (String key : USER_SETTINGS.stringPropertyNames()) {
 			String value = USER_SETTINGS.getProperty(key);
-			USER_SETTINGS.setStringProperty(key, value, true);
+			USER_SETTINGS.setObjectProperty(key, String.class, value, true);
 		}
 	}
 	

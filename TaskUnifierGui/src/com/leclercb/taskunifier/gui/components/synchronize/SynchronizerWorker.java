@@ -398,8 +398,9 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 			
 			@Override
 			public void run() {
-				Main.getUserSettings().setStringProperty(
+				Main.getUserSettings().setObjectProperty(
 						"synchronizer.scheduler_sleep_time",
+						String.class,
 						Main.getUserSettings().getStringProperty(
 								"synchronizer.scheduler_sleep_time"),
 						true);

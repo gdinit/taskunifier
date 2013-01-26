@@ -32,21 +32,23 @@
  */
 package com.leclercb.commons.api.properties.coders;
 
+import java.text.SimpleDateFormat;
+
 import com.leclercb.commons.api.properties.PropertiesCoder;
 
-public class BooleanCoder extends PropertiesCoder<Boolean> {
+public class SimpleDateFormatCoder extends PropertiesCoder<SimpleDateFormat> {
 	
 	@Override
-	public Boolean decode(String value) throws Exception {
+	public SimpleDateFormat decode(String value) throws Exception {
 		if (value == null || value.length() == 0)
 			return null;
 		
-		return Boolean.parseBoolean(value);
+		return new SimpleDateFormat(value);
 	}
 	
 	@Override
-	public String encode(Boolean value) throws Exception {
-		return (value == null ? "" : value + "");
+	public String encode(SimpleDateFormat value) throws Exception {
+		return (value == null ? "" : value.toPattern());
 	}
 	
 }
