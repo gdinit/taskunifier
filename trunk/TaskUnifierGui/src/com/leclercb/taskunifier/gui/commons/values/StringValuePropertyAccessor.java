@@ -17,7 +17,12 @@ public class StringValuePropertyAccessor implements StringValue {
 		if (!(value instanceof PropertyAccessor<?>))
 			return " ";
 		
-		return ((PropertyAccessor<?>) value).getLabel();
+		PropertyAccessor<?> accessor = (PropertyAccessor<?>) value;
+		
+		return accessor.getLabel()
+				+ " ("
+				+ StringValuePropertyAccessorType.INSTANCE.getString(accessor.getType())
+				+ ")";
 	}
 	
 }
