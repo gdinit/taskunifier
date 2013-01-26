@@ -87,6 +87,7 @@ import com.leclercb.taskunifier.gui.api.plugins.PluginsUtils;
 import com.leclercb.taskunifier.gui.api.plugins.exc.PluginException;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
+import com.leclercb.taskunifier.gui.commons.properties.PropertiesUtils;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.main.MainLoadFiles;
@@ -382,6 +383,8 @@ public class Main {
 	}
 	
 	private static void initialize() throws Exception {
+		PropertiesUtils.initializePropertiesCoders();
+		
 		DEVELOPER_MODE = false;
 		FIRST_EXECUTION = false;
 		

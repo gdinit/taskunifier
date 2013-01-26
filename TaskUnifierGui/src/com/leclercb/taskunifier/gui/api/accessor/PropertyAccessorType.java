@@ -130,10 +130,6 @@ public enum PropertyAccessorType {
 	TIMER(Timer.class),
 	VOID(Void.class);
 	
-	static {
-		
-	}
-	
 	private Class<?> type;
 	private Comparator<?> comparator;
 	private TableCellRenderer renderer;

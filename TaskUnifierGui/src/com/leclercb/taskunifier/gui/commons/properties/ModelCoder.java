@@ -30,39 +30,38 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.properties;
+package com.leclercb.taskunifier.gui.commons.properties;
 
 import com.leclercb.commons.api.properties.PropertiesCoder;
-import com.leclercb.taskunifier.gui.main.frames.ShortcutKey;
+import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.taskunifier.api.models.Model;
+import com.leclercb.taskunifier.api.models.ModelId;
+import com.leclercb.taskunifier.api.models.ModelType;
+import com.leclercb.taskunifier.api.models.utils.ModelFactoryUtils;
 
-public class ShortcutKeyCoder extends PropertiesCoder<ShortcutKey> {
+public class ModelCoder extends PropertiesCoder<Model> {
 	
-	@Override
-	public ShortcutKey decode(String value) throws Exception {
-		if (value == null || value.length() == 0)
-			return null;
-		
-		String[] split = value.split(";");
-		
-		if (split.length != 2)
-			return null;
-		
-		try {
-			int character = Integer.parseInt(split[0]);
-			int modifiers = Integer.parseInt(split[1]);
-			
-			return new ShortcutKey(character, modifiers);
-		} catch (Exception e) {
-			return null;
-		}
+	private ModelType type;
+	
+	public ModelCoder(ModelType type) {
+		CheckUtils.isNotNull(type);
+		this.type = type;
 	}
 	
 	@Override
-	public String encode(ShortcutKey value) throws Exception {
+	public Model decode(String value) throws Exception {
+		if (value == null || value.length() == 0)
+			return null;
+		
+		return ModelFactoryUtils.getModel(this.type, new ModelId(value));
+	}
+	
+	@Override
+	public String encode(Model value) throws Exception {
 		if (value == null)
 			return null;
 		
-		return value.getKeyCode() + ";" + value.getModifiers();
+		return value.getModelId().getId();
 	}
 	
 }
