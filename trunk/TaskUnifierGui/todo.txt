@@ -1,0 +1,3 @@
+- Remove forbidden accessor types in settings
+- Translate accessor types
+- Create an accessor type money ?
