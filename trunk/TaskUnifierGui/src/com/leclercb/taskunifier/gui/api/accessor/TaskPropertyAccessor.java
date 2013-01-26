@@ -30,55 +30,46 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.configuration;
-
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+package com.leclercb.taskunifier.gui.api.accessor;
 
 import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
-import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
-import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
-import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
-import com.leclercb.taskunifier.gui.components.configuration.api.DefaultConfigurationPanel;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
-import com.leclercb.taskunifier.gui.main.Main;
 
-public class ThemeTaskColumnsConfigurationPanel extends DefaultConfigurationPanel {
+public class TaskPropertyAccessor extends DefaultPropertyAccessor<Task> {
 	
-	public ThemeTaskColumnsConfigurationPanel(ConfigurationGroup configuration) {
-		super(configuration, "configuration_theme_columns");
-		
-		this.initialize();
-		this.pack();
+	public TaskPropertyAccessor(
+			String name,
+			String fieldSettingsPropertyName,
+			PropertyAccessorType type,
+			String propertyName,
+			String label,
+			boolean editable,
+			boolean usable,
+			boolean sortable) {
+		super(
+				name,
+				fieldSettingsPropertyName,
+				type,
+				propertyName,
+				label,
+				editable,
+				usable,
+				sortable);
 	}
 	
-	private void initialize() {
-		List<PropertyAccessor<Task>> columns = TaskColumnList.getInstance().getAccessors();
-		
-		Collections.sort(columns, new Comparator<PropertyAccessor<Task>>() {
-			
-			@Override
-			public int compare(
-					PropertyAccessor<Task> c1,
-					PropertyAccessor<Task> c2) {
-				return c1.getLabel().compareTo(c2.getLabel());
-			}
-			
-		});
-		
-		for (PropertyAccessor<Task> column : columns) {
-			this.addField(new ConfigurationField(
-					column.getId(),
-					null,
-					new ConfigurationFieldType.CheckBox(
-							Main.getSettings(),
-							"task.column."
-									+ column.getId().toLowerCase()
-									+ ".visible",
-							column.getLabel())));
-		}
+	@Override
+	public Object getProperty(Task task) {
+		return task.getProperties().getObjectProperty(
+				this.getPropertyName(),
+				this.getType().getType(),
+				null);
+	}
+	
+	@Override
+	public void setProperty(Task task, Object value) {
+		task.getProperties().setRawObjectProperty(
+				this.getPropertyName(),
+				this.getType().getType(),
+				value);
 	}
 	
 }

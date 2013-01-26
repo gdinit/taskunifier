@@ -103,12 +103,12 @@ public class ThemeTaskFieldsConfigurationPanel extends DefaultConfigurationPanel
 		
 		for (PropertyAccessor<Task> column : columns) {
 			this.addField(new ConfigurationField(
-					column.getName(),
+					column.getId(),
 					null,
 					new ConfigurationFieldType.CheckBox(
 							Main.getSettings(),
 							"task.field."
-									+ column.getName().toLowerCase()
+									+ column.getId().toLowerCase()
 									+ ".used",
 							column.getLabel())));
 		}

@@ -281,7 +281,7 @@ public class NoteFilterXMLCoder extends AbstractXMLCoder<NoteFilter> {
 			root.appendChild(element);
 			
 			Element column = document.createElement("column");
-			column.setTextContent(e.getProperty().getName());
+			column.setTextContent(e.getProperty().getId());
 			element.appendChild(column);
 			
 			Element condition = document.createElement("condition");

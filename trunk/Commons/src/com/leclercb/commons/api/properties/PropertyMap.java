@@ -672,6 +672,22 @@ public class PropertyMap extends Properties implements PropertyChangeSupported, 
 				value);
 	}
 	
+	public <T> Object setRawObjectProperty(
+			String key,
+			Class<T> cls,
+			Object value) {
+		try {
+			T castValue = cls.cast(value);
+			return this.setObjectProperty(key, cls, castValue);
+		} catch (PropertiesException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new PropertiesException(
+					"Cannot cast object of class: " + cls,
+					e);
+		}
+	}
+	
 	public <T> Object setObjectProperty(String key, Class<T> cls, T value) {
 		Object oldValue = this.getObjectProperty(key, cls);
 		

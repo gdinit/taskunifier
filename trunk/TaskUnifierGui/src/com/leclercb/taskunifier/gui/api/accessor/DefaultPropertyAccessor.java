@@ -96,7 +96,7 @@ public abstract class DefaultPropertyAccessor<T> implements PropertyAccessor<T>,
 	}
 	
 	@Override
-	public String getName() {
+	public String getId() {
 		return this.name;
 	}
 	
@@ -227,7 +227,7 @@ public abstract class DefaultPropertyAccessor<T> implements PropertyAccessor<T>,
 		if (o instanceof PropertyAccessor) {
 			PropertyAccessor<?> pa = (PropertyAccessor<?>) o;
 			
-			return new EqualsBuilder().append(this.getName(), pa.getName()).isEquals();
+			return new EqualsBuilder().append(this.getId(), pa.getId()).isEquals();
 		}
 		
 		return false;
@@ -236,7 +236,7 @@ public abstract class DefaultPropertyAccessor<T> implements PropertyAccessor<T>,
 	@Override
 	public int hashCode() {
 		HashCodeBuilder hashCode = new HashCodeBuilder();
-		hashCode.append(this.getName());
+		hashCode.append(this.getId());
 		
 		return hashCode.toHashCode();
 	}
