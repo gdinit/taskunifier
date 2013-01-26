@@ -384,9 +384,10 @@ public class NoteSearcherPanel extends JPanel implements SavePropertiesListener,
 			if (searcher.getType() == NoteSearcherType.FOLDER) {
 				if (this.searcherView.getSelectedFolder() != null) {
 					ModelId id = this.searcherView.getSelectedFolder().getModelId();
-					Main.getSettings().setStringProperty(
+					Main.getSettings().setObjectProperty(
 							this.settingsPrefix + ".selected.value",
-							new ModelIdCoder().encode(id));
+							ModelId.class,
+							id);
 				}
 				
 				return;

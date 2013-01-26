@@ -492,9 +492,10 @@ public class TaskSearcherPanel extends JPanel implements SavePropertiesListener,
 					|| searcher.getType() == TaskSearcherType.LOCATION) {
 				if (this.searcherView.getSelectedModel() != null) {
 					ModelId id = this.searcherView.getSelectedModel().getModelId();
-					Main.getSettings().setStringProperty(
+					Main.getSettings().setObjectProperty(
 							this.settingsPrefix + ".selected.value",
-							new ModelIdCoder().encode(id));
+							ModelId.class,
+							id);
 				}
 				
 				return;
