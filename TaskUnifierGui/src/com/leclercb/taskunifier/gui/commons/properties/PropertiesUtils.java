@@ -34,7 +34,14 @@ package com.leclercb.taskunifier.gui.commons.properties;
 
 import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.commons.api.properties.coders.EnumCoder;
+import com.leclercb.taskunifier.api.models.Contact;
+import com.leclercb.taskunifier.api.models.Context;
+import com.leclercb.taskunifier.api.models.Folder;
+import com.leclercb.taskunifier.api.models.Goal;
+import com.leclercb.taskunifier.api.models.Location;
 import com.leclercb.taskunifier.api.models.ModelType;
+import com.leclercb.taskunifier.api.models.Note;
+import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.api.properties.ModelIdCoder;
@@ -49,13 +56,27 @@ public final class PropertiesUtils {
 		PropertyMap.addDefaultCoder(new ModelIdCoder());
 		PropertyMap.addDefaultCoder(new ShortcutKeyCoder());
 		
-		PropertyMap.addDefaultCoder(new ModelCoder(ModelType.CONTACT));
-		PropertyMap.addDefaultCoder(new ModelCoder(ModelType.CONTEXT));
-		PropertyMap.addDefaultCoder(new ModelCoder(ModelType.FOLDER));
-		PropertyMap.addDefaultCoder(new ModelCoder(ModelType.GOAL));
-		PropertyMap.addDefaultCoder(new ModelCoder(ModelType.LOCATION));
-		PropertyMap.addDefaultCoder(new ModelCoder(ModelType.NOTE));
-		PropertyMap.addDefaultCoder(new ModelCoder(ModelType.TASK));
+		PropertyMap.addDefaultCoder(new ModelCoder<Contact>(
+				Contact.class,
+				ModelType.CONTACT));
+		PropertyMap.addDefaultCoder(new ModelCoder<Context>(
+				Context.class,
+				ModelType.CONTEXT));
+		PropertyMap.addDefaultCoder(new ModelCoder<Folder>(
+				Folder.class,
+				ModelType.FOLDER));
+		PropertyMap.addDefaultCoder(new ModelCoder<Goal>(
+				Goal.class,
+				ModelType.GOAL));
+		PropertyMap.addDefaultCoder(new ModelCoder<Location>(
+				Location.class,
+				ModelType.LOCATION));
+		PropertyMap.addDefaultCoder(new ModelCoder<Note>(
+				Note.class,
+				ModelType.NOTE));
+		PropertyMap.addDefaultCoder(new ModelCoder<Task>(
+				Task.class,
+				ModelType.TASK));
 		
 		PropertyMap.addDefaultCoder(new EnumCoder<TaskPriority>(
 				TaskPriority.class));

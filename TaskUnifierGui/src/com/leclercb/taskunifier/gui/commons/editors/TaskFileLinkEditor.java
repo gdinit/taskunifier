@@ -30,15 +30,21 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.taskfiles.table.editors;
+package com.leclercb.taskunifier.gui.commons.editors;
 
-import javax.swing.DefaultCellEditor;
-import javax.swing.JTextField;
+import javax.swing.JComboBox;
 
-public class FileEditor extends DefaultCellEditor {
+import org.jdesktop.swingx.autocomplete.ComboBoxCellEditor;
+
+import com.leclercb.taskunifier.gui.commons.models.TaskFileLinkModel;
+
+public class TaskFileLinkEditor extends ComboBoxCellEditor {
 	
-	public FileEditor() {
-		super(new JTextField());
+	public TaskFileLinkEditor() {
+		super(new JComboBox(new TaskFileLinkModel(false)));
+		((JComboBox) this.getComponent()).setEditable(true);
+		
+		this.setClickCountToStart(2);
 	}
 	
 }
