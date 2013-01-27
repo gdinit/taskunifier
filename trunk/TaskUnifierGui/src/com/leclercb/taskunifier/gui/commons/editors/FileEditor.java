@@ -30,21 +30,44 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.taskfiles.table.editors;
+package com.leclercb.taskunifier.gui.commons.editors;
 
-import javax.swing.JComboBox;
+import java.awt.Component;
 
-import org.jdesktop.swingx.autocomplete.ComboBoxCellEditor;
+import javax.swing.AbstractCellEditor;
+import javax.swing.JFileChooser;
+import javax.swing.JTable;
+import javax.swing.table.TableCellEditor;
 
-import com.leclercb.taskunifier.gui.commons.models.TaskFileLinkModel;
+import com.leclercb.taskunifier.gui.swing.TUFileEditor;
 
-public class LinkEditor extends ComboBoxCellEditor {
+public class FileEditor extends AbstractCellEditor implements TableCellEditor {
 	
-	public LinkEditor() {
-		super(new JComboBox(new TaskFileLinkModel(false)));
-		((JComboBox) this.getComponent()).setEditable(true);
-		
-		this.setClickCountToStart(2);
+	private TUFileEditor fileField;
+	
+	public FileEditor() {
+		this.fileField = new TUFileEditor(
+				true,
+				null,
+				JFileChooser.FILES_AND_DIRECTORIES,
+				null,
+				null);
+	}
+	
+	@Override
+	public Component getTableCellEditorComponent(
+			JTable table,
+			Object value,
+			boolean isSelected,
+			int row,
+			int col) {
+		this.fileField.setFile(value == null ? null : value.toString());
+		return this.fileField;
+	}
+	
+	@Override
+	public Object getCellEditorValue() {
+		return this.fileField.getFile();
 	}
 	
 }

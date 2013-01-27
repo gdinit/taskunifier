@@ -39,25 +39,35 @@ import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.utils.ModelFactoryUtils;
 
-public class ModelCoder extends PropertiesCoder<Model> {
+public class ModelCoder<M extends Model> extends PropertiesCoder<M> {
 	
+	private Class<M> cls;
 	private ModelType type;
 	
-	public ModelCoder(ModelType type) {
+	public ModelCoder(Class<M> cls, ModelType type) {
+		CheckUtils.isNotNull(cls);
 		CheckUtils.isNotNull(type);
+		
+		this.cls = cls;
 		this.type = type;
 	}
 	
 	@Override
-	public Model decode(String value) throws Exception {
+	public Class<M> getCoderClass() {
+		return this.cls;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public M decode(String value) throws Exception {
 		if (value == null || value.length() == 0)
 			return null;
 		
-		return ModelFactoryUtils.getModel(this.type, new ModelId(value));
+		return (M) ModelFactoryUtils.getModel(this.type, new ModelId(value));
 	}
 	
 	@Override
-	public String encode(Model value) throws Exception {
+	public String encode(M value) throws Exception {
 		if (value == null)
 			return null;
 		

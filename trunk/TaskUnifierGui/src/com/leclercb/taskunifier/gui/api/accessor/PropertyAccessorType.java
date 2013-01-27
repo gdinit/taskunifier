@@ -63,6 +63,7 @@ import com.leclercb.taskunifier.gui.commons.editors.ContactEditor;
 import com.leclercb.taskunifier.gui.commons.editors.ContextEditor;
 import com.leclercb.taskunifier.gui.commons.editors.ContextsEditor;
 import com.leclercb.taskunifier.gui.commons.editors.DateEditor;
+import com.leclercb.taskunifier.gui.commons.editors.FileEditor;
 import com.leclercb.taskunifier.gui.commons.editors.FolderEditor;
 import com.leclercb.taskunifier.gui.commons.editors.GoalEditor;
 import com.leclercb.taskunifier.gui.commons.editors.GoalsEditor;
@@ -96,7 +97,6 @@ import com.leclercb.taskunifier.gui.commons.values.StringValueTaskRepeatFrom;
 import com.leclercb.taskunifier.gui.commons.values.StringValueTime;
 import com.leclercb.taskunifier.gui.commons.values.StringValueTimer;
 import com.leclercb.taskunifier.gui.commons.values.StringValueTitle;
-import com.leclercb.taskunifier.gui.components.taskfiles.table.editors.FileEditor;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public enum PropertyAccessorType {

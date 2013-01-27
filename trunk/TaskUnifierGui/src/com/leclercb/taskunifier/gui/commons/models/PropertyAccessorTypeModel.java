@@ -32,6 +32,7 @@
  */
 package com.leclercb.taskunifier.gui.commons.models;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,7 +47,8 @@ public class PropertyAccessorTypeModel extends DefaultComboBoxModel {
 	}
 	
 	private static PropertyAccessorType[] generateArray(boolean firstNull) {
-		List<PropertyAccessorType> types = Arrays.asList(PropertyAccessorType.values());
+		List<PropertyAccessorType> types = new ArrayList<PropertyAccessorType>(
+				Arrays.asList(PropertyAccessorType.values()));
 		
 		types.remove(PropertyAccessorType.MODEL);
 		types.remove(PropertyAccessorType.ORDER);

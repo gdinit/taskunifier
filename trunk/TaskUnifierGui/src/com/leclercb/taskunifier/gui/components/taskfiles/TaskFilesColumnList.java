@@ -43,8 +43,8 @@ import com.leclercb.taskunifier.api.models.FileList.FileItem;
 import com.leclercb.taskunifier.gui.api.accessor.DefaultPropertyAccessor;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorList;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
+import com.leclercb.taskunifier.gui.commons.editors.TaskFileLinkEditor;
 import com.leclercb.taskunifier.gui.commons.values.IconValueOpen;
-import com.leclercb.taskunifier.gui.components.taskfiles.table.editors.LinkEditor;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class TaskFilesColumnList extends PropertyAccessorList<FileItem> {
@@ -82,7 +82,7 @@ public class TaskFilesColumnList extends PropertyAccessorList<FileItem> {
 			@Override
 			public TableCellEditor getCellEditor() {
 				if (this.editor == null) {
-					this.editor = new LinkEditor();
+					this.editor = new TaskFileLinkEditor();
 				}
 				
 				return this.editor;

@@ -32,6 +32,9 @@
  */
 package com.leclercb.taskunifier.gui.api.accessor;
 
+import java.util.logging.Level;
+
+import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.Task;
 
@@ -59,24 +62,34 @@ public class TaskPropertyAccessor extends DefaultPropertyAccessor<Task> {
 	
 	@Override
 	public Object getProperty(Task task) {
-		Object property = task.getProperties().getObjectProperty(
-				this.getPropertyName(),
-				this.getType().getType(),
-				null);
-		
-		if (property instanceof Model)
-			if (!((Model) property).getModelStatus().isEndUserStatus())
-				return null;
-		
-		return property;
+		try {
+			Object property = task.getProperties().getObjectProperty(
+					this.getPropertyName(),
+					this.getType().getType(),
+					null);
+			
+			if (property instanceof Model)
+				if (!((Model) property).getModelStatus().isEndUserStatus())
+					return null;
+			
+			return property;
+		} catch (Exception e) {
+			GuiLogger.getLogger().log(Level.SEVERE, "Cannot get property", e);
+			
+			return null;
+		}
 	}
 	
 	@Override
 	public void setProperty(Task task, Object value) {
-		task.getProperties().setRawObjectProperty(
-				this.getPropertyName(),
-				this.getType().getType(),
-				value);
+		try {
+			task.getProperties().setRawObjectProperty(
+					this.getPropertyName(),
+					this.getType().getType(),
+					value);
+		} catch (Exception e) {
+			GuiLogger.getLogger().log(Level.SEVERE, "Cannot set property", e);
+		}
 	}
 	
 }
