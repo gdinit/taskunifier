@@ -30,53 +30,29 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.api.accessor;
+package com.leclercb.taskunifier.gui.commons.models;
 
-import com.leclercb.taskunifier.api.models.Model;
-import com.leclercb.taskunifier.api.models.Task;
+import java.util.Arrays;
+import java.util.List;
 
-public class TaskPropertyAccessor extends DefaultPropertyAccessor<Task> {
+import javax.swing.DefaultComboBoxModel;
+
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
+
+public class PropertyAccessorTypeModel extends DefaultComboBoxModel {
 	
-	public TaskPropertyAccessor(
-			String name,
-			String fieldSettingsPropertyName,
-			PropertyAccessorType type,
-			String propertyName,
-			String label,
-			boolean editable,
-			boolean usable,
-			boolean sortable) {
-		super(
-				name,
-				fieldSettingsPropertyName,
-				type,
-				propertyName,
-				label,
-				editable,
-				usable,
-				sortable);
+	public PropertyAccessorTypeModel(boolean firstNull) {
+		super(generateArray(firstNull));
 	}
 	
-	@Override
-	public Object getProperty(Task task) {
-		Object property = task.getProperties().getObjectProperty(
-				this.getPropertyName(),
-				this.getType().getType(),
-				null);
+	private static PropertyAccessorType[] generateArray(boolean firstNull) {
+		List<PropertyAccessorType> types = Arrays.asList(PropertyAccessorType.values());
 		
-		if (property instanceof Model)
-			if (!((Model) property).getModelStatus().isEndUserStatus())
-				return null;
+		types.remove(PropertyAccessorType.MODEL);
+		types.remove(PropertyAccessorType.ORDER);
+		types.remove(PropertyAccessorType.VOID);
 		
-		return property;
-	}
-	
-	@Override
-	public void setProperty(Task task, Object value) {
-		task.getProperties().setRawObjectProperty(
-				this.getPropertyName(),
-				this.getType().getType(),
-				value);
+		return types.toArray(new PropertyAccessorType[0]);
 	}
 	
 }
