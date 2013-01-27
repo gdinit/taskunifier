@@ -48,6 +48,7 @@ import com.leclercb.commons.api.event.action.ActionSupported;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
+import com.leclercb.taskunifier.gui.commons.models.PropertyAccessorTypeModel;
 import com.leclercb.taskunifier.gui.commons.values.StringValuePropertyAccessorType;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
@@ -82,7 +83,7 @@ public class EditTaskPropertyAccessorPanel extends JPanel implements ActionSuppo
 		FormBuilder builder = new FormBuilder(
 				"right:pref, 4dlu, fill:default:grow");
 		
-		this.typeField = new JComboBox(PropertyAccessorType.values());
+		this.typeField = new JComboBox(new PropertyAccessorTypeModel(false));
 		
 		this.typeField.setRenderer(new DefaultListRenderer(
 				StringValuePropertyAccessorType.INSTANCE));
