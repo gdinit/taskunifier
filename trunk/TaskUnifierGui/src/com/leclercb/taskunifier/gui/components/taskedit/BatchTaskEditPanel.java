@@ -50,6 +50,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
@@ -102,6 +103,7 @@ import com.leclercb.taskunifier.gui.swing.TUSpinnerTimeEditor;
 import com.leclercb.taskunifier.gui.swing.TUSpinnerTimeModel;
 import com.leclercb.taskunifier.gui.swing.TUTagList;
 import com.leclercb.taskunifier.gui.swing.TUTimerField;
+import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.DateTimeFormatUtils;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
@@ -115,6 +117,8 @@ public class BatchTaskEditPanel extends JPanel {
 	
 	private boolean changed;
 	private Task[] tasks;
+	
+	private JTabbedPane tabbedPane;
 	
 	private JCheckBox taskTitleCheckBox;
 	private JCheckBox taskTagsCheckBox;
@@ -351,7 +355,7 @@ public class BatchTaskEditPanel extends JPanel {
 			}
 			
 			for (TaskPropertyItem item : this.taskPropertyTable.getTaskPropertyTableModel().getTaskPropertyItems()) {
-				if (this.tasks.length == 1 || item.isEdit()) {
+				if (item.isEdit()) {
 					for (Task task : this.tasks) {
 						item.getAccessor().setProperty(task, item.getValue());
 					}
@@ -964,9 +968,6 @@ public class BatchTaskEditPanel extends JPanel {
 		// Separator
 		builder.getBuilder().appendSeparator();
 		
-		// Center Panel
-		FormBuilder centerBuilder = new FormBuilder("fill:default:grow");
-		
 		// Task Note
 		this.taskNote.getComponent().setBorder(
 				BorderFactory.createLineBorder(Color.GRAY));
@@ -975,23 +976,43 @@ public class BatchTaskEditPanel extends JPanel {
 		notePanel.add(this.taskNoteCheckBox, BorderLayout.WEST);
 		notePanel.add(this.taskNote.getComponent(), BorderLayout.CENTER);
 		
-		if (TaskColumnList.getInstance().get(TaskColumnList.NOTE).isUsed()) {
-			centerBuilder.append(this.taskNote.getComponent());
-		}
-		
-		// Separator
-		centerBuilder.getBuilder().appendSeparator();
-		
-		// Task Property Table
-		if (TaskCustomColumnList.getInstance().getInitialPropertyAccessors().size() != 0) {
-			centerBuilder.append(ComponentFactory.createJScrollPane(
-					this.taskPropertyTable,
-					true));
-		}
-		
 		// Lay out the panel
-		this.add(builder.getPanel(), BorderLayout.NORTH);
-		this.add(centerBuilder.getPanel(), BorderLayout.CENTER);
+		this.tabbedPane = new JTabbedPane();
+		
+		JPanel tabMain = new JPanel();
+		tabMain.setLayout(new BorderLayout());
+		
+		tabMain.add(builder.getPanel(), BorderLayout.NORTH);
+		
+		if (TaskColumnList.getInstance().get(TaskColumnList.NOTE).isUsed()) {
+			tabMain.add(notePanel, BorderLayout.CENTER);
+		}
+		
+		if (TaskCustomColumnList.getInstance().getInitialPropertyAccessors().size() != 0) {
+			JPanel tabProperties = new JPanel();
+			tabProperties.setLayout(new BorderLayout());
+			tabProperties.add(ComponentFactory.createJScrollPane(
+					this.taskPropertyTable,
+					true), BorderLayout.CENTER);
+			
+			tabMain.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+			tabProperties.setBorder(BorderFactory.createEmptyBorder(
+					10,
+					10,
+					10,
+					10));
+			
+			this.tabbedPane.addTab(
+					Translations.getString("general.main"),
+					tabMain);
+			this.tabbedPane.addTab(
+					Translations.getString("general.custom_columns"),
+					tabProperties);
+			this.add(this.tabbedPane, BorderLayout.CENTER);
+		} else {
+			this.add(tabMain, BorderLayout.CENTER);
+		}
+		
 	}
 	
 	public void reinitializeFields(Task task) {

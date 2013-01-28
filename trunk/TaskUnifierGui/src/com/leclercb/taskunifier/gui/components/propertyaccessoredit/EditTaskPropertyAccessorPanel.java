@@ -161,11 +161,11 @@ public class EditTaskPropertyAccessorPanel extends JPanel implements ActionSuppo
 		this.accessor = accessor;
 		
 		if (this.accessor == null) {
-			this.typeField.setEditable(true);
+			this.typeField.setEnabled(true);
 			this.typeField.setSelectedItem(PropertyAccessorType.STRING);
 			this.labelField.setText(null);
 		} else {
-			this.typeField.setEditable(false);
+			this.typeField.setEnabled(false);
 			this.typeField.setSelectedItem(this.accessor.getType());
 			this.labelField.setText(this.accessor.getLabel());
 		}

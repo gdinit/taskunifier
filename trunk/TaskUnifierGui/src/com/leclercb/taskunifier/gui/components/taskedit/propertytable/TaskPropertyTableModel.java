@@ -41,6 +41,7 @@ import javax.swing.table.AbstractTableModel;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.TaskCustomColumnList;
 
 public class TaskPropertyTableModel extends AbstractTableModel {
@@ -96,11 +97,11 @@ public class TaskPropertyTableModel extends AbstractTableModel {
 	public String getColumnName(int col) {
 		switch (col) {
 			case 0:
-				return "Edit";
+				return Translations.getString("property_table.edit");
 			case 1:
-				return "Property";
+				return Translations.getString("property_table.property");
 			case 2:
-				return "Value";
+				return Translations.getString("property_table.value");
 			default:
 				return null;
 		}
