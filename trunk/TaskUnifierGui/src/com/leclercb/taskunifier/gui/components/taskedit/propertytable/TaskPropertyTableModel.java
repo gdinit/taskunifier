@@ -33,6 +33,7 @@
 package com.leclercb.taskunifier.gui.components.taskedit.propertytable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -71,6 +72,10 @@ public class TaskPropertyTableModel extends AbstractTableModel {
 			else
 				item.setValue(item.getAccessor().getProperty(this.task));
 		}
+	}
+	
+	public List<TaskPropertyItem> getTaskPropertyItems() {
+		return Collections.unmodifiableList(this.items);
 	}
 	
 	public TaskPropertyItem getTaskPropertyItem(int index) {

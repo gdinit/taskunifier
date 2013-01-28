@@ -33,13 +33,10 @@
 package com.leclercb.taskunifier.gui.components.taskedit.propertytable;
 
 import javax.swing.ListSelectionModel;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 
 import org.jdesktop.swingx.JXTable;
 
 import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
 
 public class TaskPropertyTable extends JXTable {
 	
@@ -70,34 +67,6 @@ public class TaskPropertyTable extends JXTable {
 		
 		this.setSortable(false);
 		this.setColumnControlVisible(false);
-	}
-	
-	@Override
-	public TableCellEditor getCellEditor(int row, int col) {
-		switch (col) {
-			case 0:
-				return PropertyAccessorType.BOOLEAN.getCellEditor();
-			case 1:
-				return PropertyAccessorType.STRING.getCellEditor();
-			case 2:
-				return this.getTaskPropertyTableModel().getTaskPropertyItem(row).getAccessor().getCellEditor();
-			default:
-				return super.getCellEditor(row, col);
-		}
-	}
-	
-	@Override
-	public TableCellRenderer getCellRenderer(int row, int col) {
-		switch (col) {
-			case 0:
-				return PropertyAccessorType.BOOLEAN.getCellRenderer();
-			case 1:
-				return PropertyAccessorType.STRING.getCellRenderer();
-			case 2:
-				return this.getTaskPropertyTableModel().getTaskPropertyItem(row).getAccessor().getCellRenderer();
-			default:
-				return super.getCellRenderer(row, col);
-		}
 	}
 	
 }
