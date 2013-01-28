@@ -92,6 +92,8 @@ import com.leclercb.taskunifier.gui.components.modelnote.HTMLEditorInterface;
 import com.leclercb.taskunifier.gui.components.modelnote.editors.WysiwygHTMLEditorPane;
 import com.leclercb.taskunifier.gui.components.models.ModelConfigurationDialog.ModelConfigurationTab;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
+import com.leclercb.taskunifier.gui.components.taskedit.propertytable.TaskPropertyTable;
+import com.leclercb.taskunifier.gui.components.taskedit.propertytable.TaskPropertyTableModel.TaskPropertyItem;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.TUModelListField;
@@ -104,6 +106,7 @@ import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.DateTimeFormatUtils;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
+import com.leclercb.taskunifier.gui.utils.TaskCustomColumnList;
 import com.leclercb.taskunifier.gui.utils.TaskStatusList;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JTextFieldDateEditor;
@@ -161,6 +164,7 @@ public class BatchTaskEditPanel extends JPanel {
 	private JComboBox taskPriority;
 	private JCheckBox taskStar;
 	private HTMLEditorInterface taskNote;
+	private TaskPropertyTable taskPropertyTable;
 	
 	public BatchTaskEditPanel() {
 		this.changed = false;
@@ -343,6 +347,14 @@ public class BatchTaskEditPanel extends JPanel {
 			if (this.taskCompletedCheckBox.isSelected()) {
 				for (Task task : this.tasks) {
 					task.setCompleted(this.taskCompleted.isSelected());
+				}
+			}
+			
+			for (TaskPropertyItem item : this.taskPropertyTable.getTaskPropertyTableModel().getTaskPropertyItems()) {
+				if (this.tasks.length == 1 || item.isEdit()) {
+					for (Task task : this.tasks) {
+						item.getAccessor().setProperty(task, item.getValue());
+					}
 				}
 			}
 		} catch (Throwable t) {
@@ -536,6 +548,7 @@ public class BatchTaskEditPanel extends JPanel {
 				true);
 		this.taskStar = new JCheckBox();
 		this.taskNote = new WysiwygHTMLEditorPane("", false, null);
+		this.taskPropertyTable = new TaskPropertyTable();
 		
 		this.taskTitle.getDocument().addDocumentListener(new ChangesListener());
 		// this.taskTags.addActionListener(new ChangeListener());
@@ -951,6 +964,9 @@ public class BatchTaskEditPanel extends JPanel {
 		// Separator
 		builder.getBuilder().appendSeparator();
 		
+		// Center Panel
+		FormBuilder centerBuilder = new FormBuilder("fill:default:grow");
+		
 		// Task Note
 		this.taskNote.getComponent().setBorder(
 				BorderFactory.createLineBorder(Color.GRAY));
@@ -959,12 +975,23 @@ public class BatchTaskEditPanel extends JPanel {
 		notePanel.add(this.taskNoteCheckBox, BorderLayout.WEST);
 		notePanel.add(this.taskNote.getComponent(), BorderLayout.CENTER);
 		
+		if (TaskColumnList.getInstance().get(TaskColumnList.NOTE).isUsed()) {
+			centerBuilder.append(this.taskNote.getComponent());
+		}
+		
+		// Separator
+		centerBuilder.getBuilder().appendSeparator();
+		
+		// Task Property Table
+		if (TaskCustomColumnList.getInstance().getInitialPropertyAccessors().size() != 0) {
+			centerBuilder.append(ComponentFactory.createJScrollPane(
+					this.taskPropertyTable,
+					true));
+		}
+		
 		// Lay out the panel
 		this.add(builder.getPanel(), BorderLayout.NORTH);
-		
-		if (TaskColumnList.getInstance().get(TaskColumnList.NOTE).isUsed()) {
-			this.add(notePanel, BorderLayout.CENTER);
-		}
+		this.add(centerBuilder.getPanel(), BorderLayout.CENTER);
 	}
 	
 	public void reinitializeFields(Task task) {
@@ -1000,6 +1027,8 @@ public class BatchTaskEditPanel extends JPanel {
 			this.taskStar.setSelected(false);
 			
 			this.taskNote.setText("", true, true);
+			
+			this.taskPropertyTable.setTask(task);
 		} else {
 			visible = false;
 			selected = true;
@@ -1051,6 +1080,8 @@ public class BatchTaskEditPanel extends JPanel {
 			this.taskStar.setSelected(task.isStar());
 			
 			this.taskNote.setText(task.getNote(), true, true);
+			
+			this.taskPropertyTable.setTask(task);
 		}
 		
 		this.taskTitleCheckBox.setSelected(selected);
