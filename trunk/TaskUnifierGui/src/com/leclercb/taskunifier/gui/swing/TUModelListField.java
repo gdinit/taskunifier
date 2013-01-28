@@ -91,7 +91,7 @@ public class TUModelListField<M extends Model> extends JPanel {
 	@SuppressWarnings("unchecked")
 	public ModelList<M> getModelList() {
 		Model[] models = this.modelSelectionPanel.getSelectedModels();
-		ModelList<M> modelList = new ModelList<M>();
+		ModelList<M> modelList = new ModelList<M>(this.modelType);
 		
 		for (Model model : models) {
 			modelList.add((M) model);

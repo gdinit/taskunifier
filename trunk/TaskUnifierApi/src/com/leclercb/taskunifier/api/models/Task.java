@@ -112,13 +112,13 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
 		
 		this.tags = new TagList();
 		
-		this.contexts = new ModelList<Context>();
+		this.contexts = new ModelList<Context>(ModelType.CONTEXT);
 		this.contexts.addListChangeListener(this);
 		
-		this.goals = new ModelList<Goal>();
+		this.goals = new ModelList<Goal>(ModelType.GOAL);
 		this.goals.addListChangeListener(this);
 		
-		this.locations = new ModelList<Location>();
+		this.locations = new ModelList<Location>(ModelType.LOCATION);
 		this.locations.addListChangeListener(this);
 		
 		this.contacts = new ContactList();
@@ -135,9 +135,9 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
 		
 		this.setTags(new TagList());
 		this.setFolder(null);
-		this.setContexts(new ModelList<Context>());
-		this.setGoals(new ModelList<Goal>());
-		this.setLocations(new ModelList<Location>());
+		this.setContexts(new ModelList<Context>(ModelType.CONTEXT));
+		this.setGoals(new ModelList<Goal>(ModelType.GOAL));
+		this.setLocations(new ModelList<Location>(ModelType.LOCATION));
 		this.setProgress(0);
 		this.setCompleted(false);
 		this.setCompletedOn(null);
@@ -228,14 +228,11 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
 		this.setTags(bean.getTags());
 		this.setFolder(folder);
 		this.setContexts((bean.getContexts() == null ? null : bean.getContexts().toModelList(
-				new ModelList<Context>(),
-				ModelType.CONTEXT)));
+				new ModelList<Context>(ModelType.CONTEXT))));
 		this.setGoals((bean.getGoals() == null ? null : bean.getGoals().toModelList(
-				new ModelList<Goal>(),
-				ModelType.GOAL)));
+				new ModelList<Goal>(ModelType.GOAL))));
 		this.setLocations((bean.getLocations() == null ? null : bean.getLocations().toModelList(
-				new ModelList<Location>(),
-				ModelType.LOCATION)));
+				new ModelList<Location>(ModelType.LOCATION))));
 		this.setProgress(bean.getProgress());
 		this.setStartDate(bean.getStartDate());
 		this.setStartDateReminder(bean.getStartDateReminder());

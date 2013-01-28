@@ -83,7 +83,7 @@ public abstract class ModelListConverter<M extends Model> extends ReflectionConv
 			reader.moveUp();
 		}
 		
-		return modelBeanList.toModelList(new ModelList<M>(), this.modelType);
+		return modelBeanList.toModelList(new ModelList<M>(this.modelType));
 	}
 	
 	@SuppressWarnings("rawtypes")

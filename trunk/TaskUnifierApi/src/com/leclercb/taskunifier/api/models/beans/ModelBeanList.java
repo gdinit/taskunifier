@@ -9,7 +9,6 @@ import java.util.List;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.ModelList;
-import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.utils.ModelFactoryUtils;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
@@ -88,13 +87,12 @@ public class ModelBeanList implements Cloneable, Serializable, Iterable<ModelId>
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <M extends Model> ModelList<M> toModelList(
-			ModelList<M> list,
-			ModelType type) {
+	public <M extends Model> ModelList<M> toModelList(ModelList<M> list) {
 		for (ModelId model : this.models) {
-			M m = (M) ModelFactoryUtils.getModel(type, model);
+			M m = (M) ModelFactoryUtils.getModel(list.getModelType(), model);
 			if (m == null)
-				m = (M) ModelFactoryUtils.getFactory(type).createShell(model);
+				m = (M) ModelFactoryUtils.getFactory(list.getModelType()).createShell(
+						model);
 			
 			list.add(m);
 		}

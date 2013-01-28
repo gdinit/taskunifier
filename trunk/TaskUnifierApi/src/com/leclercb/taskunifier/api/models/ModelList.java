@@ -22,17 +22,25 @@ public class ModelList<M extends Model> implements Cloneable, Serializable, Iter
 	
 	private ListChangeSupport listChangeSupport;
 	
+	private ModelType type;
 	private List<M> models;
 	
-	public ModelList() {
+	public ModelList(ModelType type) {
+		CheckUtils.isNotNull(type);
+		this.type = type;
+		
 		this.listChangeSupport = new ListChangeSupport(this);
 		
 		this.models = new ArrayList<M>();
 	}
 	
+	public ModelType getModelType() {
+		return this.type;
+	}
+	
 	@Override
 	protected ModelList<M> clone() {
-		ModelList<M> list = new ModelList<M>();
+		ModelList<M> list = new ModelList<M>(this.type);
 		list.models.addAll(this.models);
 		return list;
 	}

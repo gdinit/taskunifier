@@ -117,7 +117,8 @@ public class ModelItem extends DefaultMutableTreeNode implements SearcherNode, P
 						TaskColumnList.CONTEXTS);
 				type = TaskSearcherType.CONTEXT;
 				
-				ModelList<Context> contexts = new ModelList<Context>();
+				ModelList<Context> contexts = new ModelList<Context>(
+						ModelType.CONTEXT);
 				
 				if (model != null)
 					contexts.add((Context) model);
@@ -136,7 +137,7 @@ public class ModelItem extends DefaultMutableTreeNode implements SearcherNode, P
 				column = TaskColumnList.getInstance().get(TaskColumnList.GOALS);
 				type = TaskSearcherType.GOAL;
 				
-				ModelList<Goal> goals = new ModelList<Goal>();
+				ModelList<Goal> goals = new ModelList<Goal>(ModelType.GOAL);
 				
 				if (model != null)
 					goals.add((Goal) model);
@@ -149,7 +150,8 @@ public class ModelItem extends DefaultMutableTreeNode implements SearcherNode, P
 						TaskColumnList.LOCATIONS);
 				type = TaskSearcherType.LOCATION;
 				
-				ModelList<Location> locations = new ModelList<Location>();
+				ModelList<Location> locations = new ModelList<Location>(
+						ModelType.LOCATION);
 				
 				if (model != null)
 					locations.add((Location) model);
