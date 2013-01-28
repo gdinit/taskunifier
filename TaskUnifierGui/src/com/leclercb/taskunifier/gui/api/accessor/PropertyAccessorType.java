@@ -63,10 +63,12 @@ import com.leclercb.taskunifier.gui.commons.editors.ContactEditor;
 import com.leclercb.taskunifier.gui.commons.editors.ContextEditor;
 import com.leclercb.taskunifier.gui.commons.editors.ContextsEditor;
 import com.leclercb.taskunifier.gui.commons.editors.DateEditor;
+import com.leclercb.taskunifier.gui.commons.editors.DoubleEditor;
 import com.leclercb.taskunifier.gui.commons.editors.FileEditor;
 import com.leclercb.taskunifier.gui.commons.editors.FolderEditor;
 import com.leclercb.taskunifier.gui.commons.editors.GoalEditor;
 import com.leclercb.taskunifier.gui.commons.editors.GoalsEditor;
+import com.leclercb.taskunifier.gui.commons.editors.IntegerEditor;
 import com.leclercb.taskunifier.gui.commons.editors.LocationEditor;
 import com.leclercb.taskunifier.gui.commons.editors.LocationsEditor;
 import com.leclercb.taskunifier.gui.commons.editors.MinutesEditor;
@@ -457,13 +459,13 @@ public enum PropertyAccessorType {
 				this.editor = new DateEditor(true);
 				break;
 			case DOUBLE:
-				this.editor = null;
+				this.editor = new DoubleEditor();
 				break;
 			case PERCENTAGE:
 				this.editor = new PercentageEditor();
 				break;
 			case INTEGER:
-				this.editor = null;
+				this.editor = new IntegerEditor();
 				break;
 			case MINUTES:
 				this.editor = new MinutesEditor();

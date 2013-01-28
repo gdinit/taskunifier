@@ -43,20 +43,20 @@ import javax.swing.JTable;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.table.TableCellEditor;
 
-public class PercentageEditor extends AbstractCellEditor implements TableCellEditor {
+public class IntegerEditor extends AbstractCellEditor implements TableCellEditor {
 	
 	private JSpinner progressSpinner;
 	
-	public PercentageEditor() {
+	public IntegerEditor() {
 		this.progressSpinner = new JSpinner();
 		this.progressSpinner.setModel(new SpinnerNumberModel(
-				0.00,
-				0.00,
-				1.00,
-				0.10));
+				0,
+				0,
+				Integer.MAX_VALUE,
+				1));
 		this.progressSpinner.setEditor(new JSpinner.NumberEditor(
 				this.progressSpinner,
-				"##0%"));
+				"0"));
 	}
 	
 	@Override
@@ -82,7 +82,7 @@ public class PercentageEditor extends AbstractCellEditor implements TableCellEdi
 		if (this.progressSpinner.getValue() == null)
 			return null;
 		
-		return Double.parseDouble(this.progressSpinner.getValue().toString());
+		return Integer.parseInt(this.progressSpinner.getValue().toString());
 	}
 	
 	@Override
