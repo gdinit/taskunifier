@@ -51,14 +51,19 @@ import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.utils.ModelFactoryUtils;
 
-public class ModelListCoder extends PropertiesCoder<ModelList<?>> {
+public class ModelListCoder extends PropertiesCoder<ModelList> {
 	
 	public ModelListCoder() {
 		
 	}
 	
 	@Override
-	public ModelList<?> decode(String value) throws Exception {
+	public Class<ModelList> getCoderClass() {
+		return ModelList.class;
+	}
+	
+	@Override
+	public ModelList decode(String value) throws Exception {
 		if (value == null || value.length() == 0)
 			return null;
 		
@@ -72,6 +77,9 @@ public class ModelListCoder extends PropertiesCoder<ModelList<?>> {
 			return null;
 		
 		for (String modelId : values) {
+			if (modelId.trim().length() == 0)
+				continue;
+			
 			Model model = ModelFactoryUtils.getModel(type, new ModelId(modelId));
 			
 			if (model == null)
@@ -133,14 +141,13 @@ public class ModelListCoder extends PropertiesCoder<ModelList<?>> {
 	}
 	
 	@Override
-	public String encode(ModelList<?> value) throws Exception {
+	public String encode(ModelList value) throws Exception {
 		if (value == null)
 			return null;
 		
-		StringBuffer buffer = new StringBuffer(value.getModelType().name()
-				+ ";");
-		for (Model model : value) {
-			buffer.append(";" + model.getModelId());
+		StringBuffer buffer = new StringBuffer(value.getModelType().name());
+		for (Object model : value) {
+			buffer.append(";" + ((Model) model).getModelId());
 		}
 		
 		return buffer.toString();
