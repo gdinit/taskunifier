@@ -66,6 +66,9 @@ public class IntegerEditor extends AbstractCellEditor implements TableCellEditor
 			boolean isSelected,
 			int row,
 			int col) {
+		if (value == null)
+			value = (int) 0;
+		
 		this.progressSpinner.setValue(value);
 		
 		return this.progressSpinner;
@@ -80,7 +83,7 @@ public class IntegerEditor extends AbstractCellEditor implements TableCellEditor
 		}
 		
 		if (this.progressSpinner.getValue() == null)
-			return null;
+			return (int) 0;
 		
 		return Integer.parseInt(this.progressSpinner.getValue().toString());
 	}
