@@ -30,72 +30,45 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.configuration.fields.publication;
+package com.leclercb.taskunifier.gui.components.taskedit.propertytable;
 
 import javax.swing.ListSelectionModel;
-import javax.swing.SortOrder;
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.renderer.DefaultTableRenderer;
-import org.jdesktop.swingx.renderer.MappedValue;
 
-import com.leclercb.taskunifier.gui.commons.values.BooleanValueBoolean;
-import com.leclercb.taskunifier.gui.commons.values.IconValueSelected;
-import com.leclercb.taskunifier.gui.components.configuration.fields.publication.editors.OptionsEditor;
-import com.leclercb.taskunifier.gui.components.configuration.fields.publication.renderers.OptionsRenderer;
+import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
 
-public class PublisherPluginTable extends JXTable {
+public class TaskPropertyTable extends JXTable {
 	
-	private static final TableCellRenderer BOOLEAN_RENDERER;
-	private static final TableCellRenderer GENERIC_RENDERER;
-	private static final TableCellRenderer OPTIONS_RENDERER;
-	
-	private static final TableCellEditor BOOLEAN_EDITOR;
-	private static final TableCellEditor OPTIONS_EDITOR;
-	
-	static {
-		// RENDERERS
-		BOOLEAN_RENDERER = new DefaultTableRenderer(new MappedValue(
-				null,
-				IconValueSelected.INSTANCE,
-				BooleanValueBoolean.INSTANCE), SwingConstants.CENTER);
-		GENERIC_RENDERER = new DefaultTableCellRenderer();
-		OPTIONS_RENDERER = new OptionsRenderer();
-		
-		// EDITORS
-		BOOLEAN_EDITOR = new BooleanEditor();
-		OPTIONS_EDITOR = new OptionsEditor();
-	}
-	
-	public PublisherPluginTable() {
+	public TaskPropertyTable() {
 		this.initialize();
 	}
 	
-	public void refresh() {
-		this.getPublisherPluginTableModel().fireTableDataChanged();
+	public Task getTask() {
+		return this.getTaskPropertyTableModel().getTask();
 	}
 	
-	public PublisherPluginTableModel getPublisherPluginTableModel() {
-		return (PublisherPluginTableModel) this.getModel();
+	public void setTask(Task task) {
+		this.getTaskPropertyTableModel().setTask(task);
+	}
+	
+	public TaskPropertyTableModel getTaskPropertyTableModel() {
+		return (TaskPropertyTableModel) this.getModel();
 	}
 	
 	private void initialize() {
 		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
-		PublisherPluginTableModel tableModel = new PublisherPluginTableModel();
+		TaskPropertyTableModel tableModel = new TaskPropertyTableModel();
 		
 		this.setModel(tableModel);
-		this.setRowHeight(32);
+		this.setRowHeight(24);
 		this.getTableHeader().setReorderingAllowed(false);
-		this.setShowGrid(true, false);
 		
 		this.setSortable(false);
-		this.setSortsOnUpdates(true);
-		this.setSortOrder(1, SortOrder.ASCENDING);
 		this.setColumnControlVisible(false);
 	}
 	
@@ -103,11 +76,11 @@ public class PublisherPluginTable extends JXTable {
 	public TableCellEditor getCellEditor(int row, int col) {
 		switch (col) {
 			case 0:
-				return BOOLEAN_EDITOR;
+				return PropertyAccessorType.BOOLEAN.getCellEditor();
 			case 1:
-				return super.getCellEditor(row, col);
+				return PropertyAccessorType.STRING.getCellEditor();
 			case 2:
-				return OPTIONS_EDITOR;
+				return this.getTaskPropertyTableModel().getTaskPropertyItem(row).getAccessor().getCellEditor();
 			default:
 				return super.getCellEditor(row, col);
 		}
@@ -117,11 +90,11 @@ public class PublisherPluginTable extends JXTable {
 	public TableCellRenderer getCellRenderer(int row, int col) {
 		switch (col) {
 			case 0:
-				return BOOLEAN_RENDERER;
+				return PropertyAccessorType.BOOLEAN.getCellRenderer();
 			case 1:
-				return GENERIC_RENDERER;
+				return PropertyAccessorType.STRING.getCellRenderer();
 			case 2:
-				return OPTIONS_RENDERER;
+				return this.getTaskPropertyTableModel().getTaskPropertyItem(row).getAccessor().getCellRenderer();
 			default:
 				return super.getCellRenderer(row, col);
 		}

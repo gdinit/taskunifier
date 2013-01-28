@@ -307,7 +307,7 @@ public enum PropertyAccessorType {
 		return this.comparator;
 	}
 	
-	protected TableCellRenderer getCellRenderer() {
+	public TableCellRenderer getCellRenderer() {
 		if (this.renderer != null)
 			return this.renderer;
 		
@@ -439,7 +439,7 @@ public enum PropertyAccessorType {
 		return this.renderer;
 	}
 	
-	protected TableCellEditor getCellEditor() {
+	public TableCellEditor getCellEditor() {
 		if (this.editor != null)
 			return this.editor;
 		

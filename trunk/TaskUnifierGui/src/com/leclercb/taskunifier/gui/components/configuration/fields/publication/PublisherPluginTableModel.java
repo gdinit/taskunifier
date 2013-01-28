@@ -45,11 +45,11 @@ import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 
-public class PublisherPluginModel extends AbstractTableModel implements ListChangeListener {
+public class PublisherPluginTableModel extends AbstractTableModel implements ListChangeListener {
 	
 	private List<SynchronizerGuiPlugin> plugins;
 	
-	public PublisherPluginModel() {
+	public PublisherPluginTableModel() {
 		this.plugins = new ArrayList<SynchronizerGuiPlugin>();
 		this.initialize();
 	}
