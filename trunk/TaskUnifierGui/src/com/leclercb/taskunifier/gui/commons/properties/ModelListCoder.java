@@ -68,6 +68,9 @@ public class ModelListCoder extends PropertiesCoder<ModelList<?>> {
 		
 		ModelType type = ModelType.valueOf(values[0]);
 		
+		if (type == null)
+			return null;
+		
 		for (String modelId : values) {
 			Model model = ModelFactoryUtils.getModel(type, new ModelId(modelId));
 			

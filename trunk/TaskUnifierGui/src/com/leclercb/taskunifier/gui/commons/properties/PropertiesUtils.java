@@ -56,6 +56,8 @@ public final class PropertiesUtils {
 		PropertyMap.addDefaultCoder(new ModelIdCoder());
 		PropertyMap.addDefaultCoder(new ShortcutKeyCoder());
 		
+		PropertyMap.addDefaultCoder(new ModelListCoder());
+		
 		PropertyMap.addDefaultCoder(new ModelCoder<Contact>(
 				Contact.class,
 				ModelType.CONTACT));
