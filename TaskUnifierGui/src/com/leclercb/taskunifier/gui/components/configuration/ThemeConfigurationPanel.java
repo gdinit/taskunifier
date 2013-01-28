@@ -69,7 +69,8 @@ public class ThemeConfigurationPanel extends ConfigurationPanel {
 		this.add(this.tabbedPane, BorderLayout.CENTER);
 		
 		this.initializeGeneralPanel();
-		this.initializeTaskCustomColumnListPanel();
+		// TODO: PRO
+		// this.initializeTaskCustomColumnListPanel();
 		this.initializeNoteColumnsPanel();
 		this.initializeTaskColumnsPanel();
 		this.initializeNoteFieldsPanel();
@@ -161,7 +162,8 @@ public class ThemeConfigurationPanel extends ConfigurationPanel {
 	@Override
 	public void saveAndApplyConfig() {
 		this.generalConfigurationPanel.saveAndApplyConfig();
-		this.taskCustomColumnListConfigurationPanel.saveAndApplyConfig();
+		// TODO: PRO
+		// this.taskCustomColumnListConfigurationPanel.saveAndApplyConfig();
 		this.noteColumnsConfigurationPanel.saveAndApplyConfig();
 		this.taskColumnsConfigurationPanel.saveAndApplyConfig();
 		this.noteFieldsConfigurationPanel.saveAndApplyConfig();
@@ -173,7 +175,8 @@ public class ThemeConfigurationPanel extends ConfigurationPanel {
 	@Override
 	public void cancelConfig() {
 		this.generalConfigurationPanel.cancelConfig();
-		this.taskCustomColumnListConfigurationPanel.cancelConfig();
+		// TODO: PRO
+		// this.taskCustomColumnListConfigurationPanel.cancelConfig();
 		this.noteColumnsConfigurationPanel.cancelConfig();
 		this.taskColumnsConfigurationPanel.cancelConfig();
 		this.noteFieldsConfigurationPanel.cancelConfig();

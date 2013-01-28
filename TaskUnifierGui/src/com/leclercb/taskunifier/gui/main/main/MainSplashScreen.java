@@ -36,7 +36,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.SplashScreen;
+
+import com.leclercb.taskunifier.gui.main.Main;
 
 public final class MainSplashScreen {
 	
@@ -70,15 +73,41 @@ public final class MainSplashScreen {
 		if (this.g2d == null)
 			return;
 		
+		Font font = this.g2d.getFont();
+		FontMetrics metrics;
+		int stringWidth;
+		
 		try {
+			this.g2d.setRenderingHint(
+					RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON);
+			
+			if (Main.isProVersion()) {
+				this.g2d.setColor(new Color(234, 255, 234));
+				this.g2d.fillRect(180, 85, 250, 40);
+				
+				this.g2d.setFont(font);
+				this.g2d.setFont(this.g2d.getFont().deriveFont(Font.BOLD).deriveFont(
+						(float) 16.0));
+				metrics = this.g2d.getFontMetrics(this.g2d.getFont());
+				stringWidth = metrics.stringWidth("PRO Version");
+				
+				this.g2d.setColor(Color.RED);
+				this.g2d.drawString("PRO Version", 420 - stringWidth, 105);
+			}
+			
 			this.g2d.setColor(new Color(234, 255, 234));
 			this.g2d.fillRect(140, 130, 290, 40);
 			
+			this.g2d.setFont(font);
 			this.g2d.setFont(this.g2d.getFont().deriveFont(Font.BOLD));
+			metrics = this.g2d.getFontMetrics(this.g2d.getFont());
+			stringWidth = metrics.stringWidth(message);
+			
 			this.g2d.setColor(Color.GRAY);
-			FontMetrics metrics = this.g2d.getFontMetrics(this.g2d.getFont());
-			int stringWidth = metrics.stringWidth(message);
 			this.g2d.drawString(message, 420 - stringWidth, 160);
+			
+			this.g2d.setFont(font);
 			
 			SplashScreen.getSplashScreen().update();
 		} catch (Exception e) {
