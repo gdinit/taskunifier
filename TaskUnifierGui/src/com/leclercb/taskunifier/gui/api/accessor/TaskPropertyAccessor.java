@@ -34,6 +34,7 @@ package com.leclercb.taskunifier.gui.api.accessor;
 
 import java.util.logging.Level;
 
+import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.Task;
@@ -62,6 +63,8 @@ public class TaskPropertyAccessor extends DefaultPropertyAccessor<Task> {
 	
 	@Override
 	public Object getProperty(Task task) {
+		CheckUtils.isNotNull(task);
+		
 		try {
 			Object property = task.getProperties().getObjectProperty(
 					this.getPropertyName(),
@@ -82,6 +85,8 @@ public class TaskPropertyAccessor extends DefaultPropertyAccessor<Task> {
 	
 	@Override
 	public void setProperty(Task task, Object value) {
+		CheckUtils.isNotNull(task);
+		
 		try {
 			task.getProperties().setRawObjectProperty(
 					this.getPropertyName(),

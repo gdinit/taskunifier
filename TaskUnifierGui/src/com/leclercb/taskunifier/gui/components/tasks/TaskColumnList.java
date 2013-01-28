@@ -1071,7 +1071,7 @@ public class TaskColumnList extends PropertyAccessorList<Task> {
 			
 		});
 		
-		List<PropertyAccessor<Task>> accessors = TaskCustomColumnList.getInstance().getPropertyAccessors();
+		List<PropertyAccessor<Task>> accessors = TaskCustomColumnList.getInstance().getInitialPropertyAccessors();
 		
 		for (PropertyAccessor<Task> accessor : accessors) {
 			this.add(accessor);

@@ -65,12 +65,15 @@ public final class TaskCustomColumnList implements ListEventSupported<PropertyAc
 		return INSTANCE;
 	}
 	
+	private List<PropertyAccessor<Task>> initialItems;
 	private EventList<PropertyAccessor<Task>> items;
 	
 	private TaskCustomColumnList() {
 		this.items = new BasicEventList<PropertyAccessor<Task>>();
 		
 		this.initialize();
+		
+		this.initialItems = this.getPropertyAccessors();
 	}
 	
 	private void initialize() {
@@ -147,6 +150,10 @@ public final class TaskCustomColumnList implements ListEventSupported<PropertyAc
 	
 	public EventList<PropertyAccessor<Task>> getEventList() {
 		return GlazedLists.readOnlyList(this.items);
+	}
+	
+	public List<PropertyAccessor<Task>> getInitialPropertyAccessors() {
+		return new ArrayList<PropertyAccessor<Task>>(this.initialItems);
 	}
 	
 	public List<PropertyAccessor<Task>> getPropertyAccessors() {
