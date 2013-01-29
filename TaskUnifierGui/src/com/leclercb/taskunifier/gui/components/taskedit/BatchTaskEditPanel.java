@@ -391,7 +391,7 @@ public class BatchTaskEditPanel extends ScrollablePanel {
 	
 	private void initialize() {
 		this.setScrollableWidth(ScrollablePanel.ScrollableSizeHint.FIT);
-		this.setScrollableHeight(ScrollablePanel.ScrollableSizeHint.NONE);
+		this.setScrollableHeight(ScrollablePanel.ScrollableSizeHint.STRETCH);
 		
 		String dateFormat = Main.getSettings().getStringProperty(
 				"date.date_format");
