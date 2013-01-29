@@ -36,6 +36,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import com.leclercb.taskunifier.gui.actions.ActionManagePublisherPlugins;
+import com.leclercb.taskunifier.gui.actions.publish.ActionPublishAll;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
@@ -86,6 +87,23 @@ public class PublicationConfigurationPanel extends DefaultConfigurationPanel {
 				"PLUGIN_TABLE",
 				null,
 				new PublisherPluginFieldType()));
+		
+		this.addField(new ConfigurationField(
+				"SEPARATOR_2",
+				null,
+				new ConfigurationFieldType.Separator()));
+		
+		this.addField(new ConfigurationField(
+				"PUBLISH_ALL_LABEL",
+				null,
+				new ConfigurationFieldType.Label(
+						Translations.getString("configuration.publication.publish_all"))));
+		
+		this.addField(new ConfigurationField(
+				"PUBLISH_ALL",
+				null,
+				new ConfigurationFieldType.Button(new ActionPublishAll(
+						this.getConfigurationGroup()))));
 	}
 	
 }
