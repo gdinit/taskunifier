@@ -34,6 +34,7 @@ package com.leclercb.taskunifier.gui.components.taskedit;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -66,6 +67,7 @@ import ca.odell.glazedlists.swing.EventComboBoxModel;
 
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
+import com.leclercb.commons.gui.swing.panels.ScrollablePanel;
 import com.leclercb.taskunifier.api.models.Context;
 import com.leclercb.taskunifier.api.models.Folder;
 import com.leclercb.taskunifier.api.models.Goal;
@@ -113,7 +115,7 @@ import com.leclercb.taskunifier.gui.utils.TaskStatusList;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JTextFieldDateEditor;
 
-public class BatchTaskEditPanel extends JPanel {
+public class BatchTaskEditPanel extends ScrollablePanel {
 	
 	private boolean changed;
 	private Task[] tasks;
@@ -388,6 +390,9 @@ public class BatchTaskEditPanel extends JPanel {
 	}
 	
 	private void initialize() {
+		this.setScrollableWidth(ScrollablePanel.ScrollableSizeHint.FIT);
+		this.setScrollableHeight(ScrollablePanel.ScrollableSizeHint.NONE);
+		
 		String dateFormat = Main.getSettings().getStringProperty(
 				"date.date_format");
 		String timeFormat = Main.getSettings().getStringProperty(
@@ -973,8 +978,11 @@ public class BatchTaskEditPanel extends JPanel {
 				BorderFactory.createLineBorder(Color.GRAY));
 		
 		JPanel notePanel = new JPanel(new BorderLayout());
+		notePanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
 		notePanel.add(this.taskNoteCheckBox, BorderLayout.WEST);
 		notePanel.add(this.taskNote.getComponent(), BorderLayout.CENTER);
+		
+		notePanel.setPreferredSize(new Dimension(200, 150));
 		
 		// Lay out the panel
 		this.tabbedPane = new JTabbedPane();
@@ -989,11 +997,18 @@ public class BatchTaskEditPanel extends JPanel {
 		}
 		
 		if (TaskCustomColumnList.getInstance().getInitialPropertyAccessors().size() != 0) {
+			JPanel taskPropertyPanel = new JPanel();
+			taskPropertyPanel.setLayout(new BorderLayout());
+			taskPropertyPanel.add(
+					this.taskPropertyTable.getTableHeader(),
+					BorderLayout.NORTH);
+			taskPropertyPanel.add(this.taskPropertyTable, BorderLayout.CENTER);
+			
 			JPanel tabProperties = new JPanel();
 			tabProperties.setLayout(new BorderLayout());
-			tabProperties.add(ComponentFactory.createJScrollPane(
-					this.taskPropertyTable,
-					true), BorderLayout.CENTER);
+			tabProperties.add(
+					ComponentFactory.createJScrollPane(taskPropertyPanel, true),
+					BorderLayout.CENTER);
 			
 			tabMain.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 			tabProperties.setBorder(BorderFactory.createEmptyBorder(
