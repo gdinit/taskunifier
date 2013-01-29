@@ -3,6 +3,7 @@ Version 3.1.8
 		- Refactoring of table columns
 	- Minor:
 		- BF 254: Filter operator change
+		- Line wrap in task edit window
 		- Improved create template from task
 
 Version 3.1.7
