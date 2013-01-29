@@ -982,7 +982,7 @@ public class BatchTaskEditPanel extends ScrollablePanel {
 		notePanel.add(this.taskNoteCheckBox, BorderLayout.WEST);
 		notePanel.add(this.taskNote.getComponent(), BorderLayout.CENTER);
 		
-		notePanel.setPreferredSize(new Dimension(200, 150));
+		notePanel.setPreferredSize(new Dimension(100, 150));
 		
 		// Lay out the panel
 		this.tabbedPane = new JTabbedPane();

@@ -34,6 +34,7 @@ package com.leclercb.taskunifier.gui.components.configuration.fields.publication
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -58,6 +59,7 @@ public class PublisherPluginFieldType extends ConfigurationFieldType.Panel imple
 		panel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		
 		this.table = new PublisherPluginTable();
+		this.table.setPreferredSize(new Dimension(100, 200));
 		
 		panel.add(this.table.getTableHeader(), BorderLayout.NORTH);
 		panel.add(this.table, BorderLayout.CENTER);
