@@ -39,6 +39,7 @@ import java.util.Map;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
+import com.leclercb.taskunifier.api.models.Timer;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -79,6 +80,7 @@ public class ActionDuplicateTasks extends AbstractViewTaskSelectionAction {
 		try {
 			for (Task task : tasks) {
 				Task newTask = TaskFactory.getInstance().create(task);
+				newTask.setTimer(new Timer());
 				newTasks.put(task, newTask);
 			}
 			

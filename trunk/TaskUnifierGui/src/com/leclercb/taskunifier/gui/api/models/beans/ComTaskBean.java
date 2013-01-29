@@ -46,10 +46,8 @@ import com.leclercb.taskunifier.api.models.LocationFactory;
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
-import com.leclercb.taskunifier.api.models.beans.ContactListBean;
 import com.leclercb.taskunifier.api.models.beans.ModelBeanList;
 import com.leclercb.taskunifier.api.models.beans.TaskBean;
-import com.leclercb.taskunifier.api.models.beans.TaskListBean;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 
@@ -289,16 +287,6 @@ public class ComTaskBean extends GuiTaskBean {
 			this.setLocationTitles(null);
 			this.setParentTitle(null);
 		}
-	}
-	
-	@Override
-	public void setContacts(ContactListBean contacts) {
-		// You cannot set contacts
-	}
-	
-	@Override
-	public void setTasks(TaskListBean tasks) {
-		// You cannot set tasks
 	}
 	
 }
