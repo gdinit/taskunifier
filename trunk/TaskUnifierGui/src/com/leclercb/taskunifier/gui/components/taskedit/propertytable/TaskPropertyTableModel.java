@@ -157,6 +157,7 @@ public class TaskPropertyTableModel extends AbstractTableModel {
 			case 1:
 				break;
 			case 2:
+				this.items.get(row).setEdit(true);
 				this.items.get(row).setValue(value);
 			default:
 				break;
