@@ -92,7 +92,7 @@ public final class MainSplashScreen {
 				metrics = this.g2d.getFontMetrics(this.g2d.getFont());
 				stringWidth = metrics.stringWidth("PRO Version");
 				
-				this.g2d.setColor(Color.RED);
+				this.g2d.setColor(new Color(40, 155, 60));
 				this.g2d.drawString("PRO Version", 420 - stringWidth, 105);
 			}
 			
