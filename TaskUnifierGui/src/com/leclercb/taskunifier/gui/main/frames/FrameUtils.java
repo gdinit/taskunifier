@@ -84,7 +84,7 @@ public final class FrameUtils {
 		String propertyName = "window.main";
 		
 		if (!isFirstWindow)
-			propertyName = "window.sub";
+			propertyName = "window.sub." + FRAME_ID;
 		
 		MainFrame frame = new MainFrame(FRAME_ID, propertyName);
 		

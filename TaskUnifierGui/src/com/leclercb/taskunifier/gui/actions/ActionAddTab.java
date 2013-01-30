@@ -96,18 +96,24 @@ public class ActionAddTab extends AbstractViewAction {
 		ActionAddTab.addTab(type);
 	}
 	
-	public static void addTab(ViewType type) {
+	public static ViewItem addTab(ViewType type) {
+		return addTab(type, null);
+	}
+	
+	public static ViewItem addTab(ViewType type, FrameView frameView) {
 		if (type == null)
 			type = ViewType.TASKS;
 		
 		ViewItem viewItem = null;
-		FrameView frameView = FrameUtils.getCurrentFrameView();
 		
 		if (frameView == null)
-			return;
+			frameView = FrameUtils.getCurrentFrameView();
+		
+		if (frameView == null)
+			return null;
 		
 		if (!COUNT_MAP.containsKey(type)) {
-			COUNT_MAP.put(type, 2);
+			COUNT_MAP.put(type, 1);
 		} else {
 			COUNT_MAP.put(type, COUNT_MAP.get(type) + 1);
 		}
@@ -142,6 +148,8 @@ public class ActionAddTab extends AbstractViewAction {
 		
 		ViewList.getInstance().addView(viewItem);
 		ViewList.getInstance().setCurrentView(viewItem);
+		
+		return viewItem;
 	}
 	
 }
