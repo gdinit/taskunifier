@@ -8,6 +8,7 @@ Version 3.1.8
 		- BF 254: Filter operator change
 		- BF 255: "Mail to" error with current user
 		- BF 259: Reset timer when clone task
+		- FR 296: Added parent/sub task count task columns
 		- FR 299: Shortcut add subtask at the same level
 		- FR 304: Show only active calendar events
 		- Line wrap in task edit window

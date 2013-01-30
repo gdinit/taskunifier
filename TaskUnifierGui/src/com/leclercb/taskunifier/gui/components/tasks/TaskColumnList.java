@@ -288,6 +288,57 @@ public class TaskColumnList extends PropertyAccessorList<Task> {
 		});
 		
 		this.add(new DefaultPropertyAccessor<Task>(
+				"SUB_TASK_COUNT",
+				"task.field.sub_task_count",
+				PropertyAccessorType.INTEGER,
+				null,
+				Translations.getString("general.task.sub_task_count"),
+				false,
+				false,
+				false) {
+			
+			@Override
+			public Object getProperty(Task model) {
+				int count = 0;
+				List<Task> children = model.getChildren();
+				
+				for (Task child : children)
+					if (child.getModelStatus().isEndUserStatus())
+						count++;
+				
+				return count;
+			}
+			
+			@Override
+			public void setProperty(Task model, Object value) {
+				
+			}
+			
+		});
+		
+		this.add(new DefaultPropertyAccessor<Task>(
+				"PARENT_TASK_COUNT",
+				"task.field.parent_task_count",
+				PropertyAccessorType.INTEGER,
+				null,
+				Translations.getString("general.task.parent_task_count"),
+				false,
+				false,
+				false) {
+			
+			@Override
+			public Object getProperty(Task model) {
+				return model.getAllParents().size();
+			}
+			
+			@Override
+			public void setProperty(Task model, Object value) {
+				
+			}
+			
+		});
+		
+		this.add(new DefaultPropertyAccessor<Task>(
 				"TITLE",
 				"task.field.title",
 				PropertyAccessorType.STRING,
