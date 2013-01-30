@@ -290,7 +290,8 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 		List<Event> allEvents = new ArrayList<Event>();
 		
 		for (NamedCalendar nc : this.calendarPanel.getCalendars()) {
-			allEvents.addAll(nc.getEvents(null, null));
+			if (nc.isActive())
+				allEvents.addAll(nc.getEvents(null, null));
 		}
 		
 		try {
