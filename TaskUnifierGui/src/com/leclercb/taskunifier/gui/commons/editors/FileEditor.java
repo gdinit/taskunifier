@@ -33,6 +33,8 @@
 package com.leclercb.taskunifier.gui.commons.editors;
 
 import java.awt.Component;
+import java.awt.event.MouseEvent;
+import java.util.EventObject;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.JFileChooser;
@@ -68,6 +70,18 @@ public class FileEditor extends AbstractCellEditor implements TableCellEditor {
 	@Override
 	public Object getCellEditorValue() {
 		return this.fileField.getFile();
+	}
+	
+	@Override
+	public boolean isCellEditable(EventObject anEvent) {
+		if (anEvent instanceof MouseEvent) {
+			MouseEvent event = (MouseEvent) anEvent;
+			
+			if (event.getClickCount() != 2)
+				return false;
+		}
+		
+		return super.isCellEditable(anEvent);
 	}
 	
 }
