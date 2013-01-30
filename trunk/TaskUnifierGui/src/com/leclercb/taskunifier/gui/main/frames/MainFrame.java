@@ -410,15 +410,20 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 	private void loadWindowSettings() {
 		try {
 			int extendedState = Main.getSettings().getIntegerProperty(
-					this.propertyName + ".extended_state");
+					this.propertyName + ".extended_state",
+					Frame.MAXIMIZED_BOTH);
 			int width = Main.getSettings().getIntegerProperty(
-					this.propertyName + ".width");
+					this.propertyName + ".width",
+					1024);
 			int height = Main.getSettings().getIntegerProperty(
-					this.propertyName + ".height");
+					this.propertyName + ".height",
+					768);
 			int locationX = Main.getSettings().getIntegerProperty(
-					this.propertyName + ".location_x");
+					this.propertyName + ".location_x",
+					0);
 			int locationY = Main.getSettings().getIntegerProperty(
-					this.propertyName + ".location_y");
+					this.propertyName + ".location_y",
+					0);
 			
 			if (SystemUtils.IS_OS_MAC
 					&& EqualsUtils.equalsStringIgnoreCase(
