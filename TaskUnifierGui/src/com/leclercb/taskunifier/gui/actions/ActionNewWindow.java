@@ -64,7 +64,7 @@ public class ActionNewWindow extends AbstractViewAction {
 		this.putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(
 				KeyEvent.VK_W,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()
-						+ InputEvent.SHIFT_MASK));
+						+ InputEvent.SHIFT_DOWN_MASK));
 	}
 	
 	@Override

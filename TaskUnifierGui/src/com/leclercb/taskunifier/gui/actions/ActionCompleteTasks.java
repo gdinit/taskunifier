@@ -57,7 +57,7 @@ public class ActionCompleteTasks extends AbstractViewTaskSelectionAction {
 		
 		this.putValue(
 				ACCELERATOR_KEY,
-				KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.ALT_MASK));
+				KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.ALT_DOWN_MASK));
 	}
 	
 	@Override
