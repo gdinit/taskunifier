@@ -43,9 +43,11 @@ import java.awt.event.MouseEvent;
 import java.awt.print.PrinterException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -70,10 +72,12 @@ import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
+import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.actions.ActionDelete;
 import com.leclercb.taskunifier.gui.actions.ActionEditTasks;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionChangeSupport;
@@ -107,6 +111,7 @@ import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
+import com.leclercb.taskunifier.gui.utils.DesktopUtils;
 import com.leclercb.taskunifier.gui.utils.UndoSupport;
 
 public class TaskTable extends JXTable implements TaskTableView, PropertyChangeListener, SavePropertiesListener {
@@ -350,6 +355,7 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 		this.initializeSettings();
 		this.initializeHeaderListener();
 		this.initializeDeleteTasks();
+		this.initializeSingleClick();
 		this.initializeDoubleClick();
 		this.initializeTaskTableMenu();
 		this.initializeDragAndDrop();
@@ -474,6 +480,69 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 		});
 	}
 	
+	private void initializeSingleClick() {
+		this.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				if (event.getButton() == MouseEvent.BUTTON1
+						&& event.getClickCount() == 1
+						&& event.isControlDown()) {
+					try {
+						int rowIndex = TaskTable.this.rowAtPoint(event.getPoint());
+						
+						if (rowIndex == -1)
+							return;
+						
+						rowIndex = TaskTable.this.getRowSorter().convertRowIndexToModel(
+								rowIndex);
+						
+						int colIndex = TaskTable.this.columnAtPoint(event.getPoint());
+						
+						PropertyAccessor<Task> column = (PropertyAccessor<Task>) TaskTable.this.getColumn(
+								colIndex).getIdentifier();
+						
+						if (column.getType() == PropertyAccessorType.FILE) {
+							Task task = ((TaskTableModel) TaskTable.this.getModel()).getTask(rowIndex);
+							
+							if (task == null)
+								return;
+							
+							TaskTable.this.commitChanges();
+							TaskTable.this.setSelectedTasks(new Task[] { task });
+							
+							String value = (String) column.getProperty(task);
+							
+							if (value == null)
+								return;
+							
+							try {
+								File file = new File(value);
+								
+								if (file.exists()) {
+									DesktopUtils.open(file);
+									return;
+								}
+							} catch (Exception e) {
+								
+							}
+							
+							DesktopUtils.browse(value);
+							
+							return;
+						}
+					} catch (Exception e) {
+						GuiLogger.getLogger().log(
+								Level.WARNING,
+								e.getMessage(),
+								e);
+					}
+				}
+			}
+			
+		});
+	}
+	
 	private void initializeDoubleClick() {
 		this.addMouseListener(new MouseAdapter() {
 			
@@ -574,7 +643,10 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 							}
 						}
 					} catch (Exception e) {
-						
+						GuiLogger.getLogger().log(
+								Level.WARNING,
+								e.getMessage(),
+								e);
 					}
 				}
 			}
