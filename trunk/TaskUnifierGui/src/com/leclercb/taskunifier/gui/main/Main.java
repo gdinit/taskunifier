@@ -583,6 +583,7 @@ public class Main {
 	
 	public static void reloadProVersion() {
 		loadProVersion();
+		ACTION_SUPPORT.fireActionPerformed(0, "PRO_VERSION");
 	}
 	
 	private static void loadModels() throws Exception {

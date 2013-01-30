@@ -33,18 +33,25 @@
 package com.leclercb.taskunifier.gui.components.configuration;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JTabbedPane;
 
+import com.leclercb.commons.api.event.action.WeakActionListener;
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationPanel;
+import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 
-public class ThemeConfigurationPanel extends ConfigurationPanel {
+public class ThemeConfigurationPanel extends ConfigurationPanel implements ActionListener {
 	
 	private JTabbedPane tabbedPane;
+	
+	private int taskCustomColumnListConfigurationIndex;
 	
 	private ConfigurationPanel generalConfigurationPanel;
 	private ConfigurationPanel taskCustomColumnListConfigurationPanel;
@@ -69,8 +76,7 @@ public class ThemeConfigurationPanel extends ConfigurationPanel {
 		this.add(this.tabbedPane, BorderLayout.CENTER);
 		
 		this.initializeGeneralPanel();
-		// TODO: PRO
-		// this.initializeTaskCustomColumnListPanel();
+		this.initializeTaskCustomColumnListPanel();
 		this.initializeNoteColumnsPanel();
 		this.initializeTaskColumnsPanel();
 		this.initializeNoteFieldsPanel();
@@ -92,11 +98,34 @@ public class ThemeConfigurationPanel extends ConfigurationPanel {
 	private void initializeTaskCustomColumnListPanel() {
 		this.taskCustomColumnListConfigurationPanel = new TaskCustomColumnListConfigurationPanel(
 				this);
-		this.tabbedPane.addTab(
-				Translations.getString("configuration.tab.task_custom_column_list"),
-				ComponentFactory.createJScrollPane(
-						this.taskCustomColumnListConfigurationPanel,
-						false));
+		
+		this.taskCustomColumnListConfigurationIndex = -1;
+		this.checkTaskCustomColumnListPanel();
+		
+		Main.getActionSupport().addActionListener(
+				new WeakActionListener(Main.getActionSupport(), this));
+	}
+	
+	private void checkTaskCustomColumnListPanel() {
+		// TODO: PRO
+		if (true)
+			return;
+		
+		if (Main.isProVersion()) {
+			if (this.taskCustomColumnListConfigurationIndex == -1) {
+				this.tabbedPane.addTab(
+						Translations.getString("configuration.tab.task_custom_column_list"),
+						ComponentFactory.createJScrollPane(
+								this.taskCustomColumnListConfigurationPanel,
+								false));
+				this.taskCustomColumnListConfigurationIndex = this.tabbedPane.getTabCount() - 1;
+			}
+		} else {
+			if (this.taskCustomColumnListConfigurationIndex != -1) {
+				this.tabbedPane.removeTabAt(this.taskCustomColumnListConfigurationIndex);
+				this.taskCustomColumnListConfigurationIndex = 1;
+			}
+		}
 	}
 	
 	private void initializeNoteColumnsPanel() {
@@ -162,8 +191,7 @@ public class ThemeConfigurationPanel extends ConfigurationPanel {
 	@Override
 	public void saveAndApplyConfig() {
 		this.generalConfigurationPanel.saveAndApplyConfig();
-		// TODO: PRO
-		// this.taskCustomColumnListConfigurationPanel.saveAndApplyConfig();
+		this.taskCustomColumnListConfigurationPanel.saveAndApplyConfig();
 		this.noteColumnsConfigurationPanel.saveAndApplyConfig();
 		this.taskColumnsConfigurationPanel.saveAndApplyConfig();
 		this.noteFieldsConfigurationPanel.saveAndApplyConfig();
@@ -175,14 +203,21 @@ public class ThemeConfigurationPanel extends ConfigurationPanel {
 	@Override
 	public void cancelConfig() {
 		this.generalConfigurationPanel.cancelConfig();
-		// TODO: PRO
-		// this.taskCustomColumnListConfigurationPanel.cancelConfig();
+		this.taskCustomColumnListConfigurationPanel.cancelConfig();
 		this.noteColumnsConfigurationPanel.cancelConfig();
 		this.taskColumnsConfigurationPanel.cancelConfig();
 		this.noteFieldsConfigurationPanel.cancelConfig();
 		this.taskFieldsConfigurationPanel.cancelConfig();
 		this.priorityConfigurationPanel.cancelConfig();
 		this.importanceConfigurationPanel.cancelConfig();
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		if (!EqualsUtils.equals(event.getActionCommand(), "PRO_VERSION"))
+			return;
+		
+		this.checkTaskCustomColumnListPanel();
 	}
 	
 }
