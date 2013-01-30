@@ -65,7 +65,7 @@ public class ActionChangeView extends AbstractViewAction implements PropertyChan
 		
 		this.putValue(
 				ACCELERATOR_KEY,
-				KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.ALT_MASK));
+				KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.ALT_DOWN_MASK));
 		
 		this.updateIcon();
 		

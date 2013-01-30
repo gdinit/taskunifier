@@ -38,12 +38,9 @@ import java.util.List;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import com.leclercb.commons.api.utils.CheckUtils;
-import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilter;
-import com.leclercb.taskunifier.gui.components.modelnote.converters.Text2HTML;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 
 public final class NoteUtils {
 	
@@ -92,10 +89,7 @@ public final class NoteUtils {
 					
 					String text = row[j];
 					
-					if (EqualsUtils.equals(columns.get(j), NoteColumnList.NOTE))
-						text = Text2HTML.convert(text);
-					else
-						text = StringEscapeUtils.escapeHtml4(text);
+					text = StringEscapeUtils.escapeHtml4(text);
 					
 					buffer.append(text);
 				}
@@ -145,10 +139,7 @@ public final class NoteUtils {
 			for (int j = 0; j < row.length; j++) {
 				String text = row[j];
 				
-				if (EqualsUtils.equals(columns.get(j), NoteColumnList.NOTE))
-					text = Text2HTML.convert(text);
-				else
-					text = StringEscapeUtils.escapeHtml3(text);
+				text = StringEscapeUtils.escapeHtml3(text);
 				
 				buffer.append("<td>" + text + "</td>");
 			}

@@ -32,7 +32,12 @@
  */
 package com.leclercb.taskunifier.gui.actions;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.KeyStroke;
 
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
@@ -51,7 +56,10 @@ public class ActionAddSubTaskAtSameLevel extends ActionAddSubTask {
 				SHORT_DESCRIPTION,
 				Translations.getString("action.add_subtask_at_same_level"));
 		
-		this.putValue(ACCELERATOR_KEY, null);
+		this.putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(
+				KeyEvent.VK_K,
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()
+						+ InputEvent.SHIFT_DOWN_MASK));
 	}
 	
 	@Override

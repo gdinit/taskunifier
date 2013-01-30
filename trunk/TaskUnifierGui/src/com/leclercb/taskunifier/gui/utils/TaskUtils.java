@@ -50,7 +50,6 @@ import com.leclercb.taskunifier.gui.api.models.GuiTask;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilterElement;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
-import com.leclercb.taskunifier.gui.components.modelnote.converters.Text2HTML;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.main.Main;
@@ -275,13 +274,7 @@ public final class TaskUtils {
 					
 					String text = row[j];
 					
-					if (EqualsUtils.equals(
-							columns.get(j),
-							TaskColumnList.getInstance().get(
-									TaskColumnList.NOTE)))
-						text = Text2HTML.convert(text);
-					else
-						text = StringEscapeUtils.escapeHtml3(text);
+					text = StringEscapeUtils.escapeHtml3(text);
 					
 					buffer.append(text);
 				}
@@ -331,12 +324,7 @@ public final class TaskUtils {
 			for (int j = 0; j < row.length; j++) {
 				String text = row[j];
 				
-				if (EqualsUtils.equals(
-						columns.get(j),
-						TaskColumnList.getInstance().get(TaskColumnList.NOTE)))
-					text = Text2HTML.convert(text);
-				else
-					text = StringEscapeUtils.escapeHtml3(text);
+				text = StringEscapeUtils.escapeHtml3(text);
 				
 				buffer.append("<td>" + text + "</td>");
 			}
