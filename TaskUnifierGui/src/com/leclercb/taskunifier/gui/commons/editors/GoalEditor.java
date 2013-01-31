@@ -40,7 +40,9 @@ import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 public class GoalEditor extends ComboBoxCellEditor {
 	
 	public GoalEditor() {
-		super(ComponentFactory.createModelComboBox(new GoalModel(true), true));
+		super(ComponentFactory.createModelComboBox(
+				new GoalModel(true, false),
+				true));
 	}
 	
 }

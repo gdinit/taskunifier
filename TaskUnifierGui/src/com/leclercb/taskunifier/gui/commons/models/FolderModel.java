@@ -40,6 +40,7 @@ import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.Folder;
 import com.leclercb.taskunifier.api.models.FolderFactory;
+import com.leclercb.taskunifier.api.models.ModelArchived;
 import com.leclercb.taskunifier.api.models.ModelParent;
 
 public class FolderModel extends AbstractBasicModelSortedModel {
@@ -90,7 +91,7 @@ public class FolderModel extends AbstractBasicModelSortedModel {
 			return;
 		}
 		
-		if (event.getPropertyName().equals(Folder.PROP_ARCHIVED)
+		if (event.getPropertyName().equals(ModelArchived.PROP_ARCHIVED)
 				&& !this.includeArchived) {
 			if (folder.isSelfOrParentArchived()) {
 				this.removeElement(folder);

@@ -32,16 +32,24 @@
  */
 package com.leclercb.taskunifier.gui.commons.models;
 
+import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
+import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.Goal;
 import com.leclercb.taskunifier.api.models.GoalFactory;
+import com.leclercb.taskunifier.api.models.ModelArchived;
+import com.leclercb.taskunifier.api.models.ModelParent;
 
 public class GoalModel extends AbstractBasicModelSortedModel {
 	
-	public GoalModel(boolean firstNull) {
+	protected boolean includeArchived;
+	
+	public GoalModel(boolean firstNull, boolean includeArchived) {
+		this.includeArchived = includeArchived;
+		
 		if (firstNull)
 			this.addElement(null);
 		
@@ -53,6 +61,71 @@ public class GoalModel extends AbstractBasicModelSortedModel {
 				new WeakListChangeListener(GoalFactory.getInstance(), this));
 		GoalFactory.getInstance().addPropertyChangeListener(
 				new WeakPropertyChangeListener(GoalFactory.getInstance(), this));
+	}
+	
+	@Override
+	public void addElement(Object element) {
+		if (element != null)
+			if (!this.includeArchived
+					&& ((Goal) element).isSelfOrParentArchived())
+				return;
+		
+		super.addElement(element);
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+		Goal goal = (Goal) event.getSource();
+		
+		if (event.getPropertyName().equals(BasicModel.PROP_MODEL_STATUS)) {
+			if (goal.getModelStatus().isEndUserStatus()) {
+				int index = this.getIndexOf(goal);
+				if (index == -1)
+					this.addElement(goal);
+			} else {
+				this.removeElement(goal);
+			}
+			
+			return;
+		}
+		
+		if (event.getPropertyName().equals(ModelArchived.PROP_ARCHIVED)
+				&& !this.includeArchived) {
+			if (goal.isSelfOrParentArchived()) {
+				this.removeElement(goal);
+				
+				List<Goal> children = goal.getAllChildren();
+				for (Goal child : children) {
+					this.removeElement(child);
+				}
+			} else {
+				int index = this.getIndexOf(goal);
+				if (index == -1)
+					this.addElement(goal);
+				
+				List<Goal> children = goal.getAllChildren();
+				for (Goal child : children) {
+					if (child.isSelfOrParentArchived())
+						continue;
+					
+					index = this.getIndexOf(child);
+					if (index == -1)
+						this.addElement(child);
+				}
+				
+				this.fireStructureChanged(this);
+			}
+			
+			return;
+		}
+		
+		if (event.getPropertyName().equals(ModelParent.PROP_PARENT)) {
+			this.fireStructureChanged(this);
+			return;
+		}
+		
+		int index = this.getIndexOf(goal);
+		this.fireContentsChanged(this, index, index);
 	}
 	
 }

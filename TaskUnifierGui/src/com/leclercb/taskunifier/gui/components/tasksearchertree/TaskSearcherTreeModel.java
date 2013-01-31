@@ -61,6 +61,7 @@ import com.leclercb.taskunifier.api.models.GoalFactory;
 import com.leclercb.taskunifier.api.models.Location;
 import com.leclercb.taskunifier.api.models.LocationFactory;
 import com.leclercb.taskunifier.api.models.Model;
+import com.leclercb.taskunifier.api.models.ModelArchived;
 import com.leclercb.taskunifier.api.models.ModelNote;
 import com.leclercb.taskunifier.api.models.ModelParent;
 import com.leclercb.taskunifier.api.models.ModelType;
@@ -257,12 +258,14 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 		
 		for (Goal goal : goals) {
 			if (goal.getModelStatus().isEndUserStatus()) {
-				DefaultMutableTreeNode node = this.goalCategory;
-				
-				if (goal.getParent() != null)
-					node = this.findItemFromModel(goal.getParent());
-				
-				node.add(new ModelItem(ModelType.GOAL, goal));
+				if (!goal.isSelfOrParentArchived()) {
+					DefaultMutableTreeNode node = this.goalCategory;
+					
+					if (goal.getParent() != null)
+						node = this.findItemFromModel(goal.getParent());
+					
+					node.add(new ModelItem(ModelType.GOAL, goal));
+				}
 			}
 		}
 		
@@ -467,8 +470,8 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 				if (!model.getModelStatus().isEndUserStatus())
 					return;
 				
-				if (event.getValue() instanceof Folder)
-					if (((Folder) event.getValue()).isSelfOrParentArchived())
+				if (event.getValue() instanceof ModelArchived)
+					if (((ModelArchived) event.getValue()).isSelfOrParentArchived())
 						return;
 				
 				ModelItem item = new ModelItem(model.getModelType(), model);
@@ -565,8 +568,8 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 			if (!((Model) event.getSource()).getModelStatus().isEndUserStatus()) {
 				if (item != null)
 					this.removeNodeFromParent(item);
-			} else if (event.getSource() instanceof Folder
-					&& ((Folder) event.getSource()).isSelfOrParentArchived()) {
+			} else if (event.getSource() instanceof ModelArchived
+					&& ((ModelArchived) event.getSource()).isSelfOrParentArchived()) {
 				if (item != null)
 					this.removeNodeFromParent(item);
 			} else if (item == null) {
@@ -584,6 +587,29 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 				if (event.getSource() instanceof Folder) {
 					if (!((Folder) event.getSource()).isSelfOrParentArchived()) {
 						for (Folder child : ((Folder) event.getSource()).getAllChildren()) {
+							if (child.isSelfOrParentArchived())
+								continue;
+							
+							category = this.findItemFromModel(child.getParent());
+							item = new ModelItem(child.getModelType(), child);
+							
+							try {
+								this.insertNodeInto(
+										item,
+										category,
+										this.findNewIndexInModelCategory(
+												category,
+												child));
+							} catch (Exception e) {
+								this.insertNodeInto(item, category, 0);
+							}
+						}
+					}
+				}
+				
+				if (event.getSource() instanceof Goal) {
+					if (!((Goal) event.getSource()).isSelfOrParentArchived()) {
+						for (Goal child : ((Goal) event.getSource()).getAllChildren()) {
 							if (child.isSelfOrParentArchived())
 								continue;
 							
