@@ -40,7 +40,7 @@ import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.Goal;
 import com.leclercb.taskunifier.api.models.GoalFactory;
-import com.leclercb.taskunifier.api.models.ModelArchived;
+import com.leclercb.taskunifier.api.models.ModelArchive;
 import com.leclercb.taskunifier.api.models.ModelParent;
 
 public class GoalModel extends AbstractBasicModelSortedModel {
@@ -89,7 +89,7 @@ public class GoalModel extends AbstractBasicModelSortedModel {
 			return;
 		}
 		
-		if (event.getPropertyName().equals(ModelArchived.PROP_ARCHIVED)
+		if (event.getPropertyName().equals(ModelArchive.PROP_ARCHIVED)
 				&& !this.includeArchived) {
 			if (goal.isSelfOrParentArchived()) {
 				this.removeElement(goal);

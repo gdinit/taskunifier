@@ -42,7 +42,7 @@ import com.leclercb.taskunifier.api.models.beans.GoalBean;
 import com.leclercb.taskunifier.api.models.beans.ModelBean;
 import com.leclercb.taskunifier.api.models.enums.GoalLevel;
 
-public class Goal extends AbstractModelParent<Goal> implements ModelArchived, PropertyChangeListener {
+public class Goal extends AbstractModelParent<Goal> implements ModelArchive, PropertyChangeListener {
 	
 	public static final String PROP_LEVEL = "level";
 	public static final String PROP_CONTRIBUTES = "contributes";

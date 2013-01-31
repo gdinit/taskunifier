@@ -61,7 +61,7 @@ import com.leclercb.taskunifier.api.models.GoalFactory;
 import com.leclercb.taskunifier.api.models.Location;
 import com.leclercb.taskunifier.api.models.LocationFactory;
 import com.leclercb.taskunifier.api.models.Model;
-import com.leclercb.taskunifier.api.models.ModelArchived;
+import com.leclercb.taskunifier.api.models.ModelArchive;
 import com.leclercb.taskunifier.api.models.ModelNote;
 import com.leclercb.taskunifier.api.models.ModelParent;
 import com.leclercb.taskunifier.api.models.ModelType;
@@ -470,8 +470,8 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 				if (!model.getModelStatus().isEndUserStatus())
 					return;
 				
-				if (event.getValue() instanceof ModelArchived)
-					if (((ModelArchived) event.getValue()).isSelfOrParentArchived())
+				if (event.getValue() instanceof ModelArchive)
+					if (((ModelArchive) event.getValue()).isSelfOrParentArchived())
 						return;
 				
 				ModelItem item = new ModelItem(model.getModelType(), model);
@@ -568,8 +568,8 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 			if (!((Model) event.getSource()).getModelStatus().isEndUserStatus()) {
 				if (item != null)
 					this.removeNodeFromParent(item);
-			} else if (event.getSource() instanceof ModelArchived
-					&& ((ModelArchived) event.getSource()).isSelfOrParentArchived()) {
+			} else if (event.getSource() instanceof ModelArchive
+					&& ((ModelArchive) event.getSource()).isSelfOrParentArchived()) {
 				if (item != null)
 					this.removeNodeFromParent(item);
 			} else if (item == null) {

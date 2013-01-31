@@ -36,7 +36,7 @@ import javax.swing.RowFilter;
 import javax.swing.table.TableModel;
 
 import com.leclercb.taskunifier.api.models.Model;
-import com.leclercb.taskunifier.api.models.ModelArchived;
+import com.leclercb.taskunifier.api.models.ModelArchive;
 import com.leclercb.taskunifier.gui.components.modelselectiontable.table.ModelSelectionTableModel;
 
 public class ModelRowFilter extends RowFilter<TableModel, Integer> {
@@ -56,8 +56,8 @@ public class ModelRowFilter extends RowFilter<TableModel, Integer> {
 		if (!model.getModelStatus().isEndUserStatus())
 			return false;
 		
-		if (model instanceof ModelArchived)
-			if (((ModelArchived) model).isArchived())
+		if (model instanceof ModelArchive)
+			if (((ModelArchive) model).isArchived())
 				return false;
 		
 		return true;
