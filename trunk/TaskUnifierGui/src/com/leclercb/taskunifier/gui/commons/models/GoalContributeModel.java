@@ -33,16 +33,18 @@
 package com.leclercb.taskunifier.gui.commons.models;
 
 import java.beans.PropertyChangeEvent;
+import java.util.List;
 
 import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.Goal;
+import com.leclercb.taskunifier.api.models.ModelArchived;
 import com.leclercb.taskunifier.api.models.ModelParent;
 import com.leclercb.taskunifier.api.models.enums.GoalLevel;
 
 public class GoalContributeModel extends GoalModel {
 	
-	public GoalContributeModel(boolean firstNull) {
-		super(firstNull);
+	public GoalContributeModel(boolean firstNull, boolean includeArchived) {
+		super(firstNull, includeArchived);
 	}
 	
 	@Override
@@ -77,6 +79,36 @@ public class GoalContributeModel extends GoalModel {
 				int index = this.getIndexOf(goal);
 				if (index == -1)
 					this.addElement(goal);
+			}
+			
+			return;
+		}
+		
+		if (event.getPropertyName().equals(ModelArchived.PROP_ARCHIVED)
+				&& !this.includeArchived) {
+			if (goal.isSelfOrParentArchived()) {
+				this.removeElement(goal);
+				
+				List<Goal> children = goal.getAllChildren();
+				for (Goal child : children) {
+					this.removeElement(child);
+				}
+			} else {
+				int index = this.getIndexOf(goal);
+				if (index == -1)
+					this.addElement(goal);
+				
+				List<Goal> children = goal.getAllChildren();
+				for (Goal child : children) {
+					if (child.isSelfOrParentArchived())
+						continue;
+					
+					index = this.getIndexOf(child);
+					if (index == -1)
+						this.addElement(child);
+				}
+				
+				this.fireStructureChanged(this);
 			}
 			
 			return;

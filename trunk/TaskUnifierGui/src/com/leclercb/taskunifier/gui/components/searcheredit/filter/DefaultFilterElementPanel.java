@@ -376,7 +376,7 @@ public class DefaultFilterElementPanel<M extends Model, FE extends FilterElement
 			case GOAL:
 			case GOALS:
 				if (condition instanceof ModelCondition) {
-					this.elementValueCb.setModel(new GoalModel(true));
+					this.elementValueCb.setModel(new GoalModel(true, true));
 					this.elementValueCb.setRenderer(new DefaultListRenderer(
 							StringValueModel.INSTANCE_INDENTED,
 							IconValueModel.INSTANCE));

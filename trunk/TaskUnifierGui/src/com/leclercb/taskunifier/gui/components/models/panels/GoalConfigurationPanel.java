@@ -43,6 +43,7 @@ import java.awt.event.ItemListener;
 import javax.swing.BorderFactory;
 import javax.swing.DropMode;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -60,6 +61,7 @@ import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.Goal;
 import com.leclercb.taskunifier.api.models.GoalFactory;
 import com.leclercb.taskunifier.api.models.Model;
+import com.leclercb.taskunifier.api.models.ModelArchived;
 import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.enums.GoalLevel;
 import com.leclercb.taskunifier.gui.api.models.GuiGoal;
@@ -110,6 +112,7 @@ public class GoalConfigurationPanel extends JSplitPane implements IModelList {
 		final JComboBox goalContributes = ComponentFactory.createModelComboBox(
 				null,
 				true);
+		final JCheckBox goalArchived = new JCheckBox();
 		final JXColorSelectionButton goalColor = new JXColorSelectionButton();
 		final JButton removeColor = new JButton();
 		
@@ -122,11 +125,12 @@ public class GoalConfigurationPanel extends JSplitPane implements IModelList {
 		goalTitle.setEnabled(false);
 		goalLevel.setEnabled(false);
 		goalContributes.setEnabled(false);
+		goalArchived.setEnabled(false);
 		goalColor.setEnabled(false);
 		removeColor.setEnabled(false);
 		
 		// Initialize Model List
-		this.modelList = new ModelList(new GoalModel(false) {
+		this.modelList = new ModelList(new GoalModel(false, true) {
 			
 			@Override
 			protected void fireContentsChanged(
@@ -153,8 +157,11 @@ public class GoalConfigurationPanel extends JSplitPane implements IModelList {
 				
 				ValueModel contributesModel = this.adapter.getValueModel(Goal.PROP_CONTRIBUTES);
 				goalContributes.setModel(new ComboBoxAdapter<Goal>(
-						new GoalContributeModel(true),
+						new GoalContributeModel(true, true),
 						contributesModel));
+				
+				ValueModel archivedModel = this.adapter.getValueModel(ModelArchived.PROP_ARCHIVED);
+				Bindings.bind(goalArchived, archivedModel);
 				
 				ValueModel colorModel = this.adapter.getValueModel(GuiModel.PROP_COLOR);
 				Bindings.bind(goalColor, "background", new ColorConverter(
@@ -184,6 +191,7 @@ public class GoalConfigurationPanel extends JSplitPane implements IModelList {
 				goalTitle.setEnabled(model != null);
 				goalLevel.setEnabled(model != null);
 				goalContributes.setEnabled(model != null);
+				goalArchived.setEnabled(model != null);
 				goalColor.setEnabled(model != null);
 				removeColor.setEnabled(model != null);
 				
@@ -242,6 +250,9 @@ public class GoalConfigurationPanel extends JSplitPane implements IModelList {
 		
 		// Goal Contributes
 		builder.appendI15d("general.goal.contributes", true, goalContributes);
+		
+		// Folder Archived
+		builder.appendI15d("general.goal.archived", true, goalArchived);
 		
 		// Goal Color
 		JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));

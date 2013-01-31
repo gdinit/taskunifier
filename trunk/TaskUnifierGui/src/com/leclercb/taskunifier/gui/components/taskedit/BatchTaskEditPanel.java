@@ -790,7 +790,7 @@ public class BatchTaskEditPanel extends ScrollablePanel {
 								16,
 								ModelConfigurationTab.GOALS))));
 			} else {
-				this.taskGoal.setModel(new GoalModel(true));
+				this.taskGoal.setModel(new GoalModel(true, false));
 				builder.append(this.createPanel(this.taskGoal, new JButton(
 						new ActionManageModels(
 								16,
