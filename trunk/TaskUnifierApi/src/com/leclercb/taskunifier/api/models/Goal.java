@@ -42,13 +42,14 @@ import com.leclercb.taskunifier.api.models.beans.GoalBean;
 import com.leclercb.taskunifier.api.models.beans.ModelBean;
 import com.leclercb.taskunifier.api.models.enums.GoalLevel;
 
-public class Goal extends AbstractModelParent<Goal> implements PropertyChangeListener {
+public class Goal extends AbstractModelParent<Goal> implements ModelArchived, PropertyChangeListener {
 	
 	public static final String PROP_LEVEL = "level";
 	public static final String PROP_CONTRIBUTES = "contributes";
 	
 	private GoalLevel level;
 	private Goal contributes;
+	private boolean archived;
 	
 	protected Goal(GoalBean bean, boolean loadReferenceIds) {
 		this(bean.getModelId(), bean.getTitle());
@@ -72,6 +73,7 @@ public class Goal extends AbstractModelParent<Goal> implements PropertyChangeLis
 		
 		this.setLevel(level);
 		this.setContributes(null);
+		this.setArchived(false);
 		
 		this.getFactory().register(this);
 	}
@@ -82,6 +84,7 @@ public class Goal extends AbstractModelParent<Goal> implements PropertyChangeLis
 		
 		goal.setLevel(this.getLevel());
 		goal.setContributes(this.getContributes());
+		goal.setArchived(this.isArchived());
 		goal.setParent(this.getParent());
 		
 		// After all other setXxx methods
@@ -122,6 +125,7 @@ public class Goal extends AbstractModelParent<Goal> implements PropertyChangeLis
 		
 		this.setLevel(bean.getLevel());
 		this.setContributes(contributes);
+		this.setArchived(bean.isArchived());
 		
 		super.loadBean(bean, loadReferenceIds);
 	}
@@ -132,6 +136,7 @@ public class Goal extends AbstractModelParent<Goal> implements PropertyChangeLis
 		
 		bean.setLevel(this.getLevel());
 		bean.setContributes(this.getContributes() == null ? null : this.getContributes().getModelId());
+		bean.setArchived(this.isArchived());
 		
 		return bean;
 	}
@@ -181,6 +186,33 @@ public class Goal extends AbstractModelParent<Goal> implements PropertyChangeLis
 			this.contributes.addPropertyChangeListener(this);
 		
 		this.updateProperty(PROP_CONTRIBUTES, oldContributes, contributes);
+	}
+	
+	@Override
+	public boolean isSelfOrParentArchived() {
+		if (this.isArchived())
+			return true;
+		
+		for (Goal parent : this.getAllParents())
+			if (parent.isArchived())
+				return true;
+		
+		return false;
+	}
+	
+	@Override
+	public boolean isArchived() {
+		return this.archived;
+	}
+	
+	@Override
+	public void setArchived(boolean archived) {
+		if (!this.checkBeforeSet(this.isArchived(), archived))
+			return;
+		
+		boolean oldArchived = this.archived;
+		this.archived = archived;
+		this.updateProperty(PROP_ARCHIVED, oldArchived, archived);
 	}
 	
 	@Override

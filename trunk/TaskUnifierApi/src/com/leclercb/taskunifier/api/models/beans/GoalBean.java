@@ -45,6 +45,9 @@ public class GoalBean extends AbstractModelParentBean {
 	@XStreamAlias("contributes")
 	private ModelId contributes;
 	
+	@XStreamAlias("archived")
+	private boolean archived;
+	
 	public GoalBean() {
 		this((ModelId) null);
 	}
@@ -54,6 +57,7 @@ public class GoalBean extends AbstractModelParentBean {
 		
 		this.setLevel(GoalLevel.LIFE_TIME);
 		this.setContributes(null);
+		this.setArchived(false);
 	}
 	
 	public GoalBean(GoalBean bean) {
@@ -61,6 +65,7 @@ public class GoalBean extends AbstractModelParentBean {
 		
 		this.setLevel(bean.getLevel());
 		this.setContributes(bean.getContributes());
+		this.setArchived(bean.isArchived());
 	}
 	
 	@Override
@@ -82,6 +87,14 @@ public class GoalBean extends AbstractModelParentBean {
 	
 	public void setContributes(ModelId contributes) {
 		this.contributes = contributes;
+	}
+	
+	public boolean isArchived() {
+		return this.archived;
+	}
+	
+	public void setArchived(boolean archived) {
+		this.archived = archived;
 	}
 	
 }

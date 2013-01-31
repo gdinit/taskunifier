@@ -38,9 +38,7 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.beans.FolderBean;
 import com.leclercb.taskunifier.api.models.beans.ModelBean;
 
-public class Folder extends AbstractModelParent<Folder> {
-	
-	public static final String PROP_ARCHIVED = "archived";
+public class Folder extends AbstractModelParent<Folder> implements ModelArchived {
 	
 	private boolean archived;
 	
@@ -109,6 +107,7 @@ public class Folder extends AbstractModelParent<Folder> {
 		return bean;
 	}
 	
+	@Override
 	public boolean isSelfOrParentArchived() {
 		if (this.isArchived())
 			return true;
@@ -120,10 +119,12 @@ public class Folder extends AbstractModelParent<Folder> {
 		return false;
 	}
 	
+	@Override
 	public boolean isArchived() {
 		return this.archived;
 	}
 	
+	@Override
 	public void setArchived(boolean archived) {
 		if (!this.checkBeforeSet(this.isArchived(), archived))
 			return;
