@@ -68,14 +68,14 @@ public final class FrameUtils {
 	
 	private static int FRAME_ID = 0;
 	
-	private static List<FrameView> frames = new ArrayList<FrameView>();
+	private static List<FrameView> FRAMES = new ArrayList<FrameView>();
 	
 	public static int getFrameCount() {
-		return frames.size();
+		return FRAMES.size();
 	}
 	
 	public static List<FrameView> getFrameViews() {
-		return new ArrayList<FrameView>(frames);
+		return new ArrayList<FrameView>(FRAMES);
 	}
 	
 	public static FrameView createFrameView() {
@@ -90,7 +90,7 @@ public final class FrameUtils {
 		
 		FRAME_ID++;
 		
-		frames.add(frame);
+		FRAMES.add(frame);
 		
 		frame.setVisible(true);
 		frame.requestFocus();
@@ -104,6 +104,11 @@ public final class FrameUtils {
 	}
 	
 	public static void deleteFrameView(FrameView frame) {
+		if (!FRAMES.contains(frame))
+			return;
+		
+		saveFrameViewTabs(frame.getFrameId());
+		
 		for (ViewItem view : ViewList.getInstance().getViews()) {
 			if (frame.getFrameId() == view.getFrameId()) {
 				ViewList.getInstance().removeView(view);
@@ -112,7 +117,7 @@ public final class FrameUtils {
 		
 		frame.getFrame().dispose();
 		
-		frames.remove(frame);
+		FRAMES.remove(frame);
 		
 		if (getFrameCount() == 0)
 			ActionQuit.quit();
@@ -257,6 +262,34 @@ public final class FrameUtils {
 		} catch (AWTException e) {
 			GuiLogger.getLogger().log(Level.WARNING, "Cannot add tray icon", e);
 		}
+	}
+	
+	public static void saveFrameViewTabs(int frameId) {
+		ViewItem[] viewArray = ViewList.getInstance().getViews(frameId);
+		
+		if (viewArray.length == 0)
+			return;
+		
+		StringBuffer views = new StringBuffer();
+		StringBuffer labels = new StringBuffer();
+		
+		for (ViewItem view : viewArray) {
+			views.append(view.getViewType().name() + ";");
+			labels.append(view.getLabel() + ";");
+		}
+		
+		int newFrameId = 0;
+		for (FrameView frame : FRAMES)
+			if (frame.getFrameId() < frameId)
+				newFrameId++;
+		
+		Main.getSettings().setStringProperty(
+				"window.views." + newFrameId + ".types",
+				views.toString());
+		
+		Main.getSettings().setStringProperty(
+				"window.views." + newFrameId + ".labels",
+				labels.toString());
 	}
 	
 }

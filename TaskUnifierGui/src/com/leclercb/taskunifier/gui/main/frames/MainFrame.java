@@ -466,6 +466,8 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 				Main.getSettings().setIntegerProperty(
 						this.propertyName + ".location_y",
 						(int) this.getLocationOnScreen().getY());
+				
+				FrameUtils.saveFrameViewTabs(this.getFrameId());
 			}
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(
