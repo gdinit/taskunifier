@@ -32,7 +32,7 @@
  */
 package com.leclercb.taskunifier.api.models;
 
-public interface ModelArchived extends Model {
+public interface ModelArchive extends Model {
 	
 	public static final String PROP_ARCHIVED = "archived";
 	

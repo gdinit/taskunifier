@@ -61,7 +61,7 @@ import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.Goal;
 import com.leclercb.taskunifier.api.models.GoalFactory;
 import com.leclercb.taskunifier.api.models.Model;
-import com.leclercb.taskunifier.api.models.ModelArchived;
+import com.leclercb.taskunifier.api.models.ModelArchive;
 import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.enums.GoalLevel;
 import com.leclercb.taskunifier.gui.api.models.GuiGoal;
@@ -160,7 +160,7 @@ public class GoalConfigurationPanel extends JSplitPane implements IModelList {
 						new GoalContributeModel(true, true),
 						contributesModel));
 				
-				ValueModel archivedModel = this.adapter.getValueModel(ModelArchived.PROP_ARCHIVED);
+				ValueModel archivedModel = this.adapter.getValueModel(ModelArchive.PROP_ARCHIVED);
 				Bindings.bind(goalArchived, archivedModel);
 				
 				ValueModel colorModel = this.adapter.getValueModel(GuiModel.PROP_COLOR);

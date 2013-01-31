@@ -56,7 +56,7 @@ import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.Folder;
 import com.leclercb.taskunifier.api.models.FolderFactory;
 import com.leclercb.taskunifier.api.models.Model;
-import com.leclercb.taskunifier.api.models.ModelArchived;
+import com.leclercb.taskunifier.api.models.ModelArchive;
 import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.gui.api.models.GuiFolder;
 import com.leclercb.taskunifier.gui.api.models.GuiModel;
@@ -129,7 +129,7 @@ public class FolderConfigurationPanel extends JSplitPane implements IModelList {
 				ValueModel titleModel = this.adapter.getValueModel(BasicModel.PROP_TITLE);
 				Bindings.bind(folderTitle, titleModel);
 				
-				ValueModel archivedModel = this.adapter.getValueModel(ModelArchived.PROP_ARCHIVED);
+				ValueModel archivedModel = this.adapter.getValueModel(ModelArchive.PROP_ARCHIVED);
 				Bindings.bind(folderArchived, archivedModel);
 				
 				ValueModel colorModel = this.adapter.getValueModel(GuiModel.PROP_COLOR);

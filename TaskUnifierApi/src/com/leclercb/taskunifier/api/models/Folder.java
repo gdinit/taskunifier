@@ -38,7 +38,7 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.beans.FolderBean;
 import com.leclercb.taskunifier.api.models.beans.ModelBean;
 
-public class Folder extends AbstractModelParent<Folder> implements ModelArchived {
+public class Folder extends AbstractModelParent<Folder> implements ModelArchive {
 	
 	private boolean archived;
 	

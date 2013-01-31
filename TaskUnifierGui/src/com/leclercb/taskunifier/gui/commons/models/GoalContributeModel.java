@@ -37,7 +37,7 @@ import java.util.List;
 
 import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.Goal;
-import com.leclercb.taskunifier.api.models.ModelArchived;
+import com.leclercb.taskunifier.api.models.ModelArchive;
 import com.leclercb.taskunifier.api.models.ModelParent;
 import com.leclercb.taskunifier.api.models.enums.GoalLevel;
 
@@ -84,7 +84,7 @@ public class GoalContributeModel extends GoalModel {
 			return;
 		}
 		
-		if (event.getPropertyName().equals(ModelArchived.PROP_ARCHIVED)
+		if (event.getPropertyName().equals(ModelArchive.PROP_ARCHIVED)
 				&& !this.includeArchived) {
 			if (goal.isSelfOrParentArchived()) {
 				this.removeElement(goal);
