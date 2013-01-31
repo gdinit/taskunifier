@@ -74,6 +74,8 @@ public class ActionRenameTab extends AbstractViewAction {
 		if (tabName == null)
 			return;
 		
+		tabName = tabName.replaceAll(";", "");
+		
 		currentViewItem.setLabel(tabName);
 	}
 	

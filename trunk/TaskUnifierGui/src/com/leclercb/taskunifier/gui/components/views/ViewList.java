@@ -110,6 +110,16 @@ public class ViewList implements ListChangeSupported, PropertyChangeSupported {
 		return this.views.get(index);
 	}
 	
+	public ViewItem[] getViews(int frameId) {
+		List<ViewItem> list = new ArrayList<ViewItem>();
+		
+		for (ViewItem view : this.views)
+			if (view.getFrameId() == frameId)
+				list.add(view);
+		
+		return list.toArray(new ViewItem[0]);
+	}
+	
 	public ViewItem[] getViews() {
 		return this.views.toArray(new ViewItem[0]);
 	}

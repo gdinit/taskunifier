@@ -36,15 +36,15 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.logging.Level;
 
 import javax.swing.KeyStroke;
 
-import com.leclercb.taskunifier.gui.components.views.DefaultCalendarView;
-import com.leclercb.taskunifier.gui.components.views.DefaultNoteView;
-import com.leclercb.taskunifier.gui.components.views.DefaultTaskView;
+import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.components.views.ViewItem;
 import com.leclercb.taskunifier.gui.components.views.ViewList;
 import com.leclercb.taskunifier.gui.components.views.ViewType;
+import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.main.frames.FrameView;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -80,35 +80,60 @@ public class ActionNewWindow extends AbstractViewAction {
 		FrameView frameView = FrameUtils.createFrameView();
 		
 		if (createTabs) {
-			ViewItem viewItem = null;
+			ViewItem mainViewItem = null;
 			
-			viewItem = new ViewItem(
-					ViewType.TASKS,
-					Translations.getString("general.tasks"),
-					ImageUtils.getResourceImage("task.png", 16, 16),
-					frameView.getFrameId());
-			viewItem.setView(new DefaultTaskView());
+			int addedViews = 0;
 			
-			ViewList.getInstance().addView(viewItem);
-			ViewList.getInstance().setCurrentView(viewItem);
+			String views = Main.getSettings().getStringProperty(
+					"window.views." + frameView.getFrameId() + ".types",
+					"");
+			String[] viewArray = views.split(";");
 			
-			viewItem = new ViewItem(
-					ViewType.NOTES,
-					Translations.getString("general.notes"),
-					ImageUtils.getResourceImage("note.png", 16, 16),
-					frameView.getFrameId());
-			viewItem.setView(new DefaultNoteView());
+			String labels = Main.getSettings().getStringProperty(
+					"window.views." + frameView.getFrameId() + ".labels",
+					"");
+			String[] labelArray = labels.split(";");
 			
-			ViewList.getInstance().addView(viewItem);
+			if (viewArray.length == labelArray.length) {
+				for (int i = 0; i < viewArray.length; i++) {
+					String view = viewArray[i].trim();
+					String label = labelArray[i].trim();
+					
+					if (view.length() == 0)
+						continue;
+					
+					try {
+						ViewType viewType = ViewType.valueOf(view);
+						
+						if (viewType == null)
+							continue;
+						
+						ViewItem viewItem = ActionAddTab.addTab(
+								viewType,
+								frameView);
+						addedViews++;
+						
+						viewItem.setLabel(label);
+						
+						if (i == 0)
+							mainViewItem = viewItem;
+					} catch (Exception e) {
+						GuiLogger.getLogger().log(
+								Level.WARNING,
+								"Cannot load view type: " + view,
+								e);
+					}
+				}
+			}
 			
-			viewItem = new ViewItem(
-					ViewType.CALENDAR,
-					Translations.getString("general.calendar"),
-					ImageUtils.getResourceImage("calendar.png", 16, 16),
-					frameView.getFrameId());
-			viewItem.setView(new DefaultCalendarView());
+			if (addedViews == 0) {
+				mainViewItem = ActionAddTab.addTab(ViewType.TASKS, frameView);
+				
+				ActionAddTab.addTab(ViewType.NOTES, frameView);
+				ActionAddTab.addTab(ViewType.CALENDAR, frameView);
+			}
 			
-			ViewList.getInstance().addView(viewItem);
+			ViewList.getInstance().setCurrentView(mainViewItem);
 		}
 	}
 	

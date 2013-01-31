@@ -107,6 +107,8 @@ public final class TaskStatusList implements PropertyChangeListener, SavePropert
 	public void addStatus(String status) {
 		CheckUtils.isNotNull(status);
 		
+		status = status.replaceAll(";", "");
+		
 		if (this.statuses.contains(status))
 			return;
 		
