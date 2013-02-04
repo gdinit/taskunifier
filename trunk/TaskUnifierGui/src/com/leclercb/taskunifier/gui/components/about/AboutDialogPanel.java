@@ -30,31 +30,69 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.actions;
+package com.leclercb.taskunifier.gui.components.about;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import com.leclercb.taskunifier.gui.components.about.AboutDialog;
-import com.leclercb.taskunifier.gui.translations.Translations;
-import com.leclercb.taskunifier.gui.utils.ImageUtils;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
-public class ActionAbout extends AbstractViewAction {
+import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
+import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
+import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
+
+public class AboutDialogPanel extends TUDialogPanel {
 	
-	public ActionAbout(int width, int height) {
-		super(
-				Translations.getString("action.about"),
-				ImageUtils.getResourceImage("information.png", width, height));
+	private static AboutDialogPanel INSTANCE;
+	
+	public static AboutDialogPanel getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new AboutDialogPanel();
 		
-		this.putValue(SHORT_DESCRIPTION, Translations.getString("action.about"));
+		return INSTANCE;
+	}
+	
+	private JButton okButton;
+	
+	private AboutDialogPanel() {
+		this.initialize();
+	}
+	
+	private void initialize() {
+		this.setLayout(new BorderLayout());
+		
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		this.add(panel, BorderLayout.CENTER);
+		
+		AboutPanel aboutPanel = new AboutPanel();
+		panel.add(aboutPanel, BorderLayout.CENTER);
+		
+		this.initializeButtonsPanel(panel);
+	}
+	
+	private void initializeButtonsPanel(JPanel panel) {
+		ActionListener listener = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AboutDialogPanel.this.setVisible(false);
+			}
+			
+		};
+		
+		this.okButton = new TUOkButton(listener);
+		JPanel buttonsPanel = new TUButtonsPanel(this.okButton);
+		
+		panel.add(buttonsPanel, BorderLayout.SOUTH);
 	}
 	
 	@Override
-	public void actionPerformed(ActionEvent event) {
-		ActionAbout.about();
-	}
-	
-	public static void about() {
-		new AboutDialog().setVisible(true);
+	protected void dialogLoaded() {
+		this.getDialog().getRootPane().setDefaultButton(this.okButton);
 	}
 	
 }

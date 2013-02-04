@@ -40,12 +40,19 @@ import net.miginfocom.swing.MigLayout;
 
 import org.jdesktop.swingx.JXEditorPane;
 
+import com.leclercb.commons.api.event.listchange.ListChangeEvent;
+import com.leclercb.commons.api.event.listchange.ListChangeListener;
+import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
+import com.leclercb.taskunifier.gui.utils.UserUtils;
 
-public class AboutPanel extends JPanel {
+public class AboutPanel extends JPanel implements ListChangeListener {
+	
+	private JXEditorPane aboutMessage;
+	private JXEditorPane systemMessage;
 	
 	public AboutPanel() {
 		this.initialize();
@@ -60,31 +67,39 @@ public class AboutPanel extends JPanel {
 		
 		JTabbedPane tabbedPane = new JTabbedPane();
 		
-		JXEditorPane aboutMessage = new JXEditorPane();
-		aboutMessage.setContentType("text/html");
-		aboutMessage.setEditable(false);
-		aboutMessage.setText(AboutUtils.getAboutMessage());
-		aboutMessage.setCaretPosition(0);
+		this.aboutMessage = new JXEditorPane();
+		this.aboutMessage.setContentType("text/html");
+		this.aboutMessage.setEditable(false);
+		this.aboutMessage.setText(AboutUtils.getAboutMessage());
+		this.aboutMessage.setCaretPosition(0);
 		
-		JXEditorPane systemMessage = new JXEditorPane();
-		systemMessage.setContentType("text/html");
-		systemMessage.setEditable(false);
-		systemMessage.setText(AboutUtils.getSystemMessage(true));
-		systemMessage.setCaretPosition(0);
+		this.systemMessage = new JXEditorPane();
+		this.systemMessage.setContentType("text/html");
+		this.systemMessage.setEditable(false);
+		this.systemMessage.setText(AboutUtils.getSystemMessage(true));
+		this.systemMessage.setCaretPosition(0);
 		
 		tabbedPane.addTab(
 				Translations.getString("general.about"),
 				ImageUtils.getResourceImage("logo.png", 16, 16),
-				ComponentFactory.createJScrollPane(aboutMessage, true));
+				ComponentFactory.createJScrollPane(this.aboutMessage, true));
 		
 		tabbedPane.addTab(
 				Translations.getString("general.system"),
 				ImageUtils.getResourceImage("settings.png", 16, 16),
-				ComponentFactory.createJScrollPane(systemMessage, true));
+				ComponentFactory.createJScrollPane(this.systemMessage, true));
 		
 		this.add(icon, "gap 0px 20px");
 		this.add(title, "wrap 20px");
 		this.add(tabbedPane, "span");
+		
+		UserUtils.getInstance().addListChangeListener(
+				new WeakListChangeListener(UserUtils.getInstance(), this));
+	}
+	
+	@Override
+	public void listChange(ListChangeEvent event) {
+		this.systemMessage.setText(AboutUtils.getSystemMessage(true));
 	}
 	
 }

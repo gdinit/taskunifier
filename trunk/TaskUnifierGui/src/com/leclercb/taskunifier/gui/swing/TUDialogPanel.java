@@ -30,31 +30,35 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.actions;
+package com.leclercb.taskunifier.gui.swing;
 
-import java.awt.event.ActionEvent;
+import javax.swing.JPanel;
 
-import com.leclercb.taskunifier.gui.components.about.AboutDialog;
-import com.leclercb.taskunifier.gui.translations.Translations;
-import com.leclercb.taskunifier.gui.utils.ImageUtils;
-
-public class ActionAbout extends AbstractViewAction {
+public abstract class TUDialogPanel extends JPanel {
 	
-	public ActionAbout(int width, int height) {
-		super(
-				Translations.getString("action.about"),
-				ImageUtils.getResourceImage("information.png", width, height));
-		
-		this.putValue(SHORT_DESCRIPTION, Translations.getString("action.about"));
+	private TUDialog dialog;
+	
+	public TUDialogPanel() {
+		this.dialog = null;
+	}
+	
+	public TUDialog getDialog() {
+		return this.dialog;
+	}
+	
+	public void setDialog(TUDialog dialog) {
+		this.dialog = dialog;
+		this.dialogLoaded();
 	}
 	
 	@Override
-	public void actionPerformed(ActionEvent event) {
-		ActionAbout.about();
+	public void setVisible(boolean visible) {
+		if (this.dialog != null)
+			this.dialog.setVisible(visible);
 	}
 	
-	public static void about() {
-		new AboutDialog().setVisible(true);
+	protected void dialogLoaded() {
+		
 	}
 	
 }

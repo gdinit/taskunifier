@@ -32,42 +32,15 @@
  */
 package com.leclercb.taskunifier.gui.components.about;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
-import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.TUDialog;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class AboutDialog extends TUDialog {
 	
-	private static AboutDialog INSTANCE;
-	
-	public static AboutDialog getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new AboutDialog();
+	public AboutDialog() {
+		super(AboutDialogPanel.getInstance());
 		
-		return INSTANCE;
-	}
-	
-	private AboutDialog() {
 		this.initialize();
-	}
-	
-	@Override
-	public void setVisible(boolean visible) {
-		if (visible) {
-			this.setLocationRelativeTo(FrameUtils.getCurrentFrame());
-		}
-		
-		super.setVisible(visible);
 	}
 	
 	private void initialize() {
@@ -75,34 +48,10 @@ public class AboutDialog extends TUDialog {
 		this.setTitle(Translations.getString("general.about"));
 		this.setSize(600, 350);
 		this.setResizable(false);
-		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		this.add(panel, BorderLayout.CENTER);
-		
-		AboutPanel aboutPanel = new AboutPanel();
-		panel.add(aboutPanel, BorderLayout.CENTER);
-		
-		this.initializeButtonsPanel(panel);
-	}
-	
-	private void initializeButtonsPanel(JPanel panel) {
-		ActionListener listener = new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				AboutDialog.this.setVisible(false);
-			}
-			
-		};
-		
-		JButton okButton = new TUOkButton(listener);
-		JPanel buttonsPanel = new TUButtonsPanel(okButton);
-		
-		panel.add(buttonsPanel, BorderLayout.SOUTH);
-		this.getRootPane().setDefaultButton(okButton);
+		if (this.getOwner() != null)
+			this.setLocationRelativeTo(this.getOwner());
 	}
 	
 }
