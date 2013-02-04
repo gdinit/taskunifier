@@ -47,7 +47,6 @@ import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -62,7 +61,7 @@ import com.leclercb.commons.api.progress.ProgressMessage;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 
-public class TUWorkerDialog<T> extends JDialog implements ListChangeListener, ActionListener {
+public class TUWorkerDialog<T> extends TUDialog implements ListChangeListener, ActionListener {
 	
 	private TUWorker<T> worker;
 	

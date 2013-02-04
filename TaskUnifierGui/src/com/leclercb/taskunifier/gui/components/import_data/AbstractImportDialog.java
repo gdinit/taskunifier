@@ -43,7 +43,6 @@ import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
@@ -55,12 +54,13 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.FileUtils;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
+import com.leclercb.taskunifier.gui.swing.TUDialog;
 import com.leclercb.taskunifier.gui.swing.TUFileField;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-abstract class AbstractImportDialog extends JDialog {
+abstract class AbstractImportDialog extends TUDialog {
 	
 	private TUFileField fileField;
 	private JCheckBox deleteExistingValues;

@@ -41,7 +41,6 @@ import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -52,6 +51,7 @@ import org.jdesktop.swingx.JXHeader;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
+import com.leclercb.taskunifier.gui.swing.TUDialog;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
 import com.leclercb.taskunifier.gui.swing.buttons.TUPrintButton;
@@ -59,7 +59,7 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class PrintDialog extends JDialog {
+public class PrintDialog extends TUDialog {
 	
 	private static PrintDialog INSTANCE;
 	

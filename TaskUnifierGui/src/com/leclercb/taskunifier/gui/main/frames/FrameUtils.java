@@ -36,6 +36,7 @@ import java.awt.AWTException;
 import java.awt.Frame;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -65,6 +66,8 @@ public final class FrameUtils {
 	}
 	
 	private static Provider PROVIDER;
+	
+	private static Window CURRENT_WINDOW;
 	
 	private static int FRAME_ID = 0;
 	
@@ -121,6 +124,14 @@ public final class FrameUtils {
 		
 		if (getFrameCount() == 0)
 			ActionQuit.quit();
+	}
+	
+	public static Window getCurrentWindow() {
+		return CURRENT_WINDOW;
+	}
+	
+	public static void setCurrentWindow(Window window) {
+		CURRENT_WINDOW = window;
 	}
 	
 	public static Frame getCurrentFrame() {

@@ -32,8 +32,10 @@
  */
 package com.leclercb.taskunifier.gui.swing;
 
-import java.awt.Frame;
 import java.awt.Point;
+import java.awt.Window;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.util.logging.Level;
 
 import javax.swing.JDialog;
@@ -44,6 +46,7 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.commons.gui.utils.ScreenUtils;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 
 public class TUDialog extends JDialog implements SavePropertiesListener {
 	
@@ -53,8 +56,10 @@ public class TUDialog extends JDialog implements SavePropertiesListener {
 		this(null);
 	}
 	
-	public TUDialog(Frame owner) {
+	public TUDialog(Window owner) {
 		super(owner);
+		
+		this.windowProperty = null;
 		
 		this.initialize();
 	}
@@ -62,6 +67,20 @@ public class TUDialog extends JDialog implements SavePropertiesListener {
 	private void initialize() {
 		Main.getSettings().addSavePropertiesListener(
 				new WeakSavePropertiesListener(Main.getSettings(), this));
+		
+		this.addWindowFocusListener(new WindowFocusListener() {
+			
+			@Override
+			public void windowGainedFocus(WindowEvent event) {
+				FrameUtils.setCurrentWindow(TUDialog.this);
+			}
+			
+			@Override
+			public void windowLostFocus(WindowEvent event) {
+				
+			}
+			
+		});
 	}
 	
 	public void loadWindowSettings(final String windowProperty) {

@@ -271,6 +271,8 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 			
 			@Override
 			public void windowGainedFocus(WindowEvent event) {
+				FrameUtils.setCurrentWindow(MainFrame.this);
+				
 				ViewItem view = MainFrame.this.getSelectedView();
 				
 				if (view == null)

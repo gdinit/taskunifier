@@ -39,15 +39,15 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
-import javax.swing.JDialog;
 
 import org.jdesktop.swingx.JXHeader;
 
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
+import com.leclercb.taskunifier.gui.swing.TUDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class BatchAddTasksDialog extends JDialog {
+public class BatchAddTasksDialog extends TUDialog {
 	
 	private static BatchAddTasksDialog INSTANCE;
 	

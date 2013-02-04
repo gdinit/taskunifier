@@ -125,6 +125,7 @@ public class TaskTemplatePanel extends JPanel {
 	
 	public TaskTemplatePanel() {
 		this.initialize();
+		this.setTemplate(null);
 	}
 	
 	public JTextField getTemplateTitle() {

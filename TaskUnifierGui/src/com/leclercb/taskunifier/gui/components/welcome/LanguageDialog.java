@@ -37,17 +37,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import com.leclercb.taskunifier.gui.components.configuration.GeneralConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
+import com.leclercb.taskunifier.gui.swing.TUDialog;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public class LanguageDialog extends JDialog implements ConfigurationGroup {
+public class LanguageDialog extends TUDialog implements ConfigurationGroup {
 	
 	private GeneralConfigurationPanel generalConfigurationPanel;
 	
