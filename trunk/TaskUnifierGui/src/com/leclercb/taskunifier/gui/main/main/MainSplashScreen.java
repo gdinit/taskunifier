@@ -82,7 +82,8 @@ public final class MainSplashScreen {
 					RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
 			
-			if (Main.isProVersion()) {
+			// TODO: PRO
+			if (false && Main.isProVersion()) {
 				this.g2d.setColor(new Color(234, 255, 234));
 				this.g2d.fillRect(180, 85, 250, 40);
 				
