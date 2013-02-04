@@ -38,7 +38,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
@@ -48,7 +47,7 @@ import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public class TUFileDialog extends JDialog {
+public class TUFileDialog extends TUDialog {
 	
 	private TUFileField fileField;
 	private boolean cancelled;

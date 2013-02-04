@@ -39,14 +39,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
-import javax.swing.JDialog;
 
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
+import com.leclercb.taskunifier.gui.swing.TUDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public class EditTaskPropertyAccessorDialog extends JDialog {
+public class EditTaskPropertyAccessorDialog extends TUDialog {
 	
 	private static EditTaskPropertyAccessorDialog INSTANCE;
 	

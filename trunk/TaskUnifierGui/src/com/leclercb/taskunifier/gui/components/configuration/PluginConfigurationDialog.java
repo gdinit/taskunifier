@@ -38,7 +38,6 @@ import java.awt.event.ActionListener;
 import java.util.logging.Level;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import org.jdesktop.swingx.JXErrorPane;
@@ -56,6 +55,7 @@ import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationPa
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.main.main.MainSaveFiles;
+import com.leclercb.taskunifier.gui.swing.TUDialog;
 import com.leclercb.taskunifier.gui.swing.buttons.TUApplyButton;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
@@ -64,7 +64,7 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class PluginConfigurationDialog extends JDialog implements ConfigurationGroup, ReloadPropertiesListener {
+public class PluginConfigurationDialog extends TUDialog implements ConfigurationGroup, ReloadPropertiesListener {
 	
 	private static PluginConfigurationDialog INSTANCE;
 	

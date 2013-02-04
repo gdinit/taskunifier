@@ -40,7 +40,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
@@ -60,12 +59,13 @@ import com.leclercb.taskunifier.gui.components.models.panels.GoalConfigurationPa
 import com.leclercb.taskunifier.gui.components.models.panels.LocationConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.models.panels.TagConfigurationPanel;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
+import com.leclercb.taskunifier.gui.swing.TUDialog;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ModelConfigurationDialog extends JDialog {
+public class ModelConfigurationDialog extends TUDialog {
 	
 	private static ModelConfigurationDialog INSTANCE = null;
 	
