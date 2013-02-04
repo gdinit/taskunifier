@@ -73,7 +73,7 @@ public class ActionBatchAddTasks extends AbstractViewAction {
 	}
 	
 	public static void batchAddTasks() {
-		BatchAddTasksDialog.getInstance().setVisible(true);
+		new BatchAddTasksDialog().setVisible(true);
 	}
 	
 	public static void batchAddTasks(TaskTemplate template, String[] titles) {

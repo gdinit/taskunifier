@@ -32,26 +32,78 @@
  */
 package com.leclercb.taskunifier.gui.components.batchaddtasks;
 
-import com.leclercb.taskunifier.gui.swing.TUDialog;
-import com.leclercb.taskunifier.gui.translations.Translations;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-public class BatchAddTasksDialog extends TUDialog {
+import javax.swing.BorderFactory;
+
+import org.jdesktop.swingx.JXHeader;
+
+import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
+import com.leclercb.taskunifier.gui.translations.Translations;
+import com.leclercb.taskunifier.gui.utils.ImageUtils;
+
+public class BatchAddTasksDialogPanel extends TUDialogPanel {
 	
-	public BatchAddTasksDialog() {
-		super(BatchAddTasksDialogPanel.getInstance());
+	private static BatchAddTasksDialogPanel INSTANCE;
+	
+	public static BatchAddTasksDialogPanel getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new BatchAddTasksDialogPanel();
 		
+		return INSTANCE;
+	}
+	
+	private BatchAddTasksPanel batchPanel;
+	
+	private BatchAddTasksDialogPanel() {
 		this.initialize();
 	}
 	
 	private void initialize() {
-		this.setModal(true);
-		this.setTitle(Translations.getString("general.batch_add_tasks"));
-		this.setSize(600, 350);
-		this.setResizable(false);
-		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		this.setLayout(new BorderLayout());
 		
-		if (this.getOwner() != null)
-			this.setLocationRelativeTo(this.getOwner());
+		JXHeader header = new JXHeader();
+		header.setTitle(Translations.getString("general.batch_add_tasks"));
+		header.setDescription(Translations.getString("batch_add_tasks.insert_task_titles"));
+		header.setIcon(ImageUtils.getResourceImage("batch.png", 32, 32));
+		
+		this.batchPanel = new BatchAddTasksPanel();
+		this.batchPanel.setBorder(BorderFactory.createEmptyBorder(
+				10,
+				10,
+				10,
+				10));
+		
+		this.add(header, BorderLayout.NORTH);
+		this.add(this.batchPanel, BorderLayout.CENTER);
+		
+		this.batchPanel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				BatchAddTasksDialogPanel.this.setVisible(false);
+			}
+			
+		});
+	}
+	
+	@Override
+	protected void dialogLoaded() {
+		this.getDialog().addWindowListener(new WindowAdapter() {
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				BatchAddTasksDialogPanel.this.batchPanel.actionCancel();
+			}
+			
+		});
+		
+		this.getDialog().getRootPane().setDefaultButton(
+				this.batchPanel.getOkButton());
 	}
 	
 }
