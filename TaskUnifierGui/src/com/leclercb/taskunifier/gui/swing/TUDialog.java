@@ -32,6 +32,7 @@
  */
 package com.leclercb.taskunifier.gui.swing;
 
+import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.WindowEvent;
@@ -53,7 +54,7 @@ public class TUDialog extends JDialog implements SavePropertiesListener {
 	private String windowProperty;
 	
 	public TUDialog() {
-		this(null);
+		this((Window) null);
 	}
 	
 	public TUDialog(Window owner) {
@@ -62,6 +63,15 @@ public class TUDialog extends JDialog implements SavePropertiesListener {
 		this.windowProperty = null;
 		
 		this.initialize();
+	}
+	
+	public TUDialog(TUDialogPanel dialogPanel) {
+		this(FrameUtils.getCurrentWindow());
+		
+		this.setLayout(new BorderLayout());
+		this.add(dialogPanel);
+		
+		dialogPanel.setDialog(this);
 	}
 	
 	private void initialize() {
