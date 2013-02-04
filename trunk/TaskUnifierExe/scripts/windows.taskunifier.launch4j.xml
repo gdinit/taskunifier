@@ -20,6 +20,7 @@
 		<maxVersion></maxVersion>
 		<jdkPreference>preferJre</jdkPreference>
 		<maxHeapSize>512</maxHeapSize>
+		<opt>-splash:resources/images/splash_screen.png</opt>
 		<opt>-Dcom.leclercb.taskunifier.resource_folder="resources"</opt>
 		<opt>-Dcom.leclercb.taskunifier.data_folder="%APPDATA%/TaskUnifier"</opt>
 	</jre>
