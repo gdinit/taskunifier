@@ -29,8 +29,14 @@
 	<target depends="taskunifier-version-underscored" name="create-sources">
 		<echo message="Creating sources zip file..."/>
 		<zip destfile="${directory.exe}/sources/TaskUnifier_${taskunifier.version.underscored}_src.zip">
-		    <zipfileset dir="${directory.api}" prefix="TaskUnifierApi"/>
-		    <zipfileset dir="${directory.gui}" prefix="TaskUnifierGui"/>
+		    <zipfileset dir="${directory.api}" prefix="TaskUnifierApi">
+				<exclude name="**/bin/**"/>
+				<exclude name="**/data/**"/>
+		    </zipfileset>
+		    <zipfileset dir="${directory.gui}" prefix="TaskUnifierGui">
+				<exclude name="**/bin/**"/>
+				<exclude name="**/data/**"/>
+		    </zipfileset>
 		</zip>
 	</target>
 	
