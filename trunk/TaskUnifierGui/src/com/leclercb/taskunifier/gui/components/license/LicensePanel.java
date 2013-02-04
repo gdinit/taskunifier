@@ -44,10 +44,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import com.leclercb.commons.api.license.License;
+import com.leclercb.commons.api.license.LicenseManager;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
-import com.leclercb.taskunifier.gui.license.License;
-import com.leclercb.taskunifier.gui.license.LicenseManager;
 import com.leclercb.taskunifier.gui.resources.Resources;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;

@@ -40,16 +40,23 @@ import java.util.logging.Level;
 
 import org.apache.commons.io.FileUtils;
 
+import com.leclercb.commons.api.license.License;
+import com.leclercb.commons.api.license.LicenseManager;
+import com.leclercb.commons.api.license.exceptions.LicenseException;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.constants.Constants;
-import com.leclercb.taskunifier.gui.license.License;
-import com.leclercb.taskunifier.gui.license.LicenseManager;
-import com.leclercb.taskunifier.gui.license.exceptions.LicenseException;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.resources.Resources;
 
 public final class LicenseUtils {
+	
+	private static final String PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCY"
+			+ "kSwG7upH9Y1Mq155AAHIQy+rGMrLs614j4cs6A/m"
+			+ "kBRYm7sdumhE16hwsaWF5RXPN/2tesM/bAlr3Y4z"
+			+ "QwSD5TIFp5XwsEed9XKREDdiy6FhbkHgvv0OY7U1"
+			+ "ueWj+kkbI7WvLj2z41u+/uH9lU4WIQOifBh0fP0+"
+			+ "WpZqcw7QXwIDAQAB";
 	
 	private LicenseUtils() {
 		
@@ -60,7 +67,7 @@ public final class LicenseUtils {
 			File file = new File(Main.getLicenseFile());
 			String license = FileUtils.readFileToString(file, "UTF-8");
 			
-			InputStream publicKey = Resources.class.getResourceAsStream("public_key");
+			InputStream publicKey = LicenseManager.publicKeyDecoder(PUBLIC_KEY);
 			LicenseManager lm = new LicenseManager(publicKey, null);
 			License l = lm.readLicense(license);
 			
@@ -102,6 +109,11 @@ public final class LicenseUtils {
 			
 			throw e;
 		}
+	}
+	
+	public static void main(String[] args) throws Exception {
+		InputStream publicKey = Resources.class.getResourceAsStream("public_key");
+		System.out.println(LicenseManager.publicKeyEncoder(publicKey));
 	}
 	
 }
