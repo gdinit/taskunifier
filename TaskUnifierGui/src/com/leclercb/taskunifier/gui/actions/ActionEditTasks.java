@@ -40,6 +40,7 @@ import javax.swing.KeyStroke;
 
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.components.taskedit.BatchTaskEditDialog;
+import com.leclercb.taskunifier.gui.components.taskedit.BatchTaskEditDialogPanel;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
@@ -84,10 +85,9 @@ public class ActionEditTasks extends AbstractViewTaskSelectionAction {
 		
 		Task[] previousSelectedTasks = ViewUtils.getSelectedTasks();
 		
-		BatchTaskEditDialog dialog = BatchTaskEditDialog.getInstance();
-		dialog.setTasks(tasks);
-		dialog.setVisible(true);
-		boolean edited = !dialog.isCancelled();
+		BatchTaskEditDialogPanel.getInstance().setTasks(tasks);
+		new BatchTaskEditDialog().setVisible(true);
+		boolean edited = !BatchTaskEditDialogPanel.getInstance().isCancelled();
 		
 		if (edited) {
 			if (select)
