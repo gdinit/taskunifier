@@ -47,6 +47,7 @@ public class License {
 	
 	private String name;
 	private String email;
+	private Calendar purchaseDate;
 	
 	private LicenseType licenseType;
 	private String version;
@@ -76,6 +77,14 @@ public class License {
 	
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public Calendar getPurchaseDate() {
+		return this.purchaseDate;
+	}
+	
+	public void setPurchaseDate(Calendar purchaseDate) {
+		this.purchaseDate = purchaseDate;
 	}
 	
 	public LicenseType getLicenseType() {
@@ -148,6 +157,7 @@ public class License {
 		PropertyMap p = new PropertyMap();
 		p.setStringProperty("name", this.name);
 		p.setStringProperty("email", this.email);
+		p.setCalendarProperty("purchaseDate", this.purchaseDate);
 		p.setEnumProperty("licenseType", LicenseType.class, this.licenseType);
 		p.setStringProperty("version", this.version);
 		p.setCalendarProperty("expiration", this.expiration);
@@ -166,6 +176,7 @@ public class License {
 		License l = new License();
 		l.setName(p.getStringProperty("name"));
 		l.setEmail(p.getStringProperty("email"));
+		l.setPurchaseDate(p.getCalendarProperty("purchaseDate"));
 		l.setLicenseType(p.getEnumProperty("licenseType", LicenseType.class));
 		l.setVersion(p.getStringProperty("version"));
 		l.setExpiration(p.getCalendarProperty("expiration"));
