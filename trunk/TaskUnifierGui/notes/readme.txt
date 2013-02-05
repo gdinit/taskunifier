@@ -1,6 +1,11 @@
 HISTORY
 -------
 
+Version 3.1.9
+	- Major:
+		- BF 11: Error message at the end of the installation
+		- BF 130: Duplicate entries in add/remove programs
+
 Version 3.1.8
 	- Major:
 		- Refactoring of table columns

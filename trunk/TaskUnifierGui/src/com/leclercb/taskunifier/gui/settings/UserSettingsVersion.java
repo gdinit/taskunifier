@@ -103,6 +103,9 @@ public final class UserSettingsVersion {
 		if (version.equals("3.1.7"))
 			version = updateUserSettings("3.1.7", "3.1.8");
 		
+		if (version.equals("3.1.8"))
+			version = updateUserSettings("3.1.8", "3.1.9");
+		
 		cleanSettings();
 		
 		Main.getUserSettings().setStringProperty(
