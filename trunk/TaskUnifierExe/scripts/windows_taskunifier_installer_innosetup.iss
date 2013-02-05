@@ -5,15 +5,19 @@ AppName=TaskUnifier
 AppVersion=1.5
 DefaultDirName={pf}\TaskUnifier
 DefaultGroupName=TaskUnifier
-UninstallDisplayIcon={app}\TaskUnifier.exe
+UninstallDisplayIcon={app}\resources\icon.ico
 Compression=lzma2
 SolidCompression=yes
-OutputDir=userdocs:Inno Setup Examples Output
+OutputDir=..\temp
+ArchitecturesInstallIn64BitMode=x64
+LicenseFile=..\temp\license.txt
+
+AppPublisher=TaskUnifier
+AppPublisherURL=http://www.taskunifier.com
 
 [Files]
-Source: "MyProg.exe"; DestDir: "{app}"
-Source: "MyProg.chm"; DestDir: "{app}"
-Source: "Readme.txt"; DestDir: "{app}"; Flags: isreadme
+Source: "..\temp\*"; DestDir: "{app}"
+Source: "..\temp\readme.txt"; DestDir: "{app}"; Flags: isreadme
 
 [Icons]
 Name: "{group}\TaskUnifier"; Filename: "{app}\resources\icon.ico"
