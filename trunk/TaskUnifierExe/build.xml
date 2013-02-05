@@ -66,7 +66,7 @@
     <target depends="taskunifier-version-underscored" name="create-linux-binary">
 		<echo message="Creating linux tar file..."/>
     	<antcall target="create-binary"/>
-    	<copy file="${directory.exe}/scripts/linux.taskunifier.sh" tofile="${directory.exe}/temp/TaskUnifier/TaskUnifier.sh"/>
+    	<copy file="${directory.exe}/scripts/linux_taskunifier.sh" tofile="${directory.exe}/temp/TaskUnifier/TaskUnifier.sh"/>
     	<chmod file="${directory.exe}/temp/TaskUnifier/TaskUnifier.sh" perm="ugo+rx"/>
     	<mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
 		<tar destfile="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/TaskUnifier_${taskunifier.version.underscored}_linux.tar">
@@ -126,12 +126,12 @@
 		<chmod dir="${directory.exe}/temp" includes="**/JavaApplicationStub" perm="755"/>
 		
 		<echo message="Signing mac app..."/>
-		<exec executable="${directory.exe}/scripts/mac.codesign.sh" failonerror="true"/>
+		<exec executable="${directory.exe}/scripts/mac_codesign.sh" failonerror="true"/>
 		
 		<mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
 		
 		<echo message="Creating mac dmg file..."/>
-		<exec executable="${directory.exe}/scripts/mac.create_dmg.sh" failonerror="true">
+		<exec executable="${directory.exe}/scripts/mac_create_dmg.sh" failonerror="true">
 			<arg line="${taskunifier.version.underscored}"/>
 		</exec>
 	</target>
@@ -139,7 +139,7 @@
 	<target depends="taskunifier-version-underscored, check-os" name="create-windows-binary" if="isWindows">
 		<echo message="Creating windows zip file..."/>
     	<antcall target="create-binary"/>
-		<launch4j configFile="${directory.exe}/scripts/windows.taskunifier.launch4j.xml" fileVersion="${taskunifier.version}.0" txtFileVersion="${taskunifier.version}" productVersion="${taskunifier.version}.0" txtProductVersion="${taskunifier.version}" />
+		<launch4j configFile="${directory.exe}/scripts/windows_taskunifier_launch4j.xml" fileVersion="${taskunifier.version}.0" txtFileVersion="${taskunifier.version}" productVersion="${taskunifier.version}.0" txtProductVersion="${taskunifier.version}" />
 		<mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
 	    <zip destfile="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/TaskUnifier_${taskunifier.version.underscored}_windows.zip" basedir="${directory.exe}/temp"/>
 		<antcall target="create-installer-windows"/>
@@ -147,15 +147,15 @@
 	
 	<target depends="taskunifier-version-underscored, check-os" name="create-installer-windows" if="isWindows">
 		<echo message="Creating windows installer zip file..."/>
-		<copy file="${directory.exe}/scripts/windows.taskunifier.assoc.bat" tofile="${directory.exe}/temp/TaskUnifier/TaskUnifierAssoc.bat"/>
-		<izpack input="${directory.exe}/scripts/taskunifier.izpack.xml"
+		<copy file="${directory.exe}/scripts/windows_taskunifier_assoc.bat" tofile="${directory.exe}/temp/TaskUnifier/TaskUnifierAssoc.bat"/>
+		<izpack input="${directory.exe}/scripts/taskunifier_izpack.xml"
 			output="${directory.exe}/temp/TaskUnifierInstaller.jar"
 			installerType="standard"
 			inheritAll="true"
 			basedir="${directory.exe}/temp/TaskUnifier"
 			compression="deflate"
 			compressionlevel="9"/>
-		<launch4j configFile="${directory.exe}/scripts/windows.taskunifier.installer.launch4j.xml" fileVersion="${taskunifier.version}.0" txtFileVersion="${taskunifier.version}" productVersion="${taskunifier.version}.0" txtProductVersion="${taskunifier.version}" />
+		<launch4j configFile="${directory.exe}/scripts/windows_taskunifier_installer_launch4j.xml" fileVersion="${taskunifier.version}.0" txtFileVersion="${taskunifier.version}" productVersion="${taskunifier.version}.0" txtProductVersion="${taskunifier.version}" />
 		<zip destfile="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/TaskUnifier_${taskunifier.version.underscored}_installer_windows.zip" basedir="${directory.exe}/temp" includes="TaskUnifierInstaller.exe"/>
 	</target>
 	

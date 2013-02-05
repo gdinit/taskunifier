@@ -87,14 +87,14 @@
 		</copy>
 
 		<echo message="Signing mac app..."/>
-		<exec executable="${directory.exe}/scripts/mac.codesign.sh" failonerror="true">
+		<exec executable="${directory.exe}/scripts/mac_codesign.sh" failonerror="true">
 			<arg line="-a"/>
 		</exec>
 		
 		<mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
 		
 		<echo message="Creating mac pkg file..."/>
-		<exec executable="${directory.exe}/scripts/mac.create_pkg.sh" failonerror="true">
+		<exec executable="${directory.exe}/scripts/mac_create_pkg.sh" failonerror="true">
 			<arg line="${taskunifier.version.underscored}"/>
 		</exec>
 	</target>
