@@ -32,6 +32,7 @@
  */
 package com.leclercb.taskunifier.gui.components.taskedit;
 
+import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.swing.TUDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
@@ -43,6 +44,18 @@ public class BatchTaskEditDialog extends TUDialog {
 		this.initialize();
 	}
 	
+	public Task[] getTasks() {
+		return BatchTaskEditDialogPanel.getInstance().getTasks();
+	}
+	
+	public void setTasks(Task[] tasks) {
+		BatchTaskEditDialogPanel.getInstance().setTasks(tasks);
+	}
+	
+	public boolean isCancelled() {
+		return BatchTaskEditDialogPanel.getInstance().isCancelled();
+	}
+	
 	private void initialize() {
 		this.setModal(true);
 		this.setTitle(Translations.getString("batch_task_edit"));
@@ -51,6 +64,8 @@ public class BatchTaskEditDialog extends TUDialog {
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		
 		this.loadWindowSettings("window.task_edit");
+		
+		this.setTasks(null);
 	}
 	
 }

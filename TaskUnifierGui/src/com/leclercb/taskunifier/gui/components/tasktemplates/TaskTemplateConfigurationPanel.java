@@ -58,7 +58,7 @@ public class TaskTemplateConfigurationPanel extends JSplitPane {
 	
 	private void initialize() {
 		this.taskTemplatePanel = new TaskTemplatePanel();
-		this.taskTemplatePanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		this.taskTemplatePanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		this.setRightComponent(ComponentFactory.createJScrollPane(
 				this.taskTemplatePanel,
 				false));

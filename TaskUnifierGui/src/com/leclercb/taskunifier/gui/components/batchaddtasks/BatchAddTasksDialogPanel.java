@@ -39,10 +39,16 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 import org.jdesktop.swingx.JXHeader;
 
+import com.leclercb.taskunifier.gui.components.help.Help;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
+import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
+import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
+import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
@@ -50,17 +56,24 @@ public class BatchAddTasksDialogPanel extends TUDialogPanel {
 	
 	private static BatchAddTasksDialogPanel INSTANCE;
 	
-	public static BatchAddTasksDialogPanel getInstance() {
+	protected static BatchAddTasksDialogPanel getInstance() {
 		if (INSTANCE == null)
 			INSTANCE = new BatchAddTasksDialogPanel();
 		
 		return INSTANCE;
 	}
 	
-	private BatchAddTasksPanel batchPanel;
+	private BatchAddTasksPanel batchaddTasksPanel;
+	
+	private JButton okButton;
+	private JButton cancelButton;
 	
 	private BatchAddTasksDialogPanel() {
 		this.initialize();
+	}
+	
+	public BatchAddTasksPanel getBatchAddTasksPanel() {
+		return this.batchaddTasksPanel;
 	}
 	
 	private void initialize() {
@@ -71,24 +84,42 @@ public class BatchAddTasksDialogPanel extends TUDialogPanel {
 		header.setDescription(Translations.getString("batch_add_tasks.insert_task_titles"));
 		header.setIcon(ImageUtils.getResourceImage("batch.png", 32, 32));
 		
-		this.batchPanel = new BatchAddTasksPanel();
-		this.batchPanel.setBorder(BorderFactory.createEmptyBorder(
+		this.batchaddTasksPanel = new BatchAddTasksPanel();
+		this.batchaddTasksPanel.setBorder(BorderFactory.createEmptyBorder(
 				10,
 				10,
 				10,
 				10));
 		
 		this.add(header, BorderLayout.NORTH);
-		this.add(this.batchPanel, BorderLayout.CENTER);
+		this.add(this.batchaddTasksPanel, BorderLayout.CENTER);
 		
-		this.batchPanel.addActionListener(new ActionListener() {
+		this.initializeButtonsPanel();
+	}
+	
+	private void initializeButtonsPanel() {
+		ActionListener listener = new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				BatchAddTasksDialogPanel.this.setVisible(false);
+			public void actionPerformed(ActionEvent event) {
+				if (event.getActionCommand().equals("OK")) {
+					BatchAddTasksDialogPanel.this.batchaddTasksPanel.batchAddTasks();
+				} else {
+					BatchAddTasksDialogPanel.this.batchaddTasksPanel.reset();
+				}
+				
+				BatchAddTasksDialogPanel.this.dialogSetVisible(false);
 			}
 			
-		});
+		};
+		
+		this.okButton = new TUOkButton(listener);
+		this.cancelButton = new TUCancelButton(listener);
+		
+		JPanel panel = new TUButtonsPanel(Help.getInstance().getHelpButton(
+				"task_batchaddtasks"), this.okButton, this.cancelButton);
+		
+		this.add(panel, BorderLayout.SOUTH);
 	}
 	
 	@Override
@@ -97,13 +128,12 @@ public class BatchAddTasksDialogPanel extends TUDialogPanel {
 			
 			@Override
 			public void windowClosing(WindowEvent e) {
-				BatchAddTasksDialogPanel.this.batchPanel.actionCancel();
+				BatchAddTasksDialogPanel.this.batchaddTasksPanel.reset();
 			}
 			
 		});
 		
-		this.getDialog().getRootPane().setDefaultButton(
-				this.batchPanel.getOkButton());
+		this.getDialog().getRootPane().setDefaultButton(this.okButton);
 	}
 	
 }

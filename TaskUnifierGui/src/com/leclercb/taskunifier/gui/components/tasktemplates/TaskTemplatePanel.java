@@ -34,6 +34,7 @@ package com.leclercb.taskunifier.gui.components.tasktemplates;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.util.Date;
 
 import javax.swing.BorderFactory;
@@ -60,6 +61,7 @@ import com.jgoodies.binding.adapter.SpinnerAdapterFactory;
 import com.jgoodies.binding.beans.BeanAdapter;
 import com.jgoodies.binding.value.AbstractConverter;
 import com.jgoodies.binding.value.ValueModel;
+import com.leclercb.commons.gui.swing.panels.ScrollablePanel;
 import com.leclercb.commons.gui.utils.FormatterUtils;
 import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.Context;
@@ -86,13 +88,12 @@ import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.TUModelListField;
 import com.leclercb.taskunifier.gui.swing.TUShortcutField;
 import com.leclercb.taskunifier.gui.swing.TUSpinnerTimeEditor;
-import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.TaskStatusList;
 
-public class TaskTemplatePanel extends JPanel {
+public class TaskTemplatePanel extends ScrollablePanel {
 	
 	private BeanAdapter<TaskTemplate> adapter;
 	
@@ -167,6 +168,9 @@ public class TaskTemplatePanel extends JPanel {
 	}
 	
 	private void initialize() {
+		this.setScrollableWidth(ScrollablePanel.ScrollableSizeHint.FIT);
+		this.setScrollableHeight(ScrollablePanel.ScrollableSizeHint.STRETCH);
+		
 		this.templateTitle = new JTextField();
 		this.templateShortcut = new TUShortcutField();
 		
@@ -378,9 +382,10 @@ public class TaskTemplatePanel extends JPanel {
 				BorderFactory.createLineBorder(Color.GRAY));
 		
 		JPanel notePanel = new JPanel(new BorderLayout());
-		notePanel.add(new JLabel(Translations.getString("general.task.note")
-				+ ":"), BorderLayout.NORTH);
+		notePanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
 		notePanel.add(this.taskNote.getComponent(), BorderLayout.CENTER);
+		
+		notePanel.setPreferredSize(new Dimension(100, 120));
 		
 		// Lay out the panel
 		this.add(builder.getPanel(), BorderLayout.NORTH);

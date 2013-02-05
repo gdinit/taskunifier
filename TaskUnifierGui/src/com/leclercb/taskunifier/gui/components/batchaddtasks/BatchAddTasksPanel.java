@@ -32,9 +32,6 @@
  */
 package com.leclercb.taskunifier.gui.components.batchaddtasks;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -45,35 +42,20 @@ import net.miginfocom.swing.MigLayout;
 
 import org.jdesktop.swingx.renderer.DefaultListRenderer;
 
-import com.leclercb.commons.api.event.action.ActionSupport;
-import com.leclercb.commons.api.event.action.ActionSupported;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
 import com.leclercb.taskunifier.gui.actions.ActionBatchAddTasks;
 import com.leclercb.taskunifier.gui.actions.ActionManageTaskTemplates;
 import com.leclercb.taskunifier.gui.commons.models.TaskTemplateModel;
 import com.leclercb.taskunifier.gui.commons.values.StringValueTaskTemplateTitle;
-import com.leclercb.taskunifier.gui.components.help.Help;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
-import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 
-public class BatchAddTasksPanel extends JPanel implements ActionSupported {
-	
-	public static final String ACTION_OK = "ACTION_OK";
-	public static final String ACTION_CANCEL = "ACTION_CANCEL";
-	
-	private ActionSupport actionSupport;
-	
-	private JButton okButton;
-	private JButton cancelButton;
+public class BatchAddTasksPanel extends JPanel {
 	
 	private JTextArea titlesTextArea;
 	private JComboBox templateComboBox;
 	
 	public BatchAddTasksPanel() {
-		this.actionSupport = new ActionSupport(this);
 		this.initialize();
 	}
 	
@@ -102,35 +84,10 @@ public class BatchAddTasksPanel extends JPanel implements ActionSupported {
 				16));
 		manageTemplates.setText(null);
 		
-		this.add(manageTemplates, "wrap");
-		
-		this.initializeButtonsPanel();
+		this.add(manageTemplates);
 	}
 	
-	private void initializeButtonsPanel() {
-		ActionListener listener = new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				if (event.getActionCommand().equals("OK")) {
-					BatchAddTasksPanel.this.actionOk();
-				} else {
-					BatchAddTasksPanel.this.actionCancel();
-				}
-			}
-			
-		};
-		
-		this.okButton = new TUOkButton(listener);
-		this.cancelButton = new TUCancelButton(listener);
-		
-		JPanel panel = new TUButtonsPanel(Help.getInstance().getHelpButton(
-				"task_batchaddtasks"), this.okButton, this.cancelButton);
-		
-		this.add(panel, "growx, pushx");
-	}
-	
-	public void actionOk() {
+	public void batchAddTasks() {
 		String titles = this.titlesTextArea.getText();
 		TaskTemplate template = (TaskTemplate) this.templateComboBox.getSelectedItem();
 		
@@ -139,33 +96,13 @@ public class BatchAddTasksPanel extends JPanel implements ActionSupported {
 			ActionBatchAddTasks.batchAddTasks(template, titleArray);
 		}
 		
-		BatchAddTasksPanel.this.titlesTextArea.setText(null);
-		BatchAddTasksPanel.this.templateComboBox.setSelectedItem(null);
-		this.actionSupport.fireActionPerformed(0, ACTION_OK);
+		this.titlesTextArea.setText(null);
+		this.templateComboBox.setSelectedItem(null);
 	}
 	
-	public void actionCancel() {
-		BatchAddTasksPanel.this.titlesTextArea.setText(null);
-		BatchAddTasksPanel.this.templateComboBox.setSelectedItem(null);
-		this.actionSupport.fireActionPerformed(0, ACTION_CANCEL);
-	}
-	
-	public JButton getOkButton() {
-		return this.okButton;
-	}
-	
-	public JButton getCancelButton() {
-		return this.cancelButton;
-	}
-	
-	@Override
-	public void addActionListener(ActionListener listener) {
-		this.actionSupport.addActionListener(listener);
-	}
-	
-	@Override
-	public void removeActionListener(ActionListener listener) {
-		this.actionSupport.removeActionListener(listener);
+	public void reset() {
+		this.titlesTextArea.setText(null);
+		this.templateComboBox.setSelectedItem(null);
 	}
 	
 }

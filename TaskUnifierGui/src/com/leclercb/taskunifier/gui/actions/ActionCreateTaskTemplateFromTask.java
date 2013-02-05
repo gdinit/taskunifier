@@ -83,19 +83,20 @@ public class ActionCreateTaskTemplateFromTask extends AbstractViewTaskSelectionA
 		
 		TaskTemplate template = TaskTemplateFactory.getInstance().create(task);
 		
-		TaskTemplateConfigurationDialog.getInstance().setSelectedTemplate(
-				template);
+		final TaskTemplateConfigurationDialog dialog = new TaskTemplateConfigurationDialog();
+		dialog.setSelectedTemplate(template);
 		
 		TUSwingUtilities.invokeLater(new Runnable() {
 			
 			@Override
 			public void run() {
-				TaskTemplateConfigurationDialog.getInstance().focusAndSelectTextInTextField();
+				dialog.focusAndSelectTextInTextField();
 			}
 			
 		});
 		
-		TaskTemplateConfigurationDialog.getInstance().setVisible(true);
+		dialog.setVisible(true);
+		dialog.dispose();
 	}
 	
 }

@@ -51,13 +51,21 @@ public abstract class TUDialogPanel extends JPanel {
 		this.dialogLoaded();
 	}
 	
-	@Override
-	public void setVisible(boolean visible) {
+	public void dialogDispose() {
+		if (this.dialog != null)
+			this.dialog.dispose();
+	}
+	
+	public void dialogSetVisible(boolean visible) {
 		if (this.dialog != null)
 			this.dialog.setVisible(visible);
 	}
 	
 	protected void dialogLoaded() {
+		
+	}
+	
+	protected void dialogVisible(boolean visible) {
 		
 	}
 	
