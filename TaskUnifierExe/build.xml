@@ -8,7 +8,6 @@
 	<property name="directory.web" value="${basedir}/../TaskUnifierWebSite"/>
 	
 	<taskdef resource="net/jtools/classloadertask/antlib.xml" classpath="${directory.exe}/tools/ant-classloadertask/ant-classloadertask.jar"/>
-	<taskdef name="izpack" classname="com.izforge.izpack.ant.IzPackTask" classpath="${directory.exe}/tools/izpack/standalone-compiler.jar"/>
 	<taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" classpath="${directory.exe}/tools/jarbundler/jarbundler-2.2.0.jar"/>
 	<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${directory.exe}/tools/launch4j/launch4j.jar:${directory.exe}/tools/launch4j/xstream.jar" />
 	
