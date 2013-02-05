@@ -56,7 +56,9 @@ public class ActionManageTaskTemplates extends AbstractViewAction {
 	}
 	
 	public static void manageTemplates() {
-		TaskTemplateConfigurationDialog.getInstance().setVisible(true);
+		TaskTemplateConfigurationDialog dialog = new TaskTemplateConfigurationDialog();
+		dialog.setVisible(true);
+		dialog.dispose();
 	}
 	
 }

@@ -30,66 +30,88 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.about;
+package com.leclercb.taskunifier.gui.components.tasktemplates;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
+import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
+import com.leclercb.taskunifier.gui.components.help.Help;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 
-public class AboutDialogPanel extends TUDialogPanel {
+public class TaskTemplateConfigurationDialogPanel extends TUDialogPanel {
 	
-	private static AboutDialogPanel INSTANCE;
+	private static TaskTemplateConfigurationDialogPanel INSTANCE = null;
 	
-	protected static AboutDialogPanel getInstance() {
+	protected static TaskTemplateConfigurationDialogPanel getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new AboutDialogPanel();
+			INSTANCE = new TaskTemplateConfigurationDialogPanel();
 		
 		return INSTANCE;
 	}
 	
+	private TaskTemplateConfigurationPanel templateConfigurationPanel;
+	
+	private ActionListener okListener;
+	
 	private JButton okButton;
 	
-	private AboutDialogPanel() {
+	private TaskTemplateConfigurationDialogPanel() {
 		this.initialize();
+	}
+	
+	public void setSelectedTemplate(TaskTemplate template) {
+		this.templateConfigurationPanel.setSelectedTemplate(template);
+	}
+	
+	public void focusAndSelectTextInTextField() {
+		this.templateConfigurationPanel.focusAndSelectTextInTextField();
 	}
 	
 	private void initialize() {
 		this.setLayout(new BorderLayout());
-		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
-		AboutPanel aboutPanel = new AboutPanel();
-		this.add(aboutPanel, BorderLayout.CENTER);
+		this.templateConfigurationPanel = new TaskTemplateConfigurationPanel();
+		
+		this.add(this.templateConfigurationPanel, BorderLayout.CENTER);
 		
 		this.initializeButtonsPanel();
 	}
 	
 	private void initializeButtonsPanel() {
-		ActionListener listener = new ActionListener() {
+		ActionListener okListener = new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				AboutDialogPanel.this.dialogSetVisible(false);
+			public void actionPerformed(ActionEvent event) {
+				TaskTemplateConfigurationDialogPanel.this.dialogSetVisible(false);
 			}
 			
 		};
 		
-		this.okButton = new TUOkButton(listener);
-		JPanel buttonsPanel = new TUButtonsPanel(this.okButton);
+		JButton okButton = new TUOkButton(okListener);
+		JPanel panel = new TUButtonsPanel(Help.getInstance().getHelpButton(
+				"manage_task_templates"), okButton);
 		
-		this.add(buttonsPanel, BorderLayout.SOUTH);
+		this.add(panel, BorderLayout.SOUTH);
 	}
 	
 	@Override
 	protected void dialogLoaded() {
-		this.getDialog().getRootPane().setDefaultButton(this.okButton);
+		this.getRootPane().setDefaultButton(this.okButton);
+		
+		this.getRootPane().registerKeyboardAction(
+				this.okListener,
+				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+				JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 	
 }

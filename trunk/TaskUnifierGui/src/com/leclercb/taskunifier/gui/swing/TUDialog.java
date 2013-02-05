@@ -53,6 +53,8 @@ public class TUDialog extends JDialog implements SavePropertiesListener {
 	
 	private String windowProperty;
 	
+	private TUDialogPanel dialogPanel;
+	
 	public TUDialog() {
 		this((Window) null);
 	}
@@ -68,10 +70,20 @@ public class TUDialog extends JDialog implements SavePropertiesListener {
 	public TUDialog(TUDialogPanel dialogPanel) {
 		this(FrameUtils.getCurrentWindow());
 		
-		this.setLayout(new BorderLayout());
-		this.add(dialogPanel);
+		this.dialogPanel = dialogPanel;
 		
-		dialogPanel.setDialog(this);
+		this.setLayout(new BorderLayout());
+		this.add(this.dialogPanel);
+		
+		this.dialogPanel.setDialog(this);
+	}
+	
+	@Override
+	public void setVisible(boolean b) {
+		if (this.dialogPanel != null)
+			this.dialogPanel.dialogVisible(b);
+		
+		super.setVisible(b);
 	}
 	
 	private void initialize() {

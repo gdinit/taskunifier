@@ -59,7 +59,7 @@ public class BatchTaskEditDialogPanel extends TUDialogPanel {
 	
 	private static BatchTaskEditDialogPanel INSTANCE;
 	
-	public static BatchTaskEditDialogPanel getInstance() {
+	protected static BatchTaskEditDialogPanel getInstance() {
 		if (INSTANCE == null)
 			INSTANCE = new BatchTaskEditDialogPanel();
 		
@@ -87,15 +87,6 @@ public class BatchTaskEditDialogPanel extends TUDialogPanel {
 		this.batchTaskEditPanel.setTasks(tasks);
 	}
 	
-	@Override
-	public void setVisible(boolean visible) {
-		if (visible) {
-			this.cancelled = false;
-		}
-		
-		super.setVisible(visible);
-	}
-	
 	public boolean isCancelled() {
 		return this.cancelled;
 	}
@@ -105,9 +96,9 @@ public class BatchTaskEditDialogPanel extends TUDialogPanel {
 		
 		this.batchTaskEditPanel = new BatchTaskEditPanel();
 		this.batchTaskEditPanel.setBorder(BorderFactory.createEmptyBorder(
-				5,
 				10,
-				0,
+				10,
+				10,
 				10));
 		
 		this.add(ComponentFactory.createJScrollPane(
@@ -124,7 +115,7 @@ public class BatchTaskEditDialogPanel extends TUDialogPanel {
 				BatchTaskEditDialogPanel.this.batchTaskEditPanel.editTasks();
 				BatchTaskEditDialogPanel.this.cancelled = false;
 				BatchTaskEditDialogPanel.this.setTasks(null);
-				BatchTaskEditDialogPanel.this.setVisible(false);
+				BatchTaskEditDialogPanel.this.dialogSetVisible(false);
 			}
 			
 		};
@@ -136,7 +127,7 @@ public class BatchTaskEditDialogPanel extends TUDialogPanel {
 				boolean saveChanges = BatchTaskEditDialogPanel.this.askSaveChanges();
 				BatchTaskEditDialogPanel.this.cancelled = !saveChanges;
 				BatchTaskEditDialogPanel.this.setTasks(null);
-				BatchTaskEditDialogPanel.this.setVisible(false);
+				BatchTaskEditDialogPanel.this.dialogSetVisible(false);
 			}
 			
 		};
@@ -176,6 +167,13 @@ public class BatchTaskEditDialogPanel extends TUDialogPanel {
 	}
 	
 	@Override
+	public void dialogVisible(boolean visible) {
+		if (visible) {
+			this.cancelled = false;
+		}
+	}
+	
+	@Override
 	protected void dialogLoaded() {
 		this.getDialog().addWindowListener(new WindowAdapter() {
 			
@@ -184,7 +182,7 @@ public class BatchTaskEditDialogPanel extends TUDialogPanel {
 				boolean saveChanges = BatchTaskEditDialogPanel.this.askSaveChanges();
 				BatchTaskEditDialogPanel.this.cancelled = !saveChanges;
 				BatchTaskEditDialogPanel.this.setTasks(null);
-				BatchTaskEditDialogPanel.this.setVisible(false);
+				BatchTaskEditDialogPanel.this.dialogSetVisible(false);
 			}
 			
 		});

@@ -54,7 +54,9 @@ public class ActionAbout extends AbstractViewAction {
 	}
 	
 	public static void about() {
-		new AboutDialog().setVisible(true);
+		AboutDialog dialog = new AboutDialog();
+		dialog.setVisible(true);
+		dialog.dispose();
 	}
 	
 }

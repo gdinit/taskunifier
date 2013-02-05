@@ -32,49 +32,25 @@
  */
 package com.leclercb.taskunifier.gui.components.tasktemplates;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.KeyStroke;
-
-import org.jdesktop.swingx.JXHeader;
-
 import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
-import com.leclercb.taskunifier.gui.components.help.Help;
 import com.leclercb.taskunifier.gui.swing.TUDialog;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
-import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class TaskTemplateConfigurationDialog extends TUDialog {
 	
-	private static TaskTemplateConfigurationDialog INSTANCE = null;
-	
-	public static TaskTemplateConfigurationDialog getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new TaskTemplateConfigurationDialog();
+	public TaskTemplateConfigurationDialog() {
+		super(TaskTemplateConfigurationDialogPanel.getInstance());
 		
-		return INSTANCE;
-	}
-	
-	private TaskTemplateConfigurationPanel templateConfigurationPanel;
-	
-	private TaskTemplateConfigurationDialog() {
 		this.initialize();
 	}
 	
 	public void setSelectedTemplate(TaskTemplate template) {
-		this.templateConfigurationPanel.setSelectedTemplate(template);
+		TaskTemplateConfigurationDialogPanel.getInstance().setSelectedTemplate(
+				template);
 	}
 	
 	public void focusAndSelectTextInTextField() {
-		this.templateConfigurationPanel.focusAndSelectTextInTextField();
+		TaskTemplateConfigurationDialogPanel.getInstance().focusAndSelectTextInTextField();
 	}
 	
 	private void initialize() {
@@ -82,45 +58,9 @@ public class TaskTemplateConfigurationDialog extends TUDialog {
 		this.setTitle(Translations.getString("general.manage_task_templates"));
 		this.setSize(900, 500);
 		this.setResizable(true);
-		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		
 		this.loadWindowSettings("window.task_template");
-		
-		JXHeader header = new JXHeader();
-		header.setTitle(Translations.getString("header.title.manage_task_templates"));
-		header.setDescription(Translations.getString("header.description.manage_task_templates"));
-		header.setIcon(ImageUtils.getResourceImage("template.png", 32, 32));
-		
-		this.templateConfigurationPanel = new TaskTemplateConfigurationPanel();
-		
-		this.add(header, BorderLayout.NORTH);
-		this.add(this.templateConfigurationPanel, BorderLayout.CENTER);
-		
-		this.initializeButtonsPanel();
-	}
-	
-	private void initializeButtonsPanel() {
-		ActionListener listener = new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				TaskTemplateConfigurationDialog.this.setVisible(false);
-			}
-			
-		};
-		
-		JButton okButton = new TUOkButton(listener);
-		JPanel panel = new TUButtonsPanel(Help.getInstance().getHelpButton(
-				"manage_task_templates"), okButton);
-		
-		this.add(panel, BorderLayout.SOUTH);
-		this.getRootPane().setDefaultButton(okButton);
-		
-		this.getRootPane().registerKeyboardAction(
-				listener,
-				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-				JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 	
 }
