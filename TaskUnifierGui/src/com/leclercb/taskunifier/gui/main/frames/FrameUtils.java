@@ -213,7 +213,14 @@ public final class FrameUtils {
 				
 				@Override
 				public void onHotKey(HotKey key) {
-					QuickAddTaskDialog.getInstance().setVisible(true);
+					try {
+						QuickAddTaskDialog.getInstance().setVisible(true);
+					} catch (Exception e) {
+						GuiLogger.getLogger().log(
+								Level.WARNING,
+								"Cannot open quick add task dialog",
+								e);
+					}
 				}
 				
 			});
