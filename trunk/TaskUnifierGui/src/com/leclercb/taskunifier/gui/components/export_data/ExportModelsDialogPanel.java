@@ -48,18 +48,18 @@ import com.leclercb.taskunifier.api.models.NoteFactory;
 import com.leclercb.taskunifier.api.models.TaskFactory;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public class ExportModelsDialog extends AbstractExportDialog {
+public class ExportModelsDialogPanel extends AbstractExportDialogPanel {
 	
-	private static ExportModelsDialog INSTANCE;
+	private static ExportModelsDialogPanel INSTANCE;
 	
-	public static ExportModelsDialog getInstance() {
+	public static ExportModelsDialogPanel getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new ExportModelsDialog();
+			INSTANCE = new ExportModelsDialogPanel();
 		
 		return INSTANCE;
 	}
 	
-	private ExportModelsDialog() {
+	private ExportModelsDialogPanel() {
 		super(
 				Translations.getString("action.export_models"),
 				"zip",

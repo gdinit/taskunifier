@@ -30,37 +30,43 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.actions;
+package com.leclercb.taskunifier.gui.components.import_data;
 
-import java.awt.event.ActionEvent;
+import java.io.FileInputStream;
 
-import com.leclercb.taskunifier.gui.components.export_data.ExportDialog;
-import com.leclercb.taskunifier.gui.components.export_data.ExportTaskRulesDialogPanel;
+import com.leclercb.taskunifier.api.models.templates.TaskTemplateFactory;
 import com.leclercb.taskunifier.gui.translations.Translations;
-import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ActionExportTaskRules extends AbstractViewAction {
+public class ImportTaskTemplatesDialogPanel extends AbstractImportDialogPanel {
 	
-	public ActionExportTaskRules(int width, int height) {
-		super(
-				Translations.getString("action.export_task_rules"),
-				ImageUtils.getResourceImage("upload.png", width, height));
+	private static ImportTaskTemplatesDialogPanel INSTANCE;
+	
+	public static ImportTaskTemplatesDialogPanel getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new ImportTaskTemplatesDialogPanel();
 		
-		this.putValue(
-				SHORT_DESCRIPTION,
-				Translations.getString("action.export_task_rules"));
+		return INSTANCE;
+	}
+	
+	private ImportTaskTemplatesDialogPanel() {
+		super(
+				Translations.getString("action.import_task_templates"),
+				true,
+				"xml",
+				Translations.getString("general.xml_files"),
+				"import.task_templates.file_name");
 	}
 	
 	@Override
-	public void actionPerformed(ActionEvent event) {
-		ActionExportTaskRules.exportTaskRules();
+	public void deleteExistingValue() {
+		TaskTemplateFactory.getInstance().deleteAll();
 	}
 	
-	public static void exportTaskRules() {
-		ExportDialog dialog = new ExportDialog(
-				ExportTaskRulesDialogPanel.getInstance());
-		dialog.setVisible(true);
-		dialog.dispose();
+	@Override
+	protected void importFromFile(String file) throws Exception {
+		FileInputStream input = new FileInputStream(file);
+		TaskTemplateFactory.getInstance().decodeFromXML(input);
+		input.close();
 	}
 	
 }

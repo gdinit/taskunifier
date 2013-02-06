@@ -32,41 +32,25 @@
  */
 package com.leclercb.taskunifier.gui.components.import_data;
 
-import java.io.FileInputStream;
+import com.leclercb.taskunifier.gui.swing.TUDialog;
 
-import com.leclercb.taskunifier.gui.api.rules.TaskRuleFactory;
-import com.leclercb.taskunifier.gui.translations.Translations;
-
-public class ImportTaskRulesDialog extends AbstractImportDialog {
+public class ImportDialog extends TUDialog {
 	
-	private static ImportTaskRulesDialog INSTANCE;
-	
-	public static ImportTaskRulesDialog getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new ImportTaskRulesDialog();
+	public ImportDialog(AbstractImportDialogPanel dialogPanel) {
+		super(dialogPanel);
 		
-		return INSTANCE;
+		this.initialize(dialogPanel);
 	}
 	
-	private ImportTaskRulesDialog() {
-		super(
-				Translations.getString("action.import_task_rules"),
-				true,
-				"xml",
-				Translations.getString("general.xml_files"),
-				"import.task_rules.file_name");
-	}
-	
-	@Override
-	public void deleteExistingValue() {
-		TaskRuleFactory.getInstance().deleteAll();
-	}
-	
-	@Override
-	protected void importFromFile(String file) throws Exception {
-		FileInputStream input = new FileInputStream(file);
-		TaskRuleFactory.getInstance().decodeFromXML(input);
-		input.close();
+	private void initialize(AbstractImportDialogPanel dialogPanel) {
+		this.setModal(true);
+		this.setTitle(dialogPanel.getTitle());
+		this.setSize(500, 150);
+		this.setResizable(false);
+		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		
+		if (this.getOwner() != null)
+			this.setLocationRelativeTo(this.getOwner());
 	}
 	
 }

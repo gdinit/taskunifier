@@ -34,7 +34,8 @@ package com.leclercb.taskunifier.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import com.leclercb.taskunifier.gui.components.export_data.ExportNoteSearchersDialog;
+import com.leclercb.taskunifier.gui.components.export_data.ExportDialog;
+import com.leclercb.taskunifier.gui.components.export_data.ExportNoteSearchersDialogPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
@@ -56,7 +57,10 @@ public class ActionExportNoteSearchers extends AbstractViewAction {
 	}
 	
 	public static void exportNoteSearchers() {
-		ExportNoteSearchersDialog.getInstance().setVisible(true);
+		ExportDialog dialog = new ExportDialog(
+				ExportNoteSearchersDialogPanel.getInstance());
+		dialog.setVisible(true);
+		dialog.dispose();
 	}
 	
 }

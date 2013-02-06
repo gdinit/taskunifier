@@ -34,7 +34,8 @@ package com.leclercb.taskunifier.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import com.leclercb.taskunifier.gui.components.import_data.ImportNoteSearchersDialog;
+import com.leclercb.taskunifier.gui.components.import_data.ImportDialog;
+import com.leclercb.taskunifier.gui.components.import_data.ImportNoteSearchersDialogPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
@@ -56,7 +57,10 @@ public class ActionImportNoteSearchers extends AbstractViewAction {
 	}
 	
 	public static void importNoteSearchers() {
-		ImportNoteSearchersDialog.getInstance().setVisible(true);
+		ImportDialog dialog = new ImportDialog(
+				ImportNoteSearchersDialogPanel.getInstance());
+		dialog.setVisible(true);
+		dialog.dispose();
 	}
 	
 }

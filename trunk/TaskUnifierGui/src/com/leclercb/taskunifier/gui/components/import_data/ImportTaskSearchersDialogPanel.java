@@ -30,35 +30,44 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.export_data;
+package com.leclercb.taskunifier.gui.components.import_data;
 
-import java.io.FileOutputStream;
+import java.io.FileInputStream;
 
-import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.api.searchers.TaskSearcherFactory;
+import com.leclercb.taskunifier.gui.api.searchers.coders.TaskSearcherFactoryXMLCoder;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public class ExportSettingsDialog extends AbstractExportDialog {
+public class ImportTaskSearchersDialogPanel extends AbstractImportDialogPanel {
 	
-	private static ExportSettingsDialog INSTANCE;
+	private static ImportTaskSearchersDialogPanel INSTANCE;
 	
-	public static ExportSettingsDialog getInstance() {
+	public static ImportTaskSearchersDialogPanel getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new ExportSettingsDialog();
+			INSTANCE = new ImportTaskSearchersDialogPanel();
 		
 		return INSTANCE;
 	}
 	
-	private ExportSettingsDialog() {
+	private ImportTaskSearchersDialogPanel() {
 		super(
-				Translations.getString("action.export_settings"),
-				"properties",
-				Translations.getString("general.properties_files"),
-				"export.settings.file_name");
+				Translations.getString("action.import_task_searchers"),
+				true,
+				"xml",
+				Translations.getString("general.xml_files"),
+				"import.task_searchers.file_name");
 	}
 	
 	@Override
-	protected void exportToFile(String file) throws Exception {
-		Main.getSettings().store(new FileOutputStream(file), "Settings");
+	public void deleteExistingValue() {
+		TaskSearcherFactory.getInstance().deleteAll();
+	}
+	
+	@Override
+	protected void importFromFile(String file) throws Exception {
+		FileInputStream input = new FileInputStream(file);
+		new TaskSearcherFactoryXMLCoder().decode(input);
+		input.close();
 	}
 	
 }

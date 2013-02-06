@@ -52,7 +52,8 @@ import com.leclercb.taskunifier.gui.api.models.beans.ComBean;
 import com.leclercb.taskunifier.gui.api.models.beans.ComNoteBean;
 import com.leclercb.taskunifier.gui.api.models.beans.ComQuickTaskBean;
 import com.leclercb.taskunifier.gui.api.models.beans.ComTaskBean;
-import com.leclercb.taskunifier.gui.components.import_data.ImportComFileDialog;
+import com.leclercb.taskunifier.gui.components.import_data.ImportComFileDialogPanel;
+import com.leclercb.taskunifier.gui.components.import_data.ImportDialog;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
@@ -80,7 +81,10 @@ public class ActionImportComFile extends AbstractViewAction {
 	}
 	
 	public static void importComFile() {
-		ImportComFileDialog.getInstance().setVisible(true);
+		ImportDialog dialog = new ImportDialog(
+				ImportComFileDialogPanel.getInstance());
+		dialog.setVisible(true);
+		dialog.dispose();
 	}
 	
 	public static void importComFile(File file) {

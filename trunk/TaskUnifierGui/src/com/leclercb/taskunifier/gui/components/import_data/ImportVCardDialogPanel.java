@@ -48,18 +48,18 @@ import com.leclercb.taskunifier.api.models.Contact;
 import com.leclercb.taskunifier.api.models.ContactFactory;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public class ImportVCardDialog extends AbstractImportDialog {
+public class ImportVCardDialogPanel extends AbstractImportDialogPanel {
 	
-	private static ImportVCardDialog INSTANCE;
+	private static ImportVCardDialogPanel INSTANCE;
 	
-	public static ImportVCardDialog getInstance() {
+	public static ImportVCardDialogPanel getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new ImportVCardDialog();
+			INSTANCE = new ImportVCardDialogPanel();
 		
 		return INSTANCE;
 	}
 	
-	private ImportVCardDialog() {
+	private ImportVCardDialogPanel() {
 		super(
 				Translations.getString("action.import_vcard"),
 				false,

@@ -30,37 +30,27 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.actions;
+package com.leclercb.taskunifier.gui.components.export_data;
 
-import java.awt.event.ActionEvent;
+import com.leclercb.taskunifier.gui.swing.TUDialog;
 
-import com.leclercb.taskunifier.gui.components.export_data.ExportDialog;
-import com.leclercb.taskunifier.gui.components.export_data.ExportTaskRulesDialogPanel;
-import com.leclercb.taskunifier.gui.translations.Translations;
-import com.leclercb.taskunifier.gui.utils.ImageUtils;
-
-public class ActionExportTaskRules extends AbstractViewAction {
+public class ExportDialog extends TUDialog {
 	
-	public ActionExportTaskRules(int width, int height) {
-		super(
-				Translations.getString("action.export_task_rules"),
-				ImageUtils.getResourceImage("upload.png", width, height));
+	public ExportDialog(AbstractExportDialogPanel dialogPanel) {
+		super(dialogPanel);
 		
-		this.putValue(
-				SHORT_DESCRIPTION,
-				Translations.getString("action.export_task_rules"));
+		this.initialize(dialogPanel);
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		ActionExportTaskRules.exportTaskRules();
-	}
-	
-	public static void exportTaskRules() {
-		ExportDialog dialog = new ExportDialog(
-				ExportTaskRulesDialogPanel.getInstance());
-		dialog.setVisible(true);
-		dialog.dispose();
+	private void initialize(AbstractExportDialogPanel dialogPanel) {
+		this.setModal(true);
+		this.setTitle(dialogPanel.getTitle());
+		this.setSize(500, 120);
+		this.setResizable(false);
+		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		
+		if (this.getOwner() != null)
+			this.setLocationRelativeTo(this.getOwner());
 	}
 	
 }

@@ -30,46 +30,65 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.import_data;
+package com.leclercb.taskunifier.gui.components.export_data;
 
-import java.io.FileInputStream;
+import java.io.File;
+import java.util.List;
 
-import com.leclercb.taskunifier.gui.actions.ActionImportComFile;
-import com.leclercb.taskunifier.gui.api.models.beans.ComBean;
+import org.apache.commons.io.FileUtils;
+
+import a_vcard.android.provider.Contacts;
+import a_vcard.android.syncml.pim.vcard.ContactStruct;
+import a_vcard.android.syncml.pim.vcard.VCardComposer;
+
+import com.leclercb.taskunifier.api.models.Contact;
+import com.leclercb.taskunifier.api.models.ContactFactory;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public class ImportComFileDialog extends AbstractImportDialog {
+public class ExportVCardDialogPanel extends AbstractExportDialogPanel {
 	
-	private static ImportComFileDialog INSTANCE;
+	private static ExportVCardDialogPanel INSTANCE;
 	
-	public static ImportComFileDialog getInstance() {
+	public static ExportVCardDialogPanel getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new ImportComFileDialog();
+			INSTANCE = new ExportVCardDialogPanel();
 		
 		return INSTANCE;
 	}
 	
-	private ImportComFileDialog() {
+	private ExportVCardDialogPanel() {
 		super(
-				Translations.getString("action.import_com_file"),
-				false,
-				"tue",
-				Translations.getString("general.tue_files"),
-				"import.com_file.file_name");
+				Translations.getString("action.export_vcard"),
+				"vcf",
+				Translations.getString("general.vcard_files"),
+				"export.vcard.file_name");
 	}
 	
 	@Override
-	public void deleteExistingValue() {
+	protected void exportToFile(String file) throws Exception {
+		VCardComposer composer = new VCardComposer();
 		
-	}
-	
-	@Override
-	protected void importFromFile(String file) throws Exception {
-		FileInputStream input = new FileInputStream(file);
-		ComBean bean = ComBean.decodeFromXML(input);
-		input.close();
+		StringBuffer buffer = new StringBuffer();
+		List<Contact> contacts = ContactFactory.getInstance().getList();
+		for (Contact contact : contacts) {
+			ContactStruct c = new ContactStruct();
+			c.name = contact.getLastName() + " " + contact.getFirstName();
+			c.addContactmethod(
+					Contacts.KIND_EMAIL,
+					-1,
+					contact.getEmail(),
+					null,
+					true);
+			
+			String vcard = composer.createVCard(
+					c,
+					VCardComposer.VERSION_VCARD21_INT);
+			
+			buffer.append(vcard);
+			buffer.append("\n");
+		}
 		
-		ActionImportComFile.importComBean(bean);
+		FileUtils.writeStringToFile(new File(file), buffer.toString());
 	}
 	
 }

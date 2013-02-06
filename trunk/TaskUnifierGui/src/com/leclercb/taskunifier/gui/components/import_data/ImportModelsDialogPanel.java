@@ -49,18 +49,18 @@ import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 
-public class ImportModelsDialog extends AbstractImportDialog {
+public class ImportModelsDialogPanel extends AbstractImportDialogPanel {
 	
-	private static ImportModelsDialog INSTANCE;
+	private static ImportModelsDialogPanel INSTANCE;
 	
-	public static ImportModelsDialog getInstance() {
+	public static ImportModelsDialogPanel getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new ImportModelsDialog();
+			INSTANCE = new ImportModelsDialogPanel();
 		
 		return INSTANCE;
 	}
 	
-	private ImportModelsDialog() {
+	private ImportModelsDialogPanel() {
 		super(
 				Translations.getString("action.import_models"),
 				true,

@@ -34,7 +34,8 @@ package com.leclercb.taskunifier.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import com.leclercb.taskunifier.gui.components.export_data.ExportVCardDialog;
+import com.leclercb.taskunifier.gui.components.export_data.ExportDialog;
+import com.leclercb.taskunifier.gui.components.export_data.ExportVCardDialogPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
@@ -56,7 +57,10 @@ public class ActionExportVCard extends AbstractViewAction {
 	}
 	
 	public static void exportVCard() {
-		ExportVCardDialog.getInstance().setVisible(true);
+		ExportDialog dialog = new ExportDialog(
+				ExportVCardDialogPanel.getInstance());
+		dialog.setVisible(true);
+		dialog.dispose();
 	}
 	
 }

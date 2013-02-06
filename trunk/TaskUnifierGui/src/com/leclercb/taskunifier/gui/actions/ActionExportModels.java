@@ -34,7 +34,8 @@ package com.leclercb.taskunifier.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import com.leclercb.taskunifier.gui.components.export_data.ExportModelsDialog;
+import com.leclercb.taskunifier.gui.components.export_data.ExportDialog;
+import com.leclercb.taskunifier.gui.components.export_data.ExportModelsDialogPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
@@ -56,7 +57,10 @@ public class ActionExportModels extends AbstractViewAction {
 	}
 	
 	public static void exportModels() {
-		ExportModelsDialog.getInstance().setVisible(true);
+		ExportDialog dialog = new ExportDialog(
+				ExportModelsDialogPanel.getInstance());
+		dialog.setVisible(true);
+		dialog.dispose();
 	}
 	
 }
