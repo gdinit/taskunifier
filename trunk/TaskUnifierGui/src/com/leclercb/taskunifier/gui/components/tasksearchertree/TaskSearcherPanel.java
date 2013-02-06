@@ -85,7 +85,7 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondi
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
 import com.leclercb.taskunifier.gui.commons.events.TaskSearcherSelectionChangeSupport;
 import com.leclercb.taskunifier.gui.commons.events.TaskSearcherSelectionListener;
-import com.leclercb.taskunifier.gui.components.configuration.ConfigurationDialog.ConfigurationTab;
+import com.leclercb.taskunifier.gui.components.configuration.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.models.ModelConfigurationDialog;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.ModelItem;

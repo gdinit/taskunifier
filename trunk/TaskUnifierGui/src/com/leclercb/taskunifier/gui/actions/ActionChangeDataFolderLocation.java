@@ -81,7 +81,9 @@ public class ActionChangeDataFolderLocation extends AbstractViewAction {
 			return;
 		}
 		
-		ChangeDataFolderDialog.getInstance().setVisible(true);
+		ChangeDataFolderDialog dialog = new ChangeDataFolderDialog();
+		dialog.setVisible(true);
+		dialog.dispose();
 	}
 	
 }

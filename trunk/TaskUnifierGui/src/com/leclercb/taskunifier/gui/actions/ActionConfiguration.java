@@ -35,7 +35,7 @@ package com.leclercb.taskunifier.gui.actions;
 import java.awt.event.ActionEvent;
 
 import com.leclercb.taskunifier.gui.components.configuration.ConfigurationDialog;
-import com.leclercb.taskunifier.gui.components.configuration.ConfigurationDialog.ConfigurationTab;
+import com.leclercb.taskunifier.gui.components.configuration.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
@@ -70,10 +70,13 @@ public class ActionConfiguration extends AbstractViewAction {
 	}
 	
 	public static void configuration(ConfigurationTab tab) {
-		if (tab != null)
-			ConfigurationDialog.getInstance().setSelectedConfigurationTab(tab);
+		ConfigurationDialog dialog = new ConfigurationDialog();
 		
-		ConfigurationDialog.getInstance().setVisible(true);
+		if (tab != null)
+			dialog.setSelectedConfigurationTab(tab);
+		
+		dialog.setVisible(true);
+		dialog.dispose();
 		
 		ViewUtils.refreshTaskSearcher();
 	}

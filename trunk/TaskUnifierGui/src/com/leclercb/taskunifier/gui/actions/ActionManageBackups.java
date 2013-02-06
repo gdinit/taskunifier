@@ -34,7 +34,7 @@ package com.leclercb.taskunifier.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import com.leclercb.taskunifier.gui.components.configuration.ConfigurationDialog.ConfigurationTab;
+import com.leclercb.taskunifier.gui.components.configuration.ConfigurationTab;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 

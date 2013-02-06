@@ -193,6 +193,8 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 		this.initializeMenuBar();
 		this.initializeToolBar();
 		this.initializeStatusBar();
+		
+		this.pack();
 	}
 	
 	private void initializeTabPopupMenu() {
