@@ -165,6 +165,8 @@ public class MenuBar extends JMenuBar implements ListChangeListener, PropertyCha
 		importMenu.add(new ActionImportModels(16, 16));
 		importMenu.add(new ActionImportSettings(16, 16));
 		importMenu.add(new ActionImportNoteSearchers(16, 16));
+		// TODO: PRO
+		// importMenu.add(new ActionImportTaskRules(16, 16));
 		importMenu.add(new ActionImportTaskSearchers(16, 16));
 		importMenu.add(new ActionImportTaskTemplates(16, 16));
 		importMenu.add(new ActionImportVCard(16, 16));
@@ -176,6 +178,8 @@ public class MenuBar extends JMenuBar implements ListChangeListener, PropertyCha
 		exportMenu.add(new ActionExportModels(16, 16));
 		exportMenu.add(new ActionExportSettings(16, 16));
 		exportMenu.add(new ActionExportNoteSearchers(16, 16));
+		// TODO: PRO
+		// exportMenu.add(new ActionExportTaskRules(16, 16));
 		exportMenu.add(new ActionExportTaskSearchers(16, 16));
 		exportMenu.add(new ActionExportTaskTemplates(16, 16));
 		exportMenu.add(new ActionExportVCard(16, 16));
