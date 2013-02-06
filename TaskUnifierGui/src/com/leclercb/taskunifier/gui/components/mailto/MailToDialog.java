@@ -32,48 +32,19 @@
  */
 package com.leclercb.taskunifier.gui.components.mailto;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
-import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.TUDialog;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUCloseButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class MailToDialog extends TUDialog {
 	
-	private static MailToDialog INSTANCE;
-	
-	public static MailToDialog getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new MailToDialog();
+	public MailToDialog() {
+		super(MailToDialogPanel.getInstance());
 		
-		return INSTANCE;
-	}
-	
-	private MailToPanel mailToPanel;
-	
-	private MailToDialog() {
 		this.initialize();
 	}
 	
-	@Override
-	public void setVisible(boolean visible) {
-		if (visible) {
-			this.setLocationRelativeTo(FrameUtils.getCurrentFrame());
-		}
-		
-		super.setVisible(visible);
-	}
-	
 	public MailToPanel getMailToPanel() {
-		return this.mailToPanel;
+		return MailToDialogPanel.getInstance().getMailToPanel();
 	}
 	
 	private void initialize() {
@@ -81,38 +52,10 @@ public class MailToDialog extends TUDialog {
 		this.setTitle(Translations.getString("action.mail_to"));
 		this.setSize(600, 350);
 		this.setResizable(true);
-		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		
-		this.mailToPanel = new MailToPanel();
-		this.mailToPanel.setBorder(BorderFactory.createEmptyBorder(
-				10,
-				10,
-				0,
-				10));
-		this.add(this.mailToPanel, BorderLayout.CENTER);
-		
-		this.initializeButtonsPanel();
-	}
-	
-	private void initializeButtonsPanel() {
-		ActionListener listener = new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				MailToDialog.this.setVisible(false);
-			}
-			
-		};
-		
-		this.mailToPanel.addActionListener(listener);
-		
-		JButton closeButton = new TUCloseButton(listener);
-		
-		JPanel panel = new TUButtonsPanel(closeButton);
-		
-		this.add(panel, BorderLayout.SOUTH);
-		this.getRootPane().setDefaultButton(closeButton);
+		if (this.getOwner() != null)
+			this.setLocationRelativeTo(this.getOwner());
 	}
 	
 }

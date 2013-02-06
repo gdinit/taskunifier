@@ -30,56 +30,79 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.actions;
+package com.leclercb.taskunifier.gui.components.mailto;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import com.leclercb.taskunifier.api.models.ModelType;
-import com.leclercb.taskunifier.gui.components.models.ModelConfigurationDialog;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
-import com.leclercb.taskunifier.gui.translations.Translations;
-import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
-import com.leclercb.taskunifier.gui.utils.ImageUtils;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
-public class ActionAddModel extends AbstractViewAction {
+import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
+import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
+import com.leclercb.taskunifier.gui.swing.buttons.TUCloseButton;
+
+public class MailToDialogPanel extends TUDialogPanel {
 	
-	private ModelType type;
+	private static MailToDialogPanel INSTANCE;
 	
-	public ActionAddModel(ModelType type, int width, int height) {
-		super(
-				Translations.getString(
-						"action.add_model",
-						TranslationsUtils.translateModelType(type, false)),
-				ImageUtils.getResourceImage("folder.png", width, height));
+	protected static MailToDialogPanel getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new MailToDialogPanel();
 		
-		this.type = type;
+		return INSTANCE;
+	}
+	
+	private MailToPanel mailToPanel;
+	
+	private JButton closeButton;
+	
+	private MailToDialogPanel() {
+		this.initialize();
+	}
+	
+	public MailToPanel getMailToPanel() {
+		return this.mailToPanel;
+	}
+	
+	private void initialize() {
+		this.setLayout(new BorderLayout());
 		
-		this.putValue(
-				SHORT_DESCRIPTION,
-				Translations.getString(
-						"action.add_model",
-						TranslationsUtils.translateModelType(type, false)));
+		this.mailToPanel = new MailToPanel();
+		this.mailToPanel.setBorder(BorderFactory.createEmptyBorder(
+				10,
+				10,
+				0,
+				10));
+		this.add(this.mailToPanel, BorderLayout.CENTER);
+		
+		this.initializeButtonsPanel();
+	}
+	
+	private void initializeButtonsPanel() {
+		ActionListener listener = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MailToDialogPanel.this.getDialog().setVisible(false);
+			}
+			
+		};
+		
+		this.mailToPanel.addActionListener(listener);
+		
+		this.closeButton = new TUCloseButton(listener);
+		
+		JPanel panel = new TUButtonsPanel(this.closeButton);
+		
+		this.add(panel, BorderLayout.SOUTH);
 	}
 	
 	@Override
-	public void actionPerformed(ActionEvent event) {
-		ActionAddModel.addModel(this.type);
-	}
-	
-	public static void addModel(final ModelType type) {
-		final ModelConfigurationDialog dialog = new ModelConfigurationDialog();
-		
-		TUSwingUtilities.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				dialog.addNewModel(type);
-			}
-			
-		});
-		
-		dialog.setVisible(true);
-		dialog.dispose();
+	protected void dialogLoaded() {
+		this.getDialog().getRootPane().setDefaultButton(this.closeButton);
 	}
 	
 }

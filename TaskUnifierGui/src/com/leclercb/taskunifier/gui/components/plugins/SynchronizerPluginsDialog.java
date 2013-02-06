@@ -32,50 +32,15 @@
  */
 package com.leclercb.taskunifier.gui.components.plugins;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
-import org.jdesktop.swingx.JXHeader;
-
-import com.leclercb.taskunifier.gui.components.help.Help;
-import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.TUDialog;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
-import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
-import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class SynchronizerPluginsDialog extends TUDialog {
 	
-	private static SynchronizerPluginsDialog INSTANCE;
-	
-	public static SynchronizerPluginsDialog getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new SynchronizerPluginsDialog();
+	public SynchronizerPluginsDialog() {
+		super(SynchronizerPluginsDialogPanel.getInstance());
 		
-		return INSTANCE;
-	}
-	
-	private PluginsPanel pluginsPanel;
-	
-	private SynchronizerPluginsDialog() {
 		this.initialize();
-	}
-	
-	@Override
-	public void setVisible(boolean visible) {
-		if (visible) {
-			this.pluginsPanel.reloadPlugins();
-			this.setLocationRelativeTo(FrameUtils.getCurrentFrame());
-		}
-		
-		super.setVisible(visible);
 	}
 	
 	private void initialize() {
@@ -83,48 +48,10 @@ public class SynchronizerPluginsDialog extends TUDialog {
 		this.setTitle(Translations.getString("general.manage_synchronizer_plugins"));
 		this.setSize(650, 400);
 		this.setResizable(true);
-		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		
-		JXHeader header = new JXHeader();
-		header.setTitle(Translations.getString("header.title.manage_synchronizer_plugins"));
-		header.setDescription(Translations.getString("header.description.manage_synchronizer_plugins"));
-		header.setIcon(ImageUtils.getResourceImage("settings.png", 32, 32));
-		this.add(header, BorderLayout.NORTH);
-		
-		this.pluginsPanel = new PluginsPanel(false, true);
-		
-		JPanel mainPanel = new JPanel(new BorderLayout());
-		mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 0, 10));
-		mainPanel.add(this.pluginsPanel, BorderLayout.CENTER);
-		
-		this.add(mainPanel, BorderLayout.CENTER);
-		
-		this.initializeButtonsPanel();
-	}
-	
-	private void initializeButtonsPanel() {
-		ActionListener listener = new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				if (event.getActionCommand().equals("OK")) {
-					SynchronizerPluginsDialog.this.pluginsPanel.installSelectedPlugin();
-				}
-				
-				SynchronizerPluginsDialog.this.setVisible(false);
-			}
-			
-		};
-		
-		JButton okButton = new TUOkButton(listener);
-		JButton cancelButton = new TUCancelButton(listener);
-		
-		JPanel panel = new TUButtonsPanel(Help.getInstance().getHelpButton(
-				"synchronization"), okButton, cancelButton);
-		
-		this.add(panel, BorderLayout.SOUTH);
-		this.getRootPane().setDefaultButton(okButton);
+		if (this.getOwner() != null)
+			this.setLocationRelativeTo(this.getOwner());
 	}
 	
 }

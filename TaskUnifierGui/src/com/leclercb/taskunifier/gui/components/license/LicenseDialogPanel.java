@@ -32,31 +32,73 @@
  */
 package com.leclercb.taskunifier.gui.components.license;
 
-import com.leclercb.commons.api.license.License;
-import com.leclercb.taskunifier.gui.swing.TUDialog;
-import com.leclercb.taskunifier.gui.translations.Translations;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class LicenseDialog extends TUDialog {
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
+import com.leclercb.commons.api.license.License;
+import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
+import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
+import com.leclercb.taskunifier.gui.swing.buttons.TUCloseButton;
+
+public class LicenseDialogPanel extends TUDialogPanel {
 	
-	public LicenseDialog() {
-		super(LicenseDialogPanel.getInstance());
+	private static LicenseDialogPanel INSTANCE;
+	
+	protected static LicenseDialogPanel getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new LicenseDialogPanel();
+			INSTANCE.setLicense(LicenseUtils.loadLicense());
+		}
 		
+		return INSTANCE;
+	}
+	
+	private LicensePanel licensePanel;
+	
+	private JButton closeButton;
+	
+	private LicenseDialogPanel() {
 		this.initialize();
 	}
 	
 	public void setLicense(License license) {
-		LicenseDialogPanel.getInstance().setLicense(license);
+		this.licensePanel.setLicense(license);
 	}
 	
 	private void initialize() {
-		this.setModal(true);
-		this.setTitle(Translations.getString("general.license"));
-		this.setSize(520, 280);
-		this.setResizable(false);
-		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
+		this.setLayout(new BorderLayout());
+		this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		
-		if (this.getOwner() != null)
-			this.setLocationRelativeTo(this.getOwner());
+		this.licensePanel = new LicensePanel();
+		this.add(this.licensePanel, BorderLayout.CENTER);
+		
+		this.initializeButtonsPanel();
+	}
+	
+	private void initializeButtonsPanel() {
+		ActionListener listener = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				LicenseDialogPanel.this.getDialog().setVisible(false);
+			}
+			
+		};
+		
+		this.closeButton = new TUCloseButton(listener);
+		JPanel buttonsPanel = new TUButtonsPanel(this.closeButton);
+		
+		this.add(buttonsPanel, BorderLayout.SOUTH);
+	}
+	
+	@Override
+	protected void dialogLoaded() {
+		this.getDialog().getRootPane().setDefaultButton(this.closeButton);
 	}
 	
 }

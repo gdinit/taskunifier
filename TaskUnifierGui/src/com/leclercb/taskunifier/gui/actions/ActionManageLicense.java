@@ -56,7 +56,9 @@ public class ActionManageLicense extends AbstractViewAction {
 	}
 	
 	public static void manageLicense() {
-		LicenseDialog.getInstance().setVisible(true);
+		LicenseDialog dialog = new LicenseDialog();
+		dialog.setVisible(true);
+		dialog.dispose();
 	}
 	
 }

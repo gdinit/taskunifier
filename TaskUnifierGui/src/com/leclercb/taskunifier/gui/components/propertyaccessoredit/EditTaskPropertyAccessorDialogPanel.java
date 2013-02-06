@@ -33,86 +33,88 @@
 package com.leclercb.taskunifier.gui.components.propertyaccessoredit;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.JComboBox;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-
-import org.jdesktop.swingx.renderer.DefaultListRenderer;
 
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
-import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
-import com.leclercb.taskunifier.gui.commons.models.PropertyAccessorTypeModel;
-import com.leclercb.taskunifier.gui.commons.values.StringValuePropertyAccessorType;
-import com.leclercb.taskunifier.gui.utils.FormBuilder;
-import com.leclercb.taskunifier.gui.utils.TaskCustomColumnList;
+import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
+import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
+import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
+import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 
-public class EditTaskPropertyAccessorPanel extends JPanel {
+public class EditTaskPropertyAccessorDialogPanel extends TUDialogPanel {
 	
-	private PropertyAccessor<Task> accessor;
+	private static EditTaskPropertyAccessorDialogPanel INSTANCE;
 	
-	private JComboBox typeField;
-	private JTextField labelField;
+	protected static EditTaskPropertyAccessorDialogPanel getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new EditTaskPropertyAccessorDialogPanel();
+		
+		return INSTANCE;
+	}
 	
-	public EditTaskPropertyAccessorPanel() {
+	private EditTaskPropertyAccessorPanel editPropertyAccessorPanel;
+	
+	private JButton okButton;
+	private JButton cancelButton;
+	
+	private EditTaskPropertyAccessorDialogPanel() {
 		this.initialize();
 	}
 	
 	private void initialize() {
 		this.setLayout(new BorderLayout());
 		
-		FormBuilder builder = new FormBuilder(
-				"right:pref, 4dlu, fill:default:grow");
+		this.editPropertyAccessorPanel = new EditTaskPropertyAccessorPanel();
+		this.editPropertyAccessorPanel.setBorder(BorderFactory.createEmptyBorder(
+				10,
+				10,
+				0,
+				10));
 		
-		this.typeField = new JComboBox(new PropertyAccessorTypeModel(false));
+		this.add(this.editPropertyAccessorPanel, BorderLayout.CENTER);
 		
-		this.typeField.setRenderer(new DefaultListRenderer(
-				StringValuePropertyAccessorType.INSTANCE));
-		
-		this.labelField = new JTextField();
-		
-		builder.appendI15d(
-				"general.propertyaccessor.type",
-				true,
-				this.typeField);
-		builder.appendI15d(
-				"general.propertyaccessor.label",
-				true,
-				this.labelField);
-		
-		this.add(builder.getPanel(), BorderLayout.CENTER);
+		this.initializeButtonsPanel();
 	}
 	
-	public void editPropertyAccessor() {
-		PropertyAccessorType type = (PropertyAccessorType) this.typeField.getSelectedItem();
-		String label = this.labelField.getText();
+	private void initializeButtonsPanel() {
+		ActionListener listener = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				if (event.getActionCommand().equals("OK")) {
+					EditTaskPropertyAccessorDialogPanel.this.editPropertyAccessorPanel.editPropertyAccessor();
+					EditTaskPropertyAccessorDialogPanel.this.getDialog().setVisible(
+							false);
+				}
+			}
+			
+		};
 		
-		if (this.accessor == null) {
-			TaskCustomColumnList.getInstance().addColumn(type, label);
-		} else {
-			TaskCustomColumnList.getInstance().renameColumn(
-					this.accessor,
-					label);
-		}
+		this.okButton = new TUOkButton(listener);
+		this.cancelButton = new TUCancelButton(listener);
+		
+		JPanel panel = new TUButtonsPanel(this.okButton, this.cancelButton);
+		
+		this.add(panel, BorderLayout.SOUTH);
 	}
 	
 	public PropertyAccessor<Task> getPropertyAccessor() {
-		return this.accessor;
+		return this.editPropertyAccessorPanel.getPropertyAccessor();
 	}
 	
 	public void setPropertyAccessor(PropertyAccessor<Task> accessor) {
-		this.accessor = accessor;
-		
-		if (this.accessor == null) {
-			this.typeField.setEnabled(true);
-			this.typeField.setSelectedItem(PropertyAccessorType.STRING);
-			this.labelField.setText(null);
-		} else {
-			this.typeField.setEnabled(false);
-			this.typeField.setSelectedItem(this.accessor.getType());
-			this.labelField.setText(this.accessor.getLabel());
-		}
+		this.editPropertyAccessorPanel.setPropertyAccessor(accessor);
+	}
+	
+	@Override
+	protected void dialogLoaded() {
+		this.getDialog().getRootPane().setDefaultButton(this.okButton);
 	}
 	
 }

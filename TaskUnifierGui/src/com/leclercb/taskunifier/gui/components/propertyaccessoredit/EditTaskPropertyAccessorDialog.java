@@ -32,44 +32,26 @@
  */
 package com.leclercb.taskunifier.gui.components.propertyaccessoredit;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import javax.swing.BorderFactory;
-
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
-import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.TUDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class EditTaskPropertyAccessorDialog extends TUDialog {
 	
-	private static EditTaskPropertyAccessorDialog INSTANCE;
-	
-	public static EditTaskPropertyAccessorDialog getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new EditTaskPropertyAccessorDialog();
+	public EditTaskPropertyAccessorDialog() {
+		super(EditTaskPropertyAccessorDialogPanel.getInstance());
 		
-		return INSTANCE;
-	}
-	
-	private EditTaskPropertyAccessorPanel editPropertyAccessorPanel;
-	
-	private EditTaskPropertyAccessorDialog() {
 		this.initialize();
 	}
 	
-	@Override
-	public void setVisible(boolean visible) {
-		if (visible) {
-			this.setLocationRelativeTo(FrameUtils.getCurrentFrame());
-		}
-		
-		super.setVisible(visible);
+	public PropertyAccessor<Task> getPropertyAccessor() {
+		return EditTaskPropertyAccessorDialogPanel.getInstance().getPropertyAccessor();
+	}
+	
+	public void setPropertyAccessor(PropertyAccessor<Task> accessor) {
+		EditTaskPropertyAccessorDialogPanel.getInstance().setPropertyAccessor(
+				accessor);
 	}
 	
 	private void initialize() {
@@ -77,46 +59,10 @@ public class EditTaskPropertyAccessorDialog extends TUDialog {
 		this.setTitle(Translations.getString("general.edit_property_accessor"));
 		this.setSize(400, 150);
 		this.setResizable(false);
-		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		
-		this.editPropertyAccessorPanel = new EditTaskPropertyAccessorPanel();
-		this.editPropertyAccessorPanel.setBorder(BorderFactory.createEmptyBorder(
-				10,
-				10,
-				0,
-				10));
-		
-		this.add(this.editPropertyAccessorPanel, BorderLayout.CENTER);
-		
-		this.addWindowListener(new WindowAdapter() {
-			
-			@Override
-			public void windowClosing(WindowEvent e) {
-				EditTaskPropertyAccessorDialog.this.editPropertyAccessorPanel.actionCancel();
-			}
-			
-		});
-		
-		this.editPropertyAccessorPanel.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				EditTaskPropertyAccessorDialog.this.setVisible(false);
-			}
-			
-		});
-		
-		this.getRootPane().setDefaultButton(
-				this.editPropertyAccessorPanel.getOkButton());
-	}
-	
-	public PropertyAccessor<Task> getPropertyAccessor() {
-		return this.editPropertyAccessorPanel.getPropertyAccessor();
-	}
-	
-	public void setPropertyAccessor(PropertyAccessor<Task> accessor) {
-		this.editPropertyAccessorPanel.setPropertyAccessor(accessor);
+		if (this.getOwner() != null)
+			this.setLocationRelativeTo(this.getOwner());
 	}
 	
 }

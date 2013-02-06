@@ -59,7 +59,7 @@ import com.leclercb.taskunifier.gui.commons.highlighters.AlternateHighlighter;
 import com.leclercb.taskunifier.gui.commons.models.ContactModel;
 import com.leclercb.taskunifier.gui.commons.values.IconValueContact;
 import com.leclercb.taskunifier.gui.commons.values.StringValueModel;
-import com.leclercb.taskunifier.gui.components.models.ModelConfigurationDialog.ModelConfigurationTab;
+import com.leclercb.taskunifier.gui.components.models.ModelConfigurationTab;
 import com.leclercb.taskunifier.gui.components.models.lists.ModelRowFilter;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;

@@ -319,9 +319,10 @@ public class NoteSearcherPanel extends JPanel implements SavePropertiesListener,
 			return;
 		}
 		
-		ModelConfigurationDialog dialog = ModelConfigurationDialog.getInstance();
+		ModelConfigurationDialog dialog = new ModelConfigurationDialog();
 		dialog.setSelectedModel(ModelType.FOLDER, item.getFolder());
 		dialog.setVisible(true);
+		dialog.dispose();
 	}
 	
 	@Override
