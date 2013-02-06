@@ -54,7 +54,6 @@ import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
-import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
 import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.swing.TUWorker;
@@ -520,7 +519,6 @@ public final class PluginsUtils {
 			}
 		} else {
 			TUWorkerDialog<Plugin[]> dialog = new TUWorkerDialog<Plugin[]>(
-					FrameUtils.getCurrentFrame(),
 					Translations.getString("general.loading_plugins"));
 			
 			ProgressMonitor monitor = new ProgressMonitor();
