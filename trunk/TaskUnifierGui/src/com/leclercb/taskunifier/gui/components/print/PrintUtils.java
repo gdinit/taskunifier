@@ -48,11 +48,13 @@ public final class PrintUtils {
 	
 	public static void printTable(String propertyName, TableReport tableReport)
 			throws PrinterException {
-		PrintDialog.getInstance().setPropertyName(propertyName);
-		PrintDialog.getInstance().setPrintableReport(tableReport);
-		PrintDialog.getInstance().setVisible(true);
+		PrintDialog dialog = new PrintDialog();
+		dialog.setPropertyName(propertyName);
+		dialog.setPrintableReport(tableReport);
+		dialog.setVisible(true);
+		dialog.dispose();
 		
-		if (PrintDialog.getInstance().isCancelled())
+		if (dialog.isCancelled())
 			return;
 		
 		tableReport.getComponent().clearSelection();
@@ -68,8 +70,7 @@ public final class PrintUtils {
 				propertyName + ".scaling_factor");
 		tableReport.setScalingFactor(scalingFactor);
 		
-		tableReport.setHeaderFormat(new MessageFormat(
-				PrintDialog.getInstance().getReportTitle()));
+		tableReport.setHeaderFormat(new MessageFormat(dialog.getReportTitle()));
 		
 		PrinterJob printerJob = PrinterJob.getPrinterJob();
 		

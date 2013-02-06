@@ -30,41 +30,15 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.actions;
+package com.leclercb.taskunifier.gui.components.models;
 
-import java.awt.event.ActionEvent;
-
-import com.leclercb.taskunifier.gui.components.plugins.PublisherPluginsDialog;
-import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
-import com.leclercb.taskunifier.gui.translations.Translations;
-import com.leclercb.taskunifier.gui.utils.ImageUtils;
-
-public class ActionManagePublisherPlugins extends AbstractViewAction {
+public enum ModelConfigurationTab {
 	
-	public ActionManagePublisherPlugins(int width, int height) {
-		super(
-				Translations.getString("action.manage_publisher_plugins"),
-				ImageUtils.getResourceImage("download.png", width, height));
-		
-		this.putValue(
-				SHORT_DESCRIPTION,
-				Translations.getString("action.manage_publisher_plugins"));
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		ActionManagePublisherPlugins.managePublisherPlugins();
-	}
-	
-	public static void managePublisherPlugins() {
-		if (Synchronizing.getInstance().isSynchronizing()) {
-			Synchronizing.getInstance().showSynchronizingMessage();
-			return;
-		}
-		
-		PublisherPluginsDialog dialog = new PublisherPluginsDialog();
-		dialog.setVisible(true);
-		dialog.dispose();
-	}
+	CONTACTS,
+	CONTEXTS,
+	FOLDERS,
+	GOALS,
+	LOCATIONS,
+	TAGS;
 	
 }

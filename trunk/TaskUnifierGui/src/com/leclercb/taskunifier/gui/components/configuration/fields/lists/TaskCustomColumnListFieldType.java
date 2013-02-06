@@ -118,9 +118,10 @@ public class TaskCustomColumnListFieldType extends ConfigurationFieldType.Panel 
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				EditTaskPropertyAccessorDialog.getInstance().setPropertyAccessor(
-						null);
-				EditTaskPropertyAccessorDialog.getInstance().setVisible(true);
+				EditTaskPropertyAccessorDialog dialog = new EditTaskPropertyAccessorDialog();
+				dialog.setPropertyAccessor(null);
+				dialog.setVisible(true);
+				dialog.dispose();
 			}
 			
 		});
@@ -134,9 +135,10 @@ public class TaskCustomColumnListFieldType extends ConfigurationFieldType.Panel 
 					return;
 				
 				PropertyAccessor<Task> item = (PropertyAccessor<Task>) TaskCustomColumnListFieldType.this.list.getSelectedValue();
-				EditTaskPropertyAccessorDialog.getInstance().setPropertyAccessor(
-						item);
-				EditTaskPropertyAccessorDialog.getInstance().setVisible(true);
+				EditTaskPropertyAccessorDialog dialog = new EditTaskPropertyAccessorDialog();
+				dialog.setPropertyAccessor(item);
+				dialog.setVisible(true);
+				dialog.dispose();
 			}
 			
 		});

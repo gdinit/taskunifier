@@ -54,7 +54,7 @@ import com.leclercb.taskunifier.gui.commons.comparators.BasicModelComparator;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionChangeEvent;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionListener;
 import com.leclercb.taskunifier.gui.components.help.Help;
-import com.leclercb.taskunifier.gui.components.models.ModelConfigurationDialog.ModelConfigurationTab;
+import com.leclercb.taskunifier.gui.components.models.ModelConfigurationTab;
 import com.leclercb.taskunifier.gui.components.taskcontacts.table.TaskContactsTable;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;

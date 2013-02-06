@@ -62,7 +62,9 @@ public class ActionManageSynchronizerPlugins extends AbstractViewAction {
 			return;
 		}
 		
-		SynchronizerPluginsDialog.getInstance().setVisible(true);
+		SynchronizerPluginsDialog dialog = new SynchronizerPluginsDialog();
+		dialog.setVisible(true);
+		dialog.dispose();
 	}
 	
 }

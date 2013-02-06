@@ -60,7 +60,9 @@ public class ActionMailTo extends AbstractViewAction {
 	}
 	
 	public static void mailTo() {
-		MailToDialog.getInstance().setVisible(true);
+		MailToDialog dialog = new MailToDialog();
+		dialog.setVisible(true);
+		dialog.dispose();
 	}
 	
 }

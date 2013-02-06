@@ -35,7 +35,7 @@ package com.leclercb.taskunifier.gui.actions;
 import java.awt.event.ActionEvent;
 
 import com.leclercb.taskunifier.gui.components.models.ModelConfigurationDialog;
-import com.leclercb.taskunifier.gui.components.models.ModelConfigurationDialog.ModelConfigurationTab;
+import com.leclercb.taskunifier.gui.components.models.ModelConfigurationTab;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
@@ -69,11 +69,13 @@ public class ActionManageModels extends AbstractViewAction {
 	}
 	
 	public static void manageModels(ModelConfigurationTab tab) {
-		if (tab != null)
-			ModelConfigurationDialog.getInstance().setSelectedModelConfigurationTab(
-					tab);
+		ModelConfigurationDialog dialog = new ModelConfigurationDialog();
 		
-		ModelConfigurationDialog.getInstance().setVisible(true);
+		if (tab != null)
+			dialog.setSelectedModelConfigurationTab(tab);
+		
+		dialog.setVisible(true);
+		dialog.dispose();
 	}
 	
 }
