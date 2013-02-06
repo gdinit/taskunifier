@@ -30,28 +30,20 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.change_data_folder;
+package com.leclercb.taskunifier.gui.components.configuration;
 
-import com.leclercb.taskunifier.gui.swing.TUDialog;
-import com.leclercb.taskunifier.gui.translations.Translations;
-
-public class ChangeDataFolderDialog extends TUDialog {
+public enum ConfigurationTab {
 	
-	public ChangeDataFolderDialog() {
-		super(ChangeDataFolderDialogPanel.getInstance());
-		
-		this.initialize();
-	}
-	
-	private void initialize() {
-		this.setModal(true);
-		this.setTitle(Translations.getString("action.change_data_folder_location"));
-		this.setSize(600, 180);
-		this.setResizable(false);
-		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		
-		if (this.getOwner() != null)
-			this.setLocationRelativeTo(this.getOwner());
-	}
+	GENERAL,
+	DATE,
+	BACKUP,
+	PROXY,
+	SEARCHER,
+	THEME,
+	TOOLBAR,
+	LISTS,
+	PUBLICATION,
+	SYNCHRONIZATION,
+	ADVANCED;
 	
 }

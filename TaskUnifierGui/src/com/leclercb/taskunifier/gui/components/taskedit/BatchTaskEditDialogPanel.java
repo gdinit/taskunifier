@@ -47,6 +47,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import org.jdesktop.swingx.JXHeader;
+
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
@@ -54,6 +56,7 @@ import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
+import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class BatchTaskEditDialogPanel extends TUDialogPanel {
 	
@@ -66,6 +69,7 @@ public class BatchTaskEditDialogPanel extends TUDialogPanel {
 		return INSTANCE;
 	}
 	
+	private JXHeader header;
 	private BatchTaskEditPanel batchTaskEditPanel;
 	private boolean cancelled;
 	
@@ -84,6 +88,14 @@ public class BatchTaskEditDialogPanel extends TUDialogPanel {
 	}
 	
 	public void setTasks(Task[] tasks) {
+		if (tasks != null && tasks.length == 1) {
+			this.header.setTitle(Translations.getString("header.title.edit_task"));
+			this.header.setDescription(Translations.getString("header.description.edit_task"));
+		} else {
+			this.header.setTitle(Translations.getString("header.title.batch_edit_task"));
+			this.header.setDescription(Translations.getString("header.description.batch_edit_task"));
+		}
+		
 		this.batchTaskEditPanel.setTasks(tasks);
 	}
 	
@@ -94,6 +106,11 @@ public class BatchTaskEditDialogPanel extends TUDialogPanel {
 	private void initialize() {
 		this.setLayout(new BorderLayout());
 		
+		this.header = new JXHeader();
+		this.header.setTitle(Translations.getString("header.title.batch_edit_task"));
+		this.header.setDescription(Translations.getString("header.description.batch_edit_task"));
+		this.header.setIcon(ImageUtils.getResourceImage("edit.png", 32, 32));
+		
 		this.batchTaskEditPanel = new BatchTaskEditPanel();
 		this.batchTaskEditPanel.setBorder(BorderFactory.createEmptyBorder(
 				10,
@@ -101,6 +118,7 @@ public class BatchTaskEditDialogPanel extends TUDialogPanel {
 				10,
 				10));
 		
+		this.add(this.header, BorderLayout.NORTH);
 		this.add(ComponentFactory.createJScrollPane(
 				this.batchTaskEditPanel,
 				false), BorderLayout.CENTER);

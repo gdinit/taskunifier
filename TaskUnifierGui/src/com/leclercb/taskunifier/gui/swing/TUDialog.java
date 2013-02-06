@@ -73,9 +73,11 @@ public class TUDialog extends JDialog implements SavePropertiesListener {
 		this.dialogPanel = dialogPanel;
 		
 		this.setLayout(new BorderLayout());
-		this.add(this.dialogPanel);
+		this.add(this.dialogPanel, BorderLayout.CENTER);
 		
 		this.dialogPanel.setDialog(this);
+		
+		this.pack();
 	}
 	
 	@Override

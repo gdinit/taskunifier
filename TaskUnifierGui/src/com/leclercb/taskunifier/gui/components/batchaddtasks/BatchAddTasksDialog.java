@@ -52,8 +52,6 @@ public class BatchAddTasksDialog extends TUDialog {
 		
 		if (this.getOwner() != null)
 			this.setLocationRelativeTo(this.getOwner());
-		
-		BatchAddTasksDialogPanel.getInstance().getBatchAddTasksPanel().reset();
 	}
 	
 }

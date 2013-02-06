@@ -42,11 +42,15 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+import org.jdesktop.swingx.JXHeader;
+
 import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
 import com.leclercb.taskunifier.gui.components.help.Help;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
+import com.leclercb.taskunifier.gui.translations.Translations;
+import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class TaskTemplateConfigurationDialogPanel extends TUDialogPanel {
 	
@@ -80,8 +84,14 @@ public class TaskTemplateConfigurationDialogPanel extends TUDialogPanel {
 	private void initialize() {
 		this.setLayout(new BorderLayout());
 		
+		JXHeader header = new JXHeader();
+		header.setTitle(Translations.getString("header.title.manage_task_templates"));
+		header.setDescription(Translations.getString("header.description.manage_task_templates"));
+		header.setIcon(ImageUtils.getResourceImage("template.png", 32, 32));
+		
 		this.templateConfigurationPanel = new TaskTemplateConfigurationPanel();
 		
+		this.add(header, BorderLayout.NORTH);
 		this.add(this.templateConfigurationPanel, BorderLayout.CENTER);
 		
 		this.initializeButtonsPanel();
