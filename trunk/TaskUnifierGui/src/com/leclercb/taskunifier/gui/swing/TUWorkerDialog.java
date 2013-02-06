@@ -34,7 +34,6 @@ package com.leclercb.taskunifier.gui.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.AdjustmentEvent;
@@ -59,6 +58,7 @@ import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessage;
 import com.leclercb.commons.gui.logger.GuiLogger;
+import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 
 public class TUWorkerDialog<T> extends TUDialog implements ListChangeListener, ActionListener {
@@ -69,8 +69,8 @@ public class TUWorkerDialog<T> extends TUDialog implements ListChangeListener, A
 	private JProgressBar progressBar;
 	private JTextPane progressStatus;
 	
-	public TUWorkerDialog(Frame frame, String title) {
-		super(frame);
+	public TUWorkerDialog(String title) {
+		super(FrameUtils.getCurrentWindow());
 		
 		this.initialize(title);
 	}

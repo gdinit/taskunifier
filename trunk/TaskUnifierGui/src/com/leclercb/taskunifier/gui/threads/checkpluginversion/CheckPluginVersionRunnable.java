@@ -159,7 +159,6 @@ public class CheckPluginVersionRunnable implements Runnable {
 		
 		if (pluginsToUpdate.size() > 0) {
 			TUWorkerDialog<Void> dialog = new TUWorkerDialog<Void>(
-					FrameUtils.getCurrentFrame(),
 					Translations.getString("general.manage_plugins"));
 			
 			ProgressMonitor monitor = new ProgressMonitor();

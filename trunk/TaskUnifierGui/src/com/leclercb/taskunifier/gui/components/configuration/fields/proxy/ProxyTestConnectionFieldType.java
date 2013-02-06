@@ -77,7 +77,6 @@ public class ProxyTestConnectionFieldType extends ConfigurationFieldType.Button 
 			this.panel.saveAndApplyConfig();
 			
 			TUWorkerDialog<Void> dialog = new TUWorkerDialog<Void>(
-					FrameUtils.getCurrentFrame(),
 					Translations.getString("configuration.proxy.test_connection"));
 			
 			ProgressMonitor monitor = new ProgressMonitor();
