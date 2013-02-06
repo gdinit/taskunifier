@@ -34,7 +34,8 @@ package com.leclercb.taskunifier.gui.actions;
 
 import java.awt.event.ActionEvent;
 
-import com.leclercb.taskunifier.gui.components.import_data.ImportTaskTemplatesDialog;
+import com.leclercb.taskunifier.gui.components.import_data.ImportDialog;
+import com.leclercb.taskunifier.gui.components.import_data.ImportTaskTemplatesDialogPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
@@ -56,7 +57,10 @@ public class ActionImportTaskTemplates extends AbstractViewAction {
 	}
 	
 	public static void importTaskTemplates() {
-		ImportTaskTemplatesDialog.getInstance().setVisible(true);
+		ImportDialog dialog = new ImportDialog(
+				ImportTaskTemplatesDialogPanel.getInstance());
+		dialog.setVisible(true);
+		dialog.dispose();
 	}
 	
 }

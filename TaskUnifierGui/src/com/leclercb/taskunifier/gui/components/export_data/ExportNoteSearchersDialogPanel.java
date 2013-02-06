@@ -34,32 +34,32 @@ package com.leclercb.taskunifier.gui.components.export_data;
 
 import java.io.FileOutputStream;
 
-import com.leclercb.taskunifier.gui.api.searchers.coders.TaskSearcherFactoryXMLCoder;
+import com.leclercb.taskunifier.gui.api.searchers.coders.NoteSearcherFactoryXMLCoder;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public class ExportTaskSearchersDialog extends AbstractExportDialog {
+public class ExportNoteSearchersDialogPanel extends AbstractExportDialogPanel {
 	
-	private static ExportTaskSearchersDialog INSTANCE;
+	private static ExportNoteSearchersDialogPanel INSTANCE;
 	
-	public static ExportTaskSearchersDialog getInstance() {
+	public static ExportNoteSearchersDialogPanel getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new ExportTaskSearchersDialog();
+			INSTANCE = new ExportNoteSearchersDialogPanel();
 		
 		return INSTANCE;
 	}
 	
-	private ExportTaskSearchersDialog() {
+	private ExportNoteSearchersDialogPanel() {
 		super(
-				Translations.getString("action.export_task_searchers"),
+				Translations.getString("action.export_note_searchers"),
 				"xml",
 				Translations.getString("general.xml_files"),
-				"export.task_searchers.file_name");
+				"export.note_searchers.file_name");
 	}
 	
 	@Override
 	protected void exportToFile(String file) throws Exception {
 		FileOutputStream output = new FileOutputStream(file);
-		new TaskSearcherFactoryXMLCoder().encode(output);
+		new NoteSearcherFactoryXMLCoder().encode(output);
 	}
 	
 }

@@ -53,20 +53,25 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.FileUtils;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
-import com.leclercb.taskunifier.gui.swing.TUDialog;
+import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
 import com.leclercb.taskunifier.gui.swing.TUFileField;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-abstract class AbstractExportDialog extends TUDialog {
+abstract class AbstractExportDialogPanel extends TUDialogPanel {
 	
 	private TUFileField fileField;
+	
+	private String title;
 	private String fileExtention;
 	private String fileExtentionDescription;
 	private String fileProperty;
 	
-	public AbstractExportDialog(
+	private JButton exportButton;
+	private JButton cancelButton;
+	
+	public AbstractExportDialogPanel(
 			String title,
 			String fileExtention,
 			String fileExtentionDescription,
@@ -74,39 +79,20 @@ abstract class AbstractExportDialog extends TUDialog {
 		CheckUtils.isNotNull(fileExtention);
 		CheckUtils.isNotNull(fileExtentionDescription);
 		
+		this.title = title;
 		this.fileExtention = fileExtention;
 		this.fileExtentionDescription = fileExtentionDescription;
 		this.fileProperty = fileProperty;
 		
-		this.initialize(title);
+		this.initialize();
 	}
 	
-	@Override
-	public void setVisible(boolean visible) {
-		if (visible) {
-			this.setLocationRelativeTo(FrameUtils.getCurrentFrame());
-		}
-		
-		super.setVisible(visible);
+	public String getTitle() {
+		return this.title;
 	}
 	
-	private void initialize(String title) {
-		this.setModal(true);
-		this.setTitle(title);
-		this.setSize(500, 120);
-		this.setResizable(false);
+	private void initialize() {
 		this.setLayout(new BorderLayout());
-		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		
-		this.addWindowListener(new WindowAdapter() {
-			
-			@Override
-			public void windowClosing(WindowEvent e) {
-				AbstractExportDialog.this.fileField.setFile(null);
-				AbstractExportDialog.this.setVisible(false);
-			}
-			
-		});
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
@@ -118,7 +104,7 @@ abstract class AbstractExportDialog extends TUDialog {
 			
 			@Override
 			public String getDescription() {
-				return AbstractExportDialog.this.fileExtentionDescription;
+				return AbstractExportDialogPanel.this.fileExtentionDescription;
 			}
 			
 			@Override
@@ -128,7 +114,7 @@ abstract class AbstractExportDialog extends TUDialog {
 				
 				String extention = FileUtils.getExtention(f.getName());
 				
-				return AbstractExportDialog.this.fileExtention.equals(extention);
+				return AbstractExportDialogPanel.this.fileExtention.equals(extention);
 			}
 			
 		};
@@ -159,14 +145,15 @@ abstract class AbstractExportDialog extends TUDialog {
 			public void actionPerformed(ActionEvent event) {
 				if (event.getActionCommand().equals("EXPORT")) {
 					try {
-						if (AbstractExportDialog.this.fileProperty != null)
+						if (AbstractExportDialogPanel.this.fileProperty != null)
 							Main.getSettings().setStringProperty(
-									AbstractExportDialog.this.fileProperty,
-									AbstractExportDialog.this.fileField.getFile());
+									AbstractExportDialogPanel.this.fileProperty,
+									AbstractExportDialogPanel.this.fileField.getFile());
 						
-						AbstractExportDialog.this.exportToFile(AbstractExportDialog.this.fileField.getFile());
+						AbstractExportDialogPanel.this.exportToFile(AbstractExportDialogPanel.this.fileField.getFile());
 						
-						AbstractExportDialog.this.setVisible(false);
+						AbstractExportDialogPanel.this.getDialog().setVisible(
+								false);
 					} catch (Exception e) {
 						ErrorInfo info = new ErrorInfo(
 								Translations.getString("general.error"),
@@ -184,25 +171,39 @@ abstract class AbstractExportDialog extends TUDialog {
 				}
 				
 				if (event.getActionCommand().equals("CANCEL")) {
-					AbstractExportDialog.this.setVisible(false);
+					AbstractExportDialogPanel.this.getDialog().setVisible(false);
 				}
 			}
 			
 		};
 		
-		JButton exportButton = new JButton(
+		this.exportButton = new JButton(
 				Translations.getString("general.export"));
-		exportButton.setActionCommand("EXPORT");
-		exportButton.addActionListener(listener);
+		this.exportButton.setActionCommand("EXPORT");
+		this.exportButton.addActionListener(listener);
 		
-		JButton cancelButton = new TUCancelButton(listener);
+		this.cancelButton = new TUCancelButton(listener);
 		
-		JPanel panel = new TUButtonsPanel(exportButton, cancelButton);
+		JPanel panel = new TUButtonsPanel(this.exportButton, this.cancelButton);
 		
 		this.add(panel, BorderLayout.SOUTH);
-		this.getRootPane().setDefaultButton(exportButton);
 	}
 	
 	protected abstract void exportToFile(String file) throws Exception;
+	
+	@Override
+	protected void dialogLoaded() {
+		this.getDialog().addWindowListener(new WindowAdapter() {
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				AbstractExportDialogPanel.this.fileField.setFile(null);
+				AbstractExportDialogPanel.this.getDialog().setVisible(false);
+			}
+			
+		});
+		
+		this.getDialog().getRootPane().setDefaultButton(this.exportButton);
+	}
 	
 }

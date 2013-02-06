@@ -38,18 +38,18 @@ import com.leclercb.taskunifier.gui.api.searchers.NoteSearcherFactory;
 import com.leclercb.taskunifier.gui.api.searchers.coders.NoteSearcherFactoryXMLCoder;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public class ImportNoteSearchersDialog extends AbstractImportDialog {
+public class ImportNoteSearchersDialogPanel extends AbstractImportDialogPanel {
 	
-	private static ImportNoteSearchersDialog INSTANCE;
+	private static ImportNoteSearchersDialogPanel INSTANCE;
 	
-	public static ImportNoteSearchersDialog getInstance() {
+	public static ImportNoteSearchersDialogPanel getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new ImportNoteSearchersDialog();
+			INSTANCE = new ImportNoteSearchersDialogPanel();
 		
 		return INSTANCE;
 	}
 	
-	private ImportNoteSearchersDialog() {
+	private ImportNoteSearchersDialogPanel() {
 		super(
 				Translations.getString("action.import_note_searchers"),
 				true,

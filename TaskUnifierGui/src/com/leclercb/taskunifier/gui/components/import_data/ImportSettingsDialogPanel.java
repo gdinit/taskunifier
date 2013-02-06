@@ -42,18 +42,18 @@ import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public class ImportSettingsDialog extends AbstractImportDialog {
+public class ImportSettingsDialogPanel extends AbstractImportDialogPanel {
 	
-	private static ImportSettingsDialog INSTANCE;
+	private static ImportSettingsDialogPanel INSTANCE;
 	
-	public static ImportSettingsDialog getInstance() {
+	public static ImportSettingsDialogPanel getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new ImportSettingsDialog();
+			INSTANCE = new ImportSettingsDialogPanel();
 		
 		return INSTANCE;
 	}
 	
-	private ImportSettingsDialog() {
+	private ImportSettingsDialogPanel() {
 		super(
 				Translations.getString("action.import_settings"),
 				false,

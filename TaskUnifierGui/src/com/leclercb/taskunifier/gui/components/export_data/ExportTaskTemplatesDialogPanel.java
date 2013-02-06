@@ -32,63 +32,34 @@
  */
 package com.leclercb.taskunifier.gui.components.export_data;
 
-import java.io.File;
-import java.util.List;
+import java.io.FileOutputStream;
 
-import org.apache.commons.io.FileUtils;
-
-import a_vcard.android.provider.Contacts;
-import a_vcard.android.syncml.pim.vcard.ContactStruct;
-import a_vcard.android.syncml.pim.vcard.VCardComposer;
-
-import com.leclercb.taskunifier.api.models.Contact;
-import com.leclercb.taskunifier.api.models.ContactFactory;
+import com.leclercb.taskunifier.api.models.templates.TaskTemplateFactory;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public class ExportVCardDialog extends AbstractExportDialog {
+public class ExportTaskTemplatesDialogPanel extends AbstractExportDialogPanel {
 	
-	private static ExportVCardDialog INSTANCE;
+	private static ExportTaskTemplatesDialogPanel INSTANCE;
 	
-	public static ExportVCardDialog getInstance() {
+	public static ExportTaskTemplatesDialogPanel getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new ExportVCardDialog();
+			INSTANCE = new ExportTaskTemplatesDialogPanel();
 		
 		return INSTANCE;
 	}
 	
-	private ExportVCardDialog() {
+	private ExportTaskTemplatesDialogPanel() {
 		super(
-				Translations.getString("action.export_vcard"),
-				"vcf",
-				Translations.getString("general.vcard_files"),
-				"export.vcard.file_name");
+				Translations.getString("action.export_task_templates"),
+				"xml",
+				Translations.getString("general.xml_files"),
+				"export.task_templates.file_name");
 	}
 	
 	@Override
 	protected void exportToFile(String file) throws Exception {
-		VCardComposer composer = new VCardComposer();
-		
-		StringBuffer buffer = new StringBuffer();
-		List<Contact> contacts = ContactFactory.getInstance().getList();
-		for (Contact contact : contacts) {
-			ContactStruct c = new ContactStruct();
-			c.name = contact.getLastName() + " " + contact.getFirstName();
-			c.addContactmethod(
-					Contacts.KIND_EMAIL,
-					-1,
-					contact.getEmail(),
-					null,
-					true);
-			
-			String vcard = composer.createVCard(
-					c,
-					VCardComposer.VERSION_VCARD21_INT);
-			
-			buffer.append(vcard);
-			buffer.append("\n");
-		}
-		
-		FileUtils.writeStringToFile(new File(file), buffer.toString());
+		FileOutputStream output = new FileOutputStream(file);
+		TaskTemplateFactory.getInstance().encodeToXML(output);
 	}
 	
 }

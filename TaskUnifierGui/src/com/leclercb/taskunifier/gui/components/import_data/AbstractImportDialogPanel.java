@@ -54,21 +54,26 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.FileUtils;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
-import com.leclercb.taskunifier.gui.swing.TUDialog;
+import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
 import com.leclercb.taskunifier.gui.swing.TUFileField;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-abstract class AbstractImportDialog extends TUDialog {
+abstract class AbstractImportDialogPanel extends TUDialogPanel {
 	
 	private TUFileField fileField;
 	private JCheckBox deleteExistingValues;
+	
+	private String title;
 	private String fileExtention;
 	private String fileExtentionDescription;
 	private String fileProperty;
 	
-	public AbstractImportDialog(
+	private JButton importButton;
+	private JButton cancelButton;
+	
+	public AbstractImportDialogPanel(
 			String title,
 			boolean showDeleteExistingValues,
 			String fileExtention,
@@ -77,40 +82,20 @@ abstract class AbstractImportDialog extends TUDialog {
 		CheckUtils.isNotNull(fileExtention);
 		CheckUtils.isNotNull(fileExtentionDescription);
 		
+		this.title = title;
 		this.fileExtention = fileExtention;
 		this.fileExtentionDescription = fileExtentionDescription;
 		this.fileProperty = fileProperty;
 		
-		this.initialize(title, showDeleteExistingValues);
+		this.initialize(showDeleteExistingValues);
 	}
 	
-	@Override
-	public void setVisible(boolean visible) {
-		if (visible) {
-			this.setLocationRelativeTo(FrameUtils.getCurrentFrame());
-		}
-		
-		super.setVisible(visible);
+	public String getTitle() {
+		return this.title;
 	}
 	
-	private void initialize(String title, boolean showDeleteExistingValues) {
-		this.setModal(true);
-		this.setTitle(title);
-		this.setSize(500, 150);
-		this.setResizable(false);
+	private void initialize(boolean showDeleteExistingValues) {
 		this.setLayout(new BorderLayout());
-		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		
-		this.addWindowListener(new WindowAdapter() {
-			
-			@Override
-			public void windowClosing(WindowEvent e) {
-				AbstractImportDialog.this.fileField.setFile(null);
-				AbstractImportDialog.this.deleteExistingValues.setSelected(false);
-				AbstractImportDialog.this.setVisible(false);
-			}
-			
-		});
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
@@ -122,7 +107,7 @@ abstract class AbstractImportDialog extends TUDialog {
 			
 			@Override
 			public String getDescription() {
-				return AbstractImportDialog.this.fileExtentionDescription;
+				return AbstractImportDialogPanel.this.fileExtentionDescription;
 			}
 			
 			@Override
@@ -132,7 +117,7 @@ abstract class AbstractImportDialog extends TUDialog {
 				
 				String extention = FileUtils.getExtention(f.getName());
 				
-				return AbstractImportDialog.this.fileExtention.equals(extention);
+				return AbstractImportDialogPanel.this.fileExtention.equals(extention);
 			}
 			
 		};
@@ -171,18 +156,19 @@ abstract class AbstractImportDialog extends TUDialog {
 			public void actionPerformed(ActionEvent event) {
 				if (event.getActionCommand().equals("IMPORT")) {
 					try {
-						if (AbstractImportDialog.this.fileProperty != null)
+						if (AbstractImportDialogPanel.this.fileProperty != null)
 							Main.getSettings().setStringProperty(
-									AbstractImportDialog.this.fileProperty,
-									AbstractImportDialog.this.fileField.getFile());
+									AbstractImportDialogPanel.this.fileProperty,
+									AbstractImportDialogPanel.this.fileField.getFile());
 						
-						if (AbstractImportDialog.this.deleteExistingValues.isSelected())
-							AbstractImportDialog.this.deleteExistingValue();
+						if (AbstractImportDialogPanel.this.deleteExistingValues.isSelected())
+							AbstractImportDialogPanel.this.deleteExistingValue();
 						
-						AbstractImportDialog.this.importFromFile(AbstractImportDialog.this.fileField.getFile());
+						AbstractImportDialogPanel.this.importFromFile(AbstractImportDialogPanel.this.fileField.getFile());
 						
-						AbstractImportDialog.this.deleteExistingValues.setSelected(false);
-						AbstractImportDialog.this.setVisible(false);
+						AbstractImportDialogPanel.this.deleteExistingValues.setSelected(false);
+						AbstractImportDialogPanel.this.getDialog().setVisible(
+								false);
 					} catch (Exception e) {
 						ErrorInfo info = new ErrorInfo(
 								Translations.getString("general.error"),
@@ -200,28 +186,43 @@ abstract class AbstractImportDialog extends TUDialog {
 				}
 				
 				if (event.getActionCommand().equals("CANCEL")) {
-					AbstractImportDialog.this.deleteExistingValues.setSelected(false);
-					AbstractImportDialog.this.setVisible(false);
+					AbstractImportDialogPanel.this.deleteExistingValues.setSelected(false);
+					AbstractImportDialogPanel.this.getDialog().setVisible(false);
 				}
 			}
 			
 		};
 		
-		JButton importButton = new JButton(
+		this.importButton = new JButton(
 				Translations.getString("general.import"));
-		importButton.setActionCommand("IMPORT");
-		importButton.addActionListener(listener);
+		this.importButton.setActionCommand("IMPORT");
+		this.importButton.addActionListener(listener);
 		
-		JButton cancelButton = new TUCancelButton(listener);
+		this.cancelButton = new TUCancelButton(listener);
 		
-		JPanel panel = new TUButtonsPanel(importButton, cancelButton);
+		JPanel panel = new TUButtonsPanel(this.importButton, this.cancelButton);
 		
 		this.add(panel, BorderLayout.SOUTH);
-		this.getRootPane().setDefaultButton(importButton);
 	}
 	
 	protected abstract void deleteExistingValue();
 	
 	protected abstract void importFromFile(String file) throws Exception;
+	
+	@Override
+	protected void dialogLoaded() {
+		this.getDialog().addWindowListener(new WindowAdapter() {
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				AbstractImportDialogPanel.this.fileField.setFile(null);
+				AbstractImportDialogPanel.this.deleteExistingValues.setSelected(false);
+				AbstractImportDialogPanel.this.getDialog().setVisible(false);
+			}
+			
+		});
+		
+		this.getDialog().getRootPane().setDefaultButton(this.importButton);
+	}
 	
 }

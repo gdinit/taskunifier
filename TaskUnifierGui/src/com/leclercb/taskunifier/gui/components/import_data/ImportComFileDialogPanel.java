@@ -30,36 +30,46 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.export_data;
+package com.leclercb.taskunifier.gui.components.import_data;
 
-import java.io.FileOutputStream;
+import java.io.FileInputStream;
 
-import com.leclercb.taskunifier.gui.api.rules.TaskRuleFactory;
+import com.leclercb.taskunifier.gui.actions.ActionImportComFile;
+import com.leclercb.taskunifier.gui.api.models.beans.ComBean;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public class ExportTaskRulesDialog extends AbstractExportDialog {
+public class ImportComFileDialogPanel extends AbstractImportDialogPanel {
 	
-	private static ExportTaskRulesDialog INSTANCE;
+	private static ImportComFileDialogPanel INSTANCE;
 	
-	public static ExportTaskRulesDialog getInstance() {
+	public static ImportComFileDialogPanel getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new ExportTaskRulesDialog();
+			INSTANCE = new ImportComFileDialogPanel();
 		
 		return INSTANCE;
 	}
 	
-	private ExportTaskRulesDialog() {
+	private ImportComFileDialogPanel() {
 		super(
-				Translations.getString("action.export_task_rules"),
-				"xml",
-				Translations.getString("general.xml_files"),
-				"export.task_rules.file_name");
+				Translations.getString("action.import_com_file"),
+				false,
+				"tue",
+				Translations.getString("general.tue_files"),
+				"import.com_file.file_name");
 	}
 	
 	@Override
-	protected void exportToFile(String file) throws Exception {
-		FileOutputStream output = new FileOutputStream(file);
-		TaskRuleFactory.getInstance().encodeToXML(output);
+	public void deleteExistingValue() {
+		
+	}
+	
+	@Override
+	protected void importFromFile(String file) throws Exception {
+		FileInputStream input = new FileInputStream(file);
+		ComBean bean = ComBean.decodeFromXML(input);
+		input.close();
+		
+		ActionImportComFile.importComBean(bean);
 	}
 	
 }

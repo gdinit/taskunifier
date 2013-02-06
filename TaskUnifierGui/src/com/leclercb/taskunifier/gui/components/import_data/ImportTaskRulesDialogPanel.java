@@ -34,38 +34,38 @@ package com.leclercb.taskunifier.gui.components.import_data;
 
 import java.io.FileInputStream;
 
-import com.leclercb.taskunifier.api.models.templates.TaskTemplateFactory;
+import com.leclercb.taskunifier.gui.api.rules.TaskRuleFactory;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public class ImportTaskTemplatesDialog extends AbstractImportDialog {
+public class ImportTaskRulesDialogPanel extends AbstractImportDialogPanel {
 	
-	private static ImportTaskTemplatesDialog INSTANCE;
+	private static ImportTaskRulesDialogPanel INSTANCE;
 	
-	public static ImportTaskTemplatesDialog getInstance() {
+	public static ImportTaskRulesDialogPanel getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new ImportTaskTemplatesDialog();
+			INSTANCE = new ImportTaskRulesDialogPanel();
 		
 		return INSTANCE;
 	}
 	
-	private ImportTaskTemplatesDialog() {
+	private ImportTaskRulesDialogPanel() {
 		super(
-				Translations.getString("action.import_task_templates"),
+				Translations.getString("action.import_task_rules"),
 				true,
 				"xml",
 				Translations.getString("general.xml_files"),
-				"import.task_templates.file_name");
+				"import.task_rules.file_name");
 	}
 	
 	@Override
 	public void deleteExistingValue() {
-		TaskTemplateFactory.getInstance().deleteAll();
+		TaskRuleFactory.getInstance().deleteAll();
 	}
 	
 	@Override
 	protected void importFromFile(String file) throws Exception {
 		FileInputStream input = new FileInputStream(file);
-		TaskTemplateFactory.getInstance().decodeFromXML(input);
+		TaskRuleFactory.getInstance().decodeFromXML(input);
 		input.close();
 	}
 	
