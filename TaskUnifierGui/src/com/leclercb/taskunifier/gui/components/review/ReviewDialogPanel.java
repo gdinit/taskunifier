@@ -30,35 +30,56 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.actions;
+package com.leclercb.taskunifier.gui.components.review;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import com.leclercb.taskunifier.gui.components.review.ReviewDialog;
-import com.leclercb.taskunifier.gui.translations.Translations;
-import com.leclercb.taskunifier.gui.utils.ImageUtils;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 
-public class ActionReview extends AbstractViewAction {
+import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
+import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
+
+public class ReviewDialogPanel extends TUDialogPanel {
 	
-	public ActionReview(int width, int height) {
-		super(
-				Translations.getString("action.review"),
-				ImageUtils.getResourceImage("information.png", width, height));
+	private static ReviewDialogPanel INSTANCE;
+	
+	protected static ReviewDialogPanel getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new ReviewDialogPanel();
 		
-		this.putValue(
-				SHORT_DESCRIPTION,
-				Translations.getString("action.review"));
+		return INSTANCE;
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		ActionReview.review();
+	public ReviewDialogPanel() {
+		this.initialize();
 	}
 	
-	public static void review() {
-		ReviewDialog dialog = new ReviewDialog();
-		dialog.setVisible(true);
-		dialog.dispose();
+	private void initialize() {
+		this.setLayout(new BorderLayout());
+		
+		ReviewPanel reviewPanel = new ReviewPanel();
+		reviewPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		this.add(reviewPanel, BorderLayout.CENTER);
+		
+		this.initializeButtonsPanel();
+	}
+	
+	private void initializeButtonsPanel() {
+		ActionListener listener = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ReviewDialogPanel.this.getDialog().setVisible(false);
+			}
+			
+		};
+		
+		JButton okButton = new TUOkButton(listener);
+		
+		this.setButtons(okButton, okButton);
 	}
 	
 }

@@ -32,47 +32,20 @@
  */
 package com.leclercb.taskunifier.gui.components.taskrules;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.KeyStroke;
-
-import org.jdesktop.swingx.JXHeader;
-
 import com.leclercb.taskunifier.gui.api.rules.TaskRule;
-import com.leclercb.taskunifier.gui.components.help.Help;
 import com.leclercb.taskunifier.gui.swing.TUDialog;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
-import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class TaskRuleConfigurationDialog extends TUDialog {
 	
-	private static TaskRuleConfigurationDialog INSTANCE = null;
-	
-	public static TaskRuleConfigurationDialog getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new TaskRuleConfigurationDialog();
+	public TaskRuleConfigurationDialog() {
+		super(TaskRuleConfigurationDialogPanel.getInstance());
 		
-		return INSTANCE;
-	}
-	
-	private TaskRuleConfigurationPanel ruleConfigurationPanel;
-	
-	private TaskRuleConfigurationDialog() {
 		this.initialize();
 	}
 	
 	public void setSelectedRule(TaskRule rule) {
-		this.ruleConfigurationPanel.setSelectedRule(rule);
+		TaskRuleConfigurationDialogPanel.getInstance().setSelectedRule(rule);
 	}
 	
 	private void initialize() {
@@ -80,56 +53,9 @@ public class TaskRuleConfigurationDialog extends TUDialog {
 		this.setTitle(Translations.getString("general.manage_task_rules"));
 		this.setSize(900, 500);
 		this.setResizable(true);
-		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		
 		this.loadWindowSettings("window.task_rule");
-		
-		this.addWindowListener(new WindowAdapter() {
-			
-			@Override
-			public void windowClosing(WindowEvent e) {
-				TaskRuleConfigurationDialog.this.ruleConfigurationPanel.close();
-				TaskRuleConfigurationDialog.this.setVisible(false);
-			}
-			
-		});
-		
-		JXHeader header = new JXHeader();
-		header.setTitle(Translations.getString("header.title.manage_task_rules"));
-		header.setDescription(Translations.getString("header.description.manage_task_rules"));
-		header.setIcon(ImageUtils.getResourceImage("rule.png", 32, 32));
-		
-		this.ruleConfigurationPanel = new TaskRuleConfigurationPanel();
-		
-		this.add(header, BorderLayout.NORTH);
-		this.add(this.ruleConfigurationPanel, BorderLayout.CENTER);
-		
-		this.initializeButtonsPanel();
-	}
-	
-	private void initializeButtonsPanel() {
-		ActionListener listener = new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				TaskRuleConfigurationDialog.this.ruleConfigurationPanel.close();
-				TaskRuleConfigurationDialog.this.setVisible(false);
-			}
-			
-		};
-		
-		JButton okButton = new TUOkButton(listener);
-		JPanel panel = new TUButtonsPanel(Help.getInstance().getHelpButton(
-				"manage_task_rules"), okButton);
-		
-		this.add(panel, BorderLayout.SOUTH);
-		this.getRootPane().setDefaultButton(okButton);
-		
-		this.getRootPane().registerKeyboardAction(
-				listener,
-				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-				JComponent.WHEN_IN_FOCUSED_WINDOW);
 	}
 	
 }

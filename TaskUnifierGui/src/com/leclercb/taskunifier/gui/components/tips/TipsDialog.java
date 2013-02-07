@@ -39,7 +39,7 @@ public class TipsDialog extends JXTipOfTheDay {
 		}
 		
 		this.showDialog(
-				FrameUtils.getCurrentFrame(),
+				FrameUtils.getCurrentWindow(),
 				new TUShowOnStartupChoice(),
 				!startup);
 	}

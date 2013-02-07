@@ -32,42 +32,15 @@
  */
 package com.leclercb.taskunifier.gui.components.review;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
-import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.TUDialog;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class ReviewDialog extends TUDialog {
 	
-	private static ReviewDialog INSTANCE;
-	
-	public static ReviewDialog getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new ReviewDialog();
-		
-		return INSTANCE;
-	}
-	
 	public ReviewDialog() {
-		this.initialize();
-	}
-	
-	@Override
-	public void setVisible(boolean visible) {
-		if (visible) {
-			this.setLocationRelativeTo(FrameUtils.getCurrentFrame());
-		}
+		super(ReviewDialogPanel.getInstance());
 		
-		super.setVisible(visible);
+		this.initialize();
 	}
 	
 	private void initialize() {
@@ -75,31 +48,10 @@ public class ReviewDialog extends TUDialog {
 		this.setTitle(Translations.getString("general.review"));
 		this.setSize(600, 300);
 		this.setResizable(false);
-		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		
-		ReviewPanel reviewPanel = new ReviewPanel();
-		reviewPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		this.add(reviewPanel, BorderLayout.CENTER);
-		
-		this.initializeButtonsPanel();
-	}
-	
-	private void initializeButtonsPanel() {
-		ActionListener listener = new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				ReviewDialog.this.setVisible(false);
-			}
-			
-		};
-		
-		JButton okButton = new TUOkButton(listener);
-		JPanel panel = new TUButtonsPanel(okButton);
-		
-		this.add(panel, BorderLayout.SOUTH);
-		this.getRootPane().setDefaultButton(okButton);
+		if (this.getOwner() != null)
+			this.setLocationRelativeTo(this.getOwner());
 	}
 	
 }
