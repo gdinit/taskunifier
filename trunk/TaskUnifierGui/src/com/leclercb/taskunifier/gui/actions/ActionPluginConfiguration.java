@@ -76,8 +76,10 @@ public class ActionPluginConfiguration extends AbstractViewAction {
 		if (plugin == null)
 			plugin = SynchronizerUtils.getSynchronizerPlugin();
 		
-		PluginConfigurationDialog.getInstance().setPlugin(plugin);
-		PluginConfigurationDialog.getInstance().setVisible(true);
+		PluginConfigurationDialog dialog = new PluginConfigurationDialog();
+		dialog.setPlugin(plugin);
+		dialog.setVisible(true);
+		dialog.dispose();
 	}
 	
 }
