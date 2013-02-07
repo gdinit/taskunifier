@@ -32,48 +32,19 @@
  */
 package com.leclercb.taskunifier.gui.components.users;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
-import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.TUDialog;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUCloseButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class UserDialog extends TUDialog {
 	
-	private static UserDialog INSTANCE;
-	
-	public static UserDialog getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new UserDialog();
+	public UserDialog() {
+		super(UserDialogPanel.getInstance());
 		
-		return INSTANCE;
-	}
-	
-	private UserPanel userPanel;
-	
-	private UserDialog() {
 		this.initialize();
 	}
 	
-	@Override
-	public void setVisible(boolean visible) {
-		if (visible) {
-			this.setLocationRelativeTo(FrameUtils.getCurrentFrame());
-		}
-		
-		super.setVisible(visible);
-	}
-	
 	public UserPanel getUserPanel() {
-		return this.userPanel;
+		return UserDialogPanel.getInstance().getUserPanel();
 	}
 	
 	private void initialize() {
@@ -81,33 +52,10 @@ public class UserDialog extends TUDialog {
 		this.setTitle(Translations.getString("general.manage_users"));
 		this.setSize(800, 350);
 		this.setResizable(true);
-		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		
-		this.userPanel = new UserPanel();
-		this.userPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
-		
-		this.add(this.userPanel, BorderLayout.CENTER);
-		
-		this.initializeButtonsPanel();
-	}
-	
-	private void initializeButtonsPanel() {
-		ActionListener listener = new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				UserDialog.this.setVisible(false);
-			}
-			
-		};
-		
-		JButton closeButton = new TUCloseButton(listener);
-		
-		JPanel panel = new TUButtonsPanel(closeButton);
-		
-		this.add(panel, BorderLayout.SOUTH);
-		this.getRootPane().setDefaultButton(closeButton);
+		if (this.getOwner() != null)
+			this.setLocationRelativeTo(this.getOwner());
 	}
 	
 }

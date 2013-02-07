@@ -62,7 +62,9 @@ public class ActionManageUsers extends AbstractViewAction {
 			return;
 		}
 		
-		UserDialog.getInstance().setVisible(true);
+		UserDialog dialog = new UserDialog();
+		dialog.setVisible(true);
+		dialog.dispose();
 	}
 	
 }

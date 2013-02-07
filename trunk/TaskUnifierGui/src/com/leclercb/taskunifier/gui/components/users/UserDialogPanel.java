@@ -30,7 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.propertyaccessoredit;
+package com.leclercb.taskunifier.gui.components.users;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -39,48 +39,37 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
-import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
-import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
+import com.leclercb.taskunifier.gui.swing.buttons.TUCloseButton;
 
-public class EditTaskPropertyAccessorDialogPanel extends TUDialogPanel {
+public class UserDialogPanel extends TUDialogPanel {
 	
-	private static EditTaskPropertyAccessorDialogPanel INSTANCE;
+	private static UserDialogPanel INSTANCE;
 	
-	protected static EditTaskPropertyAccessorDialogPanel getInstance() {
+	protected static UserDialogPanel getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new EditTaskPropertyAccessorDialogPanel();
+			INSTANCE = new UserDialogPanel();
 		
 		return INSTANCE;
 	}
 	
-	private EditTaskPropertyAccessorPanel editPropertyAccessorPanel;
+	private UserPanel userPanel;
 	
-	private EditTaskPropertyAccessorDialogPanel() {
+	private UserDialogPanel() {
 		this.initialize();
 	}
 	
-	public PropertyAccessor<Task> getPropertyAccessor() {
-		return this.editPropertyAccessorPanel.getPropertyAccessor();
-	}
-	
-	public void setPropertyAccessor(PropertyAccessor<Task> accessor) {
-		this.editPropertyAccessorPanel.setPropertyAccessor(accessor);
+	public UserPanel getUserPanel() {
+		return this.userPanel;
 	}
 	
 	private void initialize() {
 		this.setLayout(new BorderLayout());
 		
-		this.editPropertyAccessorPanel = new EditTaskPropertyAccessorPanel();
-		this.editPropertyAccessorPanel.setBorder(BorderFactory.createEmptyBorder(
-				10,
-				10,
-				0,
-				10));
+		this.userPanel = new UserPanel();
+		this.userPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
 		
-		this.add(this.editPropertyAccessorPanel, BorderLayout.CENTER);
+		this.add(this.userPanel, BorderLayout.CENTER);
 		
 		this.initializeButtonsPanel();
 	}
@@ -89,21 +78,15 @@ public class EditTaskPropertyAccessorDialogPanel extends TUDialogPanel {
 		ActionListener listener = new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent event) {
-				if (event.getActionCommand().equals("OK")) {
-					EditTaskPropertyAccessorDialogPanel.this.editPropertyAccessorPanel.editPropertyAccessor();
-				}
-				
-				EditTaskPropertyAccessorDialogPanel.this.getDialog().setVisible(
-						false);
+			public void actionPerformed(ActionEvent e) {
+				UserDialogPanel.this.getDialog().setVisible(false);
 			}
 			
 		};
 		
-		JButton okButton = new TUOkButton(listener);
-		JButton cancelButton = new TUCancelButton(listener);
+		JButton closeButton = new TUCloseButton(listener);
 		
-		this.setButtons(okButton, okButton, cancelButton);
+		this.setButtons(closeButton, closeButton);
 	}
 	
 }

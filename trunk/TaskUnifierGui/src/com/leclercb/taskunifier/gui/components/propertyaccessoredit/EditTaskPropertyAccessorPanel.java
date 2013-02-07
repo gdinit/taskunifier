@@ -59,6 +59,24 @@ public class EditTaskPropertyAccessorPanel extends JPanel {
 		this.initialize();
 	}
 	
+	public PropertyAccessor<Task> getPropertyAccessor() {
+		return this.accessor;
+	}
+	
+	public void setPropertyAccessor(PropertyAccessor<Task> accessor) {
+		this.accessor = accessor;
+		
+		if (this.accessor == null) {
+			this.typeField.setEnabled(true);
+			this.typeField.setSelectedItem(PropertyAccessorType.STRING);
+			this.labelField.setText(null);
+		} else {
+			this.typeField.setEnabled(false);
+			this.typeField.setSelectedItem(this.accessor.getType());
+			this.labelField.setText(this.accessor.getLabel());
+		}
+	}
+	
 	private void initialize() {
 		this.setLayout(new BorderLayout());
 		
@@ -94,24 +112,6 @@ public class EditTaskPropertyAccessorPanel extends JPanel {
 			TaskCustomColumnList.getInstance().renameColumn(
 					this.accessor,
 					label);
-		}
-	}
-	
-	public PropertyAccessor<Task> getPropertyAccessor() {
-		return this.accessor;
-	}
-	
-	public void setPropertyAccessor(PropertyAccessor<Task> accessor) {
-		this.accessor = accessor;
-		
-		if (this.accessor == null) {
-			this.typeField.setEnabled(true);
-			this.typeField.setSelectedItem(PropertyAccessorType.STRING);
-			this.labelField.setText(null);
-		} else {
-			this.typeField.setEnabled(false);
-			this.typeField.setSelectedItem(this.accessor.getType());
-			this.labelField.setText(this.accessor.getLabel());
 		}
 	}
 	
