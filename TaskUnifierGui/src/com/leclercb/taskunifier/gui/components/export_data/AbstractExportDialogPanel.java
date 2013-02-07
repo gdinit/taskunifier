@@ -43,7 +43,6 @@ import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
 import org.jdesktop.swingx.JXErrorPane;
@@ -55,7 +54,6 @@ import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
 import com.leclercb.taskunifier.gui.swing.TUFileField;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
@@ -67,9 +65,6 @@ abstract class AbstractExportDialogPanel extends TUDialogPanel {
 	private String fileExtention;
 	private String fileExtentionDescription;
 	private String fileProperty;
-	
-	private JButton exportButton;
-	private JButton cancelButton;
 	
 	public AbstractExportDialogPanel(
 			String title,
@@ -93,11 +88,7 @@ abstract class AbstractExportDialogPanel extends TUDialogPanel {
 	
 	private void initialize() {
 		this.setLayout(new BorderLayout());
-		
-		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout());
-		panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		this.add(panel, BorderLayout.NORTH);
+		this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		
 		// Export file
 		FileFilter fileFilter = new FileFilter() {
@@ -133,7 +124,7 @@ abstract class AbstractExportDialogPanel extends TUDialogPanel {
 				fileFilter,
 				this.fileExtention);
 		
-		panel.add(this.fileField, BorderLayout.CENTER);
+		this.add(this.fileField, BorderLayout.NORTH);
 		
 		this.initializeButtonsPanel();
 	}
@@ -177,16 +168,14 @@ abstract class AbstractExportDialogPanel extends TUDialogPanel {
 			
 		};
 		
-		this.exportButton = new JButton(
+		JButton exportButton = new JButton(
 				Translations.getString("general.export"));
-		this.exportButton.setActionCommand("EXPORT");
-		this.exportButton.addActionListener(listener);
+		exportButton.setActionCommand("EXPORT");
+		exportButton.addActionListener(listener);
 		
-		this.cancelButton = new TUCancelButton(listener);
+		JButton cancelButton = new TUCancelButton(listener);
 		
-		JPanel panel = new TUButtonsPanel(this.exportButton, this.cancelButton);
-		
-		this.add(panel, BorderLayout.SOUTH);
+		this.setButtons(exportButton, exportButton, cancelButton);
 	}
 	
 	protected abstract void exportToFile(String file) throws Exception;
@@ -202,8 +191,6 @@ abstract class AbstractExportDialogPanel extends TUDialogPanel {
 			}
 			
 		});
-		
-		this.getDialog().getRootPane().setDefaultButton(this.exportButton);
 	}
 	
 }

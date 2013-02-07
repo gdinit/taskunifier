@@ -40,13 +40,11 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
 import org.jdesktop.swingx.JXHeader;
 
 import com.leclercb.taskunifier.gui.components.help.Help;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -64,9 +62,6 @@ public class BatchAddTasksDialogPanel extends TUDialogPanel {
 	}
 	
 	private BatchAddTasksPanel batchaddTasksPanel;
-	
-	private JButton okButton;
-	private JButton cancelButton;
 	
 	private BatchAddTasksDialogPanel() {
 		this.initialize();
@@ -108,18 +103,17 @@ public class BatchAddTasksDialogPanel extends TUDialogPanel {
 					BatchAddTasksDialogPanel.this.batchaddTasksPanel.reset();
 				}
 				
-				BatchAddTasksDialogPanel.this.dialogSetVisible(false);
+				BatchAddTasksDialogPanel.this.getDialog().setVisible(false);
 			}
 			
 		};
 		
-		this.okButton = new TUOkButton(listener);
-		this.cancelButton = new TUCancelButton(listener);
+		JButton helpButton = Help.getInstance().getHelpButton(
+				"task_batchaddtasks");
+		JButton okButton = new TUOkButton(listener);
+		JButton cancelButton = new TUCancelButton(listener);
 		
-		JPanel panel = new TUButtonsPanel(Help.getInstance().getHelpButton(
-				"task_batchaddtasks"), this.okButton, this.cancelButton);
-		
-		this.add(panel, BorderLayout.SOUTH);
+		this.setButtons(okButton, helpButton, okButton, cancelButton);
 	}
 	
 	@Override
@@ -132,8 +126,6 @@ public class BatchAddTasksDialogPanel extends TUDialogPanel {
 			}
 			
 		});
-		
-		this.getDialog().getRootPane().setDefaultButton(this.okButton);
 	}
 	
 }

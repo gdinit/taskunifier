@@ -51,7 +51,6 @@ import org.jdesktop.swingx.JXHeader;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
 import com.leclercb.taskunifier.gui.swing.buttons.TUPrintButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -78,9 +77,6 @@ public class PrintDialogPanel extends TUDialogPanel {
 	private JComboBox orientation;
 	private JSpinner scalingFactor;
 	private JTextField reportTitle;
-	
-	private JButton printButton;
-	private JButton cancelButton;
 	
 	private PrintDialogPanel() {
 		this.initialize();
@@ -207,18 +203,10 @@ public class PrintDialogPanel extends TUDialogPanel {
 			
 		};
 		
-		this.printButton = new TUPrintButton(listener);
-		this.cancelButton = new TUCancelButton(listener);
-		TUButtonsPanel buttonsPanel = new TUButtonsPanel(
-				this.printButton,
-				this.cancelButton);
+		JButton printButton = new TUPrintButton(listener);
+		JButton cancelButton = new TUCancelButton(listener);
 		
-		panel.add(buttonsPanel, BorderLayout.SOUTH);
-	}
-	
-	@Override
-	protected void dialogLoaded() {
-		this.getDialog().getRootPane().setDefaultButton(this.printButton);
+		this.setButtons(printButton, printButton, cancelButton);
 	}
 	
 }

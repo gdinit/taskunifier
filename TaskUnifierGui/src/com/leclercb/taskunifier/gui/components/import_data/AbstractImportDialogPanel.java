@@ -44,7 +44,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
-import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
 import org.jdesktop.swingx.JXErrorPane;
@@ -56,7 +55,6 @@ import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
 import com.leclercb.taskunifier.gui.swing.TUFileField;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
@@ -69,9 +67,6 @@ abstract class AbstractImportDialogPanel extends TUDialogPanel {
 	private String fileExtention;
 	private String fileExtentionDescription;
 	private String fileProperty;
-	
-	private JButton importButton;
-	private JButton cancelButton;
 	
 	public AbstractImportDialogPanel(
 			String title,
@@ -96,11 +91,7 @@ abstract class AbstractImportDialogPanel extends TUDialogPanel {
 	
 	private void initialize(boolean showDeleteExistingValues) {
 		this.setLayout(new BorderLayout());
-		
-		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout());
-		panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		this.add(panel, BorderLayout.NORTH);
+		this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		
 		// Import file
 		FileFilter fileFilter = new FileFilter() {
@@ -136,14 +127,14 @@ abstract class AbstractImportDialogPanel extends TUDialogPanel {
 				fileFilter,
 				null);
 		
-		panel.add(this.fileField, BorderLayout.CENTER);
+		this.add(this.fileField, BorderLayout.SOUTH);
 		
 		// Delete existing values
 		this.deleteExistingValues = new JCheckBox(
 				Translations.getString("import.delete_existing_values"));
 		
 		if (showDeleteExistingValues) {
-			panel.add(this.deleteExistingValues, BorderLayout.NORTH);
+			this.add(this.deleteExistingValues, BorderLayout.NORTH);
 		}
 		
 		this.initializeButtonsPanel();
@@ -193,16 +184,14 @@ abstract class AbstractImportDialogPanel extends TUDialogPanel {
 			
 		};
 		
-		this.importButton = new JButton(
+		JButton importButton = new JButton(
 				Translations.getString("general.import"));
-		this.importButton.setActionCommand("IMPORT");
-		this.importButton.addActionListener(listener);
+		importButton.setActionCommand("IMPORT");
+		importButton.addActionListener(listener);
 		
-		this.cancelButton = new TUCancelButton(listener);
+		JButton cancelButton = new TUCancelButton(listener);
 		
-		JPanel panel = new TUButtonsPanel(this.importButton, this.cancelButton);
-		
-		this.add(panel, BorderLayout.SOUTH);
+		this.setButtons(importButton, importButton, cancelButton);
 	}
 	
 	protected abstract void deleteExistingValue();
@@ -221,8 +210,6 @@ abstract class AbstractImportDialogPanel extends TUDialogPanel {
 			}
 			
 		});
-		
-		this.getDialog().getRootPane().setDefaultButton(this.importButton);
 	}
 	
 }

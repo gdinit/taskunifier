@@ -38,37 +38,37 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
+import com.leclercb.taskunifier.gui.swing.TUFrame;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCloseButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class ReminderDialog extends JFrame {
+public class ReminderFrame extends TUFrame {
 	
-	private static ReminderDialog INSTANCE;
+	private static ReminderFrame INSTANCE;
 	
-	public static ReminderDialog getInstance() {
+	public static ReminderFrame getInstance() {
 		if (INSTANCE == null)
-			INSTANCE = new ReminderDialog();
+			INSTANCE = new ReminderFrame();
 		
 		return INSTANCE;
 	}
 	
 	private ReminderPanel reminderPanel;
 	
-	private ReminderDialog() {
+	private ReminderFrame() {
 		this.initialize();
 	}
 	
 	@Override
 	public void setVisible(boolean visible) {
 		if (visible) {
-			this.setLocationRelativeTo(FrameUtils.getCurrentFrame());
+			this.setLocationRelativeTo(FrameUtils.getCurrentWindow());
 		}
 		
 		super.setVisible(visible);
@@ -107,13 +107,13 @@ public class ReminderDialog extends JFrame {
 				if (e.getActionCommand().equals(ReminderPanel.ACTION_SNOOZE)
 						|| e.getActionCommand().equals(
 								ReminderPanel.ACTION_DISMISS)) {
-					if (ReminderDialog.this.reminderPanel.getReminderList().getTasks().length == 0)
-						ReminderDialog.this.setVisible(false);
+					if (ReminderFrame.this.reminderPanel.getReminderList().getTasks().length == 0)
+						ReminderFrame.this.setVisible(false);
 					
 					return;
 				}
 				
-				ReminderDialog.this.setVisible(false);
+				ReminderFrame.this.setVisible(false);
 			}
 			
 		};

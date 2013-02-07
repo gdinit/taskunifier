@@ -32,14 +32,12 @@
  */
 package com.leclercb.taskunifier.gui.swing;
 
-import java.awt.BorderLayout;
 import java.awt.Point;
-import java.awt.Window;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.util.logging.Level;
 
-import javax.swing.JDialog;
+import javax.swing.JFrame;
 
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
 import com.leclercb.commons.api.properties.events.WeakSavePropertiesListener;
@@ -48,32 +46,15 @@ import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.commons.gui.utils.ScreenUtils;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 
-public class TUDialog extends JDialog implements SavePropertiesListener {
+public class TUFrame extends JFrame implements SavePropertiesListener {
 	
 	private String windowProperty;
 	
-	private TUDialogPanel dialogPanel;
-	
-	public TUDialog() {
-		this((Window) null);
-	}
-	
-	public TUDialog(Window owner) {
-		super(owner);
-		
+	public TUFrame() {
 		this.windowProperty = null;
 		
 		this.initialize();
-	}
-	
-	public TUDialog(TUDialogPanel dialogPanel) {
-		this(FrameUtils.getCurrentWindow());
-		
-		this.dialogPanel = dialogPanel;
-		
-		this.initializeDialogPanel();
 	}
 	
 	private void initialize() {
@@ -84,7 +65,7 @@ public class TUDialog extends JDialog implements SavePropertiesListener {
 			
 			@Override
 			public void windowGainedFocus(WindowEvent event) {
-				FrameUtils.setCurrentWindow(TUDialog.this);
+				FrameUtils.setCurrentWindow(TUFrame.this);
 			}
 			
 			@Override
@@ -93,21 +74,6 @@ public class TUDialog extends JDialog implements SavePropertiesListener {
 			}
 			
 		});
-	}
-	
-	private void initializeDialogPanel() {
-		this.setLayout(new BorderLayout());
-		
-		this.add(this.dialogPanel, BorderLayout.CENTER);
-		this.dialogPanel.setDialog(this);
-		
-		TUButtonsPanel buttonsPanel = new TUButtonsPanel(
-				this.dialogPanel.getButtons());
-		this.add(buttonsPanel, BorderLayout.SOUTH);
-		
-		this.getRootPane().setDefaultButton(this.dialogPanel.getDefaultButton());
-		
-		this.pack();
 	}
 	
 	public void loadWindowSettings(final String windowProperty) {
@@ -148,20 +114,20 @@ public class TUDialog extends JDialog implements SavePropertiesListener {
 			
 			Main.getSettings().setIntegerProperty(
 					this.windowProperty + ".width",
-					TUDialog.this.getWidth());
+					TUFrame.this.getWidth());
 			Main.getSettings().setIntegerProperty(
 					this.windowProperty + ".height",
-					TUDialog.this.getHeight());
+					TUFrame.this.getHeight());
 			Main.getSettings().setIntegerProperty(
 					this.windowProperty + ".location_x",
-					TUDialog.this.getX());
+					TUFrame.this.getX());
 			Main.getSettings().setIntegerProperty(
 					this.windowProperty + ".location_y",
-					TUDialog.this.getY());
+					TUFrame.this.getY());
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(
 					Level.SEVERE,
-					"Cannot save dialog settings",
+					"Cannot save frame settings",
 					e);
 		}
 	}

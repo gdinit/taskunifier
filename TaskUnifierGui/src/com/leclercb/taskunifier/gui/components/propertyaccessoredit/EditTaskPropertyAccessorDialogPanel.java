@@ -38,12 +38,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 
@@ -59,9 +57,6 @@ public class EditTaskPropertyAccessorDialogPanel extends TUDialogPanel {
 	}
 	
 	private EditTaskPropertyAccessorPanel editPropertyAccessorPanel;
-	
-	private JButton okButton;
-	private JButton cancelButton;
 	
 	private EditTaskPropertyAccessorDialogPanel() {
 		this.initialize();
@@ -96,12 +91,10 @@ public class EditTaskPropertyAccessorDialogPanel extends TUDialogPanel {
 			
 		};
 		
-		this.okButton = new TUOkButton(listener);
-		this.cancelButton = new TUCancelButton(listener);
+		JButton okButton = new TUOkButton(listener);
+		JButton cancelButton = new TUCancelButton(listener);
 		
-		JPanel panel = new TUButtonsPanel(this.okButton, this.cancelButton);
-		
-		this.add(panel, BorderLayout.SOUTH);
+		this.setButtons(okButton, okButton, cancelButton);
 	}
 	
 	public PropertyAccessor<Task> getPropertyAccessor() {
@@ -110,11 +103,6 @@ public class EditTaskPropertyAccessorDialogPanel extends TUDialogPanel {
 	
 	public void setPropertyAccessor(PropertyAccessor<Task> accessor) {
 		this.editPropertyAccessorPanel.setPropertyAccessor(accessor);
-	}
-	
-	@Override
-	protected void dialogLoaded() {
-		this.getDialog().getRootPane().setDefaultButton(this.okButton);
 	}
 	
 }

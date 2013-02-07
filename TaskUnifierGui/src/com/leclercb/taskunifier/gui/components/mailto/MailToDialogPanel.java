@@ -38,10 +38,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCloseButton;
 
 public class MailToDialogPanel extends TUDialogPanel {
@@ -56,8 +54,6 @@ public class MailToDialogPanel extends TUDialogPanel {
 	}
 	
 	private MailToPanel mailToPanel;
-	
-	private JButton closeButton;
 	
 	private MailToDialogPanel() {
 		this.initialize();
@@ -93,16 +89,9 @@ public class MailToDialogPanel extends TUDialogPanel {
 		
 		this.mailToPanel.addActionListener(listener);
 		
-		this.closeButton = new TUCloseButton(listener);
+		JButton closeButton = new TUCloseButton(listener);
 		
-		JPanel panel = new TUButtonsPanel(this.closeButton);
-		
-		this.add(panel, BorderLayout.SOUTH);
-	}
-	
-	@Override
-	protected void dialogLoaded() {
-		this.getDialog().getRootPane().setDefaultButton(this.closeButton);
+		this.setButtons(closeButton, closeButton);
 	}
 	
 }

@@ -39,7 +39,6 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import org.jdesktop.swingx.JXHeader;
@@ -47,7 +46,6 @@ import org.jdesktop.swingx.JXHeader;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
 import com.leclercb.taskunifier.gui.components.help.Help;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
@@ -64,10 +62,7 @@ public class TaskTemplateConfigurationDialogPanel extends TUDialogPanel {
 	}
 	
 	private TaskTemplateConfigurationPanel templateConfigurationPanel;
-	
 	private ActionListener okListener;
-	
-	private JButton okButton;
 	
 	private TaskTemplateConfigurationDialogPanel() {
 		this.initialize();
@@ -102,23 +97,22 @@ public class TaskTemplateConfigurationDialogPanel extends TUDialogPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				TaskTemplateConfigurationDialogPanel.this.dialogSetVisible(false);
+				TaskTemplateConfigurationDialogPanel.this.getDialog().setVisible(
+						false);
 			}
 			
 		};
 		
+		JButton helpButton = Help.getInstance().getHelpButton(
+				"manage_task_templates");
 		JButton okButton = new TUOkButton(okListener);
-		JPanel panel = new TUButtonsPanel(Help.getInstance().getHelpButton(
-				"manage_task_templates"), okButton);
 		
-		this.add(panel, BorderLayout.SOUTH);
+		this.setButtons(okButton, helpButton, okButton);
 	}
 	
 	@Override
 	protected void dialogLoaded() {
-		this.getRootPane().setDefaultButton(this.okButton);
-		
-		this.getRootPane().registerKeyboardAction(
+		this.getDialog().getRootPane().registerKeyboardAction(
 				this.okListener,
 				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
 				JComponent.WHEN_IN_FOCUSED_WINDOW);

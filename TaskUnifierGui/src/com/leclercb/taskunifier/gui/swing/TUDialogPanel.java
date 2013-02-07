@@ -32,14 +32,30 @@
  */
 package com.leclercb.taskunifier.gui.swing;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public abstract class TUDialogPanel extends JPanel {
 	
 	private TUDialog dialog;
+	private JButton[] buttons;
+	private JButton defaultButton;
 	
 	public TUDialogPanel() {
-		this.dialog = null;
+		
+	}
+	
+	public JButton[] getButtons() {
+		return this.buttons;
+	}
+	
+	public JButton getDefaultButton() {
+		return this.defaultButton;
+	}
+	
+	public void setButtons(JButton defaultButton, JButton... buttons) {
+		this.buttons = buttons;
+		this.defaultButton = defaultButton;
 	}
 	
 	public TUDialog getDialog() {
@@ -51,21 +67,7 @@ public abstract class TUDialogPanel extends JPanel {
 		this.dialogLoaded();
 	}
 	
-	public void dialogDispose() {
-		if (this.dialog != null)
-			this.dialog.dispose();
-	}
-	
-	public void dialogSetVisible(boolean visible) {
-		if (this.dialog != null)
-			this.dialog.setVisible(visible);
-	}
-	
 	protected void dialogLoaded() {
-		
-	}
-	
-	protected void dialogVisible(boolean visible) {
 		
 	}
 	
