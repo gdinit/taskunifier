@@ -64,7 +64,9 @@ public class ActionManageTaskRules extends AbstractViewAction {
 			return;
 		}
 		
-		TaskRuleConfigurationDialog.getInstance().setVisible(true);
+		TaskRuleConfigurationDialog dialog = new TaskRuleConfigurationDialog();
+		dialog.setVisible(true);
+		dialog.dispose();
 	}
 	
 }
