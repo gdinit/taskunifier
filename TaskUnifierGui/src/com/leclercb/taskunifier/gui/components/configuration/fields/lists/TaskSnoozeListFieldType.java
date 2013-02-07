@@ -118,8 +118,11 @@ public class TaskSnoozeListFieldType extends ConfigurationFieldType.Panel {
 			public void actionPerformed(ActionEvent event) {
 				SnoozeItem item = new SnoozeItem();
 				TaskSnoozeList.getInstance().add(item);
-				EditTimeValueDialog.getInstance().setTimeValue(item);
-				EditTimeValueDialog.getInstance().setVisible(true);
+				
+				EditTimeValueDialog dialog = new EditTimeValueDialog();
+				dialog.setTimeValue(item);
+				dialog.setVisible(true);
+				dialog.dispose();
 			}
 			
 		});
@@ -132,8 +135,12 @@ public class TaskSnoozeListFieldType extends ConfigurationFieldType.Panel {
 					return;
 				
 				SnoozeItem item = (SnoozeItem) TaskSnoozeListFieldType.this.list.getSelectedValue();
-				EditTimeValueDialog.getInstance().setTimeValue(item);
-				EditTimeValueDialog.getInstance().setVisible(true);
+				
+				EditTimeValueDialog dialog = new EditTimeValueDialog();
+				dialog.setTimeValue(item);
+				dialog.setVisible(true);
+				dialog.dispose();
+				
 				TaskSnoozeListFieldType.this.list.setSelectedValue(item, true);
 			}
 			

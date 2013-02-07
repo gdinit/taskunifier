@@ -118,8 +118,12 @@ public class TaskPostponeListFieldType extends ConfigurationFieldType.Panel {
 			public void actionPerformed(ActionEvent event) {
 				PostponeItem item = new PostponeItem();
 				TaskPostponeList.getInstance().add(item);
-				EditTimeValueDialog.getInstance().setTimeValue(item);
-				EditTimeValueDialog.getInstance().setVisible(true);
+				
+				EditTimeValueDialog dialog = new EditTimeValueDialog();
+				dialog.setTimeValue(item);
+				dialog.setVisible(true);
+				dialog.dispose();
+				
 				TaskPostponeListFieldType.this.list.setSelectedValue(item, true);
 			}
 			
@@ -133,8 +137,12 @@ public class TaskPostponeListFieldType extends ConfigurationFieldType.Panel {
 					return;
 				
 				PostponeItem item = (PostponeItem) TaskPostponeListFieldType.this.list.getSelectedValue();
-				EditTimeValueDialog.getInstance().setTimeValue(item);
-				EditTimeValueDialog.getInstance().setVisible(true);
+				
+				EditTimeValueDialog dialog = new EditTimeValueDialog();
+				dialog.setTimeValue(item);
+				dialog.setVisible(true);
+				dialog.dispose();
+				
 				TaskPostponeListFieldType.this.list.setSelectedValue(item, true);
 			}
 			

@@ -32,8 +32,12 @@
  */
 package com.leclercb.taskunifier.gui.swing;
 
+import java.util.logging.Level;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import com.leclercb.commons.gui.logger.GuiLogger;
 
 public abstract class TUDialogPanel extends JPanel {
 	
@@ -63,8 +67,16 @@ public abstract class TUDialogPanel extends JPanel {
 	}
 	
 	public void setDialog(TUDialog dialog) {
+		if (this.dialog != null && dialog != null)
+			GuiLogger.getLogger().log(
+					Level.SEVERE,
+					"Another dialog has not been disposed",
+					new Exception());
+		
 		this.dialog = dialog;
-		this.dialogLoaded();
+		
+		if (dialog != null)
+			this.dialogLoaded();
 	}
 	
 	protected void dialogLoaded() {
