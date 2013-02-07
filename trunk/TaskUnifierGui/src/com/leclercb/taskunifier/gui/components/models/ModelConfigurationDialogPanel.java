@@ -59,7 +59,6 @@ import com.leclercb.taskunifier.gui.components.models.panels.GoalConfigurationPa
 import com.leclercb.taskunifier.gui.components.models.panels.LocationConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.models.panels.TagConfigurationPanel;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
@@ -78,8 +77,6 @@ public class ModelConfigurationDialogPanel extends TUDialogPanel {
 	private JTabbedPane tabbedPane;
 	
 	private ActionListener okListener;
-	
-	private JButton okButton;
 	
 	private ModelConfigurationDialogPanel() {
 		this.initialize();
@@ -178,10 +175,9 @@ public class ModelConfigurationDialogPanel extends TUDialogPanel {
 			
 		};
 		
-		this.okButton = new TUOkButton(this.okListener);
-		JPanel panel = new TUButtonsPanel(this.okButton);
+		JButton okButton = new TUOkButton(this.okListener);
 		
-		this.add(panel, BorderLayout.SOUTH);
+		this.setButtons(okButton, okButton);
 	}
 	
 	private static int modelTypeToTabIndex(ModelType type) {
@@ -208,8 +204,6 @@ public class ModelConfigurationDialogPanel extends TUDialogPanel {
 	
 	@Override
 	protected void dialogLoaded() {
-		this.getDialog().getRootPane().setDefaultButton(this.okButton);
-		
 		this.getDialog().getRootPane().registerKeyboardAction(
 				this.okListener,
 				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),

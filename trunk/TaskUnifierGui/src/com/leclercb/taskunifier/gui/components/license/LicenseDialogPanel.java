@@ -38,11 +38,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
 import com.leclercb.commons.api.license.License;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCloseButton;
 
 public class LicenseDialogPanel extends TUDialogPanel {
@@ -59,8 +57,6 @@ public class LicenseDialogPanel extends TUDialogPanel {
 	}
 	
 	private LicensePanel licensePanel;
-	
-	private JButton closeButton;
 	
 	private LicenseDialogPanel() {
 		this.initialize();
@@ -90,15 +86,9 @@ public class LicenseDialogPanel extends TUDialogPanel {
 			
 		};
 		
-		this.closeButton = new TUCloseButton(listener);
-		JPanel buttonsPanel = new TUButtonsPanel(this.closeButton);
+		JButton closeButton = new TUCloseButton(listener);
 		
-		this.add(buttonsPanel, BorderLayout.SOUTH);
-	}
-	
-	@Override
-	protected void dialogLoaded() {
-		this.getDialog().getRootPane().setDefaultButton(this.closeButton);
+		this.setButtons(closeButton, closeButton);
 	}
 	
 }

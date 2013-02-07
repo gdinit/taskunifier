@@ -44,14 +44,12 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import org.jdesktop.swingx.JXHeader;
 
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -75,9 +73,6 @@ public class BatchTaskEditDialogPanel extends TUDialogPanel {
 	
 	private ActionListener okListener;
 	private ActionListener cancelListener;
-	
-	private JButton okButton;
-	private JButton cancelButton;
 	
 	private BatchTaskEditDialogPanel() {
 		this.initialize();
@@ -133,7 +128,7 @@ public class BatchTaskEditDialogPanel extends TUDialogPanel {
 				BatchTaskEditDialogPanel.this.batchTaskEditPanel.editTasks();
 				BatchTaskEditDialogPanel.this.cancelled = false;
 				BatchTaskEditDialogPanel.this.setTasks(null);
-				BatchTaskEditDialogPanel.this.dialogSetVisible(false);
+				BatchTaskEditDialogPanel.this.getDialog().setVisible(false);
 			}
 			
 		};
@@ -145,17 +140,15 @@ public class BatchTaskEditDialogPanel extends TUDialogPanel {
 				boolean saveChanges = BatchTaskEditDialogPanel.this.askSaveChanges();
 				BatchTaskEditDialogPanel.this.cancelled = !saveChanges;
 				BatchTaskEditDialogPanel.this.setTasks(null);
-				BatchTaskEditDialogPanel.this.dialogSetVisible(false);
+				BatchTaskEditDialogPanel.this.getDialog().setVisible(false);
 			}
 			
 		};
 		
-		this.okButton = new TUOkButton(this.okListener);
-		this.cancelButton = new TUCancelButton(this.cancelListener);
+		JButton okButton = new TUOkButton(this.okListener);
+		JButton cancelButton = new TUCancelButton(this.cancelListener);
 		
-		JPanel panel = new TUButtonsPanel(this.okButton, this.cancelButton);
-		
-		this.add(panel, BorderLayout.SOUTH);
+		this.setButtons(okButton, okButton, cancelButton);
 	}
 	
 	private boolean askSaveChanges() {
@@ -185,27 +178,23 @@ public class BatchTaskEditDialogPanel extends TUDialogPanel {
 	}
 	
 	@Override
-	public void dialogVisible(boolean visible) {
-		if (visible) {
-			this.cancelled = false;
-		}
-	}
-	
-	@Override
 	protected void dialogLoaded() {
 		this.getDialog().addWindowListener(new WindowAdapter() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+				BatchTaskEditDialogPanel.this.cancelled = false;
+			}
 			
 			@Override
 			public void windowClosing(WindowEvent e) {
 				boolean saveChanges = BatchTaskEditDialogPanel.this.askSaveChanges();
 				BatchTaskEditDialogPanel.this.cancelled = !saveChanges;
 				BatchTaskEditDialogPanel.this.setTasks(null);
-				BatchTaskEditDialogPanel.this.dialogSetVisible(false);
+				BatchTaskEditDialogPanel.this.getDialog().setVisible(false);
 			}
 			
 		});
-		
-		this.getRootPane().setDefaultButton(this.okButton);
 		
 		this.getDialog().getRootPane().registerKeyboardAction(
 				this.okListener,

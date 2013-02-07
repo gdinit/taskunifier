@@ -35,6 +35,8 @@ package com.leclercb.taskunifier.gui.components.plugins;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -44,7 +46,6 @@ import org.jdesktop.swingx.JXHeader;
 
 import com.leclercb.taskunifier.gui.components.help.Help;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -62,9 +63,6 @@ public class SynchronizerPluginsDialogPanel extends TUDialogPanel {
 	}
 	
 	private PluginsPanel pluginsPanel;
-	
-	private JButton okButton;
-	private JButton cancelButton;
 	
 	private SynchronizerPluginsDialogPanel() {
 		this.initialize();
@@ -105,20 +103,23 @@ public class SynchronizerPluginsDialogPanel extends TUDialogPanel {
 			
 		};
 		
-		this.okButton = new TUOkButton(listener);
-		this.cancelButton = new TUCancelButton(listener);
+		JButton helpButton = Help.getInstance().getHelpButton("synchronization");
+		JButton okButton = new TUOkButton(listener);
+		JButton cancelButton = new TUCancelButton(listener);
 		
-		JPanel panel = new TUButtonsPanel(Help.getInstance().getHelpButton(
-				"synchronization"), this.okButton, this.cancelButton);
-		
-		this.add(panel, BorderLayout.SOUTH);
+		this.setButtons(okButton, helpButton, okButton, cancelButton);
 	}
 	
 	@Override
 	protected void dialogLoaded() {
-		this.pluginsPanel.reloadPlugins();
-		
-		this.getDialog().getRootPane().setDefaultButton(this.okButton);
+		this.getDialog().addWindowListener(new WindowAdapter() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+				SynchronizerPluginsDialogPanel.this.pluginsPanel.reloadPlugins();
+			}
+			
+		});
 	}
 	
 }

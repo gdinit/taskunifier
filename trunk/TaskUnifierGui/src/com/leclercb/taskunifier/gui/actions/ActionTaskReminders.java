@@ -37,7 +37,7 @@ import java.awt.event.ActionEvent;
 
 import org.apache.commons.lang3.SystemUtils;
 
-import com.leclercb.taskunifier.gui.components.reminder.ReminderDialog;
+import com.leclercb.taskunifier.gui.components.reminder.ReminderFrame;
 import com.leclercb.taskunifier.gui.main.MacApplication;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
@@ -67,7 +67,7 @@ public class ActionTaskReminders extends AbstractViewAction {
 				Toolkit.getDefaultToolkit().beep();
 		}
 		
-		ReminderDialog.getInstance().setVisible(true);
+		ReminderFrame.getInstance().setVisible(true);
 	}
 	
 }

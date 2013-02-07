@@ -38,10 +38,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 
 public class AboutDialogPanel extends TUDialogPanel {
@@ -54,8 +52,6 @@ public class AboutDialogPanel extends TUDialogPanel {
 		
 		return INSTANCE;
 	}
-	
-	private JButton okButton;
 	
 	private AboutDialogPanel() {
 		this.initialize();
@@ -76,20 +72,14 @@ public class AboutDialogPanel extends TUDialogPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AboutDialogPanel.this.dialogSetVisible(false);
+				AboutDialogPanel.this.getDialog().setVisible(false);
 			}
 			
 		};
 		
-		this.okButton = new TUOkButton(listener);
-		JPanel buttonsPanel = new TUButtonsPanel(this.okButton);
+		JButton okButton = new TUOkButton(listener);
 		
-		this.add(buttonsPanel, BorderLayout.SOUTH);
-	}
-	
-	@Override
-	protected void dialogLoaded() {
-		this.getDialog().getRootPane().setDefaultButton(this.okButton);
+		this.setButtons(okButton, okButton);
 	}
 	
 }

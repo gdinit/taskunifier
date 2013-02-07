@@ -61,7 +61,6 @@ import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.main.main.MainSaveFiles;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUApplyButton;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -82,10 +81,6 @@ public class ConfigurationDialogPanel extends TUDialogPanel implements Configura
 	private ActionListener okListener;
 	private ActionListener applyListener;
 	private ActionListener cancelListener;
-	
-	private JButton okButton;
-	private JButton applyButton;
-	private JButton cancelButton;
 	
 	private JTabbedPane tabbedPane;
 	
@@ -175,16 +170,11 @@ public class ConfigurationDialogPanel extends TUDialogPanel implements Configura
 			
 		};
 		
-		this.okButton = new TUOkButton(this.okListener);
-		this.cancelButton = new TUCancelButton(this.cancelListener);
-		this.applyButton = new TUApplyButton(this.applyListener);
+		JButton okButton = new TUOkButton(this.okListener);
+		JButton cancelButton = new TUCancelButton(this.cancelListener);
+		JButton applyButton = new TUApplyButton(this.applyListener);
 		
-		JPanel panel = new TUButtonsPanel(
-				this.okButton,
-				this.cancelButton,
-				this.applyButton);
-		
-		this.add(panel, BorderLayout.SOUTH);
+		this.setButtons(okButton, okButton, cancelButton, applyButton);
 	}
 	
 	private void initializeGeneralPanel() {
@@ -362,8 +352,6 @@ public class ConfigurationDialogPanel extends TUDialogPanel implements Configura
 	
 	@Override
 	protected void dialogLoaded() {
-		this.getDialog().getRootPane().setDefaultButton(this.okButton);
-		
 		this.getDialog().getRootPane().registerKeyboardAction(
 				this.okListener,
 				KeyStroke.getKeyStroke(

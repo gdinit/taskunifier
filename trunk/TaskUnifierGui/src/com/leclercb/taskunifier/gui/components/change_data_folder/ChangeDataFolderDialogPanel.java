@@ -44,7 +44,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
-import javax.swing.JPanel;
 
 import org.apache.commons.io.FileUtils;
 import org.jdesktop.swingx.JXErrorPane;
@@ -56,7 +55,6 @@ import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
 import com.leclercb.taskunifier.gui.swing.TUFileField;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
@@ -74,21 +72,13 @@ public class ChangeDataFolderDialogPanel extends TUDialogPanel {
 	private TUFileField fileField;
 	private JCheckBox copyData;
 	
-	private JButton resetButton;
-	private JButton importButton;
-	private JButton cancelButton;
-	
 	private ChangeDataFolderDialogPanel() {
 		this.initialize();
 	}
 	
 	private void initialize() {
 		this.setLayout(new BorderLayout());
-		
-		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout());
-		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		this.add(panel, BorderLayout.NORTH);
+		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
 		// Data folder
 		this.fileField = new TUFileField(
@@ -99,13 +89,13 @@ public class ChangeDataFolderDialogPanel extends TUDialogPanel {
 				null,
 				null);
 		
-		panel.add(this.fileField, BorderLayout.CENTER);
+		this.add(this.fileField, BorderLayout.NORTH);
 		
 		// Copy data
 		this.copyData = new JCheckBox(
 				Translations.getString("change_data_folder_location.copy_data"));
 		
-		panel.add(this.copyData, BorderLayout.SOUTH);
+		this.add(this.copyData, BorderLayout.SOUTH);
 		
 		this.initializeButtonsPanel();
 	}
@@ -141,24 +131,19 @@ public class ChangeDataFolderDialogPanel extends TUDialogPanel {
 			
 		};
 		
-		this.resetButton = new JButton(
+		JButton resetButton = new JButton(
 				Translations.getString("general.reset_default"));
-		this.resetButton.setActionCommand("RESET");
-		this.resetButton.addActionListener(listener);
+		resetButton.setActionCommand("RESET");
+		resetButton.addActionListener(listener);
 		
-		this.importButton = new JButton(
+		JButton importButton = new JButton(
 				Translations.getString("action.change_data_folder_location"));
-		this.importButton.setActionCommand("CHANGE");
-		this.importButton.addActionListener(listener);
+		importButton.setActionCommand("CHANGE");
+		importButton.addActionListener(listener);
 		
-		this.cancelButton = new TUCancelButton(listener);
+		JButton cancelButton = new TUCancelButton(listener);
 		
-		JPanel panel = new TUButtonsPanel(
-				this.resetButton,
-				this.importButton,
-				this.cancelButton);
-		
-		this.add(panel, BorderLayout.SOUTH);
+		this.setButtons(importButton, resetButton, importButton, cancelButton);
 	}
 	
 	private boolean changeDataFolder() {
@@ -201,9 +186,13 @@ public class ChangeDataFolderDialogPanel extends TUDialogPanel {
 	
 	@Override
 	protected void dialogLoaded() {
-		this.getRootPane().setDefaultButton(this.importButton);
-		
 		this.getDialog().addWindowListener(new WindowAdapter() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+				File file = new File(Main.getDataFolder());
+				ChangeDataFolderDialogPanel.this.fileField.setFile(file.getAbsolutePath());
+			}
 			
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -212,14 +201,6 @@ public class ChangeDataFolderDialogPanel extends TUDialogPanel {
 			}
 			
 		});
-	}
-	
-	@Override
-	public void dialogSetVisible(boolean visible) {
-		if (visible) {
-			File file = new File(Main.getDataFolder());
-			this.fileField.setFile(file.getAbsolutePath());
-		}
 	}
 	
 }
