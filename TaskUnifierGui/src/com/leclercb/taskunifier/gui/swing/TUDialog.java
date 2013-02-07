@@ -71,6 +71,7 @@ public class TUDialog extends JDialog implements SavePropertiesListener {
 	public TUDialog(TUDialogPanel dialogPanel) {
 		this(FrameUtils.getCurrentWindow());
 		
+		CheckUtils.isNotNull(dialogPanel);
 		this.dialogPanel = dialogPanel;
 		
 		this.initializeDialogPanel();
@@ -101,11 +102,17 @@ public class TUDialog extends JDialog implements SavePropertiesListener {
 		this.add(this.dialogPanel, BorderLayout.CENTER);
 		this.dialogPanel.setDialog(this);
 		
-		TUButtonsPanel buttonsPanel = new TUButtonsPanel(
-				this.dialogPanel.getButtons());
-		this.add(buttonsPanel, BorderLayout.SOUTH);
+		if (this.dialogPanel.getButtons() != null
+				&& this.dialogPanel.getButtons().length != 0) {
+			TUButtonsPanel buttonsPanel = new TUButtonsPanel(
+					this.dialogPanel.getButtons());
+			this.add(buttonsPanel, BorderLayout.SOUTH);
+		}
 		
-		this.getRootPane().setDefaultButton(this.dialogPanel.getDefaultButton());
+		if (this.dialogPanel.getDefaultButton() != null) {
+			this.getRootPane().setDefaultButton(
+					this.dialogPanel.getDefaultButton());
+		}
 		
 		this.pack();
 	}

@@ -69,6 +69,8 @@ public class MailToPanel extends JPanel {
 	
 	private ContactList contactList;
 	
+	private TUButtonsPanel buttonsPanel;
+	
 	public MailToPanel() {
 		this.actionSupport = new ActionSupport(this);
 		
@@ -77,6 +79,10 @@ public class MailToPanel extends JPanel {
 	
 	public ContactList getContactList() {
 		return this.contactList;
+	}
+	
+	public TUButtonsPanel getButtonsPanel() {
+		return this.buttonsPanel;
 	}
 	
 	public void addActionListener(ActionListener listener) {
@@ -154,7 +160,7 @@ public class MailToPanel extends JPanel {
 	}
 	
 	private void initialize() {
-		this.setLayout(new BorderLayout(0, 10));
+		this.setLayout(new BorderLayout());
 		
 		this.contactList = new ContactList();
 		this.add(this.contactList, BorderLayout.CENTER);
@@ -164,9 +170,9 @@ public class MailToPanel extends JPanel {
 	
 	private void initializeButtonsPanel() {
 		JButton mailButton = new JButton(new MailAction());
-		JPanel panel = new TUButtonsPanel(mailButton);
+		this.buttonsPanel = new TUButtonsPanel(mailButton);
 		
-		this.add(panel, BorderLayout.SOUTH);
+		this.add(this.buttonsPanel, BorderLayout.SOUTH);
 	}
 	
 	private class MailAction extends AbstractAction {
