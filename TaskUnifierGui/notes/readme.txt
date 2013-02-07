@@ -6,6 +6,8 @@ Version 3.1.9
 		- New installation software for Windows
 		- BF 11: Error message at the end of the installation
 		- BF 130: Duplicate entries in add/remove programs
+	- Minor:
+		- Fixed owner of all the dialogs
 
 Version 3.1.8
 	- Major:
