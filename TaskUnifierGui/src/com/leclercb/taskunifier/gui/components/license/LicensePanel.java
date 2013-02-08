@@ -34,13 +34,19 @@ package com.leclercb.taskunifier.gui.components.license;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
 import java.util.logging.Level;
 
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -49,21 +55,21 @@ import com.leclercb.commons.api.license.LicenseManager;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
 import com.leclercb.taskunifier.gui.resources.Resources;
+import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
-import com.leclercb.taskunifier.gui.utils.FormBuilder;
+import com.leclercb.taskunifier.gui.utils.FontUtils;
+import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class LicensePanel extends JPanel {
+	
+	private License license;
 	
 	private JPanel licenseInfo;
 	private JPanel licenseEnter;
 	
-	private JLabel nameLabel;
-	private JLabel emailLabel;
-	private JLabel licenseTypeLabel;
-	private JLabel expirationLabel;
-	private JLabel versionLabel;
-	private JLabel referenceLabel;
+	private TUButtonsPanel licenseInfoButtonsPanel;
+	private TUButtonsPanel licenseEnterButtonsPanel;
 	
 	private JButton changeLicense;
 	
@@ -75,45 +81,45 @@ public class LicensePanel extends JPanel {
 	}
 	
 	public void setLicense(License license) {
+		this.license = license;
+		
 		if (license == null) {
-			this.nameLabel.setText("");
-			this.emailLabel.setText("");
-			this.licenseTypeLabel.setText("");
-			this.expirationLabel.setText("");
-			this.versionLabel.setText("");
-			this.referenceLabel.setText("");
-			
 			this.licenseArea.setText("");
 			
 			CardLayout layout = (CardLayout) this.getLayout();
 			layout.show(this, "ENTER");
 		} else {
-			this.nameLabel.setText(license.getName());
-			this.emailLabel.setText(license.getEmail());
-			this.licenseTypeLabel.setText(license.getLicenseType().name());
-			this.expirationLabel.setText(StringValueCalendar.INSTANCE_DATE.getString(license.getExpiration()));
-			this.versionLabel.setText(license.getVersion());
-			this.referenceLabel.setText(license.getReference());
-			
 			this.licenseArea.setText("");
+			this.licenseInfo.revalidate();
 			
 			CardLayout layout = (CardLayout) this.getLayout();
 			layout.show(this, "INFO");
 		}
 	}
 	
+	public TUButtonsPanel getLicenseInfoButtonsPanel() {
+		return this.licenseInfoButtonsPanel;
+	}
+	
+	public TUButtonsPanel getLicenseEnterButtonsPanel() {
+		return this.licenseEnterButtonsPanel;
+	}
+	
 	private void initialize() {
 		this.setLayout(new CardLayout());
 		
+		this.initializeLicenseInfo();
+		this.initializeLicenseEnter();
+		
+		this.setLicense(null);
+	}
+	
+	private void initializeLicenseInfo() {
 		this.licenseInfo = new JPanel();
 		this.licenseInfo.setLayout(new BorderLayout());
 		
-		this.nameLabel = new JLabel();
-		this.emailLabel = new JLabel();
-		this.licenseTypeLabel = new JLabel();
-		this.expirationLabel = new JLabel();
-		this.versionLabel = new JLabel();
-		this.referenceLabel = new JLabel();
+		LicenseInfoPanel licenseInfoPanel = new LicenseInfoPanel();
+		this.licenseInfo.add(licenseInfoPanel, BorderLayout.CENTER);
 		
 		this.changeLicense = new JButton(
 				Translations.getString("license.change_license"));
@@ -127,23 +133,27 @@ public class LicensePanel extends JPanel {
 			
 		});
 		
-		FormBuilder builder = new FormBuilder(
-				"right:pref, 4dlu, fill:default:grow");
+		this.licenseInfoButtonsPanel = new TUButtonsPanel(this.changeLicense);
+		this.licenseInfo.add(this.licenseInfoButtonsPanel, BorderLayout.SOUTH);
 		
-		builder.appendI15d("license.name", true, this.nameLabel);
-		builder.appendI15d("license.email", true, this.emailLabel);
-		builder.appendI15d("license.license_type", true, this.licenseTypeLabel);
-		builder.appendI15d("license.expiration", true, this.expirationLabel);
-		builder.appendI15d("license.version", true, this.versionLabel);
-		builder.appendI15d("license.reference", true, this.referenceLabel);
-		builder.append("", this.changeLicense);
-		
-		this.licenseInfo.add(builder.getPanel(), BorderLayout.CENTER);
-		
+		this.add(this.licenseInfo, "INFO");
+	}
+	
+	private void initializeLicenseEnter() {
 		this.licenseEnter = new JPanel();
 		this.licenseEnter.setLayout(new BorderLayout(5, 5));
+		this.licenseEnter.setBorder(BorderFactory.createEmptyBorder(
+				10,
+				10,
+				0,
+				10));
 		
 		this.licenseArea = new JTextArea();
+		
+		this.licenseEnter.add(
+				ComponentFactory.createJScrollPane(this.licenseArea, true),
+				BorderLayout.CENTER);
+		
 		this.enterLicenseButton = new JButton(
 				Translations.getString("license.enter_license"));
 		this.enterLicenseButton.addActionListener(new ActionListener() {
@@ -177,15 +187,65 @@ public class LicensePanel extends JPanel {
 			
 		});
 		
-		this.licenseEnter.add(
-				ComponentFactory.createJScrollPane(this.licenseArea, true),
-				BorderLayout.CENTER);
-		this.licenseEnter.add(this.enterLicenseButton, BorderLayout.SOUTH);
+		this.licenseEnterButtonsPanel = new TUButtonsPanel(
+				this.enterLicenseButton);
+		this.licenseEnter.add(this.licenseEnterButtonsPanel, BorderLayout.SOUTH);
 		
-		this.add(this.licenseInfo, "INFO");
 		this.add(this.licenseEnter, "ENTER");
+	}
+	
+	private class LicenseInfoPanel extends JPanel {
 		
-		this.setLicense(null);
+		public LicenseInfoPanel() {
+			ImageIcon icon = ImageUtils.getResourceImage("licence.png");
+			this.setPreferredSize(new Dimension(
+					icon.getIconWidth(),
+					icon.getIconHeight()));
+		}
+		
+		@Override
+		public void paintComponent(Graphics g) {
+			super.paintComponents(g);
+			
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setRenderingHint(
+					RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON);
+			
+			ImageIcon icon = ImageUtils.getResourceImage("licence.png");
+			
+			g2.drawImage(icon.getImage(), 0, 0, null);
+			
+			if (LicensePanel.this.license != null) {
+				Font font = FontUtils.getResourceFont("constantia.ttf");
+				g2.setFont(font.deriveFont((float) 20.0).deriveFont(Font.BOLD));
+				
+				int width = g.getFontMetrics().stringWidth(
+						LicensePanel.this.license.getName());
+				g2.drawString(
+						LicensePanel.this.license.getName(),
+						(this.getWidth() - width) / 2,
+						135);
+				
+				g2.setFont(font.deriveFont((float) 14.0).deriveFont(Font.PLAIN));
+				
+				g2.drawString(LicensePanel.this.license.getEmail(), 200, 187);
+				g2.drawString(
+						StringValueCalendar.INSTANCE_DATE.getString(LicensePanel.this.license.getExpiration()),
+						200,
+						211);
+				g2.drawString(
+						LicensePanel.this.license.getLicenseType().name(),
+						200,
+						235);
+				g2.drawString(LicensePanel.this.license.getVersion(), 200, 256);
+				g2.drawString(
+						LicensePanel.this.license.getReference(),
+						200,
+						284);
+			}
+		}
+		
 	}
 	
 }
