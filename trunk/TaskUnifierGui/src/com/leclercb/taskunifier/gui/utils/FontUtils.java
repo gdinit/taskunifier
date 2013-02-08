@@ -30,32 +30,54 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.license;
+package com.leclercb.taskunifier.gui.utils;
 
-import com.leclercb.commons.api.license.License;
-import com.leclercb.taskunifier.gui.swing.TUDialog;
-import com.leclercb.taskunifier.gui.translations.Translations;
+import java.awt.Font;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
 
-public class LicenseDialog extends TUDialog {
+import com.leclercb.commons.gui.logger.GuiLogger;
+import com.leclercb.taskunifier.gui.main.Main;
+
+public final class FontUtils {
 	
-	public LicenseDialog() {
-		super(LicenseDialogPanel.getInstance());
+	private FontUtils() {
 		
-		this.initialize();
 	}
 	
-	public void setLicense(License license) {
-		LicenseDialogPanel.getInstance().setLicense(license);
+	private static Map<String, Font> fonts = new HashMap<String, Font>();
+	
+	private static final String FONTS_FOLDER = Main.getResourcesFolder()
+			+ File.separator
+			+ "fonts";
+	
+	public static String getResourceFile(String file) {
+		return FONTS_FOLDER + File.separator + file;
 	}
 	
-	private void initialize() {
-		this.setModal(true);
-		this.setTitle(Translations.getString("general.license"));
-		this.setResizable(false);
-		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
+	public static Font getResourceFont(String file) {
+		return getFont(FONTS_FOLDER + File.separator + file);
+	}
+	
+	public static Font getFont(String file) {
+		if (fonts.containsKey(file))
+			return fonts.get(file);
 		
-		if (this.getOwner() != null)
-			this.setLocationRelativeTo(this.getOwner());
+		Font instance;
+		
+		try {
+			instance = Font.createFont(Font.TRUETYPE_FONT, new File(file));
+		} catch (Exception e) {
+			GuiLogger.getLogger().log(Level.SEVERE, "Cannot load font", e);
+			
+			return null;
+		}
+		
+		fonts.put(file, instance);
+		
+		return instance;
 	}
 	
 }
