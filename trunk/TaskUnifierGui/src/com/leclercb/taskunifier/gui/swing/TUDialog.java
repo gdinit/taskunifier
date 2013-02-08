@@ -121,6 +121,8 @@ public class TUDialog extends JDialog implements SavePropertiesListener {
 	public void dispose() {
 		if (this.dialogPanel != null)
 			this.dialogPanel.setDialog(null);
+		
+		super.dispose();
 	}
 	
 	public void loadWindowSettings(final String windowProperty) {
