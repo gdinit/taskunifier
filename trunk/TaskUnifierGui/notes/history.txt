@@ -4,6 +4,7 @@ Version 3.1.9
 		- BF 11: Error message at the end of the installation
 		- BF 130: Duplicate entries in add/remove programs
 	- Minor:
+		- BF 253: Remove beeps
 		- Fixed owner of all the dialogs
 
 Version 3.1.8
