@@ -34,6 +34,7 @@ package com.leclercb.taskunifier.gui.components.license;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -117,6 +118,7 @@ public class LicensePanel extends JPanel {
 	private void initializeLicenseInfo() {
 		this.licenseInfo = new JPanel();
 		this.licenseInfo.setLayout(new BorderLayout());
+		this.licenseInfo.setBackground(Color.WHITE);
 		
 		LicenseInfoPanel licenseInfoPanel = new LicenseInfoPanel();
 		this.licenseInfo.add(licenseInfoPanel, BorderLayout.CENTER);
@@ -134,6 +136,8 @@ public class LicensePanel extends JPanel {
 		});
 		
 		this.licenseInfoButtonsPanel = new TUButtonsPanel(this.changeLicense);
+		this.licenseInfoButtonsPanel.setOpaque(false);
+		
 		this.licenseInfo.add(this.licenseInfoButtonsPanel, BorderLayout.SOUTH);
 		
 		this.add(this.licenseInfo, "INFO");
@@ -231,7 +235,7 @@ public class LicensePanel extends JPanel {
 				
 				g2.drawString(LicensePanel.this.license.getEmail(), 200, 187);
 				g2.drawString(
-						StringValueCalendar.INSTANCE_DATE.getString(LicensePanel.this.license.getExpiration()),
+						StringValueCalendar.INSTANCE_DATE.getString(LicensePanel.this.license.getPurchaseDate()),
 						200,
 						211);
 				g2.drawString(
@@ -240,7 +244,7 @@ public class LicensePanel extends JPanel {
 						235);
 				g2.drawString(LicensePanel.this.license.getVersion(), 200, 256);
 				g2.drawString(
-						LicensePanel.this.license.getReference(),
+						StringValueCalendar.INSTANCE_DATE.getString(LicensePanel.this.license.getExpiration()),
 						200,
 						284);
 			}

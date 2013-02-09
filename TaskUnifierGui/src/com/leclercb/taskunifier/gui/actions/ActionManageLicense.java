@@ -35,6 +35,7 @@ package com.leclercb.taskunifier.gui.actions;
 import java.awt.event.ActionEvent;
 
 import com.leclercb.taskunifier.gui.components.license.LicenseDialog;
+import com.leclercb.taskunifier.gui.components.license.LicenseUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
@@ -57,6 +58,7 @@ public class ActionManageLicense extends AbstractViewAction {
 	
 	public static void manageLicense() {
 		LicenseDialog dialog = new LicenseDialog();
+		dialog.setLicense(LicenseUtils.loadLicense());
 		dialog.setVisible(true);
 		dialog.dispose();
 	}

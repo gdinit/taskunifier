@@ -149,8 +149,6 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 		else
 			this.setTitle(Constants.TITLE + " - " + Constants.VERSION);
 		
-		this.loadWindowSettings();
-		
 		this.addWindowListener(new WindowAdapter() {
 			
 			@Override
@@ -195,6 +193,7 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 		this.initializeStatusBar();
 		
 		this.pack();
+		this.loadWindowSettings();
 	}
 	
 	private void initializeTabPopupMenu() {
