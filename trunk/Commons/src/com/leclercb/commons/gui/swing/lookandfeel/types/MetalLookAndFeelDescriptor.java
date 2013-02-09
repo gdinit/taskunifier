@@ -39,6 +39,7 @@ import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.MetalTheme;
 
+import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelDecorator;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelDescriptor;
 import com.leclercb.commons.gui.swing.lookandfeel.exc.LookAndFeelException;
 
@@ -54,7 +55,8 @@ public class MetalLookAndFeelDescriptor extends LookAndFeelDescriptor {
 			MetalLookAndFeel.setCurrentTheme((MetalTheme) Class.forName(
 					this.getIdentifier()).newInstance());
 			
-			UIManager.setLookAndFeel(MetalLookAndFeel.class.getName());
+			UIManager.setLookAndFeel(new LookAndFeelDecorator(
+					new MetalLookAndFeel()));
 			
 			if (window != null) {
 				SwingUtilities.updateComponentTreeUI(window);
