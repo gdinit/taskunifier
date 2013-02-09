@@ -46,6 +46,7 @@ import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.leclercb.commons.gui.logger.GuiLogger;
+import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelDecorator;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelDescriptor;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelUtils;
 import com.leclercb.taskunifier.gui.actions.ActionCheckPluginVersion;
@@ -146,6 +147,8 @@ public class MainSwingRunnable implements Runnable {
 	}
 	
 	private void loadLookAndFeel() {
+		LookAndFeelDecorator.setErrorFeedbackEnabled(false);
+		
 		String lookAndFeel = Main.getSettings().getStringProperty(
 				"theme.lookandfeel");
 		

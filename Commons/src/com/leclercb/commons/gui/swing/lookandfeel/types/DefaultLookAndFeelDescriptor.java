@@ -34,9 +34,11 @@ package com.leclercb.commons.gui.swing.lookandfeel.types;
 
 import java.awt.Window;
 
+import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelDecorator;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelDescriptor;
 import com.leclercb.commons.gui.swing.lookandfeel.exc.LookAndFeelException;
 
@@ -49,7 +51,10 @@ public class DefaultLookAndFeelDescriptor extends LookAndFeelDescriptor {
 	@Override
 	public void setLookAndFeel(Window window) throws LookAndFeelException {
 		try {
-			UIManager.setLookAndFeel(this.getIdentifier());
+			LookAndFeel instance = (LookAndFeel) Class.forName(
+					this.getIdentifier()).newInstance();
+			
+			UIManager.setLookAndFeel(new LookAndFeelDecorator(instance));
 			
 			if (window != null) {
 				SwingUtilities.updateComponentTreeUI(window);
