@@ -58,11 +58,16 @@ public final class LicenseUtils {
 			+ "ueWj+kkbI7WvLj2z41u+/uH9lU4WIQOifBh0fP0+"
 			+ "WpZqcw7QXwIDAQAB";
 	
+	private static License LICENSE;
+	
 	private LicenseUtils() {
 		
 	}
 	
 	public static License loadLicense() {
+		if (LICENSE != null)
+			return LICENSE;
+		
 		try {
 			File file = new File(Main.getLicenseFile());
 			String license = FileUtils.readFileToString(file, "UTF-8");
@@ -89,6 +94,8 @@ public final class LicenseUtils {
 			
 			File file = new File(Main.getLicenseFile());
 			FileUtils.writeStringToFile(file, license);
+			
+			LICENSE = null;
 			
 			Main.reloadProVersion();
 		} catch (Exception e) {

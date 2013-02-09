@@ -47,7 +47,6 @@ public class LicenseDialogPanel extends TUDialogPanel {
 	protected static LicenseDialogPanel getInstance() {
 		if (INSTANCE == null) {
 			INSTANCE = new LicenseDialogPanel();
-			INSTANCE.setLicense(LicenseUtils.loadLicense());
 		}
 		
 		return INSTANCE;
