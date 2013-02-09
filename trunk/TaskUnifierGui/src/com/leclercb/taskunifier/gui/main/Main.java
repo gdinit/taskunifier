@@ -607,7 +607,7 @@ public class Main {
 	private static void loadLookAndFeel() throws Exception {
 		// jGoodies
 		Properties jgoodies = new Properties();
-		jgoodies.load(Resources.class.getResourceAsStream("jgoodies_themes.properties"));
+		jgoodies.load(Resources.class.getResourceAsStream("themes_jgoodies.properties"));
 		
 		for (Object key : jgoodies.keySet()) {
 			LookAndFeelUtils.addLookAndFeel(new DefaultLookAndFeelDescriptor(
@@ -617,7 +617,7 @@ public class Main {
 		
 		// jTattoo
 		Properties jtattoo = new Properties();
-		jtattoo.load(Resources.class.getResourceAsStream("jtattoo_themes.properties"));
+		jtattoo.load(Resources.class.getResourceAsStream("themes_jtattoo.properties"));
 		
 		for (Object key : jtattoo.keySet()) {
 			LookAndFeelUtils.addLookAndFeel(new JTattooLookAndFeelDescriptor(
