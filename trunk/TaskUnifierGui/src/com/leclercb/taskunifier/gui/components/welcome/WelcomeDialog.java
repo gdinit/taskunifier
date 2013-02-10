@@ -52,6 +52,7 @@ import com.leclercb.taskunifier.gui.components.configuration.SynchronizationConf
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 import com.leclercb.taskunifier.gui.components.welcome.panels.CardInterface;
 import com.leclercb.taskunifier.gui.components.welcome.panels.CardPanel;
+import com.leclercb.taskunifier.gui.components.welcome.panels.LicensePanel;
 import com.leclercb.taskunifier.gui.components.welcome.panels.SettingsPanel;
 import com.leclercb.taskunifier.gui.components.welcome.panels.WelcomePanel;
 import com.leclercb.taskunifier.gui.main.Main;
@@ -83,7 +84,9 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 			this.panels.add(new WelcomePanel(messages, messageButtons));
 			
 			// TODO: PRO
-			// this.panels.add(new LicensePanel());
+			if (Main.isTmpProVersion()) {
+				this.panels.add(new LicensePanel());
+			}
 			
 			this.panels.add(new SettingsPanel(
 					Translations.getString("configuration.tab.general"),

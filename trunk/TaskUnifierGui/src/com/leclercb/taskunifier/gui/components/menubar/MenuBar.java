@@ -75,6 +75,7 @@ import com.leclercb.taskunifier.gui.actions.ActionExpandAll;
 import com.leclercb.taskunifier.gui.actions.ActionExportModels;
 import com.leclercb.taskunifier.gui.actions.ActionExportNoteSearchers;
 import com.leclercb.taskunifier.gui.actions.ActionExportSettings;
+import com.leclercb.taskunifier.gui.actions.ActionExportTaskRules;
 import com.leclercb.taskunifier.gui.actions.ActionExportTaskSearchers;
 import com.leclercb.taskunifier.gui.actions.ActionExportTaskTemplates;
 import com.leclercb.taskunifier.gui.actions.ActionExportVCard;
@@ -84,6 +85,7 @@ import com.leclercb.taskunifier.gui.actions.ActionImportComFile;
 import com.leclercb.taskunifier.gui.actions.ActionImportModels;
 import com.leclercb.taskunifier.gui.actions.ActionImportNoteSearchers;
 import com.leclercb.taskunifier.gui.actions.ActionImportSettings;
+import com.leclercb.taskunifier.gui.actions.ActionImportTaskRules;
 import com.leclercb.taskunifier.gui.actions.ActionImportTaskSearchers;
 import com.leclercb.taskunifier.gui.actions.ActionImportTaskTemplates;
 import com.leclercb.taskunifier.gui.actions.ActionImportVCard;
@@ -91,9 +93,11 @@ import com.leclercb.taskunifier.gui.actions.ActionLogBug;
 import com.leclercb.taskunifier.gui.actions.ActionLogFeatureRequest;
 import com.leclercb.taskunifier.gui.actions.ActionMailTo;
 import com.leclercb.taskunifier.gui.actions.ActionManageBackups;
+import com.leclercb.taskunifier.gui.actions.ActionManageLicense;
 import com.leclercb.taskunifier.gui.actions.ActionManageModels;
 import com.leclercb.taskunifier.gui.actions.ActionManagePublisherPlugins;
 import com.leclercb.taskunifier.gui.actions.ActionManageSynchronizerPlugins;
+import com.leclercb.taskunifier.gui.actions.ActionManageTaskRules;
 import com.leclercb.taskunifier.gui.actions.ActionManageTaskTemplates;
 import com.leclercb.taskunifier.gui.actions.ActionManageUsers;
 import com.leclercb.taskunifier.gui.actions.ActionNewWindow;
@@ -112,6 +116,7 @@ import com.leclercb.taskunifier.gui.actions.ActionSynchronizeAndPublish;
 import com.leclercb.taskunifier.gui.actions.ActionTaskReminders;
 import com.leclercb.taskunifier.gui.components.views.ViewType;
 import com.leclercb.taskunifier.gui.constants.Constants;
+import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
@@ -141,8 +146,10 @@ public class MenuBar extends JMenuBar implements ListChangeListener, PropertyCha
 		this.add(fileMenu);
 		
 		// TODO: PRO
-		// fileMenu.add(new ActionManageLicense(16, 16));
-		// fileMenu.addSeparator();
+		if (Main.isTmpProVersion()) {
+			fileMenu.add(new ActionManageLicense(16, 16));
+			fileMenu.addSeparator();
+		}
 		
 		fileMenu.add(new ActionNewWindow(16, 16));
 		fileMenu.add(new ActionCloseWindow(16, 16));
@@ -166,7 +173,9 @@ public class MenuBar extends JMenuBar implements ListChangeListener, PropertyCha
 		importMenu.add(new ActionImportSettings(16, 16));
 		importMenu.add(new ActionImportNoteSearchers(16, 16));
 		// TODO: PRO
-		// importMenu.add(new ActionImportTaskRules(16, 16));
+		if (Main.isTmpProVersion()) {
+			importMenu.add(new ActionImportTaskRules(16, 16));
+		}
 		importMenu.add(new ActionImportTaskSearchers(16, 16));
 		importMenu.add(new ActionImportTaskTemplates(16, 16));
 		importMenu.add(new ActionImportVCard(16, 16));
@@ -179,7 +188,9 @@ public class MenuBar extends JMenuBar implements ListChangeListener, PropertyCha
 		exportMenu.add(new ActionExportSettings(16, 16));
 		exportMenu.add(new ActionExportNoteSearchers(16, 16));
 		// TODO: PRO
-		// exportMenu.add(new ActionExportTaskRules(16, 16));
+		if (Main.isTmpProVersion()) {
+			exportMenu.add(new ActionExportTaskRules(16, 16));
+		}
 		exportMenu.add(new ActionExportTaskSearchers(16, 16));
 		exportMenu.add(new ActionExportTaskTemplates(16, 16));
 		exportMenu.add(new ActionExportVCard(16, 16));
@@ -270,7 +281,9 @@ public class MenuBar extends JMenuBar implements ListChangeListener, PropertyCha
 		tasksMenu.addSeparator();
 		
 		// TODO: PRO
-		// tasksMenu.add(new ActionManageTaskRules(16, 16));
+		if (Main.isTmpProVersion()) {
+			tasksMenu.add(new ActionManageTaskRules(16, 16));
+		}
 		tasksMenu.add(new ActionManageTaskTemplates(16, 16));
 		tasksMenu.add(new ActionCreateTaskTemplateFromTask(16, 16));
 		tasksMenu.add(new ActionTaskReminders(16, 16));

@@ -161,6 +161,10 @@ public class Main {
 		return PRO_VERSION;
 	}
 	
+	public static boolean isTmpProVersion() {
+		return DEVELOPER_MODE;
+	}
+	
 	private static String getLockFile() {
 		return DATA_FOLDER + File.separator + "taskunifier.lock";
 	}

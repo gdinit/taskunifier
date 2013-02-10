@@ -97,7 +97,8 @@ public class TaskRuleConfigurationDialogPanel extends TUDialogPanel {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				TaskRuleConfigurationDialogPanel.this.ruleConfigurationPanel.close();
-				TaskRuleConfigurationDialogPanel.this.setVisible(false);
+				TaskRuleConfigurationDialogPanel.this.getDialog().setVisible(
+						false);
 			}
 			
 		};
