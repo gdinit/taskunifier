@@ -108,7 +108,7 @@ public class ThemeConfigurationPanel extends ConfigurationPanel implements Actio
 	
 	private void checkTaskCustomColumnListPanel() {
 		// TODO: PRO
-		if (true)
+		if (!Main.isTmpProVersion())
 			return;
 		
 		if (Main.isProVersion()) {
