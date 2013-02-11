@@ -50,7 +50,6 @@ import org.apache.commons.lang3.SystemUtils;
 import com.leclercb.commons.api.event.action.ActionSupport;
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
-import com.leclercb.commons.api.license.exceptions.NoLicenseException;
 import com.leclercb.commons.api.plugins.PluginLoader;
 import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.commons.api.properties.SortedProperties;
@@ -584,11 +583,6 @@ public class Main {
 				LicenseUtils.checkLicense();
 			
 			PRO_VERSION = true;
-		} catch (NoLicenseException e) {
-			if (Main.isFirstExecution())
-				; // TODO: generate trial license
-				
-			PRO_VERSION = false;
 		} catch (Exception e) {
 			PRO_VERSION = false;
 		}
