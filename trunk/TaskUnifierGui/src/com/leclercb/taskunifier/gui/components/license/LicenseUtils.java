@@ -43,6 +43,7 @@ import org.apache.commons.io.FileUtils;
 import com.leclercb.commons.api.license.License;
 import com.leclercb.commons.api.license.LicenseManager;
 import com.leclercb.commons.api.license.exceptions.LicenseException;
+import com.leclercb.commons.api.license.exceptions.NoLicenseException;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.constants.Constants;
@@ -104,10 +105,17 @@ public final class LicenseUtils {
 	}
 	
 	public static void checkLicense() throws LicenseException {
-		License l = loadLicense();
+		License license = loadLicense();
+		
+		checkLicense(license);
+	}
+	
+	public static void checkLicense(License license) throws LicenseException {
+		if (license == null)
+			throw new NoLicenseException();
 		
 		try {
-			l.validate(Calendar.getInstance(), Constants.VERSION);
+			license.validate(Calendar.getInstance(), Constants.VERSION);
 		} catch (LicenseException e) {
 			GuiLogger.getLogger().log(
 					Level.SEVERE,

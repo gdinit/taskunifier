@@ -50,6 +50,7 @@ import org.apache.commons.lang3.SystemUtils;
 import com.leclercb.commons.api.event.action.ActionSupport;
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
+import com.leclercb.commons.api.license.exceptions.NoLicenseException;
 import com.leclercb.commons.api.plugins.PluginLoader;
 import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.commons.api.properties.SortedProperties;
@@ -88,6 +89,7 @@ import com.leclercb.taskunifier.gui.api.plugins.exc.PluginException;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.commons.properties.PropertiesUtils;
+import com.leclercb.taskunifier.gui.components.license.LicenseUtils;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.main.MainLoadFiles;
@@ -578,8 +580,15 @@ public class Main {
 	private static void loadProVersion() {
 		try {
 			// TODO: check license
-			// LicenseUtils.checkLicense();
+			if (false)
+				LicenseUtils.checkLicense();
+			
 			PRO_VERSION = true;
+		} catch (NoLicenseException e) {
+			if (Main.isFirstExecution())
+				; // TODO: generate trial license
+				
+			PRO_VERSION = false;
 		} catch (Exception e) {
 			PRO_VERSION = false;
 		}

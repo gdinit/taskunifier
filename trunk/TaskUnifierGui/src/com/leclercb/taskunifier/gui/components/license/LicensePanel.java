@@ -53,6 +53,8 @@ import javax.swing.JTextArea;
 
 import com.leclercb.commons.api.license.License;
 import com.leclercb.commons.api.license.LicenseManager;
+import com.leclercb.commons.api.license.exceptions.LicenseExpiredException;
+import com.leclercb.commons.api.license.exceptions.LicenseVersionExpiredException;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
 import com.leclercb.taskunifier.gui.resources.Resources;
@@ -65,6 +67,7 @@ import com.leclercb.taskunifier.gui.utils.ImageUtils;
 public class LicensePanel extends JPanel {
 	
 	private License license;
+	private boolean expired;
 	
 	private JPanel licenseInfo;
 	private JPanel licenseEnter;
@@ -84,7 +87,20 @@ public class LicensePanel extends JPanel {
 	public void setLicense(License license) {
 		this.license = license;
 		
-		if (license == null) {
+		boolean show = true;
+		this.expired = false;
+		
+		try {
+			LicenseUtils.checkLicense(license);
+		} catch (LicenseExpiredException e) {
+			this.expired = true;
+		} catch (LicenseVersionExpiredException e) {
+			this.expired = true;
+		} catch (Exception e) {
+			show = false;
+		}
+		
+		if (license == null || !show) {
 			this.licenseArea.setText("");
 			
 			CardLayout layout = (CardLayout) this.getLayout();
