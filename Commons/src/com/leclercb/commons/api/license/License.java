@@ -157,8 +157,8 @@ public class License {
 		PropertyMap p = new PropertyMap();
 		p.setStringProperty("name", this.name);
 		p.setStringProperty("email", this.email);
-		p.setCalendarProperty("purchaseDate", this.purchaseDate);
-		p.setEnumProperty("licenseType", LicenseType.class, this.licenseType);
+		p.setCalendarProperty("purchase_date", this.purchaseDate);
+		p.setEnumProperty("license_type", LicenseType.class, this.licenseType);
 		p.setStringProperty("version", this.version);
 		p.setCalendarProperty("expiration", this.expiration);
 		p.setStringProperty("reference", this.reference);
@@ -176,8 +176,8 @@ public class License {
 		License l = new License();
 		l.setName(p.getStringProperty("name"));
 		l.setEmail(p.getStringProperty("email"));
-		l.setPurchaseDate(p.getCalendarProperty("purchaseDate"));
-		l.setLicenseType(p.getEnumProperty("licenseType", LicenseType.class));
+		l.setPurchaseDate(p.getCalendarProperty("purchase_date"));
+		l.setLicenseType(p.getEnumProperty("license_type", LicenseType.class));
 		l.setVersion(p.getStringProperty("version"));
 		l.setExpiration(p.getCalendarProperty("expiration"));
 		l.setReference(p.getStringProperty("reference"));
