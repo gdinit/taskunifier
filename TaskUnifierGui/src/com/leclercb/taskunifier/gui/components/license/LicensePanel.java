@@ -53,6 +53,7 @@ import javax.swing.JTextArea;
 
 import com.leclercb.commons.api.license.License;
 import com.leclercb.commons.api.license.LicenseManager;
+import com.leclercb.commons.api.license.LicenseType;
 import com.leclercb.commons.api.license.exceptions.LicenseExpiredException;
 import com.leclercb.commons.api.license.exceptions.LicenseVersionExpiredException;
 import com.leclercb.commons.gui.logger.GuiLogger;
@@ -263,6 +264,23 @@ public class LicensePanel extends JPanel {
 						StringValueCalendar.INSTANCE_DATE.getString(LicensePanel.this.license.getExpiration()),
 						200,
 						284);
+				
+				if (LicensePanel.this.expired) {
+					ImageIcon expiredIcon = ImageUtils.getResourceImage("expired.png");
+					
+					g2.drawImage(
+							expiredIcon.getImage(),
+							(this.getWidth() - expiredIcon.getIconWidth()) / 2,
+							(this.getHeight() - expiredIcon.getIconHeight()) / 2,
+							null);
+				} else if (LicensePanel.this.license.getLicenseType() == LicenseType.TRIAL) {
+					ImageIcon trialIcon = ImageUtils.getResourceImage(
+							"trial.png",
+							100,
+							100);
+					
+					g2.drawImage(trialIcon.getImage(), 50, 55, null);
+				}
 			}
 		}
 		
