@@ -1,2 +1,2 @@
 - Translate accessor types
-- Fix layout batch edit tasks
+- Translate license types

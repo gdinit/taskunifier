@@ -8,7 +8,7 @@ Compression=lzma2
 SolidCompression=yes
 OutputDir=..\temp
 ArchitecturesInstallIn64BitMode=x64
-LicenseFile=..\temp\TaskUnifier\licence.txt
+LicenseFile=..\temp\TaskUnifier\license.txt
 
 AppPublisher=TaskUnifier
 AppPublisherURL=http://www.taskunifier.com

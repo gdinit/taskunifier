@@ -218,7 +218,7 @@ public class LicensePanel extends JPanel {
 	private class LicenseInfoPanel extends JPanel {
 		
 		public LicenseInfoPanel() {
-			ImageIcon icon = ImageUtils.getResourceImage("licence.png");
+			ImageIcon icon = ImageUtils.getResourceImage("license.png");
 			this.setPreferredSize(new Dimension(
 					icon.getIconWidth(),
 					icon.getIconHeight()));
@@ -233,7 +233,7 @@ public class LicensePanel extends JPanel {
 					RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
 			
-			ImageIcon icon = ImageUtils.getResourceImage("licence.png");
+			ImageIcon icon = ImageUtils.getResourceImage("license.png");
 			
 			g2.drawImage(icon.getImage(), 0, 0, null);
 			
