@@ -187,6 +187,11 @@ public class LicensePanel extends JPanel {
 					License l = lm.readLicense(LicensePanel.this.licenseArea.getText());
 					
 					if (l != null) {
+						if (l.getLicenseType() == LicenseType.TRIAL) {
+							// TODO: multiple trials not allowed
+							// Sign message in settings ?
+						}
+						
 						LicenseUtils.saveLicense(LicensePanel.this.licenseArea.getText());
 						LicensePanel.this.setLicense(l);
 					} else {
