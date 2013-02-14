@@ -46,7 +46,7 @@ import com.leclercb.taskunifier.gui.components.views.ViewType;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 
-public abstract class AbstractViewAction extends AbstractAction implements PropertyChangeListener {
+abstract class AbstractViewAction extends AbstractAction implements PropertyChangeListener {
 	
 	private ViewType[] enabledViews;
 	private boolean proRequired;

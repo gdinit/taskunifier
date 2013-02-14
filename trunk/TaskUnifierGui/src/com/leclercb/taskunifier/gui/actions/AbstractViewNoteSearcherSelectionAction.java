@@ -48,7 +48,7 @@ import com.leclercb.taskunifier.gui.components.views.ViewList;
 import com.leclercb.taskunifier.gui.components.views.ViewType;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 
-public abstract class AbstractViewNoteSearcherSelectionAction extends AbstractViewAction implements NoteSearcherSelectionListener, PropertyChangeListener {
+abstract class AbstractViewNoteSearcherSelectionAction extends AbstractViewAction implements NoteSearcherSelectionListener, PropertyChangeListener {
 	
 	public AbstractViewNoteSearcherSelectionAction() {
 		this(null, null);

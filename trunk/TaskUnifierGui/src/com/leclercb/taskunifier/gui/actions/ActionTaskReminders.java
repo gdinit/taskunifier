@@ -38,7 +38,7 @@ import java.awt.event.ActionEvent;
 import org.apache.commons.lang3.SystemUtils;
 
 import com.leclercb.taskunifier.gui.components.reminder.ReminderFrame;
-import com.leclercb.taskunifier.gui.main.MacApplication;
+import com.leclercb.taskunifier.gui.main.main.MacApplication;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
