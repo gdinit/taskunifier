@@ -50,7 +50,7 @@ public class UserDialog extends TUDialog {
 	private void initialize() {
 		this.setModal(true);
 		this.setTitle(Translations.getString("general.manage_users"));
-		this.setSize(800, 350);
+		this.setSize(700, 350);
 		this.setResizable(true);
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		
