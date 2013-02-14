@@ -49,7 +49,7 @@ import com.leclercb.taskunifier.gui.components.views.ViewList;
 import com.leclercb.taskunifier.gui.components.views.ViewType;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 
-public abstract class AbstractViewTaskSelectionAction extends AbstractViewAction implements ModelSelectionListener, PropertyChangeListener {
+abstract class AbstractViewTaskSelectionAction extends AbstractViewAction implements ModelSelectionListener, PropertyChangeListener {
 	
 	public AbstractViewTaskSelectionAction() {
 		this(null, null);

@@ -34,6 +34,7 @@ package com.leclercb.taskunifier.gui.components.pro;
 
 import java.awt.BorderLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -56,6 +57,7 @@ public class ProPanel extends JPanel {
 	
 	private void initialize() {
 		this.setLayout(new BorderLayout());
+		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
 		JXLabel label = new JXLabel("license.pro_version_required");
 		
