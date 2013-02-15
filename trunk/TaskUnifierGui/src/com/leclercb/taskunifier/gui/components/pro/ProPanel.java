@@ -33,6 +33,8 @@
 package com.leclercb.taskunifier.gui.components.pro;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -40,14 +42,29 @@ import javax.swing.JPanel;
 
 import org.jdesktop.swingx.JXLabel;
 
+import com.leclercb.commons.api.event.action.ActionSupport;
+import com.leclercb.commons.api.event.action.ActionSupported;
+import com.leclercb.commons.api.utils.EqualsUtils;
+import com.leclercb.taskunifier.gui.actions.ActionManageLicense;
+import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
+import com.leclercb.taskunifier.gui.utils.DesktopUtils;
 
-public class ProPanel extends JPanel {
+public class ProPanel extends JPanel implements ActionSupported {
+	
+	public static final String ACTION_MORE_INFO = "MORE_INFO";
+	public static final String ACTION_GET_TRIAL = "GET_TRIAL";
+	public static final String ACTION_BUY_LICENSE = "BUY_LICENSE";
+	public static final String ACTION_ENTER_LICENSE = "ENTER_LICENSE";
+	
+	private ActionSupport actionSupport;
 	
 	private TUButtonsPanel buttonsPanel;
 	
 	public ProPanel() {
+		this.actionSupport = new ActionSupport(this);
+		
 		this.initialize();
 	}
 	
@@ -63,11 +80,44 @@ public class ProPanel extends JPanel {
 		
 		this.add(label, BorderLayout.CENTER);
 		
+		ActionListener listener = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				if (EqualsUtils.equals("MORE_INFO", event.getActionCommand()))
+					ProPanel.this.moreInfo();
+				
+				if (EqualsUtils.equals("GET_TRIAL", event.getActionCommand()))
+					ProPanel.this.getTrial();
+				
+				if (EqualsUtils.equals("BUY_LICENSE", event.getActionCommand()))
+					ProPanel.this.buyLicense();
+				
+				if (EqualsUtils.equals(
+						"ENTER_LICENSE",
+						event.getActionCommand()))
+					ProPanel.this.enterLicense();
+			}
+			
+		};
+		
 		JButton moreInfoButton = new JButton("More Info");
+		moreInfoButton.setActionCommand("MORE_INFO");
+		moreInfoButton.addActionListener(listener);
+		
 		JButton getTrialButton = new JButton("Get Trial");
-		JButton buyLicenseButton = new JButton("license.buy_license");
+		getTrialButton.setActionCommand("GET_TRIAL");
+		getTrialButton.addActionListener(listener);
+		
+		JButton buyLicenseButton = new JButton(
+				Translations.getString("license.buy_license"));
+		buyLicenseButton.setActionCommand("BUY_LICENSE");
+		buyLicenseButton.addActionListener(listener);
+		
 		JButton enterLicenseButton = new JButton(
 				Translations.getString("license.enter_license"));
+		enterLicenseButton.setActionCommand("ENTER_LICENSE");
+		enterLicenseButton.addActionListener(listener);
 		
 		this.buttonsPanel = new TUButtonsPanel(
 				moreInfoButton,
@@ -76,6 +126,36 @@ public class ProPanel extends JPanel {
 				enterLicenseButton);
 		
 		this.add(this.buttonsPanel, BorderLayout.SOUTH);
+	}
+	
+	public void moreInfo() {
+		DesktopUtils.browse(Constants.PRO_URL);
+		this.actionSupport.fireActionPerformed(0, ACTION_MORE_INFO);
+	}
+	
+	public void getTrial() {
+		DesktopUtils.browse(Constants.PRO_URL);
+		this.actionSupport.fireActionPerformed(0, ACTION_GET_TRIAL);
+	}
+	
+	public void buyLicense() {
+		DesktopUtils.browse(Constants.PRO_URL);
+		this.actionSupport.fireActionPerformed(0, ACTION_BUY_LICENSE);
+	}
+	
+	public void enterLicense() {
+		ActionManageLicense.manageLicense();
+		this.actionSupport.fireActionPerformed(0, ACTION_ENTER_LICENSE);
+	}
+	
+	@Override
+	public void addActionListener(ActionListener listener) {
+		this.actionSupport.addActionListener(listener);
+	}
+	
+	@Override
+	public void removeActionListener(ActionListener listener) {
+		this.actionSupport.removeActionListener(listener);
 	}
 	
 }

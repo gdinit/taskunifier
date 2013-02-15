@@ -36,6 +36,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCloseButton;
 
@@ -62,6 +63,18 @@ public class ProDialogPanel extends TUDialogPanel {
 		
 		this.proPanel = new ProPanel();
 		this.add(this.proPanel, BorderLayout.CENTER);
+		
+		this.proPanel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				if (EqualsUtils.equals(
+						ProPanel.ACTION_ENTER_LICENSE,
+						event.getActionCommand()))
+					ProDialogPanel.this.getDialog().setVisible(false);
+			}
+			
+		});
 		
 		this.initializeButtonsPanel();
 	}
