@@ -147,7 +147,7 @@
 	<target depends="taskunifier-version-underscored, check-os" name="create-installer-windows" if="isWindows">
 		<echo message="Creating windows installer zip file..."/>
 		<exec dir="." executable="cmd">
-		  <arg line="/c tools\\innosetup\\innosetup.bat"/>
+		  <arg line="/c tools\\innosetup\\innosetup.bat ${taskunifier.version}"/>
 		</exec>
 		<zip destfile="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/TaskUnifier_${taskunifier.version.underscored}_installer_windows.zip" basedir="${directory.exe}/temp" includes="setup.exe"/>
 	</target>
