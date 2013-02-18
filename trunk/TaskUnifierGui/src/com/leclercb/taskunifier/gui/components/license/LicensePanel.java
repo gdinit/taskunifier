@@ -111,6 +111,7 @@ public class LicensePanel extends JPanel {
 		
 		this.licenseArea.setText("");
 		this.licenseInfo.revalidate();
+		this.getTrialButton.setEnabled(LicenseUtils.isFirstTrialLicense());
 		
 		if (license == null || !show) {
 			if (getTrial) {
@@ -203,8 +204,21 @@ public class LicensePanel extends JPanel {
 			
 		});
 		
+		this.getTrialButton = new JButton(
+				Translations.getString("license.get_trial"));
+		this.getTrialButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				CardLayout layout = (CardLayout) LicensePanel.this.getLayout();
+				layout.show(LicensePanel.this, "GET_TRIAL");
+			}
+			
+		});
+		
 		this.licenseEnterButtonsPanel = new TUButtonsPanel(
-				this.enterLicenseButton);
+				this.enterLicenseButton,
+				this.getTrialButton);
 		this.licenseEnter.add(this.licenseEnterButtonsPanel, BorderLayout.SOUTH);
 		
 		this.add(this.licenseEnter, "ENTER");
@@ -238,9 +252,9 @@ public class LicensePanel extends JPanel {
 		builder.appendI15d("license.get_trial.last_name", true, lastName);
 		builder.appendI15d("license.get_trial.email", true, email);
 		
-		this.getTrialButton = new JButton(
+		JButton getTrialButton = new JButton(
 				Translations.getString("license.get_trial"));
-		this.getTrialButton.addActionListener(new ActionListener() {
+		getTrialButton.addActionListener(new ActionListener() {
 			
 			GetTrialActionListener listener = new GetTrialActionListener();
 			
@@ -265,8 +279,7 @@ public class LicensePanel extends JPanel {
 		
 		panel.add(builder.getPanel(), BorderLayout.CENTER);
 		
-		this.licenseGetTrialButtonsPanel = new TUButtonsPanel(
-				this.getTrialButton);
+		this.licenseGetTrialButtonsPanel = new TUButtonsPanel(getTrialButton);
 		panel.add(this.licenseGetTrialButtonsPanel, BorderLayout.SOUTH);
 		
 		this.add(this.licenseGetTrial, "GET_TRIAL");
@@ -280,8 +293,10 @@ public class LicensePanel extends JPanel {
 			
 			if (l != null) {
 				if (l.getLicenseType() == LicenseType.TRIAL) {
-					// TODO: multiple trials not allowed
-					// Sign message in settings ?
+					if (!LicenseUtils.isFirstTrialLicense()) {
+						// TODO: multiple trials not allowed
+						// Sign message in settings ?
+					}
 				}
 				
 				LicenseUtils.saveLicense(license);
