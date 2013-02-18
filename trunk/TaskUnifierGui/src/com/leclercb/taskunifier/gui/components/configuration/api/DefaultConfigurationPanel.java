@@ -43,8 +43,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import org.jdesktop.swingx.JXLabel;
-
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.gui.components.help.Help;
@@ -156,7 +154,7 @@ public abstract class DefaultConfigurationPanel extends ConfigurationPanel {
 		FormBuilder builder = new FormBuilder(
 				"right:pref, 4dlu, fill:default:grow");
 		
-		JXLabel label = null;
+		JLabel label = null;
 		Component component = null;
 		
 		if (this.helpButton != null) {
@@ -167,11 +165,9 @@ public abstract class DefaultConfigurationPanel extends ConfigurationPanel {
 		
 		for (ConfigurationField field : this.fields) {
 			if (field.getLabel() == null)
-				label = new JXLabel();
+				label = new JLabel();
 			else
-				label = new JXLabel(field.getLabel() + ":");
-			
-			label.setLineWrap(true);
+				label = new JLabel("<html>" + field.getLabel() + ":</html>");
 			
 			field.getType().initializeFieldComponent();
 			component = field.getType().getFieldComponent();

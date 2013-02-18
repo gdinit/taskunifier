@@ -53,6 +53,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
@@ -149,13 +150,10 @@ public interface ConfigurationFieldType<ComponentType extends JComponent, ValueT
 		
 	}
 	
-	public static class Label extends JTextArea implements ConfigurationFieldType<JTextArea, Void> {
+	public static class Label extends JLabel implements ConfigurationFieldType<JLabel, Void> {
 		
 		public Label(String label) {
-			super(label);
-			this.setOpaque(false);
-			this.setLineWrap(true);
-			this.setWrapStyleWord(true);
+			super("<html>" + label + "</html>");
 		}
 		
 		@Override
@@ -164,7 +162,7 @@ public interface ConfigurationFieldType<ComponentType extends JComponent, ValueT
 		}
 		
 		@Override
-		public JTextArea getFieldComponent() {
+		public JLabel getFieldComponent() {
 			return this;
 		}
 		
