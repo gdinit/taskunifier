@@ -44,8 +44,8 @@ public class LicenseDialog extends TUDialog {
 		this.initialize();
 	}
 	
-	public void setLicense(License license) {
-		LicenseDialogPanel.getInstance().setLicense(license);
+	public void setLicense(License license, boolean getTrial) {
+		LicenseDialogPanel.getInstance().setLicense(license, getTrial);
 	}
 	
 	private void initialize() {

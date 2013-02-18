@@ -58,7 +58,7 @@ public class LicensePanel extends CardPanel {
 		this.add(header, BorderLayout.NORTH);
 		
 		com.leclercb.taskunifier.gui.components.license.LicensePanel licensePanel = new com.leclercb.taskunifier.gui.components.license.LicensePanel();
-		licensePanel.setLicense(LicenseUtils.loadLicense());
+		licensePanel.setLicense(LicenseUtils.loadLicense(), false);
 		licensePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		
 		this.add(licensePanel, BorderLayout.CENTER);
