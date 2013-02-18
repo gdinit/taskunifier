@@ -52,6 +52,7 @@ import com.leclercb.taskunifier.gui.resources.Resources;
 
 public final class LicenseUtils {
 	
+	// openssl genrsa -des3 -out private_key 2048
 	private static final String PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCY"
 			+ "kSwG7upH9Y1Mq155AAHIQy+rGMrLs614j4cs6A/m"
 			+ "kBRYm7sdumhE16hwsaWF5RXPN/2tesM/bAlr3Y4z"
