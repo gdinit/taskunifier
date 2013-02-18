@@ -81,9 +81,12 @@ public final class Constants {
 	public static final int WAIT_NO_LICENSE_ADDED_TIME = 15;
 	public static final int MAX_NO_LICENSE_SYNCS = 50;
 	
+	public static final int ITEM_TRIAL_ID = 11;
+	
 	public static final String PLUGINS_FILE = "http://www.taskunifier.com/plugins/plugins.xml";
 	public static final String VERSION_FILE = "http://www.taskunifier.com/version.txt";
 	public static final String PRO_URL = "http://www.taskunifier.com/index.php?page=pro";
+	public static final String GET_TRIAL_URL = "http://www.taskunifier.com/php/services/trial_license.php";
 	public static final String DOWNLOAD_URL = "http://www.taskunifier.com/index.php?page=download";
 	public static final String DONATE_URL = "http://sourceforge.net/p/taskunifier/donate/";
 	public static final String REVIEW_URL = "http://sourceforge.net/projects/taskunifier/reviews/";
