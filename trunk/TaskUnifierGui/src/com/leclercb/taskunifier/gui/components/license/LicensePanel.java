@@ -52,6 +52,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.jdesktop.swingx.JXHeader;
+
 import com.leclercb.commons.api.license.License;
 import com.leclercb.commons.api.license.LicenseManager;
 import com.leclercb.commons.api.license.LicenseType;
@@ -64,6 +66,7 @@ import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.FontUtils;
+import com.leclercb.taskunifier.gui.utils.FormBuilder;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class LicensePanel extends JPanel {
@@ -195,34 +198,7 @@ public class LicensePanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				try {
-					InputStream publicKey = Resources.class.getResourceAsStream("public_key");
-					LicenseManager lm = new LicenseManager(publicKey, null);
-					License l = lm.readLicense(LicensePanel.this.licenseArea.getText());
-					
-					if (l != null) {
-						if (l.getLicenseType() == LicenseType.TRIAL) {
-							// TODO: multiple trials not allowed
-							// Sign message in settings ?
-						}
-						
-						LicenseUtils.saveLicense(LicensePanel.this.licenseArea.getText());
-						LicensePanel.this.setLicense(l, false);
-					} else {
-						GuiLogger.getLogger().log(
-								Level.WARNING,
-								"Incorrect license: "
-										+ LicensePanel.this.licenseArea.getText());
-					}
-				} catch (Exception e) {
-					GuiLogger.getLogger().log(
-							Level.WARNING,
-							"Incorrect license: "
-									+ LicensePanel.this.licenseArea.getText(),
-							e);
-				}
-				
-				// TODO: license incorrect message
+				LicensePanel.this.saveLicense(LicensePanel.this.licenseArea.getText());
 			}
 			
 		});
@@ -237,33 +213,92 @@ public class LicensePanel extends JPanel {
 	public void initializeLicenseGetTrial() {
 		this.licenseGetTrial = new JPanel();
 		this.licenseGetTrial.setLayout(new BorderLayout(5, 5));
-		this.licenseGetTrial.setBorder(BorderFactory.createEmptyBorder(
-				10,
-				10,
-				0,
-				10));
 		
-		JTextField firstName = new JTextField();
-		JTextField lastName = new JTextField();
-		JTextField email = new JTextField();
+		JXHeader header = new JXHeader();
+		header.setTitle(Translations.getString("header.title.get_trial"));
+		header.setDescription(Translations.getString("header.description.get_trial"));
+		header.setIcon(ImageUtils.getResourceImage("key.png", 32, 32));
 		
-		this.getTrialButton = new JButton();
+		this.licenseGetTrial.add(header, BorderLayout.NORTH);
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
+		
+		this.licenseGetTrial.add(panel, BorderLayout.CENTER);
+		
+		FormBuilder builder = new FormBuilder(
+				"right:pref, 4dlu, fill:default:grow");
+		
+		final JTextField firstName = new JTextField();
+		final JTextField lastName = new JTextField();
+		final JTextField email = new JTextField();
+		
+		builder.appendI15d("license.get_trial.first_name", true, firstName);
+		builder.appendI15d("license.get_trial.last_name", true, lastName);
+		builder.appendI15d("license.get_trial.email", true, email);
+		
+		this.getTrialButton = new JButton(
+				Translations.getString("license.get_trial"));
 		this.getTrialButton.addActionListener(new ActionListener() {
+			
+			GetTrialActionListener listener = new GetTrialActionListener();
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				// TODO get trial
+				this.listener.setInfo(
+						firstName.getText(),
+						lastName.getText(),
+						email.getText());
+				this.listener.actionPerformed(event);
+				
+				if (this.listener.getLicense() != null) {
+					firstName.setText(null);
+					lastName.setText(null);
+					email.setText(null);
+					
+					LicensePanel.this.saveLicense(this.listener.getLicense());
+				}
 			}
 			
 		});
 		
+		panel.add(builder.getPanel(), BorderLayout.CENTER);
+		
 		this.licenseGetTrialButtonsPanel = new TUButtonsPanel(
 				this.getTrialButton);
-		this.licenseGetTrial.add(
-				this.licenseGetTrialButtonsPanel,
-				BorderLayout.SOUTH);
+		panel.add(this.licenseGetTrialButtonsPanel, BorderLayout.SOUTH);
 		
 		this.add(this.licenseGetTrial, "GET_TRIAL");
+	}
+	
+	private void saveLicense(String license) {
+		try {
+			InputStream publicKey = Resources.class.getResourceAsStream("public_key");
+			LicenseManager lm = new LicenseManager(publicKey, null);
+			License l = lm.readLicense(license);
+			
+			if (l != null) {
+				if (l.getLicenseType() == LicenseType.TRIAL) {
+					// TODO: multiple trials not allowed
+					// Sign message in settings ?
+				}
+				
+				LicenseUtils.saveLicense(license);
+				this.setLicense(l, false);
+			} else {
+				GuiLogger.getLogger().log(
+						Level.WARNING,
+						"Incorrect license: " + license);
+			}
+		} catch (Exception e) {
+			GuiLogger.getLogger().log(
+					Level.WARNING,
+					"Incorrect license: " + license,
+					e);
+		}
+		
+		// TODO: license incorrect message
 	}
 	
 	private class LicenseInfoPanel extends JPanel {
@@ -292,12 +327,12 @@ public class LicensePanel extends JPanel {
 				Font font = FontUtils.getResourceFont("constantia.ttf");
 				g2.setFont(font.deriveFont((float) 20.0).deriveFont(Font.BOLD));
 				
-				int width = g.getFontMetrics().stringWidth(
-						LicensePanel.this.license.getFirstName());
-				g2.drawString(
-						LicensePanel.this.license.getLastName(),
-						(this.getWidth() - width) / 2,
-						135);
+				String name = LicensePanel.this.license.getFirstName()
+						+ " "
+						+ LicensePanel.this.license.getLastName();
+				
+				int width = g.getFontMetrics().stringWidth(name);
+				g2.drawString(name, (this.getWidth() - width) / 2, 135);
 				
 				g2.setFont(font.deriveFont((float) 14.0).deriveFont(Font.PLAIN));
 				

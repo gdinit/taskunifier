@@ -46,6 +46,7 @@ import com.leclercb.commons.api.event.action.ActionSupport;
 import com.leclercb.commons.api.event.action.ActionSupported;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.gui.actions.ActionManageLicense;
+import com.leclercb.taskunifier.gui.components.license.LicenseDialog;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -134,7 +135,11 @@ public class ProPanel extends JPanel implements ActionSupported {
 	}
 	
 	public void getTrial() {
-		DesktopUtils.browse(Constants.PRO_URL);
+		LicenseDialog dialog = new LicenseDialog();
+		dialog.setLicense(null, true);
+		dialog.setVisible(true);
+		dialog.dispose();
+		
 		this.actionSupport.fireActionPerformed(0, ACTION_GET_TRIAL);
 	}
 	

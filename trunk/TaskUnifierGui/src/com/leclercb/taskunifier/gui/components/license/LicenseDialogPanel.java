@@ -86,6 +86,9 @@ public class LicenseDialogPanel extends TUDialogPanel {
 		
 		this.licensePanel.getLicenseEnterButtonsPanel().addButton(
 				new TUCloseButton(listener));
+		
+		this.licensePanel.getLicenseGetTrialButtonsPanel().addButton(
+				new TUCloseButton(listener));
 	}
 	
 }

@@ -33,6 +33,9 @@
 package com.leclercb.taskunifier.gui.utils;
 
 import java.net.URI;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
 
 import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.taskunifier.gui.main.Main;
@@ -54,6 +57,25 @@ public final class HttpUtils {
 					Main.getSettings().getStringProperty("proxy.password"));
 		} else {
 			return com.leclercb.commons.api.utils.HttpUtils.getHttpGetResponse(uri);
+		}
+	}
+	
+	public static HttpResponse getHttpPostResponse(
+			URI uri,
+			List<NameValuePair> parameters) throws Exception {
+		if (!Main.getSettings().getBooleanProperty("proxy.use_system_proxies")
+				&& Main.getSettings().getBooleanProperty("proxy.enabled")) {
+			return com.leclercb.commons.api.utils.HttpUtils.getHttpPostResponse(
+					uri,
+					parameters,
+					Main.getSettings().getStringProperty("proxy.host"),
+					Main.getSettings().getIntegerProperty("proxy.port"),
+					Main.getSettings().getStringProperty("proxy.login"),
+					Main.getSettings().getStringProperty("proxy.password"));
+		} else {
+			return com.leclercb.commons.api.utils.HttpUtils.getHttpPostResponse(
+					uri,
+					parameters);
 		}
 	}
 	
