@@ -9,6 +9,7 @@ Version 3.1.9
 	- Minor:
 		- BF 253: Remove beeps
 		- Fixed owner of all the dialogs
+		- Bug fixed: Layout of settings
 
 Version 3.1.8
 	- Major:
