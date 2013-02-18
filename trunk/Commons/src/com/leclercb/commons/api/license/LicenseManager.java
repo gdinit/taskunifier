@@ -44,6 +44,8 @@ import org.apache.commons.lang3.ArrayUtils;
 
 public class LicenseManager {
 	
+	public static final int BIT_LENGTH = 256;
+	
 	private EncryptionManager encryptionManager;
 	
 	public LicenseManager(File publicKey, File privateKey) throws Exception {
@@ -68,8 +70,8 @@ public class LicenseManager {
 		Base64 base64 = new Base64(40);
 		byte[] data = base64.decode(input);
 		
-		byte[] signature = ArrayUtils.subarray(data, 0, 128);
-		byte[] message = ArrayUtils.subarray(data, 128, data.length);
+		byte[] signature = ArrayUtils.subarray(data, 0, BIT_LENGTH);
+		byte[] message = ArrayUtils.subarray(data, BIT_LENGTH, data.length);
 		
 		if (!this.encryptionManager.verify(message, signature)) {
 			return null;
@@ -87,8 +89,7 @@ public class LicenseManager {
 		FileUtils.writeByteArrayToFile(file, base64.encode(data));
 	}
 	
-	public static String keyEncoder(InputStream publicKey)
-			throws Exception {
+	public static String keyEncoder(InputStream publicKey) throws Exception {
 		byte[] input = IOUtils.toByteArray(publicKey);
 		
 		Base64 base64 = new Base64(40);
@@ -97,8 +98,7 @@ public class LicenseManager {
 		return new String(data, "UTF-8");
 	}
 	
-	public static InputStream keyDecoder(String publicKey)
-			throws Exception {
+	public static InputStream keyDecoder(String publicKey) throws Exception {
 		Base64 base64 = new Base64(40);
 		byte[] data = base64.decode(publicKey);
 		
