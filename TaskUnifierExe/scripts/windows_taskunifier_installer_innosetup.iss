@@ -1,6 +1,6 @@
 [Setup]
 AppName=TaskUnifier
-AppVersion=3.2.0
+AppVersion={#TASKUNIFIER_VERSION}
 DefaultDirName={pf}\TaskUnifier
 DefaultGroupName=TaskUnifier
 UninstallDisplayIcon={app}\resources\icon.ico
