@@ -32,14 +32,17 @@
  */
 package com.leclercb.taskunifier.gui.components.configuration.api;
 
-import javax.swing.JPanel;
+import com.leclercb.commons.gui.swing.panels.ScrollablePanel;
 
-public abstract class ConfigurationPanel extends JPanel implements ConfigurationGroup {
+public abstract class ConfigurationPanel extends ScrollablePanel implements ConfigurationGroup {
 	
 	private ConfigurationGroup configurationGroup;
 	
 	public ConfigurationPanel(ConfigurationGroup configurationGroup) {
 		this.configurationGroup = configurationGroup;
+		
+		this.setScrollableWidth(ScrollablePanel.ScrollableSizeHint.FIT);
+		this.setScrollableHeight(ScrollablePanel.ScrollableSizeHint.NONE);
 	}
 	
 	public ConfigurationGroup getConfigurationGroup() {
