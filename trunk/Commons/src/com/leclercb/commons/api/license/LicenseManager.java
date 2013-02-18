@@ -87,7 +87,7 @@ public class LicenseManager {
 		FileUtils.writeByteArrayToFile(file, base64.encode(data));
 	}
 	
-	public static String publicKeyEncoder(InputStream publicKey)
+	public static String keyEncoder(InputStream publicKey)
 			throws Exception {
 		byte[] input = IOUtils.toByteArray(publicKey);
 		
@@ -97,7 +97,7 @@ public class LicenseManager {
 		return new String(data, "UTF-8");
 	}
 	
-	public static InputStream publicKeyDecoder(String publicKey)
+	public static InputStream keyDecoder(String publicKey)
 			throws Exception {
 		Base64 base64 = new Base64(40);
 		byte[] data = base64.decode(publicKey);
