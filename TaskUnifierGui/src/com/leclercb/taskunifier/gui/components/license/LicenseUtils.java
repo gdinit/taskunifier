@@ -126,6 +126,12 @@ public final class LicenseUtils {
 		}
 	}
 	
+	public static boolean isFirstTrialLicense() {
+		// TODO: multiple trials not allowed
+		// Sign message in settings ?
+		return true;
+	}
+	
 	public static void main(String[] args) throws Exception {
 		InputStream publicKey = Resources.class.getResourceAsStream("public_key");
 		System.out.println(LicenseManager.publicKeyEncoder(publicKey));
