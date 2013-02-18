@@ -45,7 +45,8 @@ import com.leclercb.commons.api.utils.CheckUtils;
 
 public class License {
 	
-	private String name;
+	private String firstName;
+	private String lastName;
 	private String email;
 	private Calendar purchaseDate;
 	
@@ -63,12 +64,20 @@ public class License {
 		this.setLicenseType(licenseType);
 	}
 	
-	public String getName() {
-		return this.name;
+	public String getFirstName() {
+		return this.firstName;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	
+	public String getLastName() {
+		return this.lastName;
+	}
+	
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 	
 	public String getEmail() {
@@ -155,7 +164,8 @@ public class License {
 	
 	public String licenseToString() throws Exception {
 		PropertyMap p = new PropertyMap();
-		p.setStringProperty("name", this.name);
+		p.setStringProperty("first_name", this.firstName);
+		p.setStringProperty("last_name", this.lastName);
 		p.setStringProperty("email", this.email);
 		p.setCalendarProperty("purchase_date", this.purchaseDate);
 		p.setEnumProperty("license_type", LicenseType.class, this.licenseType);
@@ -174,7 +184,8 @@ public class License {
 		p.load(IOUtils.toInputStream(license));
 		
 		License l = new License();
-		l.setName(p.getStringProperty("name"));
+		l.setFirstName(p.getStringProperty("first_name"));
+		l.setLastName(p.getStringProperty("last_name"));
 		l.setEmail(p.getStringProperty("email"));
 		l.setPurchaseDate(p.getCalendarProperty("purchase_date"));
 		l.setLicenseType(p.getEnumProperty("license_type", LicenseType.class));

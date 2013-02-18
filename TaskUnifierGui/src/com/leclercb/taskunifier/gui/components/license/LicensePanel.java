@@ -50,6 +50,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import com.leclercb.commons.api.license.License;
 import com.leclercb.commons.api.license.LicenseManager;
@@ -72,20 +73,24 @@ public class LicensePanel extends JPanel {
 	
 	private JPanel licenseInfo;
 	private JPanel licenseEnter;
+	private JPanel licenseGetTrial;
 	
 	private TUButtonsPanel licenseInfoButtonsPanel;
 	private TUButtonsPanel licenseEnterButtonsPanel;
+	private TUButtonsPanel licenseGetTrialButtonsPanel;
 	
-	private JButton changeLicense;
+	private JButton changeLicenseButton;
 	
 	private JTextArea licenseArea;
 	private JButton enterLicenseButton;
+	
+	private JButton getTrialButton;
 	
 	public LicensePanel() {
 		this.initialize();
 	}
 	
-	public void setLicense(License license) {
+	public void setLicense(License license, boolean getTrial) {
 		this.license = license;
 		
 		boolean show = true;
@@ -101,15 +106,18 @@ public class LicensePanel extends JPanel {
 			show = false;
 		}
 		
+		this.licenseArea.setText("");
+		this.licenseInfo.revalidate();
+		
 		if (license == null || !show) {
-			this.licenseArea.setText("");
-			
-			CardLayout layout = (CardLayout) this.getLayout();
-			layout.show(this, "ENTER");
+			if (getTrial) {
+				CardLayout layout = (CardLayout) this.getLayout();
+				layout.show(this, "GET_TRIAL");
+			} else {
+				CardLayout layout = (CardLayout) this.getLayout();
+				layout.show(this, "ENTER");
+			}
 		} else {
-			this.licenseArea.setText("");
-			this.licenseInfo.revalidate();
-			
 			CardLayout layout = (CardLayout) this.getLayout();
 			layout.show(this, "INFO");
 		}
@@ -123,13 +131,18 @@ public class LicensePanel extends JPanel {
 		return this.licenseEnterButtonsPanel;
 	}
 	
+	public TUButtonsPanel getLicenseGetTrialButtonsPanel() {
+		return this.licenseGetTrialButtonsPanel;
+	}
+	
 	private void initialize() {
 		this.setLayout(new CardLayout());
 		
 		this.initializeLicenseInfo();
 		this.initializeLicenseEnter();
+		this.initializeLicenseGetTrial();
 		
-		this.setLicense(null);
+		this.setLicense(null, false);
 	}
 	
 	private void initializeLicenseInfo() {
@@ -140,9 +153,9 @@ public class LicensePanel extends JPanel {
 		LicenseInfoPanel licenseInfoPanel = new LicenseInfoPanel();
 		this.licenseInfo.add(licenseInfoPanel, BorderLayout.CENTER);
 		
-		this.changeLicense = new JButton(
+		this.changeLicenseButton = new JButton(
 				Translations.getString("license.change_license"));
-		this.changeLicense.addActionListener(new ActionListener() {
+		this.changeLicenseButton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -152,7 +165,8 @@ public class LicensePanel extends JPanel {
 			
 		});
 		
-		this.licenseInfoButtonsPanel = new TUButtonsPanel(this.changeLicense);
+		this.licenseInfoButtonsPanel = new TUButtonsPanel(
+				this.changeLicenseButton);
 		this.licenseInfoButtonsPanel.setOpaque(false);
 		
 		this.licenseInfo.add(this.licenseInfoButtonsPanel, BorderLayout.SOUTH);
@@ -193,7 +207,7 @@ public class LicensePanel extends JPanel {
 						}
 						
 						LicenseUtils.saveLicense(LicensePanel.this.licenseArea.getText());
-						LicensePanel.this.setLicense(l);
+						LicensePanel.this.setLicense(l, false);
 					} else {
 						GuiLogger.getLogger().log(
 								Level.WARNING,
@@ -218,6 +232,38 @@ public class LicensePanel extends JPanel {
 		this.licenseEnter.add(this.licenseEnterButtonsPanel, BorderLayout.SOUTH);
 		
 		this.add(this.licenseEnter, "ENTER");
+	}
+	
+	public void initializeLicenseGetTrial() {
+		this.licenseGetTrial = new JPanel();
+		this.licenseGetTrial.setLayout(new BorderLayout(5, 5));
+		this.licenseGetTrial.setBorder(BorderFactory.createEmptyBorder(
+				10,
+				10,
+				0,
+				10));
+		
+		JTextField firstName = new JTextField();
+		JTextField lastName = new JTextField();
+		JTextField email = new JTextField();
+		
+		this.getTrialButton = new JButton();
+		this.getTrialButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				// TODO get trial
+			}
+			
+		});
+		
+		this.licenseGetTrialButtonsPanel = new TUButtonsPanel(
+				this.getTrialButton);
+		this.licenseGetTrial.add(
+				this.licenseGetTrialButtonsPanel,
+				BorderLayout.SOUTH);
+		
+		this.add(this.licenseGetTrial, "GET_TRIAL");
 	}
 	
 	private class LicenseInfoPanel extends JPanel {
@@ -247,9 +293,9 @@ public class LicensePanel extends JPanel {
 				g2.setFont(font.deriveFont((float) 20.0).deriveFont(Font.BOLD));
 				
 				int width = g.getFontMetrics().stringWidth(
-						LicensePanel.this.license.getName());
+						LicensePanel.this.license.getFirstName());
 				g2.drawString(
-						LicensePanel.this.license.getName(),
+						LicensePanel.this.license.getLastName(),
 						(this.getWidth() - width) / 2,
 						135);
 				
