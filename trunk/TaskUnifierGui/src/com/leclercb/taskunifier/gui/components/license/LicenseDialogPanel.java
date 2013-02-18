@@ -58,8 +58,8 @@ public class LicenseDialogPanel extends TUDialogPanel {
 		this.initialize();
 	}
 	
-	public void setLicense(License license) {
-		this.licensePanel.setLicense(license);
+	public void setLicense(License license, boolean getTrial) {
+		this.licensePanel.setLicense(license, getTrial);
 	}
 	
 	private void initialize() {
