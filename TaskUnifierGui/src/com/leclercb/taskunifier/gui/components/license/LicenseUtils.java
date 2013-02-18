@@ -73,7 +73,7 @@ public final class LicenseUtils {
 			File file = new File(Main.getLicenseFile());
 			String license = FileUtils.readFileToString(file, "UTF-8");
 			
-			InputStream publicKey = LicenseManager.publicKeyDecoder(PUBLIC_KEY);
+			InputStream publicKey = LicenseManager.keyDecoder(PUBLIC_KEY);
 			LicenseManager lm = new LicenseManager(publicKey, null);
 			License l = lm.readLicense(license);
 			
@@ -134,7 +134,7 @@ public final class LicenseUtils {
 	
 	public static void main(String[] args) throws Exception {
 		InputStream publicKey = Resources.class.getResourceAsStream("public_key");
-		System.out.println(LicenseManager.publicKeyEncoder(publicKey));
+		System.out.println(LicenseManager.keyEncoder(publicKey));
 	}
 	
 }
