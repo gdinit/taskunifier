@@ -36,32 +36,46 @@ import org.apache.commons.codec.binary.StringUtils;
 
 public class HttpResponse {
 	
-	private int responseCode;
-	private String responseMessage;
+	private int code;
+	private String message;
 	private byte[] bytes;
 	
-	public HttpResponse(int responseCode, String responseMessage, byte[] bytes) {
-		CheckUtils.isNotNull(responseMessage);
+	public HttpResponse() {
 		
-		this.responseCode = responseCode;
-		this.responseMessage = responseMessage;
-		this.bytes = bytes;
+	}
+	
+	public HttpResponse(int code, String message, byte[] bytes) {
+		this.setCode(code);
+		this.setMessage(message);
+		this.setBytes(bytes);
 	}
 	
 	public boolean isSuccessfull() {
-		return this.responseCode == 200;
+		return this.code == 200;
 	}
 	
-	public int getResponseCode() {
-		return this.responseCode;
+	public int getCode() {
+		return this.code;
 	}
 	
-	public String getResponseMessage() {
-		return this.responseMessage;
+	public void setCode(int code) {
+		this.code = code;
+	}
+	
+	public String getMessage() {
+		return this.message;
+	}
+	
+	public void setMessage(String message) {
+		this.message = message;
 	}
 	
 	public byte[] getBytes() {
 		return this.bytes;
+	}
+	
+	public void setBytes(byte[] bytes) {
+		this.bytes = bytes;
 	}
 	
 	public String getContent() {
