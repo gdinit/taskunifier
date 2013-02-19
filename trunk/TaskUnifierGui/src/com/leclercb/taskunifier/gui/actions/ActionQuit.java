@@ -103,7 +103,7 @@ public class ActionQuit extends AbstractViewAction {
 	
 	public static boolean quitAndApply() {
 		JOptionPane.showMessageDialog(
-				FrameUtils.getCurrentFrame(),
+				FrameUtils.getCurrentWindow(),
 				Translations.getString("general.quit_apply_changes"),
 				Translations.getString("general.information"),
 				JOptionPane.INFORMATION_MESSAGE);

@@ -115,7 +115,7 @@ public class ImportSettingsDialogPanel extends AbstractImportDialogPanel {
 		}
 		
 		JOptionPane.showMessageDialog(
-				FrameUtils.getCurrentFrame(),
+				FrameUtils.getCurrentWindow(),
 				Translations.getString("configuration.general.settings_changed_after_restart"),
 				Translations.getString("general.information"),
 				JOptionPane.INFORMATION_MESSAGE);

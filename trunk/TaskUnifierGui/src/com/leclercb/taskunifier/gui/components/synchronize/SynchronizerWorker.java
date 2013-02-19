@@ -465,7 +465,7 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 								null);
 						
 						JXErrorPane.showDialog(
-								FrameUtils.getCurrentFrame(),
+								FrameUtils.getCurrentWindow(),
 								info);
 						
 						if (e instanceof SynchronizerSettingsException)
@@ -511,7 +511,7 @@ public class SynchronizerWorker extends TUStopableWorker<Void> {
 								null);
 						
 						JXErrorPane.showDialog(
-								FrameUtils.getCurrentFrame(),
+								FrameUtils.getCurrentWindow(),
 								info);
 					} catch (Exception e) {
 						GuiLogger.getLogger().log(

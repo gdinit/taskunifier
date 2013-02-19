@@ -204,7 +204,7 @@ public class TaskRulePanel extends JPanel implements PropertyChangeListener {
 							Level.INFO,
 							null);
 					
-					JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+					JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 					
 					GuiLogger.getLogger().log(
 							Level.WARNING,

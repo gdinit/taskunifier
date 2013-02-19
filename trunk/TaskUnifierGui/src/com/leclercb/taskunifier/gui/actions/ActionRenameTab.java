@@ -66,7 +66,7 @@ public class ActionRenameTab extends AbstractViewAction {
 			return;
 		
 		String tabName = JOptionPane.showInputDialog(
-				FrameUtils.getCurrentFrame(),
+				FrameUtils.getCurrentWindow(),
 				Translations.getString("action.rename_tab.tab_name"),
 				Translations.getString("general.question"),
 				JOptionPane.QUESTION_MESSAGE);

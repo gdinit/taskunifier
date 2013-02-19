@@ -112,7 +112,7 @@ public class ProxyTestConnectionFieldType extends ConfigurationFieldType.Button 
 				public void run() {
 					if (result) {
 						JOptionPane.showMessageDialog(
-								FrameUtils.getCurrentFrame(),
+								FrameUtils.getCurrentWindow(),
 								Translations.getString("configuration.proxy.test_connection.success"),
 								Translations.getString("general.information"),
 								JOptionPane.INFORMATION_MESSAGE);
@@ -127,7 +127,7 @@ public class ProxyTestConnectionFieldType extends ConfigurationFieldType.Button 
 								null);
 						
 						JXErrorPane.showDialog(
-								FrameUtils.getCurrentFrame(),
+								FrameUtils.getCurrentWindow(),
 								info);
 					}
 				}

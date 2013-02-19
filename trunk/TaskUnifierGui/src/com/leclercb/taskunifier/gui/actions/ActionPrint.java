@@ -98,7 +98,7 @@ public class ActionPrint extends AbstractViewAction {
 					Level.WARNING,
 					null);
 			
-			JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+			JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 		}
 	}
 	

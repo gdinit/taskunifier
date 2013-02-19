@@ -115,7 +115,7 @@ public class ActionImportComFile extends AbstractViewAction {
 					Level.WARNING,
 					null);
 			
-			JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+			JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 		}
 	}
 	

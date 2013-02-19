@@ -33,7 +33,7 @@
 package com.leclercb.taskunifier.gui.components.notesearcheredit;
 
 import java.awt.BorderLayout;
-import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -58,15 +58,15 @@ public class NoteSearcherEditDialog extends TUDialog {
 	
 	private NoteSearcherEditPanel searcherEditPanel;
 	
-	public NoteSearcherEditDialog(Frame frame, NoteSearcher searcher) {
-		this(frame, searcher, true);
+	public NoteSearcherEditDialog(Window window, NoteSearcher searcher) {
+		this(window, searcher, true);
 	}
 	
 	public NoteSearcherEditDialog(
-			Frame frame,
+			Window window,
 			NoteSearcher searcher,
 			boolean showInfoPanel) {
-		super(frame);
+		super(window);
 		
 		this.initialize(searcher, showInfoPanel);
 	}

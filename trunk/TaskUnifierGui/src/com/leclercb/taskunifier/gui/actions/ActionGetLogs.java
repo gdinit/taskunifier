@@ -150,7 +150,7 @@ public class ActionGetLogs extends AbstractViewAction {
 					Level.WARNING,
 					null);
 			
-			JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+			JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 		}
 	}
 	

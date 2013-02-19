@@ -80,7 +80,7 @@ public class ActionCreateNewBackup extends AbstractViewAction {
 		
 		if (backupFolderName != null) {
 			JOptionPane.showMessageDialog(
-					FrameUtils.getCurrentFrame(),
+					FrameUtils.getCurrentWindow(),
 					Translations.getString("action.create_new_backup.success"),
 					Translations.getString("general.information"),
 					JOptionPane.INFORMATION_MESSAGE);
@@ -94,7 +94,7 @@ public class ActionCreateNewBackup extends AbstractViewAction {
 					Level.WARNING,
 					null);
 			
-			JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+			JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 		}
 		
 		return backupFolderName;
@@ -102,7 +102,7 @@ public class ActionCreateNewBackup extends AbstractViewAction {
 	
 	public static String askBackupName() {
 		return JOptionPane.showInputDialog(
-				FrameUtils.getCurrentFrame(),
+				FrameUtils.getCurrentWindow(),
 				Translations.getString("manage_backups.new_backup_name"),
 				Translations.getString("general.manage_backups"),
 				JOptionPane.QUESTION_MESSAGE);
