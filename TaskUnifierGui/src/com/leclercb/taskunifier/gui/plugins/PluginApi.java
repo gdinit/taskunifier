@@ -33,6 +33,7 @@
 package com.leclercb.taskunifier.gui.plugins;
 
 import java.awt.Frame;
+import java.awt.Window;
 import java.util.Locale;
 
 import javax.help.HelpSet;
@@ -121,8 +122,12 @@ public final class PluginApi {
 		TUSwingUtilities.executeOrInvokeAndWait(doRun);
 	}
 	
-	public static Frame getCurrentFrame() {
-		return FrameUtils.getCurrentFrame();
+	public static Frame getCurrentFrame2() {
+		return FrameUtils.getCurrentFrame2();
+	}
+	
+	public static Window getCurrentWindow() {
+		return FrameUtils.getCurrentWindow();
 	}
 	
 	public static FrameView getCurrentFrameView() {

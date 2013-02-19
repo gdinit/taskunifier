@@ -309,7 +309,7 @@ public class ConfigurationDialogPanel extends TUDialogPanel implements Configura
 					Level.SEVERE,
 					null);
 			
-			JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+			JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 		}
 	}
 	
@@ -341,7 +341,7 @@ public class ConfigurationDialogPanel extends TUDialogPanel implements Configura
 					Level.SEVERE,
 					null);
 			
-			JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+			JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 		}
 	}
 	

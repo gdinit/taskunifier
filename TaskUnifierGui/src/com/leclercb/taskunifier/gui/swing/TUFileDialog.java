@@ -68,7 +68,7 @@ public class TUFileDialog extends TUDialog {
 	public void setVisible(boolean visible) {
 		if (visible) {
 			this.setCancelled(false);
-			this.setLocationRelativeTo(FrameUtils.getCurrentFrame());
+			this.setLocationRelativeTo(FrameUtils.getCurrentWindow());
 		}
 		
 		super.setVisible(visible);

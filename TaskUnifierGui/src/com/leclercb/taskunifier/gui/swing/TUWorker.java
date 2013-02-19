@@ -109,7 +109,7 @@ public abstract class TUWorker<T> extends SwingWorker<T, ProgressMessage> implem
 						Level.WARNING,
 						null);
 				
-				JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+				JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 			}
 			
 		});

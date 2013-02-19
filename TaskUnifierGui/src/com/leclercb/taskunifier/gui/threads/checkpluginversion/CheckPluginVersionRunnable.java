@@ -119,7 +119,7 @@ public class CheckPluginVersionRunnable implements Runnable {
 								Translations.getString("general.cancel") };
 						
 						result = JOptionPane.showOptionDialog(
-								FrameUtils.getCurrentFrame(),
+								FrameUtils.getCurrentWindow(),
 								Translations.getString(
 										"action.check_plugin_version.new_plugin_version_available",
 										version,
@@ -152,7 +152,7 @@ public class CheckPluginVersionRunnable implements Runnable {
 							Level.INFO,
 							null);
 					
-					JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+					JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 				}
 			}
 		}
@@ -192,7 +192,7 @@ public class CheckPluginVersionRunnable implements Runnable {
 		
 		if (!silent) {
 			JOptionPane.showMessageDialog(
-					FrameUtils.getCurrentFrame(),
+					FrameUtils.getCurrentWindow(),
 					Translations.getString(
 							"action.check_plugin_version.no_new_plugin_version_available",
 							syncPlugin.getVersion(),

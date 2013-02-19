@@ -32,7 +32,9 @@
  */
 package com.leclercb.taskunifier.gui.utils;
 
+import java.awt.Dialog;
 import java.awt.FileDialog;
+import java.awt.Frame;
 import java.io.File;
 import java.io.FilenameFilter;
 
@@ -97,9 +99,9 @@ public final class FileChooserUtils {
 		int result = 0;
 		
 		if (open)
-			result = fileChooser.showOpenDialog(FrameUtils.getCurrentFrame());
+			result = fileChooser.showOpenDialog(FrameUtils.getCurrentWindow());
 		else
-			result = fileChooser.showSaveDialog(FrameUtils.getCurrentFrame());
+			result = fileChooser.showSaveDialog(FrameUtils.getCurrentWindow());
 		
 		if (result != JFileChooser.APPROVE_OPTION)
 			return null;
@@ -117,7 +119,14 @@ public final class FileChooserUtils {
 		else
 			System.setProperty("apple.awt.fileDialogForDirectories", "true");
 		
-		FileDialog fileChooser = new FileDialog(FrameUtils.getCurrentFrame());
+		FileDialog fileChooser = null;
+		
+		if (FrameUtils.getCurrentWindow() instanceof Frame)
+			fileChooser = new FileDialog((Frame) FrameUtils.getCurrentWindow());
+		else if (FrameUtils.getCurrentWindow() instanceof Dialog)
+			fileChooser = new FileDialog((Dialog) FrameUtils.getCurrentWindow());
+		else
+			fileChooser = new FileDialog(FrameUtils.getCurrentFrame2());
 		
 		if (open)
 			fileChooser.setMode(FileDialog.LOAD);

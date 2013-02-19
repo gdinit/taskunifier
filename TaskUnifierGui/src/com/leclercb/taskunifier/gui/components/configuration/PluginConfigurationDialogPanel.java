@@ -187,7 +187,7 @@ public class PluginConfigurationDialogPanel extends TUDialogPanel implements Con
 					Level.SEVERE,
 					null);
 			
-			JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+			JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 			
 			return;
 		}
@@ -209,7 +209,7 @@ public class PluginConfigurationDialogPanel extends TUDialogPanel implements Con
 					Level.SEVERE,
 					null);
 			
-			JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+			JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 			
 			return;
 		}

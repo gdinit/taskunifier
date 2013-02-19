@@ -88,7 +88,7 @@ public class ActionEditTaskSearcher extends AbstractViewTaskSearcherSelectionAct
 		
 		if (foundInFactory && searcher.getType().isEditable()) {
 			TaskSearcherEditDialog dialog = new TaskSearcherEditDialog(
-					FrameUtils.getCurrentFrame(),
+					FrameUtils.getCurrentWindow(),
 					searcher);
 			
 			dialog.setVisible(true);

@@ -165,7 +165,7 @@ public class GetTrialActionListener implements ActionListener {
 			public void run() {
 				if (EqualsUtils.equals(code, "0")) {
 					JOptionPane.showMessageDialog(
-							FrameUtils.getCurrentFrame(),
+							FrameUtils.getCurrentWindow(),
 							message,
 							Translations.getString("general.information"),
 							JOptionPane.INFORMATION_MESSAGE);
@@ -179,7 +179,7 @@ public class GetTrialActionListener implements ActionListener {
 							Level.INFO,
 							null);
 					
-					JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+					JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 				}
 			}
 			

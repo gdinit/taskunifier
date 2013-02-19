@@ -62,7 +62,7 @@ public final class DesktopUtils {
 					Level.WARNING,
 					null);
 			
-			JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+			JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 			
 			return false;
 		}
@@ -85,7 +85,7 @@ public final class DesktopUtils {
 					Level.WARNING,
 					null);
 			
-			JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+			JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 			
 			return false;
 		}
@@ -114,7 +114,7 @@ public final class DesktopUtils {
 					Level.WARNING,
 					null);
 			
-			JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+			JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 			
 			return false;
 		}
@@ -137,7 +137,7 @@ public final class DesktopUtils {
 					Level.WARNING,
 					null);
 			
-			JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+			JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 			
 			return false;
 		}

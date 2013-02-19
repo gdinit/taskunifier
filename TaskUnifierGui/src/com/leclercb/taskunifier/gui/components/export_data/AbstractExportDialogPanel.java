@@ -156,7 +156,7 @@ abstract class AbstractExportDialogPanel extends TUDialogPanel {
 								null);
 						
 						JXErrorPane.showDialog(
-								FrameUtils.getCurrentFrame(),
+								FrameUtils.getCurrentWindow(),
 								info);
 					}
 				}

@@ -36,6 +36,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +44,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import com.leclercb.commons.api.progress.DefaultProgressMessage;
+import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.actions.ActionManageSynchronizerPlugins;
 import com.leclercb.taskunifier.gui.components.configuration.DateConfigurationPanel;
@@ -55,11 +58,15 @@ import com.leclercb.taskunifier.gui.components.welcome.panels.CardPanel;
 import com.leclercb.taskunifier.gui.components.welcome.panels.LicensePanel;
 import com.leclercb.taskunifier.gui.components.welcome.panels.SettingsPanel;
 import com.leclercb.taskunifier.gui.components.welcome.panels.WelcomePanel;
+import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.TUDialog;
+import com.leclercb.taskunifier.gui.swing.TUWorker;
+import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
+import com.leclercb.taskunifier.gui.utils.HttpUtils;
 
 public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 	
@@ -83,6 +90,10 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 		} else {
 			this.panels.add(new WelcomePanel(messages, messageButtons));
 			
+			this.panels.add(new SettingsPanel(
+					Translations.getString("configuration.tab.proxy"),
+					new ProxyConfigurationPanel(this, false)));
+			
 			// TODO: PRO
 			if (Main.isTmpProVersion()) {
 				this.panels.add(new LicensePanel());
@@ -95,10 +106,6 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 			this.panels.add(new SettingsPanel(
 					Translations.getString("configuration.tab.date"),
 					new DateConfigurationPanel(this, false)));
-			
-			this.panels.add(new SettingsPanel(
-					Translations.getString("configuration.tab.proxy"),
-					new ProxyConfigurationPanel(this, false)));
 			
 			// TODO: hide when non pro
 			this.panels.add(new SettingsPanel(
@@ -247,6 +254,45 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 	public void cancelConfig() {
 		for (CardPanel panel : this.panels)
 			panel.cancelConfig();
+	}
+	
+	private void testConnection() {
+		TUWorkerDialog<Void> dialog = new TUWorkerDialog<Void>(
+				Translations.getString("configuration.proxy.test_connection"));
+		
+		ProgressMonitor monitor = new ProgressMonitor();
+		monitor.addListChangeListener(dialog);
+		
+		dialog.setWorker(new TUWorker<Void>(monitor) {
+			
+			@Override
+			protected Void longTask() throws Exception {
+				this.publish(new DefaultProgressMessage(
+						Translations.getString("configuration.proxy.test_connection")));
+				
+				Thread thread = new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						try {
+							HttpUtils.getHttpGetResponse(new URI(
+									Constants.TEST_CONNECTION));
+						} catch (Throwable t) {
+							
+						}
+					}
+					
+				});
+				
+				thread.start();
+				thread.wait(1000);
+				
+				return null;
+			}
+			
+		});
+		
+		dialog.setVisible(true);
 	}
 	
 }

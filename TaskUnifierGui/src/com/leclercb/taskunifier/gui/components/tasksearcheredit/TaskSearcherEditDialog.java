@@ -33,7 +33,7 @@
 package com.leclercb.taskunifier.gui.components.tasksearcheredit;
 
 import java.awt.BorderLayout;
-import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -58,15 +58,15 @@ public class TaskSearcherEditDialog extends TUDialog {
 	
 	private TaskSearcherEditPanel searcherEditPanel;
 	
-	public TaskSearcherEditDialog(Frame frame, TaskSearcher searcher) {
-		this(frame, searcher, true);
+	public TaskSearcherEditDialog(Window window, TaskSearcher searcher) {
+		this(window, searcher, true);
 	}
 	
 	public TaskSearcherEditDialog(
-			Frame frame,
+			Window window,
 			TaskSearcher searcher,
 			boolean showInfoPanel) {
-		super(frame);
+		super(window);
 		
 		this.initialize(searcher, showInfoPanel);
 	}

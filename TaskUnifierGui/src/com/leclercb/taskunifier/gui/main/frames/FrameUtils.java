@@ -134,7 +134,7 @@ public final class FrameUtils {
 		CURRENT_WINDOW = window;
 	}
 	
-	public static Frame getCurrentFrame() {
+	public static Frame getCurrentFrame2() {
 		if (getCurrentFrameView() != null)
 			return getCurrentFrameView().getFrame();
 		

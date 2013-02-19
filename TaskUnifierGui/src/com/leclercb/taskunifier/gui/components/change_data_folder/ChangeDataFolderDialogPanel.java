@@ -178,7 +178,7 @@ public class ChangeDataFolderDialogPanel extends TUDialogPanel {
 					Level.INFO,
 					null);
 			
-			JXErrorPane.showDialog(FrameUtils.getCurrentFrame(), info);
+			JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 			
 			return false;
 		}
