@@ -47,6 +47,7 @@ import javax.swing.WindowConstants;
 import com.leclercb.commons.api.progress.DefaultProgressMessage;
 import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.taskunifier.gui.actions.ActionManageSynchronizerPlugins;
 import com.leclercb.taskunifier.gui.components.configuration.DateConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.configuration.GeneralConfigurationPanel;
@@ -257,26 +258,32 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 	}
 	
 	private void testConnection() {
-		TUWorkerDialog<Void> dialog = new TUWorkerDialog<Void>(
+		TUWorkerDialog<HttpResponse> dialog = new TUWorkerDialog<HttpResponse>(
 				Translations.getString("configuration.proxy.test_connection"));
 		
 		ProgressMonitor monitor = new ProgressMonitor();
 		monitor.addListChangeListener(dialog);
 		
-		dialog.setWorker(new TUWorker<Void>(monitor) {
+		dialog.setWorker(new TUWorker<HttpResponse>(monitor) {
 			
 			@Override
-			protected Void longTask() throws Exception {
+			protected HttpResponse longTask() throws Exception {
 				this.publish(new DefaultProgressMessage(
 						Translations.getString("configuration.proxy.test_connection")));
+				
+				final HttpResponse response = new HttpResponse();
 				
 				Thread thread = new Thread(new Runnable() {
 					
 					@Override
 					public void run() {
 						try {
-							HttpUtils.getHttpGetResponse(new URI(
+							HttpResponse r = HttpUtils.getHttpGetResponse(new URI(
 									Constants.TEST_CONNECTION));
+							
+							response.setCode(r.getCode());
+							response.setMessage(r.getMessage());
+							response.setBytes(r.getBytes());
 						} catch (Throwable t) {
 							
 						}
@@ -287,7 +294,10 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 				thread.start();
 				thread.wait(1000);
 				
-				return null;
+				return new HttpResponse(
+						response.getCode(),
+						response.getMessage(),
+						response.getBytes());
 			}
 			
 		});
