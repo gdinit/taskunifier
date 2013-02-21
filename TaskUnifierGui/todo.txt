@@ -2,6 +2,6 @@
 - Translate license types
 
 - Filter element accepts children, condition include filterelement in method sig, update coders
-- Trial license ? Rampart Licensing ?
+- Trial license ?
 - Processes
-- Test connection welcome panel
+- Test connection welcome panel / finish welcome panel
