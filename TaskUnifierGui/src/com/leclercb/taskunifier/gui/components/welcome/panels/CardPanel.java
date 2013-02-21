@@ -34,12 +34,27 @@ package com.leclercb.taskunifier.gui.components.welcome.panels;
 
 import javax.swing.JPanel;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 
 public abstract class CardPanel extends JPanel implements CardInterface, ConfigurationGroup {
 	
+	private String id;
+	
+	public CardPanel(String id) {
+		CheckUtils.hasContent(id);
+		this.id = id;
+	}
+	
+	public String getID() {
+		return this.id;
+	}
+	
 	@Override
-	public boolean next() {
+	public boolean allowNext() {
 		return true;
 	}
 	
@@ -50,6 +65,26 @@ public abstract class CardPanel extends JPanel implements CardInterface, Configu
 	
 	public boolean displayInScrollPane() {
 		return true;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o == this) {
+			return true;
+		}
+		
+		if (o instanceof CardPanel) {
+			CardPanel cp = (CardPanel) o;
+			
+			return new EqualsBuilder().append(this.id, cp.id).isEquals();
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(this.id).toHashCode();
 	}
 	
 }
