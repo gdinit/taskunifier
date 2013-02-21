@@ -47,6 +47,7 @@ import javax.swing.WindowConstants;
 import com.leclercb.commons.api.progress.DefaultProgressMessage;
 import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.taskunifier.gui.actions.ActionManageSynchronizerPlugins;
 import com.leclercb.taskunifier.gui.components.configuration.DateConfigurationPanel;
@@ -86,36 +87,42 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 	public WelcomeDialog(String[] messages, TUButtonsPanel messageButtons) {
 		this.panels = new ArrayList<CardPanel>();
 		
+		this.initialize();
+		
 		if (!Main.isFirstExecution()) {
-			this.panels.add(new WelcomePanel(messages, messageButtons));
+			this.addPanel(new WelcomePanel("MESSAGES", messages, messageButtons));
 		} else {
-			this.panels.add(new WelcomePanel(messages, messageButtons));
+			this.addPanel(new WelcomePanel("MESSAGES", messages, messageButtons));
 			
-			this.panels.add(new SettingsPanel(
+			this.addPanel(new SettingsPanel(
+					"SETTINGS_PROXY",
 					Translations.getString("configuration.tab.proxy"),
 					new ProxyConfigurationPanel(this, false)));
 			
 			// TODO: PRO
 			if (Main.isTmpProVersion()) {
-				this.panels.add(new LicensePanel());
+				this.addPanel(new LicensePanel("LICENSE"));
 			}
 			
-			this.panels.add(new SettingsPanel(
+			this.addPanel(new SettingsPanel(
+					"SETTINGS_GENERAL",
 					Translations.getString("configuration.tab.general"),
 					new GeneralConfigurationPanel(this, false, true)));
 			
-			this.panels.add(new SettingsPanel(
+			this.addPanel(new SettingsPanel(
+					"SETTINGS_DATE",
 					Translations.getString("configuration.tab.date"),
 					new DateConfigurationPanel(this, false)));
 			
 			// TODO: hide when non pro
-			this.panels.add(new SettingsPanel(
+			this.addPanel(new SettingsPanel(
+					"SETTINGS_SYNCHRONIZATION",
 					Translations.getString("configuration.tab.synchronization"),
 					new SynchronizationConfigurationPanel(this, true),
 					new CardInterface() {
 						
 						@Override
-						public boolean next() {
+						public boolean allowNext() {
 							return true;
 						}
 						
@@ -126,8 +133,6 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 						
 					}));
 		}
-		
-		this.initialize();
 	}
 	
 	public WelcomeDialog(List<CardPanel> panels) {
@@ -157,16 +162,6 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 		this.cardPanel = new JPanel();
 		this.cardPanel.setLayout(new CardLayout());
 		this.add(this.cardPanel, BorderLayout.CENTER);
-		
-		int i = 0;
-		for (CardPanel cp : this.panels) {
-			if (cp.displayInScrollPane())
-				this.cardPanel.add(
-						ComponentFactory.createJScrollPane(cp, false),
-						"" + i++);
-			else
-				this.cardPanel.add(cp, "" + i++);
-		}
 		
 		this.initializeButtonsPanel();
 	}
@@ -205,12 +200,41 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 		this.add(panel, BorderLayout.SOUTH);
 	}
 	
+	public void addPanel(CardPanel panel) {
+		this.panels.add(panel);
+		
+		if (panel.displayInScrollPane())
+			this.cardPanel.add(
+					ComponentFactory.createJScrollPane(panel, false),
+					panel.getID());
+		else
+			this.cardPanel.add(panel, panel.getID());
+		
+		this.checkButtonsState();
+	}
+	
+	public void setPanelVisible(String id, boolean visible) {
+		for (CardPanel panel : this.panels) {
+			if (EqualsUtils.equals(panel.getID(), id)) {
+				panel.setVisible(visible);
+				break;
+			}
+		}
+		
+		this.checkButtonsState();
+	}
+	
 	public void previous() {
 		this.panels.get(this.currentPanel).saveAndApplyConfig();
 		
 		if (this.currentPanel != 0) {
 			this.currentPanel--;
 			((CardLayout) this.cardPanel.getLayout()).previous(this.cardPanel);
+			
+			if (!this.panels.get(this.currentPanel).isVisible()) {
+				this.cardPanel.remove(this.panels.get(this.currentPanel));
+				this.previous();
+			}
 		}
 		
 		this.checkButtonsState();
@@ -219,11 +243,17 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 	public void next() {
 		this.panels.get(this.currentPanel).saveAndApplyConfig();
 		
-		if (this.panels.get(this.currentPanel).next()) {
+		if (this.panels.get(this.currentPanel).allowNext()) {
 			if (this.currentPanel < this.panels.size() - 1) {
 				this.currentPanel++;
 				((CardLayout) this.cardPanel.getLayout()).next(this.cardPanel);
-				this.panels.get(this.currentPanel).display();
+				
+				if (!this.panels.get(this.currentPanel).isVisible()) {
+					this.cardPanel.remove(this.panels.get(this.currentPanel));
+					this.next();
+				} else {
+					this.panels.get(this.currentPanel).display();
+				}
 				
 				this.checkButtonsState();
 			} else {

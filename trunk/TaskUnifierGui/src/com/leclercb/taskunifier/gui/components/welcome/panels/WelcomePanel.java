@@ -53,7 +53,12 @@ public class WelcomePanel extends CardPanel {
 	
 	private JCheckBox messageReadAgree;
 	
-	public WelcomePanel(String[] messages, TUButtonsPanel messageButtons) {
+	public WelcomePanel(
+			String id,
+			String[] messages,
+			TUButtonsPanel messageButtons) {
+		super(id);
+		
 		this.initialize(messages, messageButtons);
 	}
 	
@@ -116,7 +121,7 @@ public class WelcomePanel extends CardPanel {
 	}
 	
 	@Override
-	public boolean next() {
+	public boolean allowNext() {
 		if (this.messageReadAgree != null) {
 			if (!this.messageReadAgree.isSelected()) {
 				this.messageReadAgree.setForeground(Color.RED);

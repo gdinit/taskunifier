@@ -48,14 +48,17 @@ public class SettingsPanel extends CardPanel {
 	private ConfigurationPanel panel;
 	private CardInterface cardInterface;
 	
-	public SettingsPanel(String title, ConfigurationPanel panel) {
-		this(title, panel, null);
+	public SettingsPanel(String id, String title, ConfigurationPanel panel) {
+		this(id, title, panel, null);
 	}
 	
 	public SettingsPanel(
+			String id,
 			String title,
 			ConfigurationPanel panel,
 			CardInterface cardInterface) {
+		super(id);
+		
 		this.reset(title, panel, cardInterface);
 	}
 	
@@ -93,9 +96,9 @@ public class SettingsPanel extends CardPanel {
 	}
 	
 	@Override
-	public boolean next() {
+	public boolean allowNext() {
 		if (this.cardInterface != null)
-			return this.cardInterface.next();
+			return this.cardInterface.allowNext();
 		
 		return true;
 	}

@@ -44,7 +44,9 @@ import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class LicensePanel extends CardPanel {
 	
-	public LicensePanel() {
+	public LicensePanel(String id) {
+		super(id);
+		
 		this.initialize();
 	}
 	

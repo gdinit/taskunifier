@@ -98,22 +98,15 @@ public class ActionAddQuickTask extends AbstractViewAction {
 		
 		ViewType viewType = ViewUtils.getCurrentViewType();
 		
-		TaskTemplate searcherTemplate = null;
-		
 		if (viewType != ViewType.TASKS && viewType != ViewType.CALENDAR) {
 			ViewUtils.setTaskView(true);
 			viewType = ViewUtils.getCurrentViewType();
-		} else {
-			searcherTemplate = ViewUtils.getSelectedTaskSearcher().getTemplate();
 		}
 		
 		TaskBean bean = new TaskBean();
 		
 		if (template != null)
 			template.applyTo(bean);
-		
-		if (searcherTemplate != null)
-			searcherTemplate.applyTo(bean);
 		
 		task = task.trim();
 		
