@@ -34,11 +34,15 @@ package com.leclercb.taskunifier.gui.components.license;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.KeyPair;
 import java.util.Calendar;
 import java.util.logging.Level;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import com.leclercb.commons.api.license.License;
 import com.leclercb.commons.api.license.LicenseManager;
@@ -52,7 +56,6 @@ import com.leclercb.taskunifier.gui.resources.Resources;
 
 public final class LicenseUtils {
 	
-	// openssl genrsa -des3 -out private_key 2048
 	private static final String PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCY"
 			+ "kSwG7upH9Y1Mq155AAHIQy+rGMrLs614j4cs6A/m"
 			+ "kBRYm7sdumhE16hwsaWF5RXPN/2tesM/bAlr3Y4z"
@@ -134,8 +137,26 @@ public final class LicenseUtils {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		InputStream publicKey = Resources.class.getResourceAsStream("public_key");
-		System.out.println(LicenseManager.keyEncoder(publicKey));
+		boolean generateKey = true;
+		boolean encodeKey = true;
+		
+		if (generateKey) {
+			KeyPair keyPair = LicenseManager.generateKeys("RSA", 2048);
+			
+			OutputStream os = null;
+			
+			os = new FileOutputStream(
+					"src\\com\\leclercb\\taskunifier\\gui\\resources\\public_key");
+			IOUtils.write(keyPair.getPublic().getEncoded(), os);
+			
+			os = new FileOutputStream("private_key");
+			IOUtils.write(keyPair.getPrivate().getEncoded(), os);
+		}
+		
+		if (encodeKey) {
+			InputStream publicKey = Resources.class.getResourceAsStream("public_key");
+			System.out.println(LicenseManager.keyEncoder(publicKey));
+		}
 	}
 	
 }

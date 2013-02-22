@@ -36,6 +36,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
@@ -44,7 +47,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 public class LicenseManager {
 	
-	public static final int BIT_LENGTH = 256;
+	public static final int BIT_LENGTH = 2048;
 	
 	private EncryptionManager encryptionManager;
 	
@@ -70,8 +73,8 @@ public class LicenseManager {
 		Base64 base64 = new Base64(40);
 		byte[] data = base64.decode(input);
 		
-		byte[] signature = ArrayUtils.subarray(data, 0, BIT_LENGTH);
-		byte[] message = ArrayUtils.subarray(data, BIT_LENGTH, data.length);
+		byte[] signature = ArrayUtils.subarray(data, 0, BIT_LENGTH / 8);
+		byte[] message = ArrayUtils.subarray(data, BIT_LENGTH / 8, data.length);
 		
 		if (!this.encryptionManager.verify(message, signature)) {
 			return null;
@@ -103,6 +106,14 @@ public class LicenseManager {
 		byte[] data = base64.decode(publicKey);
 		
 		return new ByteArrayInputStream(data);
+	}
+	
+	public static KeyPair generateKeys(String algorithm, int keySize)
+			throws NoSuchAlgorithmException {
+		KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algorithm);
+		keyGen.initialize(keySize);
+		
+		return keyGen.genKeyPair();
 	}
 	
 }
