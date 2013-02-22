@@ -54,6 +54,7 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.taskunifier.gui.constants.Constants;
+import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.swing.TUWorker;
@@ -117,6 +118,9 @@ public class GetTrialActionListener implements ActionListener {
 					parameters.add(new BasicNameValuePair(
 							"email",
 							GetTrialActionListener.this.email));
+					parameters.add(new BasicNameValuePair(
+							"user_id",
+							Main.getCurrentUserId()));
 					
 					HttpResponse response = HttpUtils.getHttpPostResponse(
 							new URI(Constants.GET_TRIAL_URL),

@@ -35,6 +35,8 @@ package com.leclercb.taskunifier.gui.components.pro;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -44,15 +46,18 @@ import org.jdesktop.swingx.JXLabel;
 
 import com.leclercb.commons.api.event.action.ActionSupport;
 import com.leclercb.commons.api.event.action.ActionSupported;
+import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.gui.actions.ActionManageLicense;
 import com.leclercb.taskunifier.gui.components.license.LicenseDialog;
+import com.leclercb.taskunifier.gui.components.license.LicenseUtils;
 import com.leclercb.taskunifier.gui.constants.Constants;
+import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.DesktopUtils;
 
-public class ProPanel extends JPanel implements ActionSupported {
+public class ProPanel extends JPanel implements ActionSupported, PropertyChangeListener {
 	
 	public static final String ACTION_MORE_INFO = "MORE_INFO";
 	public static final String ACTION_GET_TRIAL = "GET_TRIAL";
@@ -62,6 +67,11 @@ public class ProPanel extends JPanel implements ActionSupported {
 	private ActionSupport actionSupport;
 	
 	private TUButtonsPanel buttonsPanel;
+	
+	private JButton moreInfoButton;
+	private JButton getTrialButton;
+	private JButton buyLicenseButton;
+	private JButton enterLicenseButton;
 	
 	public ProPanel() {
 		this.actionSupport = new ActionSupport(this);
@@ -102,29 +112,35 @@ public class ProPanel extends JPanel implements ActionSupported {
 			
 		};
 		
-		JButton moreInfoButton = new JButton("More Info");
-		moreInfoButton.setActionCommand("MORE_INFO");
-		moreInfoButton.addActionListener(listener);
+		this.moreInfoButton = new JButton("More Info");
+		this.moreInfoButton.setActionCommand("MORE_INFO");
+		this.moreInfoButton.addActionListener(listener);
 		
-		JButton getTrialButton = new JButton("Get Trial");
-		getTrialButton.setActionCommand("GET_TRIAL");
-		getTrialButton.addActionListener(listener);
+		this.getTrialButton = new JButton("Get Trial");
+		this.getTrialButton.setActionCommand("GET_TRIAL");
+		this.getTrialButton.addActionListener(listener);
 		
-		JButton buyLicenseButton = new JButton(
+		this.getTrialButton.setEnabled(LicenseUtils.isFirstTrialLicense());
+		
+		Main.getSettings().addPropertyChangeListener(
+				"license.trial.used",
+				new WeakPropertyChangeListener(Main.getSettings(), this));
+		
+		this.buyLicenseButton = new JButton(
 				Translations.getString("license.buy_license"));
-		buyLicenseButton.setActionCommand("BUY_LICENSE");
-		buyLicenseButton.addActionListener(listener);
+		this.buyLicenseButton.setActionCommand("BUY_LICENSE");
+		this.buyLicenseButton.addActionListener(listener);
 		
-		JButton enterLicenseButton = new JButton(
+		this.enterLicenseButton = new JButton(
 				Translations.getString("license.enter_license"));
-		enterLicenseButton.setActionCommand("ENTER_LICENSE");
-		enterLicenseButton.addActionListener(listener);
+		this.enterLicenseButton.setActionCommand("ENTER_LICENSE");
+		this.enterLicenseButton.addActionListener(listener);
 		
 		this.buttonsPanel = new TUButtonsPanel(
-				moreInfoButton,
-				getTrialButton,
-				buyLicenseButton,
-				enterLicenseButton);
+				this.moreInfoButton,
+				this.getTrialButton,
+				this.buyLicenseButton,
+				this.enterLicenseButton);
 		
 		this.add(this.buttonsPanel, BorderLayout.SOUTH);
 	}
@@ -161,6 +177,11 @@ public class ProPanel extends JPanel implements ActionSupported {
 	@Override
 	public void removeActionListener(ActionListener listener) {
 		this.actionSupport.removeActionListener(listener);
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+		this.getTrialButton.setEnabled(LicenseUtils.isFirstTrialLicense());
 	}
 	
 }
