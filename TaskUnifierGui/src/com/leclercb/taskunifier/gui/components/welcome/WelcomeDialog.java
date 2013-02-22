@@ -36,7 +36,6 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +43,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import com.leclercb.commons.api.progress.DefaultProgressMessage;
-import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.HttpResponse;
@@ -60,15 +57,12 @@ import com.leclercb.taskunifier.gui.components.welcome.panels.CardPanel;
 import com.leclercb.taskunifier.gui.components.welcome.panels.LicensePanel;
 import com.leclercb.taskunifier.gui.components.welcome.panels.SettingsPanel;
 import com.leclercb.taskunifier.gui.components.welcome.panels.WelcomePanel;
-import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.TUDialog;
-import com.leclercb.taskunifier.gui.swing.TUWorker;
-import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
-import com.leclercb.taskunifier.gui.utils.HttpUtils;
+import com.leclercb.taskunifier.gui.utils.ConnectionUtils;
 
 public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 	
@@ -97,11 +91,38 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 			this.addPanel(new SettingsPanel(
 					"SETTINGS_PROXY",
 					Translations.getString("configuration.tab.proxy"),
-					new ProxyConfigurationPanel(this, false)));
+					new ProxyConfigurationPanel(this, false)) {
+				
+				@Override
+				public void display() {
+					HttpResponse r = ConnectionUtils.testConnection(
+							5000,
+							true,
+							true);
+					
+					if (r != null && r.isSuccessfull())
+						WelcomeDialog.this.setPanelVisible(
+								"SETTINGS_PROXY",
+								false);
+				}
+				
+			});
 			
 			// TODO: PRO
 			if (Main.isTmpProVersion()) {
-				this.addPanel(new LicensePanel("LICENSE"));
+				this.addPanel(new LicensePanel("LICENSE") {
+					
+					@Override
+					public boolean next() {
+						if (!Main.isProVersion())
+							WelcomeDialog.this.setPanelVisible(
+									"SETTINGS_SYNCHRONIZATION",
+									false);
+						
+						return super.next();
+					}
+					
+				});
 			}
 			
 			this.addPanel(new SettingsPanel(
@@ -114,7 +135,6 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 					Translations.getString("configuration.tab.date"),
 					new DateConfigurationPanel(this, false)));
 			
-			// TODO: hide when non pro
 			this.addPanel(new SettingsPanel(
 					"SETTINGS_SYNCHRONIZATION",
 					Translations.getString("configuration.tab.synchronization"),
@@ -122,7 +142,7 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 					new CardInterface() {
 						
 						@Override
-						public boolean allowNext() {
+						public boolean next() {
 							return true;
 						}
 						
@@ -156,6 +176,8 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 		
 		if (this.getOwner() != null)
 			this.setLocationRelativeTo(this.getOwner());
+		else
+			this.setLocationRelativeTo(null);
 		
 		this.currentPanel = 0;
 		
@@ -214,11 +236,18 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 	}
 	
 	public void setPanelVisible(String id, boolean visible) {
+		int i = 0;
 		for (CardPanel panel : this.panels) {
 			if (EqualsUtils.equals(panel.getID(), id)) {
 				panel.setVisible(visible);
+				
+				if (this.currentPanel == i)
+					this.next();
+				
 				break;
 			}
+			
+			i++;
 		}
 		
 		this.checkButtonsState();
@@ -232,8 +261,8 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 			((CardLayout) this.cardPanel.getLayout()).previous(this.cardPanel);
 			
 			if (!this.panels.get(this.currentPanel).isVisible()) {
-				this.cardPanel.remove(this.panels.get(this.currentPanel));
 				this.previous();
+				return;
 			}
 		}
 		
@@ -243,14 +272,14 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 	public void next() {
 		this.panels.get(this.currentPanel).saveAndApplyConfig();
 		
-		if (this.panels.get(this.currentPanel).allowNext()) {
+		if (this.panels.get(this.currentPanel).next()) {
 			if (this.currentPanel < this.panels.size() - 1) {
 				this.currentPanel++;
 				((CardLayout) this.cardPanel.getLayout()).next(this.cardPanel);
 				
 				if (!this.panels.get(this.currentPanel).isVisible()) {
-					this.cardPanel.remove(this.panels.get(this.currentPanel));
 					this.next();
+					return;
 				} else {
 					this.panels.get(this.currentPanel).display();
 				}
@@ -264,15 +293,17 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 	}
 	
 	private void checkButtonsState() {
-		if (this.currentPanel == 0)
-			this.previousButton.setEnabled(false);
-		else
-			this.previousButton.setEnabled(true);
+		this.previousButton.setEnabled(false);
 		
-		if (this.currentPanel == this.panels.size() - 1)
-			this.nextButton.setText(Translations.getString("general.finish"));
-		else
-			this.nextButton.setText(Translations.getString("general.next"));
+		for (int i = this.currentPanel; i > 0; i--)
+			if (this.panels.get(i).isVisible())
+				this.previousButton.setEnabled(true);
+		
+		this.nextButton.setText(Translations.getString("general.finish"));
+		
+		for (int i = this.currentPanel + 1; i < this.panels.size(); i++)
+			if (this.panels.get(i).isVisible())
+				this.nextButton.setText(Translations.getString("general.next"));
 	}
 	
 	@Override
@@ -285,54 +316,6 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 	public void cancelConfig() {
 		for (CardPanel panel : this.panels)
 			panel.cancelConfig();
-	}
-	
-	private void testConnection() {
-		TUWorkerDialog<HttpResponse> dialog = new TUWorkerDialog<HttpResponse>(
-				Translations.getString("configuration.proxy.test_connection"));
-		
-		ProgressMonitor monitor = new ProgressMonitor();
-		monitor.addListChangeListener(dialog);
-		
-		dialog.setWorker(new TUWorker<HttpResponse>(monitor) {
-			
-			@Override
-			protected HttpResponse longTask() throws Exception {
-				this.publish(new DefaultProgressMessage(
-						Translations.getString("configuration.proxy.test_connection")));
-				
-				final HttpResponse response = new HttpResponse();
-				
-				Thread thread = new Thread(new Runnable() {
-					
-					@Override
-					public void run() {
-						try {
-							HttpResponse r = HttpUtils.getHttpGetResponse(new URI(
-									Constants.TEST_CONNECTION));
-							
-							response.setCode(r.getCode());
-							response.setMessage(r.getMessage());
-							response.setBytes(r.getBytes());
-						} catch (Throwable t) {
-							
-						}
-					}
-					
-				});
-				
-				thread.start();
-				thread.wait(1000);
-				
-				return new HttpResponse(
-						response.getCode(),
-						response.getMessage(),
-						response.getBytes());
-			}
-			
-		});
-		
-		dialog.setVisible(true);
 	}
 	
 }
