@@ -42,6 +42,7 @@ import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFi
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 import com.leclercb.taskunifier.gui.components.configuration.api.DefaultConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.configuration.fields.publication.PublisherPluginFieldType;
+import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class PublicationConfigurationPanel extends DefaultConfigurationPanel {
@@ -90,6 +91,35 @@ public class PublicationConfigurationPanel extends DefaultConfigurationPanel {
 		
 		this.addField(new ConfigurationField(
 				"SEPARATOR_2",
+				null,
+				new ConfigurationFieldType.Separator()));
+		
+		this.addField(new ConfigurationField(
+				"PUBLISH_BACKGROUND",
+				null,
+				new ConfigurationFieldType.CheckBox(
+						Main.getUserSettings(),
+						"synchronizer.publish_background",
+						Translations.getString("configuration.synchronization.publish_background"))));
+		
+		this.addField(new ConfigurationField(
+				"PUBLISH_START",
+				null,
+				new ConfigurationFieldType.CheckBox(
+						Main.getUserSettings(),
+						"synchronizer.publish_start",
+						Translations.getString("configuration.synchronization.publish_start"))));
+		
+		this.addField(new ConfigurationField(
+				"PUBLISH_EXIT",
+				null,
+				new ConfigurationFieldType.CheckBox(
+						Main.getUserSettings(),
+						"synchronizer.publish_exit",
+						Translations.getString("configuration.synchronization.publish_exit"))));
+		
+		this.addField(new ConfigurationField(
+				"SEPARATOR_3",
 				null,
 				new ConfigurationFieldType.Separator()));
 		
