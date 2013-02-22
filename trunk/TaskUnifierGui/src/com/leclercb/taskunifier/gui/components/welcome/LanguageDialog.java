@@ -65,6 +65,8 @@ public class LanguageDialog extends TUDialog implements ConfigurationGroup {
 		
 		if (this.getOwner() != null)
 			this.setLocationRelativeTo(this.getOwner());
+		else
+			this.setLocationRelativeTo(null);
 		
 		this.generalConfigurationPanel = new GeneralConfigurationPanel(
 				this,
