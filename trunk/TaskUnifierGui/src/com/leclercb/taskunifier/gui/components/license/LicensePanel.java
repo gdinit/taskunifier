@@ -114,7 +114,7 @@ public class LicensePanel extends JPanel {
 		this.getTrialButton.setEnabled(LicenseUtils.isFirstTrialLicense());
 		
 		if (license == null || !show) {
-			if (getTrial) {
+			if (getTrial && LicenseUtils.isFirstTrialLicense()) {
 				CardLayout layout = (CardLayout) this.getLayout();
 				layout.show(this, "GET_TRIAL");
 			} else {
@@ -294,8 +294,8 @@ public class LicensePanel extends JPanel {
 			if (l != null) {
 				if (l.getLicenseType() == LicenseType.TRIAL) {
 					if (!LicenseUtils.isFirstTrialLicense()) {
-						// TODO: multiple trials not allowed
-						// Sign message in settings ?
+						// TODO: only one trial license key allowed
+						return;
 					}
 				}
 				

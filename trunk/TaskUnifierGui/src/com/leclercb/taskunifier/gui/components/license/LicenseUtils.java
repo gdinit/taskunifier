@@ -46,6 +46,7 @@ import org.apache.commons.io.IOUtils;
 
 import com.leclercb.commons.api.license.License;
 import com.leclercb.commons.api.license.LicenseManager;
+import com.leclercb.commons.api.license.LicenseType;
 import com.leclercb.commons.api.license.exceptions.LicenseException;
 import com.leclercb.commons.api.license.exceptions.NoLicenseException;
 import com.leclercb.commons.api.utils.CheckUtils;
@@ -84,6 +85,11 @@ public final class LicenseUtils {
 			InputStream publicKey = LicenseManager.keyDecoder(PUBLIC_KEY);
 			LicenseManager lm = new LicenseManager(publicKey, null);
 			License l = lm.readLicense(license);
+			
+			if (l.getLicenseType() == LicenseType.TRIAL)
+				Main.getSettings().setBooleanProperty(
+						"license.trial.used",
+						true);
 			
 			return l;
 		} catch (FileNotFoundException e) {
@@ -135,9 +141,7 @@ public final class LicenseUtils {
 	}
 	
 	public static boolean isFirstTrialLicense() {
-		// TODO: multiple trials not allowed
-		// Sign message in settings ?
-		return true;
+		return !Main.getSettings().getBooleanProperty("license.trial.used");
 	}
 	
 	public static void main(String[] args) throws Exception {

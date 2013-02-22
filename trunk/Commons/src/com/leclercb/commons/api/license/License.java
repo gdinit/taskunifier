@@ -45,94 +45,124 @@ import com.leclercb.commons.api.utils.CheckUtils;
 
 public class License {
 	
-	private String firstName;
-	private String lastName;
-	private String email;
-	private Calendar purchaseDate;
+	private static LicenseValidator LICENSE_VALIDATOR;
 	
-	private LicenseType licenseType;
-	private String version;
-	private Calendar expiration;
+	public static License parseLicense(String license) throws Exception {
+		PropertyMap p = new PropertyMap();
+		p.load(IOUtils.toInputStream(license));
+		
+		License l = new License();
+		l.setProperties(p);
+		
+		return l;
+	}
 	
-	private String reference;
+	public static void setLicenseValidator(LicenseValidator validator) {
+		LICENSE_VALIDATOR = validator;
+	}
+	
+	private PropertyMap properties;
 	
 	public License() {
 		this(LicenseType.TRIAL);
 	}
 	
 	public License(LicenseType licenseType) {
+		this.setProperties(new PropertyMap());
+		
 		this.setLicenseType(licenseType);
 	}
 	
 	public String getFirstName() {
-		return this.firstName;
+		return this.properties.getStringProperty("first_name", null);
 	}
 	
 	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+		this.properties.setStringProperty("first_name", firstName);
 	}
 	
 	public String getLastName() {
-		return this.lastName;
+		return this.properties.getStringProperty("last_name", null);
 	}
 	
 	public void setLastName(String lastName) {
-		this.lastName = lastName;
+		this.properties.setStringProperty("last_name", lastName);
 	}
 	
 	public String getEmail() {
-		return this.email;
+		return this.properties.getStringProperty("email", null);
 	}
 	
 	public void setEmail(String email) {
-		this.email = email;
+		this.properties.setStringProperty("email", email);
 	}
 	
 	public Calendar getPurchaseDate() {
-		return this.purchaseDate;
+		return this.properties.getCalendarProperty("purchase_date", null);
 	}
 	
 	public void setPurchaseDate(Calendar purchaseDate) {
-		this.purchaseDate = purchaseDate;
+		this.properties.setCalendarProperty("purchase_date", purchaseDate);
 	}
 	
 	public LicenseType getLicenseType() {
-		return this.licenseType;
+		return this.properties.getEnumProperty(
+				"license_type",
+				LicenseType.class,
+				null);
 	}
 	
 	public void setLicenseType(LicenseType licenseType) {
 		CheckUtils.isNotNull(licenseType);
-		this.licenseType = licenseType;
+		this.properties.setEnumProperty(
+				"license_type",
+				LicenseType.class,
+				licenseType);
 	}
 	
 	public String getVersion() {
-		return this.version;
+		return this.properties.getStringProperty("version", null);
 	}
 	
 	public void setVersion(String version) {
-		this.version = version;
+		this.properties.setStringProperty("version", version);
 	}
 	
 	public Calendar getExpiration() {
-		return this.expiration;
+		return this.properties.getCalendarProperty("expiration", null);
 	}
 	
 	public void setExpiration(Calendar expiration) {
-		this.expiration = expiration;
+		this.properties.setCalendarProperty("expiration", expiration);
 	}
 	
 	public String getReference() {
-		return this.reference;
+		return this.properties.getStringProperty("reference", null);
 	}
 	
 	public void setReference(String reference) {
-		this.reference = reference;
+		this.properties.setStringProperty("reference", reference);
+	}
+	
+	public String getProperty(String key) {
+		return this.properties.getStringProperty(key, null);
+	}
+	
+	public void setProperty(String key, String value) {
+		this.properties.setStringProperty(key, value);
+	}
+	
+	private void setProperties(PropertyMap properties) {
+		this.properties = properties;
 	}
 	
 	public void validate(Calendar currentDate, String currentVersion)
 			throws LicenseException {
 		this.validateExpiration(currentDate);
 		this.validateVersion(currentVersion);
+		
+		if (LICENSE_VALIDATOR != null)
+			LICENSE_VALIDATOR.validate(this);
 	}
 	
 	protected void validateExpiration(Calendar currentDate)
@@ -163,37 +193,10 @@ public class License {
 	}
 	
 	public String licenseToString() throws Exception {
-		PropertyMap p = new PropertyMap();
-		p.setStringProperty("first_name", this.firstName);
-		p.setStringProperty("last_name", this.lastName);
-		p.setStringProperty("email", this.email);
-		p.setCalendarProperty("purchase_date", this.purchaseDate);
-		p.setEnumProperty("license_type", LicenseType.class, this.licenseType);
-		p.setStringProperty("version", this.version);
-		p.setCalendarProperty("expiration", this.expiration);
-		p.setStringProperty("reference", this.reference);
-		
 		StringWriter writer = new StringWriter();
-		p.store(writer, null);
+		this.properties.store(writer, null);
 		
 		return writer.toString();
-	}
-	
-	public static License parseLicense(String license) throws Exception {
-		PropertyMap p = new PropertyMap();
-		p.load(IOUtils.toInputStream(license));
-		
-		License l = new License();
-		l.setFirstName(p.getStringProperty("first_name"));
-		l.setLastName(p.getStringProperty("last_name"));
-		l.setEmail(p.getStringProperty("email"));
-		l.setPurchaseDate(p.getCalendarProperty("purchase_date"));
-		l.setLicenseType(p.getEnumProperty("license_type", LicenseType.class));
-		l.setVersion(p.getStringProperty("version"));
-		l.setExpiration(p.getCalendarProperty("expiration"));
-		l.setReference(p.getStringProperty("reference"));
-		
-		return l;
 	}
 	
 }
