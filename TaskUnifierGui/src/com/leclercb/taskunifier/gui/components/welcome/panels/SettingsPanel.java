@@ -96,9 +96,9 @@ public class SettingsPanel extends CardPanel {
 	}
 	
 	@Override
-	public boolean allowNext() {
+	public boolean next() {
 		if (this.cardInterface != null)
-			return this.cardInterface.allowNext();
+			return this.cardInterface.next();
 		
 		return true;
 	}

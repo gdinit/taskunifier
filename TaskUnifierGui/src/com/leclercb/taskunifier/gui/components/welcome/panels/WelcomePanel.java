@@ -121,7 +121,7 @@ public class WelcomePanel extends CardPanel {
 	}
 	
 	@Override
-	public boolean allowNext() {
+	public boolean next() {
 		if (this.messageReadAgree != null) {
 			if (!this.messageReadAgree.isSelected()) {
 				this.messageReadAgree.setForeground(Color.RED);
