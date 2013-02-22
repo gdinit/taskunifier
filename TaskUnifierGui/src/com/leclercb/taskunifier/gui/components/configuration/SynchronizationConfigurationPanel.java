@@ -126,14 +126,6 @@ public class SynchronizationConfigurationPanel extends DefaultConfigurationPanel
 				new SchedulerSleepTimeFieldType()));
 		
 		this.addField(new ConfigurationField(
-				"PUBLISH_BACKGROUND",
-				null,
-				new ConfigurationFieldType.CheckBox(
-						Main.getUserSettings(),
-						"synchronizer.publish_background",
-						Translations.getString("configuration.synchronization.publish_background"))));
-		
-		this.addField(new ConfigurationField(
 				"SEPARATOR_3",
 				null,
 				new ConfigurationFieldType.Separator()));
@@ -153,22 +145,6 @@ public class SynchronizationConfigurationPanel extends DefaultConfigurationPanel
 						Main.getUserSettings(),
 						"synchronizer.sync_exit",
 						Translations.getString("configuration.synchronization.sync_exit"))));
-		
-		this.addField(new ConfigurationField(
-				"PUBLISH_START",
-				null,
-				new ConfigurationFieldType.CheckBox(
-						Main.getUserSettings(),
-						"synchronizer.publish_start",
-						Translations.getString("configuration.synchronization.publish_start"))));
-		
-		this.addField(new ConfigurationField(
-				"PUBLISH_EXIT",
-				null,
-				new ConfigurationFieldType.CheckBox(
-						Main.getUserSettings(),
-						"synchronizer.publish_exit",
-						Translations.getString("configuration.synchronization.publish_exit"))));
 		
 		this.addField(new ConfigurationField(
 				"SEPARATOR_4",
@@ -293,20 +269,11 @@ public class SynchronizationConfigurationPanel extends DefaultConfigurationPanel
 		if (this.containsId("SCHEDULER_SLEEP_TIME"))
 			this.setEnabled("SCHEDULER_SLEEP_TIME", enabled);
 		
-		if (this.containsId("PUBLISH_BACKGROUND"))
-			this.setEnabled("PUBLISH_BACKGROUND", enabled);
-		
 		if (this.containsId("SYNC_START"))
 			this.setEnabled("SYNC_START", enabled);
 		
 		if (this.containsId("SYNC_EXIT"))
 			this.setEnabled("SYNC_EXIT", enabled);
-		
-		if (this.containsId("PUBLISH_START"))
-			this.setEnabled("PUBLISH_START", enabled);
-		
-		if (this.containsId("PUBLISH_EXIT"))
-			this.setEnabled("PUBLISH_EXIT", enabled);
 		
 		if (this.containsId("SYNC_REMINDER_FIELD"))
 			this.setEnabled("SYNC_REMINDER_FIELD", enabled);

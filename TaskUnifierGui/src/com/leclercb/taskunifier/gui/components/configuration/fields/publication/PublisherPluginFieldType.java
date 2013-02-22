@@ -59,7 +59,7 @@ public class PublisherPluginFieldType extends ConfigurationFieldType.Panel imple
 		panel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		
 		this.table = new PublisherPluginTable();
-		this.table.setPreferredSize(new Dimension(100, 200));
+		this.table.setPreferredSize(new Dimension(100, 100));
 		
 		panel.add(this.table.getTableHeader(), BorderLayout.NORTH);
 		panel.add(this.table, BorderLayout.CENTER);
