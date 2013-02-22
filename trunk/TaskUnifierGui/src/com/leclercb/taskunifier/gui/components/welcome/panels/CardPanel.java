@@ -54,7 +54,7 @@ public abstract class CardPanel extends JPanel implements CardInterface, Configu
 	}
 	
 	@Override
-	public boolean allowNext() {
+	public boolean next() {
 		return true;
 	}
 	
