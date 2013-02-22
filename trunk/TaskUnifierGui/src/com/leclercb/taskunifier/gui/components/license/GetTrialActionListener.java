@@ -159,7 +159,7 @@ public class GetTrialActionListener implements ActionListener {
 	}
 	
 	private void showResult(final String code, final String message) {
-		TUSwingUtilities.invokeLater(new Runnable() {
+		TUSwingUtilities.invokeAndWait(new Runnable() {
 			
 			@Override
 			public void run() {
