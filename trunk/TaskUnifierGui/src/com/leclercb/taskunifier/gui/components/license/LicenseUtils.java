@@ -56,12 +56,16 @@ import com.leclercb.taskunifier.gui.resources.Resources;
 
 public final class LicenseUtils {
 	
-	private static final String PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCY"
-			+ "kSwG7upH9Y1Mq155AAHIQy+rGMrLs614j4cs6A/m"
-			+ "kBRYm7sdumhE16hwsaWF5RXPN/2tesM/bAlr3Y4z"
-			+ "QwSD5TIFp5XwsEed9XKREDdiy6FhbkHgvv0OY7U1"
-			+ "ueWj+kkbI7WvLj2z41u+/uH9lU4WIQOifBh0fP0+"
-			+ "WpZqcw7QXwIDAQAB";
+	private static final String PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC"
+			+ "AQEAjbWn5Ts0sjDudj1oXHQnsRM5+H44nB+YF02Z"
+			+ "kK+zk7wJNCPjXJj518PjMC4GMExGmU+fb7q1PyWk"
+			+ "+39n/eMvov2Bfcvjzu0jxsrv9yzEaaRLdiD17GEz"
+			+ "KM8lOmUvBMN5sUGP+d86mGQT/6Akboi7RgI1q6p6"
+			+ "eXlwVOZpc8xNMtoAyoWBQg1X5aXneKSerxbuQ59Z"
+			+ "1E7u5myEbEVzJuYhOE8RVsAvtotMw+LjREymPttr"
+			+ "trMcqCzRMD3UVdDP/eolsD4mGzKVzweDbY2fWG2G"
+			+ "Tp8ImkCArQsH5YGfBSlPyuZ4O2bU/qszJ3KYJRTe"
+			+ "Vw/71cdeA6DCVuDR3BynEbRzZwIDAQAB";
 	
 	private static License LICENSE;
 	
@@ -137,7 +141,7 @@ public final class LicenseUtils {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		boolean generateKey = true;
+		boolean generateKey = false;
 		boolean encodeKey = true;
 		
 		if (generateKey) {
