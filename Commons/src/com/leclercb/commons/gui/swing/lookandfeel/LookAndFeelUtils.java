@@ -35,6 +35,7 @@ package com.leclercb.commons.gui.swing.lookandfeel;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.metal.DefaultMetalTheme;
@@ -82,8 +83,13 @@ public final class LookAndFeelUtils {
 		if (UIManager.getLookAndFeel() == null)
 			return false;
 		
+		LookAndFeel laf = UIManager.getLookAndFeel();
+		
+		if (laf instanceof LookAndFeelDecorator)
+			laf = ((LookAndFeelDecorator) laf).getLookAndFeel();
+		
 		return UIManager.getSystemLookAndFeelClassName().equals(
-				UIManager.getLookAndFeel().getClass().getName());
+				laf.getClass().getName());
 	}
 	
 	public static LookAndFeelDescriptor getLookAndFeel(String className) {
