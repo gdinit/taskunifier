@@ -62,6 +62,10 @@ public class LookAndFeelDecorator extends LookAndFeel {
 		this.laf = laf;
 	}
 	
+	public LookAndFeel getLookAndFeel() {
+		return this.laf;
+	}
+	
 	@Override
 	public UIDefaults getDefaults() {
 		return this.laf.getDefaults();
