@@ -33,8 +33,10 @@
 package com.leclercb.taskunifier.gui.components.welcome.panels;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.JPanel;
 
 import org.jdesktop.swingx.JXHeader;
 
@@ -59,11 +61,16 @@ public class LicensePanel extends CardPanel {
 		
 		this.add(header, BorderLayout.NORTH);
 		
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		
 		com.leclercb.taskunifier.gui.components.license.LicensePanel licensePanel = new com.leclercb.taskunifier.gui.components.license.LicensePanel();
 		licensePanel.setLicense(LicenseUtils.loadLicense(), false);
 		licensePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		
-		this.add(licensePanel, BorderLayout.CENTER);
+		mainPanel.add(licensePanel);
+		
+		this.add(mainPanel, BorderLayout.CENTER);
 	}
 	
 	@Override
