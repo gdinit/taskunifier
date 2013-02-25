@@ -8,6 +8,7 @@ Version 3.1.9
 		- BF 130: Duplicate entries in add/remove programs
 	- Minor:
 		- BF 253: Remove beeps
+		- FR 324: Search shortcut
 		- Fixed owner of all the dialogs
 		- Do not apply searcher template for quick add task
 		- Bug fixed: Layout of settings

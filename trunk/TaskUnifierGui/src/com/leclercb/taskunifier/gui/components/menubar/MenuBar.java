@@ -109,6 +109,7 @@ import com.leclercb.taskunifier.gui.actions.ActionQuit;
 import com.leclercb.taskunifier.gui.actions.ActionRefresh;
 import com.leclercb.taskunifier.gui.actions.ActionReview;
 import com.leclercb.taskunifier.gui.actions.ActionScheduledSync;
+import com.leclercb.taskunifier.gui.actions.ActionSearch;
 import com.leclercb.taskunifier.gui.actions.ActionSelectParentTasks;
 import com.leclercb.taskunifier.gui.actions.ActionShowTips;
 import com.leclercb.taskunifier.gui.actions.ActionSynchronize;
@@ -226,6 +227,10 @@ public class MenuBar extends JMenuBar implements ListChangeListener, PropertyCha
 		editMenu.add(new ActionCut(16, 16));
 		editMenu.add(new ActionCopy(16, 16));
 		editMenu.add(new ActionPaste(16, 16));
+		
+		editMenu.addSeparator();
+		
+		editMenu.add(new ActionSearch(16, 16));
 	}
 	
 	private void initializeViewMenu() {

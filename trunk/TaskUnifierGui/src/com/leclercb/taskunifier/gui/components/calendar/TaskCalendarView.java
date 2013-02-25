@@ -46,4 +46,6 @@ public interface TaskCalendarView extends ModelSelectionChangeSupported {
 	
 	public abstract boolean shouldBeDisplayed(Task task);
 	
+	public abstract void focusAndSearch(String text);
+	
 }

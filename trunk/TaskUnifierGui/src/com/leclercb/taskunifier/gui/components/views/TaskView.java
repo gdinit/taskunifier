@@ -55,4 +55,6 @@ public interface TaskView extends View {
 	
 	public abstract void setSelectedInfoTab(InfoTab tab);
 	
+	public abstract void focusAndSearch(String text);
+	
 }

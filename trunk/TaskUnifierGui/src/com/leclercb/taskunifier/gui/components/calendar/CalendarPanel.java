@@ -306,6 +306,13 @@ public class CalendarPanel extends JPanel implements SavePropertiesListener {
 		this.horizontalSplitPane.setLeftComponent(searcherPane);
 	}
 	
+	public void focusAndSearch(String text) {
+		if (text != null)
+			this.searchField.setText(text);
+		
+		this.searchField.requestFocus();
+	}
+	
 	private void initializeSearchField() {
 		this.searchField = new JXSearchField(
 				Translations.getString("general.search"));

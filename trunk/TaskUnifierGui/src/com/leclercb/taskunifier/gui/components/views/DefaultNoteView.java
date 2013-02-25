@@ -103,6 +103,14 @@ public class DefaultNoteView extends JPanel implements NoteView, SavePropertiesL
 		return this.noteNote;
 	}
 	
+	@Override
+	public void focusAndSearch(String text) {
+		if (text != null)
+			this.searchField.setText(text);
+		
+		this.searchField.requestFocus();
+	}
+	
 	private void initialize() {
 		Main.getSettings().addSavePropertiesListener(this);
 		
