@@ -165,7 +165,7 @@ public class Main {
 	}
 	
 	public static boolean isTmpProVersion() {
-		return false;
+		return DEVELOPER_MODE;
 	}
 	
 	private static String getLockFile() {
