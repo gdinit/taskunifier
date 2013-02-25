@@ -85,9 +85,6 @@ public final class LookAndFeelUtils {
 		
 		LookAndFeel laf = UIManager.getLookAndFeel();
 		
-		if (laf instanceof LookAndFeelDecorator)
-			laf = ((LookAndFeelDecorator) laf).getLookAndFeel();
-		
 		return UIManager.getSystemLookAndFeelClassName().equals(
 				laf.getClass().getName());
 	}
