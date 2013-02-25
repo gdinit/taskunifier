@@ -162,6 +162,9 @@ public final class ComponentFactory {
 						
 						@Override
 						public String getPreferredStringForItem(Object item) {
+							if (item == null)
+								return null;
+							
 							return StringValueTaskPriority.INSTANCE.getString(item);
 						}
 						
@@ -189,6 +192,9 @@ public final class ComponentFactory {
 						
 						@Override
 						public String getPreferredStringForItem(Object item) {
+							if (item == null)
+								return null;
+							
 							return StringValueTaskRepeatFrom.INSTANCE.getString(item);
 						}
 						
@@ -218,6 +224,9 @@ public final class ComponentFactory {
 						
 						@Override
 						public String getPreferredStringForItem(Object item) {
+							if (item == null)
+								return null;
+							
 							return StringValueTaskStatus.INSTANCE.getString(item);
 						}
 						
