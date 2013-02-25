@@ -135,6 +135,14 @@ public class DefaultTaskView extends JPanel implements TaskView, SavePropertiesL
 		this.infoTabbedPane.setSelectedIndex(tab.ordinal());
 	}
 	
+	@Override
+	public void focusAndSearch(String text) {
+		if (text != null)
+			this.searchField.setText(text);
+		
+		this.searchField.requestFocus();
+	}
+	
 	private void initialize() {
 		Main.getSettings().addSavePropertiesListener(this);
 		

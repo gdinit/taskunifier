@@ -44,4 +44,6 @@ public interface NoteView extends View {
 	
 	public abstract ModelNoteView getModelNoteView();
 	
+	public abstract void focusAndSearch(String text);
+	
 }

@@ -335,6 +335,7 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 		
 		this.initializeSettings();
 		this.initializeHeaderListener();
+		this.initializeFind();
 		this.initializeDeleteNote();
 		this.initializeEditNote();
 		this.initializeNoteTableMenu();
@@ -428,6 +429,10 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 			}
 			
 		});
+	}
+	
+	private void initializeFind() {
+		this.getActionMap().put("find", null);
 	}
 	
 	private void initializeDeleteNote() {

@@ -101,6 +101,7 @@ public enum ActionList {
 	REVIEW(Translations.getString("action.review"), "information.png", true),
 	SAVE(Translations.getString("action.save"), "save.png", false),
 	SCHEDULED_SYNC(Translations.getString("action.scheduled_sync"), "synchronize_play.png", true),
+	SEARCH(Translations.getString("action.search"), "search.png", true),
 	SELECT_PARENT_TASKS(Translations.getString("action.select_parent_tasks"), "task.png", true),
 	SHOW_TIPS(Translations.getString("action.show_tips"), "information.png", true),
 	SWITCH_TO_USER(Translations.getString("action.switch_user"), "user.png", false),
@@ -322,6 +323,8 @@ public enum ActionList {
 				return new ActionSave(width, height);
 			case SCHEDULED_SYNC:
 				return new ActionScheduledSync(width, height);
+			case SEARCH:
+				return new ActionSearch(width, height);
 			case SELECT_PARENT_TASKS:
 				return new ActionSelectParentTasks(width, height);
 			case SHOW_TIPS:

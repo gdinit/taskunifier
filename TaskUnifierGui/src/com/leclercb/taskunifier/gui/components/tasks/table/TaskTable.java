@@ -354,6 +354,7 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 		
 		this.initializeSettings();
 		this.initializeHeaderListener();
+		this.initializeFind();
 		this.initializeDeleteTasks();
 		this.initializeSingleClick();
 		this.initializeDoubleClick();
@@ -466,6 +467,10 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 			}
 			
 		});
+	}
+	
+	private void initializeFind() {
+		this.getActionMap().put("find", null);
 	}
 	
 	private void initializeDeleteTasks() {

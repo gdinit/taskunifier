@@ -41,4 +41,6 @@ public interface CalendarView extends View {
 	
 	public abstract TaskCalendarView getTaskCalendarView();
 	
+	public abstract void focusAndSearch(String text);
+	
 }

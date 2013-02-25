@@ -68,6 +68,11 @@ public class DefaultCalendarView extends JPanel implements CalendarView, Propert
 		return this.calendarPanel;
 	}
 	
+	@Override
+	public void focusAndSearch(String text) {
+		this.calendarPanel.focusAndSearch(text);
+	}
+	
 	private void initialize() {
 		this.setOpaque(false);
 		this.setLayout(new BorderLayout());

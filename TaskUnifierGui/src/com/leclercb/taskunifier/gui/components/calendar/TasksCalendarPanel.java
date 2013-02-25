@@ -115,6 +115,11 @@ public class TasksCalendarPanel extends JPanel implements TaskCalendarView, Save
 		return this.calendarPanel.getTaskSearcherPanel();
 	}
 	
+	@Override
+	public void focusAndSearch(String text) {
+		this.calendarPanel.focusAndSearch(text);
+	}
+	
 	private void initialize() {
 		this.setOpaque(false);
 		this.setLayout(new BorderLayout());
