@@ -39,7 +39,6 @@ import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelDecorator;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelDescriptor;
 import com.leclercb.commons.gui.swing.lookandfeel.exc.LookAndFeelException;
 import com.leclercb.taskunifier.gui.constants.Constants;
@@ -73,7 +72,7 @@ public class JTattooLookAndFeelDescriptor extends LookAndFeelDescriptor {
 			
 			LookAndFeel instance = (LookAndFeel) lafClass.newInstance();
 			
-			UIManager.setLookAndFeel(new LookAndFeelDecorator(instance));
+			UIManager.setLookAndFeel(instance);
 			
 			if (window != null) {
 				SwingUtilities.updateComponentTreeUI(window);
