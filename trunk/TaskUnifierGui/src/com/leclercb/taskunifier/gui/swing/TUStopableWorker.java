@@ -55,7 +55,7 @@ public abstract class TUStopableWorker<T> extends TUWorker<T> {
 		this.cancel(false);
 	}
 	
-	protected final void executeNonAtomicAction(Runnable runnable) {
+	public final void executeNonAtomicAction(Runnable runnable) {
 		Thread thread = new Thread(runnable);
 		thread.start();
 		
