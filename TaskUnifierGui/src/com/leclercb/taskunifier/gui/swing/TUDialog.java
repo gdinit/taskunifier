@@ -49,6 +49,7 @@ import com.leclercb.commons.gui.utils.ScreenUtils;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
+import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class TUDialog extends JDialog implements SavePropertiesListener {
 	
@@ -78,6 +79,8 @@ public class TUDialog extends JDialog implements SavePropertiesListener {
 	}
 	
 	private void initialize() {
+		this.setIconImage(ImageUtils.getResourceImage("logo.png").getImage());
+		
 		Main.getSettings().addSavePropertiesListener(
 				new WeakSavePropertiesListener(Main.getSettings(), this));
 		
