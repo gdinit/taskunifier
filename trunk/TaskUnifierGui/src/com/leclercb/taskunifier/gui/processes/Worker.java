@@ -30,10 +30,17 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.swing;
+package com.leclercb.taskunifier.gui.processes;
 
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
 import javax.swing.SwingWorker;
@@ -50,9 +57,10 @@ import com.leclercb.commons.api.progress.ProgressMessage;
 import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
+import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public abstract class TUWorker<T> extends SwingWorker<T, ProgressMessage> implements ActionSupported, ListChangeListener {
+public abstract class Worker<T> extends SwingWorker<T, ProgressMessage> implements ActionSupported, ListChangeListener {
 	
 	public static final String ACTION_STARTED = "ACTION_STARTED";
 	public static final String ACTION_FINISHED = "ACTION_FINISHED";
@@ -62,7 +70,7 @@ public abstract class TUWorker<T> extends SwingWorker<T, ProgressMessage> implem
 	private ProgressMonitor edtMonitor;
 	private ProgressMonitor monitor;
 	
-	public TUWorker(ProgressMonitor monitor) {
+	public Worker(ProgressMonitor monitor) {
 		this.actionSupport = new ActionSupport(this);
 		this.edtMonitor = new ProgressMonitor();
 		
@@ -144,7 +152,7 @@ public abstract class TUWorker<T> extends SwingWorker<T, ProgressMessage> implem
 			
 			@Override
 			public void run() {
-				TUWorker.this.monitor.addMessage((ProgressMessage) event.getValue());
+				Worker.this.monitor.addMessage((ProgressMessage) event.getValue());
 			}
 			
 		});
@@ -158,6 +166,13 @@ public abstract class TUWorker<T> extends SwingWorker<T, ProgressMessage> implem
 	@Override
 	public void removeActionListener(ActionListener listener) {
 		this.actionSupport.removeActionListener(listener);
+	}
+	
+	public final <O> O executeAtomicAction(Callable<O> callable, int timeout)
+			throws InterruptedException, ExecutionException, TimeoutException {
+		ExecutorService executor = Executors.newCachedThreadPool();
+		Future<O> future = executor.submit(callable);
+		return future.get(timeout, TimeUnit.MILLISECONDS);
 	}
 	
 }

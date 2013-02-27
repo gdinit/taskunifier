@@ -59,11 +59,12 @@ import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessage;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
+import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 
 public class TUWorkerDialog<T> extends TUDialog implements ListChangeListener, ActionListener {
 	
-	private TUWorker<T> worker;
+	private Worker<T> worker;
 	
 	private JPanel panel;
 	private JProgressBar progressBar;
@@ -108,11 +109,11 @@ public class TUWorkerDialog<T> extends TUDialog implements ListChangeListener, A
 		}
 	}
 	
-	public TUWorker<T> getWorker() {
+	public Worker<T> getWorker() {
 		return this.worker;
 	}
 	
-	public void setWorker(TUWorker<T> worker) {
+	public void setWorker(Worker<T> worker) {
 		if (this.worker != null)
 			this.worker.removeActionListener(this);
 		
@@ -181,7 +182,7 @@ public class TUWorkerDialog<T> extends TUDialog implements ListChangeListener, A
 	
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		if (event.getActionCommand().equals(TUWorker.ACTION_FINISHED)) {
+		if (event.getActionCommand().equals(Worker.ACTION_FINISHED)) {
 			this.setCursor(null);
 			this.setVisible(false);
 			this.dispose();
