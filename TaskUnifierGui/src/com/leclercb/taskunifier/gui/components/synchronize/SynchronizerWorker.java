@@ -41,7 +41,7 @@ import java.util.logging.Level;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
-import com.leclercb.commons.api.event.listchange.ListChangeListener;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedListener;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.synchronizer.Connection;
@@ -80,13 +80,15 @@ public class SynchronizerWorker extends StoppableWorker<Void> {
 	private List<Type> types;
 	
 	private boolean silent;
-	private ListChangeListener handler;
+	private ProgressMessageAddedListener handler;
 	
 	public SynchronizerWorker(boolean silent) {
 		this(silent, null);
 	}
 	
-	public SynchronizerWorker(boolean silent, ListChangeListener handler) {
+	public SynchronizerWorker(
+			boolean silent,
+			ProgressMessageAddedListener handler) {
 		super(Constants.PROGRESS_MONITOR);
 		
 		this.plugins = new ArrayList<SynchronizerGuiPlugin>();
@@ -129,7 +131,7 @@ public class SynchronizerWorker extends StoppableWorker<Void> {
 		Synchronizing.getInstance().setSynchronizing(true);
 		
 		if (this.handler != null)
-			this.getMonitor().addListChangeListener(this.handler);
+			this.getMonitor().addProgressMessageAddedListener(this.handler);
 		
 		boolean noLicense = false;
 		SynchronizerGuiPlugin plugin = null;
@@ -415,7 +417,8 @@ public class SynchronizerWorker extends StoppableWorker<Void> {
 	protected void done() {
 		try {
 			if (this.handler != null)
-				this.getMonitor().removeListChangeListener(this.handler);
+				this.getMonitor().removeProgressMessageAddedListener(
+						this.handler);
 			
 			Constants.PROGRESS_MONITOR.clear();
 			

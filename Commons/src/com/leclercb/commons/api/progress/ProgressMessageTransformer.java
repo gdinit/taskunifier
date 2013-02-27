@@ -32,12 +32,14 @@
  */
 package com.leclercb.commons.api.progress;
 
-import com.leclercb.commons.api.event.listchange.ListChangeEvent;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedEvent;
 
 public interface ProgressMessageTransformer {
 	
-	public abstract boolean acceptsEvent(ListChangeEvent event);
+	public abstract boolean acceptsEvent(ProgressMessageAddedEvent event);
 	
-	public abstract Object getEventValue(ListChangeEvent event, String key);
+	public abstract Object getEventValue(
+			ProgressMessageAddedEvent event,
+			String key);
 	
 }

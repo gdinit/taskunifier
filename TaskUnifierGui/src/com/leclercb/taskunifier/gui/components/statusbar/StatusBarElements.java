@@ -41,11 +41,11 @@ import java.util.TimerTask;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 
-import com.leclercb.commons.api.event.listchange.ListChangeEvent;
-import com.leclercb.commons.api.event.listchange.ListChangeListener;
-import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessageTransformer;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedEvent;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedListener;
+import com.leclercb.commons.api.progress.event.WeakProgressMessageAddedListener;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
 import com.leclercb.taskunifier.gui.commons.values.StringValueTime;
@@ -67,7 +67,7 @@ import com.leclercb.taskunifier.gui.threads.communicator.progress.CommunicatorPr
 import com.leclercb.taskunifier.gui.threads.scheduledsync.ScheduledSyncThread;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-final class StatusBarElements implements ListChangeListener, PropertyChangeListener {
+final class StatusBarElements implements ProgressMessageAddedListener, PropertyChangeListener {
 	
 	private JLabel synchronizerStatusLabel;
 	private JLabel lastSynchronizationDateLabel;
@@ -108,7 +108,7 @@ final class StatusBarElements implements ListChangeListener, PropertyChangeListe
 		this.synchronizerStatusLabel.setText(Translations.getString("synchronizer.status")
 				+ ": ");
 		
-		Constants.PROGRESS_MONITOR.addListChangeListener(new WeakListChangeListener(
+		Constants.PROGRESS_MONITOR.addProgressMessageAddedListener(new WeakProgressMessageAddedListener(
 				Constants.PROGRESS_MONITOR,
 				this));
 	}
@@ -253,7 +253,7 @@ final class StatusBarElements implements ListChangeListener, PropertyChangeListe
 	}
 	
 	@Override
-	public void listChange(ListChangeEvent event) {
+	public void progressMessageAdded(ProgressMessageAddedEvent event) {
 		ProgressMessageTransformer t = null;
 		
 		t = SynchronizerProgressMessageTransformer.getInstance();

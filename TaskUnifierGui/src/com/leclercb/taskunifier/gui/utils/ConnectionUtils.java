@@ -32,17 +32,8 @@
  */
 package com.leclercb.taskunifier.gui.utils;
 
-import java.util.logging.Level;
-
-import javax.swing.JOptionPane;
-
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
-
 import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.HttpResponse;
-import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
@@ -60,41 +51,13 @@ public final class ConnectionUtils {
 				Translations.getString("configuration.proxy.test_connection"));
 		
 		ProgressMonitor monitor = new ProgressMonitor();
-		monitor.addListChangeListener(dialog);
+		monitor.addProgressMessageAddedListener(dialog);
 		
 		dialog.setWorker();
 		
 		dialog.setVisible(true);
 		
 		return dialog.getResult();
-	}
-	
-	private static void showResult(final boolean result) {
-		TUSwingUtilities.invokeAndWait(new Runnable() {
-			
-			@Override
-			public void run() {
-				if (result) {
-					JOptionPane.showMessageDialog(
-							FrameUtils.getCurrentWindow(),
-							Translations.getString("configuration.proxy.test_connection.success"),
-							Translations.getString("general.information"),
-							JOptionPane.INFORMATION_MESSAGE);
-				} else {
-					ErrorInfo info = new ErrorInfo(
-							Translations.getString("general.error"),
-							Translations.getString("configuration.proxy.test_connection.failed"),
-							null,
-							"GUI",
-							null,
-							Level.INFO,
-							null);
-					
-					JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
-				}
-			}
-			
-		});
 	}
 	
 }

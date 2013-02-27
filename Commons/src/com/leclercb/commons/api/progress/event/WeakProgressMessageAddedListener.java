@@ -30,30 +30,47 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.threads.reminder.progress;
+package com.leclercb.commons.api.progress.event;
 
-import com.leclercb.commons.api.progress.ProgressMessageTransformer;
-import com.leclercb.commons.api.progress.event.ProgressMessageAddedEvent;
-import com.leclercb.commons.api.progress.event.ProgressMessageAddedListener;
-import com.leclercb.taskunifier.gui.utils.notifications.NotificationList;
-import com.leclercb.taskunifier.gui.utils.notifications.NotificationUtils;
+import java.lang.ref.WeakReference;
 
-public class NotificationReminderProgressMessageListener implements ProgressMessageAddedListener {
+public class WeakProgressMessageAddedListener implements ProgressMessageAddedListener {
 	
-	public NotificationReminderProgressMessageListener() {
-		
+	private ProgressMessageAddedSupported support;
+	private WeakReference<ProgressMessageAddedListener> reference;
+	
+	public WeakProgressMessageAddedListener(
+			ProgressMessageAddedSupported support,
+			ProgressMessageAddedListener listener) {
+		this.support = support;
+		this.reference = new WeakReference<ProgressMessageAddedListener>(
+				listener);
 	}
 	
 	@Override
-	public void progressMessageAdded(ProgressMessageAddedEvent event) {
-		ProgressMessageTransformer t = ReminderProgressMessageTransformer.getInstance();
+	public void progressMessageAdded(ProgressMessageAddedEvent evt) {
+		ProgressMessageAddedListener listener = this.reference.get();
 		
-		if (t.acceptsEvent(event)) {
-			NotificationUtils.notify(
-					NotificationList.REMINDER,
-					(String) t.getEventValue(event, "title"),
-					(String) t.getEventValue(event, "description"));
-		}
+		if (listener == null)
+			this.support.removeProgressMessageAddedListener(this);
+		else
+			listener.progressMessageAdded(evt);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this.reference != null)
+			return this.reference.equals(obj);
+		
+		return super.equals(obj);
+	}
+	
+	@Override
+	public int hashCode() {
+		if (this.reference != null)
+			return this.reference.hashCode();
+		
+		return super.hashCode();
 	}
 	
 }

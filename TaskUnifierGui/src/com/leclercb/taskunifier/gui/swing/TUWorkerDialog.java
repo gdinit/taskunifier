@@ -54,15 +54,14 @@ import javax.swing.SwingConstants;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
-import com.leclercb.commons.api.event.listchange.ListChangeEvent;
-import com.leclercb.commons.api.event.listchange.ListChangeListener;
-import com.leclercb.commons.api.progress.ProgressMessage;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedEvent;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedListener;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 
-public class TUWorkerDialog<T> extends TUDialog implements ListChangeListener, ActionListener {
+public class TUWorkerDialog<T> extends TUDialog implements ProgressMessageAddedListener, ActionListener {
 	
 	private Worker<T> worker;
 	
@@ -77,13 +76,8 @@ public class TUWorkerDialog<T> extends TUDialog implements ListChangeListener, A
 	}
 	
 	@Override
-	public void listChange(ListChangeEvent event) {
-		if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
-			if (event.getValue() instanceof ProgressMessage) {
-				this.appendToProgressStatus(null, event.getValue().toString()
-						+ "\n");
-			}
-		}
+	public void progressMessageAdded(ProgressMessageAddedEvent event) {
+		this.appendToProgressStatus(null, event.getMessage() + "\n");
 	}
 	
 	public void appendToProgressStatus(Icon icon, String text) {

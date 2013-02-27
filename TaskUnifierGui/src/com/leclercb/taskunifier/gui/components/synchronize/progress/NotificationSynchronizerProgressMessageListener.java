@@ -32,16 +32,16 @@
  */
 package com.leclercb.taskunifier.gui.components.synchronize.progress;
 
-import com.leclercb.commons.api.event.listchange.ListChangeEvent;
-import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessage;
 import com.leclercb.commons.api.progress.ProgressMessageTransformer;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedEvent;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedListener;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerMainProgressMessage;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerUpdatedModelsProgressMessage;
 import com.leclercb.taskunifier.gui.utils.notifications.NotificationList;
 import com.leclercb.taskunifier.gui.utils.notifications.NotificationUtils;
 
-public class NotificationSynchronizerProgressMessageListener implements ListChangeListener {
+public class NotificationSynchronizerProgressMessageListener implements ProgressMessageAddedListener {
 	
 	private StringBuilder builder;
 	
@@ -50,40 +50,38 @@ public class NotificationSynchronizerProgressMessageListener implements ListChan
 	}
 	
 	@Override
-	public void listChange(ListChangeEvent event) {
+	public void progressMessageAdded(ProgressMessageAddedEvent event) {
 		ProgressMessageTransformer t = SynchronizerProgressMessageTransformer.getInstance();
 		
 		if (t.acceptsEvent(event)) {
-			if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
-				ProgressMessage message = (ProgressMessage) event.getValue();
+			ProgressMessage message = event.getMessage();
+			
+			String content = (String) t.getEventValue(event, "message");
+			
+			if (message instanceof SynchronizerUpdatedModelsProgressMessage) {
+				this.builder.append(content + "\n");
+			} else if (message.getClass().equals(
+					SynchronizerMainProgressMessage.class)) {
+				SynchronizerMainProgressMessage m = (SynchronizerMainProgressMessage) message;
 				
-				String content = (String) t.getEventValue(event, "message");
-				
-				if (message instanceof SynchronizerUpdatedModelsProgressMessage) {
-					this.builder.append(content + "\n");
-				} else if (message.getClass().equals(
-						SynchronizerMainProgressMessage.class)) {
-					SynchronizerMainProgressMessage m = (SynchronizerMainProgressMessage) message;
-					
-					switch (m.getType()) {
-						case PUBLISHER_START:
-						case SYNCHRONIZER_START:
-							NotificationUtils.notify(
-									NotificationList.SYNCHRONIZATION,
-									content);
-							
-							break;
-						case PUBLISHER_END:
-						case SYNCHRONIZER_END:
-							NotificationUtils.notify(
-									NotificationList.SYNCHRONIZATION,
-									content,
-									this.builder.toString());
-							
-							this.builder = new StringBuilder();
-							
-							break;
-					}
+				switch (m.getType()) {
+					case PUBLISHER_START:
+					case SYNCHRONIZER_START:
+						NotificationUtils.notify(
+								NotificationList.SYNCHRONIZATION,
+								content);
+						
+						break;
+					case PUBLISHER_END:
+					case SYNCHRONIZER_END:
+						NotificationUtils.notify(
+								NotificationList.SYNCHRONIZATION,
+								content,
+								this.builder.toString());
+						
+						this.builder = new StringBuilder();
+						
+						break;
 				}
 			}
 		}

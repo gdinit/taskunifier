@@ -39,9 +39,9 @@ import java.util.logging.Level;
 import javax.swing.Icon;
 import javax.swing.JButton;
 
-import com.leclercb.commons.api.event.listchange.ListChangeEvent;
-import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessageTransformer;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedEvent;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedListener;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.gui.actions.ActionGetSerial;
@@ -101,10 +101,10 @@ public class SynchronizerDialog extends TUWorkerDialog<Void> {
 	public class SynchronizerDialogWorker extends SynchronizerWorker {
 		
 		public SynchronizerDialogWorker() {
-			super(false, new ListChangeListener() {
+			super(false, new ProgressMessageAddedListener() {
 				
 				@Override
-				public void listChange(ListChangeEvent event) {
+				public void progressMessageAdded(ProgressMessageAddedEvent event) {
 					ProgressMessageTransformer t = SynchronizerProgressMessageTransformer.getInstance();
 					
 					if (t.acceptsEvent(event)) {

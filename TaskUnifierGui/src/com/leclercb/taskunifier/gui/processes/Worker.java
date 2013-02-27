@@ -50,17 +50,17 @@ import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.leclercb.commons.api.event.action.ActionSupport;
 import com.leclercb.commons.api.event.action.ActionSupported;
-import com.leclercb.commons.api.event.listchange.ListChangeEvent;
-import com.leclercb.commons.api.event.listchange.ListChangeListener;
-import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessage;
 import com.leclercb.commons.api.progress.ProgressMonitor;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedEvent;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedListener;
+import com.leclercb.commons.api.progress.event.WeakProgressMessageAddedListener;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public abstract class Worker<T> extends SwingWorker<T, ProgressMessage> implements ActionSupported, ListChangeListener {
+public abstract class Worker<T> extends SwingWorker<T, ProgressMessage> implements ActionSupported, ProgressMessageAddedListener {
 	
 	public static final String ACTION_STARTED = "ACTION_STARTED";
 	public static final String ACTION_FINISHED = "ACTION_FINISHED";
@@ -74,7 +74,7 @@ public abstract class Worker<T> extends SwingWorker<T, ProgressMessage> implemen
 		this.actionSupport = new ActionSupport(this);
 		this.edtMonitor = new ProgressMonitor();
 		
-		this.edtMonitor.addListChangeListener(new WeakListChangeListener(
+		this.edtMonitor.addProgressMessageAddedListener(new WeakProgressMessageAddedListener(
 				this.edtMonitor,
 				this));
 		
@@ -144,15 +144,12 @@ public abstract class Worker<T> extends SwingWorker<T, ProgressMessage> implemen
 	}
 	
 	@Override
-	public void listChange(final ListChangeEvent event) {
-		if (event.getChangeType() != ListChangeEvent.VALUE_ADDED)
-			return;
-		
+	public void progressMessageAdded(final ProgressMessageAddedEvent event) {
 		TUSwingUtilities.invokeLater(new Runnable() {
 			
 			@Override
 			public void run() {
-				Worker.this.monitor.addMessage((ProgressMessage) event.getValue());
+				Worker.this.monitor.addMessage(event.getMessage());
 			}
 			
 		});
