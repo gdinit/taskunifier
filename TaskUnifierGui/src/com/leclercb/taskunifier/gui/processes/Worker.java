@@ -60,21 +60,27 @@ import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public abstract class Worker<T> extends SwingWorker<T, ProgressMessage> implements ActionSupported, ProgressMessageAddedListener {
+public class Worker<T> extends SwingWorker<T, ProgressMessage> implements ActionSupported, ProgressMessageAddedListener {
 	
 	public static final String ACTION_STARTED = "ACTION_STARTED";
 	public static final String ACTION_FINISHED = "ACTION_FINISHED";
 	
 	private ActionSupport actionSupport;
 	
+	private boolean stopped;
+	
+	private Process<T> process;
+	
 	private ProgressMonitor edtMonitor;
 	private ProgressMonitor monitor;
 	
-	public Worker() {
-		this(new ProgressMonitor());
+	private Future<?> future;
+	
+	public Worker(Process<T> process) {
+		this(process, new ProgressMonitor());
 	}
 	
-	public Worker(ProgressMonitor monitor) {
+	public Worker(Process<T> process, ProgressMonitor monitor) {
 		this.actionSupport = new ActionSupport(this);
 		this.edtMonitor = new ProgressMonitor();
 		
@@ -82,7 +88,35 @@ public abstract class Worker<T> extends SwingWorker<T, ProgressMessage> implemen
 				this.edtMonitor,
 				this));
 		
+		this.stopped = false;
+		
+		this.setProcess(process);
 		this.setMonitor(monitor);
+	}
+	
+	public final synchronized boolean isStopped() {
+		return this.stopped;
+	}
+	
+	public synchronized void stop() {
+		if (this.stopped)
+			return;
+		
+		this.stopped = true;
+		
+		if (this.future != null)
+			this.future.cancel(true);
+		
+		this.cancel(false);
+	}
+	
+	public Process<T> getProcess() {
+		return this.process;
+	}
+	
+	private void setProcess(Process<T> process) {
+		CheckUtils.isNotNull(process);
+		this.process = process;
 	}
 	
 	public ProgressMonitor getEDTMonitor() {
@@ -93,7 +127,7 @@ public abstract class Worker<T> extends SwingWorker<T, ProgressMessage> implemen
 		return this.monitor;
 	}
 	
-	public void setMonitor(ProgressMonitor monitor) {
+	private void setMonitor(ProgressMonitor monitor) {
 		CheckUtils.isNotNull(monitor);
 		this.monitor = monitor;
 	}
@@ -105,7 +139,9 @@ public abstract class Worker<T> extends SwingWorker<T, ProgressMessage> implemen
 		}
 	}
 	
-	protected abstract T longTask() throws Exception;
+	protected T longTask() throws Exception {
+		return this.process.execute(this);
+	}
 	
 	protected void handleException(final Throwable t) {
 		TUSwingUtilities.invokeLater(new Runnable() {
@@ -167,10 +203,13 @@ public abstract class Worker<T> extends SwingWorker<T, ProgressMessage> implemen
 		this.actionSupport.removeActionListener(listener);
 	}
 	
-	public final <O> O executeAtomicAction(Callable<O> callable, int timeout)
-			throws InterruptedException, ExecutionException, TimeoutException {
+	public final <O> O executeInterruptibleAction(
+			Callable<O> callable,
+			int timeout) throws InterruptedException, ExecutionException,
+			TimeoutException {
 		ExecutorService executor = Executors.newCachedThreadPool();
 		Future<O> future = executor.submit(callable);
+		this.future = future;
 		return future.get(timeout, TimeUnit.MILLISECONDS);
 	}
 	

@@ -30,47 +30,50 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.processes;
+package com.leclercb.taskunifier.gui.processes.plugins;
 
-import com.leclercb.commons.api.progress.ProgressMonitor;
+import java.util.List;
 
-public abstract class StoppableWorker<T> extends Worker<T> {
+import com.leclercb.taskunifier.gui.api.plugins.Plugin;
+import com.leclercb.taskunifier.gui.api.plugins.PluginStatus;
+import com.leclercb.taskunifier.gui.api.plugins.PluginsUtils;
+import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
+import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.processes.Worker;
+
+public class ProcessLoadAndUpdatePluginsFromXml extends ProcessLoadPluginsFromXml {
 	
-	private boolean stopped;
-	
-	public StoppableWorker() {
-		super();
-		this.stopped = false;
+	public ProcessLoadAndUpdatePluginsFromXml(
+			boolean includePublishers,
+			boolean includeSynchronizers,
+			boolean includeDummyPlugin) {
+		super(includePublishers, includeSynchronizers, includeDummyPlugin);
 	}
 	
-	public StoppableWorker(ProgressMonitor monitor) {
-		super(monitor);
-		this.stopped = false;
-	}
-	
-	public final synchronized boolean isStopped() {
-		return this.stopped;
-	}
-	
-	public synchronized void stop() {
-		if (this.stopped)
-			return;
+	@Override
+	public Plugin[] execute(final Worker<Plugin[]> worker) throws Exception {
+		Plugin[] plugins = super.execute(worker);
 		
-		this.stopped = true;
-		this.cancel(false);
-	}
-	
-	public final void executeNonAtomicAction(Runnable runnable) {
-		Thread thread = new Thread(runnable);
-		thread.start();
+		if (plugins == null) {
+			if (!this.isIncludeDummyPlugin())
+				return new Plugin[0];
+			
+			plugins = new Plugin[] { PluginsUtils.getDummyPlugin() };
+		}
 		
-		while (thread.isAlive() && !this.isStopped()) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				
+		List<SynchronizerGuiPlugin> loadedPlugins = Main.getApiPlugins().getPlugins();
+		for (SynchronizerGuiPlugin p : loadedPlugins) {
+			for (int i = 0; i < plugins.length; i++) {
+				if (p.getId().equals(plugins[i].getId())) {
+					if (p.getVersion().compareTo(plugins[i].getVersion()) < 0)
+						plugins[i].setStatus(PluginStatus.TO_UPDATE);
+					else
+						plugins[i].setStatus(PluginStatus.INSTALLED);
+				}
 			}
 		}
+		
+		return plugins;
 	}
 	
 }

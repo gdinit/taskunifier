@@ -34,32 +34,12 @@ package com.leclercb.taskunifier.gui.components.license;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
 
-import javax.swing.JOptionPane;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.leclercb.commons.api.progress.DefaultProgressMessage;
 import com.leclercb.commons.api.utils.CheckUtils;
-import com.leclercb.commons.api.utils.EqualsUtils;
-import com.leclercb.commons.api.utils.HttpResponse;
-import com.leclercb.taskunifier.gui.constants.Constants;
-import com.leclercb.taskunifier.gui.main.Main;
-import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.processes.Worker;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
+import com.leclercb.taskunifier.gui.processes.license.ProcessGetTrial;
 import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
-import com.leclercb.taskunifier.gui.utils.HttpUtils;
 
 public class GetTrialActionListener implements ActionListener {
 	
@@ -92,98 +72,16 @@ public class GetTrialActionListener implements ActionListener {
 		TUWorkerDialog<String> dialog = new TUWorkerDialog<String>(
 				Translations.getString("license.get_trial"));
 		
-		dialog.setWorker(new Worker<String>() {
-			
-			@Override
-			protected String longTask() throws Exception {
-				this.publish(new DefaultProgressMessage(
-						Translations.getString("license.get_trial")));
-				
-				try {
-					List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-					
-					parameters.add(new BasicNameValuePair(
-							"item",
-							Constants.ITEM_TRIAL_ID + ""));
-					parameters.add(new BasicNameValuePair(
-							"first_name",
-							GetTrialActionListener.this.firstName));
-					parameters.add(new BasicNameValuePair(
-							"last_name",
-							GetTrialActionListener.this.lastName));
-					parameters.add(new BasicNameValuePair(
-							"email",
-							GetTrialActionListener.this.email));
-					parameters.add(new BasicNameValuePair(
-							"user_id",
-							Main.getCurrentUserId()));
-					
-					HttpResponse response = HttpUtils.getHttpPostResponse(
-							new URI(Constants.GET_TRIAL_URL),
-							parameters);
-					
-					System.out.println(response.getContent());
-					
-					if (!response.isSuccessfull())
-						throw new Exception();
-					
-					ObjectMapper mapper = new ObjectMapper();
-					JsonNode node = mapper.readTree(response.getContent());
-					
-					String code = node.get("code").asText();
-					String message = node.get("message").asText();
-					String license = null;
-					
-					GetTrialActionListener.this.showResult(code, message);
-					
-					if (EqualsUtils.equals(code, "0")) {
-						license = node.get("data").get("license").asText();
-					}
-					
-					return license;
-				} catch (Throwable t) {
-					t.printStackTrace();
-					GetTrialActionListener.this.showResult(
-							"999",
-							"An error occured while generating the trial license key.");
-					
-					return null;
-				}
-			}
-			
-		});
+		ProcessGetTrial process = new ProcessGetTrial(
+				this.firstName,
+				this.lastName,
+				this.email);
+		
+		dialog.setWorker(new Worker<String>(process));
 		
 		dialog.setVisible(true);
 		
 		this.license = dialog.getResult();
-	}
-	
-	private void showResult(final String code, final String message) {
-		TUSwingUtilities.invokeAndWait(new Runnable() {
-			
-			@Override
-			public void run() {
-				if (EqualsUtils.equals(code, "0")) {
-					JOptionPane.showMessageDialog(
-							FrameUtils.getCurrentWindow(),
-							message,
-							Translations.getString("general.information"),
-							JOptionPane.INFORMATION_MESSAGE);
-				} else {
-					ErrorInfo info = new ErrorInfo(
-							Translations.getString("general.error"),
-							message,
-							null,
-							"GUI",
-							null,
-							Level.INFO,
-							null);
-					
-					JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
-				}
-			}
-			
-		});
 	}
 	
 }
