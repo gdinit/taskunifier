@@ -35,20 +35,19 @@ package com.leclercb.commons.api.progress;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.leclercb.commons.api.event.listchange.ListChangeEvent;
-import com.leclercb.commons.api.event.listchange.ListChangeListener;
-import com.leclercb.commons.api.event.listchange.ListChangeSupport;
-import com.leclercb.commons.api.event.listchange.ListChangeSupported;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedListener;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedSupport;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedSupported;
 import com.leclercb.commons.api.utils.CheckUtils;
 
-public class ProgressMonitor implements ListChangeSupported {
+public class ProgressMonitor implements ProgressMessageAddedSupported {
 	
-	private ListChangeSupport listChangeSupport;
+	private ProgressMessageAddedSupport progressMessageAddedSupport;
 	
 	private List<ProgressMessage> messages;
 	
 	public ProgressMonitor() {
-		this.listChangeSupport = new ListChangeSupport(this);
+		this.progressMessageAddedSupport = new ProgressMessageAddedSupport(this);
 		
 		this.messages = new ArrayList<ProgressMessage>();
 	}
@@ -68,11 +67,7 @@ public class ProgressMonitor implements ListChangeSupported {
 	public synchronized void addMessage(ProgressMessage message) {
 		CheckUtils.isNotNull(message);
 		this.messages.add(message);
-		int index = this.messages.size() - 1;
-		this.listChangeSupport.fireListChange(
-				ListChangeEvent.VALUE_ADDED,
-				index,
-				message);
+		this.progressMessageAddedSupport.fireProgressMessageAdded(message);
 	}
 	
 	public void clear() {
@@ -80,13 +75,15 @@ public class ProgressMonitor implements ListChangeSupported {
 	}
 	
 	@Override
-	public void addListChangeListener(ListChangeListener listener) {
-		this.listChangeSupport.addListChangeListener(listener);
+	public void addProgressMessageAddedListener(
+			ProgressMessageAddedListener listener) {
+		this.progressMessageAddedSupport.addProgressMessageAddedListener(listener);
 	}
 	
 	@Override
-	public void removeListChangeListener(ListChangeListener listener) {
-		this.listChangeSupport.removeListChangeListener(listener);
+	public void removeProgressMessageAddedListener(
+			ProgressMessageAddedListener listener) {
+		this.progressMessageAddedSupport.removeProgressMessageAddedListener(listener);
 	}
 	
 }

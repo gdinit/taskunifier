@@ -32,20 +32,20 @@
  */
 package com.leclercb.taskunifier.gui.threads.communicator.progress;
 
-import com.leclercb.commons.api.event.listchange.ListChangeEvent;
-import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.progress.ProgressMessageTransformer;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedEvent;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedListener;
 import com.leclercb.taskunifier.gui.utils.notifications.NotificationList;
 import com.leclercb.taskunifier.gui.utils.notifications.NotificationUtils;
 
-public class NotificationCommunicatorProgressMessageListener implements ListChangeListener {
+public class NotificationCommunicatorProgressMessageListener implements ProgressMessageAddedListener {
 	
 	public NotificationCommunicatorProgressMessageListener() {
 		
 	}
 	
 	@Override
-	public void listChange(ListChangeEvent event) {
+	public void progressMessageAdded(ProgressMessageAddedEvent event) {
 		ProgressMessageTransformer t = CommunicatorProgressMessageTransformer.getInstance();
 		
 		if (t.acceptsEvent(event)) {

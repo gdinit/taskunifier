@@ -30,30 +30,43 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.threads.reminder.progress;
+package com.leclercb.commons.api.progress.event;
 
-import com.leclercb.commons.api.progress.ProgressMessageTransformer;
-import com.leclercb.commons.api.progress.event.ProgressMessageAddedEvent;
-import com.leclercb.commons.api.progress.event.ProgressMessageAddedListener;
-import com.leclercb.taskunifier.gui.utils.notifications.NotificationList;
-import com.leclercb.taskunifier.gui.utils.notifications.NotificationUtils;
+import com.leclercb.commons.api.event.ListenerList;
+import com.leclercb.commons.api.progress.ProgressMessage;
 
-public class NotificationReminderProgressMessageListener implements ProgressMessageAddedListener {
+public class ProgressMessageAddedSupport implements ProgressMessageAddedSupported {
 	
-	public NotificationReminderProgressMessageListener() {
-		
+	private ListenerList<ProgressMessageAddedListener> listeners;
+	
+	private Object source;
+	
+	public ProgressMessageAddedSupport(Object source) {
+		this.listeners = new ListenerList<ProgressMessageAddedListener>();
+		this.source = source;
 	}
 	
 	@Override
-	public void progressMessageAdded(ProgressMessageAddedEvent event) {
-		ProgressMessageTransformer t = ReminderProgressMessageTransformer.getInstance();
-		
-		if (t.acceptsEvent(event)) {
-			NotificationUtils.notify(
-					NotificationList.REMINDER,
-					(String) t.getEventValue(event, "title"),
-					(String) t.getEventValue(event, "description"));
-		}
+	public void addProgressMessageAddedListener(
+			ProgressMessageAddedListener listener) {
+		this.listeners.addListener(listener);
+	}
+	
+	@Override
+	public void removeProgressMessageAddedListener(
+			ProgressMessageAddedListener listener) {
+		this.listeners.removeListener(listener);
+	}
+	
+	public void fireProgressMessageAdded(ProgressMessageAddedEvent event) {
+		for (ProgressMessageAddedListener listener : this.listeners)
+			listener.progressMessageAdded(event);
+	}
+	
+	public void fireProgressMessageAdded(ProgressMessage message) {
+		this.fireProgressMessageAdded(new ProgressMessageAddedEvent(
+				this.source,
+				message));
 	}
 	
 }

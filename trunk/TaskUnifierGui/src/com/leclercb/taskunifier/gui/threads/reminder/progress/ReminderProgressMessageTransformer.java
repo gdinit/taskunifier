@@ -32,9 +32,8 @@
  */
 package com.leclercb.taskunifier.gui.threads.reminder.progress;
 
-import com.leclercb.commons.api.event.listchange.ListChangeEvent;
-import com.leclercb.commons.api.progress.ProgressMessage;
 import com.leclercb.commons.api.progress.ProgressMessageTransformer;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedEvent;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
@@ -55,31 +54,23 @@ public class ReminderProgressMessageTransformer implements ProgressMessageTransf
 	}
 	
 	@Override
-	public boolean acceptsEvent(ListChangeEvent event) {
-		if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
-			ProgressMessage message = (ProgressMessage) event.getValue();
-			
-			if (message instanceof ReminderDefaultProgressMessage) {
-				return true;
-			}
+	public boolean acceptsEvent(ProgressMessageAddedEvent event) {
+		if (event.getMessage() instanceof ReminderDefaultProgressMessage) {
+			return true;
 		}
 		
 		return false;
 	}
 	
 	@Override
-	public Object getEventValue(ListChangeEvent event, String key) {
-		if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
-			ProgressMessage message = (ProgressMessage) event.getValue();
+	public Object getEventValue(ProgressMessageAddedEvent event, String key) {
+		if (event.getMessage() instanceof ReminderDefaultProgressMessage) {
+			ReminderDefaultProgressMessage m = (ReminderDefaultProgressMessage) event.getMessage();
 			
-			if (message instanceof ReminderDefaultProgressMessage) {
-				ReminderDefaultProgressMessage m = (ReminderDefaultProgressMessage) message;
-				
-				if (key != null && key.equalsIgnoreCase("description"))
-					return getDescription(m.getTask());
-				else
-					return m.getTask().getTitle();
-			}
+			if (key != null && key.equalsIgnoreCase("description"))
+				return getDescription(m.getTask());
+			else
+				return m.getTask().getTitle();
 		}
 		
 		return null;

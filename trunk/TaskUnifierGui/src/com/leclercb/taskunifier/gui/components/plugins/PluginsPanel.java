@@ -108,7 +108,7 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 					Translations.getString("general.manage_plugins"));
 			
 			ProgressMonitor monitor = new ProgressMonitor();
-			monitor.addListChangeListener(dialog);
+			monitor.addProgressMessageAddedListener(dialog);
 			
 			dialog.setWorker(new Worker<Boolean>(monitor) {
 				

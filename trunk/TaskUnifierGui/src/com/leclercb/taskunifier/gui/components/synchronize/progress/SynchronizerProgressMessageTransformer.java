@@ -32,9 +32,9 @@
  */
 package com.leclercb.taskunifier.gui.components.synchronize.progress;
 
-import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.progress.ProgressMessage;
 import com.leclercb.commons.api.progress.ProgressMessageTransformer;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedEvent;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerDefaultProgressMessage;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerMainProgressMessage;
@@ -59,126 +59,119 @@ public class SynchronizerProgressMessageTransformer implements ProgressMessageTr
 	}
 	
 	@Override
-	public boolean acceptsEvent(ListChangeEvent event) {
-		if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
-			ProgressMessage message = (ProgressMessage) event.getValue();
+	public boolean acceptsEvent(ProgressMessageAddedEvent event) {
+		ProgressMessage message = event.getMessage();
+		
+		if (message instanceof SynchronizerDefaultProgressMessage) {
+			return true;
+		} else if (message instanceof SynchronizerRetrievedModelsProgressMessage) {
+			SynchronizerRetrievedModelsProgressMessage m = (SynchronizerRetrievedModelsProgressMessage) message;
 			
-			if (message instanceof SynchronizerDefaultProgressMessage) {
-				return true;
-			} else if (message instanceof SynchronizerRetrievedModelsProgressMessage) {
-				SynchronizerRetrievedModelsProgressMessage m = (SynchronizerRetrievedModelsProgressMessage) message;
-				
-				switch (m.getType()) {
-					case PUBLISHER_END:
-					case SYNCHRONIZER_END:
-						return false;
-				}
-				
-				return true;
-			} else if (message instanceof SynchronizerUpdatedModelsProgressMessage) {
-				SynchronizerUpdatedModelsProgressMessage m = (SynchronizerUpdatedModelsProgressMessage) message;
-				
-				switch (m.getType()) {
-					case PUBLISHER_END:
-					case SYNCHRONIZER_END:
-						return false;
-				}
-				
-				return true;
-			} else if (message instanceof SynchronizerMainProgressMessage) {
-				return true;
+			switch (m.getType()) {
+				case PUBLISHER_END:
+				case SYNCHRONIZER_END:
+					return false;
 			}
+			
+			return true;
+		} else if (message instanceof SynchronizerUpdatedModelsProgressMessage) {
+			SynchronizerUpdatedModelsProgressMessage m = (SynchronizerUpdatedModelsProgressMessage) message;
+			
+			switch (m.getType()) {
+				case PUBLISHER_END:
+				case SYNCHRONIZER_END:
+					return false;
+			}
+			
+			return true;
+		} else if (message instanceof SynchronizerMainProgressMessage) {
+			return true;
 		}
 		
 		return false;
 	}
 	
 	@Override
-	public Object getEventValue(ListChangeEvent event, String key) {
-		if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
-			ProgressMessage message = (ProgressMessage) event.getValue();
-			
-			if (EqualsUtils.equalsStringIgnoreCase(key, "icon")) {
-				if (message instanceof SynchronizerDefaultProgressMessage) {
-					SynchronizerDefaultProgressMessage m = (SynchronizerDefaultProgressMessage) message;
-					
-					return m.getIcon();
-				}
-				
-				return null;
-			}
-			
+	public Object getEventValue(ProgressMessageAddedEvent event, String key) {
+		ProgressMessage message = event.getMessage();
+		
+		if (EqualsUtils.equalsStringIgnoreCase(key, "icon")) {
 			if (message instanceof SynchronizerDefaultProgressMessage) {
 				SynchronizerDefaultProgressMessage m = (SynchronizerDefaultProgressMessage) message;
 				
-				return m.getMessage();
-			} else if (message instanceof SynchronizerRetrievedModelsProgressMessage) {
-				SynchronizerRetrievedModelsProgressMessage m = (SynchronizerRetrievedModelsProgressMessage) message;
-				
-				switch (m.getType()) {
-					case PUBLISHER_END:
-					case SYNCHRONIZER_END:
-						return null;
-				}
-				
-				String type = TranslationsUtils.translateModelType(
-						m.getModelType(),
-						true);
-				
-				return Translations.getString(
-						"synchronizer.retrieving_models",
-						type);
-			} else if (message instanceof SynchronizerUpdatedModelsProgressMessage) {
-				SynchronizerUpdatedModelsProgressMessage m = (SynchronizerUpdatedModelsProgressMessage) message;
-				
-				String property = null;
-				
-				switch (m.getType()) {
-					case PUBLISHER_START:
-						property = "synchronizer.publishing";
-						break;
-					case SYNCHRONIZER_START:
-						property = "synchronizer.synchronizing";
-						break;
-				}
-				
-				if (property == null)
+				return m.getIcon();
+			}
+			
+			return null;
+		}
+		
+		if (message instanceof SynchronizerDefaultProgressMessage) {
+			SynchronizerDefaultProgressMessage m = (SynchronizerDefaultProgressMessage) message;
+			
+			return m.getMessage();
+		} else if (message instanceof SynchronizerRetrievedModelsProgressMessage) {
+			SynchronizerRetrievedModelsProgressMessage m = (SynchronizerRetrievedModelsProgressMessage) message;
+			
+			switch (m.getType()) {
+				case PUBLISHER_END:
+				case SYNCHRONIZER_END:
 					return null;
-				
-				String type = TranslationsUtils.translateModelType(
-						m.getModelType(),
-						m.getActionCount() > 1);
-				
-				return Translations.getString(
-						property,
-						m.getActionCount(),
-						type);
-			} else if (message instanceof SynchronizerMainProgressMessage) {
-				SynchronizerMainProgressMessage m = (SynchronizerMainProgressMessage) message;
-				
-				String apiName = "?";
-				
-				if (m.getPlugin() != null)
-					apiName = m.getPlugin().getSynchronizerApi().getApiName();
-				
-				switch (m.getType()) {
-					case PUBLISHER_END:
-						return Translations.getString(
-								"synchronizer.publication_completed",
-								apiName);
-					case PUBLISHER_START:
-						return Translations.getString(
-								"synchronizer.start_publication",
-								apiName);
-					case SYNCHRONIZER_END:
-						return Translations.getString(
-								"synchronizer.synchronization_completed",
-								apiName);
-					case SYNCHRONIZER_START:
-						return Translations.getString(
-								"synchronizer.start_synchronization",
-								apiName);
-				}
+			}
+			
+			String type = TranslationsUtils.translateModelType(
+					m.getModelType(),
+					true);
+			
+			return Translations.getString(
+					"synchronizer.retrieving_models",
+					type);
+		} else if (message instanceof SynchronizerUpdatedModelsProgressMessage) {
+			SynchronizerUpdatedModelsProgressMessage m = (SynchronizerUpdatedModelsProgressMessage) message;
+			
+			String property = null;
+			
+			switch (m.getType()) {
+				case PUBLISHER_START:
+					property = "synchronizer.publishing";
+					break;
+				case SYNCHRONIZER_START:
+					property = "synchronizer.synchronizing";
+					break;
+			}
+			
+			if (property == null)
+				return null;
+			
+			String type = TranslationsUtils.translateModelType(
+					m.getModelType(),
+					m.getActionCount() > 1);
+			
+			return Translations.getString(property, m.getActionCount(), type);
+		} else if (message instanceof SynchronizerMainProgressMessage) {
+			SynchronizerMainProgressMessage m = (SynchronizerMainProgressMessage) message;
+			
+			String apiName = "?";
+			
+			if (m.getPlugin() != null)
+				apiName = m.getPlugin().getSynchronizerApi().getApiName();
+			
+			switch (m.getType()) {
+				case PUBLISHER_END:
+					return Translations.getString(
+							"synchronizer.publication_completed",
+							apiName);
+				case PUBLISHER_START:
+					return Translations.getString(
+							"synchronizer.start_publication",
+							apiName);
+				case SYNCHRONIZER_END:
+					return Translations.getString(
+							"synchronizer.synchronization_completed",
+							apiName);
+				case SYNCHRONIZER_START:
+					return Translations.getString(
+							"synchronizer.start_synchronization",
+							apiName);
 			}
 		}
 		

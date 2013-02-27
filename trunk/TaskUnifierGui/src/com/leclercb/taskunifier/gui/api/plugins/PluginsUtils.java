@@ -522,7 +522,7 @@ public final class PluginsUtils {
 					Translations.getString("general.loading_plugins"));
 			
 			ProgressMonitor monitor = new ProgressMonitor();
-			monitor.addListChangeListener(dialog);
+			monitor.addProgressMessageAddedListener(dialog);
 			
 			dialog.setWorker(new Worker<Plugin[]>(monitor) {
 				

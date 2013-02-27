@@ -30,30 +30,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.threads.reminder.progress;
+package com.leclercb.commons.api.progress.event;
 
-import com.leclercb.commons.api.progress.ProgressMessageTransformer;
-import com.leclercb.commons.api.progress.event.ProgressMessageAddedEvent;
-import com.leclercb.commons.api.progress.event.ProgressMessageAddedListener;
-import com.leclercb.taskunifier.gui.utils.notifications.NotificationList;
-import com.leclercb.taskunifier.gui.utils.notifications.NotificationUtils;
-
-public class NotificationReminderProgressMessageListener implements ProgressMessageAddedListener {
+public interface ProgressMessageAddedSupported {
 	
-	public NotificationReminderProgressMessageListener() {
-		
-	}
+	public abstract void addProgressMessageAddedListener(
+			ProgressMessageAddedListener listener);
 	
-	@Override
-	public void progressMessageAdded(ProgressMessageAddedEvent event) {
-		ProgressMessageTransformer t = ReminderProgressMessageTransformer.getInstance();
-		
-		if (t.acceptsEvent(event)) {
-			NotificationUtils.notify(
-					NotificationList.REMINDER,
-					(String) t.getEventValue(event, "title"),
-					(String) t.getEventValue(event, "description"));
-		}
-	}
+	public abstract void removeProgressMessageAddedListener(
+			ProgressMessageAddedListener listener);
 	
 }

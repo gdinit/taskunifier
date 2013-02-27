@@ -32,9 +32,8 @@
  */
 package com.leclercb.taskunifier.gui.threads.communicator.progress;
 
-import com.leclercb.commons.api.event.listchange.ListChangeEvent;
-import com.leclercb.commons.api.progress.ProgressMessage;
 import com.leclercb.commons.api.progress.ProgressMessageTransformer;
+import com.leclercb.commons.api.progress.event.ProgressMessageAddedEvent;
 
 public class CommunicatorProgressMessageTransformer implements ProgressMessageTransformer {
 	
@@ -52,27 +51,19 @@ public class CommunicatorProgressMessageTransformer implements ProgressMessageTr
 	}
 	
 	@Override
-	public boolean acceptsEvent(ListChangeEvent event) {
-		if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
-			ProgressMessage message = (ProgressMessage) event.getValue();
-			
-			if (message instanceof CommunicatorDefaultProgressMessage) {
-				return true;
-			}
+	public boolean acceptsEvent(ProgressMessageAddedEvent event) {
+		if (event.getMessage() instanceof CommunicatorDefaultProgressMessage) {
+			return true;
 		}
 		
 		return false;
 	}
 	
 	@Override
-	public Object getEventValue(ListChangeEvent event, String key) {
-		if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
-			ProgressMessage message = (ProgressMessage) event.getValue();
-			
-			if (message instanceof CommunicatorDefaultProgressMessage) {
-				CommunicatorDefaultProgressMessage m = (CommunicatorDefaultProgressMessage) message;
-				return m.getMessage();
-			}
+	public Object getEventValue(ProgressMessageAddedEvent event, String key) {
+		if (event.getMessage() instanceof CommunicatorDefaultProgressMessage) {
+			CommunicatorDefaultProgressMessage m = (CommunicatorDefaultProgressMessage) event.getMessage();
+			return m.getMessage();
 		}
 		
 		return null;

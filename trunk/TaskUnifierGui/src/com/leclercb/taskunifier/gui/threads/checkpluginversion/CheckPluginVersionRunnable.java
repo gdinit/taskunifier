@@ -162,7 +162,7 @@ public class CheckPluginVersionRunnable implements Runnable {
 					Translations.getString("general.manage_plugins"));
 			
 			ProgressMonitor monitor = new ProgressMonitor();
-			monitor.addListChangeListener(dialog);
+			monitor.addProgressMessageAddedListener(dialog);
 			
 			dialog.setWorker(new Worker<Void>(monitor) {
 				

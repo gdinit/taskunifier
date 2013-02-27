@@ -126,9 +126,9 @@ public final class Constants {
 	
 	public static void initialize() {
 		// Notification Listeners
-		Constants.PROGRESS_MONITOR.addListChangeListener(new NotificationCommunicatorProgressMessageListener());
-		Constants.PROGRESS_MONITOR.addListChangeListener(new NotificationSynchronizerProgressMessageListener());
-		Constants.PROGRESS_MONITOR.addListChangeListener(new NotificationReminderProgressMessageListener());
+		Constants.PROGRESS_MONITOR.addProgressMessageAddedListener(new NotificationCommunicatorProgressMessageListener());
+		Constants.PROGRESS_MONITOR.addProgressMessageAddedListener(new NotificationSynchronizerProgressMessageListener());
+		Constants.PROGRESS_MONITOR.addProgressMessageAddedListener(new NotificationReminderProgressMessageListener());
 		
 		// Initialize Searchers
 		initializeNoteSearcher();

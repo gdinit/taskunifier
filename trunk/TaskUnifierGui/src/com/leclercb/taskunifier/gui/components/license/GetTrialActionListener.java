@@ -94,7 +94,7 @@ public class GetTrialActionListener implements ActionListener {
 				Translations.getString("license.get_trial"));
 		
 		ProgressMonitor monitor = new ProgressMonitor();
-		monitor.addListChangeListener(dialog);
+		monitor.addProgressMessageAddedListener(dialog);
 		
 		dialog.setWorker(new Worker<String>(monitor) {
 			
