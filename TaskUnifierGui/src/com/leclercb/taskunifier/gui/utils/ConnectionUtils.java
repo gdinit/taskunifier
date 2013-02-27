@@ -32,8 +32,9 @@
  */
 package com.leclercb.taskunifier.gui.utils;
 
-import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.HttpResponse;
+import com.leclercb.taskunifier.gui.processes.StoppableWorker;
+import com.leclercb.taskunifier.gui.processes.connection.TestConnection;
 import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
@@ -44,16 +45,22 @@ public final class ConnectionUtils {
 	}
 	
 	public static HttpResponse testConnection(
-			final long wait,
 			final boolean showSuccess,
 			final boolean showFailure) {
 		TUWorkerDialog<HttpResponse> dialog = new TUWorkerDialog<HttpResponse>(
 				Translations.getString("configuration.proxy.test_connection"));
 		
-		ProgressMonitor monitor = new ProgressMonitor();
-		monitor.addProgressMessageAddedListener(dialog);
-		
-		dialog.setWorker();
+		dialog.setWorker(new StoppableWorker<HttpResponse>() {
+			
+			@Override
+			protected HttpResponse longTask() throws Exception {
+				TestConnection process = new TestConnection(
+						showSuccess,
+						showFailure);
+				return process.execute(this);
+			}
+			
+		});
 		
 		dialog.setVisible(true);
 		

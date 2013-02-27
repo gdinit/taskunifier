@@ -521,10 +521,7 @@ public final class PluginsUtils {
 			TUWorkerDialog<Plugin[]> dialog = new TUWorkerDialog<Plugin[]>(
 					Translations.getString("general.loading_plugins"));
 			
-			ProgressMonitor monitor = new ProgressMonitor();
-			monitor.addProgressMessageAddedListener(dialog);
-			
-			dialog.setWorker(new Worker<Plugin[]>(monitor) {
+			dialog.setWorker(new Worker<Plugin[]>() {
 				
 				@Override
 				protected Plugin[] longTask() throws Exception {

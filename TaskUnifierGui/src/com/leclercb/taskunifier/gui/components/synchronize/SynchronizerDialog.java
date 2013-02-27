@@ -61,7 +61,7 @@ public class SynchronizerDialog extends TUWorkerDialog<Void> {
 		this.serialNeeded = false;
 		
 		final SynchronizerDialogWorker worker = new SynchronizerDialogWorker();
-		this.setWorker(worker);
+		this.setWorker(worker, false);
 		
 		this.addWindowListener(new WindowAdapter() {
 			

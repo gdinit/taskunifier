@@ -49,7 +49,6 @@ import org.jdesktop.swingx.error.ErrorInfo;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leclercb.commons.api.progress.DefaultProgressMessage;
-import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.HttpResponse;
@@ -93,10 +92,7 @@ public class GetTrialActionListener implements ActionListener {
 		TUWorkerDialog<String> dialog = new TUWorkerDialog<String>(
 				Translations.getString("license.get_trial"));
 		
-		ProgressMonitor monitor = new ProgressMonitor();
-		monitor.addProgressMessageAddedListener(dialog);
-		
-		dialog.setWorker(new Worker<String>(monitor) {
+		dialog.setWorker(new Worker<String>() {
 			
 			@Override
 			protected String longTask() throws Exception {

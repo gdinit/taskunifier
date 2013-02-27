@@ -39,7 +39,6 @@ import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.taskunifier.gui.actions.ActionPluginConfiguration;
 import com.leclercb.taskunifier.gui.api.plugins.Plugin;
 import com.leclercb.taskunifier.gui.api.plugins.PluginStatus;
@@ -107,10 +106,7 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 			TUWorkerDialog<Boolean> dialog = new TUWorkerDialog<Boolean>(
 					Translations.getString("general.manage_plugins"));
 			
-			ProgressMonitor monitor = new ProgressMonitor();
-			monitor.addProgressMessageAddedListener(dialog);
-			
-			dialog.setWorker(new Worker<Boolean>(monitor) {
+			dialog.setWorker(new Worker<Boolean>() {
 				
 				@Override
 				protected Boolean longTask() throws Exception {

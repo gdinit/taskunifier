@@ -38,6 +38,11 @@ public abstract class StoppableWorker<T> extends Worker<T> {
 	
 	private boolean stopped;
 	
+	public StoppableWorker() {
+		super();
+		this.stopped = false;
+	}
+	
 	public StoppableWorker(ProgressMonitor monitor) {
 		super(monitor);
 		this.stopped = false;

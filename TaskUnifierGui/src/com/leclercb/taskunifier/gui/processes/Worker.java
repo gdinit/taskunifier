@@ -70,6 +70,10 @@ public abstract class Worker<T> extends SwingWorker<T, ProgressMessage> implemen
 	private ProgressMonitor edtMonitor;
 	private ProgressMonitor monitor;
 	
+	public Worker() {
+		this(new ProgressMonitor());
+	}
+	
 	public Worker(ProgressMonitor monitor) {
 		this.actionSupport = new ActionSupport(this);
 		this.edtMonitor = new ProgressMonitor();

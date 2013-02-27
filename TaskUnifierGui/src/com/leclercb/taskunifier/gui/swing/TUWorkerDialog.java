@@ -54,8 +54,10 @@ import javax.swing.SwingConstants;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
+import com.leclercb.commons.api.event.action.WeakActionListener;
 import com.leclercb.commons.api.progress.event.ProgressMessageAddedEvent;
 import com.leclercb.commons.api.progress.event.ProgressMessageAddedListener;
+import com.leclercb.commons.api.progress.event.WeakProgressMessageAddedListener;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.processes.Worker;
@@ -107,13 +109,29 @@ public class TUWorkerDialog<T> extends TUDialog implements ProgressMessageAddedL
 	}
 	
 	public void setWorker(Worker<T> worker) {
-		if (this.worker != null)
+		this.setWorker(worker, true);
+	}
+	
+	public void setWorker(Worker<T> worker, boolean listenToMonitor) {
+		if (this.worker != null) {
 			this.worker.removeActionListener(this);
+			
+			this.worker.getMonitor().removeProgressMessageAddedListener(this);
+		}
 		
 		this.worker = worker;
 		
-		if (this.worker != null)
-			this.worker.addActionListener(this);
+		if (this.worker != null) {
+			if (listenToMonitor)
+				this.worker.getMonitor().addProgressMessageAddedListener(
+						new WeakProgressMessageAddedListener(
+								this.worker.getMonitor(),
+								this));
+			
+			this.worker.addActionListener(new WeakActionListener(
+					this.worker,
+					this));
+		}
 	}
 	
 	public void setSouthComponent(JComponent component) {

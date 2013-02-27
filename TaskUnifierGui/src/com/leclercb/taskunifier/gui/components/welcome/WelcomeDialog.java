@@ -95,10 +95,7 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 				
 				@Override
 				public void display() {
-					HttpResponse r = ConnectionUtils.testConnection(
-							5000,
-							true,
-							true);
+					HttpResponse r = ConnectionUtils.testConnection(true, true);
 					
 					if (r != null && r.isSuccessfull())
 						WelcomeDialog.this.setPanelVisible(
