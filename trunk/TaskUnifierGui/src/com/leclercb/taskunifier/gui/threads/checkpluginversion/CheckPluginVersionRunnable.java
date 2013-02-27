@@ -42,7 +42,6 @@ import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.leclercb.commons.api.progress.DefaultProgressMessage;
-import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.api.plugins.Plugin;
@@ -161,10 +160,7 @@ public class CheckPluginVersionRunnable implements Runnable {
 			TUWorkerDialog<Void> dialog = new TUWorkerDialog<Void>(
 					Translations.getString("general.manage_plugins"));
 			
-			ProgressMonitor monitor = new ProgressMonitor();
-			monitor.addProgressMessageAddedListener(dialog);
-			
-			dialog.setWorker(new Worker<Void>(monitor) {
+			dialog.setWorker(new Worker<Void>() {
 				
 				@Override
 				protected Void longTask() throws Exception {
