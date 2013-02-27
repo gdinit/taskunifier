@@ -38,10 +38,10 @@ import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.components.synchronize.BackgroundSynchronizer;
 import com.leclercb.taskunifier.gui.components.synchronize.SynchronizerDialog;
 import com.leclercb.taskunifier.gui.components.synchronize.SynchronizerWorker;
-import com.leclercb.taskunifier.gui.components.synchronize.SynchronizerWorker.Type;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.processes.synchronization.ProcessSynchronize;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
@@ -104,7 +104,7 @@ public class ActionSynchronize extends AbstractViewAction {
 			
 			worker.add(
 					SynchronizerUtils.getSynchronizerPlugin(),
-					Type.SYNCHRONIZE);
+					ProcessSynchronize.Type.SYNCHRONIZE);
 			
 			BackgroundSynchronizer.execute(worker);
 		} else {
@@ -112,7 +112,7 @@ public class ActionSynchronize extends AbstractViewAction {
 			
 			dialog.add(
 					SynchronizerUtils.getSynchronizerPlugin(),
-					Type.SYNCHRONIZE);
+					ProcessSynchronize.Type.SYNCHRONIZE);
 			
 			dialog.setVisible(true);
 		}

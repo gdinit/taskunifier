@@ -41,7 +41,6 @@ import javax.swing.JOptionPane;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
-import com.leclercb.commons.api.progress.DefaultProgressMessage;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.api.plugins.Plugin;
@@ -49,6 +48,7 @@ import com.leclercb.taskunifier.gui.api.plugins.PluginsUtils;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.processes.Worker;
+import com.leclercb.taskunifier.gui.processes.plugins.ProcessUpdatePlugin;
 import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
@@ -160,19 +160,8 @@ public class CheckPluginVersionRunnable implements Runnable {
 			TUWorkerDialog<Void> dialog = new TUWorkerDialog<Void>(
 					Translations.getString("general.manage_plugins"));
 			
-			dialog.setWorker(new Worker<Void>() {
-				
-				@Override
-				protected Void longTask() throws Exception {
-					for (Plugin plugin : pluginsToUpdate) {
-						PluginsUtils.updatePlugin(plugin, this.getEDTMonitor());
-						this.publish(new DefaultProgressMessage(" "));
-					}
-					
-					return null;
-				}
-				
-			});
+			dialog.setWorker(new Worker<Void>(new ProcessUpdatePlugin(
+					pluginsToUpdate.toArray(new Plugin[0]))));
 			
 			dialog.setVisible(true);
 		}

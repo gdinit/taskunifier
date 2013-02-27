@@ -40,6 +40,7 @@ import java.util.logging.Level;
 
 import com.leclercb.commons.api.progress.DefaultProgressMessage;
 import com.leclercb.commons.api.progress.ProgressMonitor;
+import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.FileUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.api.plugins.Plugin;
@@ -72,6 +73,7 @@ public class ProcessInstallPlugin implements Process<Void> {
 	}
 	
 	public void setPlugin(Plugin plugin) {
+		CheckUtils.isNotNull(plugin);
 		this.plugin = plugin;
 	}
 	
@@ -199,6 +201,11 @@ public class ProcessInstallPlugin implements Process<Void> {
 			
 			throw e;
 		}
+	}
+	
+	@Override
+	public void done(Worker<Void> worker) {
+		
 	}
 	
 }

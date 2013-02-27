@@ -47,6 +47,7 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.gui.actions.ActionGetSerial;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.components.synchronize.progress.SynchronizerProgressMessageTransformer;
+import com.leclercb.taskunifier.gui.processes.synchronization.ProcessSynchronize;
 import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
@@ -78,7 +79,7 @@ public class SynchronizerDialog extends TUWorkerDialog<Void> {
 		});
 	}
 	
-	public void add(SynchronizerGuiPlugin plugin, SynchronizerWorker.Type type) {
+	public void add(SynchronizerGuiPlugin plugin, ProcessSynchronize.Type type) {
 		SynchronizerDialogWorker worker = (SynchronizerDialogWorker) this.getWorker();
 		worker.add(plugin, type);
 		

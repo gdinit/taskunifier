@@ -38,10 +38,10 @@ import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.components.synchronize.BackgroundSynchronizer;
 import com.leclercb.taskunifier.gui.components.synchronize.SynchronizerDialog;
 import com.leclercb.taskunifier.gui.components.synchronize.SynchronizerWorker;
-import com.leclercb.taskunifier.gui.components.synchronize.SynchronizerWorker.Type;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.processes.synchronization.ProcessSynchronize;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
@@ -102,7 +102,7 @@ public class ActionPublish extends AbstractViewAction {
 			SynchronizerWorker worker = BackgroundSynchronizer.getSynchronizer();
 			
 			for (SynchronizerGuiPlugin plugin : publisherPlugins) {
-				worker.add(plugin, Type.PUBLISH);
+				worker.add(plugin, ProcessSynchronize.Type.PUBLISH);
 			}
 			
 			BackgroundSynchronizer.execute(worker);
@@ -110,7 +110,7 @@ public class ActionPublish extends AbstractViewAction {
 			SynchronizerDialog dialog = new SynchronizerDialog();
 			
 			for (SynchronizerGuiPlugin plugin : publisherPlugins) {
-				dialog.add(plugin, Type.PUBLISH);
+				dialog.add(plugin, ProcessSynchronize.Type.PUBLISH);
 			}
 			
 			dialog.setVisible(true);
