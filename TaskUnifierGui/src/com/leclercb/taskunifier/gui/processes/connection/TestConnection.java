@@ -30,8 +30,10 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.utils;
+package com.leclercb.taskunifier.gui.processes.connection;
 
+import java.net.URI;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
@@ -39,37 +41,72 @@ import javax.swing.JOptionPane;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
+import com.leclercb.commons.api.progress.DefaultProgressMessage;
 import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.HttpResponse;
+import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
+import com.leclercb.taskunifier.gui.processes.Process;
+import com.leclercb.taskunifier.gui.processes.StoppableWorker;
 import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
-import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
+import com.leclercb.taskunifier.gui.utils.HttpUtils;
 
-public final class ConnectionUtils {
+public class TestConnection implements Process<HttpResponse> {
 	
-	private ConnectionUtils() {
-		
+	private boolean showSuccess;
+	private boolean showFailure;
+	
+	public TestConnection(boolean showSuccess, boolean showFailure) {
+		this.setShowSuccess(showSuccess);
+		this.setShowFailure(showFailure);
 	}
 	
-	public static HttpResponse testConnection(
-			final long wait,
-			final boolean showSuccess,
-			final boolean showFailure) {
-		TUWorkerDialog<HttpResponse> dialog = new TUWorkerDialog<HttpResponse>(
-				Translations.getString("configuration.proxy.test_connection"));
-		
-		ProgressMonitor monitor = new ProgressMonitor();
-		monitor.addListChangeListener(dialog);
-		
-		dialog.setWorker();
-		
-		dialog.setVisible(true);
-		
-		return dialog.getResult();
+	public boolean isShowSuccess() {
+		return this.showSuccess;
 	}
 	
-	private static void showResult(final boolean result) {
+	public void setShowSuccess(boolean showSuccess) {
+		this.showSuccess = showSuccess;
+	}
+	
+	public boolean isShowFailure() {
+		return this.showFailure;
+	}
+	
+	public void setShowFailure(boolean showFailure) {
+		this.showFailure = showFailure;
+	}
+	
+	@Override
+	public HttpResponse execute(StoppableWorker<HttpResponse> worker)
+			throws Exception {
+		ProgressMonitor monitor = worker.getEDTMonitor();
+		
+		monitor.addMessage(new DefaultProgressMessage(
+				Translations.getString("configuration.proxy.test_connection")));
+		
+		HttpResponse response = worker.executeAtomicAction(
+				new Callable<HttpResponse>() {
+					
+					@Override
+					public HttpResponse call() throws Exception {
+						return HttpUtils.getHttpGetResponse(new URI(
+								Constants.TEST_CONNECTION));
+					}
+					
+				}, Constants.TIMEOUT_HTTP_CALL);
+		
+		if (this.showSuccess && response.isSuccessfull())
+			this.showResult(true);
+		
+		if (this.showFailure && !response.isSuccessfull())
+			this.showResult(false);
+		
+		return response;
+	}
+	
+	private void showResult(final boolean result) {
 		TUSwingUtilities.invokeAndWait(new Runnable() {
 			
 			@Override

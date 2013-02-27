@@ -111,16 +111,16 @@ public class SynchronizerDialog extends TUWorkerDialog<Void> {
 						Icon icon = (Icon) t.getEventValue(event, "icon");
 						
 						if (icon == null)
-							SynchronizerDialog.this.appendToProgressStatus(ImageUtils.getResourceImage(
+							icon = ImageUtils.getResourceImage(
 									"transparent.png",
 									16,
-									16));
-						else
-							SynchronizerDialog.this.appendToProgressStatus(icon);
+									16);
 						
-						SynchronizerDialog.this.appendToProgressStatus("   "
-								+ t.getEventValue(event, "message")
-								+ "\n");
+						SynchronizerDialog.this.appendToProgressStatus(
+								icon,
+								"   "
+										+ t.getEventValue(event, "message")
+										+ "\n");
 					}
 				}
 				

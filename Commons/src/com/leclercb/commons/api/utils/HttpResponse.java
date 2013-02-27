@@ -40,10 +40,6 @@ public class HttpResponse {
 	private String message;
 	private byte[] bytes;
 	
-	public HttpResponse() {
-		
-	}
-	
 	public HttpResponse(int code, String message, byte[] bytes) {
 		this.setCode(code);
 		this.setMessage(message);
@@ -58,7 +54,7 @@ public class HttpResponse {
 		return this.code;
 	}
 	
-	public void setCode(int code) {
+	private void setCode(int code) {
 		this.code = code;
 	}
 	
@@ -66,7 +62,7 @@ public class HttpResponse {
 		return this.message;
 	}
 	
-	public void setMessage(String message) {
+	private void setMessage(String message) {
 		this.message = message;
 	}
 	
@@ -74,7 +70,7 @@ public class HttpResponse {
 		return this.bytes;
 	}
 	
-	public void setBytes(byte[] bytes) {
+	private void setBytes(byte[] bytes) {
 		this.bytes = bytes;
 	}
 	
