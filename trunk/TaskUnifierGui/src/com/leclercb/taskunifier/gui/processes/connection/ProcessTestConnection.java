@@ -47,17 +47,17 @@ import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.processes.Process;
-import com.leclercb.taskunifier.gui.processes.StoppableWorker;
+import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.HttpUtils;
 
-public class TestConnection implements Process<HttpResponse> {
+public class ProcessTestConnection implements Process<HttpResponse> {
 	
 	private boolean showSuccess;
 	private boolean showFailure;
 	
-	public TestConnection(boolean showSuccess, boolean showFailure) {
+	public ProcessTestConnection(boolean showSuccess, boolean showFailure) {
 		this.setShowSuccess(showSuccess);
 		this.setShowFailure(showFailure);
 	}
@@ -79,14 +79,14 @@ public class TestConnection implements Process<HttpResponse> {
 	}
 	
 	@Override
-	public HttpResponse execute(StoppableWorker<HttpResponse> worker)
+	public HttpResponse execute(final Worker<HttpResponse> worker)
 			throws Exception {
-		ProgressMonitor monitor = worker.getEDTMonitor();
+		final ProgressMonitor monitor = worker.getEDTMonitor();
 		
 		monitor.addMessage(new DefaultProgressMessage(
 				Translations.getString("configuration.proxy.test_connection")));
 		
-		HttpResponse response = worker.executeAtomicAction(
+		HttpResponse response = worker.executeInterruptibleAction(
 				new Callable<HttpResponse>() {
 					
 					@Override

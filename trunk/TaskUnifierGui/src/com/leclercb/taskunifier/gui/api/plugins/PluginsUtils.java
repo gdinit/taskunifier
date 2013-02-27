@@ -33,11 +33,8 @@
 package com.leclercb.taskunifier.gui.api.plugins;
 
 import java.io.File;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Level;
 
 import com.leclercb.commons.api.progress.DefaultProgressMessage;
@@ -45,9 +42,7 @@ import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.CompareUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.FileUtils;
-import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.commons.gui.logger.GuiLogger;
-import com.leclercb.taskunifier.api.xstream.TUXStream;
 import com.leclercb.taskunifier.gui.api.plugins.exc.PluginException;
 import com.leclercb.taskunifier.gui.api.plugins.exc.PluginExceptionType;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
@@ -55,16 +50,10 @@ import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
-import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
-import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
-import com.leclercb.taskunifier.gui.utils.HttpUtils;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 
 public final class PluginsUtils {
 	
@@ -239,109 +228,6 @@ public final class PluginsUtils {
 	/**
 	 * CAN BE EXECUTED OUTSIDE EDT
 	 */
-	public static void installPlugin(
-			final Plugin plugin,
-			final boolean use,
-			final ProgressMonitor monitor) throws Exception {
-		File file = null;
-		
-		try {
-			if (plugin.getId().equals(DummyGuiPlugin.getInstance().getId()))
-				return;
-			
-			if (monitor != null)
-				monitor.addMessage(new DefaultProgressMessage(
-						Translations.getString(
-								"manage_plugins.progress.start_plugin_installation",
-								plugin.getName())));
-			
-			file = new File(Main.getPluginsFolder()
-					+ File.separator
-					+ UUID.randomUUID().toString()
-					+ ".jar");
-			
-			file.createNewFile();
-			
-			if (monitor != null)
-				monitor.addMessage(new DefaultProgressMessage(
-						Translations.getString(
-								"manage_plugins.progress.downloading_plugin",
-								plugin.getName())));
-			
-			if (!Main.getSettings().getBooleanProperty(
-					"proxy.use_system_proxies")
-					&& Main.getSettings().getBooleanProperty("proxy.enabled")) {
-				FileUtils.copyURLToFile(
-						new URL(plugin.getDownloadUrl()),
-						file,
-						Main.getSettings().getStringProperty("proxy.host"),
-						Main.getSettings().getIntegerProperty("proxy.port"),
-						Main.getSettings().getStringProperty("proxy.login"),
-						Main.getSettings().getStringProperty("proxy.password"));
-			} else {
-				FileUtils.copyURLToFile(new URL(plugin.getDownloadUrl()), file);
-			}
-			
-			if (monitor != null)
-				monitor.addMessage(new DefaultProgressMessage(
-						Translations.getString(
-								"manage_plugins.progress.installing_plugin",
-								plugin.getName())));
-			
-			final File finalFile = file;
-			TUSwingUtilities.executeOrInvokeAndWait(new Runnable() {
-				
-				@Override
-				public void run() {
-					SynchronizerGuiPlugin loadedPlugin;
-					
-					try {
-						loadedPlugin = PluginsUtils.loadPlugin(finalFile);
-						
-						if (loadedPlugin != null)
-							GuiLogger.getLogger().info(
-									"Plugin installed: "
-											+ loadedPlugin.getName()
-											+ " - "
-											+ loadedPlugin.getVersion());
-						
-						if (use) {
-							SynchronizerUtils.setSynchronizerPlugin(loadedPlugin);
-							SynchronizerUtils.addPublisherPlugin(loadedPlugin);
-						}
-						
-						if (loadedPlugin != null)
-							loadedPlugin.installPlugin();
-						
-						if (monitor != null)
-							monitor.addMessage(new DefaultProgressMessage(
-									Translations.getString(
-											"manage_plugins.progress.plugin_installed",
-											plugin.getName())));
-						
-						plugin.setStatus(PluginStatus.INSTALLED);
-					} catch (PluginException e) {
-						finalFile.delete();
-					}
-				}
-				
-			});
-		} catch (Exception e) {
-			if (file != null)
-				file.delete();
-			
-			PluginLogger.getLogger().log(
-					Level.WARNING,
-					"Cannot install plugin",
-					e);
-			
-			throw e;
-		}
-	}
-	
-	/**
-	 * CAN BE EXECUTED OUTSIDE EDT
-	 */
 	public static void updatePlugin(Plugin plugin, ProgressMonitor monitor)
 			throws Exception {
 		if (plugin.getId().equals(DummyGuiPlugin.getInstance().getId()))
@@ -412,153 +298,6 @@ public final class PluginsUtils {
 					Translations.getString(
 							"manage_plugins.progress.plugin_deleted",
 							plugin.getName())));
-	}
-	
-	/**
-	 * CAN BE EXECUTED OUTSIDE EDT
-	 */
-	private static Plugin[] loadPluginsFromXML(
-			ProgressMonitor monitor,
-			boolean includePublishers,
-			boolean includeSynchronizers,
-			boolean includeDummyPlugin) throws Exception {
-		try {
-			if (monitor != null)
-				monitor.addMessage(new DefaultProgressMessage(
-						Translations.getString("manage_plugins.progress.retrieve_plugin_database")));
-			
-			HttpResponse response = null;
-			
-			response = HttpUtils.getHttpGetResponse(new URI(
-					Constants.PLUGINS_FILE));
-			
-			if (!response.isSuccessfull()) {
-				throw new PluginException(
-						PluginExceptionType.ERROR_LOADING_PLUGIN_DB);
-			}
-			
-			if (monitor != null)
-				monitor.addMessage(new DefaultProgressMessage(
-						Translations.getString("manage_plugins.progress.analysing_plugin_database")));
-			
-			XStream xstream = new TUXStream(
-					new PureJavaReflectionProvider(),
-					new DomDriver("UTF-8"));
-			xstream.setMode(XStream.NO_REFERENCES);
-			xstream.alias("plugins", Plugin[].class);
-			xstream.alias("plugin", Plugin.class);
-			xstream.processAnnotations(Plugin.class);
-			
-			Plugin[] plugins = (Plugin[]) xstream.fromXML(response.getContent());
-			List<Plugin> filteredPlugins = new ArrayList<Plugin>();
-			
-			for (Plugin plugin : plugins) {
-				// Check min version
-				if (plugin.getMinVersion() != null
-						&& plugin.getMinVersion().length() != 0) {
-					if (Constants.VERSION.compareTo(plugin.getMinVersion()) < 0)
-						continue;
-				}
-				
-				// Check max version
-				if (plugin.getMaxVersion() != null
-						&& plugin.getMaxVersion().length() != 0) {
-					if (Constants.VERSION.compareTo(plugin.getMaxVersion()) > 0)
-						continue;
-				}
-				
-				// Check publisher & synchronizer
-				if (!((includePublishers && plugin.isPublisher()) || (includeSynchronizers && plugin.isSynchronizer())))
-					continue;
-				
-				plugin.loadHistory();
-				plugin.loadLogo();
-				
-				filteredPlugins.add(plugin);
-			}
-			
-			if (monitor != null)
-				monitor.addMessage(new DefaultProgressMessage(
-						Translations.getString("manage_plugins.progress.plugin_database_retrieved")));
-			
-			if (includeSynchronizers && includeDummyPlugin)
-				filteredPlugins.add(0, DUMMY_PLUGIN);
-			
-			return filteredPlugins.toArray(new Plugin[0]);
-		} catch (Exception e) {
-			PluginLogger.getLogger().log(
-					Level.WARNING,
-					"Cannot load plugin database",
-					e);
-			
-			throw new PluginException(
-					PluginExceptionType.ERROR_LOADING_PLUGIN_DB,
-					e);
-		}
-	}
-	
-	/**
-	 * CAN BE EXECUTED OUTSIDE EDT
-	 */
-	public static Plugin[] loadAndUpdatePluginsFromXML(
-			final boolean includePublishers,
-			final boolean includeSynchronizers,
-			final boolean includeDummyPlugin,
-			final boolean silent) {
-		Plugin[] plugins = null;
-		
-		if (silent) {
-			try {
-				plugins = PluginsUtils.loadPluginsFromXML(
-						null,
-						includePublishers,
-						includeSynchronizers,
-						includeDummyPlugin);
-			} catch (Exception e) {
-				GuiLogger.getLogger().warning("Cannot load plugins from XML");
-			}
-		} else {
-			TUWorkerDialog<Plugin[]> dialog = new TUWorkerDialog<Plugin[]>(
-					Translations.getString("general.loading_plugins"));
-			
-			dialog.setWorker(new Worker<Plugin[]>() {
-				
-				@Override
-				protected Plugin[] longTask() throws Exception {
-					return PluginsUtils.loadPluginsFromXML(
-							this.getEDTMonitor(),
-							includePublishers,
-							includeSynchronizers,
-							includeDummyPlugin);
-				}
-				
-			});
-			
-			dialog.setVisible(true);
-			
-			plugins = dialog.getResult();
-		}
-		
-		if (plugins == null) {
-			if (!includeDummyPlugin)
-				return new Plugin[0];
-			
-			plugins = new Plugin[] { DUMMY_PLUGIN };
-		}
-		
-		List<SynchronizerGuiPlugin> loadedPlugins = Main.getApiPlugins().getPlugins();
-		for (SynchronizerGuiPlugin p : loadedPlugins) {
-			for (int i = 0; i < plugins.length; i++) {
-				if (p.getId().equals(plugins[i].getId())) {
-					if (p.getVersion().compareTo(plugins[i].getVersion()) < 0)
-						plugins[i].setStatus(PluginStatus.TO_UPDATE);
-					else
-						plugins[i].setStatus(PluginStatus.INSTALLED);
-				}
-			}
-		}
-		
-		return plugins;
 	}
 	
 }

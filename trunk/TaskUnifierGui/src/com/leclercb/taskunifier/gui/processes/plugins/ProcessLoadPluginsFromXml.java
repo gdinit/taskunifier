@@ -49,20 +49,20 @@ import com.leclercb.taskunifier.gui.api.plugins.exc.PluginExceptionType;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
 import com.leclercb.taskunifier.gui.processes.Process;
-import com.leclercb.taskunifier.gui.processes.StoppableWorker;
+import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.HttpUtils;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
-public class LoadPluginsFromXml implements Process<Plugin[]> {
+public class ProcessLoadPluginsFromXml implements Process<Plugin[]> {
 	
 	private boolean includePublishers;
 	private boolean includeSynchronizers;
 	private boolean includeDummyPlugin;
 	
-	public LoadPluginsFromXml(
+	public ProcessLoadPluginsFromXml(
 			boolean includePublishers,
 			boolean includeSynchronizers,
 			boolean includeDummyPlugin) {
@@ -96,15 +96,14 @@ public class LoadPluginsFromXml implements Process<Plugin[]> {
 	}
 	
 	@Override
-	public Plugin[] execute(StoppableWorker<Plugin[]> worker) throws Exception {
-		ProgressMonitor monitor = worker.getEDTMonitor();
+	public Plugin[] execute(final Worker<Plugin[]> worker) throws Exception {
+		final ProgressMonitor monitor = worker.getEDTMonitor();
 		
 		try {
-			if (monitor != null)
-				monitor.addMessage(new DefaultProgressMessage(
-						Translations.getString("manage_plugins.progress.retrieve_plugin_database")));
+			monitor.addMessage(new DefaultProgressMessage(
+					Translations.getString("manage_plugins.progress.retrieve_plugin_database")));
 			
-			HttpResponse response = worker.executeAtomicAction(
+			HttpResponse response = worker.executeInterruptibleAction(
 					new Callable<HttpResponse>() {
 						
 						@Override
@@ -123,9 +122,8 @@ public class LoadPluginsFromXml implements Process<Plugin[]> {
 						PluginExceptionType.ERROR_LOADING_PLUGIN_DB);
 			}
 			
-			if (monitor != null)
-				monitor.addMessage(new DefaultProgressMessage(
-						Translations.getString("manage_plugins.progress.analysing_plugin_database")));
+			monitor.addMessage(new DefaultProgressMessage(
+					Translations.getString("manage_plugins.progress.analysing_plugin_database")));
 			
 			XStream xstream = new TUXStream(
 					new PureJavaReflectionProvider(),
@@ -163,9 +161,8 @@ public class LoadPluginsFromXml implements Process<Plugin[]> {
 				filteredPlugins.add(plugin);
 			}
 			
-			if (monitor != null)
-				monitor.addMessage(new DefaultProgressMessage(
-						Translations.getString("manage_plugins.progress.plugin_database_retrieved")));
+			monitor.addMessage(new DefaultProgressMessage(
+					Translations.getString("manage_plugins.progress.plugin_database_retrieved")));
 			
 			if (this.includeSynchronizers && this.includeDummyPlugin)
 				filteredPlugins.add(0, PluginsUtils.getDummyPlugin());
