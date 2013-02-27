@@ -80,18 +80,17 @@ public class TUWorkerDialog<T> extends TUDialog implements ListChangeListener, A
 	public void listChange(ListChangeEvent event) {
 		if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
 			if (event.getValue() instanceof ProgressMessage) {
-				this.appendToProgressStatus(event.getValue().toString() + "\n");
+				this.appendToProgressStatus(null, event.getValue().toString()
+						+ "\n");
 			}
 		}
 	}
 	
-	public void appendToProgressStatus(Icon icon) {
-		if (icon != null)
-			this.progressStatus.insertIcon(icon);
-	}
-	
-	public void appendToProgressStatus(String text) {
+	public void appendToProgressStatus(Icon icon, String text) {
 		try {
+			if (icon != null)
+				this.progressStatus.insertIcon(icon);
+			
 			Document document = this.progressStatus.getDocument();
 			document.insertString(document.getLength(), text, null);
 		} catch (BadLocationException e) {
