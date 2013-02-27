@@ -136,8 +136,6 @@ public abstract class Worker<T> extends SwingWorker<T, ProgressMessage> implemen
 		} catch (final Throwable t) {
 			this.handleException(t);
 			return null;
-		} finally {
-			Thread.sleep(1000);
 		}
 	}
 	
