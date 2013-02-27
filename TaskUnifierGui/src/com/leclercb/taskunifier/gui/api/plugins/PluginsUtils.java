@@ -50,7 +50,10 @@ import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
+import com.leclercb.taskunifier.gui.processes.Worker;
+import com.leclercb.taskunifier.gui.processes.plugins.ProcessLoadAndUpdatePluginsFromXml;
 import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
+import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
@@ -298,6 +301,37 @@ public final class PluginsUtils {
 					Translations.getString(
 							"manage_plugins.progress.plugin_deleted",
 							plugin.getName())));
+	}
+	
+	public static Plugin[] loadAndUpdatePluginsFromXML(
+			boolean includePublishers,
+			boolean includeSynchronizers,
+			boolean includeDummyPlugin,
+			boolean silent) {
+		ProcessLoadAndUpdatePluginsFromXml process = new ProcessLoadAndUpdatePluginsFromXml(
+				includePublishers,
+				includeSynchronizers,
+				includeDummyPlugin);
+		
+		Worker<Plugin[]> worker = new Worker<Plugin[]>(process);
+		
+		if (silent) {
+			TUWorkerDialog<Plugin[]> dialog = new TUWorkerDialog<Plugin[]>(
+					Translations.getString("general.loading_plugins"));
+			
+			dialog.setWorker(worker);
+			
+			dialog.setVisible(true);
+			
+			return dialog.getResult();
+		} else {
+			try {
+				worker.execute();
+				return worker.get();
+			} catch (Exception e) {
+				return null;
+			}
+		}
 	}
 	
 }
