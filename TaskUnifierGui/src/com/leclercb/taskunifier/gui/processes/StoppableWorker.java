@@ -30,15 +30,15 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.swing;
+package com.leclercb.taskunifier.gui.processes;
 
 import com.leclercb.commons.api.progress.ProgressMonitor;
 
-public abstract class TUStopableWorker<T> extends TUWorker<T> {
+public abstract class StoppableWorker<T> extends Worker<T> {
 	
 	private boolean stopped;
 	
-	public TUStopableWorker(ProgressMonitor monitor) {
+	public StoppableWorker(ProgressMonitor monitor) {
 		super(monitor);
 		this.stopped = false;
 	}

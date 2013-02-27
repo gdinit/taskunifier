@@ -35,6 +35,7 @@ package com.leclercb.taskunifier.gui.processes.plugins;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
 import com.leclercb.commons.api.progress.DefaultProgressMessage;
@@ -48,7 +49,7 @@ import com.leclercb.taskunifier.gui.api.plugins.exc.PluginExceptionType;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
 import com.leclercb.taskunifier.gui.processes.Process;
-import com.leclercb.taskunifier.gui.swing.TUStopableWorker;
+import com.leclercb.taskunifier.gui.processes.StoppableWorker;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.HttpUtils;
 import com.thoughtworks.xstream.XStream;
@@ -95,7 +96,7 @@ public class LoadPluginsFromXml implements Process<Plugin[]> {
 	}
 	
 	@Override
-	public Plugin[] execute(TUStopableWorker<Plugin[]> worker) throws Exception {
+	public Plugin[] execute(StoppableWorker<Plugin[]> worker) throws Exception {
 		ProgressMonitor monitor = worker.getEDTMonitor();
 		
 		try {
@@ -103,17 +104,17 @@ public class LoadPluginsFromXml implements Process<Plugin[]> {
 				monitor.addMessage(new DefaultProgressMessage(
 						Translations.getString("manage_plugins.progress.retrieve_plugin_database")));
 			
-			final HttpResponse response = new HttpResponse();
+			HttpResponse response = null;
 			
-			worker.executeNonAtomicAction(new Runnable() {
+			response = worker.executeAtomicAction(new Callable<HttpResponse>() {
 				
 				@Override
-				public void run() {
-					HttpResponse r = HttpUtils.getHttpGetResponse(new URI(
+				public HttpResponse call() throws Exception {
+					return HttpUtils.getHttpGetResponse(new URI(
 							Constants.PLUGINS_FILE));
 				}
 				
-			});
+			}, Constants.TIMEOUT_HTTP_CALL);
 			
 			if (worker.isStopped())
 				return null;
@@ -171,15 +172,15 @@ public class LoadPluginsFromXml implements Process<Plugin[]> {
 				filteredPlugins.add(0, PluginsUtils.getDummyPlugin());
 			
 			return filteredPlugins.toArray(new Plugin[0]);
-		} catch (Exception e) {
+		} catch (Throwable t) {
 			PluginLogger.getLogger().log(
 					Level.WARNING,
 					"Cannot load plugin database",
-					e);
+					t);
 			
 			throw new PluginException(
 					PluginExceptionType.ERROR_LOADING_PLUGIN_DB,
-					e);
+					t);
 		}
 	}
 	

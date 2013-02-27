@@ -49,7 +49,7 @@ import com.leclercb.taskunifier.gui.api.plugins.Plugin;
 import com.leclercb.taskunifier.gui.api.plugins.PluginsUtils;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
-import com.leclercb.taskunifier.gui.swing.TUWorker;
+import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
@@ -164,7 +164,7 @@ public class CheckPluginVersionRunnable implements Runnable {
 			ProgressMonitor monitor = new ProgressMonitor();
 			monitor.addListChangeListener(dialog);
 			
-			dialog.setWorker(new TUWorker<Void>(monitor) {
+			dialog.setWorker(new Worker<Void>(monitor) {
 				
 				@Override
 				protected Void longTask() throws Exception {

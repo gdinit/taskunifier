@@ -47,7 +47,7 @@ import com.leclercb.taskunifier.gui.api.plugins.PluginsUtils;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.components.plugins.list.PluginList;
-import com.leclercb.taskunifier.gui.swing.TUWorker;
+import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
@@ -110,7 +110,7 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 			ProgressMonitor monitor = new ProgressMonitor();
 			monitor.addListChangeListener(dialog);
 			
-			dialog.setWorker(new TUWorker<Boolean>(monitor) {
+			dialog.setWorker(new Worker<Boolean>(monitor) {
 				
 				@Override
 				protected Boolean longTask() throws Exception {

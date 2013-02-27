@@ -58,14 +58,14 @@ import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
-import com.leclercb.taskunifier.gui.swing.TUStopableWorker;
+import com.leclercb.taskunifier.gui.processes.StoppableWorker;
 import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.BackupUtils;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 
-public class SynchronizerWorker extends TUStopableWorker<Void> {
+public class SynchronizerWorker extends StoppableWorker<Void> {
 	
 	public enum Type {
 		

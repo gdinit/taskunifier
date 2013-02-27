@@ -32,13 +32,11 @@
  */
 package com.leclercb.taskunifier.gui.processes;
 
-import com.leclercb.taskunifier.gui.swing.TUStopableWorker;
-
 /**
  * A process can be executed outside EDT.
  */
 public interface Process<T> {
 	
-	public abstract T execute(TUStopableWorker<T> worker) throws Exception;
+	public abstract T execute(StoppableWorker<T> worker) throws Exception;
 	
 }

@@ -56,8 +56,8 @@ import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
+import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
-import com.leclercb.taskunifier.gui.swing.TUWorker;
 import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.HttpUtils;
@@ -96,7 +96,7 @@ public class GetTrialActionListener implements ActionListener {
 		ProgressMonitor monitor = new ProgressMonitor();
 		monitor.addListChangeListener(dialog);
 		
-		dialog.setWorker(new TUWorker<String>(monitor) {
+		dialog.setWorker(new Worker<String>(monitor) {
 			
 			@Override
 			protected String longTask() throws Exception {
