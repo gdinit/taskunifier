@@ -180,4 +180,9 @@ public class ProcessLoadPluginsFromXml implements Process<Plugin[]> {
 		}
 	}
 	
+	@Override
+	public void done(Worker<Plugin[]> worker) {
+		
+	}
+	
 }

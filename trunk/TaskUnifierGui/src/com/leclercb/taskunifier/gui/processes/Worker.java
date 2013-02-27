@@ -67,6 +67,7 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 	
 	private ActionSupport actionSupport;
 	
+	private boolean silent;
 	private boolean stopped;
 	
 	private Process<T> process;
@@ -88,10 +89,19 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 				this.edtMonitor,
 				this));
 		
+		this.silent = false;
 		this.stopped = false;
 		
 		this.setProcess(process);
 		this.setMonitor(monitor);
+	}
+	
+	public boolean isSilent() {
+		return this.silent;
+	}
+	
+	public void setSilent(boolean silent) {
+		this.silent = silent;
 	}
 	
 	public final synchronized boolean isStopped() {
@@ -99,6 +109,7 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 	}
 	
 	public synchronized void stop() {
+		System.out.println("stop");
 		if (this.stopped)
 			return;
 		
@@ -139,28 +150,26 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 		}
 	}
 	
-	protected T longTask() throws Exception {
-		return this.process.execute(this);
-	}
-	
 	protected void handleException(final Throwable t) {
-		TUSwingUtilities.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				ErrorInfo info = new ErrorInfo(
-						Translations.getString("general.error"),
-						t.getMessage(),
-						null,
-						"GUI",
-						t,
-						Level.WARNING,
-						null);
+		if (!this.silent) {
+			TUSwingUtilities.invokeAndWait(new Runnable() {
 				
-				JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
-			}
-			
-		});
+				@Override
+				public void run() {
+					ErrorInfo info = new ErrorInfo(
+							Translations.getString("general.error"),
+							t.getMessage(),
+							null,
+							"GUI",
+							t,
+							Level.WARNING,
+							null);
+					
+					JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
+				}
+				
+			});
+		}
 	}
 	
 	@Override
@@ -168,7 +177,7 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 		this.actionSupport.fireActionPerformed(0, ACTION_STARTED);
 		
 		try {
-			return this.longTask();
+			return this.process.execute(this);
 		} catch (final Throwable t) {
 			this.handleException(t);
 			return null;
@@ -177,8 +186,12 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 	
 	@Override
 	protected void done() {
-		super.done();
-		this.actionSupport.fireActionPerformed(0, ACTION_FINISHED);
+		try {
+			this.process.done(this);
+		} finally {
+			super.done();
+			this.actionSupport.fireActionPerformed(0, ACTION_FINISHED);
+		}
 	}
 	
 	@Override
@@ -201,6 +214,14 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 	@Override
 	public void removeActionListener(ActionListener listener) {
 		this.actionSupport.removeActionListener(listener);
+	}
+	
+	public final <O> O executeInterruptibleAction(Callable<O> callable)
+			throws InterruptedException, ExecutionException {
+		ExecutorService executor = Executors.newCachedThreadPool();
+		Future<O> future = executor.submit(callable);
+		this.future = future;
+		return future.get();
 	}
 	
 	public final <O> O executeInterruptibleAction(

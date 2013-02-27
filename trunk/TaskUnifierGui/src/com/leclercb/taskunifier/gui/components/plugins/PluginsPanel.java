@@ -39,18 +39,15 @@ import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import com.leclercb.taskunifier.gui.actions.ActionPluginConfiguration;
 import com.leclercb.taskunifier.gui.api.plugins.Plugin;
 import com.leclercb.taskunifier.gui.api.plugins.PluginStatus;
 import com.leclercb.taskunifier.gui.api.plugins.PluginsUtils;
-import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
-import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.components.plugins.list.PluginList;
 import com.leclercb.taskunifier.gui.processes.Worker;
+import com.leclercb.taskunifier.gui.processes.plugins.ProcessInstallOrUpdatePlugin;
 import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
-import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 
 public class PluginsPanel extends JPanel implements ListSelectionListener {
 	
@@ -68,11 +65,16 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 	}
 	
 	public void reloadPlugins() {
-		this.list.setPlugins(PluginsUtils.loadAndUpdatePluginsFromXML(
+		Plugin[] plugins = PluginsUtils.loadAndUpdatePluginsFromXML(
 				this.includePublishers,
 				this.includeSynchronizers,
 				true,
-				false));
+				false);
+		
+		if (plugins == null)
+			plugins = new Plugin[] { PluginsUtils.getDummyPlugin() };
+		
+		this.list.setPlugins(plugins);
 	}
 	
 	private void initialize() {
@@ -99,44 +101,15 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 		if (plugin == null)
 			return;
 		
-		boolean error = false;
-		
 		if (plugin.getStatus() == PluginStatus.TO_INSTALL
 				|| plugin.getStatus() == PluginStatus.TO_UPDATE) {
-			TUWorkerDialog<Boolean> dialog = new TUWorkerDialog<Boolean>(
+			TUWorkerDialog<Void> dialog = new TUWorkerDialog<Void>(
 					Translations.getString("general.manage_plugins"));
 			
-			dialog.setWorker(new Worker<Boolean>() {
-				
-				@Override
-				protected Boolean longTask() throws Exception {
-					if (plugin.getStatus() == PluginStatus.TO_INSTALL) {
-						PluginsUtils.installPlugin(
-								plugin,
-								true,
-								this.getEDTMonitor());
-					} else if (plugin.getStatus() == PluginStatus.TO_UPDATE) {
-						PluginsUtils.updatePlugin(plugin, this.getEDTMonitor());
-					}
-					
-					return true;
-				}
-				
-			});
+			dialog.setWorker(new Worker<Void>(new ProcessInstallOrUpdatePlugin(
+					plugin)));
 			
 			dialog.setVisible(true);
-			
-			error = (dialog.getResult() == null);
-		}
-		
-		if (!error) {
-			SynchronizerGuiPlugin p = SynchronizerUtils.getPlugin(plugin.getId());
-			
-			SynchronizerUtils.setSynchronizerPlugin(p);
-			SynchronizerUtils.addPublisherPlugin(p);
-			
-			if (!plugin.getId().equals(DummyGuiPlugin.getInstance().getId()))
-				ActionPluginConfiguration.pluginConfiguration(p);
 		}
 		
 		PluginsPanel.this.valueChanged(null);

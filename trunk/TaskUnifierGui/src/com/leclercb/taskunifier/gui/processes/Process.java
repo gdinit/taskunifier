@@ -39,4 +39,6 @@ public interface Process<T> {
 	
 	public abstract T execute(final Worker<T> worker) throws Exception;
 	
+	public abstract void done(final Worker<T> worker);
+	
 }

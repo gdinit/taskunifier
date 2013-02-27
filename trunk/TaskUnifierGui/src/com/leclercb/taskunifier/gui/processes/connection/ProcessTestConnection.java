@@ -106,6 +106,11 @@ public class ProcessTestConnection implements Process<HttpResponse> {
 		return response;
 	}
 	
+	@Override
+	public void done(Worker<HttpResponse> worker) {
+		
+	}
+	
 	private void showResult(final boolean result) {
 		TUSwingUtilities.invokeAndWait(new Runnable() {
 			

@@ -164,6 +164,11 @@ public class ProcessGetTrial implements Process<String> {
 		}
 	}
 	
+	@Override
+	public void done(Worker<String> worker) {
+		
+	}
+	
 	private void showResult(final String code, final String message) {
 		TUSwingUtilities.invokeAndWait(new Runnable() {
 			

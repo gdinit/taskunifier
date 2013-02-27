@@ -37,8 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import com.leclercb.commons.api.progress.DefaultProgressMessage;
-import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.CompareUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.FileUtils;
@@ -52,11 +50,9 @@ import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
 import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.processes.plugins.ProcessLoadAndUpdatePluginsFromXml;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
-import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 
 public final class PluginsUtils {
 	
@@ -228,81 +224,6 @@ public final class PluginsUtils {
 						+ plugin.getVersion());
 	}
 	
-	/**
-	 * CAN BE EXECUTED OUTSIDE EDT
-	 */
-	public static void updatePlugin(Plugin plugin, ProgressMonitor monitor)
-			throws Exception {
-		if (plugin.getId().equals(DummyGuiPlugin.getInstance().getId()))
-			return;
-		
-		if (monitor != null)
-			monitor.addMessage(new DefaultProgressMessage(
-					Translations.getString(
-							"manage_plugins.progress.start_plugin_update",
-							plugin.getName())));
-		
-		boolean use = false;
-		if (plugin.getId().equals(
-				SynchronizerUtils.getSynchronizerPlugin().getId()))
-			use = true;
-		
-		deletePlugin(plugin, monitor);
-		installPlugin(plugin, use, monitor);
-		
-		if (monitor != null)
-			monitor.addMessage(new DefaultProgressMessage(
-					Translations.getString(
-							"manage_plugins.progress.plugin_updated",
-							plugin.getName())));
-	}
-	
-	/**
-	 * CAN BE EXECUTED OUTSIDE EDT
-	 */
-	public static void deletePlugin(
-			final Plugin plugin,
-			final ProgressMonitor monitor) {
-		if (monitor != null)
-			monitor.addMessage(new DefaultProgressMessage(
-					Translations.getString(
-							"manage_plugins.progress.start_plugin_deletion",
-							plugin.getName())));
-		
-		TUSwingUtilities.executeOrInvokeAndWait(new Runnable() {
-			
-			@Override
-			public void run() {
-				List<SynchronizerGuiPlugin> existingPlugins = new ArrayList<SynchronizerGuiPlugin>(
-						Main.getApiPlugins().getPlugins());
-				for (SynchronizerGuiPlugin existingPlugin : existingPlugins) {
-					if (existingPlugin.getId().equals(plugin.getId())) {
-						existingPlugin.deletePlugin();
-						
-						File file = Main.getApiPlugins().getFile(existingPlugin);
-						file.delete();
-						Main.getApiPlugins().removePlugin(existingPlugin);
-						
-						GuiLogger.getLogger().info(
-								"Plugin deleted: "
-										+ existingPlugin.getName()
-										+ " - "
-										+ existingPlugin.getVersion());
-						
-						plugin.setStatus(PluginStatus.DELETED);
-					}
-				}
-			}
-			
-		});
-		
-		if (monitor != null)
-			monitor.addMessage(new DefaultProgressMessage(
-					Translations.getString(
-							"manage_plugins.progress.plugin_deleted",
-							plugin.getName())));
-	}
-	
 	public static Plugin[] loadAndUpdatePluginsFromXML(
 			boolean includePublishers,
 			boolean includeSynchronizers,
@@ -314,8 +235,9 @@ public final class PluginsUtils {
 				includeDummyPlugin);
 		
 		Worker<Plugin[]> worker = new Worker<Plugin[]>(process);
+		worker.setSilent(silent);
 		
-		if (silent) {
+		if (!silent) {
 			TUWorkerDialog<Plugin[]> dialog = new TUWorkerDialog<Plugin[]>(
 					Translations.getString("general.loading_plugins"));
 			
