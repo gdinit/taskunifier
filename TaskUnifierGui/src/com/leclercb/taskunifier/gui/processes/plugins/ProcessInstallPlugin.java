@@ -45,8 +45,6 @@ import com.leclercb.commons.api.utils.FileUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.api.plugins.Plugin;
 import com.leclercb.taskunifier.gui.api.plugins.PluginStatus;
-import com.leclercb.taskunifier.gui.api.plugins.PluginsUtils;
-import com.leclercb.taskunifier.gui.api.plugins.exc.PluginException;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.constants.Constants;
@@ -86,7 +84,7 @@ public class ProcessInstallPlugin implements Process<Void> {
 	}
 	
 	@Override
-	public Void execute(final Worker<Void> worker) throws Exception {
+	public Void execute(final Worker<?> worker) throws Exception {
 		final ProgressMonitor monitor = worker.getEDTMonitor();
 		
 		if (this.plugin.getId().equals(DummyGuiPlugin.getInstance().getId()))
@@ -140,7 +138,7 @@ public class ProcessInstallPlugin implements Process<Void> {
 			},
 					Constants.TIMEOUT_HTTP_CALL);
 			
-			if (worker.isStopped())
+			if (worker.isCancelled())
 				return null;
 			
 			monitor.addMessage(new DefaultProgressMessage(
@@ -153,39 +151,41 @@ public class ProcessInstallPlugin implements Process<Void> {
 					+ UUID.randomUUID().toString()
 					+ ".jar");
 			
-			org.apache.commons.io.FileUtils.copyFile(tempFile, file);
-			
-			TUSwingUtilities.executeOrInvokeAndWait(new Runnable() {
+			try {
+				org.apache.commons.io.FileUtils.copyFile(tempFile, file);
 				
-				@Override
-				public void run() {
-					SynchronizerGuiPlugin loadedPlugin;
+				ProcessLoadPlugin process = new ProcessLoadPlugin(file);
+				final SynchronizerGuiPlugin loadedPlugin = process.execute(worker);
+				
+				if (loadedPlugin != null) {
+					GuiLogger.getLogger().info(
+							"Plugin installed: "
+									+ loadedPlugin.getName()
+									+ " - "
+									+ loadedPlugin.getVersion());
 					
-					try {
-						loadedPlugin = PluginsUtils.loadPlugin(file);
+					TUSwingUtilities.executeOrInvokeAndWait(new Runnable() {
 						
-						if (loadedPlugin != null)
-							GuiLogger.getLogger().info(
-									"Plugin installed: "
-											+ loadedPlugin.getName()
-											+ " - "
-											+ loadedPlugin.getVersion());
-						
-						if (ProcessInstallPlugin.this.use) {
-							SynchronizerUtils.setSynchronizerPlugin(loadedPlugin);
-							SynchronizerUtils.addPublisherPlugin(loadedPlugin);
+						@Override
+						public void run() {
+							if (ProcessInstallPlugin.this.use) {
+								SynchronizerUtils.setSynchronizerPlugin(loadedPlugin);
+								SynchronizerUtils.addPublisherPlugin(loadedPlugin);
+							}
+							
+							if (loadedPlugin != null)
+								loadedPlugin.installPlugin();
+							
 						}
 						
-						if (loadedPlugin != null)
-							loadedPlugin.installPlugin();
-						
-						ProcessInstallPlugin.this.plugin.setStatus(PluginStatus.INSTALLED);
-					} catch (PluginException e) {
-						file.delete();
-					}
+					});
 				}
 				
-			});
+				this.plugin.setStatus(PluginStatus.INSTALLED);
+			} catch (Exception e) {
+				file.delete();
+				throw e;
+			}
 			
 			monitor.addMessage(new DefaultProgressMessage(
 					Translations.getString(
@@ -204,7 +204,7 @@ public class ProcessInstallPlugin implements Process<Void> {
 	}
 	
 	@Override
-	public void done(Worker<Void> worker) {
+	public void done(Worker<?> worker) {
 		
 	}
 	

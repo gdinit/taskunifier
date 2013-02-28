@@ -43,7 +43,6 @@ import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.taskunifier.api.xstream.TUXStream;
 import com.leclercb.taskunifier.gui.api.plugins.Plugin;
-import com.leclercb.taskunifier.gui.api.plugins.PluginsUtils;
 import com.leclercb.taskunifier.gui.api.plugins.exc.PluginException;
 import com.leclercb.taskunifier.gui.api.plugins.exc.PluginExceptionType;
 import com.leclercb.taskunifier.gui.constants.Constants;
@@ -96,7 +95,7 @@ public class ProcessLoadPluginsFromXml implements Process<Plugin[]> {
 	}
 	
 	@Override
-	public Plugin[] execute(final Worker<Plugin[]> worker) throws Exception {
+	public Plugin[] execute(final Worker<?> worker) throws Exception {
 		final ProgressMonitor monitor = worker.getEDTMonitor();
 		
 		try {
@@ -114,7 +113,7 @@ public class ProcessLoadPluginsFromXml implements Process<Plugin[]> {
 						
 					}, Constants.TIMEOUT_HTTP_CALL);
 			
-			if (worker.isStopped())
+			if (worker.isCancelled())
 				return null;
 			
 			if (!response.isSuccessfull()) {
@@ -165,7 +164,7 @@ public class ProcessLoadPluginsFromXml implements Process<Plugin[]> {
 					Translations.getString("manage_plugins.progress.plugin_database_retrieved")));
 			
 			if (this.includeSynchronizers && this.includeDummyPlugin)
-				filteredPlugins.add(0, PluginsUtils.getDummyPlugin());
+				filteredPlugins.add(0, Plugin.getDummyPlugin());
 			
 			return filteredPlugins.toArray(new Plugin[0]);
 		} catch (Throwable t) {
@@ -181,7 +180,7 @@ public class ProcessLoadPluginsFromXml implements Process<Plugin[]> {
 	}
 	
 	@Override
-	public void done(Worker<Plugin[]> worker) {
+	public void done(Worker<?> worker) {
 		
 	}
 	

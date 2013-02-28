@@ -79,8 +79,7 @@ public class ProcessTestConnection implements Process<HttpResponse> {
 	}
 	
 	@Override
-	public HttpResponse execute(final Worker<HttpResponse> worker)
-			throws Exception {
+	public HttpResponse execute(final Worker<?> worker) throws Exception {
 		final ProgressMonitor monitor = worker.getEDTMonitor();
 		
 		monitor.addMessage(new DefaultProgressMessage(
@@ -97,6 +96,9 @@ public class ProcessTestConnection implements Process<HttpResponse> {
 					
 				}, Constants.TIMEOUT_HTTP_CALL);
 		
+		if (worker.isCancelled())
+			return null;
+		
 		if (this.showSuccess && response.isSuccessfull())
 			this.showResult(true);
 		
@@ -107,7 +109,7 @@ public class ProcessTestConnection implements Process<HttpResponse> {
 	}
 	
 	@Override
-	public void done(Worker<HttpResponse> worker) {
+	public void done(Worker<?> worker) {
 		
 	}
 	

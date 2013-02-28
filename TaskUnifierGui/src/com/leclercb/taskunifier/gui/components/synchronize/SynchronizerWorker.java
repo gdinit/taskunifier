@@ -60,15 +60,15 @@ public class SynchronizerWorker extends Worker<Void> {
 	}
 	
 	@Override
-	public synchronized void stop() {
-		if (!this.isStopped()) {
+	public synchronized void cancel() {
+		if (!this.isCancelled()) {
 			this.getEDTMonitor().addMessage(
 					new SynchronizerDefaultProgressMessage(
 							Translations.getString("synchronizer.cancelled_by_user"),
 							ImageUtils.getResourceImage("cancel.png", 16, 16)));
 		}
 		
-		super.stop();
+		super.cancel();
 	}
 	
 }

@@ -112,7 +112,7 @@ public class ProcessSynchronize implements Process<Void> {
 	}
 	
 	@Override
-	public Void execute(final Worker<Void> worker) throws Exception {
+	public Void execute(final Worker<?> worker) throws Exception {
 		final ProgressMonitor monitor = worker.getEDTMonitor();
 		
 		GuiLogger.getLogger().log(Level.INFO, "Synchronization started");
@@ -247,7 +247,7 @@ public class ProcessSynchronize implements Process<Void> {
 							
 							Thread.sleep(waitTime * 1000);
 							
-							if (worker.isStopped())
+							if (worker.isCancelled())
 								return null;
 						}
 					}
@@ -292,22 +292,22 @@ public class ProcessSynchronize implements Process<Void> {
 					try {
 						throw e.getCause();
 					} catch (final SynchronizerException se) {
-						if (!worker.isStopped()) {
+						if (!worker.isCancelled()) {
 							ProcessSynchronize.this.handleSynchronizerException(
 									worker,
 									se,
 									finalPlugin);
-							worker.stop();
+							worker.cancel();
 						}
 					} catch (final Throwable t) {
-						if (!worker.isStopped()) {
+						if (!worker.isCancelled()) {
 							ProcessSynchronize.this.handleThrowable(worker, t);
-							worker.stop();
+							worker.cancel();
 						}
 					}
 				}
 				
-				if (worker.isStopped())
+				if (worker.isCancelled())
 					return null;
 				
 				try {
@@ -371,7 +371,7 @@ public class ProcessSynchronize implements Process<Void> {
 				monitor.addMessage(new SynchronizerDefaultProgressMessage(
 						"----------"));
 				
-				if (worker.isStopped())
+				if (worker.isCancelled())
 					return null;
 			}
 			
@@ -408,7 +408,7 @@ public class ProcessSynchronize implements Process<Void> {
 	}
 	
 	@Override
-	public void done(final Worker<Void> worker) {
+	public void done(final Worker<?> worker) {
 		final ProgressMonitor monitor = worker.getEDTMonitor();
 		
 		try {
@@ -431,12 +431,12 @@ public class ProcessSynchronize implements Process<Void> {
 	}
 	
 	private void handleSynchronizerException(
-			final Worker<Void> worker,
+			final Worker<?> worker,
 			final SynchronizerException e,
 			final SynchronizerGuiPlugin plugin) {
 		final ProgressMonitor monitor = worker.getEDTMonitor();
 		
-		if (worker.isStopped())
+		if (worker.isCancelled())
 			return;
 		
 		monitor.addMessage(new SynchronizerDefaultProgressMessage(
@@ -482,10 +482,10 @@ public class ProcessSynchronize implements Process<Void> {
 		}
 	}
 	
-	private void handleThrowable(final Worker<Void> worker, final Throwable t) {
+	private void handleThrowable(final Worker<?> worker, final Throwable t) {
 		final ProgressMonitor monitor = worker.getEDTMonitor();
 		
-		if (worker.isStopped())
+		if (worker.isCancelled())
 			return;
 		
 		monitor.addMessage(new SynchronizerDefaultProgressMessage(

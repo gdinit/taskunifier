@@ -35,6 +35,7 @@ package com.leclercb.taskunifier.gui.processes;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -68,9 +69,9 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 	private ActionSupport actionSupport;
 	
 	private boolean silent;
-	private boolean stopped;
 	
 	private Process<T> process;
+	private Throwable throwable;
 	
 	private ProgressMonitor edtMonitor;
 	private ProgressMonitor monitor;
@@ -90,7 +91,6 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 				this));
 		
 		this.silent = false;
-		this.stopped = false;
 		
 		this.setProcess(process);
 		this.setMonitor(monitor);
@@ -104,16 +104,9 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 		this.silent = silent;
 	}
 	
-	public final synchronized boolean isStopped() {
-		return this.stopped;
-	}
-	
-	public synchronized void stop() {
-		System.out.println("stop");
-		if (this.stopped)
+	public synchronized void cancel() {
+		if (this.isCancelled())
 			return;
-		
-		this.stopped = true;
 		
 		if (this.future != null)
 			this.future.cancel(true);
@@ -128,6 +121,10 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 	private void setProcess(Process<T> process) {
 		CheckUtils.isNotNull(process);
 		this.process = process;
+	}
+	
+	public Throwable getThrowable() {
+		return this.throwable;
 	}
 	
 	public ProgressMonitor getEDTMonitor() {
@@ -150,7 +147,9 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 		}
 	}
 	
-	protected void handleException(final Throwable t) {
+	protected void handleException(final Throwable throwable) {
+		this.throwable = throwable;
+		
 		if (!this.silent) {
 			TUSwingUtilities.invokeAndWait(new Runnable() {
 				
@@ -158,10 +157,10 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 				public void run() {
 					ErrorInfo info = new ErrorInfo(
 							Translations.getString("general.error"),
-							t.getMessage(),
+							throwable.getMessage(),
 							null,
 							"GUI",
-							t,
+							throwable,
 							Level.WARNING,
 							null);
 					
@@ -221,7 +220,12 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 		ExecutorService executor = Executors.newCachedThreadPool();
 		Future<O> future = executor.submit(callable);
 		this.future = future;
-		return future.get();
+		
+		try {
+			return future.get();
+		} catch (CancellationException e) {
+			return null;
+		}
 	}
 	
 	public final <O> O executeInterruptibleAction(
@@ -231,7 +235,12 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 		ExecutorService executor = Executors.newCachedThreadPool();
 		Future<O> future = executor.submit(callable);
 		this.future = future;
-		return future.get(timeout, TimeUnit.MILLISECONDS);
+		
+		try {
+			return future.get(timeout, TimeUnit.MILLISECONDS);
+		} catch (CancellationException e) {
+			return null;
+		}
 	}
 	
 }

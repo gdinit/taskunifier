@@ -36,7 +36,6 @@ import java.util.List;
 
 import com.leclercb.taskunifier.gui.api.plugins.Plugin;
 import com.leclercb.taskunifier.gui.api.plugins.PluginStatus;
-import com.leclercb.taskunifier.gui.api.plugins.PluginsUtils;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.processes.Worker;
@@ -51,14 +50,14 @@ public class ProcessLoadAndUpdatePluginsFromXml extends ProcessLoadPluginsFromXm
 	}
 	
 	@Override
-	public Plugin[] execute(final Worker<Plugin[]> worker) throws Exception {
+	public Plugin[] execute(final Worker<?> worker) throws Exception {
 		Plugin[] plugins = super.execute(worker);
 		
 		if (plugins == null) {
 			if (!this.isIncludeDummyPlugin())
 				return new Plugin[0];
 			
-			plugins = new Plugin[] { PluginsUtils.getDummyPlugin() };
+			plugins = new Plugin[] { Plugin.getDummyPlugin() };
 		}
 		
 		List<SynchronizerGuiPlugin> loadedPlugins = Main.getApiPlugins().getPlugins();

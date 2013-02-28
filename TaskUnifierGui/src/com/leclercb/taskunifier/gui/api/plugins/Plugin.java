@@ -44,12 +44,42 @@ import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.commons.gui.logger.GuiLogger;
+import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.utils.HttpUtils;
+import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 public class Plugin implements PropertyChangeSupported {
+	
+	private static Plugin DUMMY_PLUGIN;
+	
+	static {
+		DUMMY_PLUGIN = new Plugin(
+				PluginStatus.INSTALLED,
+				DummyGuiPlugin.getInstance().getId(),
+				DummyGuiPlugin.getInstance().isPublisher(),
+				DummyGuiPlugin.getInstance().isSynchronizer(),
+				DummyGuiPlugin.getInstance().getName(),
+				DummyGuiPlugin.getInstance().getAuthor(),
+				Constants.VERSION,
+				Constants.VERSION,
+				DummyGuiPlugin.getInstance().getVersion(),
+				DummyGuiPlugin.getInstance().getSynchronizerApi().getApiWebSite(),
+				DummyGuiPlugin.getInstance().getSynchronizerApi().getApiWebSite(),
+				null,
+				null,
+				null);
+		
+		DUMMY_PLUGIN.setHistory("Version "
+				+ DummyGuiPlugin.getInstance().getVersion());
+		DUMMY_PLUGIN.setLogo(ImageUtils.getResourceImage("do_not_synchronize.png"));
+	}
+	
+	public static Plugin getDummyPlugin() {
+		return DUMMY_PLUGIN;
+	}
 	
 	public static final String PROP_STATUS = "status";
 	public static final String PROP_ID = "id";

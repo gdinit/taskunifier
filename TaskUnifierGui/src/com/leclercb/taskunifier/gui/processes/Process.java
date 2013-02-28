@@ -37,8 +37,8 @@ package com.leclercb.taskunifier.gui.processes;
  */
 public interface Process<T> {
 	
-	public abstract T execute(final Worker<T> worker) throws Exception;
+	public abstract T execute(final Worker<?> worker) throws Exception;
 	
-	public abstract void done(final Worker<T> worker);
+	public abstract void done(final Worker<?> worker);
 	
 }
