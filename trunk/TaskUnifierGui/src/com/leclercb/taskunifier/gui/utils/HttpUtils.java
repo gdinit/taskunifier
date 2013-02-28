@@ -32,6 +32,9 @@
  */
 package com.leclercb.taskunifier.gui.utils;
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.net.URI;
 import java.util.List;
 
@@ -44,6 +47,12 @@ public final class HttpUtils {
 	
 	private HttpUtils() {
 		
+	}
+	
+	static {
+		CookieHandler.setDefault(new CookieManager(
+				null,
+				CookiePolicy.ACCEPT_ALL));
 	}
 	
 	public static HttpResponse getHttpGetResponse(URI uri) throws Exception {
