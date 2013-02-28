@@ -40,6 +40,7 @@ import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
@@ -94,9 +95,19 @@ public class TUWorkerDialog<T> extends TUDialog implements ProgressMessageAddedL
 		}
 	}
 	
+	public boolean isDone() {
+		return this.worker.isDone();
+	}
+	
+	public boolean isCancelled() {
+		return this.worker.isCancelled();
+	}
+	
 	public T getResult() {
 		try {
 			return this.worker.get();
+		} catch (CancellationException e) {
+			return null;
 		} catch (InterruptedException e) {
 			return null;
 		} catch (ExecutionException e) {
@@ -155,6 +166,16 @@ public class TUWorkerDialog<T> extends TUDialog implements ProgressMessageAddedL
 			public void windowOpened(WindowEvent event) {
 				TUWorkerDialog.this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				TUWorkerDialog.this.worker.execute();
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if (TUWorkerDialog.this.worker.isDone()) {
+					TUWorkerDialog.this.setCursor(null);
+					TUWorkerDialog.this.setVisible(false);
+				}
+				
+				TUWorkerDialog.this.worker.cancel();
 			}
 			
 		});

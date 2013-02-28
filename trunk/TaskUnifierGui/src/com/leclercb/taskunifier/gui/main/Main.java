@@ -84,7 +84,6 @@ import com.leclercb.taskunifier.gui.api.models.beans.GuiGoalBean;
 import com.leclercb.taskunifier.gui.api.models.beans.GuiLocationBean;
 import com.leclercb.taskunifier.gui.api.models.beans.GuiNoteBean;
 import com.leclercb.taskunifier.gui.api.models.beans.GuiTaskBean;
-import com.leclercb.taskunifier.gui.api.plugins.PluginsUtils;
 import com.leclercb.taskunifier.gui.api.plugins.exc.PluginException;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
@@ -98,6 +97,8 @@ import com.leclercb.taskunifier.gui.main.main.MainLoadLoggers;
 import com.leclercb.taskunifier.gui.main.main.MainSaveFiles;
 import com.leclercb.taskunifier.gui.main.main.MainSplashScreen;
 import com.leclercb.taskunifier.gui.main.main.MainSwingRunnable;
+import com.leclercb.taskunifier.gui.processes.Worker;
+import com.leclercb.taskunifier.gui.processes.plugins.ProcessLoadPlugin;
 import com.leclercb.taskunifier.gui.resources.Resources;
 import com.leclercb.taskunifier.gui.settings.SettingsVersion;
 import com.leclercb.taskunifier.gui.settings.UserSettingsVersion;
@@ -650,7 +651,14 @@ public class Main {
 		
 		for (File file : pluginFiles) {
 			try {
-				PluginsUtils.loadPlugin(file);
+				ProcessLoadPlugin process = new ProcessLoadPlugin(file);
+				Worker<SynchronizerGuiPlugin> worker = new Worker<SynchronizerGuiPlugin>(
+						process);
+				worker.setSilent(true);
+				worker.execute();
+				
+				if (worker.getThrowable() != null)
+					throw worker.getThrowable();
 			} catch (PluginException e) {
 				switch (e.getType()) {
 					case MORE_THAN_ONE_PLUGIN:

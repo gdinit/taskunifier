@@ -60,7 +60,7 @@ public class ProcessUpdatePlugin implements Process<Void> {
 	}
 	
 	@Override
-	public Void execute(final Worker<Void> worker) throws Exception {
+	public Void execute(final Worker<?> worker) throws Exception {
 		final ProgressMonitor monitor = worker.getEDTMonitor();
 		
 		for (Plugin plugin : this.plugins) {
@@ -99,7 +99,7 @@ public class ProcessUpdatePlugin implements Process<Void> {
 	}
 	
 	@Override
-	public void done(Worker<Void> worker) {
+	public void done(Worker<?> worker) {
 		
 	}
 	

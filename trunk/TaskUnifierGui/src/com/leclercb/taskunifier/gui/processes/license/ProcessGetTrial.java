@@ -101,7 +101,7 @@ public class ProcessGetTrial implements Process<String> {
 	}
 	
 	@Override
-	public String execute(final Worker<String> worker) throws Exception {
+	public String execute(final Worker<?> worker) throws Exception {
 		final ProgressMonitor monitor = worker.getEDTMonitor();
 		
 		monitor.addMessage(new DefaultProgressMessage(
@@ -138,6 +138,9 @@ public class ProcessGetTrial implements Process<String> {
 					},
 					20000);
 			
+			if (worker.isCancelled())
+				return null;
+			
 			if (!response.isSuccessfull())
 				throw new Exception();
 			
@@ -165,7 +168,7 @@ public class ProcessGetTrial implements Process<String> {
 	}
 	
 	@Override
-	public void done(Worker<String> worker) {
+	public void done(Worker<?> worker) {
 		
 	}
 	

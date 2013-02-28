@@ -61,7 +61,7 @@ public class ProcessInstallOrUpdatePlugin implements Process<Void> {
 	}
 	
 	@Override
-	public Void execute(final Worker<Void> worker) throws Exception {
+	public Void execute(final Worker<?> worker) throws Exception {
 		if (this.plugin.getStatus() == PluginStatus.TO_INSTALL) {
 			ProcessInstallPlugin process = new ProcessInstallPlugin(
 					this.plugin,
@@ -92,7 +92,7 @@ public class ProcessInstallOrUpdatePlugin implements Process<Void> {
 	}
 	
 	@Override
-	public void done(Worker<Void> worker) {
+	public void done(Worker<?> worker) {
 		
 	}
 	

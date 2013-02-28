@@ -32,8 +32,6 @@
  */
 package com.leclercb.taskunifier.gui.components.synchronize;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.logging.Level;
 
 import javax.swing.Icon;
@@ -63,20 +61,6 @@ public class SynchronizerDialog extends TUWorkerDialog<Void> {
 		
 		final SynchronizerDialogWorker worker = new SynchronizerDialogWorker();
 		this.setWorker(worker, false);
-		
-		this.addWindowListener(new WindowAdapter() {
-			
-			@Override
-			public void windowClosing(WindowEvent e) {
-				if (worker.isDone()) {
-					SynchronizerDialog.this.setCursor(null);
-					SynchronizerDialog.this.setVisible(false);
-				}
-				
-				worker.stop();
-			}
-			
-		});
 	}
 	
 	public void add(SynchronizerGuiPlugin plugin, ProcessSynchronize.Type type) {

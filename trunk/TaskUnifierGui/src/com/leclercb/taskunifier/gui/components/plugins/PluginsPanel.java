@@ -72,7 +72,7 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 				false);
 		
 		if (plugins == null)
-			plugins = new Plugin[] { PluginsUtils.getDummyPlugin() };
+			plugins = new Plugin[] { Plugin.getDummyPlugin() };
 		
 		this.list.setPlugins(plugins);
 	}

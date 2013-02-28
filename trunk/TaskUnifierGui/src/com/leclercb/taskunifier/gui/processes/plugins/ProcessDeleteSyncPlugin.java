@@ -33,35 +33,32 @@
 package com.leclercb.taskunifier.gui.processes.plugins;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.leclercb.commons.api.progress.DefaultProgressMessage;
 import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
-import com.leclercb.taskunifier.gui.api.plugins.Plugin;
-import com.leclercb.taskunifier.gui.api.plugins.PluginStatus;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
+import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.processes.Process;
 import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public class ProcessDeletePlugin implements Process<Void> {
+public class ProcessDeleteSyncPlugin implements Process<Void> {
 	
-	private Plugin plugin;
+	private SynchronizerGuiPlugin plugin;
 	
-	public ProcessDeletePlugin(Plugin plugin) {
+	public ProcessDeleteSyncPlugin(SynchronizerGuiPlugin plugin) {
 		this.setPlugin(plugin);
 	}
 	
-	public Plugin getPlugin() {
+	public SynchronizerGuiPlugin getPlugin() {
 		return this.plugin;
 	}
 	
-	public void setPlugin(Plugin plugin) {
+	public void setPlugin(SynchronizerGuiPlugin plugin) {
 		CheckUtils.isNotNull(plugin);
 		this.plugin = plugin;
 	}
@@ -69,6 +66,9 @@ public class ProcessDeletePlugin implements Process<Void> {
 	@Override
 	public Void execute(final Worker<?> worker) throws Exception {
 		final ProgressMonitor monitor = worker.getEDTMonitor();
+		
+		if (this.plugin.getId().equals(DummyGuiPlugin.getInstance().getId()))
+			return null;
 		
 		monitor.addMessage(new DefaultProgressMessage(Translations.getString(
 				"manage_plugins.progress.start_plugin_deletion",
@@ -78,27 +78,20 @@ public class ProcessDeletePlugin implements Process<Void> {
 			
 			@Override
 			public void run() {
-				List<SynchronizerGuiPlugin> existingPlugins = new ArrayList<SynchronizerGuiPlugin>(
-						Main.getApiPlugins().getPlugins());
-				for (SynchronizerGuiPlugin existingPlugin : existingPlugins) {
-					if (existingPlugin.getId().equals(
-							ProcessDeletePlugin.this.plugin.getId())) {
-						existingPlugin.deletePlugin();
-						
-						File file = Main.getApiPlugins().getFile(existingPlugin);
-						file.delete();
-						
-						Main.getApiPlugins().removePlugin(existingPlugin);
-						
-						GuiLogger.getLogger().info(
-								"Plugin deleted: "
-										+ existingPlugin.getName()
-										+ " - "
-										+ existingPlugin.getVersion());
-						
-						ProcessDeletePlugin.this.plugin.setStatus(PluginStatus.DELETED);
-					}
-				}
+				ProcessDeleteSyncPlugin.this.plugin.deletePlugin();
+				
+				File file = Main.getApiPlugins().getFile(
+						ProcessDeleteSyncPlugin.this.plugin);
+				file.delete();
+				
+				Main.getApiPlugins().removePlugin(
+						ProcessDeleteSyncPlugin.this.plugin);
+				
+				GuiLogger.getLogger().info(
+						"Plugin deleted: "
+								+ ProcessDeleteSyncPlugin.this.plugin.getName()
+								+ " - "
+								+ ProcessDeleteSyncPlugin.this.plugin.getVersion());
 			}
 			
 		});
