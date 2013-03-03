@@ -39,6 +39,9 @@ import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
+import com.leclercb.taskunifier.gui.actions.publish.ActionPublish;
+import com.leclercb.taskunifier.gui.actions.synchronize.ActionSynchronize;
+import com.leclercb.taskunifier.gui.actions.synchronize.ActionSynchronizeAndPublish;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.main.Main;

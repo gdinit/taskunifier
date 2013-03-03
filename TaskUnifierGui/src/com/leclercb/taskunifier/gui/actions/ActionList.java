@@ -3,6 +3,9 @@ package com.leclercb.taskunifier.gui.actions;
 import javax.swing.Action;
 import javax.swing.Icon;
 
+import com.leclercb.taskunifier.gui.actions.publish.ActionPublish;
+import com.leclercb.taskunifier.gui.actions.synchronize.ActionSynchronize;
+import com.leclercb.taskunifier.gui.actions.synchronize.ActionSynchronizeAndPublish;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
