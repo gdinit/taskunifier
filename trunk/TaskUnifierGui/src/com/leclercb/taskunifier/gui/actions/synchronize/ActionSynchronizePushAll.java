@@ -20,7 +20,6 @@ import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.api.models.NoteFactory;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
-import com.leclercb.taskunifier.gui.actions.ActionSynchronize;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 import com.leclercb.taskunifier.gui.translations.Translations;
 

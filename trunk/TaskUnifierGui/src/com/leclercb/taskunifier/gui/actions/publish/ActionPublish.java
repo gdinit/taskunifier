@@ -30,16 +30,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.actions;
+package com.leclercb.taskunifier.gui.actions.publish;
 
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 
-import javax.swing.KeyStroke;
-
+import com.leclercb.taskunifier.gui.actions.AbstractViewAction;
+import com.leclercb.taskunifier.gui.actions.ActionManagePublisherPlugins;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
-import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.components.synchronize.BackgroundSynchronizer;
 import com.leclercb.taskunifier.gui.components.synchronize.SynchronizerDialog;
 import com.leclercb.taskunifier.gui.components.synchronize.SynchronizerWorker;
@@ -51,17 +48,14 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 
-public class ActionSynchronizeAndPublish extends AbstractViewAction {
+public class ActionPublish extends AbstractViewAction {
 	
 	private boolean background;
 	
-	public ActionSynchronizeAndPublish(int width, int height, boolean background) {
+	public ActionPublish(int width, int height, boolean background) {
 		super(
-				Translations.getString("action.synchronize_and_publish"),
-				ImageUtils.getResourceImage(
-						"synchronize_publish.png",
-						width,
-						height));
+				Translations.getString("action.publish"),
+				ImageUtils.getResourceImage("publish.png", width, height));
 		
 		this.setProRequired(true);
 		
@@ -69,25 +63,19 @@ public class ActionSynchronizeAndPublish extends AbstractViewAction {
 		
 		this.putValue(
 				SHORT_DESCRIPTION,
-				Translations.getString("action.synchronize_and_publish"));
-		
-		this.putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(
-				KeyEvent.VK_S,
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+				Translations.getString("action.publish"));
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		ActionSynchronizeAndPublish.synchronizeAndPublish(this.background, true);
+		ActionPublish.publish(this.background, true);
 	}
 	
-	public static void synchronizeAndPublish(boolean background) {
-		synchronizeAndPublish(background, false);
+	public static void publish(boolean background) {
+		publish(background, false);
 	}
 	
-	public static void synchronizeAndPublish(
-			boolean background,
-			boolean userAction) {
+	public static void publish(boolean background, boolean userAction) {
 		if (!Main.isProVersion()) {
 			showProRequired();
 			return;
@@ -100,15 +88,11 @@ public class ActionSynchronizeAndPublish extends AbstractViewAction {
 			return;
 		}
 		
-		boolean isDummyPlugin = SynchronizerUtils.getSynchronizerPlugin().getId().equals(
-				DummyGuiPlugin.getInstance().getId());
-		
-		if (isDummyPlugin
-				&& SynchronizerUtils.getPublisherPlugins().length == 0) {
+		if (SynchronizerUtils.getPublisherPlugins().length == 0) {
 			if (background || !userAction)
 				return;
 			
-			ActionManageSynchronizerPlugins.manageSynchronizerPlugins();
+			ActionManagePublisherPlugins.managePublisherPlugins();
 			return;
 		}
 		
@@ -119,11 +103,6 @@ public class ActionSynchronizeAndPublish extends AbstractViewAction {
 		if (background) {
 			SynchronizerWorker worker = BackgroundSynchronizer.getSynchronizer();
 			
-			if (!isDummyPlugin)
-				worker.add(
-						SynchronizerUtils.getSynchronizerPlugin(),
-						ProcessSynchronize.Type.SYNCHRONIZE);
-			
 			for (SynchronizerGuiPlugin plugin : publisherPlugins) {
 				worker.add(plugin, ProcessSynchronize.Type.PUBLISH);
 			}
@@ -131,11 +110,6 @@ public class ActionSynchronizeAndPublish extends AbstractViewAction {
 			BackgroundSynchronizer.execute(worker);
 		} else {
 			SynchronizerDialog dialog = new SynchronizerDialog();
-			
-			if (!isDummyPlugin)
-				dialog.add(
-						SynchronizerUtils.getSynchronizerPlugin(),
-						ProcessSynchronize.Type.SYNCHRONIZE);
 			
 			for (SynchronizerGuiPlugin plugin : publisherPlugins) {
 				dialog.add(plugin, ProcessSynchronize.Type.PUBLISH);
