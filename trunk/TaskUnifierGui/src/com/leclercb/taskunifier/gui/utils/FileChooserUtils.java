@@ -126,7 +126,7 @@ public final class FileChooserUtils {
 		else if (FrameUtils.getCurrentWindow() instanceof Dialog)
 			fileChooser = new FileDialog((Dialog) FrameUtils.getCurrentWindow());
 		else
-			fileChooser = new FileDialog(FrameUtils.getCurrentFrame2());
+			fileChooser = new FileDialog(FrameUtils.getCurrentFrame());
 		
 		if (open)
 			fileChooser.setMode(FileDialog.LOAD);

@@ -71,7 +71,6 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 	private boolean silent;
 	
 	private Process<T> process;
-	private Throwable throwable;
 	
 	private ProgressMonitor edtMonitor;
 	private ProgressMonitor monitor;
@@ -123,10 +122,6 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 		this.process = process;
 	}
 	
-	public Throwable getThrowable() {
-		return this.throwable;
-	}
-	
 	public ProgressMonitor getEDTMonitor() {
 		return this.edtMonitor;
 	}
@@ -147,9 +142,7 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 		}
 	}
 	
-	protected void handleException(final Throwable throwable) {
-		this.throwable = throwable;
-		
+	protected void handleException(final Exception e) {
 		if (!this.silent) {
 			TUSwingUtilities.invokeAndWait(new Runnable() {
 				
@@ -157,10 +150,10 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 				public void run() {
 					ErrorInfo info = new ErrorInfo(
 							Translations.getString("general.error"),
-							throwable.getMessage(),
+							e.getMessage(),
 							null,
 							"GUI",
-							throwable,
+							e,
 							Level.WARNING,
 							null);
 					
@@ -177,9 +170,9 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 		
 		try {
 			return this.process.execute(this);
-		} catch (final Throwable t) {
-			this.handleException(t);
-			return null;
+		} catch (final Exception e) {
+			this.handleException(e);
+			throw e;
 		}
 	}
 	
