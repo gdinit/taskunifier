@@ -61,6 +61,7 @@ import com.leclercb.commons.api.license.exceptions.LicenseExpiredException;
 import com.leclercb.commons.api.license.exceptions.LicenseVersionExpiredException;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
+import com.leclercb.taskunifier.gui.commons.values.StringValueLicenseType;
 import com.leclercb.taskunifier.gui.resources.Resources;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -357,7 +358,7 @@ public class LicensePanel extends JPanel {
 						200,
 						211);
 				g2.drawString(
-						LicensePanel.this.license.getLicenseType().name(),
+						StringValueLicenseType.INSTANCE.getString(LicensePanel.this.license.getLicenseType()),
 						200,
 						235);
 				g2.drawString(LicensePanel.this.license.getVersion(), 200, 256);
