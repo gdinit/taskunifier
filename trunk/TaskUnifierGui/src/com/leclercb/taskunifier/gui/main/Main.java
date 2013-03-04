@@ -98,13 +98,13 @@ import com.leclercb.taskunifier.gui.main.main.MainLoadLoggers;
 import com.leclercb.taskunifier.gui.main.main.MainSaveFiles;
 import com.leclercb.taskunifier.gui.main.main.MainSplashScreen;
 import com.leclercb.taskunifier.gui.main.main.MainSwingRunnable;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.processes.plugins.ProcessLoadPlugin;
 import com.leclercb.taskunifier.gui.resources.Resources;
 import com.leclercb.taskunifier.gui.settings.SettingsVersion;
 import com.leclercb.taskunifier.gui.settings.UserSettingsVersion;
 import com.leclercb.taskunifier.gui.swing.EventQueueProxy;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.swing.lookandfeel.JTattooLookAndFeelDescriptor;
 import com.leclercb.taskunifier.gui.threads.Threads;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -340,7 +340,7 @@ public class Main {
 			return;
 		}
 		
-		TUSwingUtilities.invokeLater(new MainSwingRunnable(args));
+		ProcessUtils.invokeLater(new MainSwingRunnable(args));
 	}
 	
 	private static void secondaryMain(String[] args) {

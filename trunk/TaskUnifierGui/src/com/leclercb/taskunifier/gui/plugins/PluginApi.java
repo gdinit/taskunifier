@@ -44,7 +44,7 @@ import com.leclercb.taskunifier.gui.components.help.Help;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.main.frames.FrameView;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 
@@ -111,15 +111,11 @@ public final class PluginApi {
 	}
 	
 	public static void invokeLater(Runnable doRun) {
-		TUSwingUtilities.invokeLater(doRun);
+		ProcessUtils.invokeLater(doRun);
 	}
 	
 	public static void invokeAndWait(Runnable doRun) {
-		TUSwingUtilities.invokeAndWait(doRun);
-	}
-	
-	public static void executeOrInvokeAndWait(Runnable doRun) {
-		TUSwingUtilities.executeOrInvokeAndWait(doRun);
+		ProcessUtils.invokeAndWait(doRun);
 	}
 	
 	public static Frame getCurrentFrame() {

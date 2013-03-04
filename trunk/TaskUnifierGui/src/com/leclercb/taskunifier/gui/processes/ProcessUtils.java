@@ -30,41 +30,43 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.swing;
+package com.leclercb.taskunifier.gui.processes;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 import java.util.logging.Level;
 
 import javax.swing.SwingUtilities;
 
 import com.leclercb.commons.gui.logger.GuiLogger;
 
-public final class TUSwingUtilities {
+public final class ProcessUtils {
 	
-	private TUSwingUtilities() {
+	private ProcessUtils() {
 		
 	}
 	
-	public static void invokeLater(Runnable doRun) {
-		SwingUtilities.invokeLater(doRun);
+	public static void invokeLater(Runnable runnable) {
+		SwingUtilities.invokeLater(runnable);
 	}
 	
-	public static void invokeAndWait(Runnable doRun) {
+	public static void invokeAndWait(Runnable runnable) {
 		try {
-			SwingUtilities.invokeAndWait(doRun);
+			SwingUtilities.invokeAndWait(runnable);
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(
 					Level.WARNING,
-					"Swing invoke and wait exception",
+					"EDT invoke and wait exception",
 					e);
 		}
 	}
 	
-	public static void executeOrInvokeAndWait(Runnable doRun) {
-		if (SwingUtilities.isEventDispatchThread()) {
-			doRun.run();
-		} else {
-			invokeAndWait(doRun);
-		}
+	public static <T> T invokeAndWait(Callable<T> callable)
+			throws InterruptedException, ExecutionException {
+		FutureTask<T> task = new FutureTask<T>(callable);
+		SwingUtilities.invokeLater(task);
+		return task.get();
 	}
 	
 }

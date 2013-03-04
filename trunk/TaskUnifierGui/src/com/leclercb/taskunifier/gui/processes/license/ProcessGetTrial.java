@@ -52,25 +52,53 @@ import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.HttpResponse;
+import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.processes.Process;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.processes.Worker;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.HttpUtils;
 
-public class ProcessGetTrial implements Process<String> {
+public class ProcessGetTrial implements Process<HttpResponse> {
+	
+	private boolean showSuccess;
+	private boolean showFailure;
 	
 	private String firstName;
 	private String lastName;
 	private String email;
 	
-	public ProcessGetTrial(String firstName, String lastName, String email) {
+	public ProcessGetTrial(
+			boolean showSuccess,
+			boolean showFailure,
+			String firstName,
+			String lastName,
+			String email) {
+		this.setShowSuccess(showSuccess);
+		this.setShowFailure(showFailure);
+		
 		this.setFirstName(firstName);
 		this.setLastName(lastName);
 		this.setEmail(email);
+	}
+	
+	public boolean isShowSuccess() {
+		return this.showSuccess;
+	}
+	
+	public void setShowSuccess(boolean showSuccess) {
+		this.showSuccess = showSuccess;
+	}
+	
+	public boolean isShowFailure() {
+		return this.showFailure;
+	}
+	
+	public void setShowFailure(boolean showFailure) {
+		this.showFailure = showFailure;
 	}
 	
 	public String getFirstName() {
@@ -101,70 +129,65 @@ public class ProcessGetTrial implements Process<String> {
 	}
 	
 	@Override
-	public String execute(final Worker<?> worker) throws Exception {
+	public HttpResponse execute(final Worker<?> worker) throws Exception {
 		final ProgressMonitor monitor = worker.getEDTMonitor();
 		
 		monitor.addMessage(new DefaultProgressMessage(
 				Translations.getString("license.get_trial")));
 		
-		try {
-			HttpResponse response = worker.executeInterruptibleAction(
-					new Callable<HttpResponse>() {
+		HttpResponse response = worker.executeInterruptibleAction(
+				new Callable<HttpResponse>() {
+					
+					@Override
+					public HttpResponse call() throws Exception {
+						List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 						
-						@Override
-						public HttpResponse call() throws Exception {
-							List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-							
-							parameters.add(new BasicNameValuePair(
-									"item",
-									Constants.ITEM_TRIAL_ID + ""));
-							parameters.add(new BasicNameValuePair(
-									"first_name",
-									ProcessGetTrial.this.firstName));
-							parameters.add(new BasicNameValuePair(
-									"last_name",
-									ProcessGetTrial.this.lastName));
-							parameters.add(new BasicNameValuePair(
-									"email",
-									ProcessGetTrial.this.email));
-							parameters.add(new BasicNameValuePair(
-									"user_id",
-									Main.getCurrentUserId()));
-							
-							return HttpUtils.getHttpPostResponse(new URI(
-									Constants.GET_TRIAL_URL), parameters);
-						}
+						parameters.add(new BasicNameValuePair(
+								"item",
+								Constants.ITEM_TRIAL_ID + ""));
+						parameters.add(new BasicNameValuePair(
+								"first_name",
+								ProcessGetTrial.this.firstName));
+						parameters.add(new BasicNameValuePair(
+								"last_name",
+								ProcessGetTrial.this.lastName));
+						parameters.add(new BasicNameValuePair(
+								"email",
+								ProcessGetTrial.this.email));
+						parameters.add(new BasicNameValuePair(
+								"user_id",
+								Main.getCurrentUserId()));
 						
-					},
-					20000);
-			
-			if (worker.isCancelled())
-				return null;
-			
-			if (!response.isSuccessfull())
-				throw new Exception();
-			
-			ObjectMapper mapper = new ObjectMapper();
-			JsonNode node = mapper.readTree(response.getContent());
-			
-			String code = node.get("code").asText();
-			String message = node.get("message").asText();
-			String license = null;
-			
-			if (EqualsUtils.equals(code, "0")) {
-				license = node.get("data").get("license").asText();
-			}
-			
-			this.showResult(code, message);
-			
-			return license;
-		} catch (Exception e) {
-			this.showResult(
-					"999",
-					"An error occured while generating the trial license key.");
-			
+						return HttpUtils.getHttpPostResponse(new URI(
+								Constants.GET_TRIAL_URL), parameters);
+					}
+					
+				},
+				20000);
+		
+		if (worker.isCancelled())
 			return null;
+		
+		if (!response.isSuccessfull()) {
+			this.showResult(
+					null,
+					"An error occurred while retrieving the license key");
+			return response;
 		}
+		
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode node = mapper.readTree(response.getContent());
+		
+		String code = node.get("code").asText();
+		String message = node.get("message").asText();
+		
+		if (this.showSuccess && EqualsUtils.equals(code, "0"))
+			this.showResult(code, message);
+		
+		if (this.showFailure && !EqualsUtils.equals(code, "0"))
+			this.showResult(code, message);
+		
+		return response;
 	}
 	
 	@Override
@@ -173,7 +196,7 @@ public class ProcessGetTrial implements Process<String> {
 	}
 	
 	private void showResult(final String code, final String message) {
-		TUSwingUtilities.invokeAndWait(new Runnable() {
+		ProcessUtils.invokeAndWait(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -198,6 +221,29 @@ public class ProcessGetTrial implements Process<String> {
 			}
 			
 		});
+	}
+	
+	public static String getLicense(HttpResponse response) {
+		if (!response.isSuccessfull())
+			return null;
+		
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			JsonNode node = mapper.readTree(response.getContent());
+			
+			String code = node.get("code").asText();
+			String license = null;
+			
+			if (EqualsUtils.equals(code, "0")) {
+				license = node.get("data").get("license").asText();
+			}
+			
+			return license;
+		} catch (Exception e) {
+			GuiLogger.getLogger().log(Level.WARNING, "Cannot read license", e);
+			
+			return null;
+		}
 	}
 	
 }

@@ -49,7 +49,7 @@ import com.leclercb.taskunifier.gui.components.reminder.ReminderFrame;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.threads.reminder.progress.ReminderDefaultProgressMessage;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
@@ -81,7 +81,7 @@ class ReminderRunnable implements Runnable, PropertyChangeListener, ListChangeLi
 				if (Synchronizing.getInstance().isSynchronizing())
 					continue;
 				
-				TUSwingUtilities.invokeLater(new Runnable() {
+				ProcessUtils.invokeLater(new Runnable() {
 					
 					@Override
 					public void run() {

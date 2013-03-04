@@ -58,7 +58,6 @@ import com.leclercb.commons.api.progress.event.ProgressMessageAddedListener;
 import com.leclercb.commons.api.progress.event.WeakProgressMessageAddedListener;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class Worker<T> extends SwingWorker<T, ProgressMessage> implements ActionSupported, ProgressMessageAddedListener {
@@ -144,7 +143,7 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 	
 	protected void handleException(final Exception e) {
 		if (!this.silent) {
-			TUSwingUtilities.invokeAndWait(new Runnable() {
+			ProcessUtils.invokeAndWait(new Runnable() {
 				
 				@Override
 				public void run() {
@@ -188,7 +187,7 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 	
 	@Override
 	public void progressMessageAdded(final ProgressMessageAddedEvent event) {
-		TUSwingUtilities.invokeLater(new Runnable() {
+		ProcessUtils.invokeLater(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -198,18 +197,8 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 		});
 	}
 	
-	@Override
-	public void addActionListener(ActionListener listener) {
-		this.actionSupport.addActionListener(listener);
-	}
-	
-	@Override
-	public void removeActionListener(ActionListener listener) {
-		this.actionSupport.removeActionListener(listener);
-	}
-	
 	public final <O> O executeInterruptibleAction(Callable<O> callable)
-			throws InterruptedException, ExecutionException {
+			throws ExecutionException, InterruptedException {
 		ExecutorService executor = Executors.newCachedThreadPool();
 		Future<O> future = executor.submit(callable);
 		this.future = future;
@@ -223,7 +212,7 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 	
 	public final <O> O executeInterruptibleAction(
 			Callable<O> callable,
-			int timeout) throws InterruptedException, ExecutionException,
+			int timeout) throws ExecutionException, InterruptedException,
 			TimeoutException {
 		ExecutorService executor = Executors.newCachedThreadPool();
 		Future<O> future = executor.submit(callable);
@@ -234,6 +223,16 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 		} catch (CancellationException e) {
 			return null;
 		}
+	}
+	
+	@Override
+	public void addActionListener(ActionListener listener) {
+		this.actionSupport.addActionListener(listener);
+	}
+	
+	@Override
+	public void removeActionListener(ActionListener listener) {
+		this.actionSupport.removeActionListener(listener);
 	}
 	
 }

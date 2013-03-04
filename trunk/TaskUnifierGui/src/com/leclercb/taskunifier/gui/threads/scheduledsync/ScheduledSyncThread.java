@@ -42,7 +42,7 @@ import com.leclercb.taskunifier.gui.actions.synchronize.ActionSynchronize;
 import com.leclercb.taskunifier.gui.actions.synchronize.ActionSynchronizeAndPublish;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.main.Main;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 
 public class ScheduledSyncThread extends Thread implements PropertyChangeSupported, PropertyChangeListener {
 	
@@ -96,7 +96,7 @@ public class ScheduledSyncThread extends Thread implements PropertyChangeSupport
 				if (Synchronizing.getInstance().isSynchronizing())
 					continue;
 				
-				TUSwingUtilities.invokeLater(new Runnable() {
+				ProcessUtils.invokeLater(new Runnable() {
 					
 					@Override
 					public void run() {

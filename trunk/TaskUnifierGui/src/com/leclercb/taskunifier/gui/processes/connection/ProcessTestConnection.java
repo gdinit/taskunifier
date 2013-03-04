@@ -47,8 +47,8 @@ import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.processes.Process;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.processes.Worker;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.HttpUtils;
 
@@ -114,7 +114,7 @@ public class ProcessTestConnection implements Process<HttpResponse> {
 	}
 	
 	private void showResult(final boolean result) {
-		TUSwingUtilities.invokeAndWait(new Runnable() {
+		ProcessUtils.invokeAndWait(new Runnable() {
 			
 			@Override
 			public void run() {

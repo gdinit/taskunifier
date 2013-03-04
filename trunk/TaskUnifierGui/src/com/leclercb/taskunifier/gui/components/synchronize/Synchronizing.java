@@ -38,7 +38,7 @@ import javax.swing.JOptionPane;
 
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupport;
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public final class Synchronizing implements PropertyChangeSupported {
@@ -78,7 +78,7 @@ public final class Synchronizing implements PropertyChangeSupported {
 		}
 		
 		if (oldSynchronizing != this.isSynchronizing()) {
-			TUSwingUtilities.executeOrInvokeAndWait(new Runnable() {
+			ProcessUtils.invokeAndWait(new Runnable() {
 				
 				@Override
 				public void run() {
@@ -93,7 +93,7 @@ public final class Synchronizing implements PropertyChangeSupported {
 	}
 	
 	public void showSynchronizingMessage() {
-		TUSwingUtilities.executeOrInvokeAndWait(new Runnable() {
+		ProcessUtils.invokeAndWait(new Runnable() {
 			
 			@Override
 			public void run() {

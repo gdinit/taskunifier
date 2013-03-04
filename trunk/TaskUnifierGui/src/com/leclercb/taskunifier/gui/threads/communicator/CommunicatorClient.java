@@ -44,7 +44,7 @@ import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.actions.ActionImportComFile;
 import com.leclercb.taskunifier.gui.api.models.beans.ComBean;
 import com.leclercb.taskunifier.gui.constants.Constants;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.threads.communicator.progress.CommunicatorDefaultProgressMessage;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
@@ -95,7 +95,7 @@ public class CommunicatorClient extends Thread {
 	}
 	
 	private void handleMessage(final String message) {
-		TUSwingUtilities.invokeLater(new Runnable() {
+		ProcessUtils.invokeLater(new Runnable() {
 			
 			@Override
 			public void run() {
