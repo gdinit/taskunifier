@@ -41,6 +41,7 @@ import java.io.FileNotFoundException;
 import java.util.Calendar;
 import java.util.Properties;
 import java.util.TimeZone;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
@@ -657,8 +658,12 @@ public class Main {
 				worker.setSilent(true);
 				worker.execute();
 				
-				if (worker.getThrowable() != null)
-					throw worker.getThrowable();
+				try {
+					worker.get();
+				} catch (ExecutionException e) {
+					if (e.getCause() instanceof PluginException)
+						throw e.getCause();
+				}
 			} catch (PluginException e) {
 				switch (e.getType()) {
 					case MORE_THAN_ONE_PLUGIN:
@@ -675,7 +680,7 @@ public class Main {
 			} catch (Throwable t) {
 				GuiLogger.getLogger().log(
 						Level.WARNING,
-						"Unknown plugin error",
+						"Error while loading plugin",
 						t);
 			}
 		}

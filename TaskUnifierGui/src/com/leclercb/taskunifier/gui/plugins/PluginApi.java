@@ -122,8 +122,8 @@ public final class PluginApi {
 		TUSwingUtilities.executeOrInvokeAndWait(doRun);
 	}
 	
-	public static Frame getCurrentFrame2() {
-		return FrameUtils.getCurrentFrame2();
+	public static Frame getCurrentFrame() {
+		return FrameUtils.getCurrentFrame();
 	}
 	
 	public static Window getCurrentWindow() {
