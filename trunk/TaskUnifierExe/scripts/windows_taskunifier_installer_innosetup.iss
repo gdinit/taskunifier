@@ -20,7 +20,7 @@ Source: "..\temp\TaskUnifier\*"; DestDir: "{app}"; Flags: recursesubdirs
 Source: "..\temp\TaskUnifier\readme.txt"; DestDir: "{app}"; Flags: isreadme
 
 [Icons]
-Name: "{group}\TaskUnifier"; Filename: "{app}\resources\icon.ico"
+Name: "{group}\TaskUnifier"; Filename: "{app}\TaskUnifier.exe"
 
 [Registry]
 Root: HKCR; Subkey: ".tue"; ValueType: string; ValueName: ""; ValueData: "TaskUnifierExchangeFile"; Flags: uninsdeletevalue
