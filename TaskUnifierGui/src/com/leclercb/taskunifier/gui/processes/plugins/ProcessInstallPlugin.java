@@ -36,7 +36,6 @@ import java.io.File;
 import java.net.URL;
 import java.util.UUID;
 import java.util.concurrent.Callable;
-import java.util.logging.Level;
 
 import com.leclercb.commons.api.progress.DefaultProgressMessage;
 import com.leclercb.commons.api.progress.ProgressMonitor;
@@ -49,7 +48,6 @@ import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
-import com.leclercb.taskunifier.gui.plugins.PluginLogger;
 import com.leclercb.taskunifier.gui.processes.Process;
 import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.processes.Worker;
@@ -90,116 +88,100 @@ public class ProcessInstallPlugin implements Process<Void> {
 		if (this.plugin.getId().equals(DummyGuiPlugin.getInstance().getId()))
 			return null;
 		
-		try {
-			monitor.addMessage(new DefaultProgressMessage(
-					Translations.getString(
-							"manage_plugins.progress.start_plugin_installation",
-							this.plugin.getName())));
+		monitor.addMessage(new DefaultProgressMessage(Translations.getString(
+				"manage_plugins.progress.start_plugin_installation",
+				this.plugin.getName())));
+		
+		final File tempFile = File.createTempFile("taskunifier_plugin_", ".jar");
+		
+		monitor.addMessage(new DefaultProgressMessage(Translations.getString(
+				"manage_plugins.progress.downloading_plugin",
+				this.plugin.getName())));
+		
+		worker.executeInterruptibleAction(new Callable<Void>() {
 			
-			final File tempFile = File.createTempFile(
-					"taskunifier_plugin_",
-					".jar");
-			
-			monitor.addMessage(new DefaultProgressMessage(
-					Translations.getString(
-							"manage_plugins.progress.downloading_plugin",
-							this.plugin.getName())));
-			
-			worker.executeInterruptibleAction(new Callable<Void>() {
-				
-				@Override
-				public Void call() throws Exception {
-					if (!Main.getSettings().getBooleanProperty(
-							"proxy.use_system_proxies")
-							&& Main.getSettings().getBooleanProperty(
-									"proxy.enabled")) {
-						FileUtils.copyURLToFile(
-								new URL(
-										ProcessInstallPlugin.this.plugin.getDownloadUrl()),
-								tempFile,
-								Main.getSettings().getStringProperty(
-										"proxy.host"),
-								Main.getSettings().getIntegerProperty(
-										"proxy.port"),
-								Main.getSettings().getStringProperty(
-										"proxy.login"),
-								Main.getSettings().getStringProperty(
-										"proxy.password"));
-					} else {
-						FileUtils.copyURLToFile(
-								new URL(
-										ProcessInstallPlugin.this.plugin.getDownloadUrl()),
-								tempFile);
-					}
-					
-					return null;
+			@Override
+			public Void call() throws Exception {
+				if (!Main.getSettings().getBooleanProperty(
+						"proxy.use_system_proxies")
+						&& Main.getSettings().getBooleanProperty(
+								"proxy.enabled")) {
+					FileUtils.copyURLToFile(
+							new URL(
+									ProcessInstallPlugin.this.plugin.getDownloadUrl()),
+							tempFile,
+							Main.getSettings().getStringProperty("proxy.host"),
+							Main.getSettings().getIntegerProperty("proxy.port"),
+							Main.getSettings().getStringProperty("proxy.login"),
+							Main.getSettings().getStringProperty(
+									"proxy.password"));
+				} else {
+					FileUtils.copyURLToFile(
+							new URL(
+									ProcessInstallPlugin.this.plugin.getDownloadUrl()),
+							tempFile);
 				}
 				
-			},
-					Constants.TIMEOUT_HTTP_CALL);
-			
-			if (worker.isCancelled())
 				return null;
-			
-			monitor.addMessage(new DefaultProgressMessage(
-					Translations.getString(
-							"manage_plugins.progress.installing_plugin",
-							this.plugin.getName())));
-			
-			final File file = new File(Main.getPluginsFolder()
-					+ File.separator
-					+ UUID.randomUUID().toString()
-					+ ".jar");
-			
-			try {
-				org.apache.commons.io.FileUtils.copyFile(tempFile, file);
-				
-				ProcessLoadPlugin process = new ProcessLoadPlugin(file);
-				final SynchronizerGuiPlugin loadedPlugin = process.execute(worker);
-				
-				if (loadedPlugin != null) {
-					GuiLogger.getLogger().info(
-							"Plugin installed: "
-									+ loadedPlugin.getName()
-									+ " - "
-									+ loadedPlugin.getVersion());
-					
-					ProcessUtils.invokeAndWait(new Runnable() {
-						
-						@Override
-						public void run() {
-							if (ProcessInstallPlugin.this.use) {
-								SynchronizerUtils.setSynchronizerPlugin(loadedPlugin);
-								SynchronizerUtils.addPublisherPlugin(loadedPlugin);
-							}
-							
-							if (loadedPlugin != null)
-								loadedPlugin.installPlugin();
-						}
-						
-					});
-				}
-				
-				this.plugin.setStatus(PluginStatus.INSTALLED);
-			} catch (Exception e) {
-				file.delete();
-				throw e;
 			}
 			
-			monitor.addMessage(new DefaultProgressMessage(
-					Translations.getString(
-							"manage_plugins.progress.plugin_installed",
-							this.plugin.getName())));
-			
+		},
+				Constants.TIMEOUT_HTTP_CALL);
+		
+		if (worker.isCancelled())
 			return null;
-		} catch (Exception e) {
-			PluginLogger.getLogger().log(
-					Level.WARNING,
-					"Cannot install plugin",
-					e);
+		
+		monitor.addMessage(new DefaultProgressMessage(Translations.getString(
+				"manage_plugins.progress.installing_plugin",
+				this.plugin.getName())));
+		
+		final File file = new File(Main.getPluginsFolder()
+				+ File.separator
+				+ UUID.randomUUID().toString()
+				+ ".jar");
+		
+		try {
+			org.apache.commons.io.FileUtils.copyFile(tempFile, file);
 			
+			ProcessLoadPlugin process = new ProcessLoadPlugin(file);
+			final SynchronizerGuiPlugin loadedPlugin = process.execute(worker);
+			
+			if (loadedPlugin != null) {
+				GuiLogger.getLogger().info(
+						"Plugin installed: "
+								+ loadedPlugin.getName()
+								+ " - "
+								+ loadedPlugin.getVersion());
+				
+				ProcessUtils.invokeAndWait(new Callable<Void>() {
+					
+					@Override
+					public Void call() {
+						if (ProcessInstallPlugin.this.use) {
+							SynchronizerUtils.setSynchronizerPlugin(loadedPlugin);
+							SynchronizerUtils.addPublisherPlugin(loadedPlugin);
+						}
+						
+						if (loadedPlugin != null)
+							loadedPlugin.installPlugin();
+						
+						return null;
+					}
+					
+				});
+			}
+			
+			this.plugin.setStatus(PluginStatus.INSTALLED);
+		} catch (Exception e) {
+			file.delete();
 			throw e;
 		}
+		
+		monitor.addMessage(new DefaultProgressMessage(Translations.getString(
+				"manage_plugins.progress.plugin_installed",
+				this.plugin.getName())));
+		
+		return null;
 	}
 	
 	@Override

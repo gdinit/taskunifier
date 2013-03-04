@@ -32,6 +32,8 @@
  */
 package com.leclercb.taskunifier.gui.processes.plugins;
 
+import java.util.concurrent.Callable;
+
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.actions.ActionPluginConfiguration;
 import com.leclercb.taskunifier.gui.api.plugins.Plugin;
@@ -72,10 +74,10 @@ public class ProcessInstallOrUpdatePlugin implements Process<Void> {
 			process.execute(worker);
 		}
 		
-		ProcessUtils.invokeAndWait(new Runnable() {
+		ProcessUtils.invokeAndWait(new Callable<Void>() {
 			
 			@Override
-			public void run() {
+			public Void call() {
 				SynchronizerGuiPlugin p = SynchronizerUtils.getPlugin(ProcessInstallOrUpdatePlugin.this.plugin.getId());
 				
 				SynchronizerUtils.setSynchronizerPlugin(p);
@@ -84,6 +86,8 @@ public class ProcessInstallOrUpdatePlugin implements Process<Void> {
 				if (!ProcessInstallOrUpdatePlugin.this.plugin.getId().equals(
 						DummyGuiPlugin.getInstance().getId()))
 					ActionPluginConfiguration.pluginConfiguration(p);
+				
+				return null;
 			}
 			
 		});

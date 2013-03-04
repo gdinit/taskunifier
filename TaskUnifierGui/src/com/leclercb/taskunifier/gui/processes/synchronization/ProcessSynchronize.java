@@ -126,11 +126,13 @@ public class ProcessSynchronize implements Process<Void> {
 		SynchronizerGuiPlugin plugin = null;
 		
 		try {
-			ProcessUtils.invokeAndWait(new Runnable() {
+			ProcessUtils.invokeAndWait(new Callable<Void>() {
 				
 				@Override
-				public void run() {
+				public Void call() {
 					Constants.UNDO_SUPPORT.discardAllEdits();
+					
+					return null;
 				}
 				
 			});
@@ -152,12 +154,14 @@ public class ProcessSynchronize implements Process<Void> {
 				if (type == Type.SYNCHRONIZE
 						&& Main.getSettings().getBooleanProperty(
 								"backup.backup_before_sync")) {
-					ProcessUtils.invokeAndWait(new Runnable() {
+					ProcessUtils.invokeAndWait(new Callable<Void>() {
 						
 						@Override
-						public void run() {
+						public Void call() {
 							BackupUtils.getInstance().createNewBackup(
 									Translations.getString("manage_backups.before_sync_backup_name"));
+							
+							return null;
 						}
 						
 					});
@@ -311,11 +315,13 @@ public class ProcessSynchronize implements Process<Void> {
 					return null;
 				
 				try {
-					ProcessUtils.invokeAndWait(new Runnable() {
+					ProcessUtils.invokeAndWait(new Callable<Void>() {
 						
 						@Override
-						public void run() {
+						public Void call() {
 							finalConnection.saveParameters(Main.getUserSettings());
+							
+							return null;
 						}
 						
 					});
@@ -337,11 +343,13 @@ public class ProcessSynchronize implements Process<Void> {
 							synchronizer.synchronize(choice, monitor);
 						}
 						
-						ProcessUtils.invokeAndWait(new Runnable() {
+						ProcessUtils.invokeAndWait(new Callable<Void>() {
 							
 							@Override
-							public void run() {
+							public Void call() {
 								synchronizer.saveParameters(Main.getUserSettings());
+								
+								return null;
 							}
 							
 						});
@@ -433,7 +441,7 @@ public class ProcessSynchronize implements Process<Void> {
 	private void handleSynchronizerException(
 			final Worker<?> worker,
 			final SynchronizerException e,
-			final SynchronizerGuiPlugin plugin) {
+			final SynchronizerGuiPlugin plugin) throws Exception {
 		final ProgressMonitor monitor = worker.getEDTMonitor();
 		
 		if (worker.isCancelled())
@@ -445,10 +453,10 @@ public class ProcessSynchronize implements Process<Void> {
 		
 		if (!worker.isSilent()
 				|| !(e instanceof SynchronizerNotConnectedException)) {
-			ProcessUtils.invokeAndWait(new Runnable() {
+			ProcessUtils.invokeAndWait(new Callable<Void>() {
 				
 				@Override
-				public void run() {
+				public Void call() {
 					try {
 						PluginLogger.getLogger().log(
 								(e.isExpected() ? Level.INFO : Level.WARNING),
@@ -476,13 +484,16 @@ public class ProcessSynchronize implements Process<Void> {
 								e.getMessage(),
 								e);
 					}
+					
+					return null;
 				}
 				
 			});
 		}
 	}
 	
-	private void handleThrowable(final Worker<?> worker, final Throwable t) {
+	private void handleThrowable(final Worker<?> worker, final Throwable t)
+			throws Exception {
 		final ProgressMonitor monitor = worker.getEDTMonitor();
 		
 		if (worker.isCancelled())
@@ -493,10 +504,10 @@ public class ProcessSynchronize implements Process<Void> {
 				ImageUtils.getResourceImage("error.png", 16, 16)));
 		
 		if (!worker.isSilent()) {
-			ProcessUtils.invokeAndWait(new Runnable() {
+			ProcessUtils.invokeAndWait(new Callable<Void>() {
 				
 				@Override
-				public void run() {
+				public Void call() {
 					try {
 						PluginLogger.getLogger().log(
 								Level.WARNING,
@@ -521,6 +532,8 @@ public class ProcessSynchronize implements Process<Void> {
 								e.getMessage(),
 								e);
 					}
+					
+					return null;
 				}
 				
 			});

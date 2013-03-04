@@ -195,11 +195,12 @@ public class ProcessGetTrial implements Process<HttpResponse> {
 		
 	}
 	
-	private void showResult(final String code, final String message) {
-		ProcessUtils.invokeAndWait(new Runnable() {
+	private void showResult(final String code, final String message)
+			throws Exception {
+		ProcessUtils.invokeAndWait(new Callable<Void>() {
 			
 			@Override
-			public void run() {
+			public Void call() {
 				if (EqualsUtils.equals(code, "0")) {
 					JOptionPane.showMessageDialog(
 							FrameUtils.getCurrentWindow(),
@@ -218,6 +219,8 @@ public class ProcessGetTrial implements Process<HttpResponse> {
 					
 					JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 				}
+				
+				return null;
 			}
 			
 		});

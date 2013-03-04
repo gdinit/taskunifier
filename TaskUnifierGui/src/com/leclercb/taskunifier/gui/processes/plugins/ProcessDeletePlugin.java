@@ -35,6 +35,7 @@ package com.leclercb.taskunifier.gui.processes.plugins;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import com.leclercb.commons.api.progress.DefaultProgressMessage;
 import com.leclercb.commons.api.progress.ProgressMonitor;
@@ -74,10 +75,10 @@ public class ProcessDeletePlugin implements Process<Void> {
 				"manage_plugins.progress.start_plugin_deletion",
 				this.plugin.getName())));
 		
-		ProcessUtils.invokeAndWait(new Runnable() {
+		ProcessUtils.invokeAndWait(new Callable<Void>() {
 			
 			@Override
-			public void run() {
+			public Void call() {
 				List<SynchronizerGuiPlugin> existingPlugins = new ArrayList<SynchronizerGuiPlugin>(
 						Main.getApiPlugins().getPlugins());
 				
@@ -100,6 +101,8 @@ public class ProcessDeletePlugin implements Process<Void> {
 						ProcessDeletePlugin.this.plugin.setStatus(PluginStatus.DELETED);
 					}
 				}
+				
+				return null;
 			}
 			
 		});

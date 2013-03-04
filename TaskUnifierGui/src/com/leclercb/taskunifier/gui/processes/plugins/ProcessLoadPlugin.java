@@ -35,6 +35,7 @@ package com.leclercb.taskunifier.gui.processes.plugins;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
 import com.leclercb.commons.api.progress.DefaultProgressMessage;
@@ -162,13 +163,15 @@ public class ProcessLoadPlugin implements Process<SynchronizerGuiPlugin> {
 			List<SynchronizerGuiPlugin> existingPlugins = new ArrayList<SynchronizerGuiPlugin>(
 					Main.getApiPlugins().getPlugins());
 			
-			ProcessUtils.invokeAndWait(new Runnable() {
+			ProcessUtils.invokeAndWait(new Callable<Void>() {
 				
 				@Override
-				public void run() {
+				public Void call() {
 					Main.getApiPlugins().addPlugin(
 							ProcessLoadPlugin.this.file,
 							plugin);
+					
+					return null;
 				}
 				
 			});
@@ -205,11 +208,13 @@ public class ProcessLoadPlugin implements Process<SynchronizerGuiPlugin> {
 			final SynchronizerGuiPlugin finalLoadedPlugin = loadedPlugin;
 			
 			if (loadedPlugin != null) {
-				ProcessUtils.invokeAndWait(new Runnable() {
+				ProcessUtils.invokeAndWait(new Callable<Void>() {
 					
 					@Override
-					public void run() {
+					public Void call() {
 						finalLoadedPlugin.loadPlugin();
+						
+						return null;
 					}
 					
 				});
