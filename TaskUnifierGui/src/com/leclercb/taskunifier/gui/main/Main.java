@@ -126,9 +126,6 @@ public class Main {
 	
 	private static String RESOURCES_FOLDER;
 	private static String DATA_FOLDER;
-	private static String USER_FOLDER;
-	private static String BACKUP_FOLDER;
-	private static String PLUGINS_FOLDER;
 	
 	private static PropertyMap INIT_SETTINGS;
 	private static PropertyMap SETTINGS;
@@ -144,6 +141,10 @@ public class Main {
 	
 	public static String getCurrentUserId() {
 		return CURRENT_USER_ID;
+	}
+	
+	public static void setCurrentUserId(String userId) {
+		CURRENT_USER_ID = userId;
 	}
 	
 	public static boolean isQuitting() {
@@ -187,7 +188,7 @@ public class Main {
 	}
 	
 	public static String getUserSettingsFile() {
-		return USER_FOLDER + File.separator + "settings.properties";
+		return getUserFolder() + File.separator + "settings.properties";
 	}
 	
 	public static String getResourcesFolder() {
@@ -199,7 +200,7 @@ public class Main {
 	}
 	
 	public static String getUserFolder() {
-		return USER_FOLDER;
+		return getUserFolder(CURRENT_USER_ID);
 	}
 	
 	public static String getUserFolder(String userId) {
@@ -211,7 +212,7 @@ public class Main {
 	}
 	
 	public static String getBackupFolder() {
-		return BACKUP_FOLDER;
+		return getUserFolder() + File.separator + "backup";
 	}
 	
 	public static String getBackupFolder(String backupFolderName) {
@@ -219,7 +220,7 @@ public class Main {
 	}
 	
 	public static String getPluginsFolder() {
-		return PLUGINS_FOLDER;
+		return getDataFolder() + File.separator + "plugins";
 	}
 	
 	public static PropertyMap getInitSettings() {
@@ -480,19 +481,16 @@ public class Main {
 		MainLoadFiles.loadFolder(DATA_FOLDER + File.separator + "users");
 	}
 	
-	private static void loadUserFolder() throws Exception {
-		USER_FOLDER = getUserFolder(CURRENT_USER_ID);
-		MainLoadFiles.loadFolder(USER_FOLDER);
+	public static void loadUserFolder() throws Exception {
+		MainLoadFiles.loadFolder(getUserFolder());
 	}
 	
-	private static void loadBackupFolder() throws Exception {
-		BACKUP_FOLDER = USER_FOLDER + File.separator + "backup";
-		MainLoadFiles.loadFolder(BACKUP_FOLDER);
+	public static void loadBackupFolder() throws Exception {
+		MainLoadFiles.loadFolder(getBackupFolder());
 	}
 	
-	private static void loadPluginsFolder() throws Exception {
-		PLUGINS_FOLDER = DATA_FOLDER + File.separator + "plugins";
-		MainLoadFiles.loadFolder(PLUGINS_FOLDER);
+	public static void loadPluginsFolder() throws Exception {
+		MainLoadFiles.loadFolder(getPluginsFolder());
 	}
 	
 	private static void loadUncaughtExceptionHandler() {
@@ -535,7 +533,7 @@ public class Main {
 		CURRENT_USER_ID = userIds[0];
 	}
 	
-	private static void loadUserSettings() throws Exception {
+	public static void loadUserSettings() throws Exception {
 		USER_SETTINGS.clear();
 		
 		try {
@@ -545,7 +543,7 @@ public class Main {
 		}
 	}
 	
-	private static void reloadUserSettings() throws Exception {
+	public static void reloadUserSettings() throws Exception {
 		for (String key : USER_SETTINGS.stringPropertyNames()) {
 			String value = USER_SETTINGS.getProperty(key);
 			USER_SETTINGS.setObjectProperty(key, String.class, value, true);
@@ -765,62 +763,6 @@ public class Main {
 		GuiLogger.getLogger().info("Exiting " + Constants.TITLE);
 		
 		System.exit(0);
-	}
-	
-	public static boolean changeUser(String userId) {
-		if (EqualsUtils.equals(userId, CURRENT_USER_ID))
-			return false;
-		
-		MainSaveFiles.saveAllData();
-		
-		Synchronizing.getInstance().setSynchronizing(true);
-		
-		boolean result = false;
-		
-		String oldUserId = CURRENT_USER_ID;
-		
-		try {
-			String userName = UserUtils.getInstance().getUserName(userId);
-			
-			CURRENT_USER_ID = userId;
-			loadUserFolder();
-			
-			SynchronizerUtils.resetAllSynchronizersAndDeleteModels();
-			
-			loadUserSettings();
-			UserSettingsVersion.updateSettings();
-			reloadUserSettings();
-			
-			SynchronizerUtils.setTaskRepeatEnabled(false);
-			SynchronizerUtils.setTaskRulesEnabled(false);
-			MainLoadFiles.loadAllData(getUserFolder());
-			SynchronizerUtils.setTaskRepeatEnabled(true);
-			SynchronizerUtils.setTaskRulesEnabled(true);
-			
-			UserUtils.getInstance().fireSwitchedUser();
-			
-			reloadProVersion();
-			
-			result = true;
-			
-			GuiLogger.getLogger().info("User switched to \"" + userName + "\"");
-		} catch (Exception e) {
-			CURRENT_USER_ID = oldUserId;
-			USER_FOLDER = DATA_FOLDER
-					+ File.separator
-					+ "users"
-					+ File.separator
-					+ CURRENT_USER_ID;
-			
-			GuiLogger.getLogger().log(
-					Level.SEVERE,
-					String.format("Error while switching user %1s", userId),
-					e);
-		} finally {
-			Synchronizing.getInstance().setSynchronizing(false);
-		}
-		
-		return result;
 	}
 	
 }

@@ -46,6 +46,9 @@ import javax.swing.JToolBar;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.leclercb.commons.api.event.listchange.ListChangeEvent;
+import com.leclercb.commons.api.event.listchange.ListChangeListener;
+import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
 import com.leclercb.commons.api.properties.events.WeakSavePropertiesListener;
@@ -66,8 +69,9 @@ import com.leclercb.taskunifier.gui.actions.synchronize.ActionSynchronizeAndPubl
 import com.leclercb.taskunifier.gui.components.configuration.ConfigurationTab;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
+import com.leclercb.taskunifier.gui.utils.UserUtils;
 
-public class DefaultToolBar extends JToolBar implements SavePropertiesListener, PropertyChangeListener {
+public class DefaultToolBar extends JToolBar implements SavePropertiesListener, PropertyChangeListener, ListChangeListener {
 	
 	private JLabel accountLabel;
 	
@@ -127,6 +131,9 @@ public class DefaultToolBar extends JToolBar implements SavePropertiesListener, 
 			}
 			
 		});
+		
+		UserUtils.getInstance().addListChangeListener(
+				new WeakListChangeListener(UserUtils.getInstance(), this));
 		
 		Main.getUserSettings().addSavePropertiesListener(
 				new WeakSavePropertiesListener(Main.getUserSettings(), this));
@@ -227,12 +234,18 @@ public class DefaultToolBar extends JToolBar implements SavePropertiesListener, 
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
-		this.accountLabel.setText(DefaultToolBar.this.getAccountLabelText());
+		this.accountLabel.setText(this.getAccountLabelText());
 	}
 	
 	@Override
 	public void saveProperties() {
-		this.accountLabel.setText(DefaultToolBar.this.getAccountLabelText());
+		this.accountLabel.setText(this.getAccountLabelText());
+	}
+	
+	@Override
+	public void listChange(ListChangeEvent event) {
+		if (event.getChangeType() == ListChangeEvent.VALUE_CHANGED)
+			this.accountLabel.setText(this.getAccountLabelText());
 	}
 	
 }

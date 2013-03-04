@@ -53,6 +53,9 @@ import com.leclercb.commons.api.event.action.ActionSupport;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
+import com.leclercb.taskunifier.gui.processes.Worker;
+import com.leclercb.taskunifier.gui.processes.users.ProcessSwitchUser;
+import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
@@ -153,16 +156,28 @@ public class UserPanel extends JPanel {
 	}
 	
 	public void switchToUser() {
-		String user = this.userList.getSelectedUser();
+		String userId = this.userList.getSelectedUser();
 		
-		if (user == null) {
+		if (userId == null) {
 			this.showSelectUserErrorMessage();
 			return;
 		}
 		
-		Main.changeUser(user);
+		TUWorkerDialog<Void> dialog = new TUWorkerDialog<Void>(
+				Translations.getString("manage_users.switch_user"));
 		
-		this.actionSupport.fireActionPerformed(0, ACTION_SWITCH_TO_USER);
+		ProcessSwitchUser process = new ProcessSwitchUser(userId);
+		
+		dialog.setWorker(new Worker<Void>(process));
+		
+		dialog.setVisible(true);
+		
+		try {
+			dialog.getResult();
+			this.actionSupport.fireActionPerformed(0, ACTION_SWITCH_TO_USER);
+		} catch (Exception e) {
+			
+		}
 	}
 	
 	private void showSelectUserErrorMessage() {
