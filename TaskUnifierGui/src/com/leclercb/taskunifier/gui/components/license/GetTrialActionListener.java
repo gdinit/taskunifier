@@ -36,6 +36,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.processes.license.ProcessGetTrial;
 import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
@@ -69,19 +70,25 @@ public class GetTrialActionListener implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent evt) {
-		TUWorkerDialog<String> dialog = new TUWorkerDialog<String>(
+		TUWorkerDialog<HttpResponse> dialog = new TUWorkerDialog<HttpResponse>(
 				Translations.getString("license.get_trial"));
 		
 		ProcessGetTrial process = new ProcessGetTrial(
+				true,
+				true,
 				this.firstName,
 				this.lastName,
 				this.email);
 		
-		dialog.setWorker(new Worker<String>(process));
+		dialog.setWorker(new Worker<HttpResponse>(process));
 		
 		dialog.setVisible(true);
 		
-		this.license = dialog.getResult();
+		try {
+			this.license = ProcessGetTrial.getLicense(dialog.getResult());
+		} catch (Exception e) {
+			this.license = null;
+		}
 	}
 	
 }

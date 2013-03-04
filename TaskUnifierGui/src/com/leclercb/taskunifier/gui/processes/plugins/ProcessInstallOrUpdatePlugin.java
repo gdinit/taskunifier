@@ -39,8 +39,8 @@ import com.leclercb.taskunifier.gui.api.plugins.PluginStatus;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.processes.Process;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.processes.Worker;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 
 public class ProcessInstallOrUpdatePlugin implements Process<Void> {
@@ -72,7 +72,7 @@ public class ProcessInstallOrUpdatePlugin implements Process<Void> {
 			process.execute(worker);
 		}
 		
-		TUSwingUtilities.invokeAndWait(new Runnable() {
+		ProcessUtils.invokeAndWait(new Runnable() {
 			
 			@Override
 			public void run() {

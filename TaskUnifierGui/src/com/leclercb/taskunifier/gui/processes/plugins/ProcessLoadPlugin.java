@@ -51,8 +51,8 @@ import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
 import com.leclercb.taskunifier.gui.processes.Process;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.processes.Worker;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class ProcessLoadPlugin implements Process<SynchronizerGuiPlugin> {
@@ -162,7 +162,7 @@ public class ProcessLoadPlugin implements Process<SynchronizerGuiPlugin> {
 			List<SynchronizerGuiPlugin> existingPlugins = new ArrayList<SynchronizerGuiPlugin>(
 					Main.getApiPlugins().getPlugins());
 			
-			TUSwingUtilities.invokeAndWait(new Runnable() {
+			ProcessUtils.invokeAndWait(new Runnable() {
 				
 				@Override
 				public void run() {
@@ -205,7 +205,7 @@ public class ProcessLoadPlugin implements Process<SynchronizerGuiPlugin> {
 			final SynchronizerGuiPlugin finalLoadedPlugin = loadedPlugin;
 			
 			if (loadedPlugin != null) {
-				TUSwingUtilities.invokeAndWait(new Runnable() {
+				ProcessUtils.invokeAndWait(new Runnable() {
 					
 					@Override
 					public void run() {

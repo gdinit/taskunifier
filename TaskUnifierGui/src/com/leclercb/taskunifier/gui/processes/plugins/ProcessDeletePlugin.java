@@ -45,8 +45,8 @@ import com.leclercb.taskunifier.gui.api.plugins.PluginStatus;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.processes.Process;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.processes.Worker;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class ProcessDeletePlugin implements Process<Void> {
@@ -74,12 +74,13 @@ public class ProcessDeletePlugin implements Process<Void> {
 				"manage_plugins.progress.start_plugin_deletion",
 				this.plugin.getName())));
 		
-		TUSwingUtilities.executeOrInvokeAndWait(new Runnable() {
+		ProcessUtils.invokeAndWait(new Runnable() {
 			
 			@Override
 			public void run() {
 				List<SynchronizerGuiPlugin> existingPlugins = new ArrayList<SynchronizerGuiPlugin>(
 						Main.getApiPlugins().getPlugins());
+				
 				for (SynchronizerGuiPlugin existingPlugin : existingPlugins) {
 					if (existingPlugin.getId().equals(
 							ProcessDeletePlugin.this.plugin.getId())) {

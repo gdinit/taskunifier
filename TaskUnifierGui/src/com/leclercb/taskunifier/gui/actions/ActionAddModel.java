@@ -36,7 +36,7 @@ import java.awt.event.ActionEvent;
 
 import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.gui.components.models.ModelConfigurationDialog;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
@@ -69,7 +69,7 @@ public class ActionAddModel extends AbstractViewAction {
 	public static void addModel(final ModelType type) {
 		final ModelConfigurationDialog dialog = new ModelConfigurationDialog();
 		
-		TUSwingUtilities.invokeLater(new Runnable() {
+		ProcessUtils.invokeLater(new Runnable() {
 			
 			@Override
 			public void run() {

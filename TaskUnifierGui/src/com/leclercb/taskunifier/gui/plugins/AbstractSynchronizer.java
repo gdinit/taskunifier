@@ -58,7 +58,7 @@ import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerM
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerMainProgressMessage.ProgressMessageType;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerRetrievedModelsProgressMessage;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerUpdatedModelsProgressMessage;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 
 public abstract class AbstractSynchronizer implements Synchronizer {
 	
@@ -291,7 +291,7 @@ public abstract class AbstractSynchronizer implements Synchronizer {
 		
 		this.deleteModels(type, modelsToDelete);
 		
-		TUSwingUtilities.invokeAndWait(new Runnable() {
+		ProcessUtils.invokeAndWait(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -322,7 +322,7 @@ public abstract class AbstractSynchronizer implements Synchronizer {
 			modelsToDelete.add(model);
 		}
 		
-		TUSwingUtilities.invokeAndWait(new Runnable() {
+		ProcessUtils.invokeAndWait(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -347,7 +347,7 @@ public abstract class AbstractSynchronizer implements Synchronizer {
 		modelsToDelete.clear();
 		
 		// Start Add Action
-		TUSwingUtilities.invokeAndWait(new Runnable() {
+		ProcessUtils.invokeAndWait(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -385,7 +385,7 @@ public abstract class AbstractSynchronizer implements Synchronizer {
 		
 		final List<String> addedIds = this.addModels(type, modelsToSync);
 		
-		TUSwingUtilities.invokeAndWait(new Runnable() {
+		ProcessUtils.invokeAndWait(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -434,7 +434,7 @@ public abstract class AbstractSynchronizer implements Synchronizer {
 		
 		this.updateModels(type, modelsToSync);
 		
-		TUSwingUtilities.invokeAndWait(new Runnable() {
+		ProcessUtils.invokeAndWait(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -470,7 +470,7 @@ public abstract class AbstractSynchronizer implements Synchronizer {
 			});
 		}
 		
-		TUSwingUtilities.invokeAndWait(new Runnable() {
+		ProcessUtils.invokeAndWait(new Runnable() {
 			
 			@Override
 			public void run() {

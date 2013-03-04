@@ -63,8 +63,8 @@ import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
 import com.leclercb.taskunifier.gui.processes.Process;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.processes.Worker;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.BackupUtils;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
@@ -126,7 +126,7 @@ public class ProcessSynchronize implements Process<Void> {
 		SynchronizerGuiPlugin plugin = null;
 		
 		try {
-			TUSwingUtilities.invokeAndWait(new Runnable() {
+			ProcessUtils.invokeAndWait(new Runnable() {
 				
 				@Override
 				public void run() {
@@ -152,7 +152,7 @@ public class ProcessSynchronize implements Process<Void> {
 				if (type == Type.SYNCHRONIZE
 						&& Main.getSettings().getBooleanProperty(
 								"backup.backup_before_sync")) {
-					TUSwingUtilities.invokeAndWait(new Runnable() {
+					ProcessUtils.invokeAndWait(new Runnable() {
 						
 						@Override
 						public void run() {
@@ -311,7 +311,7 @@ public class ProcessSynchronize implements Process<Void> {
 					return null;
 				
 				try {
-					TUSwingUtilities.invokeAndWait(new Runnable() {
+					ProcessUtils.invokeAndWait(new Runnable() {
 						
 						@Override
 						public void run() {
@@ -337,7 +337,7 @@ public class ProcessSynchronize implements Process<Void> {
 							synchronizer.synchronize(choice, monitor);
 						}
 						
-						TUSwingUtilities.invokeAndWait(new Runnable() {
+						ProcessUtils.invokeAndWait(new Runnable() {
 							
 							@Override
 							public void run() {
@@ -357,7 +357,7 @@ public class ProcessSynchronize implements Process<Void> {
 					connection.disconnect();
 				}
 				
-				TUSwingUtilities.invokeLater(new Runnable() {
+				ProcessUtils.invokeLater(new Runnable() {
 					
 					@Override
 					public void run() {
@@ -390,7 +390,7 @@ public class ProcessSynchronize implements Process<Void> {
 		
 		Thread.sleep(1000);
 		
-		TUSwingUtilities.invokeLater(new Runnable() {
+		ProcessUtils.invokeLater(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -445,7 +445,7 @@ public class ProcessSynchronize implements Process<Void> {
 		
 		if (!worker.isSilent()
 				|| !(e instanceof SynchronizerNotConnectedException)) {
-			TUSwingUtilities.invokeLater(new Runnable() {
+			ProcessUtils.invokeAndWait(new Runnable() {
 				
 				@Override
 				public void run() {
@@ -493,7 +493,7 @@ public class ProcessSynchronize implements Process<Void> {
 				ImageUtils.getResourceImage("error.png", 16, 16)));
 		
 		if (!worker.isSilent()) {
-			TUSwingUtilities.invokeLater(new Runnable() {
+			ProcessUtils.invokeAndWait(new Runnable() {
 				
 				@Override
 				public void run() {

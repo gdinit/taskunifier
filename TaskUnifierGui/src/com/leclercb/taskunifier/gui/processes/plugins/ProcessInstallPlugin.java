@@ -51,8 +51,8 @@ import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
 import com.leclercb.taskunifier.gui.processes.Process;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.processes.Worker;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 
@@ -164,7 +164,7 @@ public class ProcessInstallPlugin implements Process<Void> {
 									+ " - "
 									+ loadedPlugin.getVersion());
 					
-					TUSwingUtilities.executeOrInvokeAndWait(new Runnable() {
+					ProcessUtils.invokeAndWait(new Runnable() {
 						
 						@Override
 						public void run() {
@@ -175,7 +175,6 @@ public class ProcessInstallPlugin implements Process<Void> {
 							
 							if (loadedPlugin != null)
 								loadedPlugin.installPlugin();
-							
 						}
 						
 					});

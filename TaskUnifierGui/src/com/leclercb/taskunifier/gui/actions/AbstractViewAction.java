@@ -44,7 +44,7 @@ import com.leclercb.taskunifier.gui.components.pro.ProDialog;
 import com.leclercb.taskunifier.gui.components.views.ViewList;
 import com.leclercb.taskunifier.gui.components.views.ViewType;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
-import com.leclercb.taskunifier.gui.swing.TUSwingUtilities;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 
 public abstract class AbstractViewAction extends AbstractAction implements PropertyChangeListener {
 	
@@ -113,7 +113,7 @@ public abstract class AbstractViewAction extends AbstractAction implements Prope
 	}
 	
 	public static void showProRequired() {
-		TUSwingUtilities.executeOrInvokeAndWait(new Runnable() {
+		ProcessUtils.invokeAndWait(new Runnable() {
 			
 			@Override
 			public void run() {
