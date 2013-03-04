@@ -95,12 +95,18 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 				
 				@Override
 				public void display() {
-					HttpResponse r = ConnectionUtils.testConnection(true, true);
-					
-					if (r != null && r.isSuccessfull())
-						WelcomeDialog.this.setPanelVisible(
-								"SETTINGS_PROXY",
-								false);
+					try {
+						HttpResponse r = ConnectionUtils.testConnection(
+								true,
+								true);
+						
+						if (r != null && r.isSuccessfull())
+							WelcomeDialog.this.setPanelVisible(
+									"SETTINGS_PROXY",
+									false);
+					} catch (Exception e) {
+						
+					}
 				}
 				
 			});

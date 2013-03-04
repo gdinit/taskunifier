@@ -64,7 +64,11 @@ public final class PluginsUtils {
 			
 			dialog.setVisible(true);
 			
-			return dialog.getResult();
+			try {
+				return dialog.getResult();
+			} catch (Exception e) {
+				return null;
+			}
 		} else {
 			try {
 				worker.execute();

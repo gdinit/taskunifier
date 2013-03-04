@@ -62,7 +62,11 @@ public class ProxyTestConnectionFieldType extends ConfigurationFieldType.Button 
 		public void actionPerformed(ActionEvent evt) {
 			this.panel.saveAndApplyConfig();
 			
-			ConnectionUtils.testConnection(true, true);
+			try {
+				ConnectionUtils.testConnection(true, true);
+			} catch (Exception e) {
+				
+			}
 		}
 		
 	}

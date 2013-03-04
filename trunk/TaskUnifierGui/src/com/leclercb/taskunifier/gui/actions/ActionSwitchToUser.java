@@ -35,7 +35,9 @@ package com.leclercb.taskunifier.gui.actions;
 import java.awt.event.ActionEvent;
 
 import com.leclercb.commons.api.utils.CheckUtils;
-import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.processes.Worker;
+import com.leclercb.taskunifier.gui.processes.users.ProcessSwitchUser;
+import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.UserUtils;
@@ -65,8 +67,21 @@ public class ActionSwitchToUser extends AbstractViewAction {
 	}
 	
 	public static boolean switchToUser(String userId) {
-		CheckUtils.isNotNull(userId);
-		return Main.changeUser(userId);
+		TUWorkerDialog<Void> dialog = new TUWorkerDialog<Void>(
+				Translations.getString("manage_users.switch_user"));
+		
+		ProcessSwitchUser process = new ProcessSwitchUser(userId);
+		
+		dialog.setWorker(new Worker<Void>(process));
+		
+		dialog.setVisible(true);
+		
+		try {
+			dialog.getResult();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 	
 }
