@@ -34,6 +34,7 @@ package com.leclercb.taskunifier.gui.translations;
 
 import javax.swing.SortOrder;
 
+import com.leclercb.commons.api.license.LicenseType;
 import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.enums.GoalLevel;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
@@ -53,6 +54,19 @@ public final class TranslationsUtils {
 	
 	private TranslationsUtils() {
 		
+	}
+	
+	public static String translateLicenseType(LicenseType type) {
+		switch (type) {
+			case LIFETIME:
+				return Translations.getString("license.type.lifetime");
+			case SINGLE_VERSION:
+				return Translations.getString("license.type.single_version");
+			case TRIAL:
+				return Translations.getString("license.type.trial");
+		}
+		
+		return "#" + type.name() + "#";
 	}
 	
 	public static String translateModelType(ModelType type, boolean plurial) {
@@ -92,7 +106,7 @@ public final class TranslationsUtils {
 				return Translations.getString("general.task");
 		}
 		
-		return "Missing translation";
+		return "#" + type.name() + "#";
 	}
 	
 	public static String translateSynchronizerChoice(SynchronizerChoice choice) {
@@ -107,7 +121,7 @@ public final class TranslationsUtils {
 						SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().getApiName());
 		}
 		
-		return "Missing translation";
+		return "#" + choice.name() + "#";
 	}
 	
 	public static String translateGoalLevel(GoalLevel level) {
@@ -120,7 +134,7 @@ public final class TranslationsUtils {
 				return Translations.getString("general.goal.level.short_term");
 		}
 		
-		return "Missing translation";
+		return "#" + level.name() + "#";
 	}
 	
 	public static String translateTaskPriority(TaskPriority priority) {
@@ -137,7 +151,7 @@ public final class TranslationsUtils {
 				return Translations.getString("general.task.priority.top");
 		}
 		
-		return "Missing translation";
+		return "#" + priority.name() + "#";
 	}
 	
 	public static String translateTaskRepeatFrom(TaskRepeatFrom repeatFrom) {
@@ -148,7 +162,7 @@ public final class TranslationsUtils {
 				return Translations.getString("general.task.repeat_from.completion_date");
 		}
 		
-		return "Missing translation";
+		return "#" + repeatFrom.name() + "#";
 	}
 	
 	public static String translateBoolean(Boolean bool) {
@@ -166,7 +180,7 @@ public final class TranslationsUtils {
 				return Translations.getString("general.or");
 		}
 		
-		return "Missing translation";
+		return "#" + link.name() + "#";
 	}
 	
 	public static String translateSortOrder(SortOrder sortOrder) {
@@ -179,7 +193,7 @@ public final class TranslationsUtils {
 				return Translations.getString("general.sort_order.unsorted");
 		}
 		
-		return "Missing translation";
+		return "#" + sortOrder.name() + "#";
 	}
 	
 	public static String translateFilterCondition(Condition<?, ?> condition) {
@@ -289,7 +303,7 @@ public final class TranslationsUtils {
 			}
 		}
 		
-		return "Missing translation";
+		return "#" + condition.name() + "#";
 	}
 	
 }
