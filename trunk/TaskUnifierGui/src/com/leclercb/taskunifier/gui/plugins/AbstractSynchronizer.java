@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.CheckUtils;
@@ -141,367 +142,385 @@ public abstract class AbstractSynchronizer implements Synchronizer {
 			final SynchronizerChoice choice,
 			final ProgressMonitor monitor,
 			final ModelType type) throws SynchronizerException {
-		@SuppressWarnings("unchecked")
-		final List<Model> models = (List<Model>) ModelFactoryUtils.getFactory(
-				type).getList();
-		
-		final List<ModelBean> updatedModels = new ArrayList<ModelBean>();
-		
-		if (this.isUpdatedModels(type)) {
-			if (monitor != null)
-				monitor.addMessage(new SynchronizerRetrievedModelsProgressMessage(
+		try {
+			@SuppressWarnings("unchecked")
+			final List<Model> models = (List<Model>) ModelFactoryUtils.getFactory(
+					type).getList();
+			
+			final List<ModelBean> updatedModels = new ArrayList<ModelBean>();
+			
+			if (this.isUpdatedModels(type)) {
+				if (monitor != null)
+					monitor.addMessage(new SynchronizerRetrievedModelsProgressMessage(
+							this.getPlugin(),
+							ProgressMessageType.SYNCHRONIZER_START,
+							type));
+				
+				updatedModels.addAll(this.getUpdatedModels(type));
+				
+				if (monitor != null)
+					monitor.addMessage(new SynchronizerRetrievedModelsProgressMessage(
+							this.getPlugin(),
+							ProgressMessageType.SYNCHRONIZER_END,
+							type));
+			}
+			
+			final List<ModelBean> deletedModels = this.getDeletedModels(type);
+			
+			if (type == ModelType.GOAL) {
+				Collections.sort(models, new Comparator<Model>() {
+					
+					@Override
+					public int compare(Model o1, Model o2) {
+						Goal g1 = (Goal) o1;
+						Goal g2 = (Goal) o2;
+						
+						if (g1.getContributes() == null
+								&& g2.getContributes() == null)
+							return 0;
+						
+						if (g1.getContributes() != null
+								&& g2.getContributes() != null)
+							return 0;
+						
+						if (g1.getContributes() == null)
+							return -1;
+						
+						return 1;
+					}
+					
+				});
+			}
+			
+			if (type == ModelType.TASK) {
+				Collections.sort(models, new Comparator<Model>() {
+					
+					@Override
+					public int compare(Model o1, Model o2) {
+						Task t1 = (Task) o1;
+						Task t2 = (Task) o2;
+						
+						if (t1.getParent() == null && t2.getParent() == null)
+							return 0;
+						
+						if (t1.getParent() != null && t2.getParent() != null)
+							return 0;
+						
+						if (t1.getParent() == null)
+							return -1;
+						
+						return 1;
+					}
+					
+				});
+			}
+			
+			// Compute Action Count
+			int actionCount = 0;
+			
+			for (Model model : models) {
+				if (model.getModelStatus().isEndUserStatus())
+					if (model.getModelReferenceId(this.keyId) == null)
+						actionCount++;
+				
+				if (model.getModelStatus().equals(ModelStatus.TO_UPDATE)) {
+					if (model.getModelReferenceId(this.keyId) != null) {
+						ModelBean bean = null;
+						for (ModelBean updatedModel : updatedModels) {
+							if (EqualsUtils.equalsString(
+									updatedModel.getModelReferenceIds().get(
+											this.keyId),
+									model.getModelReferenceId(this.keyId))) {
+								bean = updatedModel;
+								break;
+							}
+						}
+						
+						if (bean != null) {
+							if (!choice.chooseLocalModel(model, bean)) {
+								continue;
+							}
+						}
+						
+						actionCount++;
+					}
+				}
+				
+				if (model.getModelStatus().equals(ModelStatus.TO_DELETE))
+					if (model.getModelReferenceId(this.keyId) != null)
+						actionCount++;
+				
+			}
+			
+			if (monitor != null && actionCount > 0)
+				monitor.addMessage(new SynchronizerUpdatedModelsProgressMessage(
 						this.getPlugin(),
 						ProgressMessageType.SYNCHRONIZER_START,
-						type));
+						type,
+						actionCount));
 			
-			updatedModels.addAll(this.getUpdatedModels(type));
+			final List<Model> modelsToSync = new ArrayList<Model>();
+			final List<Model> modelsToDelete = new ArrayList<Model>();
 			
-			if (monitor != null)
-				monitor.addMessage(new SynchronizerRetrievedModelsProgressMessage(
-						this.getPlugin(),
-						ProgressMessageType.SYNCHRONIZER_END,
-						type));
-		}
-		
-		final List<ModelBean> deletedModels = this.getDeletedModels(type);
-		
-		if (type == ModelType.GOAL) {
-			Collections.sort(models, new Comparator<Model>() {
+			// Start Delete Action
+			for (Model model : models) {
+				if (model.getModelStatus().equals(ModelStatus.TO_DELETE)) {
+					if (model.getModelReferenceId(this.keyId) != null) {
+						ModelBean bean = null;
+						for (ModelBean updatedModel : updatedModels) {
+							if (EqualsUtils.equalsString(
+									updatedModel.getModelReferenceIds().get(
+											this.keyId),
+									model.getModelReferenceId(this.keyId))) {
+								bean = updatedModel;
+								break;
+							}
+						}
+						
+						if (bean != null) {
+							if (!choice.chooseLocalModel(model, bean)) {
+								continue;
+							}
+						}
+						
+						modelsToDelete.add(model);
+						
+						PluginLogger.getLogger().info(
+								"Delete " + type + ": " + model.getModelId());
+					}
+				}
+			}
+			
+			this.deleteModels(type, modelsToDelete);
+			
+			ProcessUtils.invokeAndWait(new Callable<Void>() {
 				
 				@Override
-				public int compare(Model o1, Model o2) {
-					Goal g1 = (Goal) o1;
-					Goal g2 = (Goal) o2;
+				public Void call() {
+					for (Model model : modelsToDelete)
+						model.setModelStatus(ModelStatus.DELETED);
 					
-					if (g1.getContributes() == null
-							&& g2.getContributes() == null)
-						return 0;
-					
-					if (g1.getContributes() != null
-							&& g2.getContributes() != null)
-						return 0;
-					
-					if (g1.getContributes() == null)
-						return -1;
-					
-					return 1;
+					return null;
 				}
 				
 			});
-		}
-		
-		if (type == ModelType.TASK) {
-			Collections.sort(models, new Comparator<Model>() {
+			
+			modelsToDelete.clear();
+			
+			// Remove Deleted Models
+			for (ModelBean deletedModel : deletedModels) {
+				Model model = ModelFactoryUtils.getFactory(type).get(
+						this.keyId,
+						deletedModel.getModelReferenceIds().get(this.keyId));
 				
-				@Override
-				public int compare(Model o1, Model o2) {
-					Task t1 = (Task) o1;
-					Task t2 = (Task) o2;
-					
-					if (t1.getParent() == null && t2.getParent() == null)
-						return 0;
-					
-					if (t1.getParent() != null && t2.getParent() != null)
-						return 0;
-					
-					if (t1.getParent() == null)
-						return -1;
-					
-					return 1;
-				}
-				
-			});
-		}
-		
-		// Compute Action Count
-		int actionCount = 0;
-		
-		for (Model model : models) {
-			if (model.getModelStatus().isEndUserStatus())
-				if (model.getModelReferenceId(this.keyId) == null)
-					actionCount++;
-			
-			if (model.getModelStatus().equals(ModelStatus.TO_UPDATE)) {
-				if (model.getModelReferenceId(this.keyId) != null) {
-					ModelBean bean = null;
-					for (ModelBean updatedModel : updatedModels) {
-						if (EqualsUtils.equalsString(
-								updatedModel.getModelReferenceIds().get(
-										this.keyId),
-								model.getModelReferenceId(this.keyId))) {
-							bean = updatedModel;
-							break;
-						}
-					}
-					
-					if (bean != null) {
-						if (!choice.chooseLocalModel(model, bean)) {
-							continue;
-						}
-					}
-					
-					actionCount++;
-				}
-			}
-			
-			if (model.getModelStatus().equals(ModelStatus.TO_DELETE))
-				if (model.getModelReferenceId(this.keyId) != null)
-					actionCount++;
-			
-		}
-		
-		if (monitor != null && actionCount > 0)
-			monitor.addMessage(new SynchronizerUpdatedModelsProgressMessage(
-					this.getPlugin(),
-					ProgressMessageType.SYNCHRONIZER_START,
-					type,
-					actionCount));
-		
-		final List<Model> modelsToSync = new ArrayList<Model>();
-		final List<Model> modelsToDelete = new ArrayList<Model>();
-		
-		// Start Delete Action
-		for (Model model : models) {
-			if (model.getModelStatus().equals(ModelStatus.TO_DELETE)) {
-				if (model.getModelReferenceId(this.keyId) != null) {
-					ModelBean bean = null;
-					for (ModelBean updatedModel : updatedModels) {
-						if (EqualsUtils.equalsString(
-								updatedModel.getModelReferenceIds().get(
-										this.keyId),
-								model.getModelReferenceId(this.keyId))) {
-							bean = updatedModel;
-							break;
-						}
-					}
-					
-					if (bean != null) {
-						if (!choice.chooseLocalModel(model, bean)) {
-							continue;
-						}
-					}
-					
-					modelsToDelete.add(model);
-					
-					PluginLogger.getLogger().info(
-							"Delete " + type + ": " + model.getModelId());
-				}
-			}
-		}
-		
-		this.deleteModels(type, modelsToDelete);
-		
-		ProcessUtils.invokeAndWait(new Runnable() {
-			
-			@Override
-			public void run() {
-				for (Model model : modelsToDelete)
-					model.setModelStatus(ModelStatus.DELETED);
-			}
-			
-		});
-		
-		modelsToDelete.clear();
-		
-		// Remove Deleted Models
-		for (ModelBean deletedModel : deletedModels) {
-			Model model = ModelFactoryUtils.getFactory(type).get(
-					this.keyId,
-					deletedModel.getModelReferenceIds().get(this.keyId));
-			
-			if (model == null)
-				continue;
-			
-			if (choice.chooseLocalModel(model, deletedModel)) {
-				if (model.getModelStatus().isEndUserStatus()) {
-					modelsToSync.add(model);
+				if (model == null)
 					continue;
-				}
-			}
-			
-			modelsToDelete.add(model);
-		}
-		
-		ProcessUtils.invokeAndWait(new Runnable() {
-			
-			@Override
-			public void run() {
-				for (Model model : modelsToSync) {
-					model.removeModelReferenceId(AbstractSynchronizer.this.keyId);
-					model.setModelStatus(ModelStatus.TO_UPDATE);
-					
-					if (model instanceof Task) {
-						for (Task child : ((Task) model).getAllChildren())
-							if (child.getModelStatus().isEndUserStatus())
-								child.setModelStatus(ModelStatus.TO_UPDATE);
+				
+				if (choice.chooseLocalModel(model, deletedModel)) {
+					if (model.getModelStatus().isEndUserStatus()) {
+						modelsToSync.add(model);
+						continue;
 					}
 				}
 				
-				for (Model model : modelsToDelete)
-					model.setModelStatus(ModelStatus.DELETED);
+				modelsToDelete.add(model);
 			}
 			
-		});
-		
-		modelsToSync.clear();
-		modelsToDelete.clear();
-		
-		// Start Add Action
-		ProcessUtils.invokeAndWait(new Runnable() {
+			ProcessUtils.invokeAndWait(new Callable<Void>() {
+				
+				@Override
+				public Void call() {
+					for (Model model : modelsToSync) {
+						model.removeModelReferenceId(AbstractSynchronizer.this.keyId);
+						model.setModelStatus(ModelStatus.TO_UPDATE);
+						
+						if (model instanceof Task) {
+							for (Task child : ((Task) model).getAllChildren())
+								if (child.getModelStatus().isEndUserStatus())
+									child.setModelStatus(ModelStatus.TO_UPDATE);
+						}
+					}
+					
+					for (Model model : modelsToDelete)
+						model.setModelStatus(ModelStatus.DELETED);
+					
+					return null;
+				}
+				
+			});
 			
-			@Override
-			public void run() {
-				if (type == ModelType.TASK) {
-					// Update all the children
-					for (Model model : models) {
-						Task task = (Task) model;
-						if (task.getModelStatus().isEndUserStatus()) {
-							if (task.getModelReferenceId("toodledo") == null
-									|| task.getModelStatus().equals(
-											ModelStatus.TO_UPDATE)) {
-								for (Task child : task.getAllChildren()) {
-									if (child.getModelStatus().isEndUserStatus()) {
-										child.setModelStatus(ModelStatus.TO_UPDATE);
+			modelsToSync.clear();
+			modelsToDelete.clear();
+			
+			// Start Add Action
+			ProcessUtils.invokeAndWait(new Callable<Void>() {
+				
+				@Override
+				public Void call() {
+					if (type == ModelType.TASK) {
+						// Update all the children
+						for (Model model : models) {
+							Task task = (Task) model;
+							if (task.getModelStatus().isEndUserStatus()) {
+								if (task.getModelReferenceId("toodledo") == null
+										|| task.getModelStatus().equals(
+												ModelStatus.TO_UPDATE)) {
+									for (Task child : task.getAllChildren()) {
+										if (child.getModelStatus().isEndUserStatus()) {
+											child.setModelStatus(ModelStatus.TO_UPDATE);
+										}
 									}
 								}
 							}
 						}
 					}
-				}
-			}
-			
-		});
-		
-		for (Model model : models) {
-			if (model.getModelStatus().isEndUserStatus()) {
-				if (model.getModelReferenceId(this.keyId) == null) {
-					modelsToSync.add(model);
 					
-					PluginLogger.getLogger().info(
-							"Add " + type + ": " + model.getModelId());
-				}
-			}
-		}
-		
-		final List<String> addedIds = this.addModels(type, modelsToSync);
-		
-		ProcessUtils.invokeAndWait(new Runnable() {
-			
-			@Override
-			public void run() {
-				for (int i = 0; i < modelsToSync.size(); i++) {
-					modelsToSync.get(i).addModelReferenceId(
-							AbstractSynchronizer.this.keyId,
-							addedIds.get(i));
-					modelsToSync.get(i).setModelStatus(ModelStatus.LOADED);
-				}
-			}
-			
-		});
-		
-		modelsToSync.clear();
-		
-		// Start Update Action
-		for (Model model : models) {
-			if (model.getModelStatus().equals(ModelStatus.TO_UPDATE)) {
-				if (model.getModelReferenceId(this.keyId) != null) {
-					ModelBean bean = null;
-					for (ModelBean updatedModel : updatedModels) {
-						if (EqualsUtils.equalsString(
-								updatedModel.getModelReferenceIds().get(
-										this.keyId),
-								model.getModelReferenceId(this.keyId))) {
-							bean = updatedModel;
-							break;
-						}
-					}
-					
-					if (bean != null) {
-						if (!choice.chooseLocalModel(model, bean)) {
-							continue;
-						}
-					}
-					
-					updatedModels.remove(bean);
-					
-					modelsToSync.add(model);
-					
-					PluginLogger.getLogger().info(
-							"Update " + type + ": " + model.getModelId());
-				}
-			}
-		}
-		
-		this.updateModels(type, modelsToSync);
-		
-		ProcessUtils.invokeAndWait(new Runnable() {
-			
-			@Override
-			public void run() {
-				for (Model model : modelsToSync)
-					model.setModelStatus(ModelStatus.LOADED);
-			}
-			
-		});
-		
-		modelsToSync.clear();
-		
-		// Replace Updated Models
-		if (type == ModelType.TASK) {
-			Collections.sort(updatedModels, new Comparator<ModelBean>() {
-				
-				@Override
-				public int compare(ModelBean o1, ModelBean o2) {
-					TaskBean t1 = (TaskBean) o1;
-					TaskBean t2 = (TaskBean) o2;
-					
-					if (t1.getParent() == null && t2.getParent() == null)
-						return 0;
-					
-					if (t1.getParent() != null && t2.getParent() != null)
-						return 0;
-					
-					if (t1.getParent() == null)
-						return -1;
-					
-					return 1;
+					return null;
 				}
 				
 			});
-		}
-		
-		ProcessUtils.invokeAndWait(new Runnable() {
 			
-			@Override
-			public void run() {
-				for (ModelBean updatedModel : updatedModels) {
-					Model model = ModelFactoryUtils.getFactory(type).get(
-							AbstractSynchronizer.this.keyId,
-							updatedModel.getModelReferenceIds().get(
-									AbstractSynchronizer.this.keyId));
-					
-					if (model != null
-							&& model.getModelStatus() == ModelStatus.DELETED)
-						continue;
-					
-					if (model == null)
-						model = ModelFactoryUtils.create(
-								type,
-								updatedModel,
-								true);
-					else
-						model.loadBean(updatedModel, false);
+			for (Model model : models) {
+				if (model.getModelStatus().isEndUserStatus()) {
+					if (model.getModelReferenceId(this.keyId) == null) {
+						modelsToSync.add(model);
+						
+						PluginLogger.getLogger().info(
+								"Add " + type + ": " + model.getModelId());
+					}
 				}
 			}
 			
-		});
-		
-		if (monitor != null && actionCount > 0)
-			monitor.addMessage(new SynchronizerUpdatedModelsProgressMessage(
-					this.getPlugin(),
-					ProgressMessageType.SYNCHRONIZER_END,
-					type,
-					actionCount));
+			final List<String> addedIds = this.addModels(type, modelsToSync);
+			
+			ProcessUtils.invokeAndWait(new Callable<Void>() {
+				
+				@Override
+				public Void call() {
+					for (int i = 0; i < modelsToSync.size(); i++) {
+						modelsToSync.get(i).addModelReferenceId(
+								AbstractSynchronizer.this.keyId,
+								addedIds.get(i));
+						modelsToSync.get(i).setModelStatus(ModelStatus.LOADED);
+					}
+					
+					return null;
+				}
+				
+			});
+			
+			modelsToSync.clear();
+			
+			// Start Update Action
+			for (Model model : models) {
+				if (model.getModelStatus().equals(ModelStatus.TO_UPDATE)) {
+					if (model.getModelReferenceId(this.keyId) != null) {
+						ModelBean bean = null;
+						for (ModelBean updatedModel : updatedModels) {
+							if (EqualsUtils.equalsString(
+									updatedModel.getModelReferenceIds().get(
+											this.keyId),
+									model.getModelReferenceId(this.keyId))) {
+								bean = updatedModel;
+								break;
+							}
+						}
+						
+						if (bean != null) {
+							if (!choice.chooseLocalModel(model, bean)) {
+								continue;
+							}
+						}
+						
+						updatedModels.remove(bean);
+						
+						modelsToSync.add(model);
+						
+						PluginLogger.getLogger().info(
+								"Update " + type + ": " + model.getModelId());
+					}
+				}
+			}
+			
+			this.updateModels(type, modelsToSync);
+			
+			ProcessUtils.invokeAndWait(new Callable<Void>() {
+				
+				@Override
+				public Void call() {
+					for (Model model : modelsToSync)
+						model.setModelStatus(ModelStatus.LOADED);
+					
+					return null;
+				}
+				
+			});
+			
+			modelsToSync.clear();
+			
+			// Replace Updated Models
+			if (type == ModelType.TASK) {
+				Collections.sort(updatedModels, new Comparator<ModelBean>() {
+					
+					@Override
+					public int compare(ModelBean o1, ModelBean o2) {
+						TaskBean t1 = (TaskBean) o1;
+						TaskBean t2 = (TaskBean) o2;
+						
+						if (t1.getParent() == null && t2.getParent() == null)
+							return 0;
+						
+						if (t1.getParent() != null && t2.getParent() != null)
+							return 0;
+						
+						if (t1.getParent() == null)
+							return -1;
+						
+						return 1;
+					}
+					
+				});
+			}
+			
+			ProcessUtils.invokeAndWait(new Callable<Void>() {
+				
+				@Override
+				public Void call() {
+					for (ModelBean updatedModel : updatedModels) {
+						Model model = ModelFactoryUtils.getFactory(type).get(
+								AbstractSynchronizer.this.keyId,
+								updatedModel.getModelReferenceIds().get(
+										AbstractSynchronizer.this.keyId));
+						
+						if (model != null
+								&& model.getModelStatus() == ModelStatus.DELETED)
+							continue;
+						
+						if (model == null)
+							model = ModelFactoryUtils.create(
+									type,
+									updatedModel,
+									true);
+						else
+							model.loadBean(updatedModel, false);
+					}
+					
+					return null;
+				}
+				
+			});
+			
+			if (monitor != null && actionCount > 0)
+				monitor.addMessage(new SynchronizerUpdatedModelsProgressMessage(
+						this.getPlugin(),
+						ProgressMessageType.SYNCHRONIZER_END,
+						type,
+						actionCount));
+		} catch (SynchronizerException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new SynchronizerException(false, e.getMessage(), e);
+		}
 	}
 	
 	private void removeShells(ModelType type) {

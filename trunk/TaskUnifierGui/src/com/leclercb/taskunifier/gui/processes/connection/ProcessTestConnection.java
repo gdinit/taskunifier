@@ -113,11 +113,11 @@ public class ProcessTestConnection implements Process<HttpResponse> {
 		
 	}
 	
-	private void showResult(final boolean result) {
-		ProcessUtils.invokeAndWait(new Runnable() {
+	private void showResult(final boolean result) throws Exception {
+		ProcessUtils.invokeAndWait(new Callable<Void>() {
 			
 			@Override
-			public void run() {
+			public Void call() {
 				if (result) {
 					JOptionPane.showMessageDialog(
 							FrameUtils.getCurrentWindow(),
@@ -136,6 +136,8 @@ public class ProcessTestConnection implements Process<HttpResponse> {
 					
 					JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 				}
+				
+				return null;
 			}
 			
 		});

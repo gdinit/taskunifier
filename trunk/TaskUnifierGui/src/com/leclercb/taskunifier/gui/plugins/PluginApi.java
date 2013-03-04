@@ -35,6 +35,8 @@ package com.leclercb.taskunifier.gui.plugins;
 import java.awt.Frame;
 import java.awt.Window;
 import java.util.Locale;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 
 import javax.help.HelpSet;
 
@@ -110,12 +112,17 @@ public final class PluginApi {
 		return Main.isVersionUpdated();
 	}
 	
-	public static void invokeLater(Runnable doRun) {
-		ProcessUtils.invokeLater(doRun);
+	public static void invokeLater(Runnable runnable) {
+		ProcessUtils.invokeLater(runnable);
 	}
 	
-	public static void invokeAndWait(Runnable doRun) {
-		ProcessUtils.invokeAndWait(doRun);
+	public static void invokeAndWait(Runnable runnable) {
+		ProcessUtils.invokeAndWait(runnable);
+	}
+	
+	public static <T> T invokeAndWait(Callable<T> callable)
+			throws InterruptedException, ExecutionException {
+		return ProcessUtils.invokeAndWait(callable);
 	}
 	
 	public static Frame getCurrentFrame() {

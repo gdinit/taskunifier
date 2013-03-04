@@ -141,12 +141,12 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 		}
 	}
 	
-	protected void handleException(final Exception e) {
+	protected void handleException(final Exception e) throws Exception {
 		if (!this.silent) {
-			ProcessUtils.invokeAndWait(new Runnable() {
+			ProcessUtils.invokeAndWait(new Callable<Void>() {
 				
 				@Override
-				public void run() {
+				public Void call() {
 					ErrorInfo info = new ErrorInfo(
 							Translations.getString("general.error"),
 							e.getMessage(),
@@ -157,6 +157,8 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 							null);
 					
 					JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
+					
+					return null;
 				}
 				
 			});
