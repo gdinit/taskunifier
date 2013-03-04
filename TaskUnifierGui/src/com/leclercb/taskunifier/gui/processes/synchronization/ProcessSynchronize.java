@@ -396,8 +396,6 @@ public class ProcessSynchronize implements Process<Void> {
 			return null;
 		}
 		
-		Thread.sleep(1000);
-		
 		ProcessUtils.invokeLater(new Runnable() {
 			
 			@Override
