@@ -3,6 +3,7 @@ HISTORY
 
 Version 3.1.9
 	- Major:
+		- Refactoring of processes
 		- New installation software for Windows
 		- BF 11: Error message at the end of the installation
 		- BF 130: Duplicate entries in add/remove programs
