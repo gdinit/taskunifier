@@ -38,7 +38,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.JButton;
-import javax.swing.JTextArea;
+import javax.swing.JLabel;
 
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.taskunifier.gui.actions.ActionManageSynchronizerPlugins;
@@ -302,15 +302,14 @@ public class SynchronizationConfigurationPanel extends DefaultConfigurationPanel
 		managePluginsButton.setText(apiName);
 		
 		if (!this.welcome) {
-			JTextArea synchronizeAllLabel = (JTextArea) this.getField(
+			JLabel synchronizeAllLabel = (JLabel) this.getField(
 					"SYNCHRONIZE_ALL_LABEL").getType().getFieldComponent();
 			
-			JTextArea pushAllLabel = (JTextArea) this.getField("PUSH_ALL_LABEL").getType().getFieldComponent();
+			JLabel pushAllLabel = (JLabel) this.getField("PUSH_ALL_LABEL").getType().getFieldComponent();
 			
-			JTextArea resetAllLabel = (JTextArea) this.getField(
-					"RESET_ALL_LABEL").getType().getFieldComponent();
+			JLabel resetAllLabel = (JLabel) this.getField("RESET_ALL_LABEL").getType().getFieldComponent();
 			
-			JTextArea copyAllLabel = (JTextArea) this.getField("COPY_ALL_LABEL").getType().getFieldComponent();
+			JLabel copyAllLabel = (JLabel) this.getField("COPY_ALL_LABEL").getType().getFieldComponent();
 			
 			synchronizeAllLabel.setText(Translations.getString(
 					"configuration.synchronization.synchronize_all",
