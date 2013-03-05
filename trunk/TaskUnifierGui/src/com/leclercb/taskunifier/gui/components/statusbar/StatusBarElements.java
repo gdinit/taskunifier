@@ -62,6 +62,7 @@ import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.main.frames.FrameView;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.threads.Threads;
 import com.leclercb.taskunifier.gui.threads.communicator.progress.CommunicatorProgressMessageTransformer;
 import com.leclercb.taskunifier.gui.threads.scheduledsync.ScheduledSyncThread;
@@ -172,7 +173,16 @@ final class StatusBarElements implements ProgressMessageAddedListener, PropertyC
 					Translations.getString("statusbar.never"));
 		}
 		
-		this.scheduledSyncStatusLabel.setText(text);
+		final String finalText = text;
+		
+		ProcessUtils.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				StatusBarElements.this.scheduledSyncStatusLabel.setText(finalText);
+			}
+			
+		});
 	}
 	
 	private void initializeRowCount(int frameId) {
@@ -249,7 +259,14 @@ final class StatusBarElements implements ProgressMessageAddedListener, PropertyC
 	}
 	
 	private final void updateCurrentDateTime() {
-		this.currentDateTime.setText(StringValueCalendar.INSTANCE_DATE_TIME.getString(Calendar.getInstance()));
+		ProcessUtils.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				StatusBarElements.this.currentDateTime.setText(StringValueCalendar.INSTANCE_DATE_TIME.getString(Calendar.getInstance()));
+			}
+			
+		});
 	}
 	
 	@Override
