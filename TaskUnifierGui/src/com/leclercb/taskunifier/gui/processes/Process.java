@@ -33,12 +33,18 @@
 package com.leclercb.taskunifier.gui.processes;
 
 /**
- * A process can be executed outside EDT.
+ * A process must be executed outside EDT.
  */
 public interface Process<T> {
 	
+	/**
+	 * Must be executed outside EDT.
+	 */
 	public abstract T execute(final Worker<?> worker) throws Exception;
 	
+	/**
+	 * Must be executed inside EDT.
+	 */
 	public abstract void done(final Worker<?> worker);
 	
 }

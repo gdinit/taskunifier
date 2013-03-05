@@ -85,10 +85,13 @@ public class TUWorkerDialog<T> extends TUDialog implements ProgressMessageAddedL
 	
 	public void appendToProgressStatus(Icon icon, String text) {
 		try {
-			if (icon != null)
-				this.progressStatus.insertIcon(icon);
-			
 			Document document = this.progressStatus.getDocument();
+			
+			if (icon != null) {
+				this.progressStatus.setCaretPosition(document.getLength());
+				this.progressStatus.insertIcon(icon);
+			}
+			
 			document.insertString(document.getLength(), text, null);
 		} catch (BadLocationException e) {
 			GuiLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);

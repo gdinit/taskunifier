@@ -47,13 +47,21 @@ public final class ProcessUtils {
 		
 	}
 	
-	public static void invokeLater(Runnable runnable) {
+	public static void invokeLater(final Runnable runnable) {
 		SwingUtilities.invokeLater(runnable);
 	}
 	
-	public static void invokeAndWait(Runnable runnable) {
+	public static void invokeAndWait(final Runnable runnable) {
 		try {
-			SwingUtilities.invokeAndWait(runnable);
+			invokeAndWait(new Callable<Void>() {
+				
+				@Override
+				public Void call() throws Exception {
+					runnable.run();
+					return null;
+				}
+				
+			});
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(
 					Level.WARNING,
@@ -62,8 +70,16 @@ public final class ProcessUtils {
 		}
 	}
 	
-	public static <T> T invokeAndWait(Callable<T> callable)
+	public static <T> T invokeAndWait(final Callable<T> callable)
 			throws InterruptedException, ExecutionException {
+		if (SwingUtilities.isEventDispatchThread()) {
+			try {
+				return callable.call();
+			} catch (Exception e) {
+				throw new ExecutionException(e);
+			}
+		}
+		
 		FutureTask<T> task = new FutureTask<T>(callable);
 		SwingUtilities.invokeLater(task);
 		return task.get();
