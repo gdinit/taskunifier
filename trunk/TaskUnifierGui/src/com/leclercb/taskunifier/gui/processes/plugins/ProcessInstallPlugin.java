@@ -153,7 +153,7 @@ public class ProcessInstallPlugin implements Process<Void> {
 								+ " - "
 								+ loadedPlugin.getVersion());
 				
-				ProcessUtils.invokeAndWait(new Callable<Void>() {
+				ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 					
 					@Override
 					public Void call() {

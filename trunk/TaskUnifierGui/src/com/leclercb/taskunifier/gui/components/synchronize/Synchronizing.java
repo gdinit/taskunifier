@@ -78,7 +78,7 @@ public final class Synchronizing implements PropertyChangeSupported {
 		}
 		
 		if (oldSynchronizing != this.isSynchronizing()) {
-			ProcessUtils.invokeAndWait(new Runnable() {
+			ProcessUtils.executeOrInvokeAndWait(new Runnable() {
 				
 				@Override
 				public void run() {
@@ -93,7 +93,7 @@ public final class Synchronizing implements PropertyChangeSupported {
 	}
 	
 	public void showSynchronizingMessage() {
-		ProcessUtils.invokeAndWait(new Runnable() {
+		ProcessUtils.executeOrInvokeAndWait(new Runnable() {
 			
 			@Override
 			public void run() {

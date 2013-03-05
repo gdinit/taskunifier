@@ -117,12 +117,12 @@ public final class PluginApi {
 	}
 	
 	public static void invokeAndWait(Runnable runnable) {
-		ProcessUtils.invokeAndWait(runnable);
+		ProcessUtils.executeOrInvokeAndWait(runnable);
 	}
 	
 	public static <T> T invokeAndWait(Callable<T> callable)
 			throws InterruptedException, ExecutionException {
-		return ProcessUtils.invokeAndWait(callable);
+		return ProcessUtils.executeOrInvokeAndWait(callable);
 	}
 	
 	public static Frame getCurrentFrame() {

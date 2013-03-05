@@ -197,7 +197,7 @@ public class ProcessGetTrial implements Process<HttpResponse> {
 	
 	private void showResult(final String code, final String message)
 			throws Exception {
-		ProcessUtils.invokeAndWait(new Callable<Void>() {
+		ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 			
 			@Override
 			public Void call() {
