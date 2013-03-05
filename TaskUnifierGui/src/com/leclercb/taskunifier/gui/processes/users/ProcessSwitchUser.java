@@ -111,6 +111,7 @@ public class ProcessSwitchUser implements Process<Void> {
 						Main.loadUserFolder();
 					} catch (Exception e) {
 						Main.setCurrentUserId(oldUserId);
+						
 						throw e;
 					}
 					
@@ -123,6 +124,8 @@ public class ProcessSwitchUser implements Process<Void> {
 					} catch (Exception e) {
 						Main.setCurrentUserId(oldUserId);
 						Main.loadUserSettings();
+						MainLoadFiles.loadAllData(Main.getUserFolder());
+						
 						throw e;
 					}
 					
@@ -130,26 +133,32 @@ public class ProcessSwitchUser implements Process<Void> {
 						MainLoadFiles.loadAllData(Main.getUserFolder());
 						UserUtils.getInstance().fireSwitchedUser();
 						Main.reloadProVersion();
-						
-						GuiLogger.getLogger().info(
-								"User switched to \"" + userName + "\"");
 					} catch (Exception e) {
 						Main.setCurrentUserId(oldUserId);
 						Main.loadUserSettings();
 						MainLoadFiles.loadAllData(Main.getUserFolder());
+						Main.reloadProVersion();
+						UserUtils.getInstance().fireSwitchedUser();
 						
-						GuiLogger.getLogger().log(
-								Level.SEVERE,
-								String.format(
-										"Error while switching user %1s",
-										ProcessSwitchUser.this.userId),
-								e);
+						throw e;
 					}
+					
+					GuiLogger.getLogger().info(
+							"User switched to \"" + userName + "\"");
 					
 					return null;
 				}
 				
 			});
+		} catch (Exception e) {
+			GuiLogger.getLogger().log(
+					Level.SEVERE,
+					String.format(
+							"Error while switching user %1s",
+							ProcessSwitchUser.this.userId),
+					e);
+			
+			throw e;
 		} finally {
 			SynchronizerUtils.setTaskRepeatEnabled(true);
 			SynchronizerUtils.setTaskRulesEnabled(true);
