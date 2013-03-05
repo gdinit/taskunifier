@@ -403,8 +403,6 @@ public class ProcessSynchronize implements Process<Void> {
 	
 	@Override
 	public void done(final Worker<?> worker) {
-		final ProgressMonitor monitor = worker.getEDTMonitor();
-		
 		try {
 			Constants.PROGRESS_MONITOR.clear();
 			

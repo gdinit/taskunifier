@@ -58,12 +58,12 @@ public class SynchronizerDialog extends TUWorkerDialog<Void> {
 		
 		this.serialNeeded = false;
 		
-		final SynchronizerDialogWorker worker = new SynchronizerDialogWorker();
+		final SynchronizerWorker worker = new SynchronizerWorker(false);
 		this.setWorker(worker);
 	}
 	
 	public void add(SynchronizerGuiPlugin plugin, ProcessSynchronize.Type type) {
-		SynchronizerDialogWorker worker = (SynchronizerDialogWorker) this.getWorker();
+		SynchronizerWorker worker = (SynchronizerWorker) this.getWorker();
 		worker.add(plugin, type);
 		
 		try {
@@ -82,31 +82,20 @@ public class SynchronizerDialog extends TUWorkerDialog<Void> {
 		}
 	}
 	
-	public class SynchronizerDialogWorker extends SynchronizerWorker {
+	@Override
+	public void progressMessageAdded(ProgressMessageAddedEvent event) {
+		ProgressMessageTransformer t = SynchronizerProgressMessageTransformer.getInstance();
 		
-		public SynchronizerDialogWorker() {
-			super(false);
-		}
-		
-		@Override
-		public void progressMessageAdded(ProgressMessageAddedEvent event) {
-			ProgressMessageTransformer t = SynchronizerProgressMessageTransformer.getInstance();
+		if (t.acceptsEvent(event)) {
+			Icon icon = (Icon) t.getEventValue(event, "icon");
 			
-			if (t.acceptsEvent(event)) {
-				Icon icon = (Icon) t.getEventValue(event, "icon");
-				
-				if (icon == null)
-					icon = ImageUtils.getResourceImage(
-							"transparent.png",
-							16,
-							16);
-				
-				SynchronizerDialog.this.appendToProgressStatus(
-						icon,
-						"   " + t.getEventValue(event, "message") + "\n");
-			}
+			if (icon == null)
+				icon = ImageUtils.getResourceImage("transparent.png", 16, 16);
+			
+			SynchronizerDialog.this.appendToProgressStatus(
+					icon,
+					"   " + t.getEventValue(event, "message") + "\n");
 		}
-		
 	}
 	
 }
