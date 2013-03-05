@@ -45,6 +45,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
+import javax.swing.RepaintManager;
 
 import org.apache.commons.lang3.SystemUtils;
 
@@ -61,6 +62,7 @@ import com.leclercb.commons.api.utils.exceptions.SingleInstanceException;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelUtils;
 import com.leclercb.commons.gui.swing.lookandfeel.types.DefaultLookAndFeelDescriptor;
+import com.leclercb.commons.gui.utils.CheckThreadViolationRepaintManager;
 import com.leclercb.taskunifier.api.models.ContactFactory;
 import com.leclercb.taskunifier.api.models.ContextFactory;
 import com.leclercb.taskunifier.api.models.FolderFactory;
@@ -390,6 +392,9 @@ public class Main {
 		
 		if (isDeveloperMode())
 			GuiLogger.getLogger().severe("DEVELOPER MODE");
+		
+		if (isDeveloperMode())
+			RepaintManager.setCurrentManager(new CheckThreadViolationRepaintManager());
 	}
 	
 	private static void initialize() throws Exception {
