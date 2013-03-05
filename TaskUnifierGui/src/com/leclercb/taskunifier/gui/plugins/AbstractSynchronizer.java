@@ -293,7 +293,7 @@ public abstract class AbstractSynchronizer implements Synchronizer {
 			
 			this.deleteModels(type, modelsToDelete);
 			
-			ProcessUtils.invokeAndWait(new Callable<Void>() {
+			ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 				
 				@Override
 				public Void call() {
@@ -326,7 +326,7 @@ public abstract class AbstractSynchronizer implements Synchronizer {
 				modelsToDelete.add(model);
 			}
 			
-			ProcessUtils.invokeAndWait(new Callable<Void>() {
+			ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 				
 				@Override
 				public Void call() {
@@ -353,7 +353,7 @@ public abstract class AbstractSynchronizer implements Synchronizer {
 			modelsToDelete.clear();
 			
 			// Start Add Action
-			ProcessUtils.invokeAndWait(new Callable<Void>() {
+			ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 				
 				@Override
 				public Void call() {
@@ -393,7 +393,7 @@ public abstract class AbstractSynchronizer implements Synchronizer {
 			
 			final List<String> addedIds = this.addModels(type, modelsToSync);
 			
-			ProcessUtils.invokeAndWait(new Callable<Void>() {
+			ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 				
 				@Override
 				public Void call() {
@@ -444,7 +444,7 @@ public abstract class AbstractSynchronizer implements Synchronizer {
 			
 			this.updateModels(type, modelsToSync);
 			
-			ProcessUtils.invokeAndWait(new Callable<Void>() {
+			ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 				
 				@Override
 				public Void call() {
@@ -482,7 +482,7 @@ public abstract class AbstractSynchronizer implements Synchronizer {
 				});
 			}
 			
-			ProcessUtils.invokeAndWait(new Callable<Void>() {
+			ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 				
 				@Override
 				public Void call() {

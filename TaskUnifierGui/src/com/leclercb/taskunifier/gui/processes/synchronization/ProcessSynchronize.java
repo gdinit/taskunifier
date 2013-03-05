@@ -126,7 +126,7 @@ public class ProcessSynchronize implements Process<Void> {
 		SynchronizerGuiPlugin plugin = null;
 		
 		try {
-			ProcessUtils.invokeAndWait(new Callable<Void>() {
+			ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 				
 				@Override
 				public Void call() {
@@ -154,7 +154,7 @@ public class ProcessSynchronize implements Process<Void> {
 				if (type == Type.SYNCHRONIZE
 						&& Main.getSettings().getBooleanProperty(
 								"backup.backup_before_sync")) {
-					ProcessUtils.invokeAndWait(new Callable<Void>() {
+					ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 						
 						@Override
 						public Void call() {
@@ -315,7 +315,7 @@ public class ProcessSynchronize implements Process<Void> {
 					return null;
 				
 				try {
-					ProcessUtils.invokeAndWait(new Callable<Void>() {
+					ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 						
 						@Override
 						public Void call() {
@@ -343,7 +343,7 @@ public class ProcessSynchronize implements Process<Void> {
 							synchronizer.synchronize(choice, monitor);
 						}
 						
-						ProcessUtils.invokeAndWait(new Callable<Void>() {
+						ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 							
 							@Override
 							public Void call() {
@@ -451,7 +451,7 @@ public class ProcessSynchronize implements Process<Void> {
 		
 		if (!worker.isSilent()
 				|| !(e instanceof SynchronizerNotConnectedException)) {
-			ProcessUtils.invokeAndWait(new Callable<Void>() {
+			ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 				
 				@Override
 				public Void call() {
@@ -502,7 +502,7 @@ public class ProcessSynchronize implements Process<Void> {
 				ImageUtils.getResourceImage("error.png", 16, 16)));
 		
 		if (!worker.isSilent()) {
-			ProcessUtils.invokeAndWait(new Callable<Void>() {
+			ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 				
 				@Override
 				public Void call() {

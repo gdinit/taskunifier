@@ -163,7 +163,7 @@ public class ProcessLoadPlugin implements Process<SynchronizerGuiPlugin> {
 			List<SynchronizerGuiPlugin> existingPlugins = new ArrayList<SynchronizerGuiPlugin>(
 					Main.getApiPlugins().getPlugins());
 			
-			ProcessUtils.invokeAndWait(new Callable<Void>() {
+			ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 				
 				@Override
 				public Void call() {
@@ -208,7 +208,7 @@ public class ProcessLoadPlugin implements Process<SynchronizerGuiPlugin> {
 			final SynchronizerGuiPlugin finalLoadedPlugin = loadedPlugin;
 			
 			if (loadedPlugin != null) {
-				ProcessUtils.invokeAndWait(new Callable<Void>() {
+				ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 					
 					@Override
 					public Void call() {

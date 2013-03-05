@@ -143,7 +143,7 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 	
 	protected void handleException(final Exception e) throws Exception {
 		if (!this.silent) {
-			ProcessUtils.invokeAndWait(new Callable<Void>() {
+			ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 				
 				@Override
 				public Void call() {

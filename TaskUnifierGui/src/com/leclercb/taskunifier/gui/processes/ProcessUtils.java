@@ -51,9 +51,9 @@ public final class ProcessUtils {
 		SwingUtilities.invokeLater(runnable);
 	}
 	
-	public static void invokeAndWait(final Runnable runnable) {
+	public static void executeOrInvokeAndWait(final Runnable runnable) {
 		try {
-			invokeAndWait(new Callable<Void>() {
+			executeOrInvokeAndWait(new Callable<Void>() {
 				
 				@Override
 				public Void call() throws Exception {
@@ -70,7 +70,7 @@ public final class ProcessUtils {
 		}
 	}
 	
-	public static <T> T invokeAndWait(final Callable<T> callable)
+	public static <T> T executeOrInvokeAndWait(final Callable<T> callable)
 			throws InterruptedException, ExecutionException {
 		if (SwingUtilities.isEventDispatchThread()) {
 			try {

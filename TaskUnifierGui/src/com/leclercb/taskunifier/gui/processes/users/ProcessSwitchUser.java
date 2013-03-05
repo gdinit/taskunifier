@@ -79,7 +79,7 @@ public class ProcessSwitchUser implements Process<Void> {
 		if (EqualsUtils.equals(this.userId, Main.getCurrentUserId()))
 			return null;
 		
-		ProcessUtils.invokeAndWait(new Callable<Void>() {
+		ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 			
 			@Override
 			public Void call() throws Exception {
@@ -95,7 +95,7 @@ public class ProcessSwitchUser implements Process<Void> {
 		SynchronizerUtils.setTaskRulesEnabled(false);
 		
 		try {
-			ProcessUtils.invokeAndWait(new Callable<Void>() {
+			ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 				
 				@Override
 				public Void call() throws Exception {

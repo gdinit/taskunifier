@@ -114,7 +114,7 @@ public class ProcessTestConnection implements Process<HttpResponse> {
 	}
 	
 	private void showResult(final boolean result) throws Exception {
-		ProcessUtils.invokeAndWait(new Callable<Void>() {
+		ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 			
 			@Override
 			public Void call() {

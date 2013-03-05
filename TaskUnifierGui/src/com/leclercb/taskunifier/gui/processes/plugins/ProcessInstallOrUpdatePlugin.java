@@ -74,7 +74,7 @@ public class ProcessInstallOrUpdatePlugin implements Process<Void> {
 			process.execute(worker);
 		}
 		
-		ProcessUtils.invokeAndWait(new Callable<Void>() {
+		ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 			
 			@Override
 			public Void call() {

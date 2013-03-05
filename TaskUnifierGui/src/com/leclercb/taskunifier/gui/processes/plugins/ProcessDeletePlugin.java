@@ -75,7 +75,7 @@ public class ProcessDeletePlugin implements Process<Void> {
 				"manage_plugins.progress.start_plugin_deletion",
 				this.plugin.getName())));
 		
-		ProcessUtils.invokeAndWait(new Callable<Void>() {
+		ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 			
 			@Override
 			public Void call() {
