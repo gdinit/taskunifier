@@ -44,7 +44,6 @@ import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.leclercb.commons.api.progress.ProgressMonitor;
-import com.leclercb.commons.api.progress.event.ProgressMessageAddedListener;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.api.synchronizer.Connection;
@@ -84,17 +83,9 @@ public class ProcessSynchronize implements Process<Void> {
 	private List<SynchronizerGuiPlugin> plugins;
 	private List<Type> types;
 	
-	private ProgressMessageAddedListener handler;
-	
 	public ProcessSynchronize() {
-		this(null);
-	}
-	
-	public ProcessSynchronize(ProgressMessageAddedListener handler) {
 		this.plugins = new ArrayList<SynchronizerGuiPlugin>();
 		this.types = new ArrayList<Type>();
-		
-		this.handler = handler;
 	}
 	
 	public void add(SynchronizerGuiPlugin plugin, Type type) {
@@ -118,9 +109,6 @@ public class ProcessSynchronize implements Process<Void> {
 		GuiLogger.getLogger().log(Level.INFO, "Synchronization started");
 		
 		Synchronizing.getInstance().setSynchronizing(true);
-		
-		if (this.handler != null)
-			monitor.addProgressMessageAddedListener(this.handler);
 		
 		boolean noLicense = false;
 		SynchronizerGuiPlugin plugin = null;
@@ -418,9 +406,6 @@ public class ProcessSynchronize implements Process<Void> {
 		final ProgressMonitor monitor = worker.getEDTMonitor();
 		
 		try {
-			if (this.handler != null)
-				monitor.removeProgressMessageAddedListener(this.handler);
-			
 			Constants.PROGRESS_MONITOR.clear();
 			
 			SynchronizerUtils.removeOldCompletedTasks();

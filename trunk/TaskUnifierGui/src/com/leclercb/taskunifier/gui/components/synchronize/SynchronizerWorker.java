@@ -32,7 +32,6 @@
  */
 package com.leclercb.taskunifier.gui.components.synchronize;
 
-import com.leclercb.commons.api.progress.event.ProgressMessageAddedListener;
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerDefaultProgressMessage;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.constants.Constants;
@@ -45,13 +44,7 @@ import com.leclercb.taskunifier.gui.utils.ImageUtils;
 public class SynchronizerWorker extends Worker<Void> {
 	
 	public SynchronizerWorker(boolean silent) {
-		this(silent, null);
-	}
-	
-	public SynchronizerWorker(
-			boolean silent,
-			ProgressMessageAddedListener handler) {
-		super(new ProcessSynchronize(handler), Constants.PROGRESS_MONITOR);
+		super(new ProcessSynchronize(), Constants.PROGRESS_MONITOR);
 		this.setSilent(silent);
 	}
 	

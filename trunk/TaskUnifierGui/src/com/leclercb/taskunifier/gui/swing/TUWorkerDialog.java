@@ -123,10 +123,6 @@ public class TUWorkerDialog<T> extends TUDialog implements ProgressMessageAddedL
 	}
 	
 	public void setWorker(Worker<T> worker) {
-		this.setWorker(worker, true);
-	}
-	
-	public void setWorker(Worker<T> worker, boolean listenToMonitor) {
 		if (this.worker != null) {
 			this.worker.removeActionListener(this);
 			
@@ -136,11 +132,10 @@ public class TUWorkerDialog<T> extends TUDialog implements ProgressMessageAddedL
 		this.worker = worker;
 		
 		if (this.worker != null) {
-			if (listenToMonitor)
-				this.worker.getMonitor().addProgressMessageAddedListener(
-						new WeakProgressMessageAddedListener(
-								this.worker.getMonitor(),
-								this));
+			this.worker.getMonitor().addProgressMessageAddedListener(
+					new WeakProgressMessageAddedListener(
+							this.worker.getMonitor(),
+							this));
 			
 			this.worker.addActionListener(new WeakActionListener(
 					this.worker,
