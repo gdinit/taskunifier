@@ -106,8 +106,6 @@ final class StatusBarElements implements ProgressMessageAddedListener, PropertyC
 	
 	private void initializeSynchronizerStatus() {
 		this.synchronizerStatusLabel = new JLabel();
-		this.synchronizerStatusLabel.setText(Translations.getString("synchronizer.status")
-				+ ": ");
 		
 		Constants.PROGRESS_MONITOR.addProgressMessageAddedListener(new WeakProgressMessageAddedListener(
 				Constants.PROGRESS_MONITOR,
@@ -280,9 +278,9 @@ final class StatusBarElements implements ProgressMessageAddedListener, PropertyC
 					event,
 					"icon"));
 			
-			this.synchronizerStatusLabel.setText(Translations.getString("synchronizer.status")
-					+ ": "
-					+ t.getEventValue(event, "message"));
+			this.synchronizerStatusLabel.setText((String) t.getEventValue(
+					event,
+					"message"));
 		}
 		
 		t = CommunicatorProgressMessageTransformer.getInstance();
