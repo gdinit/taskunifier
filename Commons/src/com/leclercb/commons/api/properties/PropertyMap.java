@@ -457,7 +457,10 @@ public class PropertyMap extends Properties implements PropertyChangeSupported, 
 			Class<T> cls,
 			T value,
 			boolean force) {
-		Object oldValue = this.getObjectProperty(key, cls);
+		Object oldValue = null;
+		
+		if (!force)
+			oldValue = this.getObjectProperty(key, cls);
 		
 		try {
 			PropertiesCoder<T> coder = (PropertiesCoder<T>) this.coders.get(cls);

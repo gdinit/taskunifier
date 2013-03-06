@@ -353,17 +353,6 @@ public class ProcessSynchronize implements Process<Void> {
 					connection.disconnect();
 				}
 				
-				ProcessUtils.invokeLater(new Runnable() {
-					
-					@Override
-					public void run() {
-						Main.getUserSettings().setCalendarProperty(
-								"synchronizer.last_synchronization_date",
-								Calendar.getInstance());
-					}
-					
-				});
-				
 				monitor.addMessage(new SynchronizerDefaultProgressMessage(
 						"----------"));
 				
@@ -384,34 +373,29 @@ public class ProcessSynchronize implements Process<Void> {
 			return null;
 		}
 		
-		ProcessUtils.invokeLater(new Runnable() {
-			
-			@Override
-			public void run() {
-				Main.getUserSettings().setObjectProperty(
-						"synchronizer.scheduler_sleep_time",
-						String.class,
-						Main.getUserSettings().getStringProperty(
-								"synchronizer.scheduler_sleep_time"),
-						true);
-			}
-			
-		});
-		
 		return null;
 	}
 	
 	@Override
 	public void done(final Worker<?> worker) {
 		try {
-			Constants.PROGRESS_MONITOR.clear();
-			
 			SynchronizerUtils.removeOldCompletedTasks();
 			
 			SynchronizerUtils.setTaskRepeatEnabled(true);
 			SynchronizerUtils.setTaskRulesEnabled(true);
 			
 			ActionRefresh.refresh();
+			
+			Main.getUserSettings().setObjectProperty(
+					"synchronizer.scheduler_sleep_time",
+					String.class,
+					Main.getUserSettings().getStringProperty(
+							"synchronizer.scheduler_sleep_time"),
+					true);
+			
+			Main.getUserSettings().setCalendarProperty(
+					"synchronizer.last_synchronization_date",
+					Calendar.getInstance());
 		} finally {
 			Synchronizing.getInstance().setSynchronizing(false);
 			
