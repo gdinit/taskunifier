@@ -205,20 +205,23 @@ public class ProcessLoadPlugin implements Process<SynchronizerGuiPlugin> {
 				}
 			}
 			
+			if (loadedPlugin == null) {
+				throw new PluginException(
+						PluginExceptionType.OLDER_PLUGIN_VERSION);
+			}
+			
 			final SynchronizerGuiPlugin finalLoadedPlugin = loadedPlugin;
 			
-			if (loadedPlugin != null) {
-				ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
+			ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
+				
+				@Override
+				public Void call() {
+					finalLoadedPlugin.loadPlugin();
 					
-					@Override
-					public Void call() {
-						finalLoadedPlugin.loadPlugin();
-						
-						return null;
-					}
-					
-				});
-			}
+					return null;
+				}
+				
+			});
 			
 			monitor.addMessage(new DefaultProgressMessage(
 					Translations.getString("manage_plugins.progress.plugin_loaded")));

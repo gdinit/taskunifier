@@ -161,8 +161,12 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 		
 		dialog.setVisible(true);
 		
-		if (!plugin.getId().equals(DummyGuiPlugin.getInstance().getId()))
-			ActionPluginConfiguration.pluginConfiguration(dialog.getResult());
+		try {
+			if (!plugin.getId().equals(DummyGuiPlugin.getInstance().getId()))
+				ActionPluginConfiguration.pluginConfiguration(dialog.getResult());
+		} catch (Exception e) {
+			
+		}
 		
 		PluginsPanel.this.valueChanged(null);
 	}
@@ -206,7 +210,11 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 		
 		dialog.setVisible(true);
 		
-		ActionPluginConfiguration.pluginConfiguration(dialog.getResult());
+		try {
+			ActionPluginConfiguration.pluginConfiguration(dialog.getResult());
+		} catch (Exception e) {
+			
+		}
 		
 		this.list.getSelectionModel().clearSelection();
 		

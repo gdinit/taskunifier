@@ -106,16 +106,9 @@ public class TUWorkerDialog<T> extends TUDialog implements ProgressMessageAddedL
 		return this.worker.isCancelled();
 	}
 	
-	public T getResult() {
-		try {
-			return this.worker.get();
-		} catch (CancellationException e) {
-			return null;
-		} catch (InterruptedException e) {
-			return null;
-		} catch (ExecutionException e) {
-			return null;
-		}
+	public T getResult() throws CancellationException, InterruptedException,
+			ExecutionException {
+		return this.worker.get();
 	}
 	
 	public Worker<T> getWorker() {
