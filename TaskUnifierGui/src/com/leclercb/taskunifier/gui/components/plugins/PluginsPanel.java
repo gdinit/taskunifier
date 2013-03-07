@@ -56,11 +56,19 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 	private PluginList list;
 	private JTextArea history;
 	
+	private boolean pluginListLoaded;
+	
 	public PluginsPanel(boolean includePublishers, boolean includeSynchronizers) {
 		this.includePublishers = includePublishers;
 		this.includeSynchronizers = includeSynchronizers;
 		
+		this.pluginListLoaded = false;
+		
 		this.initialize();
+	}
+	
+	public boolean isPluginListLoaded() {
+		return this.pluginListLoaded;
 	}
 	
 	public void reloadPlugins() {
@@ -72,6 +80,8 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 		
 		if (plugins == null)
 			plugins = new Plugin[] { Plugin.getDummyPlugin() };
+		else
+			this.pluginListLoaded = true;
 		
 		this.list.setPlugins(plugins);
 	}

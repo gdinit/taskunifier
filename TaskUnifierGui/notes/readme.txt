@@ -8,12 +8,13 @@ Version 3.1.9
 		- BF 11: Error message at the end of the installation
 		- BF 130: Duplicate entries in add/remove programs
 	- Minor:
+		- Bug fixed: Layout of settings
+		- Bug fixed: UK first day of week
 		- BF 253: Remove beeps
 		- FR 324: Search shortcut
 		- Fixed owner of all the dialogs
 		- Do not apply searcher template for quick add task
-		- Bug fixed: Layout of settings
-		- Bug fixed: UK first day of week
+		- Cache plugin database
 
 Version 3.1.8
 	- Major:
