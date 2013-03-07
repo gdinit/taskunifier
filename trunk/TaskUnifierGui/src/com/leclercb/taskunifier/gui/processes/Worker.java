@@ -57,6 +57,7 @@ import com.leclercb.commons.api.progress.event.ProgressMessageAddedEvent;
 import com.leclercb.commons.api.progress.event.ProgressMessageAddedListener;
 import com.leclercb.commons.api.progress.event.WeakProgressMessageAddedListener;
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
@@ -147,6 +148,8 @@ public class Worker<T> extends SwingWorker<T, ProgressMessage> implements Action
 				
 				@Override
 				public Void call() {
+					GuiLogger.getLogger().log(Level.WARNING, e.getMessage(), e);
+					
 					ErrorInfo info = new ErrorInfo(
 							Translations.getString("general.error"),
 							e.getMessage(),
