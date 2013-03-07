@@ -38,22 +38,25 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileFilter;
 
+import com.leclercb.commons.api.utils.FileUtils;
 import com.leclercb.taskunifier.gui.api.plugins.Plugin;
 import com.leclercb.taskunifier.gui.api.plugins.PluginsUtils;
 import com.leclercb.taskunifier.gui.components.plugins.list.PluginList;
 import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.processes.plugins.ProcessInstallOrUpdatePlugin;
 import com.leclercb.taskunifier.gui.processes.plugins.ProcessInstallPluginFromFile;
-import com.leclercb.taskunifier.gui.swing.TUFileDialog;
 import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
+import com.leclercb.taskunifier.gui.utils.FileChooserUtils;
 
 public class PluginsPanel extends JPanel implements ListSelectionListener {
 	
@@ -132,7 +135,7 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 			
 		});
 		
-		this.buttonsPanel = new TUButtonsPanel();
+		this.buttonsPanel = new TUButtonsPanel(installFromFileButton);
 		
 		this.add(this.buttonsPanel, BorderLayout.SOUTH);
 	}
@@ -158,16 +161,29 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 	}
 	
 	public void installPluginFromFile() {
-		TUFileDialog fileDialog = new TUFileDialog(
+		FileFilter fileFilter = new FileFilter() {
+			
+			@Override
+			public boolean accept(File f) {
+				return FileUtils.hasExtention(f.getName(), "jar");
+			}
+			
+			@Override
+			public String getDescription() {
+				return Translations.getString("general.jar_files");
+			}
+			
+		};
+		
+		String file = FileChooserUtils.getFile(
 				true,
-				Translations.getString("manage_plugins.install_from_file"));
+				null,
+				fileFilter,
+				JFileChooser.FILES_ONLY,
+				null);
 		
-		fileDialog.setVisible(true);
-		
-		if (fileDialog.isCancelled())
+		if (file == null)
 			return;
-		
-		String file = fileDialog.getFile();
 		
 		TUWorkerDialog<Void> dialog = new TUWorkerDialog<Void>(
 				Translations.getString("general.manage_plugins"));

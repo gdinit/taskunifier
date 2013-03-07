@@ -107,7 +107,9 @@ public class SynchronizerPluginsDialogPanel extends TUDialogPanel {
 		JButton okButton = new TUOkButton(listener);
 		JButton cancelButton = new TUCancelButton(listener);
 		
-		this.setButtons(okButton, helpButton, okButton, cancelButton);
+		this.pluginsPanel.getButtonsPanel().addButton(helpButton);
+		this.pluginsPanel.getButtonsPanel().addButton(okButton);
+		this.pluginsPanel.getButtonsPanel().addButton(cancelButton);
 	}
 	
 	@Override
