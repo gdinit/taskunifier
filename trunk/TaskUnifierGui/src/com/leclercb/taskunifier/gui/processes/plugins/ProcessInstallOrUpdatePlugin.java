@@ -83,11 +83,13 @@ public class ProcessInstallOrUpdatePlugin implements Process<SynchronizerGuiPlug
 		} else if (this.plugin.getStatus() == PluginStatus.TO_UPDATE) {
 			ProcessUpdatePlugin process = new ProcessUpdatePlugin(this.plugin);
 			plugin = process.execute(worker)[0];
+		} else {
+			plugin = SynchronizerUtils.getPlugin(this.plugin.getId());
 		}
 		
 		final SynchronizerGuiPlugin finalPlugin = plugin;
 		
-		if (this.use) {
+		if (plugin != null && this.use) {
 			ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 				
 				@Override
