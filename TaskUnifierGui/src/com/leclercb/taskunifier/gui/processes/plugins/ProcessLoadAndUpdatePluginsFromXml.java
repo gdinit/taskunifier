@@ -60,8 +60,20 @@ public class ProcessLoadAndUpdatePluginsFromXml extends ProcessLoadPluginsFromXm
 			plugins = new Plugin[] { Plugin.getDummyPlugin() };
 		}
 		
+		refreshPluginStatuses(plugins);
+		
+		return plugins;
+	}
+	
+	public static void refreshPluginStatuses(Plugin[] plugins) {
+		if (plugins == null)
+			return;
+		
 		List<SynchronizerGuiPlugin> loadedPlugins = Main.getApiPlugins().getPlugins();
 		for (SynchronizerGuiPlugin p : loadedPlugins) {
+			if (p == null)
+				continue;
+			
 			for (int i = 0; i < plugins.length; i++) {
 				if (p.getId().equals(plugins[i].getId())) {
 					if (p.getVersion().compareTo(plugins[i].getVersion()) < 0)
@@ -71,8 +83,6 @@ public class ProcessLoadAndUpdatePluginsFromXml extends ProcessLoadPluginsFromXm
 				}
 			}
 		}
-		
-		return plugins;
 	}
 	
 }

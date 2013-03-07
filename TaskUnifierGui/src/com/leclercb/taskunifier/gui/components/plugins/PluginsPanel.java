@@ -55,6 +55,7 @@ import com.leclercb.taskunifier.gui.components.plugins.list.PluginList;
 import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.processes.plugins.ProcessInstallOrUpdatePlugin;
 import com.leclercb.taskunifier.gui.processes.plugins.ProcessInstallPluginFromFile;
+import com.leclercb.taskunifier.gui.processes.plugins.ProcessLoadAndUpdatePluginsFromXml;
 import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -215,6 +216,8 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 		} catch (Exception e) {
 			
 		}
+		
+		ProcessLoadAndUpdatePluginsFromXml.refreshPluginStatuses(this.list.getPlugins());
 		
 		this.list.getSelectionModel().clearSelection();
 		
