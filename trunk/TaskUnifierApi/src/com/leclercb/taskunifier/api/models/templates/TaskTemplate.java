@@ -203,29 +203,27 @@ public class TaskTemplate extends AbstractBasicModel implements Template<Task, T
 	public TaskTemplate(Task task) {
 		this(task.getTitle());
 		
-		if (task != null) {
-			this.setTaskTitle(task.getTitle());
-			this.setTaskTags(task.getTags().toString());
-			this.setTaskFolder(task.getFolder(), false);
-			this.setTaskContexts(task.getContexts());
-			this.setTaskGoals(task.getGoals());
-			this.setTaskLocations(task.getLocations());
-			this.setTaskProgress(task.getProgress());
-			this.setTaskCompleted(task.isCompleted());
-			this.setTaskDueDate(null);
-			this.setTaskDueTime(null);
-			this.setTaskStartDate(null);
-			this.setTaskStartTime(null);
-			this.setTaskDueDateReminder(task.getDueDateReminder());
-			this.setTaskStartDateReminder(task.getStartDateReminder());
-			this.setTaskRepeat(task.getRepeat());
-			this.setTaskRepeatFrom(task.getRepeatFrom());
-			this.setTaskStatus(task.getStatus());
-			this.setTaskLength(task.getLength());
-			this.setTaskPriority(task.getPriority());
-			this.setTaskStar(task.isStar());
-			this.setTaskNote(task.getNote());
-		}
+		this.setTaskTitle(task.getTitle());
+		this.setTaskTags(task.getTags().toString());
+		this.setTaskFolder(task.getFolder(), false);
+		this.setTaskContexts(task.getContexts());
+		this.setTaskGoals(task.getGoals());
+		this.setTaskLocations(task.getLocations());
+		this.setTaskProgress(task.getProgress());
+		this.setTaskCompleted(task.isCompleted());
+		this.setTaskDueDate(null);
+		this.setTaskDueTime(null);
+		this.setTaskStartDate(null);
+		this.setTaskStartTime(null);
+		this.setTaskDueDateReminder(task.getDueDateReminder());
+		this.setTaskStartDateReminder(task.getStartDateReminder());
+		this.setTaskRepeat(task.getRepeat());
+		this.setTaskRepeatFrom(task.getRepeatFrom());
+		this.setTaskStatus(task.getStatus());
+		this.setTaskLength(task.getLength());
+		this.setTaskPriority(task.getPriority());
+		this.setTaskStar(task.isStar());
+		this.setTaskNote(task.getNote());
 	}
 	
 	@Override
