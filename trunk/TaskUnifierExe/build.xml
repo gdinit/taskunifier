@@ -94,7 +94,7 @@
 			version="${taskunifier.version}"
 			bundleid="com.leclercb.taskunifier"
 			infostring="TaskUnifier ${taskunifier.version} for Mac OS X"
-			vmoptions="-Xmx512m -splash:&quot;$APP_PACKAGE/Contents/Resources/resources/images/splash_screen.png&quot;">
+			vmoptions="-Xmx512m">
 			
 			<javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
 			<javaproperty name="com.leclercb.taskunifier.resource_folder" value="$APP_PACKAGE/Contents/Resources/resources"/>
