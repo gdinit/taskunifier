@@ -135,7 +135,8 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 			
 		});
 		
-		this.buttonsPanel = new TUButtonsPanel(installFromFileButton);
+		this.buttonsPanel = new TUButtonsPanel();
+		this.buttonsPanel.addLeftButton(installFromFileButton);
 		
 		this.add(this.buttonsPanel, BorderLayout.SOUTH);
 	}
@@ -165,6 +166,9 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 			
 			@Override
 			public boolean accept(File f) {
+				if (f.isDirectory())
+					return true;
+				
 				return FileUtils.hasExtention(f.getName(), "jar");
 			}
 			
@@ -195,6 +199,8 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 		dialog.setWorker(new Worker<Void>(process));
 		
 		dialog.setVisible(true);
+		
+		this.list.getSelectionModel().clearSelection();
 	}
 	
 	@Override
