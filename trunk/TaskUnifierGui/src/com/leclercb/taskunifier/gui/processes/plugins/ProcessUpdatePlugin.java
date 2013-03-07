@@ -32,17 +32,21 @@
  */
 package com.leclercb.taskunifier.gui.processes.plugins;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.leclercb.commons.api.progress.DefaultProgressMessage;
 import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.api.plugins.Plugin;
+import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.processes.Process;
 import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 
-public class ProcessUpdatePlugin implements Process<Void> {
+public class ProcessUpdatePlugin implements Process<SynchronizerGuiPlugin[]> {
 	
 	private Plugin[] plugins;
 	
@@ -60,8 +64,11 @@ public class ProcessUpdatePlugin implements Process<Void> {
 	}
 	
 	@Override
-	public Void execute(final Worker<?> worker) throws Exception {
+	public SynchronizerGuiPlugin[] execute(final Worker<?> worker)
+			throws Exception {
 		final ProgressMonitor monitor = worker.getEDTMonitor();
+		
+		List<SynchronizerGuiPlugin> updatedPlugins = new ArrayList<SynchronizerGuiPlugin>();
 		
 		for (Plugin plugin : this.plugins) {
 			if (plugin == null)
@@ -87,7 +94,9 @@ public class ProcessUpdatePlugin implements Process<Void> {
 			ProcessInstallPlugin processInstallPlugin = new ProcessInstallPlugin(
 					plugin,
 					use);
-			processInstallPlugin.execute(worker);
+			SynchronizerGuiPlugin p = processInstallPlugin.execute(worker);
+			
+			updatedPlugins.add(p);
 			
 			monitor.addMessage(new DefaultProgressMessage(
 					Translations.getString(
@@ -95,7 +104,7 @@ public class ProcessUpdatePlugin implements Process<Void> {
 							plugin.getName())));
 		}
 		
-		return null;
+		return updatedPlugins.toArray(new SynchronizerGuiPlugin[0]);
 	}
 	
 	@Override

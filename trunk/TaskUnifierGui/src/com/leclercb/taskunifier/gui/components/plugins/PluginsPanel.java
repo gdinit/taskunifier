@@ -46,8 +46,11 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 
 import com.leclercb.commons.api.utils.FileUtils;
+import com.leclercb.taskunifier.gui.actions.ActionPluginConfiguration;
 import com.leclercb.taskunifier.gui.api.plugins.Plugin;
 import com.leclercb.taskunifier.gui.api.plugins.PluginsUtils;
+import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
+import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.components.plugins.list.PluginList;
 import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.processes.plugins.ProcessInstallOrUpdatePlugin;
@@ -147,16 +150,19 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 		if (plugin == null)
 			return;
 		
-		TUWorkerDialog<Void> dialog = new TUWorkerDialog<Void>(
+		TUWorkerDialog<SynchronizerGuiPlugin> dialog = new TUWorkerDialog<SynchronizerGuiPlugin>(
 				Translations.getString("general.manage_plugins"));
 		
 		ProcessInstallOrUpdatePlugin process = new ProcessInstallOrUpdatePlugin(
 				plugin,
 				true);
 		
-		dialog.setWorker(new Worker<Void>(process));
+		dialog.setWorker(new Worker<SynchronizerGuiPlugin>(process));
 		
 		dialog.setVisible(true);
+		
+		if (!plugin.getId().equals(DummyGuiPlugin.getInstance().getId()))
+			ActionPluginConfiguration.pluginConfiguration(dialog.getResult());
 		
 		PluginsPanel.this.valueChanged(null);
 	}
@@ -189,18 +195,22 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 		if (file == null)
 			return;
 		
-		TUWorkerDialog<Void> dialog = new TUWorkerDialog<Void>(
+		TUWorkerDialog<SynchronizerGuiPlugin> dialog = new TUWorkerDialog<SynchronizerGuiPlugin>(
 				Translations.getString("general.manage_plugins"));
 		
 		ProcessInstallPluginFromFile process = new ProcessInstallPluginFromFile(
 				new File(file),
 				true);
 		
-		dialog.setWorker(new Worker<Void>(process));
+		dialog.setWorker(new Worker<SynchronizerGuiPlugin>(process));
 		
 		dialog.setVisible(true);
 		
+		ActionPluginConfiguration.pluginConfiguration(dialog.getResult());
+		
 		this.list.getSelectionModel().clearSelection();
+		
+		PluginsPanel.this.valueChanged(null);
 	}
 	
 	@Override

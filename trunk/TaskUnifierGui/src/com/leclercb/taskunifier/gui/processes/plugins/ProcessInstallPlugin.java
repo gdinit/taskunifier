@@ -54,7 +54,7 @@ import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 
-public class ProcessInstallPlugin implements Process<Void> {
+public class ProcessInstallPlugin implements Process<SynchronizerGuiPlugin> {
 	
 	private Plugin plugin;
 	private boolean use;
@@ -82,7 +82,8 @@ public class ProcessInstallPlugin implements Process<Void> {
 	}
 	
 	@Override
-	public Void execute(final Worker<?> worker) throws Exception {
+	public SynchronizerGuiPlugin execute(final Worker<?> worker)
+			throws Exception {
 		final ProgressMonitor monitor = worker.getEDTMonitor();
 		
 		if (this.plugin.getId().equals(DummyGuiPlugin.getInstance().getId()))
@@ -140,11 +141,13 @@ public class ProcessInstallPlugin implements Process<Void> {
 				+ UUID.randomUUID().toString()
 				+ ".jar");
 		
+		SynchronizerGuiPlugin loadedPlugin = null;
+		
 		try {
 			org.apache.commons.io.FileUtils.copyFile(tempFile, file);
 			
 			ProcessLoadPlugin process = new ProcessLoadPlugin(file);
-			final SynchronizerGuiPlugin loadedPlugin = process.execute(worker);
+			loadedPlugin = process.execute(worker);
 			
 			if (loadedPlugin != null) {
 				GuiLogger.getLogger().info(
@@ -153,17 +156,19 @@ public class ProcessInstallPlugin implements Process<Void> {
 								+ " - "
 								+ loadedPlugin.getVersion());
 				
+				final SynchronizerGuiPlugin finalLoadedPlugin = loadedPlugin;
+				
 				ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 					
 					@Override
 					public Void call() {
 						if (ProcessInstallPlugin.this.use) {
-							SynchronizerUtils.setSynchronizerPlugin(loadedPlugin);
-							SynchronizerUtils.addPublisherPlugin(loadedPlugin);
+							SynchronizerUtils.setSynchronizerPlugin(finalLoadedPlugin);
+							SynchronizerUtils.addPublisherPlugin(finalLoadedPlugin);
 						}
 						
-						if (loadedPlugin != null)
-							loadedPlugin.installPlugin();
+						if (finalLoadedPlugin != null)
+							finalLoadedPlugin.installPlugin();
 						
 						return null;
 					}
@@ -188,7 +193,7 @@ public class ProcessInstallPlugin implements Process<Void> {
 				"manage_plugins.progress.plugin_installed",
 				this.plugin.getName())));
 		
-		return null;
+		return loadedPlugin;
 	}
 	
 	@Override
