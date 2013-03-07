@@ -171,7 +171,14 @@ public class ProcessInstallPlugin implements Process<Void> {
 				});
 			}
 			
-			this.plugin.setStatus(PluginStatus.INSTALLED);
+			ProcessUtils.executeOrInvokeAndWait(new Runnable() {
+				
+				@Override
+				public void run() {
+					ProcessInstallPlugin.this.plugin.setStatus(PluginStatus.INSTALLED);
+				}
+				
+			});
 		} catch (Exception e) {
 			file.delete();
 			throw e;

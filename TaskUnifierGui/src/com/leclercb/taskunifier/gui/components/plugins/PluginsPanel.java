@@ -40,7 +40,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import com.leclercb.taskunifier.gui.api.plugins.Plugin;
-import com.leclercb.taskunifier.gui.api.plugins.PluginStatus;
 import com.leclercb.taskunifier.gui.api.plugins.PluginsUtils;
 import com.leclercb.taskunifier.gui.components.plugins.list.PluginList;
 import com.leclercb.taskunifier.gui.processes.Worker;
@@ -101,16 +100,14 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 		if (plugin == null)
 			return;
 		
-		if (plugin.getStatus() == PluginStatus.TO_INSTALL
-				|| plugin.getStatus() == PluginStatus.TO_UPDATE) {
-			TUWorkerDialog<Void> dialog = new TUWorkerDialog<Void>(
-					Translations.getString("general.manage_plugins"));
-			
-			dialog.setWorker(new Worker<Void>(new ProcessInstallOrUpdatePlugin(
-					plugin)));
-			
-			dialog.setVisible(true);
-		}
+		TUWorkerDialog<Void> dialog = new TUWorkerDialog<Void>(
+				Translations.getString("general.manage_plugins"));
+		
+		dialog.setWorker(new Worker<Void>(new ProcessInstallOrUpdatePlugin(
+				plugin,
+				true)));
+		
+		dialog.setVisible(true);
 		
 		PluginsPanel.this.valueChanged(null);
 	}

@@ -48,9 +48,11 @@ import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 public class ProcessInstallOrUpdatePlugin implements Process<Void> {
 	
 	private Plugin plugin;
+	private boolean use;
 	
-	public ProcessInstallOrUpdatePlugin(Plugin plugin) {
+	public ProcessInstallOrUpdatePlugin(Plugin plugin, boolean use) {
 		this.setPlugin(plugin);
+		this.setUse(use);
 	}
 	
 	public Plugin getPlugin() {
@@ -62,35 +64,45 @@ public class ProcessInstallOrUpdatePlugin implements Process<Void> {
 		this.plugin = plugin;
 	}
 	
+	public boolean isUse() {
+		return this.use;
+	}
+	
+	public void setUse(boolean use) {
+		this.use = use;
+	}
+	
 	@Override
 	public Void execute(final Worker<?> worker) throws Exception {
 		if (this.plugin.getStatus() == PluginStatus.TO_INSTALL) {
 			ProcessInstallPlugin process = new ProcessInstallPlugin(
 					this.plugin,
-					true);
+					this.use);
 			process.execute(worker);
 		} else if (this.plugin.getStatus() == PluginStatus.TO_UPDATE) {
 			ProcessUpdatePlugin process = new ProcessUpdatePlugin(this.plugin);
 			process.execute(worker);
 		}
 		
-		ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
-			
-			@Override
-			public Void call() {
-				SynchronizerGuiPlugin p = SynchronizerUtils.getPlugin(ProcessInstallOrUpdatePlugin.this.plugin.getId());
+		if (this.use) {
+			ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 				
-				SynchronizerUtils.setSynchronizerPlugin(p);
-				SynchronizerUtils.addPublisherPlugin(p);
+				@Override
+				public Void call() {
+					SynchronizerGuiPlugin p = SynchronizerUtils.getPlugin(ProcessInstallOrUpdatePlugin.this.plugin.getId());
+					
+					SynchronizerUtils.setSynchronizerPlugin(p);
+					SynchronizerUtils.addPublisherPlugin(p);
+					
+					if (!ProcessInstallOrUpdatePlugin.this.plugin.getId().equals(
+							DummyGuiPlugin.getInstance().getId()))
+						ActionPluginConfiguration.pluginConfiguration(p);
+					
+					return null;
+				}
 				
-				if (!ProcessInstallOrUpdatePlugin.this.plugin.getId().equals(
-						DummyGuiPlugin.getInstance().getId()))
-					ActionPluginConfiguration.pluginConfiguration(p);
-				
-				return null;
-			}
-			
-		});
+			});
+		}
 		
 		return null;
 	}
