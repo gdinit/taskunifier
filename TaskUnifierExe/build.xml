@@ -206,7 +206,27 @@
 		</scp>
 		<scp password="${sourceforge.password}" todir="leclercb,taskunifier@frs.sourceforge.net:/home/frs/project/t/ta/taskunifier/binaries/TaskUnifier_${taskunifier.version.underscored}" trust="true">
 			<fileset dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}">
-				<include name="TaskUnifier_${taskunifier.version.underscored}_*.*"/>
+				<include name="TaskUnifier_${taskunifier.version.underscored}_installer_windows.zip"/>
+			</fileset>
+		</scp>
+		<scp password="${sourceforge.password}" todir="leclercb,taskunifier@frs.sourceforge.net:/home/frs/project/t/ta/taskunifier/binaries/TaskUnifier_${taskunifier.version.underscored}" trust="true">
+			<fileset dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}">
+				<include name="TaskUnifier_${taskunifier.version.underscored}_linux.tar"/>
+			</fileset>
+		</scp>
+		<scp password="${sourceforge.password}" todir="leclercb,taskunifier@frs.sourceforge.net:/home/frs/project/t/ta/taskunifier/binaries/TaskUnifier_${taskunifier.version.underscored}" trust="true">
+			<fileset dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}">
+				<include name="TaskUnifier_${taskunifier.version.underscored}_mac.dmg"/>
+			</fileset>
+		</scp>
+		<scp password="${sourceforge.password}" todir="leclercb,taskunifier@frs.sourceforge.net:/home/frs/project/t/ta/taskunifier/binaries/TaskUnifier_${taskunifier.version.underscored}" trust="true">
+			<fileset dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}">
+				<include name="TaskUnifier_${taskunifier.version.underscored}_other.zip"/>
+			</fileset>
+		</scp>
+		<scp password="${sourceforge.password}" todir="leclercb,taskunifier@frs.sourceforge.net:/home/frs/project/t/ta/taskunifier/binaries/TaskUnifier_${taskunifier.version.underscored}" trust="true">
+			<fileset dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}">
+				<include name="TaskUnifier_${taskunifier.version.underscored}_windows.zip"/>
 			</fileset>
 		</scp>
 	</target>
