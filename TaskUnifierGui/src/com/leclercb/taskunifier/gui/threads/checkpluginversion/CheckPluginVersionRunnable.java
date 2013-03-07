@@ -157,11 +157,12 @@ public class CheckPluginVersionRunnable implements Runnable {
 		}
 		
 		if (pluginsToUpdate.size() > 0) {
-			TUWorkerDialog<Void> dialog = new TUWorkerDialog<Void>(
+			TUWorkerDialog<SynchronizerGuiPlugin[]> dialog = new TUWorkerDialog<SynchronizerGuiPlugin[]>(
 					Translations.getString("general.manage_plugins"));
 			
-			dialog.setWorker(new Worker<Void>(new ProcessUpdatePlugin(
-					pluginsToUpdate.toArray(new Plugin[0]))));
+			dialog.setWorker(new Worker<SynchronizerGuiPlugin[]>(
+					new ProcessUpdatePlugin(
+							pluginsToUpdate.toArray(new Plugin[0]))));
 			
 			dialog.setVisible(true);
 		}

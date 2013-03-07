@@ -35,17 +35,15 @@ package com.leclercb.taskunifier.gui.processes.plugins;
 import java.util.concurrent.Callable;
 
 import com.leclercb.commons.api.utils.CheckUtils;
-import com.leclercb.taskunifier.gui.actions.ActionPluginConfiguration;
 import com.leclercb.taskunifier.gui.api.plugins.Plugin;
 import com.leclercb.taskunifier.gui.api.plugins.PluginStatus;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
-import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.processes.Process;
 import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 
-public class ProcessInstallOrUpdatePlugin implements Process<Void> {
+public class ProcessInstallOrUpdatePlugin implements Process<SynchronizerGuiPlugin> {
 	
 	private Plugin plugin;
 	private boolean use;
@@ -73,30 +71,29 @@ public class ProcessInstallOrUpdatePlugin implements Process<Void> {
 	}
 	
 	@Override
-	public Void execute(final Worker<?> worker) throws Exception {
+	public SynchronizerGuiPlugin execute(final Worker<?> worker)
+			throws Exception {
+		SynchronizerGuiPlugin plugin = null;
+		
 		if (this.plugin.getStatus() == PluginStatus.TO_INSTALL) {
 			ProcessInstallPlugin process = new ProcessInstallPlugin(
 					this.plugin,
 					this.use);
-			process.execute(worker);
+			plugin = process.execute(worker);
 		} else if (this.plugin.getStatus() == PluginStatus.TO_UPDATE) {
 			ProcessUpdatePlugin process = new ProcessUpdatePlugin(this.plugin);
-			process.execute(worker);
+			plugin = process.execute(worker)[0];
 		}
+		
+		final SynchronizerGuiPlugin finalPlugin = plugin;
 		
 		if (this.use) {
 			ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 				
 				@Override
 				public Void call() {
-					SynchronizerGuiPlugin p = SynchronizerUtils.getPlugin(ProcessInstallOrUpdatePlugin.this.plugin.getId());
-					
-					SynchronizerUtils.setSynchronizerPlugin(p);
-					SynchronizerUtils.addPublisherPlugin(p);
-					
-					if (!ProcessInstallOrUpdatePlugin.this.plugin.getId().equals(
-							DummyGuiPlugin.getInstance().getId()))
-						ActionPluginConfiguration.pluginConfiguration(p);
+					SynchronizerUtils.setSynchronizerPlugin(finalPlugin);
+					SynchronizerUtils.addPublisherPlugin(finalPlugin);
 					
 					return null;
 				}
@@ -104,7 +101,7 @@ public class ProcessInstallOrUpdatePlugin implements Process<Void> {
 			});
 		}
 		
-		return null;
+		return plugin;
 	}
 	
 	@Override
