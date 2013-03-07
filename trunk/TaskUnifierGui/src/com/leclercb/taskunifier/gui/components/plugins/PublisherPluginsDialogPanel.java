@@ -115,7 +115,8 @@ public class PublisherPluginsDialogPanel extends TUDialogPanel {
 			
 			@Override
 			public void windowOpened(WindowEvent e) {
-				PublisherPluginsDialogPanel.this.pluginsPanel.reloadPlugins();
+				if (!PublisherPluginsDialogPanel.this.pluginsPanel.isPluginListLoaded())
+					PublisherPluginsDialogPanel.this.pluginsPanel.reloadPlugins();
 			}
 			
 		});

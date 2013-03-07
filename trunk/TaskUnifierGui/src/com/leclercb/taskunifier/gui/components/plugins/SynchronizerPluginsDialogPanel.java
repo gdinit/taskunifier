@@ -116,7 +116,8 @@ public class SynchronizerPluginsDialogPanel extends TUDialogPanel {
 			
 			@Override
 			public void windowOpened(WindowEvent e) {
-				SynchronizerPluginsDialogPanel.this.pluginsPanel.reloadPlugins();
+				if (!SynchronizerPluginsDialogPanel.this.pluginsPanel.isPluginListLoaded())
+					SynchronizerPluginsDialogPanel.this.pluginsPanel.reloadPlugins();
 			}
 			
 		});
