@@ -76,10 +76,17 @@ public class NoteTemplate extends AbstractBasicModel implements Template<Note, N
 	public NoteTemplate(ModelId modelId, String title) {
 		super(modelId, title);
 		
-		this.setTitle(title);
 		this.setNoteTitle(null);
 		this.setNoteFolder(null, false);
 		this.setNoteNote(null);
+	}
+	
+	public NoteTemplate(Note note) {
+		this(note.getTitle());
+		
+		this.setNoteTitle(note.getTitle());
+		this.setNoteFolder(note.getFolder(), false);
+		this.setNoteNote(note.getNote());
 	}
 	
 	@Override
