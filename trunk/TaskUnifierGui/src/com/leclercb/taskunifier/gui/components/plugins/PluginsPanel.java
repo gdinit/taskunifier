@@ -33,7 +33,11 @@
 package com.leclercb.taskunifier.gui.components.plugins;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
@@ -44,7 +48,10 @@ import com.leclercb.taskunifier.gui.api.plugins.PluginsUtils;
 import com.leclercb.taskunifier.gui.components.plugins.list.PluginList;
 import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.processes.plugins.ProcessInstallOrUpdatePlugin;
+import com.leclercb.taskunifier.gui.processes.plugins.ProcessInstallPluginFromFile;
+import com.leclercb.taskunifier.gui.swing.TUFileDialog;
 import com.leclercb.taskunifier.gui.swing.TUWorkerDialog;
+import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 
@@ -58,6 +65,8 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 	
 	private boolean pluginListLoaded;
 	
+	private TUButtonsPanel buttonsPanel;
+	
 	public PluginsPanel(boolean includePublishers, boolean includeSynchronizers) {
 		this.includePublishers = includePublishers;
 		this.includeSynchronizers = includeSynchronizers;
@@ -65,6 +74,10 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 		this.pluginListLoaded = false;
 		
 		this.initialize();
+	}
+	
+	public TUButtonsPanel getButtonsPanel() {
+		return this.buttonsPanel;
 	}
 	
 	public boolean isPluginListLoaded() {
@@ -87,21 +100,41 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 	}
 	
 	private void initialize() {
-		this.setLayout(new BorderLayout(0, 5));
+		this.setLayout(new BorderLayout());
+		
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new BorderLayout(0, 5));
 		
 		this.list = new PluginList();
 		this.list.addListSelectionListener(this);
 		
-		this.add(
+		mainPanel.add(
 				ComponentFactory.createJScrollPane(this.list, true),
 				BorderLayout.CENTER);
 		
 		this.history = new JTextArea(5, 10);
 		this.history.setEditable(false);
 		
-		this.add(
+		mainPanel.add(
 				ComponentFactory.createJScrollPane(this.history, true),
 				BorderLayout.SOUTH);
+		
+		this.add(mainPanel, BorderLayout.CENTER);
+		
+		JButton installFromFileButton = new JButton(
+				Translations.getString("manage_plugins.install_from_file"));
+		installFromFileButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				PluginsPanel.this.installPluginFromFile();
+			}
+			
+		});
+		
+		this.buttonsPanel = new TUButtonsPanel();
+		
+		this.add(this.buttonsPanel, BorderLayout.SOUTH);
 	}
 	
 	public void installSelectedPlugin() {
@@ -113,13 +146,39 @@ public class PluginsPanel extends JPanel implements ListSelectionListener {
 		TUWorkerDialog<Void> dialog = new TUWorkerDialog<Void>(
 				Translations.getString("general.manage_plugins"));
 		
-		dialog.setWorker(new Worker<Void>(new ProcessInstallOrUpdatePlugin(
+		ProcessInstallOrUpdatePlugin process = new ProcessInstallOrUpdatePlugin(
 				plugin,
-				true)));
+				true);
+		
+		dialog.setWorker(new Worker<Void>(process));
 		
 		dialog.setVisible(true);
 		
 		PluginsPanel.this.valueChanged(null);
+	}
+	
+	public void installPluginFromFile() {
+		TUFileDialog fileDialog = new TUFileDialog(
+				true,
+				Translations.getString("manage_plugins.install_from_file"));
+		
+		fileDialog.setVisible(true);
+		
+		if (fileDialog.isCancelled())
+			return;
+		
+		String file = fileDialog.getFile();
+		
+		TUWorkerDialog<Void> dialog = new TUWorkerDialog<Void>(
+				Translations.getString("general.manage_plugins"));
+		
+		ProcessInstallPluginFromFile process = new ProcessInstallPluginFromFile(
+				new File(file),
+				true);
+		
+		dialog.setWorker(new Worker<Void>(process));
+		
+		dialog.setVisible(true);
 	}
 	
 	@Override
