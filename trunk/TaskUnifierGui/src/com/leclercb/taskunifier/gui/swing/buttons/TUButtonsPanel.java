@@ -32,6 +32,7 @@
  */
 package com.leclercb.taskunifier.gui.swing.buttons;
 
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
@@ -44,6 +45,10 @@ public class TUButtonsPanel extends JPanel {
 	
 	private boolean removeText;
 	
+	private JPanel leftPanel;
+	private JPanel centerPanel;
+	private JPanel rightPanel;
+	
 	public TUButtonsPanel(JButton... buttons) {
 		this(false, buttons);
 	}
@@ -55,12 +60,39 @@ public class TUButtonsPanel extends JPanel {
 	public TUButtonsPanel(boolean removeText, boolean wrap, JButton... buttons) {
 		this.removeText = removeText;
 		
+		this.initialize(wrap, buttons);
+	}
+	
+	private void initialize(boolean wrap, JButton... buttons) {
+		this.setLayout(new BorderLayout(10, 0));
 		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
+		this.leftPanel = new JPanel();
+		
 		if (wrap)
-			this.setLayout(new WrapLayout(FlowLayout.RIGHT));
+			this.leftPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
 		else
-			this.setLayout(new FlowLayout(FlowLayout.RIGHT));
+			this.leftPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		
+		this.add(this.leftPanel, BorderLayout.WEST);
+		
+		this.centerPanel = new JPanel();
+		
+		if (wrap)
+			this.centerPanel.setLayout(new WrapLayout(FlowLayout.CENTER));
+		else
+			this.centerPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		
+		this.add(this.centerPanel, BorderLayout.CENTER);
+		
+		this.rightPanel = new JPanel();
+		
+		if (wrap)
+			this.rightPanel.setLayout(new WrapLayout(FlowLayout.RIGHT));
+		else
+			this.rightPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		
+		this.add(this.rightPanel, BorderLayout.EAST);
 		
 		if (buttons == null)
 			return;
@@ -69,14 +101,38 @@ public class TUButtonsPanel extends JPanel {
 			this.addButton(button);
 	}
 	
-	public void addButton(JButton button) {
+	public void addLeftButton(JButton button) {
 		if (button == null)
 			return;
 		
 		if (this.removeText)
 			button.setText("");
 		
-		this.add(button);
+		this.leftPanel.add(button);
+	}
+	
+	public void addCenterButton(JButton button) {
+		if (button == null)
+			return;
+		
+		if (this.removeText)
+			button.setText("");
+		
+		this.centerPanel.add(button);
+	}
+	
+	public void addRightButton(JButton button) {
+		if (button == null)
+			return;
+		
+		if (this.removeText)
+			button.setText("");
+		
+		this.rightPanel.add(button);
+	}
+	
+	public void addButton(JButton button) {
+		this.addRightButton(button);
 	}
 	
 }
