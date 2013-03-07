@@ -41,6 +41,7 @@ public enum PluginExceptionType {
 	NO_VALID_PLUGIN(Translations.getString("error.no_valid_plugin")),
 	MORE_THAN_ONE_PLUGIN(Translations.getString("error.more_than_one_plugin")),
 	OUTDATED_PLUGIN(Translations.getString("error.plugin_not_up_to_date")),
+	OLDER_PLUGIN_VERSION(Translations.getString("error.older_plugin_version")),
 	PLUGIN_FOUND(Translations.getString("error.plugin_already_installed"));
 	
 	private String label;
