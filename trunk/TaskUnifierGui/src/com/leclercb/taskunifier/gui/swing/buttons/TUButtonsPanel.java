@@ -68,6 +68,7 @@ public class TUButtonsPanel extends JPanel {
 		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
 		this.leftPanel = new JPanel();
+		this.leftPanel.setOpaque(false);
 		
 		if (wrap)
 			this.leftPanel.setLayout(new WrapLayout(FlowLayout.LEFT));
@@ -77,6 +78,7 @@ public class TUButtonsPanel extends JPanel {
 		this.add(this.leftPanel, BorderLayout.WEST);
 		
 		this.centerPanel = new JPanel();
+		this.centerPanel.setOpaque(false);
 		
 		if (wrap)
 			this.centerPanel.setLayout(new WrapLayout(FlowLayout.CENTER));
@@ -86,6 +88,7 @@ public class TUButtonsPanel extends JPanel {
 		this.add(this.centerPanel, BorderLayout.CENTER);
 		
 		this.rightPanel = new JPanel();
+		this.rightPanel.setOpaque(false);
 		
 		if (wrap)
 			this.rightPanel.setLayout(new WrapLayout(FlowLayout.RIGHT));
