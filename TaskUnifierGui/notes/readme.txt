@@ -2,6 +2,9 @@ HISTORY
 -------
 
 Version 3.2.0
+	- Major:
+		- BF 184: Printing issue
+		- BF 280: Printing issue
 	- Minor:
 		- Background color problem
 
