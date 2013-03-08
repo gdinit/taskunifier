@@ -1,6 +1,10 @@
 HISTORY
 -------
 
+Version 3.2.0
+	- Minor:
+		- Background color problem
+
 Version 3.1.9
 	- Major:
 		- Refactoring of processes
