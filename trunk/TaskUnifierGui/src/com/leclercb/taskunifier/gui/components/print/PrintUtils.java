@@ -46,18 +46,19 @@ import com.leclercb.taskunifier.gui.main.Main;
 
 public final class PrintUtils {
 	
-	public static void printTable(String propertyName, TableReport tableReport)
-			throws PrinterException {
+	public static void printTable(
+			String propertyName,
+			TablePrintable tablePrintable) throws PrinterException {
 		PrintDialog dialog = new PrintDialog();
 		dialog.setPropertyName(propertyName);
-		dialog.setPrintableReport(tableReport);
+		dialog.setPrintableReport(tablePrintable);
 		dialog.setVisible(true);
 		dialog.dispose();
 		
 		if (dialog.isCancelled())
 			return;
 		
-		tableReport.getComponent().clearSelection();
+		tablePrintable.getComponent().clearSelection();
 		
 		PrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
 		attributes.add(new JobName(Constants.TITLE, null));
@@ -68,13 +69,14 @@ public final class PrintUtils {
 		
 		double scalingFactor = Main.getSettings().getDoubleProperty(
 				propertyName + ".scaling_factor");
-		tableReport.setScalingFactor(scalingFactor);
+		tablePrintable.setScalingFactor(scalingFactor);
 		
-		tableReport.setHeaderFormat(new MessageFormat(dialog.getReportTitle()));
+		tablePrintable.setHeaderFormat(new MessageFormat(
+				dialog.getReportTitle()));
 		
 		PrinterJob printerJob = PrinterJob.getPrinterJob();
 		
-		printerJob.setPrintable(tableReport);
+		printerJob.setPrintable(tablePrintable);
 		
 		if (printerJob.printDialog(attributes)) {
 			printerJob.print(attributes);

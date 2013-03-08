@@ -84,7 +84,7 @@ import com.leclercb.taskunifier.gui.commons.events.ModelSelectionChangeSupport;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionListener;
 import com.leclercb.taskunifier.gui.commons.events.TaskSearcherSelectionChangeEvent;
 import com.leclercb.taskunifier.gui.components.print.PrintUtils;
-import com.leclercb.taskunifier.gui.components.print.TableReport;
+import com.leclercb.taskunifier.gui.components.print.TablePrintable;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.components.tasks.TaskTableView;
 import com.leclercb.taskunifier.gui.components.tasks.table.draganddrop.TaskTransferHandler;
@@ -283,7 +283,7 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 		else
 			tasks = this.getTasks();
 		
-		TableReport tableReport = new TableReport(
+		TablePrintable tablePrintable = new TablePrintable(
 				new TaskPrintTable(new TUTableProperties<Task>(
 						TaskColumnList.getInstance(),
 						this.tableProperties.getPropertyName() + ".print",
@@ -295,7 +295,7 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 						+ this.getTaskSearcher().getTitle()),
 				new MessageFormat(this.getTaskCount() + " tasks | Page - {0}"));
 		
-		PrintUtils.printTable("view.tasks.print", tableReport);
+		PrintUtils.printTable("view.tasks.print", tablePrintable);
 	}
 	
 	@Override

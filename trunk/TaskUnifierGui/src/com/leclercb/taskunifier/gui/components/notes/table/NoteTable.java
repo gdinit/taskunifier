@@ -87,7 +87,7 @@ import com.leclercb.taskunifier.gui.components.notes.table.menu.NoteTableMenu;
 import com.leclercb.taskunifier.gui.components.notes.table.sorter.NoteRowComparator;
 import com.leclercb.taskunifier.gui.components.notes.table.sorter.NoteRowFilter;
 import com.leclercb.taskunifier.gui.components.print.PrintUtils;
-import com.leclercb.taskunifier.gui.components.print.TableReport;
+import com.leclercb.taskunifier.gui.components.print.TablePrintable;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
@@ -264,7 +264,7 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 		else
 			notes = this.getNotes();
 		
-		TableReport tableReport = new TableReport(
+		TablePrintable tablePrintable = new TablePrintable(
 				new NotePrintTable(new TUTableProperties<Note>(
 						NoteColumnList.getInstance(),
 						this.tableProperties.getPropertyName() + ".print",
@@ -276,7 +276,7 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 						+ this.getNoteSearcher().getTitle()),
 				new MessageFormat(this.getNoteCount() + " notes | Page - {0}"));
 		
-		PrintUtils.printTable("view.notes.print", tableReport);
+		PrintUtils.printTable("view.notes.print", tablePrintable);
 	}
 	
 	@Override
