@@ -49,12 +49,13 @@ import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
-public class TableReport implements PrintableReport, Printable {
+public class TablePrintable implements Printable, PrintableReport {
 	
 	private JTable table;
 	private JTableHeader header;
 	private TableColumnModel colModel;
 	private int totalColWidth;
+	private JTable.PrintMode printMode;
 	private MessageFormat headerFormat;
 	private MessageFormat footerFormat;
 	private int last = -1;
@@ -68,20 +69,37 @@ public class TableReport implements PrintableReport, Printable {
 	private static final float FOOTER_FONT_SIZE = 8.0f;
 	private Font headerFont;
 	private Font footerFont;
-	private JTable.PrintMode printMode;
 	private double scalingFactor = 1.0D;
 	
-	public TableReport(
+	public TablePrintable(
 			JTable table,
 			JTable.PrintMode printMode,
 			double scalingFactor,
 			MessageFormat headerFormat,
 			MessageFormat footerFormat) {
 		this.table = table;
+		
+		this.header = table.getTableHeader();
+		this.colModel = table.getColumnModel();
+		this.totalColWidth = this.colModel.getTotalColumnWidth();
+		
+		if (this.header != null) {
+			this.hclip.height = this.header.getHeight();
+		}
+		
 		this.printMode = printMode;
+		
 		this.scalingFactor = scalingFactor;
+		
 		this.headerFormat = headerFormat;
 		this.footerFormat = footerFormat;
+		
+		this.headerFont = table.getFont().deriveFont(
+				Font.BOLD,
+				HEADER_FONT_SIZE);
+		this.footerFont = table.getFont().deriveFont(
+				Font.PLAIN,
+				FOOTER_FONT_SIZE);
 	}
 	
 	@Override
@@ -129,123 +147,150 @@ public class TableReport implements PrintableReport, Printable {
 		this.footerFormat = footerFormat;
 	}
 	
-	private void initialize() {
-		this.header = this.table.getTableHeader();
-		this.colModel = this.table.getColumnModel();
-		this.totalColWidth = this.colModel.getTotalColumnWidth();
-		if (this.header != null) {
-			this.hclip.height = this.header.getHeight();
-		}
-		
-		this.headerFont = this.table.getFont().deriveFont(
-				Font.BOLD,
-				HEADER_FONT_SIZE);
-		this.footerFont = this.table.getFont().deriveFont(
-				Font.PLAIN,
-				FOOTER_FONT_SIZE);
-	}
-	
 	@Override
 	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
 			throws PrinterException {
-		this.initialize();
-		
 		final int imgWidth = (int) pageFormat.getImageableWidth();
 		final int imgHeight = (int) pageFormat.getImageableHeight();
+		
 		if (imgWidth <= 0) {
 			throw new PrinterException("Width of printable area is too small.");
 		}
-		Object[] pageNumber = new Object[] { new Integer(pageIndex + 1) };
+		
+		Object[] pageNumber = new Object[] { Integer.valueOf(pageIndex + 1) };
+		
 		String headerText = null;
 		if (this.headerFormat != null) {
 			headerText = this.headerFormat.format(pageNumber);
 		}
+		
 		String footerText = null;
 		if (this.footerFormat != null) {
 			footerText = this.footerFormat.format(pageNumber);
 		}
+		
 		Rectangle2D hRect = null;
 		Rectangle2D fRect = null;
+		
 		int headerTextSpace = 0;
 		int footerTextSpace = 0;
+		
 		int availableSpace = imgHeight;
+		
 		if (headerText != null) {
 			graphics.setFont(this.headerFont);
 			hRect = graphics.getFontMetrics().getStringBounds(
 					headerText,
 					graphics);
+			
 			headerTextSpace = (int) Math.ceil(hRect.getHeight());
 			availableSpace -= headerTextSpace + H_F_SPACE;
 		}
+		
 		if (footerText != null) {
 			graphics.setFont(this.footerFont);
 			fRect = graphics.getFontMetrics().getStringBounds(
 					footerText,
 					graphics);
+			
 			footerTextSpace = (int) Math.ceil(fRect.getHeight());
 			availableSpace -= footerTextSpace + H_F_SPACE;
 		}
+		
 		if (availableSpace <= 0) {
 			throw new PrinterException("Height of printable area is too small.");
 		}
+		
 		double sf = this.scalingFactor;
 		if (this.printMode == JTable.PrintMode.FIT_WIDTH
 				&& this.totalColWidth > imgWidth) {
+			assert imgWidth > 0;
+			
+			assert this.totalColWidth > 1;
+			
 			sf = (double) imgWidth / (double) this.totalColWidth;
 		}
+		
+		assert sf > 0;
+		
 		while (this.last < pageIndex) {
 			if (this.row >= this.table.getRowCount() && this.col == 0) {
 				return NO_SUCH_PAGE;
 			}
+			
 			int scaledWidth = (int) (imgWidth / sf);
 			int scaledHeight = (int) ((availableSpace - this.hclip.height) / sf);
+			
 			this.findNextClip(scaledWidth, scaledHeight);
+			
 			this.last++;
 		}
-		Graphics2D g2d = (Graphics2D) graphics;
+		
+		Graphics2D g2d = (Graphics2D) graphics.create();
+		
 		g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+		
 		AffineTransform oldTrans;
+		
 		if (footerText != null) {
 			oldTrans = g2d.getTransform();
+			
 			g2d.translate(0, imgHeight - footerTextSpace);
+			
 			this.printText(g2d, footerText, fRect, this.footerFont, imgWidth);
+			
 			g2d.setTransform(oldTrans);
 		}
+		
 		if (headerText != null) {
 			this.printText(g2d, headerText, hRect, this.headerFont, imgWidth);
+			
 			g2d.translate(0, headerTextSpace + H_F_SPACE);
 		}
+		
 		this.tempRect.x = 0;
 		this.tempRect.y = 0;
 		this.tempRect.width = imgWidth;
 		this.tempRect.height = availableSpace;
 		g2d.clip(this.tempRect);
+		
 		if (sf != 1.0D) {
 			g2d.scale(sf, sf);
 		} else {
 			int diff = (imgWidth - this.clip.width) / 2;
 			g2d.translate(diff, 0);
 		}
+		
 		oldTrans = g2d.getTransform();
 		Shape oldClip = g2d.getClip();
+		
 		if (this.header != null) {
 			this.hclip.x = this.clip.x;
 			this.hclip.width = this.clip.width;
+			
 			g2d.translate(-this.hclip.x, 0);
 			g2d.clip(this.hclip);
 			this.header.print(g2d);
+			
 			g2d.setTransform(oldTrans);
 			g2d.setClip(oldClip);
+			
 			g2d.translate(0, this.hclip.height);
 		}
+		
 		g2d.translate(-this.clip.x, -this.clip.y);
 		g2d.clip(this.clip);
 		this.table.print(g2d);
+		
 		g2d.setTransform(oldTrans);
 		g2d.setClip(oldClip);
+		
 		g2d.setColor(Color.BLACK);
 		g2d.drawRect(0, 0, this.clip.width, this.hclip.height
 				+ this.clip.height);
+		
+		g2d.dispose();
+		
 		return PAGE_EXISTS;
 	}
 	
@@ -255,7 +300,9 @@ public class TableReport implements PrintableReport, Printable {
 			Rectangle2D rect,
 			Font font,
 			int imgWidth) {
+		
 		int tx;
+		
 		if (rect.getWidth() < imgWidth) {
 			tx = (int) ((imgWidth - rect.getWidth()) / 2);
 		} else if (this.table.getComponentOrientation().isLeftToRight()) {
@@ -263,6 +310,7 @@ public class TableReport implements PrintableReport, Printable {
 		} else {
 			tx = -(int) (Math.ceil(rect.getWidth()) - imgWidth);
 		}
+		
 		int ty = (int) Math.ceil(Math.abs(rect.getY()));
 		g2d.setColor(Color.BLACK);
 		g2d.setFont(font);
@@ -271,34 +319,44 @@ public class TableReport implements PrintableReport, Printable {
 	
 	private void findNextClip(int pw, int ph) {
 		final boolean ltr = this.table.getComponentOrientation().isLeftToRight();
+		
 		if (this.col == 0) {
 			if (ltr) {
 				this.clip.x = 0;
 			} else {
 				this.clip.x = this.totalColWidth;
 			}
+			
 			this.clip.y += this.clip.height;
+			
 			this.clip.width = 0;
 			this.clip.height = 0;
+			
 			int rowCount = this.table.getRowCount();
 			int rowHeight = this.table.getRowHeight(this.row);
 			do {
 				this.clip.height += rowHeight;
+				
 				if (++this.row >= rowCount) {
 					break;
 				}
+				
 				rowHeight = this.table.getRowHeight(this.row);
 			} while (this.clip.height + rowHeight <= ph);
 		}
+		
 		if (this.printMode == JTable.PrintMode.FIT_WIDTH) {
 			this.clip.x = 0;
 			this.clip.width = this.totalColWidth;
 			return;
 		}
+		
 		if (ltr) {
 			this.clip.x += this.clip.width;
 		}
+		
 		this.clip.width = 0;
+		
 		int colCount = this.table.getColumnCount();
 		int colWidth = this.colModel.getColumn(this.col).getWidth();
 		do {
@@ -306,10 +364,13 @@ public class TableReport implements PrintableReport, Printable {
 			if (!ltr) {
 				this.clip.x -= colWidth;
 			}
+			
 			if (++this.col >= colCount) {
 				this.col = 0;
+				
 				break;
 			}
+			
 			colWidth = this.colModel.getColumn(this.col).getWidth();
 		} while (this.clip.width + colWidth <= pw);
 	}
