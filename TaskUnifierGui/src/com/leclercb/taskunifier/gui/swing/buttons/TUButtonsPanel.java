@@ -46,7 +46,6 @@ public class TUButtonsPanel extends JPanel {
 	private boolean removeText;
 	
 	private JPanel leftPanel;
-	private JPanel centerPanel;
 	private JPanel rightPanel;
 	
 	public TUButtonsPanel(JButton... buttons) {
@@ -77,16 +76,6 @@ public class TUButtonsPanel extends JPanel {
 		
 		this.add(this.leftPanel, BorderLayout.WEST);
 		
-		this.centerPanel = new JPanel();
-		this.centerPanel.setOpaque(false);
-		
-		if (wrap)
-			this.centerPanel.setLayout(new WrapLayout(FlowLayout.CENTER));
-		else
-			this.centerPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		
-		this.add(this.centerPanel, BorderLayout.CENTER);
-		
 		this.rightPanel = new JPanel();
 		this.rightPanel.setOpaque(false);
 		
@@ -112,16 +101,6 @@ public class TUButtonsPanel extends JPanel {
 			button.setText("");
 		
 		this.leftPanel.add(button);
-	}
-	
-	public void addCenterButton(JButton button) {
-		if (button == null)
-			return;
-		
-		if (this.removeText)
-			button.setText("");
-		
-		this.centerPanel.add(button);
 	}
 	
 	public void addRightButton(JButton button) {

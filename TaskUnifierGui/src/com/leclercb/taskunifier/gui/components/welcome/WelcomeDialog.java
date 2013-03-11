@@ -220,7 +220,11 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 		
 		this.checkButtonsState();
 		
-		JPanel panel = new TUButtonsPanel(this.previousButton, this.nextButton);
+		JPanel panel = new TUButtonsPanel(
+				false,
+				false,
+				this.previousButton,
+				this.nextButton);
 		
 		this.add(panel, BorderLayout.SOUTH);
 	}
