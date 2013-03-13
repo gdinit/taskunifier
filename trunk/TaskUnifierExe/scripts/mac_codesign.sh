@@ -24,8 +24,6 @@ BASEDIR="$BASEDIR/.."
 APPFILE="$BASEDIR/temp/TaskUnifier.app"
 PKGFILE="$BASEDIR/temp/TaskUnifier.app"
 
-export CODESIGN_ALLOCATE="/Applications/Xcode.app/Contents/Developer/usr/bin/codesign_allocate"
-
 if [ $MACAPPSTORE == 0 ]
 then
 
@@ -33,7 +31,7 @@ then
 
     echo "Codesign application file ""$APPFILE""..."
 	
-	codesign -v -f -s --timestamp=none "Developer ID Application: Benjamin Leclerc"  $APPFILE
+	codesign -v -f -s "Developer ID Application: Benjamin Leclerc"  $APPFILE
 	
 	if [ $? != 0 ]
 	then
@@ -59,7 +57,7 @@ then
 
 	echo "Codesign application file ""$APPFILE""..."
 	
-	codesign -v -f -s --timestamp=none "3rd Party Mac Developer Application: Benjamin Leclerc" --entitlements $BASEDIR/scripts/mac/entitlements.plist $APPFILE
+	codesign -v -f -s "3rd Party Mac Developer Application: Benjamin Leclerc" --entitlements $BASEDIR/scripts/mac/entitlements.plist $APPFILE
 	
 	if [ $? != 0 ]
 	then
