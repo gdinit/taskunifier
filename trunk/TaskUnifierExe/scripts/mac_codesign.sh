@@ -24,6 +24,8 @@ BASEDIR="$BASEDIR/.."
 APPFILE="$BASEDIR/temp/TaskUnifier.app"
 PKGFILE="$BASEDIR/temp/TaskUnifier.app"
 
+export CODESIGN_ALLOCATE="/Applications/Xcode.app/Contents/Developer/usr/bin/codesign_allocate"
+
 if [ $MACAPPSTORE == 0 ]
 then
 
