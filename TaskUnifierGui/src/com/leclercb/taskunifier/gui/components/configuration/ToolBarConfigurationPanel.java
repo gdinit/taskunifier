@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -25,6 +24,7 @@ import org.jdesktop.swingx.renderer.DefaultListRenderer;
 import org.jdesktop.swingx.renderer.MappedValue;
 
 import com.leclercb.taskunifier.gui.actions.ActionList;
+import com.leclercb.taskunifier.gui.commons.comparators.ActionListComparator;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.configuration.toolbar.IconValueAction;
@@ -88,14 +88,7 @@ public class ToolBarConfigurationPanel extends ConfigurationPanel {
 				null)));
 		
 		this.leftList.setAutoCreateRowSorter(true);
-		this.leftList.setComparator(new Comparator<ActionList>() {
-			
-			@Override
-			public int compare(ActionList a1, ActionList a2) {
-				return a1.getTitle().compareToIgnoreCase(a2.getTitle());
-			}
-			
-		});
+		this.leftList.setComparator(ActionListComparator.INSTANCE);
 		this.leftList.setSortOrder(SortOrder.ASCENDING);
 		this.leftList.setSortsOnUpdates(true);
 		

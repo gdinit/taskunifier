@@ -32,6 +32,8 @@
  */
 package com.leclercb.commons.api.utils;
 
+import java.text.Collator;
+
 public class CompareUtils {
 	
 	private CompareUtils() {
@@ -59,6 +61,17 @@ public class CompareUtils {
 			s2 = "";
 		
 		return s1.compareToIgnoreCase(s2);
+	}
+	
+	public static int compareLocalizedString(String s1, String s2) {
+		if (s1 == null)
+			s1 = "";
+		
+		if (s2 == null)
+			s2 = "";
+		
+		Collator collator = Collator.getInstance();
+		return collator.compare(s1, s2);
 	}
 	
 }

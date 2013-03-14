@@ -33,11 +33,11 @@
 package com.leclercb.taskunifier.gui.components.configuration.fields.general;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Locale;
 
 import org.jdesktop.swingx.renderer.DefaultListRenderer;
 
+import com.leclercb.taskunifier.gui.commons.comparators.LocaleComparator;
 import com.leclercb.taskunifier.gui.commons.values.StringValueLocale;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
 import com.leclercb.taskunifier.gui.main.Main;
@@ -74,14 +74,7 @@ public class LocaleFieldType extends ConfigurationFieldType.ComboBox {
 	
 	private static Locale[] getAvailableLocales() {
 		Locale[] locales = Translations.getAvailableLocales();
-		Arrays.sort(locales, new Comparator<Locale>() {
-			
-			@Override
-			public int compare(Locale l1, Locale l2) {
-				return l1.getDisplayName().compareTo(l2.getDisplayName());
-			}
-			
-		});
+		Arrays.sort(locales, LocaleComparator.INSTANCE);
 		
 		return locales;
 	}

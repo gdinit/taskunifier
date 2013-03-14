@@ -32,6 +32,8 @@
  */
 package com.leclercb.taskunifier.gui.api.searchers.filters.conditions;
 
+import java.text.Normalizer;
+
 public enum StringCondition implements Condition<String, Object> {
 	
 	CONTAINS,
@@ -70,6 +72,12 @@ public enum StringCondition implements Condition<String, Object> {
 		
 		String string = value.toLowerCase();
 		String taskString = modelValue.toString().toLowerCase();
+		
+		string = Normalizer.normalize(string, Normalizer.Form.NFD);
+		string = string.replaceAll("[^\\p{ASCII}]", "");
+		
+		taskString = Normalizer.normalize(taskString, Normalizer.Form.NFD);
+		taskString = taskString.replaceAll("[^\\p{ASCII}]", "");
 		
 		switch (this) {
 			case CONTAINS:

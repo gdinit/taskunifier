@@ -33,11 +33,11 @@
 package com.leclercb.taskunifier.gui.components.configuration;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.commons.comparators.PropertyAccessorComparator;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
@@ -90,16 +90,7 @@ public class ThemeTaskFieldsConfigurationPanel extends DefaultConfigurationPanel
 		
 		List<PropertyAccessor<Task>> columns = TaskColumnList.getInstance().getUsableAccessors();
 		
-		Collections.sort(columns, new Comparator<PropertyAccessor<Task>>() {
-			
-			@Override
-			public int compare(
-					PropertyAccessor<Task> c1,
-					PropertyAccessor<Task> c2) {
-				return c1.getLabel().compareTo(c2.getLabel());
-			}
-			
-		});
+		Collections.sort(columns, PropertyAccessorComparator.INSTANCE);
 		
 		for (PropertyAccessor<Task> column : columns) {
 			this.addField(new ConfigurationField(
