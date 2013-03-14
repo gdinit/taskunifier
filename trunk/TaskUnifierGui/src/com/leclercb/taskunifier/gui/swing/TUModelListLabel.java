@@ -35,22 +35,27 @@ package com.leclercb.taskunifier.gui.swing;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import org.jdesktop.swingx.JXLabel;
 
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.ModelList;
 import com.leclercb.taskunifier.gui.api.models.GuiModel;
+import com.leclercb.taskunifier.gui.commons.painters.SearchPainter;
 import com.leclercb.taskunifier.gui.commons.values.IconValueModel;
 import com.leclercb.taskunifier.gui.commons.values.StringValueModel;
 
 public class TUModelListLabel extends JPanel {
 	
 	private ModelList<?> modelList;
+	private List<JXLabel> labels;
 	
 	public TUModelListLabel() {
 		this(null);
@@ -62,6 +67,8 @@ public class TUModelListLabel extends JPanel {
 	}
 	
 	private void initialize() {
+		this.labels = new ArrayList<JXLabel>();
+		
 		this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
 		this.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 		this.setOpaque(false);
@@ -92,21 +99,33 @@ public class TUModelListLabel extends JPanel {
 		
 		this.removeAll();
 		
+		this.labels.clear();
+		
 		if (modelList != null) {
 			for (Model model : modelList) {
-				JLabel label = new JLabel(
+				JXLabel label = new JXLabel(
 						StringValueModel.INSTANCE.getString(model));
+				
+				label.setBackgroundPainter(new SearchPainter());
 				
 				if (model instanceof GuiModel)
 					label.setIcon(IconValueModel.INSTANCE.getIcon(model));
 				
 				this.add(label);
 				this.add(Box.createHorizontalStrut(3));
+				
+				this.labels.add(label);
 			}
 		}
 		
 		this.revalidate();
 		this.repaint();
+	}
+	
+	public void highlightSearchText(String searchText) {
+		for (JXLabel label : this.labels) {
+			((SearchPainter) label.getBackgroundPainter()).setSearchText(searchText);
+		}
 	}
 	
 }

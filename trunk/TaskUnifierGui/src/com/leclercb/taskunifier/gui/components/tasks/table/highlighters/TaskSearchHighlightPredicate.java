@@ -30,7 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.commons.highlighters;
+package com.leclercb.taskunifier.gui.components.tasks.table.highlighters;
 
 import java.awt.Component;
 
@@ -39,12 +39,16 @@ import org.jdesktop.swingx.decorator.HighlightPredicate;
 import org.jdesktop.swingx.renderer.JRendererLabel;
 
 import com.leclercb.commons.api.utils.StringUtils;
+import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
+import com.leclercb.taskunifier.gui.swing.TUModelListLabel;
 
-public class SearchHighlightPredicate implements HighlightPredicate {
+public class TaskSearchHighlightPredicate implements HighlightPredicate {
 	
 	private String searchText;
 	
-	public SearchHighlightPredicate() {
+	public TaskSearchHighlightPredicate() {
 		
 	}
 	
@@ -61,12 +65,37 @@ public class SearchHighlightPredicate implements HighlightPredicate {
 		if (this.searchText == null || this.searchText.length() == 0)
 			return false;
 		
-		// Check if column == TITLE, TAGS, NOTE, CONTEXTS, FOLDER, GOALS,
-		// LOCATIONS
+		PropertyAccessor<Task> column = (PropertyAccessor<Task>) adapter.getColumnIdentifierAt(adapter.convertColumnIndexToModel(adapter.column));
 		
-		JRendererLabel r = (JRendererLabel) renderer;
+		if (!column.equals(TaskColumnList.getInstance().get(
+				TaskColumnList.TITLE))
+				&& !column.equals(TaskColumnList.getInstance().get(
+						TaskColumnList.TAGS))
+				&& !column.equals(TaskColumnList.getInstance().get(
+						TaskColumnList.NOTE))
+				&& !column.equals(TaskColumnList.getInstance().get(
+						TaskColumnList.CONTEXTS))
+				&& !column.equals(TaskColumnList.getInstance().get(
+						TaskColumnList.FOLDER))
+				&& !column.equals(TaskColumnList.getInstance().get(
+						TaskColumnList.GOALS))
+				&& !column.equals(TaskColumnList.getInstance().get(
+						TaskColumnList.LOCATIONS)))
+			return false;
 		
-		return StringUtils.containsLocalized(r.getText(), this.searchText);
+		if (renderer instanceof JRendererLabel) {
+			JRendererLabel r = (JRendererLabel) renderer;
+			return StringUtils.containsLocalized(r.getText(), this.searchText);
+		}
+		
+		if (renderer instanceof TUModelListLabel) {
+			TUModelListLabel r = (TUModelListLabel) renderer;
+			return StringUtils.containsLocalized(
+					r.getModelList().toString(),
+					this.searchText);
+		}
+		
+		return false;
 	}
 	
 }

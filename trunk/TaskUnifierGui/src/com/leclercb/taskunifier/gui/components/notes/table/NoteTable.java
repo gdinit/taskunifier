@@ -80,6 +80,7 @@ import com.leclercb.taskunifier.gui.commons.highlighters.SearchHighlighter;
 import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 import com.leclercb.taskunifier.gui.components.notes.NoteTableView;
 import com.leclercb.taskunifier.gui.components.notes.table.draganddrop.NoteTransferHandler;
+import com.leclercb.taskunifier.gui.components.notes.table.highlighters.NoteSearchHighlightPredicate;
 import com.leclercb.taskunifier.gui.components.notes.table.highlighters.NoteTitleHighlighter;
 import com.leclercb.taskunifier.gui.components.notes.table.highlighters.NoteTooltipHighlighter;
 import com.leclercb.taskunifier.gui.components.notes.table.menu.NoteTableMenu;
@@ -584,7 +585,8 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 	}
 	
 	private void initializeHighlighters() {
-		this.searchHighlighter = new SearchHighlighter();
+		this.searchHighlighter = new SearchHighlighter(
+				new NoteSearchHighlightPredicate());
 		
 		this.setHighlighters(
 				new AlternateHighlighter(),

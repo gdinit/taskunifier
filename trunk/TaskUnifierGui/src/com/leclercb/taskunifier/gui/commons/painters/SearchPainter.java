@@ -30,54 +30,67 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.commons.highlighters;
+package com.leclercb.taskunifier.gui.commons.painters;
 
-import java.awt.Component;
+import java.awt.Color;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.text.Normalizer;
 
-import org.jdesktop.swingx.decorator.AbstractHighlighter;
-import org.jdesktop.swingx.decorator.ComponentAdapter;
-import org.jdesktop.swingx.decorator.HighlightPredicate;
-import org.jdesktop.swingx.renderer.JRendererLabel;
+import javax.swing.JLabel;
 
-import com.leclercb.taskunifier.gui.commons.painters.SearchPainter;
-import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskSearchHighlightPredicate;
-import com.leclercb.taskunifier.gui.swing.TUModelListLabel;
+import org.jdesktop.swingx.painter.Painter;
 
-public class SearchHighlighter extends AbstractHighlighter {
+import com.leclercb.commons.api.utils.StringUtils;
+
+public class SearchPainter implements Painter<JLabel> {
 	
-	private SearchPainter painter;
+	private String searchText;
 	
-	public SearchHighlighter(HighlightPredicate predicate) {
-		super(predicate);
+	public SearchPainter() {
 		
-		this.painter = new SearchPainter();
 	}
 	
 	public String getSearchText() {
-		return ((TaskSearchHighlightPredicate) this.getHighlightPredicate()).getSearchText();
+		return this.searchText;
 	}
 	
 	public void setSearchText(String searchText) {
-		((TaskSearchHighlightPredicate) this.getHighlightPredicate()).setSearchText(searchText);
+		this.searchText = searchText;
 	}
 	
 	@Override
-	protected Component doHighlight(Component renderer, ComponentAdapter adapter) {
-		if (adapter.isSelected())
-			return renderer;
+	public void paint(Graphics2D g, JLabel object, int width, int height) {
+		if (this.searchText == null || this.searchText.length() == 0)
+			return;
 		
-		if (renderer instanceof JRendererLabel) {
-			JRendererLabel r = (JRendererLabel) renderer;
-			this.painter.setSearchText(this.getSearchText());
-			r.setPainter(this.painter);
-		}
+		String text = object.getText();
+		String searchText = this.searchText;
 		
-		if (renderer instanceof TUModelListLabel) {
-			TUModelListLabel r = (TUModelListLabel) renderer;
-			r.highlightSearchText(this.getSearchText());
-		}
+		text = text.toLowerCase();
+		searchText = searchText.toString().toLowerCase();
 		
-		return renderer;
+		text = Normalizer.normalize(text, Normalizer.Form.NFD);
+		text = text.replaceAll("[^\\p{ASCII}]", "");
+		
+		searchText = Normalizer.normalize(searchText, Normalizer.Form.NFD);
+		searchText = searchText.replaceAll("[^\\p{ASCII}]", "");
+		
+		if (!StringUtils.containsLocalized(text, searchText))
+			return;
+		
+		FontMetrics metrics = object.getFontMetrics(object.getFont());
+		
+		String start = text.substring(0, text.indexOf(searchText));
+		
+		int startX = object.getIcon().getIconWidth()
+				+ object.getIconTextGap()
+				+ metrics.stringWidth(start);
+		
+		int length = metrics.stringWidth(searchText);
+		
+		g.setColor(Color.YELLOW);
+		g.fillRect(startX, 0, length + 1, height);
 	}
 	
 }

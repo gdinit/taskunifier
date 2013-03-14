@@ -30,54 +30,56 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.commons.highlighters;
+package com.leclercb.taskunifier.gui.components.notes.table.highlighters;
 
 import java.awt.Component;
 
-import org.jdesktop.swingx.decorator.AbstractHighlighter;
 import org.jdesktop.swingx.decorator.ComponentAdapter;
 import org.jdesktop.swingx.decorator.HighlightPredicate;
 import org.jdesktop.swingx.renderer.JRendererLabel;
 
-import com.leclercb.taskunifier.gui.commons.painters.SearchPainter;
-import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskSearchHighlightPredicate;
-import com.leclercb.taskunifier.gui.swing.TUModelListLabel;
+import com.leclercb.commons.api.utils.StringUtils;
+import com.leclercb.taskunifier.api.models.Note;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 
-public class SearchHighlighter extends AbstractHighlighter {
+public class NoteSearchHighlightPredicate implements HighlightPredicate {
 	
-	private SearchPainter painter;
+	private String searchText;
 	
-	public SearchHighlighter(HighlightPredicate predicate) {
-		super(predicate);
+	public NoteSearchHighlightPredicate() {
 		
-		this.painter = new SearchPainter();
 	}
 	
 	public String getSearchText() {
-		return ((TaskSearchHighlightPredicate) this.getHighlightPredicate()).getSearchText();
+		return this.searchText;
 	}
 	
 	public void setSearchText(String searchText) {
-		((TaskSearchHighlightPredicate) this.getHighlightPredicate()).setSearchText(searchText);
+		this.searchText = searchText;
 	}
 	
 	@Override
-	protected Component doHighlight(Component renderer, ComponentAdapter adapter) {
-		if (adapter.isSelected())
-			return renderer;
+	public boolean isHighlighted(Component renderer, ComponentAdapter adapter) {
+		if (this.searchText == null || this.searchText.length() == 0)
+			return false;
 		
-		if (renderer instanceof JRendererLabel) {
-			JRendererLabel r = (JRendererLabel) renderer;
-			this.painter.setSearchText(this.getSearchText());
-			r.setPainter(this.painter);
-		}
+		if (!(renderer instanceof JRendererLabel))
+			return false;
 		
-		if (renderer instanceof TUModelListLabel) {
-			TUModelListLabel r = (TUModelListLabel) renderer;
-			r.highlightSearchText(this.getSearchText());
-		}
+		PropertyAccessor<Note> column = (PropertyAccessor<Note>) adapter.getColumnIdentifierAt(adapter.convertColumnIndexToModel(adapter.column));
 		
-		return renderer;
+		if (!column.equals(NoteColumnList.getInstance().get(
+				NoteColumnList.TITLE))
+				&& !column.equals(NoteColumnList.getInstance().get(
+						NoteColumnList.NOTE))
+				&& !column.equals(NoteColumnList.getInstance().get(
+						NoteColumnList.FOLDER)))
+			return false;
+		
+		JRendererLabel r = (JRendererLabel) renderer;
+		
+		return StringUtils.containsLocalized(r.getText(), this.searchText);
 	}
 	
 }
