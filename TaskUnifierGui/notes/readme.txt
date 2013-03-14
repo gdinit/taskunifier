@@ -3,6 +3,7 @@ HISTORY
 
 Version 3.2.1
 	- Minor:
+		- FR 294: Highlight searched text
 		- FR 326: Search and sort localization
 
 Version 3.2.0
