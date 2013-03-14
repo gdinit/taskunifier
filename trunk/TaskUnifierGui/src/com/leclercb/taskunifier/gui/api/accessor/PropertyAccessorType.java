@@ -567,7 +567,7 @@ public enum PropertyAccessorType {
 			case FILE:
 			case STRING:
 			case TAGS:
-				return CompareUtils.compareStringIgnoreCase(
+				return CompareUtils.compareLocalizedString(
 						(o1 == null ? null : o1.toString()),
 						(o2 == null ? null : o2.toString()));
 			case TIMER:
@@ -584,7 +584,7 @@ public enum PropertyAccessorType {
 			case GOALS:
 			case CONTEXTS:
 			case LOCATIONS:
-				return CompareUtils.compareStringIgnoreCase(
+				return CompareUtils.compareLocalizedString(
 						(o1 == null ? null : o1.toString()),
 						(o2 == null ? null : o2.toString()));
 			case VOID:

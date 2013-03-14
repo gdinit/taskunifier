@@ -47,7 +47,7 @@ public class TaskTagComparator implements Comparator<IgnoreCaseString> {
 	
 	@Override
 	public int compare(IgnoreCaseString s1, IgnoreCaseString s2) {
-		return CompareUtils.compare(s1, s2);
+		return CompareUtils.compareLocalizedString(s1.toString(), s2.toString());
 	}
 	
 }

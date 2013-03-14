@@ -47,7 +47,7 @@ public class UserComparator implements Comparator<String> {
 	
 	@Override
 	public int compare(String u1, String u2) {
-		return CompareUtils.compare(
+		return CompareUtils.compareLocalizedString(
 				UserUtils.getInstance().getUserName(u1),
 				UserUtils.getInstance().getUserName(u2));
 	}

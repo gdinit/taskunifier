@@ -50,7 +50,7 @@ public class SynchronizerGuiPluginComparator implements Comparator<SynchronizerG
 		String s1 = (p1 == null ? null : p1.getSynchronizerApi().getApiName());
 		String s2 = (p2 == null ? null : p2.getSynchronizerApi().getApiName());
 		
-		int result = CompareUtils.compare(s1, s2);
+		int result = CompareUtils.compareStringIgnoreCase(s1, s2);
 		
 		if (result != 0)
 			return result;
@@ -58,7 +58,7 @@ public class SynchronizerGuiPluginComparator implements Comparator<SynchronizerG
 		s1 = (p1 == null ? null : p1.getName());
 		s2 = (p2 == null ? null : p2.getName());
 		
-		result = CompareUtils.compare(s1, s2);
+		result = CompareUtils.compareStringIgnoreCase(s1, s2);
 		
 		if (result != 0)
 			return result;

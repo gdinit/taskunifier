@@ -76,7 +76,7 @@ public class BasicModelComparator implements Comparator<BasicModel> {
 		if (model2 == null)
 			return this.nullFirst ? 1 : -1;
 		
-		int result = CompareUtils.compareStringIgnoreCase(
+		int result = CompareUtils.compareLocalizedString(
 				model1.getTitle(),
 				model2.getTitle());
 		
