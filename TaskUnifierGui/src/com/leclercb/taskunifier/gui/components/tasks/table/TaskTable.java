@@ -118,6 +118,8 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 	private TUTableProperties<Task> tableProperties;
 	private TaskTableMenu taskTableMenu;
 	
+	private SearchHighlighter searchHighlighter;
+	
 	public TaskTable(TUTableProperties<Task> tableProperties) {
 		CheckUtils.isNotNull(tableProperties);
 		
@@ -266,6 +268,10 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 		this.getSortController().setRowFilter(
 				new TaskRowFilter(searcher.getFilter()));
 		this.refreshTasks();
+	}
+	
+	public void setSearchText(String searchText) {
+		this.searchHighlighter.setSearchText(searchText);
 	}
 	
 	@Override
@@ -763,6 +769,8 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 	}
 	
 	private void initializeHighlighters() {
+		this.searchHighlighter = new SearchHighlighter();
+		
 		this.setHighlighters(
 				new TaskAlternateHighlighter(),
 				new TaskCompletedHighlighter(),
@@ -771,7 +779,7 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 				new TaskDueTodayHighlighter(),
 				new TaskOverDueHighlighter(),
 				new TaskSelectedHighlighter(),
-				new SearchHighlighter(),
+				this.searchHighlighter,
 				new TaskTooltipHighlighter());
 	}
 	

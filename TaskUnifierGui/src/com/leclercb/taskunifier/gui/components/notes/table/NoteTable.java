@@ -103,6 +103,8 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 	private TUTableProperties<Note> tableProperties;
 	private NoteTableMenu noteTableMenu;
 	
+	private SearchHighlighter searchHighlighter;
+	
 	public NoteTable(TUTableProperties<Note> noteColumnsProperties) {
 		CheckUtils.isNotNull(noteColumnsProperties);
 		
@@ -251,6 +253,10 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 		this.getSortController().setRowFilter(
 				new NoteRowFilter(searcher.getFilter()));
 		this.refreshNotes();
+	}
+	
+	public void setSearchText(String searchText) {
+		this.searchHighlighter.setSearchText(searchText);
 	}
 	
 	@Override
@@ -578,10 +584,12 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 	}
 	
 	private void initializeHighlighters() {
+		this.searchHighlighter = new SearchHighlighter();
+		
 		this.setHighlighters(
 				new AlternateHighlighter(),
 				new NoteTitleHighlighter(),
-				new SearchHighlighter(),
+				this.searchHighlighter,
 				new NoteTooltipHighlighter());
 	}
 	

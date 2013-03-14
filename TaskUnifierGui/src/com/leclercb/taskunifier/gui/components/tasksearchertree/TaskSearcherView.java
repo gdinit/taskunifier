@@ -40,9 +40,13 @@ import com.leclercb.taskunifier.gui.commons.events.TaskSearcherSelectionChangeSu
 
 public interface TaskSearcherView extends TaskSearcherSelectionChangeSupported {
 	
+	public abstract Task[] getExtraTasks();
+	
 	public abstract void addExtraTasks(Task[] tasks);
 	
 	public abstract void setExtraTasks(Task[] tasks);
+	
+	public abstract String getSearchFilter();
 	
 	public abstract void setSearchFilter(String filter);
 	

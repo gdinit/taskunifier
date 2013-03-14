@@ -122,6 +122,11 @@ public class TaskSearcherPanel extends JPanel implements SavePropertiesListener,
 	}
 	
 	@Override
+	public Task[] getExtraTasks() {
+		return this.tasks;
+	}
+	
+	@Override
 	public void addExtraTasks(Task[] tasks) {
 		if (tasks == null)
 			return;
@@ -138,6 +143,11 @@ public class TaskSearcherPanel extends JPanel implements SavePropertiesListener,
 	public void setExtraTasks(Task[] tasks) {
 		this.tasks = tasks;
 		this.refreshTaskSearcher();
+	}
+	
+	@Override
+	public String getSearchFilter() {
+		return this.filter;
 	}
 	
 	@Override

@@ -113,6 +113,11 @@ public class NoteSearcherPanel extends JPanel implements SavePropertiesListener,
 	}
 	
 	@Override
+	public Note[] getExtraNotes() {
+		return this.notes;
+	}
+	
+	@Override
 	public void addExtraNotes(Note[] notes) {
 		if (notes == null)
 			return;
@@ -129,6 +134,11 @@ public class NoteSearcherPanel extends JPanel implements SavePropertiesListener,
 	public void setExtraNotes(Note[] notes) {
 		this.notes = notes;
 		this.refreshNoteSearcher();
+	}
+	
+	@Override
+	public String getSearchFilter() {
+		return this.filter;
 	}
 	
 	@Override

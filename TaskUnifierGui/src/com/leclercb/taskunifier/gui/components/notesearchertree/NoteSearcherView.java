@@ -39,9 +39,13 @@ import com.leclercb.taskunifier.gui.commons.events.NoteSearcherSelectionChangeSu
 
 public interface NoteSearcherView extends NoteSearcherSelectionChangeSupported {
 	
+	public abstract Note[] getExtraNotes();
+	
 	public abstract void addExtraNotes(Note[] notes);
 	
 	public abstract void setExtraNotes(Note[] notes);
+	
+	public abstract String getSearchFilter();
 	
 	public abstract void setSearchFilter(String filter);
 	
