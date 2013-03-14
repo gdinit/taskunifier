@@ -37,12 +37,11 @@ import java.awt.Component;
 
 import org.jdesktop.swingx.decorator.AbstractHighlighter;
 import org.jdesktop.swingx.decorator.ComponentAdapter;
-import org.jdesktop.swingx.decorator.HighlightPredicate;
 
 public class TaskRepeatHighlighter extends AbstractHighlighter {
 	
-	public TaskRepeatHighlighter(HighlightPredicate predicate) {
-		super(predicate);
+	public TaskRepeatHighlighter() {
+		super(new TaskRepeatHighlightPredicate());
 	}
 	
 	@Override

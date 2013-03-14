@@ -83,25 +83,19 @@ import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionChangeSupport;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionListener;
 import com.leclercb.taskunifier.gui.commons.events.TaskSearcherSelectionChangeEvent;
+import com.leclercb.taskunifier.gui.commons.highlighters.SearchHighlighter;
 import com.leclercb.taskunifier.gui.components.print.PrintUtils;
 import com.leclercb.taskunifier.gui.components.print.TablePrintable;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.components.tasks.TaskTableView;
 import com.leclercb.taskunifier.gui.components.tasks.table.draganddrop.TaskTransferHandler;
 import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskAlternateHighlighter;
-import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskDueTodayHighlightPredicate;
+import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskCompletedHighlighter;
 import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskDueTodayHighlighter;
-import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskHighlightPredicate;
-import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskHighlighter;
-import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskOverDueHighlightPredicate;
 import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskOverDueHighlighter;
-import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskRepeatHighlightPredicate;
 import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskRepeatHighlighter;
-import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskSelectedHighlightPredicate;
 import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskSelectedHighlighter;
-import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskTitleHighlightPredicate;
 import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskTitleHighlighter;
-import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskTooltipHighlightPredicate;
 import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskTooltipHighlighter;
 import com.leclercb.taskunifier.gui.components.tasks.table.menu.TaskTableMenu;
 import com.leclercb.taskunifier.gui.components.tasks.table.sorter.TaskRowComparator;
@@ -771,15 +765,14 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 	private void initializeHighlighters() {
 		this.setHighlighters(
 				new TaskAlternateHighlighter(),
-				new TaskHighlighter(new TaskHighlightPredicate()),
-				new TaskTitleHighlighter(new TaskTitleHighlightPredicate()),
-				new TaskRepeatHighlighter(new TaskRepeatHighlightPredicate()),
-				new TaskDueTodayHighlighter(
-						new TaskDueTodayHighlightPredicate()),
-				new TaskOverDueHighlighter(new TaskOverDueHighlightPredicate()),
-				new TaskSelectedHighlighter(
-						new TaskSelectedHighlightPredicate()),
-				new TaskTooltipHighlighter(new TaskTooltipHighlightPredicate()));
+				new TaskCompletedHighlighter(),
+				new TaskTitleHighlighter(),
+				new TaskRepeatHighlighter(),
+				new TaskDueTodayHighlighter(),
+				new TaskOverDueHighlighter(),
+				new TaskSelectedHighlighter(),
+				new SearchHighlighter(),
+				new TaskTooltipHighlighter());
 	}
 	
 	@Override

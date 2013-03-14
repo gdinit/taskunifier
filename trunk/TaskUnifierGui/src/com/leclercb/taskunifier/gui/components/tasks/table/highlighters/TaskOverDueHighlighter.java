@@ -36,14 +36,13 @@ import java.awt.Component;
 
 import org.jdesktop.swingx.decorator.AbstractHighlighter;
 import org.jdesktop.swingx.decorator.ComponentAdapter;
-import org.jdesktop.swingx.decorator.HighlightPredicate;
 
 import com.leclercb.taskunifier.gui.main.Main;
 
 public class TaskOverDueHighlighter extends AbstractHighlighter {
 	
-	public TaskOverDueHighlighter(HighlightPredicate predicate) {
-		super(predicate);
+	public TaskOverDueHighlighter() {
+		super(new TaskOverDueHighlightPredicate());
 	}
 	
 	@Override

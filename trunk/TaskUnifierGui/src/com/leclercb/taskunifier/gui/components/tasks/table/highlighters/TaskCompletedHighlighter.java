@@ -39,12 +39,11 @@ import java.util.Map;
 
 import org.jdesktop.swingx.decorator.AbstractHighlighter;
 import org.jdesktop.swingx.decorator.ComponentAdapter;
-import org.jdesktop.swingx.decorator.HighlightPredicate;
 
-public class TaskHighlighter extends AbstractHighlighter {
+public class TaskCompletedHighlighter extends AbstractHighlighter {
 	
-	public TaskHighlighter(HighlightPredicate predicate) {
-		super(predicate);
+	public TaskCompletedHighlighter() {
+		super(new TaskCompletedHighlightPredicate());
 	}
 	
 	@Override

@@ -32,15 +32,16 @@
  */
 package com.leclercb.taskunifier.gui.components.notes.table.highlighters;
 
-import org.jdesktop.swingx.decorator.HighlightPredicate;
 import org.jdesktop.swingx.decorator.ToolTipHighlighter;
 
 import com.leclercb.taskunifier.gui.commons.values.StringValueNoteTitle;
 
 public class NoteTooltipHighlighter extends ToolTipHighlighter {
 	
-	public NoteTooltipHighlighter(HighlightPredicate predicate) {
-		super(predicate, StringValueNoteTitle.INSTANCE);
+	public NoteTooltipHighlighter() {
+		super(
+				new NoteTooltipHighlightPredicate(),
+				StringValueNoteTitle.INSTANCE);
 	}
 	
 }
