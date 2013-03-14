@@ -34,14 +34,15 @@ package com.leclercb.taskunifier.gui.commons.comparators;
 
 import java.util.Comparator;
 
+import com.leclercb.commons.api.utils.CompareUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
-public class ReminderComparator implements Comparator<Task> {
+public class TaskReminderComparator implements Comparator<Task> {
 	
-	public static final ReminderComparator INSTANCE = new ReminderComparator();
+	public static final TaskReminderComparator INSTANCE = new TaskReminderComparator();
 	
-	private ReminderComparator() {
+	private TaskReminderComparator() {
 		
 	}
 	
@@ -70,7 +71,7 @@ public class ReminderComparator implements Comparator<Task> {
 		
 		// Sort descending !
 		if (importance1 != importance2)
-			return new Integer(importance2).compareTo(importance1);
+			return CompareUtils.compare(importance2, importance1);
 		
 		return BasicModelComparator.INSTANCE_NULL_LAST.compare(t1, t2);
 	}

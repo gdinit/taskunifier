@@ -70,6 +70,9 @@ public class CompareUtils {
 		if (s2 == null)
 			s2 = "";
 		
+		s1 = s1.toLowerCase();
+		s2 = s2.toLowerCase();
+		
 		Collator collator = Collator.getInstance();
 		return collator.compare(s1, s2);
 	}
