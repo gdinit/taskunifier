@@ -51,6 +51,10 @@ public class ModelListRenderer<M extends Model> implements TableCellRenderer {
 		this.modelListLabel.setOpaque(true);
 	}
 	
+	public void highlightSearchText(String searchText) {
+		this.modelListLabel.highlightSearchText(searchText);
+	}
+	
 	@Override
 	public Component getTableCellRendererComponent(
 			JTable table,

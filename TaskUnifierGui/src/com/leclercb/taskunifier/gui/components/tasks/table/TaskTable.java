@@ -94,6 +94,7 @@ import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskComp
 import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskDueTodayHighlighter;
 import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskOverDueHighlighter;
 import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskRepeatHighlighter;
+import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskSearchHighlightPredicate;
 import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskSelectedHighlighter;
 import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskTitleHighlighter;
 import com.leclercb.taskunifier.gui.components.tasks.table.highlighters.TaskTooltipHighlighter;
@@ -769,7 +770,8 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 	}
 	
 	private void initializeHighlighters() {
-		this.searchHighlighter = new SearchHighlighter();
+		this.searchHighlighter = new SearchHighlighter(
+				new TaskSearchHighlightPredicate());
 		
 		this.setHighlighters(
 				new TaskAlternateHighlighter(),
