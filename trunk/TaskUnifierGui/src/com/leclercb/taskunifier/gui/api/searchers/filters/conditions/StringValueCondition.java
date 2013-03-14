@@ -32,11 +32,9 @@
  */
 package com.leclercb.taskunifier.gui.api.searchers.filters.conditions;
 
-import java.text.Normalizer;
-
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 
-public enum StringCondition implements Condition<String, Object> {
+public enum StringValueCondition implements Condition<String, Object> {
 	
 	CONTAINS,
 	DOES_NOT_CONTAIN,
@@ -47,7 +45,7 @@ public enum StringCondition implements Condition<String, Object> {
 	NOT_EQUALS,
 	STARTS_WITH;
 	
-	private StringCondition() {
+	private StringValueCondition() {
 		
 	}
 	
@@ -66,44 +64,42 @@ public enum StringCondition implements Condition<String, Object> {
 			PropertyAccessor<?> accessor,
 			Object objectValue,
 			Object objectModelValue) {
-		String value = (objectValue == null ? null : objectValue.toString());
-		String modelValue = (objectModelValue == null ? null : objectModelValue.toString());
+		objectModelValue = accessor.getType().convertPropertyToString(
+				objectModelValue);
 		
-		if (value == null)
-			value = "";
-		
-		if (modelValue == null)
-			modelValue = "";
-		
-		String string = value.toLowerCase();
-		String taskString = modelValue.toString().toLowerCase();
-		
-		string = Normalizer.normalize(string, Normalizer.Form.NFD);
-		string = string.replaceAll("[^\\p{ASCII}]", "");
-		
-		taskString = Normalizer.normalize(taskString, Normalizer.Form.NFD);
-		taskString = taskString.replaceAll("[^\\p{ASCII}]", "");
+		StringCondition condition = null;
 		
 		switch (this) {
 			case CONTAINS:
-				return taskString.contains(string);
+				condition = StringCondition.CONTAINS;
+				break;
 			case DOES_NOT_CONTAIN:
-				return !taskString.contains(string);
+				condition = StringCondition.DOES_NOT_CONTAIN;
+				break;
 			case DOES_NOT_END_WITH:
-				return !taskString.endsWith(string);
+				condition = StringCondition.DOES_NOT_END_WITH;
+				break;
 			case DOES_NOT_START_WITH:
-				return !taskString.startsWith(string);
+				condition = StringCondition.DOES_NOT_START_WITH;
+				break;
 			case ENDS_WITH:
-				return taskString.endsWith(string);
+				condition = StringCondition.ENDS_WITH;
+				break;
 			case EQUALS:
-				return taskString.equals(string);
+				condition = StringCondition.EQUALS;
+				break;
 			case NOT_EQUALS:
-				return !taskString.equals(string);
+				condition = StringCondition.NOT_EQUALS;
+				break;
 			case STARTS_WITH:
-				return taskString.startsWith(string);
+				condition = StringCondition.STARTS_WITH;
+				break;
 		}
 		
-		return false;
+		if (condition == null)
+			return false;
+		
+		return condition.include(accessor, objectValue, objectModelValue);
 	}
 	
 }

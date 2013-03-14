@@ -36,6 +36,9 @@ import java.awt.Component;
 
 import org.jdesktop.swingx.decorator.ComponentAdapter;
 import org.jdesktop.swingx.decorator.HighlightPredicate;
+import org.jdesktop.swingx.renderer.JRendererLabel;
+
+import com.leclercb.commons.api.utils.StringUtils;
 
 public class SearchHighlightPredicate implements HighlightPredicate {
 	
@@ -55,7 +58,15 @@ public class SearchHighlightPredicate implements HighlightPredicate {
 	
 	@Override
 	public boolean isHighlighted(Component renderer, ComponentAdapter adapter) {
-		return (this.searchText != null && this.searchText.length() != 0);
+		if (this.searchText == null || this.searchText.length() == 0)
+			return false;
+		
+		// Check if column == TITLE, TAGS, NOTE, CONTEXTS, FOLDER, GOALS,
+		// LOCATIONS
+		
+		JRendererLabel r = (JRendererLabel) renderer;
+		
+		return StringUtils.containsLocalized(r.getText(), this.searchText);
 	}
 	
 }

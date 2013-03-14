@@ -32,6 +32,8 @@
  */
 package com.leclercb.taskunifier.gui.api.searchers.filters.conditions;
 
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+
 public interface Condition<ValueType, modelValueType> {
 	
 	public abstract Class<?> getValueType();
@@ -40,6 +42,9 @@ public interface Condition<ValueType, modelValueType> {
 	
 	public abstract String name();
 	
-	public abstract boolean include(Object value, Object modelValue);
+	public abstract boolean include(
+			PropertyAccessor<?> accessor,
+			Object value,
+			Object modelValue);
 	
 }

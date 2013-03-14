@@ -196,7 +196,7 @@ public abstract class FilterElement<M extends Model, F extends Filter<M, F, ? ex
 			value = this.getComparedModelValue(comparedModel);
 		}
 		
-		return this.condition.include(value, taskValue);
+		return this.condition.include(this.property, value, taskValue);
 	}
 	
 	public abstract Object getComparedModelValue(M comparedModel);

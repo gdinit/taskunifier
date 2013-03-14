@@ -150,7 +150,7 @@ public enum PropertyAccessorType {
 		this.type = type;
 	}
 	
-	protected String getPropertyAsString(Object value) {
+	public String convertPropertyToString(Object value) {
 		switch (this) {
 			case BOOLEAN:
 				return StringValueBoolean.INSTANCE.getString(value);

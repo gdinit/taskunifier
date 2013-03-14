@@ -212,7 +212,7 @@ public abstract class DefaultPropertyAccessor<T> implements PropertyAccessor<T>,
 		CheckUtils.isNotNull(object);
 		
 		Object value = this.getProperty(object);
-		return this.type.getPropertyAsString(value);
+		return this.type.convertPropertyToString(value);
 	}
 	
 	@Override
