@@ -39,6 +39,7 @@ import javax.swing.RowFilter;
 
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupport;
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
+import com.leclercb.commons.api.utils.StringUtils;
 import com.leclercb.taskunifier.gui.api.rules.TaskRule;
 
 public class TaskRuleRowFilter extends RowFilter<ListModel, Integer> implements PropertyChangeSupported {
@@ -74,7 +75,7 @@ public class TaskRuleRowFilter extends RowFilter<ListModel, Integer> implements 
 		if (this.title == null)
 			return true;
 		
-		return rule.getTitle().toLowerCase().contains(this.title.toLowerCase());
+		return StringUtils.containsLocalized(rule.getTitle(), this.title);
 	}
 	
 	@Override

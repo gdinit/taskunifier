@@ -30,75 +30,44 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.api.searchers.filters.conditions;
+package com.leclercb.commons.api.utils;
 
-import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import java.text.Normalizer;
 
-public enum EnumCondition implements Condition<Enum<?>, Enum<?>> {
+public class StringUtils {
 	
-	EQUALS,
-	GREATER_THAN,
-	GREATER_THAN_OR_EQUALS,
-	LESS_THAN,
-	LESS_THAN_OR_EQUALS,
-	NOT_EQUALS;
-	
-	private EnumCondition() {
+	private StringUtils() {
 		
 	}
 	
-	@Override
-	public Class<?> getValueType() {
-		return Enum.class;
+	public static boolean contains(String s1, String s2) {
+		if (s1 == null || s2 == null)
+			return false;
+		
+		return s1.contains(s2);
 	}
 	
-	@Override
-	public Class<?> getModelValueType() {
-		return Enum.class;
+	public static boolean containsIgnoreCase(String s1, String s2) {
+		if (s1 == null || s2 == null)
+			return false;
+		
+		return s1.toLowerCase().contains(s2.toLowerCase());
 	}
 	
-	@Override
-	public boolean include(
-			PropertyAccessor<?> accessor,
-			Object objectValue,
-			Object objectModelValue) {
-		Enum<?> value = (Enum<?>) objectValue;
-		Enum<?> modelValue = (Enum<?>) objectModelValue;
+	public static boolean containsLocalized(String s1, String s2) {
+		if (s1 == null || s2 == null)
+			return false;
 		
-		if (value == null && modelValue == null) {
-			switch (this) {
-				case EQUALS:
-					return true;
-				default:
-					return false;
-			}
-		}
+		s1 = s1.toLowerCase();
+		s2 = s2.toLowerCase();
 		
-		if (value == null || modelValue == null) {
-			switch (this) {
-				case NOT_EQUALS:
-					return true;
-				default:
-					return false;
-			}
-		}
+		s1 = Normalizer.normalize(s1, Normalizer.Form.NFD);
+		s1 = s1.replaceAll("[^\\p{ASCII}]", "");
 		
-		switch (this) {
-			case EQUALS:
-				return modelValue.equals(value);
-			case GREATER_THAN:
-				return modelValue.ordinal() > value.ordinal();
-			case GREATER_THAN_OR_EQUALS:
-				return modelValue.ordinal() >= value.ordinal();
-			case LESS_THAN:
-				return modelValue.ordinal() < value.ordinal();
-			case LESS_THAN_OR_EQUALS:
-				return modelValue.ordinal() <= value.ordinal();
-			case NOT_EQUALS:
-				return !(modelValue.equals(value));
-		}
+		s2 = Normalizer.normalize(s2, Normalizer.Form.NFD);
+		s2 = s2.replaceAll("[^\\p{ASCII}]", "");
 		
-		return false;
+		return s1.contains(s2);
 	}
 	
 }

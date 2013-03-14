@@ -34,6 +34,7 @@ package com.leclercb.taskunifier.gui.api.searchers.filters.conditions;
 
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.ModelList;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 
 public enum ModelCondition implements Condition<Model, Object> {
 	
@@ -55,7 +56,10 @@ public enum ModelCondition implements Condition<Model, Object> {
 	}
 	
 	@Override
-	public boolean include(Object objectValue, Object objectModelValue) {
+	public boolean include(
+			PropertyAccessor<?> accessor,
+			Object objectValue,
+			Object objectModelValue) {
 		Model value = (Model) objectValue;
 		Object modelValue = objectModelValue;
 		

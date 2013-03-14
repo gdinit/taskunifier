@@ -32,6 +32,8 @@
  */
 package com.leclercb.taskunifier.gui.api.searchers.filters.conditions;
 
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+
 public enum NumberCondition implements Condition<Number, Number> {
 	
 	EQUALS,
@@ -56,7 +58,10 @@ public enum NumberCondition implements Condition<Number, Number> {
 	}
 	
 	@Override
-	public boolean include(Object objectValue, Object objectModelValue) {
+	public boolean include(
+			PropertyAccessor<?> accessor,
+			Object objectValue,
+			Object objectModelValue) {
 		Number value = (Number) objectValue;
 		Number modelValue = (Number) objectModelValue;
 		

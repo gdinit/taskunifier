@@ -32,17 +32,27 @@
  */
 package com.leclercb.taskunifier.gui.commons.highlighters;
 
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.text.Normalizer;
+
+import javax.swing.JLabel;
 
 import org.jdesktop.swingx.decorator.AbstractHighlighter;
 import org.jdesktop.swingx.decorator.ComponentAdapter;
-
-import com.leclercb.taskunifier.gui.main.Main;
+import org.jdesktop.swingx.painter.Painter;
+import org.jdesktop.swingx.renderer.JRendererLabel;
 
 public class SearchHighlighter extends AbstractHighlighter {
 	
+	private SearchPainter painter;
+	
 	public SearchHighlighter() {
 		super(new SearchHighlightPredicate());
+		
+		this.painter = new SearchPainter();
 	}
 	
 	public String getSearchText() {
@@ -55,10 +65,42 @@ public class SearchHighlighter extends AbstractHighlighter {
 	
 	@Override
 	protected Component doHighlight(Component renderer, ComponentAdapter adapter) {
-		renderer.setForeground(Main.getSettings().getColorProperty(
-				"theme.color.due_today"));
+		JRendererLabel r = (JRendererLabel) renderer;
+		
+		r.setPainter(this.painter);
 		
 		return renderer;
+	}
+	
+	private class SearchPainter implements Painter<JLabel> {
+		
+		@Override
+		public void paint(Graphics2D g, JLabel object, int width, int height) {
+			String text = object.getText();
+			String searchText = SearchHighlighter.this.getSearchText();
+			
+			text = text.toLowerCase();
+			searchText = searchText.toString().toLowerCase();
+			
+			text = Normalizer.normalize(text, Normalizer.Form.NFD);
+			text = text.replaceAll("[^\\p{ASCII}]", "");
+			
+			searchText = Normalizer.normalize(searchText, Normalizer.Form.NFD);
+			searchText = searchText.replaceAll("[^\\p{ASCII}]", "");
+			
+			FontMetrics metrics = object.getFontMetrics(object.getFont());
+			
+			String start = text.substring(0, text.indexOf(searchText));
+			
+			int startX = metrics.stringWidth(start);
+			int startY = 0;
+			
+			int length = metrics.stringWidth(searchText);
+			
+			g.setColor(Color.RED);
+			g.fillRect(startX, startY, length, metrics.getHeight());
+		}
+		
 	}
 	
 }

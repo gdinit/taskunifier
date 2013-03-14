@@ -35,6 +35,7 @@ package com.leclercb.taskunifier.gui.api.searchers.filters.conditions;
 import java.util.Calendar;
 
 import com.leclercb.commons.api.utils.DateUtils;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 
 public enum DaysCondition implements Condition<Integer, Calendar> {
 	
@@ -67,7 +68,10 @@ public enum DaysCondition implements Condition<Integer, Calendar> {
 	}
 	
 	@Override
-	public boolean include(Object objectValue, Object objectModelValue) {
+	public boolean include(
+			PropertyAccessor<?> accessor,
+			Object objectValue,
+			Object objectModelValue) {
 		Calendar modelValue = (Calendar) objectModelValue;
 		
 		if (objectValue != null
