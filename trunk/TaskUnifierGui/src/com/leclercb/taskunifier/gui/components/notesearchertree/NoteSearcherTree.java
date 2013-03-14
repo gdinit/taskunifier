@@ -115,12 +115,22 @@ public class NoteSearcherTree extends JTree implements NoteSearcherView, Propert
 	}
 	
 	@Override
+	public Note[] getExtraNotes() {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
 	public void addExtraNotes(Note[] notes) {
 		throw new UnsupportedOperationException();
 	}
 	
 	@Override
 	public void setExtraNotes(Note[] notes) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public String getSearchFilter() {
 		throw new UnsupportedOperationException();
 	}
 	

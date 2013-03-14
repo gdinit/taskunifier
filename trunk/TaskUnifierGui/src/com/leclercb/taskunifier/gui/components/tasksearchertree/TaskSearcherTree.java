@@ -117,12 +117,22 @@ public class TaskSearcherTree extends JTree implements TaskSearcherView, Propert
 	}
 	
 	@Override
+	public Task[] getExtraTasks() {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
 	public void addExtraTasks(Task[] tasks) {
 		throw new UnsupportedOperationException();
 	}
 	
 	@Override
 	public void setExtraTasks(Task[] tasks) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public String getSearchFilter() {
 		throw new UnsupportedOperationException();
 	}
 	

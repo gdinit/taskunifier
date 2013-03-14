@@ -45,6 +45,14 @@ public class SearchHighlighter extends AbstractHighlighter {
 		super(new SearchHighlightPredicate());
 	}
 	
+	public String getSearchText() {
+		return ((SearchHighlightPredicate) this.getHighlightPredicate()).getSearchText();
+	}
+	
+	public void setSearchText(String searchText) {
+		((SearchHighlightPredicate) this.getHighlightPredicate()).setSearchText(searchText);
+	}
+	
 	@Override
 	protected Component doHighlight(Component renderer, ComponentAdapter adapter) {
 		renderer.setForeground(Main.getSettings().getColorProperty(
