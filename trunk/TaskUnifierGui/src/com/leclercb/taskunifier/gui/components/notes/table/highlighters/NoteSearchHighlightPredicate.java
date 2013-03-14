@@ -64,9 +64,6 @@ public class NoteSearchHighlightPredicate implements HighlightPredicate {
 		if (this.searchText == null || this.searchText.length() == 0)
 			return false;
 		
-		if (!(renderer instanceof JRendererLabel))
-			return false;
-		
 		PropertyAccessor<Note> column = (PropertyAccessor<Note>) adapter.getColumnIdentifierAt(adapter.convertColumnIndexToModel(adapter.column));
 		
 		if (!column.equals(NoteColumnList.getInstance().get(
@@ -77,9 +74,12 @@ public class NoteSearchHighlightPredicate implements HighlightPredicate {
 						NoteColumnList.FOLDER)))
 			return false;
 		
-		JRendererLabel r = (JRendererLabel) renderer;
+		if (renderer instanceof JRendererLabel) {
+			JRendererLabel r = (JRendererLabel) renderer;
+			return StringUtils.containsLocalized(r.getText(), this.searchText);
+		}
 		
-		return StringUtils.containsLocalized(r.getText(), this.searchText);
+		return false;
 	}
 	
 }
