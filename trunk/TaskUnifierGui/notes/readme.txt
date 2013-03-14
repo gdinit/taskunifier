@@ -1,6 +1,10 @@
 HISTORY
 -------
 
+Version 3.2.1
+	- Minor:
+		- FR 326: Search and sort localization
+
 Version 3.2.0
 	- Major:
 		- BF 184: Printing issue

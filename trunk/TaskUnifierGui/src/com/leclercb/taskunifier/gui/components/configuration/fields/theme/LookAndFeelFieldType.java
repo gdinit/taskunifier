@@ -34,13 +34,13 @@ package com.leclercb.taskunifier.gui.components.configuration.fields.theme;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelDescriptor;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelUtils;
+import com.leclercb.taskunifier.gui.commons.comparators.LookAndFeelDescriptorComparator;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
 import com.leclercb.taskunifier.gui.main.Main;
 
@@ -67,16 +67,7 @@ public class LookAndFeelFieldType extends ConfigurationFieldType.ComboBox {
 		List<LookAndFeelDescriptor> lookAndFeels = new ArrayList<LookAndFeelDescriptor>(
 				LookAndFeelUtils.getLookAndFeels());
 		
-		Collections.sort(lookAndFeels, new Comparator<LookAndFeelDescriptor>() {
-			
-			@Override
-			public int compare(
-					LookAndFeelDescriptor laf1,
-					LookAndFeelDescriptor laf2) {
-				return laf1.getName().compareToIgnoreCase(laf2.getName());
-			}
-			
-		});
+		Collections.sort(lookAndFeels, LookAndFeelDescriptorComparator.INSTANCE);
 		
 		return new DefaultComboBoxModel(lookAndFeels.toArray());
 	}

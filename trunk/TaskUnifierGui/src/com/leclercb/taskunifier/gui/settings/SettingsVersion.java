@@ -129,6 +129,9 @@ public final class SettingsVersion {
 		if (version.equals("3.1.9"))
 			version = updateSettings("3.1.9", "3.2.0");
 		
+		if (version.equals("3.2.0"))
+			version = updateSettings("3.2.0", "3.2.1");
+		
 		cleanSettings();
 		
 		Main.getSettings().setStringProperty(

@@ -54,6 +54,7 @@ import org.jdesktop.swingx.renderer.DefaultListRenderer;
 
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.actions.ActionEditTasks;
+import com.leclercb.taskunifier.gui.commons.comparators.ReminderComparator;
 import com.leclercb.taskunifier.gui.commons.values.IconValueTaskPriority;
 import com.leclercb.taskunifier.gui.commons.values.StringValueTaskDescription;
 import com.leclercb.taskunifier.gui.components.models.lists.ModelRowFilter;
