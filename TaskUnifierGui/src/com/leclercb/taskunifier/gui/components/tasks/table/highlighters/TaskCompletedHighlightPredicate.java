@@ -30,42 +30,29 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.notes.table;
+package com.leclercb.taskunifier.gui.components.tasks.table.highlighters;
 
-import javax.swing.JTable;
+import java.awt.Component;
 
-import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.decorator.ComponentAdapter;
+import org.jdesktop.swingx.decorator.HighlightPredicate;
 
-import com.leclercb.taskunifier.api.models.Note;
-import com.leclercb.taskunifier.gui.components.notes.table.highlighters.NoteTitleHighlighter;
-import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
+import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 
-public class NotePrintTable extends JXTable {
+public class TaskCompletedHighlightPredicate implements HighlightPredicate {
 	
-	public NotePrintTable(TUTableProperties<Note> tableProperties, Note[] notes) {
-		this.initialize(tableProperties, notes);
-	}
-	
-	private void initialize(
-			final TUTableProperties<Note> tableProperties,
-			final Note[] notes) {
-		NotePrintTableColumnModel columnModel = new NotePrintTableColumnModel(
-				tableProperties);
-		NotePrintTableModel tableModel = new NotePrintTableModel(notes);
+	@Override
+	public boolean isHighlighted(Component renderer, ComponentAdapter adapter) {
+		Object value = adapter.getFilteredValueAt(
+				adapter.row,
+				adapter.getColumnIndex(TaskColumnList.getInstance().get(
+						TaskColumnList.MODEL)));
 		
-		this.setModel(tableModel);
-		this.setColumnModel(columnModel);
-		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		this.setShowGrid(true, false);
-		this.setColumnControlVisible(true);
+		if (value == null || !(value instanceof Task))
+			return false;
 		
-		this.initializeHighlighters();
-		
-		this.packAll();
-	}
-	
-	private void initializeHighlighters() {
-		this.setHighlighters(new NoteTitleHighlighter());
+		return ((Task) value).isCompleted();
 	}
 	
 }

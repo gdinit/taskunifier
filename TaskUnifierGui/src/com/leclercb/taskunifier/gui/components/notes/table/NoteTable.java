@@ -76,12 +76,11 @@ import com.leclercb.taskunifier.gui.commons.events.ModelSelectionChangeSupport;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionListener;
 import com.leclercb.taskunifier.gui.commons.events.NoteSearcherSelectionChangeEvent;
 import com.leclercb.taskunifier.gui.commons.highlighters.AlternateHighlighter;
+import com.leclercb.taskunifier.gui.commons.highlighters.SearchHighlighter;
 import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 import com.leclercb.taskunifier.gui.components.notes.NoteTableView;
 import com.leclercb.taskunifier.gui.components.notes.table.draganddrop.NoteTransferHandler;
-import com.leclercb.taskunifier.gui.components.notes.table.highlighters.NoteTitleHighlightPredicate;
 import com.leclercb.taskunifier.gui.components.notes.table.highlighters.NoteTitleHighlighter;
-import com.leclercb.taskunifier.gui.components.notes.table.highlighters.NoteTooltipHighlightPredicate;
 import com.leclercb.taskunifier.gui.components.notes.table.highlighters.NoteTooltipHighlighter;
 import com.leclercb.taskunifier.gui.components.notes.table.menu.NoteTableMenu;
 import com.leclercb.taskunifier.gui.components.notes.table.sorter.NoteRowComparator;
@@ -581,8 +580,9 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 	private void initializeHighlighters() {
 		this.setHighlighters(
 				new AlternateHighlighter(),
-				new NoteTitleHighlighter(new NoteTitleHighlightPredicate()),
-				new NoteTooltipHighlighter(new NoteTooltipHighlightPredicate()));
+				new NoteTitleHighlighter(),
+				new SearchHighlighter(),
+				new NoteTooltipHighlighter());
 	}
 	
 	@Override

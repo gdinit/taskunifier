@@ -45,7 +45,6 @@ import javax.swing.JLabel;
 
 import org.jdesktop.swingx.decorator.AbstractHighlighter;
 import org.jdesktop.swingx.decorator.ComponentAdapter;
-import org.jdesktop.swingx.decorator.HighlightPredicate;
 import org.jdesktop.swingx.painter.Painter;
 import org.jdesktop.swingx.renderer.JRendererLabel;
 
@@ -58,10 +57,14 @@ import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class TaskTitleHighlighter extends AbstractHighlighter implements PropertyChangeListener {
 	
+	private ProgressPainter painter;
+	
 	private Color progressColor;
 	
-	public TaskTitleHighlighter(HighlightPredicate predicate) {
-		super(predicate);
+	public TaskTitleHighlighter() {
+		super(new TaskTitleHighlightPredicate());
+		
+		this.painter = new ProgressPainter();
 		
 		this.resetColors();
 		
@@ -140,37 +143,12 @@ public class TaskTitleHighlighter extends AbstractHighlighter implements Propert
 		if (!adapter.isSelected()
 				&& !task.isCompleted()
 				&& task.getProgress() != 0) {
-			r.setPainter(new Painter<JLabel>() {
-				
-				@Override
-				public void paint(
-						Graphics2D g,
-						JLabel object,
-						int width,
-						int height) {
-					FontMetrics metrics = g.getFontMetrics(r.getFont());
-					
-					int x = 18;
-					int y = 3;
-					
-					if (indentSubtasks) {
-						for (int i = 0; i < nbParents; i++)
-							x += metrics.stringWidth("     ");
-					}
-					
-					width = (int) ((width - (x + 3)) * task.getProgress());
-					height = height - (y + y);
-					
-					Color c = g.getColor();
-					g.setRenderingHint(
-							RenderingHints.KEY_ANTIALIASING,
-							RenderingHints.VALUE_ANTIALIAS_ON);
-					g.setColor(TaskTitleHighlighter.this.progressColor);
-					g.fillRoundRect(x, y, width, height, 10, 10);
-					g.setColor(c);
-				}
-				
-			});
+			this.painter.setRenderer(r);
+			this.painter.setTask(task);
+			this.painter.setIndentSubtasks(indentSubtasks);
+			this.painter.setNbParents(nbParents);
+			
+			r.setPainter(this.painter);
 		} else {
 			r.setPainter(null);
 		}
@@ -193,6 +171,62 @@ public class TaskTitleHighlighter extends AbstractHighlighter implements Propert
 		if (evt.getPropertyName().equals("task.indent_subtasks")) {
 			TaskTitleHighlighter.this.fireStateChanged();
 		}
+	}
+	
+	private class ProgressPainter implements Painter<JLabel> {
+		
+		private Component renderer;
+		private Task task;
+		private boolean indentSubtasks;
+		private int nbParents;
+		
+		public ProgressPainter() {
+			
+		}
+		
+		public void setRenderer(Component renderer) {
+			this.renderer = renderer;
+		}
+		
+		public void setTask(Task task) {
+			this.task = task;
+		}
+		
+		public void setIndentSubtasks(boolean indentSubtasks) {
+			this.indentSubtasks = indentSubtasks;
+		}
+		
+		public void setNbParents(int nbParents) {
+			this.nbParents = nbParents;
+		}
+		
+		@Override
+		public void paint(Graphics2D g, JLabel object, int width, int height) {
+			if (this.renderer == null || this.task == null)
+				return;
+			
+			FontMetrics metrics = g.getFontMetrics(this.renderer.getFont());
+			
+			int x = 18;
+			int y = 3;
+			
+			if (this.indentSubtasks) {
+				for (int i = 0; i < this.nbParents; i++)
+					x += metrics.stringWidth("     ");
+			}
+			
+			width = (int) ((width - (x + 3)) * this.task.getProgress());
+			height = height - (y + y);
+			
+			Color c = g.getColor();
+			g.setRenderingHint(
+					RenderingHints.KEY_ANTIALIASING,
+					RenderingHints.VALUE_ANTIALIAS_ON);
+			g.setColor(TaskTitleHighlighter.this.progressColor);
+			g.fillRoundRect(x, y, width, height, 10, 10);
+			g.setColor(c);
+		}
+		
 	}
 	
 }

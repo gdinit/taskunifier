@@ -37,12 +37,11 @@ import java.awt.Component;
 
 import org.jdesktop.swingx.decorator.AbstractHighlighter;
 import org.jdesktop.swingx.decorator.ComponentAdapter;
-import org.jdesktop.swingx.decorator.HighlightPredicate;
 
 public class NoteTitleHighlighter extends AbstractHighlighter {
 	
-	public NoteTitleHighlighter(HighlightPredicate predicate) {
-		super(predicate);
+	public NoteTitleHighlighter() {
+		super(new NoteTitleHighlightPredicate());
 	}
 	
 	@Override

@@ -38,7 +38,6 @@ import java.util.Calendar;
 import javax.swing.JComponent;
 
 import org.jdesktop.swingx.decorator.ComponentAdapter;
-import org.jdesktop.swingx.decorator.HighlightPredicate;
 import org.jdesktop.swingx.decorator.ToolTipHighlighter;
 
 import com.leclercb.commons.api.utils.DateUtils;
@@ -54,10 +53,11 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class TaskTooltipHighlighter extends ToolTipHighlighter {
 	
-	public TaskTooltipHighlighter(HighlightPredicate predicate) {
-		super(predicate);
+	public TaskTooltipHighlighter() {
+		super(new TaskTooltipHighlightPredicate());
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Component doHighlight(Component renderer, ComponentAdapter adapter) {
 		PropertyAccessor<Task> column = (PropertyAccessor<Task>) adapter.getColumnIdentifierAt(adapter.convertColumnIndexToModel(adapter.column));

@@ -30,42 +30,27 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.notes.table;
+package com.leclercb.taskunifier.gui.commons.highlighters;
 
-import javax.swing.JTable;
+import java.awt.Component;
 
-import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.decorator.AbstractHighlighter;
+import org.jdesktop.swingx.decorator.ComponentAdapter;
 
-import com.leclercb.taskunifier.api.models.Note;
-import com.leclercb.taskunifier.gui.components.notes.table.highlighters.NoteTitleHighlighter;
-import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
+import com.leclercb.taskunifier.gui.main.Main;
 
-public class NotePrintTable extends JXTable {
+public class SearchHighlighter extends AbstractHighlighter {
 	
-	public NotePrintTable(TUTableProperties<Note> tableProperties, Note[] notes) {
-		this.initialize(tableProperties, notes);
+	public SearchHighlighter() {
+		super(new SearchHighlightPredicate());
 	}
 	
-	private void initialize(
-			final TUTableProperties<Note> tableProperties,
-			final Note[] notes) {
-		NotePrintTableColumnModel columnModel = new NotePrintTableColumnModel(
-				tableProperties);
-		NotePrintTableModel tableModel = new NotePrintTableModel(notes);
+	@Override
+	protected Component doHighlight(Component renderer, ComponentAdapter adapter) {
+		renderer.setForeground(Main.getSettings().getColorProperty(
+				"theme.color.due_today"));
 		
-		this.setModel(tableModel);
-		this.setColumnModel(columnModel);
-		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		this.setShowGrid(true, false);
-		this.setColumnControlVisible(true);
-		
-		this.initializeHighlighters();
-		
-		this.packAll();
-	}
-	
-	private void initializeHighlighters() {
-		this.setHighlighters(new NoteTitleHighlighter());
+		return renderer;
 	}
 	
 }

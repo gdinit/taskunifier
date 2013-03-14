@@ -30,29 +30,32 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.tasks.table.highlighters;
+package com.leclercb.taskunifier.gui.commons.highlighters;
 
 import java.awt.Component;
 
 import org.jdesktop.swingx.decorator.ComponentAdapter;
 import org.jdesktop.swingx.decorator.HighlightPredicate;
 
-import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
-
-public class TaskHighlightPredicate implements HighlightPredicate {
+public class SearchHighlightPredicate implements HighlightPredicate {
+	
+	private String searchText;
+	
+	public SearchHighlightPredicate() {
+		
+	}
+	
+	public String getSearchText() {
+		return this.searchText;
+	}
+	
+	public void setSearchText(String searchText) {
+		this.searchText = searchText;
+	}
 	
 	@Override
 	public boolean isHighlighted(Component renderer, ComponentAdapter adapter) {
-		Object value = adapter.getFilteredValueAt(
-				adapter.row,
-				adapter.getColumnIndex(TaskColumnList.getInstance().get(
-						TaskColumnList.MODEL)));
-		
-		if (value == null || !(value instanceof Task))
-			return false;
-		
-		return ((Task) value).isCompleted();
+		return (this.searchText != null && this.searchText.length() != 0);
 	}
 	
 }

@@ -36,14 +36,13 @@ import java.awt.Component;
 
 import org.jdesktop.swingx.decorator.AbstractHighlighter;
 import org.jdesktop.swingx.decorator.ComponentAdapter;
-import org.jdesktop.swingx.decorator.HighlightPredicate;
 
 import com.leclercb.taskunifier.gui.main.Main;
 
 public class TaskDueTodayHighlighter extends AbstractHighlighter {
 	
-	public TaskDueTodayHighlighter(HighlightPredicate predicate) {
-		super(predicate);
+	public TaskDueTodayHighlighter() {
+		super(new TaskDueTodayHighlightPredicate());
 	}
 	
 	@Override
