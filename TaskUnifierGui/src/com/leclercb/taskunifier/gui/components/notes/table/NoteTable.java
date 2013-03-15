@@ -227,6 +227,10 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 	
 	@Override
 	public void refreshNotes() {
+		this.getSortController().setRowFilter(
+				new NoteRowFilter(
+						this.noteRowComparator.getNoteSearcher().getFilter()));
+		
 		this.getRowSorter().allRowsChanged();
 		
 		try {
@@ -251,8 +255,7 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 		this.setSortOrder(
 				NoteColumnList.getInstance().get(NoteColumnList.MODEL),
 				SortOrder.ASCENDING);
-		this.getSortController().setRowFilter(
-				new NoteRowFilter(searcher.getFilter()));
+		
 		this.refreshNotes();
 	}
 	
