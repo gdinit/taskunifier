@@ -102,16 +102,15 @@ public class ProcessLoadPluginsFromXml implements Process<Plugin[]> {
 			monitor.addMessage(new DefaultProgressMessage(
 					Translations.getString("manage_plugins.progress.retrieve_plugin_database")));
 			
-			HttpResponse response = worker.executeInterruptibleAction(
-					new Callable<HttpResponse>() {
-						
-						@Override
-						public HttpResponse call() throws Exception {
-							return HttpUtils.getHttpGetResponse(new URI(
-									Constants.PLUGINS_FILE));
-						}
-						
-					}, Constants.TIMEOUT_HTTP_CALL);
+			HttpResponse response = worker.executeInterruptibleAction(new Callable<HttpResponse>() {
+				
+				@Override
+				public HttpResponse call() throws Exception {
+					return HttpUtils.getHttpGetResponse(new URI(
+							Constants.PLUGINS_FILE));
+				}
+				
+			});
 			
 			if (worker.isCancelled())
 				return null;
