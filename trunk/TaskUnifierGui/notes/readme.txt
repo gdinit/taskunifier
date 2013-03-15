@@ -3,6 +3,7 @@ HISTORY
 
 Version 3.2.1
 	- Minor:
+		- BF 285: Refresh filters
 		- FR 294: Highlight searched text
 		- FR 326: Search and sort localization
 

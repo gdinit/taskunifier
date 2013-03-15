@@ -242,6 +242,10 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 	
 	@Override
 	public void refreshTasks() {
+		this.getSortController().setRowFilter(
+				new TaskRowFilter(
+						this.taskRowComparator.getTaskSearcher().getFilter()));
+		
 		this.getRowSorter().allRowsChanged();
 		
 		try {
@@ -266,8 +270,7 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 		this.setSortOrder(
 				TaskColumnList.getInstance().get(TaskColumnList.MODEL),
 				SortOrder.ASCENDING);
-		this.getSortController().setRowFilter(
-				new TaskRowFilter(searcher.getFilter()));
+		
 		this.refreshTasks();
 	}
 	
