@@ -33,6 +33,10 @@
 package com.leclercb.taskunifier.gui.components.modelnote.editors;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -42,8 +46,11 @@ import java.io.File;
 import java.util.Calendar;
 
 import javax.swing.Action;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
@@ -322,7 +329,12 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 		
 		if (this.propertyName != null) {
 			this.toolBar.addSeparator();
-			this.toolBar.add(this.createFontSizeComboBox(this.htmlNote));
+			
+			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			panel.add(this.createFontSizeComboBox(this.htmlNote));
+			panel.add(this.createFontFamilyComboBox(this.htmlNote));
+			
+			this.toolBar.add(panel);
 		}
 		
 		this.add(this.toolBar, BorderLayout.NORTH);
@@ -383,9 +395,6 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 	}
 	
 	private JComponent createFontSizeComboBox(final JTextComponent component) {
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.setOpaque(false);
-		
 		final JComboBox cb = new JComboBox(new Integer[] {
 				8,
 				9,
@@ -416,9 +425,54 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 		cb.setPrototypeDisplayValue("0000");
 		cb.setToolTipText(Translations.getString("modelnote.action.font_size"));
 		
-		panel.add(cb, BorderLayout.WEST);
+		return cb;
+	}
+	
+	private JComponent createFontFamilyComboBox(final JTextComponent component) {
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		Font[] fonts = ge.getAllFonts();
 		
-		return panel;
+		final JComboBox cb = new JComboBox(fonts);
+		cb.setSelectedItem(component.getFont());
+		
+		cb.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent evt) {
+				Font font = (Font) cb.getSelectedItem();
+				component.setFont(font);
+			}
+			
+		});
+		
+		cb.setRenderer(new DefaultListCellRenderer() {
+			
+			@Override
+			public Component getListCellRendererComponent(
+					JList list,
+					Object value,
+					int index,
+					boolean isSelected,
+					boolean cellHasFocus) {
+				Font font = (Font) value;
+				
+				JLabel label = (JLabel) super.getListCellRendererComponent(
+						list,
+						value,
+						index,
+						isSelected,
+						cellHasFocus);
+				label.setFont(font.deriveFont(14.0f));
+				label.setText(font.getName());
+				
+				return label;
+			}
+			
+		});
+		
+		cb.setToolTipText(Translations.getString("modelnote.action.font_family"));
+		
+		return cb;
 	}
 	
 	public Action getAction(String name) {
@@ -432,10 +486,15 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 	
 	@Override
 	public void saveProperties() {
-		if (this.propertyName != null)
+		if (this.propertyName != null) {
 			Main.getSettings().setFloatProperty(
 					this.propertyName + ".html.font_size",
 					(float) this.htmlNote.getFont().getSize());
+			
+			Main.getSettings().setStringProperty(
+					this.propertyName + ".html.font_family",
+					this.htmlNote.getFont().getName());
+		}
 	}
 	
 }
