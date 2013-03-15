@@ -163,7 +163,7 @@ public class ProcessGetTrial implements Process<HttpResponse> {
 					}
 					
 				},
-				20000);
+				Constants.TIMEOUT_HTTP_CALL);
 		
 		if (worker.isCancelled())
 			return null;

@@ -2,6 +2,8 @@ HISTORY
 -------
 
 Version 3.2.1
+	- Major:
+		- Timeout when downloading plugin
 	- Minor:
 		- BF 285: Refresh filters
 		- FR 294: Highlight searched text

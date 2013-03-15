@@ -94,7 +94,7 @@ public final class Constants {
 	public static final String FEATURE_REQUEST_URL = "http://sourceforge.net/p/taskunifier/feature-requests/";
 	public static final String TEST_CONNECTION = "http://www.taskunifier.com";
 	
-	public static final int TIMEOUT_HTTP_CALL = 10000;
+	public static final int TIMEOUT_HTTP_CALL = 30000;
 	
 	private static NoteSearcher DEFAULT_NOTE_SEARCHER;
 	private static NoteSearcher MAIN_NOTE_SEARCHER;

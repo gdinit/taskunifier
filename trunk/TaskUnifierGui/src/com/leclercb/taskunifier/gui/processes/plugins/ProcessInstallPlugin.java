@@ -46,7 +46,6 @@ import com.leclercb.taskunifier.gui.api.plugins.Plugin;
 import com.leclercb.taskunifier.gui.api.plugins.PluginStatus;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
-import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.processes.Process;
 import com.leclercb.taskunifier.gui.processes.ProcessUtils;
@@ -126,8 +125,7 @@ public class ProcessInstallPlugin implements Process<SynchronizerGuiPlugin> {
 				return null;
 			}
 			
-		},
-				Constants.TIMEOUT_HTTP_CALL);
+		});
 		
 		if (worker.isCancelled())
 			return null;
