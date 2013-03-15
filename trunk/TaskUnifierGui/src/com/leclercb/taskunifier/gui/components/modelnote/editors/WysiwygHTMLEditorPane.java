@@ -214,11 +214,16 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 		});
 		
 		if (this.propertyName != null) {
-			float htmlFontSize = Main.getSettings().getFloatProperty(
+			float fontSize = Main.getSettings().getFloatProperty(
 					this.propertyName + ".html.font_size",
 					(float) this.htmlNote.getFont().getSize());
-			this.htmlNote.setFont(this.htmlNote.getFont().deriveFont(
-					htmlFontSize));
+			
+			String fontFamily = Main.getSettings().getStringProperty(
+					this.propertyName + ".html.font_family",
+					this.htmlNote.getFont().getFamily());
+			
+			Font font = new Font(fontFamily, Font.PLAIN, (int) fontSize);
+			this.htmlNote.setFont(font);
 		}
 		
 		this.toolBar = new JToolBar(SwingConstants.HORIZONTAL);
@@ -430,17 +435,18 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 	
 	private JComponent createFontFamilyComboBox(final JTextComponent component) {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		Font[] fonts = ge.getAllFonts();
+		String[] fonts = ge.getAvailableFontFamilyNames();
 		
 		final JComboBox cb = new JComboBox(fonts);
-		cb.setSelectedItem(component.getFont());
+		cb.setSelectedItem(component.getFont().getFamily());
 		
 		cb.addItemListener(new ItemListener() {
 			
 			@Override
 			public void itemStateChanged(ItemEvent evt) {
-				Font font = (Font) cb.getSelectedItem();
-				component.setFont(font);
+				int fontSize = component.getFont().getSize();
+				String fontFamily = (String) cb.getSelectedItem();
+				component.setFont(new Font(fontFamily, Font.PLAIN, fontSize));
 			}
 			
 		});
@@ -454,7 +460,7 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 					int index,
 					boolean isSelected,
 					boolean cellHasFocus) {
-				Font font = (Font) value;
+				String fontFamily = (String) value;
 				
 				JLabel label = (JLabel) super.getListCellRendererComponent(
 						list,
@@ -462,8 +468,9 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 						index,
 						isSelected,
 						cellHasFocus);
-				label.setFont(font.deriveFont(14.0f));
-				label.setText(font.getName());
+				
+				label.setFont(new Font(fontFamily, Font.PLAIN, 14));
+				label.setText(fontFamily);
 				
 				return label;
 			}
@@ -493,7 +500,7 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 			
 			Main.getSettings().setStringProperty(
 					this.propertyName + ".html.font_family",
-					this.htmlNote.getFont().getName());
+					this.htmlNote.getFont().getFamily());
 		}
 	}
 	
