@@ -42,6 +42,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Calendar;
 
@@ -67,8 +69,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.jdesktop.swingx.JXEditorPane;
 
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
-import com.leclercb.commons.api.properties.events.SavePropertiesListener;
-import com.leclercb.commons.api.properties.events.WeakSavePropertiesListener;
+import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.gui.actions.ActionCopy;
@@ -86,7 +87,7 @@ import com.leclercb.taskunifier.gui.utils.DesktopUtils;
 import com.leclercb.taskunifier.gui.utils.ProtocolUtils;
 import com.leclercb.taskunifier.gui.utils.UndoSupport;
 
-public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface, PropertyChangeSupported, SavePropertiesListener {
+public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface, PropertyChangeSupported, PropertyChangeListener {
 	
 	private UndoSupport undoSupport;
 	
@@ -95,6 +96,9 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 	private JToolBar toolBar;
 	private JXEditorPane htmlNote;
 	private boolean flagSetText;
+	
+	private JComboBox fontSizeComboBox;
+	private JComboBox fontFamilyComboBox;
 	
 	public WysiwygHTMLEditorPane(
 			String text,
@@ -213,19 +217,6 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 			
 		});
 		
-		if (this.propertyName != null) {
-			float fontSize = Main.getSettings().getFloatProperty(
-					this.propertyName + ".html.font_size",
-					(float) this.htmlNote.getFont().getSize());
-			
-			String fontFamily = Main.getSettings().getStringProperty(
-					this.propertyName + ".html.font_family",
-					this.htmlNote.getFont().getFamily());
-			
-			Font font = new Font(fontFamily, Font.PLAIN, (int) fontSize);
-			this.htmlNote.setFont(font);
-		}
-		
 		this.toolBar = new JToolBar(SwingConstants.HORIZONTAL);
 		this.toolBar.setOpaque(false);
 		this.toolBar.setFloatable(false);
@@ -336,6 +327,8 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 			this.toolBar.addSeparator();
 			
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			panel.setOpaque(false);
+			
 			panel.add(this.createFontSizeComboBox(this.htmlNote));
 			panel.add(this.createFontFamilyComboBox(this.htmlNote));
 			
@@ -346,11 +339,6 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 		this.add(
 				ComponentFactory.createJScrollPane(this.htmlNote, false),
 				BorderLayout.CENTER);
-		
-		if (this.propertyName != null) {
-			Main.getSettings().addSavePropertiesListener(
-					new WeakSavePropertiesListener(Main.getSettings(), this));
-		}
 		
 		this.setText(text, canEdit, true);
 	}
@@ -400,7 +388,11 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 	}
 	
 	private JComponent createFontSizeComboBox(final JTextComponent component) {
-		final JComboBox cb = new JComboBox(new Integer[] {
+		int fontSize = Main.getSettings().getIntegerProperty(
+				this.propertyName + ".html.font_size",
+				this.htmlNote.getFont().getSize());
+		
+		this.fontSizeComboBox = new JComboBox(new Integer[] {
 				8,
 				9,
 				10,
@@ -414,44 +406,55 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 				18,
 				19,
 				20 });
-		cb.setSelectedItem(component.getFont().getSize());
+		this.fontSizeComboBox.setSelectedItem(fontSize);
 		
-		cb.addItemListener(new ItemListener() {
+		this.fontSizeComboBox.addItemListener(new ItemListener() {
 			
 			@Override
 			public void itemStateChanged(ItemEvent evt) {
-				Integer fontSize = (Integer) cb.getSelectedItem();
-				component.setFont(component.getFont().deriveFont(
-						(float) fontSize));
+				Integer fontSize = (Integer) WysiwygHTMLEditorPane.this.fontSizeComboBox.getSelectedItem();
+				Main.getSettings().setIntegerProperty(
+						WysiwygHTMLEditorPane.this.propertyName
+								+ ".html.font_size",
+						fontSize);
 			}
 			
 		});
 		
-		cb.setPrototypeDisplayValue("0000");
-		cb.setToolTipText(Translations.getString("modelnote.action.font_size"));
+		this.fontSizeComboBox.setPrototypeDisplayValue("0000");
+		this.fontSizeComboBox.setToolTipText(Translations.getString("modelnote.action.font_size"));
 		
-		return cb;
+		Main.getSettings().addPropertyChangeListener(
+				new WeakPropertyChangeListener(Main.getSettings(), this));
+		
+		return this.fontSizeComboBox;
 	}
 	
 	private JComponent createFontFamilyComboBox(final JTextComponent component) {
+		String fontFamily = Main.getSettings().getStringProperty(
+				this.propertyName + ".html.font_family",
+				this.htmlNote.getFont().getFamily());
+		
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		String[] fonts = ge.getAvailableFontFamilyNames();
 		
-		final JComboBox cb = new JComboBox(fonts);
-		cb.setSelectedItem(component.getFont().getFamily());
+		this.fontFamilyComboBox = new JComboBox(fonts);
+		this.fontFamilyComboBox.setSelectedItem(fontFamily);
 		
-		cb.addItemListener(new ItemListener() {
+		this.fontFamilyComboBox.addItemListener(new ItemListener() {
 			
 			@Override
 			public void itemStateChanged(ItemEvent evt) {
-				int fontSize = component.getFont().getSize();
-				String fontFamily = (String) cb.getSelectedItem();
-				component.setFont(new Font(fontFamily, Font.PLAIN, fontSize));
+				String fontFamily = (String) WysiwygHTMLEditorPane.this.fontFamilyComboBox.getSelectedItem();
+				Main.getSettings().setStringProperty(
+						WysiwygHTMLEditorPane.this.propertyName
+								+ ".html.font_family",
+						fontFamily);
 			}
 			
 		});
 		
-		cb.setRenderer(new DefaultListCellRenderer() {
+		this.fontFamilyComboBox.setRenderer(new DefaultListCellRenderer() {
 			
 			@Override
 			public Component getListCellRendererComponent(
@@ -477,9 +480,12 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 			
 		});
 		
-		cb.setToolTipText(Translations.getString("modelnote.action.font_family"));
+		this.fontFamilyComboBox.setToolTipText(Translations.getString("modelnote.action.font_family"));
 		
-		return cb;
+		Main.getSettings().addPropertyChangeListener(
+				new WeakPropertyChangeListener(Main.getSettings(), this));
+		
+		return this.fontFamilyComboBox;
 	}
 	
 	public Action getAction(String name) {
@@ -492,16 +498,22 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 	}
 	
 	@Override
-	public void saveProperties() {
-		if (this.propertyName != null) {
-			Main.getSettings().setFloatProperty(
-					this.propertyName + ".html.font_size",
-					(float) this.htmlNote.getFont().getSize());
-			
-			Main.getSettings().setStringProperty(
-					this.propertyName + ".html.font_family",
-					this.htmlNote.getFont().getFamily());
-		}
+	public void propertyChange(PropertyChangeEvent event) {
+		int fontSize = Main.getSettings().getIntegerProperty(
+				this.propertyName + ".html.font_size",
+				this.htmlNote.getFont().getSize());
+		
+		String fontFamily = Main.getSettings().getStringProperty(
+				this.propertyName + ".html.font_family",
+				this.htmlNote.getFont().getFamily());
+		
+		if (this.fontSizeComboBox != null)
+			this.fontSizeComboBox.setSelectedItem(fontSize);
+		
+		if (this.fontFamilyComboBox != null)
+			this.fontFamilyComboBox.setSelectedItem(fontFamily);
+		
+		this.htmlNote.setFont(new Font(fontFamily, Font.PLAIN, fontSize));
 	}
 	
 }
