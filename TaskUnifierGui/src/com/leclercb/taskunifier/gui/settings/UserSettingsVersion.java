@@ -61,56 +61,8 @@ public final class UserSettingsVersion {
 		if (version == null)
 			version = "2.4.0";
 		
-		if (version.equals("2.4.0"))
+		if (version.compareTo("2.4.0") <= 0)
 			version = updateUserSettings_2_4_0_to_3_0_0();
-		
-		if (version.equals("3.0.0"))
-			version = updateUserSettings("3.0.0", "3.0.1");
-		
-		if (version.equals("3.0.1"))
-			version = updateUserSettings("3.0.1", "3.0.2");
-		
-		if (version.equals("3.0.2"))
-			version = updateUserSettings("3.0.2", "3.0.3");
-		
-		if (version.equals("3.0.3"))
-			version = updateUserSettings("3.0.3", "3.0.4");
-		
-		if (version.equals("3.0.4"))
-			version = updateUserSettings("3.0.4", "3.1.0");
-		
-		if (version.equals("3.1.0"))
-			version = updateUserSettings("3.1.0", "3.1.1");
-		
-		if (version.equals("3.1.1"))
-			version = updateUserSettings("3.1.1", "3.1.2");
-		
-		if (version.equals("3.1.2"))
-			version = updateUserSettings("3.1.2", "3.1.3");
-		
-		if (version.equals("3.1.3"))
-			version = updateUserSettings("3.1.3", "3.1.4");
-		
-		if (version.equals("3.1.4"))
-			version = updateUserSettings("3.1.4", "3.1.5");
-		
-		if (version.equals("3.1.5"))
-			version = updateUserSettings("3.1.5", "3.1.6");
-		
-		if (version.equals("3.1.6"))
-			version = updateUserSettings("3.1.6", "3.1.7");
-		
-		if (version.equals("3.1.7"))
-			version = updateUserSettings("3.1.7", "3.1.8");
-		
-		if (version.equals("3.1.8"))
-			version = updateUserSettings("3.1.8", "3.1.9");
-		
-		if (version.equals("3.1.9"))
-			version = updateUserSettings("3.1.9", "3.2.0");
-		
-		if (version.equals("3.2.0"))
-			version = updateUserSettings("3.2.0", "3.2.1");
 		
 		cleanSettings();
 		
@@ -143,13 +95,6 @@ public final class UserSettingsVersion {
 					"Cannot clean user settings",
 					t);
 		}
-	}
-	
-	private static String updateUserSettings(String from, String to) {
-		GuiLogger.getLogger().info(
-				"Update user settings from version " + from + " to " + to);
-		
-		return to;
 	}
 	
 	private static String updateUserSettings_2_4_0_to_3_0_0() {

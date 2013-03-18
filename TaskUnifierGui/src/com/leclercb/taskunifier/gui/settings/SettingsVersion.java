@@ -57,80 +57,8 @@ public final class SettingsVersion {
 		if (version == null)
 			version = "2.0.0";
 		
-		if (version.equals("2.0.0"))
-			version = updateSettings("2.0.0", "2.0.1");
-		
-		if (version.equals("2.0.1"))
-			version = updateSettings("2.0.1", "2.1.0");
-		
-		if (version.equals("2.1.0"))
-			version = updateSettings("2.1.0", "2.1.1");
-		
-		if (version.equals("2.1.1"))
-			version = updateSettings("2.1.1", "2.2.0");
-		
-		if (version.equals("2.2.0"))
-			version = updateSettings("2.2.0", "2.3.0");
-		
-		if (version.equals("2.3.0"))
-			version = updateSettings("2.3.0", "2.3.1");
-		
-		if (version.equals("2.3.1"))
-			version = updateSettings("2.3.1", "2.3.2");
-		
-		if (version.equals("2.3.2"))
-			version = updateSettings("2.3.2", "2.4.0");
-		
-		if (version.equals("2.4.0"))
+		if (version.compareTo("2.4.0") <= 0)
 			version = updateSettings_2_4_0_to_3_0_0();
-		
-		if (version.equals("3.0.0"))
-			version = updateSettings("3.0.0", "3.0.1");
-		
-		if (version.equals("3.0.1"))
-			version = updateSettings("3.0.1", "3.0.2");
-		
-		if (version.equals("3.0.2"))
-			version = updateSettings("3.0.2", "3.0.3");
-		
-		if (version.equals("3.0.3"))
-			version = updateSettings("3.0.3", "3.0.4");
-		
-		if (version.equals("3.0.4"))
-			version = updateSettings("3.0.4", "3.1.0");
-		
-		if (version.equals("3.1.0"))
-			version = updateSettings("3.1.0", "3.1.1");
-		
-		if (version.equals("3.1.1"))
-			version = updateSettings("3.1.1", "3.1.2");
-		
-		if (version.equals("3.1.2"))
-			version = updateSettings("3.1.2", "3.1.3");
-		
-		if (version.equals("3.1.3"))
-			version = updateSettings("3.1.3", "3.1.4");
-		
-		if (version.equals("3.1.4"))
-			version = updateSettings("3.1.4", "3.1.5");
-		
-		if (version.equals("3.1.5"))
-			version = updateSettings("3.1.5", "3.1.6");
-		
-		if (version.equals("3.1.6"))
-			version = updateSettings("3.1.6", "3.1.7");
-		
-		if (version.equals("3.1.7"))
-			version = updateSettings("3.1.7", "3.1.8");
-		
-		if (version.equals("3.1.8"))
-			version = updateSettings("3.1.8", "3.1.9");
-		
-		if (version.equals("3.1.9"))
-			version = updateSettings("3.1.9", "3.2.0");
-		
-		if (version.equals("3.2.0"))
-			version = updateSettings("3.2.0", "3.2.1");
 		
 		cleanSettings();
 		
@@ -160,13 +88,6 @@ public final class SettingsVersion {
 		} catch (Throwable t) {
 			GuiLogger.getLogger().log(Level.WARNING, "Cannot clean settings", t);
 		}
-	}
-	
-	private static String updateSettings(String from, String to) {
-		GuiLogger.getLogger().info(
-				"Update settings from version " + from + " to " + to);
-		
-		return to;
 	}
 	
 	private static String updateSettings_2_4_0_to_3_0_0() {
