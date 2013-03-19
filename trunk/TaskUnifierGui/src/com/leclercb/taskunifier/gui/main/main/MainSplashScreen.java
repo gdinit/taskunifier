@@ -59,25 +59,25 @@ public final class MainSplashScreen {
 	}
 	
 	public void show() {
-		if (SplashScreen.getSplashScreen() == null)
-			return;
-		
 		try {
+			if (SplashScreen.getSplashScreen() == null)
+				return;
+			
 			this.g2d = SplashScreen.getSplashScreen().createGraphics();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Throwable t) {
+			t.printStackTrace();
 		}
 	}
 	
 	public void update(String message) {
-		if (this.g2d == null)
-			return;
-		
-		Font font = this.g2d.getFont();
-		FontMetrics metrics;
-		int stringWidth;
-		
 		try {
+			if (this.g2d == null)
+				return;
+			
+			Font font = this.g2d.getFont();
+			FontMetrics metrics;
+			int stringWidth;
+			
 			this.g2d.setRenderingHint(
 					RenderingHints.KEY_ANTIALIASING,
 					RenderingHints.VALUE_ANTIALIAS_ON);
@@ -111,20 +111,20 @@ public final class MainSplashScreen {
 			this.g2d.setFont(font);
 			
 			SplashScreen.getSplashScreen().update();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Throwable t) {
+			t.printStackTrace();
 		}
 	}
 	
 	public void close() {
-		if (SplashScreen.getSplashScreen() == null)
-			return;
-		
 		try {
+			if (SplashScreen.getSplashScreen() == null)
+				return;
+			
 			this.g2d = null;
 			SplashScreen.getSplashScreen().close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Throwable t) {
+			t.printStackTrace();
 		}
 	}
 	
