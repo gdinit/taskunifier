@@ -1,6 +1,10 @@
 HISTORY
 -------
 
+Version 3.2.2
+	- Minor:
+		- FR 335: Change global font
+
 Version 3.2.1
 	- Major:
 		- Timeout when downloading plugin

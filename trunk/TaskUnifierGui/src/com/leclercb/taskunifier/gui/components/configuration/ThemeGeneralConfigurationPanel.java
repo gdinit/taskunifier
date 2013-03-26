@@ -32,10 +32,15 @@
  */
 package com.leclercb.taskunifier.gui.components.configuration;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 import com.leclercb.taskunifier.gui.components.configuration.api.DefaultConfigurationPanel;
+import com.leclercb.taskunifier.gui.components.configuration.fields.theme.FontNameFieldType;
+import com.leclercb.taskunifier.gui.components.configuration.fields.theme.FontSizeFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.fields.theme.LookAndFeelFieldType;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -121,6 +126,42 @@ public class ThemeGeneralConfigurationPanel extends DefaultConfigurationPanel {
 		
 		this.addField(new ConfigurationField(
 				"SEPARATOR_4",
+				null,
+				new ConfigurationFieldType.Separator()));
+		
+		this.addField(new ConfigurationField(
+				"FONT_NAME",
+				Translations.getString("configuration.theme.font.name"),
+				true,
+				new FontNameFieldType()));
+		
+		this.addField(new ConfigurationField(
+				"FONT_SIZE",
+				Translations.getString("configuration.theme.font.size"),
+				true,
+				new FontSizeFieldType()));
+		
+		this.addField(new ConfigurationField(
+				"FONT_RESET",
+				null,
+				new ConfigurationFieldType.Button(
+						Translations.getString("configuration.theme.font.reset"),
+						new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent event) {
+								Main.getSettings().setStringProperty(
+										"theme.font.name",
+										null);
+								Main.getSettings().setIntegerProperty(
+										"theme.font.size",
+										12);
+							}
+							
+						})));
+		
+		this.addField(new ConfigurationField(
+				"SEPARATOR_5",
 				null,
 				new ConfigurationFieldType.Separator()));
 		
