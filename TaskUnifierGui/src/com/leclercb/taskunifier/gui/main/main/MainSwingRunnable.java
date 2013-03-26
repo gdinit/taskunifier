@@ -32,6 +32,7 @@
  */
 package com.leclercb.taskunifier.gui.main.main;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ import java.util.logging.Level;
 
 import javax.swing.JButton;
 import javax.swing.UIManager;
+import javax.swing.plaf.FontUIResource;
 
 import org.apache.commons.lang3.SystemUtils;
 import org.jdesktop.swingx.JXErrorPane;
@@ -173,6 +175,16 @@ public class MainSwingRunnable implements Runnable {
 							"theme.lookandfeel",
 							laf.getIdentifier());
 				}
+			}
+			
+			String name = Main.getSettings().getStringProperty(
+					"theme.font.name");
+			Integer size = Main.getSettings().getIntegerProperty(
+					"theme.font.size");
+			
+			if (name != null && size != null) {
+				FontUIResource font = new FontUIResource(name, Font.PLAIN, size);
+				LookAndFeelUtils.setUIFont(font);
 			}
 		} catch (Throwable t) {
 			GuiLogger.getLogger().log(

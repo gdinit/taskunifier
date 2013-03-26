@@ -33,11 +33,13 @@
 package com.leclercb.commons.gui.swing.lookandfeel;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.metal.DefaultMetalTheme;
 import javax.swing.plaf.metal.OceanTheme;
 
@@ -99,6 +101,17 @@ public final class LookAndFeelUtils {
 	
 	public static List<LookAndFeelDescriptor> getLookAndFeels() {
 		return new ArrayList<LookAndFeelDescriptor>(LOOK_AND_FEELS);
+	}
+	
+	public static void setUIFont(FontUIResource f) {
+		Enumeration<Object> keys = UIManager.getDefaults().keys();
+		while (keys.hasMoreElements()) {
+			Object key = keys.nextElement();
+			Object value = UIManager.get(key);
+			
+			if (value != null && value instanceof FontUIResource)
+				UIManager.put(key, f);
+		}
 	}
 	
 }
