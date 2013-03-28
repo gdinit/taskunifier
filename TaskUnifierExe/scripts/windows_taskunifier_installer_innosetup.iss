@@ -13,14 +13,21 @@ LicenseFile=..\temp\TaskUnifier\license.txt
 AppPublisher=TaskUnifier
 AppPublisherURL=http://www.taskunifier.com
 
-ChangesAssociations=yes
+ChangesAssociations=yes 
 
 [Files]
 Source: "..\temp\TaskUnifier\*"; DestDir: "{app}"; Flags: recursesubdirs
 Source: "..\temp\TaskUnifier\readme.txt"; DestDir: "{app}"; Flags: isreadme
 
+[Tasks]
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+
 [Icons]
-Name: "{group}\TaskUnifier"; Filename: "{app}\TaskUnifier.exe"
+Name: "{group}\TaskUnifier"; Filename: "{app}\TaskUnifier.exe"    
+Name: "{commondesktop}\TaskUnifier"; Filename: "{app}\TaskUnifier.exe"; Tasks: desktopicon
+
+[Run]
+Filename: "{app}\TaskUnifier"; Description: "{cm:LaunchProgram,TaskUnifier}"; Flags: nowait postinstall skipifsilent
 
 [Registry]
 Root: HKCR; Subkey: ".tue"; ValueType: string; ValueName: ""; ValueData: "TaskUnifierExchangeFile"; Flags: uninsdeletevalue
