@@ -73,9 +73,12 @@ public class TaskPrintTableColumn extends TUTableColumn<Task> {
 				col = table.convertColumnIndexToModel(col);
 				PropertyAccessor<Task> column = ((TaskPrintTableModel) table.getModel()).getTaskColumn(col);
 				
-				component.setText(column.getPropertyAsString(task).replaceAll(
-						"\n",
-						""));
+				String property = column.getPropertyAsString(task);
+				
+				if (property == null)
+					property = "";
+				
+				component.setText(property.replaceAll("\n", ""));
 				return component;
 			}
 			

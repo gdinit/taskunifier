@@ -71,9 +71,12 @@ public class NotePrintTableColumn extends TUTableColumn<Note> {
 				col = table.convertColumnIndexToModel(col);
 				PropertyAccessor<Note> column = ((NotePrintTableModel) table.getModel()).getNoteColumn(col);
 				
-				this.setText(column.getPropertyAsString(note).replaceAll(
-						"\n",
-						""));
+				String property = column.getPropertyAsString(note);
+				
+				if (property == null)
+					property = "";
+				
+				this.setText(property.replaceAll("\n", ""));
 				return component;
 			}
 			
