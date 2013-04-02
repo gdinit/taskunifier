@@ -161,7 +161,8 @@ public class DefaultTaskView extends JPanel implements TaskView, SavePropertiesL
 		this.horizontalSplitPane.setOpaque(false);
 		this.horizontalSplitPane.setOneTouchExpandable(true);
 		
-		this.verticalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		this.verticalSplitPane = new JSplitPane(
+				Main.getSettings().getIntegerProperty("view.tasks.window.split"));
 		this.verticalSplitPane.setOpaque(false);
 		this.verticalSplitPane.setOneTouchExpandable(true);
 		this.verticalSplitPane.setBorder(BorderFactory.createEmptyBorder());

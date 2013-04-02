@@ -217,7 +217,7 @@ public class TaskSearcherPanel extends JPanel implements PropertyChangeListener 
 			
 			@Override
 			public void itemStateChanged(ItemEvent event) {
-				TaskSearcherPanel.this.searcher.setTemplate((TaskTemplate) event.getItem());
+				TaskSearcherPanel.this.searcher.setTemplate((TaskTemplate) TaskSearcherPanel.this.searcherTemplate.getSelectedItem());
 			}
 			
 		});
@@ -262,6 +262,13 @@ public class TaskSearcherPanel extends JPanel implements PropertyChangeListener 
 						24));
 				this.searcherIcon.setText((String) evt.getNewValue() == null ? Translations.getString("searcheredit.searcher.no_icon") : (String) evt.getNewValue());
 			}
+		}
+		
+		if (evt.getPropertyName().equals(TaskSearcher.PROP_TEMPLATE)) {
+			if (!EqualsUtils.equals(
+					this.searcherTemplate.getSelectedItem(),
+					evt.getNewValue()))
+				this.searcherTemplate.setSelectedItem(evt.getNewValue());
 		}
 	}
 	

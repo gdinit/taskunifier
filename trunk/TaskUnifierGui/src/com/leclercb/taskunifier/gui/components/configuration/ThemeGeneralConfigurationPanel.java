@@ -93,6 +93,18 @@ public class ThemeGeneralConfigurationPanel extends DefaultConfigurationPanel {
 				new ConfigurationFieldType.Separator()));
 		
 		this.addField(new ConfigurationField(
+				"TASKS_SPLIT",
+				Translations.getString("configuration.theme.tasks_split"),
+				true,
+				new ConfigurationFieldType.RadioButton(
+						Main.getSettings(),
+						"view.tasks.window.split",
+						new String[] {
+								Translations.getString("configuration.theme.notes_split.vertical"),
+								Translations.getString("configuration.theme.notes_split.horizontal") },
+						new String[] { "0", "1" })));
+		
+		this.addField(new ConfigurationField(
 				"NOTES_SPLIT",
 				Translations.getString("configuration.theme.notes_split"),
 				true,

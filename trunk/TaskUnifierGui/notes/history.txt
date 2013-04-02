@@ -1,6 +1,9 @@
 Version 3.2.2
 	- Minor:
+		- FR 330: Task note on the right
 		- FR 335: Change global font
+		- BF 291: Print error
+		- Bug fixed: Change searcher template
 
 Version 3.2.1
 	- Major:
