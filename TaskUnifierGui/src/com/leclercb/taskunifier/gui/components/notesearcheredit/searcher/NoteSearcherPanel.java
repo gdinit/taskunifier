@@ -35,12 +35,6 @@ package com.leclercb.taskunifier.gui.components.notesearcheredit.searcher;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 
 import javax.swing.DefaultComboBoxModel;
@@ -51,8 +45,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
-import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
-import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.FileUtils;
 import com.leclercb.taskunifier.gui.api.searchers.NoteSearcher;
 import com.leclercb.taskunifier.gui.api.searchers.NoteSearcherType;
@@ -61,20 +53,18 @@ import com.leclercb.taskunifier.gui.utils.FileChooserUtils;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class NoteSearcherPanel extends JPanel implements PropertyChangeListener {
+public class NoteSearcherPanel extends JPanel {
 	
 	private NoteSearcher searcher;
 	
 	private JComboBox searcherType;
+	private String searcherIconFile;
 	private JButton searcherIcon;
 	private JTextField searcherTitle;
+	private JTextField searcherFolder;
 	
 	public NoteSearcherPanel(NoteSearcher searcher) {
 		this.searcher = searcher;
-		
-		this.searcher.addPropertyChangeListener(new WeakPropertyChangeListener(
-				this.searcher,
-				this));
 		
 		this.initialize();
 	}
@@ -94,16 +84,6 @@ public class NoteSearcherPanel extends JPanel implements PropertyChangeListener 
 		
 		this.searcherType = new JComboBox(searcherTypeModel);
 		this.searcherType.setSelectedItem(this.searcher.getType());
-		this.searcherType.addItemListener(new ItemListener() {
-			
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				NoteSearcherType type = (NoteSearcherType) NoteSearcherPanel.this.searcherType.getSelectedItem();
-				
-				if (type != null)
-					NoteSearcherPanel.this.searcher.setType(type);
-			}
-		});
 		
 		builder.appendI15d(
 				"searcheredit.searcher.type",
@@ -111,15 +91,17 @@ public class NoteSearcherPanel extends JPanel implements PropertyChangeListener 
 				this.searcherType);
 		
 		// Icon
+		this.searcherIconFile = this.searcher.getIcon();
+		
 		JPanel iconPanel = new JPanel(new BorderLayout());
 		
 		this.searcherIcon = new JButton();
 		iconPanel.add(this.searcherIcon, BorderLayout.CENTER);
-		this.searcherIcon.setIcon(this.searcher.getIcon() == null ? ImageUtils.getResourceImage(
+		this.searcherIcon.setIcon(this.searcherIconFile == null ? ImageUtils.getResourceImage(
 				"remove.png",
 				24,
-				24) : ImageUtils.getImage(this.searcher.getIcon(), 24, 24));
-		this.searcherIcon.setText(this.searcher.getIcon() == null ? Translations.getString("searcheredit.searcher.no_icon") : this.searcher.getIcon());
+				24) : ImageUtils.getImage(this.searcherIconFile, 24, 24));
+		this.searcherIcon.setText(this.searcherIconFile == null ? Translations.getString("searcheredit.searcher.no_icon") : this.searcherIconFile);
 		this.searcherIcon.addActionListener(new ActionListener() {
 			
 			@Override
@@ -157,13 +139,15 @@ public class NoteSearcherPanel extends JPanel implements PropertyChangeListener 
 				
 				String file = FileChooserUtils.getFile(
 						true,
-						NoteSearcherPanel.this.searcher.getIcon(),
+						NoteSearcherPanel.this.searcherIconFile,
 						fileFilter,
 						JFileChooser.FILES_ONLY,
 						null);
 				
-				if (file != null)
-					NoteSearcherPanel.this.searcher.setIcon(file);
+				if (file != null) {
+					NoteSearcherPanel.this.searcherIconFile = file;
+					NoteSearcherPanel.this.searcherIcon.setText(file);
+				}
 			}
 			
 		});
@@ -175,7 +159,8 @@ public class NoteSearcherPanel extends JPanel implements PropertyChangeListener 
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				NoteSearcherPanel.this.searcher.setIcon(null);
+				NoteSearcherPanel.this.searcherIconFile = null;
+				NoteSearcherPanel.this.searcherIcon.setText(Translations.getString("searcheredit.searcher.no_icon"));
 			}
 			
 		});
@@ -184,19 +169,19 @@ public class NoteSearcherPanel extends JPanel implements PropertyChangeListener 
 		
 		// Title
 		this.searcherTitle = new JTextField(this.searcher.getTitle());
-		this.searcherTitle.addKeyListener(new KeyAdapter() {
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				NoteSearcherPanel.this.searcher.setTitle(NoteSearcherPanel.this.searcherTitle.getText());
-			}
-			
-		});
 		
 		builder.appendI15d(
 				"searcheredit.searcher.title",
 				true,
 				this.searcherTitle);
+		
+		// Folder
+		this.searcherFolder = new JTextField(this.searcher.getFolder());
+		
+		builder.appendI15d(
+				"searcheredit.searcher.folder",
+				true,
+				this.searcherFolder);
 		
 		// Lay out the panel
 		panel.add(builder.getPanel(), BorderLayout.CENTER);
@@ -204,36 +189,15 @@ public class NoteSearcherPanel extends JPanel implements PropertyChangeListener 
 		this.add(panel, BorderLayout.NORTH);
 	}
 	
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(NoteSearcher.PROP_TYPE)) {
-			if (!EqualsUtils.equals(
-					this.searcherType.getSelectedItem(),
-					evt.getNewValue()))
-				this.searcherType.setSelectedItem(evt.getNewValue());
-		}
+	public void saveChanges() {
+		NoteSearcherType type = (NoteSearcherType) NoteSearcherPanel.this.searcherType.getSelectedItem();
 		
-		if (evt.getPropertyName().equals(NoteSearcher.PROP_TITLE)) {
-			if (!EqualsUtils.equals(
-					this.searcherTitle.getText(),
-					evt.getNewValue()))
-				this.searcherTitle.setText((String) evt.getNewValue());
-		}
+		if (type != null)
+			NoteSearcherPanel.this.searcher.setType(type);
 		
-		if (evt.getPropertyName().equals(NoteSearcher.PROP_ICON)) {
-			if (!EqualsUtils.equals(
-					this.searcherTitle.getText(),
-					evt.getNewValue())) {
-				this.searcherIcon.setIcon((String) evt.getNewValue() == null ? ImageUtils.getResourceImage(
-						"remove.png",
-						24,
-						24) : ImageUtils.getImage(
-						(String) evt.getNewValue(),
-						24,
-						24));
-				this.searcherIcon.setText((String) evt.getNewValue() == null ? Translations.getString("searcheredit.searcher.no_icon") : (String) evt.getNewValue());
-			}
-		}
+		this.searcher.setIcon(this.searcherIconFile);
+		this.searcher.setTitle(this.searcherTitle.getText());
+		this.searcher.setFolder(this.searcherFolder.getText());
 	}
 	
 }

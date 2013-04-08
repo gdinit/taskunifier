@@ -34,6 +34,8 @@ package com.leclercb.taskunifier.gui.api.searchers;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
@@ -52,6 +54,7 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 public class NoteSearcher implements Cloneable, PropertyChangeSupported, ListChangeListener, PropertyChangeListener {
 	
 	public static final String PROP_TYPE = "type";
+	public static final String PROP_FOLDER = "folder";
 	public static final String PROP_ORDER = "order";
 	public static final String PROP_TITLE = "title";
 	public static final String PROP_ICON = "icon";
@@ -67,6 +70,9 @@ public class NoteSearcher implements Cloneable, PropertyChangeSupported, ListCha
 	
 	@XStreamAlias("type")
 	private NoteSearcherType type;
+	
+	@XStreamAlias("folder")
+	private String folder;
 	
 	@XStreamAlias("order")
 	private int order;
@@ -88,25 +94,28 @@ public class NoteSearcher implements Cloneable, PropertyChangeSupported, ListCha
 	
 	public NoteSearcher(
 			NoteSearcherType type,
+			String folder,
 			int order,
 			String title,
 			NoteFilter filter,
 			NoteSorter sorter) {
-		this(type, order, title, null, filter, sorter);
+		this(type, folder, order, title, null, filter, sorter);
 	}
 	
 	public NoteSearcher(
 			NoteSearcherType type,
+			String folder,
 			int order,
 			String title,
 			String icon,
 			NoteFilter filter,
 			NoteSorter sorter) {
-		this(type, order, title, icon, filter, sorter, null);
+		this(type, folder, order, title, icon, filter, sorter, null);
 	}
 	
 	public NoteSearcher(
 			NoteSearcherType type,
+			String folder,
 			int order,
 			String title,
 			String icon,
@@ -117,6 +126,7 @@ public class NoteSearcher implements Cloneable, PropertyChangeSupported, ListCha
 		
 		this.setId(UUID.randomUUID().toString());
 		this.setType(type);
+		this.setFolder(folder);
 		this.setOrder(order);
 		this.setTitle(title);
 		this.setIcon(icon);
@@ -129,6 +139,7 @@ public class NoteSearcher implements Cloneable, PropertyChangeSupported, ListCha
 	public NoteSearcher clone() {
 		return new NoteSearcher(
 				this.type,
+				this.folder,
 				this.order,
 				this.title,
 				this.icon,
@@ -152,9 +163,32 @@ public class NoteSearcher implements Cloneable, PropertyChangeSupported, ListCha
 	
 	public void setType(NoteSearcherType type) {
 		CheckUtils.isNotNull(type);
+		
+		this.setFolder(null);
+		
 		NoteSearcherType oldType = this.type;
 		this.type = type;
 		this.propertyChangeSupport.firePropertyChange(PROP_TYPE, oldType, type);
+	}
+	
+	public String[] getFolders() {
+		return getFolders(this.folder);
+	}
+	
+	public String getFolder() {
+		return this.folder;
+	}
+	
+	public void setFolder(String folder) {
+		if (folder == null)
+			folder = "";
+		
+		String oldFolder = this.folder;
+		this.folder = folder;
+		this.propertyChangeSupport.firePropertyChange(
+				PROP_FOLDER,
+				oldFolder,
+				folder);
 	}
 	
 	public int getOrder() {
@@ -312,6 +346,33 @@ public class NoteSearcher implements Cloneable, PropertyChangeSupported, ListCha
 					null,
 					this.sorter);
 		}
+	}
+	
+	public static String getFolder(String[] folders) {
+		StringBuffer buffer = new StringBuffer();
+		
+		for (String folder : folders)
+			buffer.append(folder + "/");
+		
+		if (folders.length != 0)
+			buffer.delete(buffer.length() - 1, buffer.length());
+		
+		return buffer.toString();
+	}
+	
+	public static String[] getFolders(String folder) {
+		if (folder == null)
+			return new String[0];
+		
+		String[] folders = folder.split("/");
+		
+		List<String> list = new ArrayList<String>();
+		for (String f : folders) {
+			if (f.trim().length() != 0)
+				list.add(f.trim());
+		}
+		
+		return list.toArray(new String[0]);
 	}
 	
 }

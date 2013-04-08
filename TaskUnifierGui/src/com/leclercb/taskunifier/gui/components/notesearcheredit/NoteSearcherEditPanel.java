@@ -96,7 +96,8 @@ public class NoteSearcherEditPanel extends JPanel {
 	}
 	
 	public void close() {
-		this.filterEditPanel.close();
+		this.searcherPanel.saveChanges();
+		this.filterEditPanel.saveChanges();
 	}
 	
 }

@@ -66,6 +66,7 @@ public class ActionAddNoteSearcher extends AbstractViewAction {
 		
 		NoteSearcher searcher = NoteSearcherFactory.getInstance().create(
 				NoteSearcherType.PERSONAL,
+				null,
 				Integer.MAX_VALUE,
 				Translations.getString("searcher.default.title"),
 				defaultNoteSearcher.getFilter(),

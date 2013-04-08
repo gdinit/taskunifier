@@ -84,9 +84,7 @@ public class TaskSearcherTree extends JTree implements TaskSearcherView, Propert
 		this.setRowHeight(20);
 		
 		this.setSelectionModel(new TaskSearcherTreeSelectionModel());
-		this.setModel(new TaskSearcherTreeModel(
-				this.settingsPrefix,
-				this.getSelectionModel()));
+		this.setModel(new TaskSearcherTreeModel(this.settingsPrefix, this));
 		this.setUI(new TaskSearcherTreeUI());
 		
 		this.initializeToolTipText();

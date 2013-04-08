@@ -89,7 +89,7 @@ public class TaskRuleEditPanel extends JPanel {
 	}
 	
 	public void close() {
-		this.filterEditPanel.close();
+		this.filterEditPanel.saveChanges();
 	}
 	
 }

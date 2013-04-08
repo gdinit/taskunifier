@@ -38,22 +38,36 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
+import com.leclercb.taskunifier.gui.api.searchers.NoteSearcher;
 import com.leclercb.taskunifier.gui.api.searchers.NoteSearcherType;
 
 public class SearcherCategory extends DefaultMutableTreeNode {
 	
+	private String folder;
 	private String expandedPropertyName;
 	
 	public SearcherCategory(NoteSearcherType type, String expandedPropertyName) {
+		this(type, null, expandedPropertyName);
+	}
+	
+	public SearcherCategory(
+			NoteSearcherType type,
+			String folder,
+			String expandedPropertyName) {
 		super(type);
 		
 		CheckUtils.isNotNull(type);
+		this.folder = folder;
 		
 		this.expandedPropertyName = expandedPropertyName;
 	}
 	
 	public NoteSearcherType getType() {
 		return (NoteSearcherType) this.getUserObject();
+	}
+	
+	public String getFolder() {
+		return this.folder;
 	}
 	
 	@Override
@@ -69,6 +83,11 @@ public class SearcherCategory extends DefaultMutableTreeNode {
 	}
 	
 	public String getTitle() {
+		if (this.folder != null) {
+			String[] f = NoteSearcher.getFolders(this.folder);
+			return f[f.length - 1];
+		}
+		
 		return this.getType().getLabel();
 	}
 	

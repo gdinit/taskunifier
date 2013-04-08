@@ -97,6 +97,7 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 		
 		TaskSearcherFactory.getInstance().create(
 				TaskSearcherType.GENERAL,
+				null,
 				1,
 				Translations.getString("searcherlist.general.not_completed"),
 				ImageUtils.getResourceFile("check.png"),
@@ -113,6 +114,7 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 		
 		TaskSearcherFactory.getInstance().create(
 				TaskSearcherType.GENERAL,
+				null,
 				2,
 				Translations.getString("searcherlist.general.due_today"),
 				ImageUtils.getResourceFile("calendar.png"),
@@ -129,6 +131,7 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 		
 		TaskSearcherFactory.getInstance().create(
 				TaskSearcherType.GENERAL,
+				null,
 				3,
 				Translations.getString("searcherlist.general.overdue"),
 				ImageUtils.getResourceFile("warning.png"),
@@ -150,6 +153,7 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 		
 		TaskSearcherFactory.getInstance().create(
 				TaskSearcherType.GENERAL,
+				null,
 				4,
 				Translations.getString("searcherlist.general.hot_list"),
 				ImageUtils.getResourceFile("hot_pepper.png"),
@@ -170,6 +174,7 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 		
 		TaskSearcherFactory.getInstance().create(
 				TaskSearcherType.GENERAL,
+				null,
 				5,
 				Translations.getString("searcherlist.general.importance"),
 				ImageUtils.getResourceFile("importance.png"),
@@ -186,6 +191,7 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 		
 		TaskSearcherFactory.getInstance().create(
 				TaskSearcherType.GENERAL,
+				null,
 				6,
 				Translations.getString("searcherlist.general.starred"),
 				ImageUtils.getResourceFile("star.png"),
@@ -202,6 +208,7 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 		
 		TaskSearcherFactory.getInstance().create(
 				TaskSearcherType.GENERAL,
+				null,
 				7,
 				Translations.getString("searcherlist.general.next_action"),
 				ImageUtils.getResourceFile("next.png"),
@@ -218,6 +225,7 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 		
 		TaskSearcherFactory.getInstance().create(
 				TaskSearcherType.GENERAL,
+				null,
 				8,
 				Translations.getString("searcherlist.general.completed"),
 				ImageUtils.getResourceFile("check.png"),

@@ -38,10 +38,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreeSelectionModel;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
@@ -71,7 +73,7 @@ import com.leclercb.taskunifier.gui.constants.Constants;
 
 public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChangeListener, PropertyChangeListener {
 	
-	private TreeSelectionModel treeSelectionModel;
+	private JTree tree;
 	
 	private String settingsPrefix;
 	
@@ -79,14 +81,12 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 	private SearcherCategory folderCategory;
 	private SearcherCategory personalCategory;
 	
-	public NoteSearcherTreeModel(
-			String settingsPrefix,
-			TreeSelectionModel treeSelectionModel) {
+	public NoteSearcherTreeModel(String settingsPrefix, JTree tree) {
 		super(new SearcherCategory(NoteSearcherType.DEFAULT, null));
 		
 		this.settingsPrefix = settingsPrefix;
 		
-		this.treeSelectionModel = treeSelectionModel;
+		this.tree = tree;
 		
 		this.initializeDefaultSearcher();
 		this.initializeFolderCategory();
@@ -165,9 +165,24 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 				NoteSearcherFactory.getInstance().getList());
 		Collections.sort(searchers, NoteSearcherComparator.INSTANCE);
 		
-		for (NoteSearcher searcher : searchers)
-			if (searcher.getType() == NoteSearcherType.PERSONAL)
-				this.personalCategory.add(new SearcherItem(searcher));
+		for (NoteSearcher searcher : searchers) {
+			if (searcher.getType() == NoteSearcherType.PERSONAL) {
+				this.getCategoryFromNoteSearcherType(
+						searcher.getType(),
+						searcher.getFolders(),
+						true);
+			}
+		}
+		
+		for (NoteSearcher searcher : searchers) {
+			if (searcher.getType() == NoteSearcherType.PERSONAL) {
+				SearcherCategory category = this.getCategoryFromNoteSearcherType(
+						searcher.getType(),
+						searcher.getFolders(),
+						true);
+				category.add(new SearcherItem(searcher));
+			}
+		}
 	}
 	
 	public int findNewIndexInFolderCategory(TreeNode parent, Folder folder) {
@@ -207,13 +222,20 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 	}
 	
 	public SearcherItem findItemFromSearcher(NoteSearcher searcher) {
-		return this.findItemFromSearcher(searcher, searcher.getType());
+		return this.findItemFromSearcher(
+				searcher,
+				searcher.getType(),
+				searcher.getFolders());
 	}
 	
 	private SearcherItem findItemFromSearcher(
 			NoteSearcher searcher,
-			NoteSearcherType type) {
-		SearcherCategory category = this.getCategoryFromNoteSearcherType(type);
+			NoteSearcherType type,
+			String[] folders) {
+		SearcherCategory category = this.getCategoryFromNoteSearcherType(
+				type,
+				folders,
+				false);
 		
 		for (int i = 0; i < category.getChildCount(); i++) {
 			TreeNode node = category.getChildAt(i);
@@ -230,17 +252,64 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 	}
 	
 	private SearcherCategory getCategoryFromNoteSearcherType(
-			NoteSearcherType type) {
+			NoteSearcherType type,
+			String[] folders,
+			boolean create) {
 		switch (type) {
 			case DEFAULT:
 				return (SearcherCategory) this.getRoot();
 			case FOLDER:
 				return this.folderCategory;
 			case PERSONAL:
-				return this.personalCategory;
+				return this.getCategoryFromFolder(
+						this.personalCategory,
+						folders,
+						0,
+						create);
 		}
 		
 		return null;
+	}
+	
+	private SearcherCategory getCategoryFromFolder(
+			SearcherCategory category,
+			String[] folders,
+			int index,
+			boolean create) {
+		if (folders == null || folders.length == 0 || index >= folders.length)
+			return category;
+		
+		for (int i = 0; i < category.getChildCount(); i++) {
+			TreeNode node = category.getChildAt(i);
+			if (node instanceof SearcherCategory) {
+				if (((SearcherCategory) node).getFolder().equals(
+						NoteSearcher.getFolder(ArrayUtils.subarray(
+								folders,
+								0,
+								index + 1)))) {
+					return this.getCategoryFromFolder(
+							(SearcherCategory) node,
+							folders,
+							index + 1,
+							create);
+				}
+			}
+		}
+		
+		if (create) {
+			SearcherCategory c = new SearcherCategory(
+					category.getType(),
+					NoteSearcher.getFolder(ArrayUtils.subarray(
+							folders,
+							0,
+							index + 1)), null);
+			
+			category.insert(c, 0);
+			
+			return this.getCategoryFromFolder(c, folders, index + 1, create);
+		}
+		
+		return category;
 	}
 	
 	@Override
@@ -294,12 +363,15 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 		
 		if (event.getValue() instanceof NoteSearcher) {
 			NoteSearcher searcher = (NoteSearcher) event.getValue();
-			SearcherCategory category = this.getCategoryFromNoteSearcherType(searcher.getType());
+			SearcherCategory category = this.getCategoryFromNoteSearcherType(
+					searcher.getType(),
+					searcher.getFolders(),
+					true);
 			
 			if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
 				SearcherItem item = new SearcherItem(searcher);
 				
-				this.insertNodeInto(item, category, 0);
+				this.insertNodeInto(item, category, category.getChildCount());
 			} else if (event.getChangeType() == ListChangeEvent.VALUE_REMOVED) {
 				SearcherItem item = this.findItemFromSearcher(searcher);
 				
@@ -400,19 +472,37 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 				this.nodeChanged(item);
 			}
 			
-			if (event.getPropertyName().equals(NoteSearcher.PROP_TYPE)) {
-				SearcherItem item = this.findItemFromSearcher(
-						searcher,
-						(NoteSearcherType) event.getOldValue());
+			if (event.getPropertyName().equals(NoteSearcher.PROP_TYPE)
+					|| event.getPropertyName().equals(NoteSearcher.PROP_FOLDER)) {
+				SearcherItem item = null;
 				
-				if (item != null)
+				if (event.getPropertyName().equals(NoteSearcher.PROP_TYPE))
+					item = this.findItemFromSearcher(
+							searcher,
+							(NoteSearcherType) event.getOldValue(),
+							searcher.getFolders());
+				
+				if (event.getPropertyName().equals(NoteSearcher.PROP_FOLDER))
+					item = this.findItemFromSearcher(
+							searcher,
+							searcher.getType(),
+							NoteSearcher.getFolders((String) event.getOldValue()));
+				
+				if (item != null) {
 					this.removeNodeFromParent(item);
+					this.cleanCategoryFolders();
+				}
 				
-				SearcherCategory category = this.getCategoryFromNoteSearcherType(searcher.getType());
+				SearcherCategory category = this.getCategoryFromNoteSearcherType(
+						searcher.getType(),
+						searcher.getFolders(),
+						true);
 				
 				item = new SearcherItem(searcher);
 				
-				this.insertNodeInto(item, category, 0);
+				this.insertNodeInto(item, category, category.getChildCount());
+				
+				this.tree.setSelectionPath(TreeUtils.getPath(item));
 			}
 			
 			this.updateSelection();
@@ -420,29 +510,50 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 		}
 	}
 	
+	private void cleanCategoryFolders() {
+		// TODO
+	}
+	
 	public void updateBadges() {
 		this.defaultSearcher.updateBadgeCount();
 		
 		SearcherCategory[] categories = this.getCategories();
 		for (SearcherCategory category : categories) {
-			for (int i = 0; i < category.getChildCount(); i++)
-				this.updateBadges((SearcherNode) category.getChildAt(i));
+			for (int i = 0; i < category.getChildCount(); i++) {
+				if (category.getChildAt(i) instanceof SearcherNode)
+					this.updateBadges((SearcherNode) category.getChildAt(i));
+				
+				if (category.getChildAt(i) instanceof SearcherCategory)
+					this.updateBadges((SearcherCategory) category.getChildAt(i));
+			}
 		}
 		
 		this.nodeChanged((TreeNode) this.getRoot());
+	}
+	
+	private void updateBadges(SearcherCategory category) {
+		for (int i = 0; i < category.getChildCount(); i++) {
+			if (category.getChildAt(i) instanceof SearcherNode)
+				this.updateBadges((SearcherNode) category.getChildAt(i));
+			
+			if (category.getChildAt(i) instanceof SearcherCategory)
+				this.updateBadges((SearcherCategory) category.getChildAt(i));
+		}
 	}
 	
 	private void updateBadges(SearcherNode node) {
 		node.updateBadgeCount();
 		
 		for (int i = 0; i < node.getChildCount(); i++) {
-			this.updateBadges((SearcherNode) node.getChildAt(i));
+			if (node.getChildAt(i) instanceof SearcherNode)
+				this.updateBadges((SearcherNode) node.getChildAt(i));
 		}
 	}
 	
 	private void updateSelection() {
-		if (this.treeSelectionModel.getSelectionPath() == null)
-			this.treeSelectionModel.setSelectionPath(TreeUtils.getPath(this.getDefaultSearcher()));
+		if (this.tree.getSelectionModel().getSelectionPath() == null)
+			this.tree.getSelectionModel().setSelectionPath(
+					TreeUtils.getPath(this.getDefaultSearcher()));
 	}
 	
 }

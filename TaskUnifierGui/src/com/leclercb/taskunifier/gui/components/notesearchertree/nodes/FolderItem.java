@@ -113,6 +113,7 @@ public class FolderItem extends DefaultMutableTreeNode implements SearcherNode, 
 		
 		this.searcher = new NoteSearcher(
 				NoteSearcherType.FOLDER,
+				null,
 				0,
 				title,
 				null,
@@ -137,10 +138,10 @@ public class FolderItem extends DefaultMutableTreeNode implements SearcherNode, 
 		if (this.getFolder() != null && this.getFolder() instanceof GuiModel)
 			return new TUColorBadgeIcon(
 					((GuiModel) this.getFolder()).getColor(),
-					12,
-					12);
+					14,
+					14);
 		else
-			return new TUColorBadgeIcon(null, 12, 12);
+			return new TUColorBadgeIcon(null, 14, 14);
 	}
 	
 	@Override
