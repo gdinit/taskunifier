@@ -511,7 +511,32 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 	}
 	
 	private void cleanCategoryFolders() {
-		// TODO
+		for (int i = 0; i < this.personalCategory.getChildCount(); i++) {
+			if (this.personalCategory.getChildAt(i) instanceof SearcherCategory)
+				this.removeEmptyCategories((SearcherCategory) this.personalCategory.getChildAt(i));
+		}
+	}
+	
+	private boolean removeEmptyCategories(SearcherCategory category) {
+		int categories = 0;
+		int items = 0;
+		
+		for (int i = 0; i < category.getChildCount(); i++) {
+			if (category.getChildAt(i) instanceof SearcherNode)
+				items++;
+			
+			if (category.getChildAt(i) instanceof SearcherCategory) {
+				if (!this.removeEmptyCategories((SearcherCategory) category.getChildAt(i)))
+					categories++;
+			}
+		}
+		
+		if (categories == 0 && items == 0) {
+			this.removeNodeFromParent(category);
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public void updateBadges() {
