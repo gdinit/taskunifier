@@ -30,52 +30,27 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.commons.gui.utils;
+package com.leclercb.taskunifier.gui.commons.comparators;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Comparator;
 
-import javax.swing.JTree;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
+import com.leclercb.commons.api.utils.CompareUtils;
+import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
 
-public final class TreeUtils {
+public class TaskSearcherFolderComparator implements Comparator<TaskSearcher> {
 	
-	private TreeUtils() {
+	public static final TaskSearcherFolderComparator INSTANCE = new TaskSearcherFolderComparator();
+	
+	private TaskSearcherFolderComparator() {
 		
 	}
 	
-	public static TreePath getPath(TreeNode treeNode) {
-		List<TreeNode> nodes = new ArrayList<TreeNode>();
+	@Override
+	public int compare(TaskSearcher ts1, TaskSearcher ts2) {
+		String s1 = (ts1 == null ? null : ts1.getFolder());
+		String s2 = (ts2 == null ? null : ts2.getFolder());
 		
-		while (treeNode != null) {
-			nodes.add(0, treeNode);
-			treeNode = treeNode.getParent();
-		}
-		
-		return nodes.isEmpty() ? null : new TreePath(nodes.toArray());
-	}
-	
-	public static void expandAll(JTree tree, boolean expand) {
-		TreeNode root = (TreeNode) tree.getModel().getRoot();
-		expandAll(tree, new TreePath(root), expand);
-	}
-	
-	public static void expandAll(JTree tree, TreePath parent, boolean expand) {
-		TreeNode node = (TreeNode) parent.getLastPathComponent();
-		if (node.getChildCount() >= 0) {
-			for (int i = 0; i < node.getChildCount(); i++) {
-				TreeNode childNode = node.getChildAt(i);
-				TreePath path = parent.pathByAddingChild(childNode);
-				expandAll(tree, path, expand);
-			}
-		}
-		
-		if (expand) {
-			tree.expandPath(parent);
-		} else {
-			tree.collapsePath(parent);
-		}
+		return CompareUtils.compareLocalizedString(s1, s2);
 	}
 	
 }

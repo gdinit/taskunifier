@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
@@ -54,7 +53,7 @@ import com.leclercb.commons.gui.utils.TreeUtils;
 import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.Folder;
 import com.leclercb.taskunifier.api.models.FolderFactory;
-import com.leclercb.taskunifier.api.models.Model;
+import com.leclercb.taskunifier.api.models.ModelArchive;
 import com.leclercb.taskunifier.api.models.ModelParent;
 import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.api.models.NoteFactory;
@@ -64,6 +63,7 @@ import com.leclercb.taskunifier.gui.api.searchers.NoteSearcherFactory;
 import com.leclercb.taskunifier.gui.api.searchers.NoteSearcherType;
 import com.leclercb.taskunifier.gui.commons.comparators.BasicModelComparator;
 import com.leclercb.taskunifier.gui.commons.comparators.NoteSearcherComparator;
+import com.leclercb.taskunifier.gui.commons.comparators.NoteSearcherFolderComparator;
 import com.leclercb.taskunifier.gui.components.notesearchertree.nodes.FolderItem;
 import com.leclercb.taskunifier.gui.components.notesearchertree.nodes.SearcherCategory;
 import com.leclercb.taskunifier.gui.components.notesearchertree.nodes.SearcherItem;
@@ -73,7 +73,7 @@ import com.leclercb.taskunifier.gui.constants.Constants;
 
 public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChangeListener, PropertyChangeListener {
 	
-	private JTree tree;
+	private NoteSearcherTree tree;
 	
 	private String settingsPrefix;
 	
@@ -81,7 +81,7 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 	private SearcherCategory folderCategory;
 	private SearcherCategory personalCategory;
 	
-	public NoteSearcherTreeModel(String settingsPrefix, JTree tree) {
+	public NoteSearcherTreeModel(String settingsPrefix, NoteSearcherTree tree) {
 		super(new SearcherCategory(NoteSearcherType.DEFAULT, null));
 		
 		this.settingsPrefix = settingsPrefix;
@@ -123,15 +123,24 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 	}
 	
 	private void initializeFolderCategory() {
-		this.folderCategory = new SearcherCategory(
-				NoteSearcherType.FOLDER,
-				this.settingsPrefix + ".category.folder.expanded");
-		((DefaultMutableTreeNode) this.getRoot()).add(this.folderCategory);
+		boolean init = this.folderCategory == null;
+		
+		if (this.folderCategory == null) {
+			this.folderCategory = new SearcherCategory(
+					NoteSearcherType.FOLDER,
+					this.settingsPrefix + ".category.folder.expanded");
+			((DefaultMutableTreeNode) this.getRoot()).add(this.folderCategory);
+		}
+		
+		this.folderCategory.removeAllChildren();
+		
+		this.nodeStructureChanged(this.folderCategory);
 		
 		this.folderCategory.add(new FolderItem(null));
 		
 		List<Folder> folders = new ArrayList<Folder>(
 				FolderFactory.getInstance().getList());
+		
 		Collections.sort(folders, BasicModelComparator.INSTANCE_NULL_LAST);
 		
 		for (Folder folder : folders) {
@@ -147,23 +156,40 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 			}
 		}
 		
-		FolderFactory.getInstance().addListChangeListener(
-				new WeakListChangeListener(FolderFactory.getInstance(), this));
-		FolderFactory.getInstance().addPropertyChangeListener(
-				new WeakPropertyChangeListener(
-						FolderFactory.getInstance(),
-						this));
+		if (init) {
+			FolderFactory.getInstance().addListChangeListener(
+					new WeakListChangeListener(
+							FolderFactory.getInstance(),
+							this));
+			FolderFactory.getInstance().addPropertyChangeListener(
+					new WeakPropertyChangeListener(
+							FolderFactory.getInstance(),
+							this));
+		}
+		
+		this.nodeStructureChanged(this.folderCategory);
+		TreeUtils.expandAll(
+				this.tree,
+				TreeUtils.getPath(this.folderCategory),
+				true);
 	}
 	
 	private void initializePersonalCategory() {
-		this.personalCategory = new SearcherCategory(
-				NoteSearcherType.PERSONAL,
-				this.settingsPrefix + ".category.personal.expanded");
-		((DefaultMutableTreeNode) this.getRoot()).add(this.personalCategory);
+		if (this.personalCategory == null) {
+			this.personalCategory = new SearcherCategory(
+					NoteSearcherType.PERSONAL,
+					this.settingsPrefix + ".category.personal.expanded");
+			((DefaultMutableTreeNode) this.getRoot()).add(this.personalCategory);
+		}
+		
+		this.personalCategory.removeAllChildren();
+		
+		this.nodeStructureChanged(this.personalCategory);
 		
 		List<NoteSearcher> searchers = new ArrayList<NoteSearcher>(
 				NoteSearcherFactory.getInstance().getList());
-		Collections.sort(searchers, NoteSearcherComparator.INSTANCE);
+		
+		Collections.sort(searchers, NoteSearcherFolderComparator.INSTANCE);
 		
 		for (NoteSearcher searcher : searchers) {
 			if (searcher.getType() == NoteSearcherType.PERSONAL) {
@@ -174,6 +200,8 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 			}
 		}
 		
+		Collections.sort(searchers, NoteSearcherComparator.INSTANCE);
+		
 		for (NoteSearcher searcher : searchers) {
 			if (searcher.getType() == NoteSearcherType.PERSONAL) {
 				SearcherCategory category = this.getCategoryFromNoteSearcherType(
@@ -183,21 +211,12 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 				category.add(new SearcherItem(searcher));
 			}
 		}
-	}
-	
-	public int findNewIndexInFolderCategory(TreeNode parent, Folder folder) {
-		List<Folder> folders = new ArrayList<Folder>();
-		for (int i = 0; i < parent.getChildCount(); i++) {
-			TreeNode node = parent.getChildAt(i);
-			if (node != null && node instanceof FolderItem) {
-				folders.add(((FolderItem) node).getFolder());
-			}
-		}
 		
-		folders.add(folder);
-		Collections.sort(folders, BasicModelComparator.INSTANCE_NULL_FIRST);
-		
-		return folders.indexOf(folder);
+		this.nodeStructureChanged(this.personalCategory);
+		TreeUtils.expandAll(
+				this.tree,
+				TreeUtils.getPath(this.personalCategory),
+				true);
 	}
 	
 	public FolderItem findItemFromFolder(Folder folder) {
@@ -282,7 +301,8 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 		for (int i = 0; i < category.getChildCount(); i++) {
 			TreeNode node = category.getChildAt(i);
 			if (node instanceof SearcherCategory) {
-				if (((SearcherCategory) node).getFolder().equals(
+				if (EqualsUtils.equalsStringIgnoreCase(
+						((SearcherCategory) node).getFolder(),
 						NoteSearcher.getFolder(ArrayUtils.subarray(
 								folders,
 								0,
@@ -317,226 +337,72 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 		if (event.getValue() instanceof Note) {
 			if (!Synchronizing.getInstance().isSynchronizing())
 				this.updateBadges();
+			
 			return;
 		}
 		
 		if (event.getValue() instanceof Folder) {
-			Folder folder = (Folder) event.getValue();
-			
-			DefaultMutableTreeNode category = null;
-			
-			if (folder.getParent() != null) {
-				category = this.findItemFromFolder(folder.getParent());
-			}
-			
-			if (category == null) {
-				category = this.folderCategory;
-			}
-			
-			if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
-				if (!folder.getModelStatus().isEndUserStatus())
-					return;
-				
-				if (folder.isSelfOrParentArchived())
-					return;
-				
-				FolderItem item = new FolderItem(folder);
-				
-				try {
-					this.insertNodeInto(
-							item,
-							category,
-							this.findNewIndexInFolderCategory(category, folder));
-				} catch (Exception e) {
-					this.insertNodeInto(item, category, 0);
-				}
-			} else if (event.getChangeType() == ListChangeEvent.VALUE_REMOVED) {
-				FolderItem item = this.findItemFromFolder(folder);
-				
-				if (item != null)
-					this.removeNodeFromParent(item);
-			}
-			
-			this.updateSelection();
+			this.initializeFolderCategory();
 			return;
 		}
 		
 		if (event.getValue() instanceof NoteSearcher) {
-			NoteSearcher searcher = (NoteSearcher) event.getValue();
-			SearcherCategory category = this.getCategoryFromNoteSearcherType(
-					searcher.getType(),
-					searcher.getFolders(),
-					true);
-			
-			if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
-				SearcherItem item = new SearcherItem(searcher);
-				
-				this.insertNodeInto(item, category, category.getChildCount());
-			} else if (event.getChangeType() == ListChangeEvent.VALUE_REMOVED) {
-				SearcherItem item = this.findItemFromSearcher(searcher);
-				
-				if (item != null)
-					this.removeNodeFromParent(item);
-			}
-			
-			this.updateSelection();
+			this.initializePersonalCategory();
 			return;
 		}
 	}
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
+		if (Synchronizing.getInstance().isSynchronizing())
+			return;
+		
 		if (event.getSource() instanceof Note) {
-			if (!Synchronizing.getInstance().isSynchronizing())
-				this.updateBadges();
+			this.updateBadges();
+			
 			return;
 		}
 		
 		if (event.getSource() instanceof Folder) {
-			Folder folder = (Folder) event.getSource();
-			
-			DefaultMutableTreeNode category = null;
-			
-			if (folder.getParent() != null) {
-				category = this.findItemFromFolder(folder.getParent());
+			if (event.getPropertyName().equals(BasicModel.PROP_MODEL_STATUS)
+					|| event.getPropertyName().equals(ModelParent.PROP_PARENT)
+					|| event.getPropertyName().equals(
+							ModelArchive.PROP_ARCHIVED)) {
+				Folder folder = this.tree.getSelectedFolder();
+				this.initializeFolderCategory();
+				this.updateSelection(this.findItemFromFolder(folder));
 			}
 			
-			if (category == null) {
-				category = this.folderCategory;
+			if (event.getPropertyName().equals(BasicModel.PROP_TITLE)
+					|| event.getPropertyName().equals(GuiModel.PROP_COLOR)) {
+				this.nodeChanged(this.findItemFromFolder((Folder) event.getSource()));
 			}
 			
-			FolderItem item = this.findItemFromFolder(folder);
-			
-			if (!((Model) event.getSource()).getModelStatus().isEndUserStatus()) {
-				if (item != null)
-					this.removeNodeFromParent(item);
-			} else if (folder.isSelfOrParentArchived()) {
-				if (item != null)
-					this.removeNodeFromParent(item);
-			} else if (item == null) {
-				item = new FolderItem(folder);
-				
-				try {
-					this.insertNodeInto(
-							item,
-							category,
-							this.findNewIndexInFolderCategory(category, folder));
-				} catch (Exception e) {
-					this.insertNodeInto(item, category, 0);
-				}
-				
-				if (!folder.isSelfOrParentArchived()) {
-					category = this.findItemFromFolder(folder.getParent());
-					for (Folder child : folder.getAllChildren()) {
-						category = this.findItemFromFolder(child.getParent());
-						item = new FolderItem(child);
-						
-						try {
-							this.insertNodeInto(
-									item,
-									category,
-									this.findNewIndexInFolderCategory(
-											category,
-											child));
-						} catch (Exception e) {
-							this.insertNodeInto(item, category, 0);
-						}
-					}
-				}
-			} else if (event.getPropertyName().equals(BasicModel.PROP_TITLE)
-					|| event.getPropertyName().equals(ModelParent.PROP_PARENT)) {
-				this.removeNodeFromParent(item);
-				
-				try {
-					this.insertNodeInto(
-							item,
-							category,
-							this.findNewIndexInFolderCategory(category, folder));
-				} catch (Exception e) {
-					this.insertNodeInto(item, category, 0);
-				}
-			} else if (event.getPropertyName().equals(GuiModel.PROP_COLOR)) {
-				this.nodeChanged(item);
-			}
-			
-			this.updateSelection();
 			return;
 		}
 		
 		if (event.getSource() instanceof NoteSearcher) {
-			NoteSearcher searcher = (NoteSearcher) event.getSource();
+			if (event.getPropertyName().equals(NoteSearcher.PROP_TYPE)
+					|| event.getPropertyName().equals(NoteSearcher.PROP_FOLDER)) {
+				NoteSearcher searcher = this.tree.getSelectedNoteSearcher();
+				this.initializePersonalCategory();
+				this.updateSelection(this.findItemFromSearcher(searcher));
+			}
 			
 			if (event.getPropertyName().equals(NoteSearcher.PROP_TITLE)
 					|| event.getPropertyName().equals(NoteSearcher.PROP_ICON)) {
-				SearcherItem item = this.findItemFromSearcher(searcher);
-				this.nodeChanged(item);
+				this.nodeChanged(this.findItemFromSearcher((NoteSearcher) event.getSource()));
 			}
 			
-			if (event.getPropertyName().equals(NoteSearcher.PROP_TYPE)
-					|| event.getPropertyName().equals(NoteSearcher.PROP_FOLDER)) {
-				SearcherItem item = null;
-				
-				if (event.getPropertyName().equals(NoteSearcher.PROP_TYPE))
-					item = this.findItemFromSearcher(
-							searcher,
-							(NoteSearcherType) event.getOldValue(),
-							searcher.getFolders());
-				
-				if (event.getPropertyName().equals(NoteSearcher.PROP_FOLDER))
-					item = this.findItemFromSearcher(
-							searcher,
-							searcher.getType(),
-							NoteSearcher.getFolders((String) event.getOldValue()));
-				
-				if (item != null) {
-					this.removeNodeFromParent(item);
-					this.cleanCategoryFolders();
-				}
-				
-				SearcherCategory category = this.getCategoryFromNoteSearcherType(
-						searcher.getType(),
-						searcher.getFolders(),
-						true);
-				
-				item = new SearcherItem(searcher);
-				
-				this.insertNodeInto(item, category, category.getChildCount());
-				
-				this.tree.setSelectionPath(TreeUtils.getPath(item));
-			}
-			
-			this.updateSelection();
 			return;
 		}
 	}
 	
-	private void cleanCategoryFolders() {
-		for (int i = 0; i < this.personalCategory.getChildCount(); i++) {
-			if (this.personalCategory.getChildAt(i) instanceof SearcherCategory)
-				this.removeEmptyCategories((SearcherCategory) this.personalCategory.getChildAt(i));
-		}
-	}
-	
-	private boolean removeEmptyCategories(SearcherCategory category) {
-		int categories = 0;
-		int items = 0;
+	public void update() {
+		this.initializeFolderCategory();
+		this.initializePersonalCategory();
 		
-		for (int i = 0; i < category.getChildCount(); i++) {
-			if (category.getChildAt(i) instanceof SearcherNode)
-				items++;
-			
-			if (category.getChildAt(i) instanceof SearcherCategory) {
-				if (!this.removeEmptyCategories((SearcherCategory) category.getChildAt(i)))
-					categories++;
-			}
-		}
-		
-		if (categories == 0 && items == 0) {
-			this.removeNodeFromParent(category);
-			return true;
-		}
-		
-		return false;
+		this.updateBadges();
 	}
 	
 	public void updateBadges() {
@@ -575,7 +441,11 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 		}
 	}
 	
-	private void updateSelection() {
+	private void updateSelection(TreeNode node) {
+		if (node != null)
+			this.tree.getSelectionModel().setSelectionPath(
+					TreeUtils.getPath(node));
+		
 		if (this.tree.getSelectionModel().getSelectionPath() == null)
 			this.tree.getSelectionModel().setSelectionPath(
 					TreeUtils.getPath(this.getDefaultSearcher()));

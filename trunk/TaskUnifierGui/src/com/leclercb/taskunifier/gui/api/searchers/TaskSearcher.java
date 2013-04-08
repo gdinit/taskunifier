@@ -164,10 +164,16 @@ public class TaskSearcher implements Cloneable, PropertyChangeSupported, ListCha
 	public void setType(TaskSearcherType type) {
 		CheckUtils.isNotNull(type);
 		
-		this.setFolder(null);
+		String oldFolder = this.folder;
+		this.folder = "";
 		
 		TaskSearcherType oldType = this.type;
 		this.type = type;
+		
+		this.propertyChangeSupport.firePropertyChange(
+				PROP_FOLDER,
+				oldFolder,
+				this.folder);
 		this.propertyChangeSupport.firePropertyChange(PROP_TYPE, oldType, type);
 	}
 	
