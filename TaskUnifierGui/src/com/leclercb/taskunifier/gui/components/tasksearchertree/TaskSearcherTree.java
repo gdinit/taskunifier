@@ -222,10 +222,6 @@ public class TaskSearcherTree extends JTree implements TaskSearcherView, Propert
 	
 	@Override
 	public void refreshTaskSearcher() {
-		this.updateBadges();
-	}
-	
-	public void updateBadges() {
 		this.getSearcherModel().updateBadges();
 	}
 	
@@ -307,7 +303,7 @@ public class TaskSearcherTree extends JTree implements TaskSearcherView, Propert
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals(Synchronizing.PROP_SYNCHRONIZING)) {
 			if (!(Boolean) evt.getNewValue())
-				this.updateBadges();
+				this.getSearcherModel().update();
 		}
 		
 		if (evt.getPropertyName().equals(this.settingsPrefix + ".category")) {

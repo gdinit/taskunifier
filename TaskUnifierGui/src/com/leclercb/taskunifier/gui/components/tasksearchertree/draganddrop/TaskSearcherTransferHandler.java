@@ -44,7 +44,6 @@ import javax.swing.TransferHandler;
 import javax.swing.tree.TreePath;
 
 import com.leclercb.commons.api.utils.EqualsUtils;
-import com.leclercb.commons.gui.utils.TreeUtils;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.ModelParent;
@@ -59,6 +58,7 @@ import com.leclercb.taskunifier.gui.commons.transfer.ModelTransferData;
 import com.leclercb.taskunifier.gui.commons.transfer.ModelTransferable;
 import com.leclercb.taskunifier.gui.commons.transfer.TaskSearcherTransferData;
 import com.leclercb.taskunifier.gui.commons.transfer.TaskSearcherTransferable;
+import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.TaskSearcherTree;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.ModelItem;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.SearcherCategory;
@@ -300,16 +300,11 @@ public class TaskSearcherTransferHandler extends TransferHandler {
 					if (node == null)
 						return false;
 					
-					int catCount = 0;
 					List<SearcherItem> items = new ArrayList<SearcherItem>();
 					
 					for (int i = 0; i < category.getChildCount(); i++) {
 						if (category.getChildAt(i) instanceof SearcherItem) {
 							items.add((SearcherItem) category.getChildAt(i));
-						}
-						
-						if (category.getChildAt(i) instanceof SearcherCategory) {
-							catCount++;
 						}
 					}
 					
@@ -329,31 +324,16 @@ public class TaskSearcherTransferHandler extends TransferHandler {
 					items.remove(dragItem);
 					items.add(index, dragItem);
 					
-					int order = 1;
-					for (SearcherItem i : items) {
-						i.getTaskSearcher().setOrder(order++);
-					}
+					Synchronizing.getInstance().setSynchronizing(true);
 					
-					for (SearcherItem i : items) {
-						tree.getSearcherModel().removeNodeFromParent(i);
-					}
-					
-					order = 0;
-					
-					for (int i = 0; i < category.getChildCount(); i++) {
-						if (category.getChildAt(i) instanceof SearcherCategory) {
-							order++;
+					try {
+						int order = 1;
+						for (SearcherItem i : items) {
+							i.getTaskSearcher().setOrder(order++);
 						}
+					} finally {
+						Synchronizing.getInstance().setSynchronizing(false);
 					}
-					
-					for (SearcherItem i : items) {
-						tree.getSearcherModel().insertNodeInto(
-								i,
-								category,
-								order++);
-					}
-					
-					tree.expandPath(TreeUtils.getPath(category));
 				} else {
 					dragSearcher.setType(category.getType());
 					dragSearcher.setFolder(category.getFolder());
