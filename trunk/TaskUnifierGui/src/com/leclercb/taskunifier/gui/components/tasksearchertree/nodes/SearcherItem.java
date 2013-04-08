@@ -79,9 +79,9 @@ public class SearcherItem extends DefaultMutableTreeNode implements SearcherNode
 	@Override
 	public Icon getIcon() {
 		if (this.getTaskSearcher().getIcon() == null)
-			return ImageUtils.getResourceImage("transparent.png", 16, 16);
+			return ImageUtils.getResourceImage("logo.png", 14, 14);
 		else
-			return ImageUtils.getImage(this.getTaskSearcher().getIcon(), 16, 16);
+			return ImageUtils.getImage(this.getTaskSearcher().getIcon(), 14, 14);
 	}
 	
 	@Override

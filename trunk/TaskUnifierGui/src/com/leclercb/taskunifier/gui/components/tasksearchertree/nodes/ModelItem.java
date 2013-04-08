@@ -181,6 +181,7 @@ public class ModelItem extends DefaultMutableTreeNode implements SearcherNode, P
 		
 		this.searcher = new TaskSearcher(
 				type,
+				null,
 				0,
 				title,
 				null,
@@ -205,10 +206,10 @@ public class ModelItem extends DefaultMutableTreeNode implements SearcherNode, P
 		if (this.getModel() != null && this.getModel() instanceof GuiModel)
 			return new TUColorBadgeIcon(
 					((GuiModel) this.getModel()).getColor(),
-					12,
-					12);
+					14,
+					14);
 		else
-			return new TUColorBadgeIcon(null, 12, 12);
+			return new TUColorBadgeIcon(null, 14, 14);
 	}
 	
 	@Override

@@ -82,9 +82,7 @@ public class NoteSearcherTree extends JTree implements NoteSearcherView, Propert
 		this.setRowHeight(20);
 		
 		this.setSelectionModel(new NoteSearcherTreeSelectionModel());
-		this.setModel(new NoteSearcherTreeModel(
-				this.settingsPrefix,
-				this.getSelectionModel()));
+		this.setModel(new NoteSearcherTreeModel(this.settingsPrefix, this));
 		this.setUI(new NoteSearcherTreeUI());
 		
 		this.initializeToolTipText();

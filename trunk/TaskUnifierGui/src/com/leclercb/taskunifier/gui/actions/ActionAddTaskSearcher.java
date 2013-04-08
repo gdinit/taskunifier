@@ -67,6 +67,7 @@ public class ActionAddTaskSearcher extends AbstractViewAction {
 		
 		TaskSearcher searcher = TaskSearcherFactory.getInstance().create(
 				TaskSearcherType.PERSONAL,
+				null,
 				Integer.MAX_VALUE,
 				Translations.getString("searcher.default.title"),
 				defaultTaskSearcher.getFilter(),

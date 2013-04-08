@@ -157,12 +157,14 @@ public class NoteSearcherFactory implements PropertyChangeListener, ListChangeSu
 	
 	public NoteSearcher create(
 			NoteSearcherType type,
+			String folder,
 			int order,
 			String title,
 			NoteFilter filter,
 			NoteSorter sorter) {
 		NoteSearcher searcher = new NoteSearcher(
 				type,
+				folder,
 				order,
 				title,
 				filter,
@@ -173,6 +175,7 @@ public class NoteSearcherFactory implements PropertyChangeListener, ListChangeSu
 	
 	public NoteSearcher create(
 			NoteSearcherType type,
+			String folder,
 			int order,
 			String title,
 			String icon,
@@ -180,6 +183,7 @@ public class NoteSearcherFactory implements PropertyChangeListener, ListChangeSu
 			NoteSorter sorter) {
 		NoteSearcher searcher = new NoteSearcher(
 				type,
+				folder,
 				order,
 				title,
 				icon,
@@ -191,6 +195,7 @@ public class NoteSearcherFactory implements PropertyChangeListener, ListChangeSu
 	
 	public NoteSearcher create(
 			NoteSearcherType type,
+			String folder,
 			int order,
 			String title,
 			String icon,
@@ -199,6 +204,7 @@ public class NoteSearcherFactory implements PropertyChangeListener, ListChangeSu
 			NoteTemplate template) {
 		NoteSearcher searcher = new NoteSearcher(
 				type,
+				folder,
 				order,
 				title,
 				icon,

@@ -136,7 +136,7 @@ public class TaskRuleActionApplyTemplate implements TaskRuleAction {
 		TASK_TEMPLATE_PANEL.setTemplate(this.template);
 		TASK_FILTER_PANEL.setFilter(this.filter);
 		DIALOG.setVisible(true);
-		TASK_FILTER_PANEL.close();
+		TASK_FILTER_PANEL.saveChanges();
 	}
 	
 	public static String getLabel() {

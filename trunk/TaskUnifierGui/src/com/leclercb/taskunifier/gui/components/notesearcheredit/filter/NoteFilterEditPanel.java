@@ -60,7 +60,7 @@ public class NoteFilterEditPanel extends JPanel implements TreeSelectionListener
 				"ELEMENT");
 	}
 	
-	public void close() {
+	public void saveChanges() {
 		this.elementPanel.saveElement();
 	}
 	

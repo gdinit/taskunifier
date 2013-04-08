@@ -138,11 +138,12 @@ public class NoteSearcherTransferHandler extends TransferHandler {
 			} else {
 				NoteSearcherTree tree = (NoteSearcherTree) support.getComponent();
 				SearcherNode node = this.getSearcherNodeForLocation(support);
+				SearcherCategory category = this.getSearcherCategoryForLocation(support);
 				
-				if (node == null)
+				if (node == null && category == null)
 					return false;
 				
-				if (!(node instanceof SearcherItem))
+				if (node != null && !(node instanceof SearcherItem))
 					return false;
 				
 				SearcherItem dragItem = tree.getSearcherModel().findItemFromSearcher(
@@ -261,10 +262,7 @@ public class NoteSearcherTransferHandler extends TransferHandler {
 				NoteSearcherTree tree = (NoteSearcherTree) support.getComponent();
 				SearcherNode node = this.getSearcherNodeForLocation(support);
 				
-				if (node == null)
-					return false;
-				
-				if (!(node instanceof SearcherItem))
+				if (node != null && !(node instanceof SearcherItem))
 					return false;
 				
 				SearcherItem dragItem = tree.getSearcherModel().findItemFromSearcher(
@@ -273,18 +271,31 @@ public class NoteSearcherTransferHandler extends TransferHandler {
 				if (dragItem == null)
 					return false;
 				
-				SearcherCategory category = (SearcherCategory) node.getParent();
+				SearcherCategory category = null;
 				
-				if (category.getType() == dragSearcher.getType()) {
+				if (node != null)
+					category = (SearcherCategory) node.getParent();
+				else
+					category = this.getSearcherCategoryForLocation(support);
+				
+				if (category.getType() == dragSearcher.getType()
+						&& EqualsUtils.equals(
+								(category.getFolder() == null ? "" : category.getFolder()),
+								(dragSearcher.getFolder() == null ? "" : dragSearcher.getFolder()))) {
+					if (node == null)
+						return false;
+					
+					int catCount = 0;
 					List<SearcherItem> items = new ArrayList<SearcherItem>();
 					
 					for (int i = 0; i < category.getChildCount(); i++) {
-						SearcherItem item = (SearcherItem) category.getChildAt(i);
-						items.add(item);
-						if (EqualsUtils.equals(
-								item.getNoteSearcher(),
-								dragSearcher))
-							dragItem = item;
+						if (category.getChildAt(i) instanceof SearcherItem) {
+							items.add((SearcherItem) category.getChildAt(i));
+						}
+						
+						if (category.getChildAt(i) instanceof SearcherCategory) {
+							catCount++;
+						}
 					}
 					
 					Collections.sort(items, new Comparator<SearcherItem>() {
@@ -313,6 +324,13 @@ public class NoteSearcherTransferHandler extends TransferHandler {
 					}
 					
 					order = 0;
+					
+					for (int i = 0; i < category.getChildCount(); i++) {
+						if (category.getChildAt(i) instanceof SearcherCategory) {
+							order++;
+						}
+					}
+					
 					for (SearcherItem i : items) {
 						tree.getSearcherModel().insertNodeInto(
 								i,
@@ -323,6 +341,7 @@ public class NoteSearcherTransferHandler extends TransferHandler {
 					tree.expandPath(TreeUtils.getPath(category));
 				} else {
 					dragSearcher.setType(category.getType());
+					dragSearcher.setFolder(category.getFolder());
 				}
 				
 				return true;
@@ -335,6 +354,23 @@ public class NoteSearcherTransferHandler extends TransferHandler {
 	@Override
 	protected void exportDone(JComponent source, Transferable data, int action) {
 		
+	}
+	
+	private SearcherCategory getSearcherCategoryForLocation(
+			TransferSupport support) {
+		NoteSearcherTree tree = (NoteSearcherTree) support.getComponent();
+		JTree.DropLocation dl = (JTree.DropLocation) support.getDropLocation();
+		TreePath path = tree.getPathForLocation(
+				dl.getDropPoint().x,
+				dl.getDropPoint().y);
+		
+		if (path == null)
+			return null;
+		
+		if (!(path.getLastPathComponent() instanceof SearcherCategory))
+			return null;
+		
+		return (SearcherCategory) path.getLastPathComponent();
 	}
 	
 	private SearcherNode getSearcherNodeForLocation(TransferSupport support) {

@@ -103,6 +103,7 @@ public class TagItem extends DefaultMutableTreeNode implements SearcherNode {
 		
 		this.searcher = new TaskSearcher(
 				TaskSearcherType.TAG,
+				null,
 				0,
 				this.getTag().toString(),
 				null,
@@ -118,7 +119,7 @@ public class TagItem extends DefaultMutableTreeNode implements SearcherNode {
 	
 	@Override
 	public Icon getIcon() {
-		return ImageUtils.getResourceImage("transparent.png", 12, 12);
+		return ImageUtils.getResourceImage("transparent.png", 14, 14);
 	}
 	
 	@Override

@@ -38,12 +38,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreeSelectionModel;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
@@ -87,7 +89,7 @@ import com.leclercb.taskunifier.gui.main.Main;
 
 public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChangeListener, PropertyChangeListener {
 	
-	private TreeSelectionModel treeSelectionModel;
+	private JTree tree;
 	
 	private String settingsPrefix;
 	
@@ -100,14 +102,12 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 	private SearcherCategory tagCategory;
 	private SearcherCategory personalCategory;
 	
-	public TaskSearcherTreeModel(
-			String settingsPrefix,
-			TreeSelectionModel treeSelectionModel) {
+	public TaskSearcherTreeModel(String settingsPrefix, JTree tree) {
 		super(new SearcherCategory(TaskSearcherType.DEFAULT, null));
 		
 		this.settingsPrefix = settingsPrefix;
 		
-		this.treeSelectionModel = treeSelectionModel;
+		this.tree = tree;
 		
 		this.initializeDefaultSearcher();
 		this.initializeGeneralCategory();
@@ -135,14 +135,15 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 		Main.getSettings().addPropertyChangeListener(
 				new WeakPropertyChangeListener(Main.getSettings(), this));
 		
-		this.treeSelectionModel.addTreeSelectionListener(new TreeSelectionListener() {
-			
-			@Override
-			public void valueChanged(TreeSelectionEvent e) {
-				TaskSearcherTreeModel.this.updateBadges();
-			}
-			
-		});
+		this.tree.getSelectionModel().addTreeSelectionListener(
+				new TreeSelectionListener() {
+					
+					@Override
+					public void valueChanged(TreeSelectionEvent e) {
+						TaskSearcherTreeModel.this.updateBadges();
+					}
+					
+				});
 	}
 	
 	public SearcherItem getDefaultSearcher() {
@@ -175,9 +176,24 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 				TaskSearcherFactory.getInstance().getList());
 		Collections.sort(searchers, TaskSearcherComparator.INSTANCE);
 		
-		for (TaskSearcher searcher : searchers)
-			if (searcher.getType() == TaskSearcherType.GENERAL)
-				this.generalCategory.add(new SearcherItem(searcher));
+		for (TaskSearcher searcher : searchers) {
+			if (searcher.getType() == TaskSearcherType.GENERAL) {
+				this.getCategoryFromTaskSearcherType(
+						searcher.getType(),
+						searcher.getFolders(),
+						true);
+			}
+		}
+		
+		for (TaskSearcher searcher : searchers) {
+			if (searcher.getType() == TaskSearcherType.GENERAL) {
+				SearcherCategory category = this.getCategoryFromTaskSearcherType(
+						searcher.getType(),
+						searcher.getFolders(),
+						true);
+				category.add(new SearcherItem(searcher));
+			}
+		}
 	}
 	
 	private void initializeContextCategory() {
@@ -326,9 +342,24 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 				TaskSearcherFactory.getInstance().getList());
 		Collections.sort(searchers, TaskSearcherComparator.INSTANCE);
 		
-		for (TaskSearcher searcher : searchers)
-			if (searcher.getType() == TaskSearcherType.PERSONAL)
-				this.personalCategory.add(new SearcherItem(searcher));
+		for (TaskSearcher searcher : searchers) {
+			if (searcher.getType() == TaskSearcherType.PERSONAL) {
+				this.getCategoryFromTaskSearcherType(
+						searcher.getType(),
+						searcher.getFolders(),
+						true);
+			}
+		}
+		
+		for (TaskSearcher searcher : searchers) {
+			if (searcher.getType() == TaskSearcherType.PERSONAL) {
+				SearcherCategory category = this.getCategoryFromTaskSearcherType(
+						searcher.getType(),
+						searcher.getFolders(),
+						true);
+				category.add(new SearcherItem(searcher));
+			}
+		}
 	}
 	
 	public int findNewIndexInModelCategory(TreeNode parent, Model model) {
@@ -369,13 +400,20 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 	}
 	
 	public SearcherItem findItemFromSearcher(TaskSearcher searcher) {
-		return this.findItemFromSearcher(searcher, searcher.getType());
+		return this.findItemFromSearcher(
+				searcher,
+				searcher.getType(),
+				searcher.getFolders());
 	}
 	
 	private SearcherItem findItemFromSearcher(
 			TaskSearcher searcher,
-			TaskSearcherType type) {
-		SearcherCategory category = this.getCategoryFromTaskSearcherType(type);
+			TaskSearcherType type,
+			String[] folders) {
+		SearcherCategory category = this.getCategoryFromTaskSearcherType(
+				type,
+				folders,
+				false);
 		
 		for (int i = 0; i < category.getChildCount(); i++) {
 			TreeNode node = category.getChildAt(i);
@@ -405,12 +443,18 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 	}
 	
 	private SearcherCategory getCategoryFromTaskSearcherType(
-			TaskSearcherType type) {
+			TaskSearcherType type,
+			String[] folders,
+			boolean create) {
 		switch (type) {
 			case DEFAULT:
 				return (SearcherCategory) this.getRoot();
 			case GENERAL:
-				return this.generalCategory;
+				return this.getCategoryFromFolder(
+						this.generalCategory,
+						folders,
+						0,
+						create);
 			case CONTEXT:
 				return this.contextCategory;
 			case FOLDER:
@@ -422,7 +466,11 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 			case TAG:
 				return this.tagCategory;
 			case PERSONAL:
-				return this.personalCategory;
+				return this.getCategoryFromFolder(
+						this.personalCategory,
+						folders,
+						0,
+						create);
 		}
 		
 		return null;
@@ -441,6 +489,47 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 			default:
 				return null;
 		}
+	}
+	
+	private SearcherCategory getCategoryFromFolder(
+			SearcherCategory category,
+			String[] folders,
+			int index,
+			boolean create) {
+		if (folders == null || folders.length == 0 || index >= folders.length)
+			return category;
+		
+		for (int i = 0; i < category.getChildCount(); i++) {
+			TreeNode node = category.getChildAt(i);
+			if (node instanceof SearcherCategory) {
+				if (((SearcherCategory) node).getFolder().equals(
+						TaskSearcher.getFolder(ArrayUtils.subarray(
+								folders,
+								0,
+								index + 1)))) {
+					return this.getCategoryFromFolder(
+							(SearcherCategory) node,
+							folders,
+							index + 1,
+							create);
+				}
+			}
+		}
+		
+		if (create) {
+			SearcherCategory c = new SearcherCategory(
+					category.getType(),
+					TaskSearcher.getFolder(ArrayUtils.subarray(
+							folders,
+							0,
+							index + 1)), null);
+			
+			category.insert(c, 0);
+			
+			return this.getCategoryFromFolder(c, folders, index + 1, create);
+		}
+		
+		return category;
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -497,12 +586,15 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 		
 		if (event.getValue() instanceof TaskSearcher) {
 			TaskSearcher searcher = (TaskSearcher) event.getValue();
-			SearcherCategory category = this.getCategoryFromTaskSearcherType(searcher.getType());
+			SearcherCategory category = this.getCategoryFromTaskSearcherType(
+					searcher.getType(),
+					searcher.getFolders(),
+					true);
 			
 			if (event.getChangeType() == ListChangeEvent.VALUE_ADDED) {
 				SearcherItem item = new SearcherItem(searcher);
 				
-				this.insertNodeInto(item, category, 0);
+				this.insertNodeInto(item, category, category.getChildCount());
 			} else if (event.getChangeType() == ListChangeEvent.VALUE_REMOVED) {
 				SearcherItem item = this.findItemFromSearcher(searcher);
 				
@@ -658,19 +750,37 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 				this.nodeChanged(item);
 			}
 			
-			if (event.getPropertyName().equals(TaskSearcher.PROP_TYPE)) {
-				SearcherItem item = this.findItemFromSearcher(
-						searcher,
-						(TaskSearcherType) event.getOldValue());
+			if (event.getPropertyName().equals(TaskSearcher.PROP_TYPE)
+					|| event.getPropertyName().equals(TaskSearcher.PROP_FOLDER)) {
+				SearcherItem item = null;
 				
-				if (item != null)
+				if (event.getPropertyName().equals(TaskSearcher.PROP_TYPE))
+					item = this.findItemFromSearcher(
+							searcher,
+							(TaskSearcherType) event.getOldValue(),
+							searcher.getFolders());
+				
+				if (event.getPropertyName().equals(TaskSearcher.PROP_FOLDER))
+					item = this.findItemFromSearcher(
+							searcher,
+							searcher.getType(),
+							TaskSearcher.getFolders((String) event.getOldValue()));
+				
+				if (item != null) {
 					this.removeNodeFromParent(item);
+					this.cleanCategoryFolders();
+				}
 				
-				SearcherCategory category = this.getCategoryFromTaskSearcherType(searcher.getType());
+				SearcherCategory category = this.getCategoryFromTaskSearcherType(
+						searcher.getType(),
+						searcher.getFolders(),
+						true);
 				
 				item = new SearcherItem(searcher);
 				
-				this.insertNodeInto(item, category, 0);
+				this.insertNodeInto(item, category, category.getChildCount());
+				
+				this.tree.setSelectionPath(TreeUtils.getPath(item));
 			}
 			
 			this.updateSelection();
@@ -678,29 +788,50 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 		}
 	}
 	
+	private void cleanCategoryFolders() {
+		// TODO
+	}
+	
 	public void updateBadges() {
 		this.defaultSearcher.updateBadgeCount();
 		
 		SearcherCategory[] categories = this.getCategories();
 		for (SearcherCategory category : categories) {
-			for (int i = 0; i < category.getChildCount(); i++)
-				this.updateBadges((SearcherNode) category.getChildAt(i));
+			for (int i = 0; i < category.getChildCount(); i++) {
+				if (category.getChildAt(i) instanceof SearcherNode)
+					this.updateBadges((SearcherNode) category.getChildAt(i));
+				
+				if (category.getChildAt(i) instanceof SearcherCategory)
+					this.updateBadges((SearcherCategory) category.getChildAt(i));
+			}
 		}
 		
 		this.nodeChanged((TreeNode) this.getRoot());
+	}
+	
+	private void updateBadges(SearcherCategory category) {
+		for (int i = 0; i < category.getChildCount(); i++) {
+			if (category.getChildAt(i) instanceof SearcherNode)
+				this.updateBadges((SearcherNode) category.getChildAt(i));
+			
+			if (category.getChildAt(i) instanceof SearcherCategory)
+				this.updateBadges((SearcherCategory) category.getChildAt(i));
+		}
 	}
 	
 	private void updateBadges(SearcherNode node) {
 		node.updateBadgeCount();
 		
 		for (int i = 0; i < node.getChildCount(); i++) {
-			this.updateBadges((SearcherNode) node.getChildAt(i));
+			if (node.getChildAt(i) instanceof SearcherNode)
+				this.updateBadges((SearcherNode) node.getChildAt(i));
 		}
 	}
 	
 	private void updateSelection() {
-		if (this.treeSelectionModel.getSelectionPath() == null)
-			this.treeSelectionModel.setSelectionPath(TreeUtils.getPath(this.getDefaultSearcher()));
+		if (this.tree.getSelectionModel().getSelectionPath() == null)
+			this.tree.getSelectionModel().setSelectionPath(
+					TreeUtils.getPath(this.getDefaultSearcher()));
 	}
 	
 }

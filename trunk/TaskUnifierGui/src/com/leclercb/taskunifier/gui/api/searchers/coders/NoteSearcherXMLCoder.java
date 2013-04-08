@@ -62,6 +62,7 @@ public class NoteSearcherXMLCoder extends AbstractXMLCoder<NoteSearcher> {
 			NodeList nSearcher = node.getChildNodes();
 			
 			NoteSearcherType type = NoteSearcherType.PERSONAL;
+			String folder = null;
 			int order = 0;
 			String title = null;
 			String icon = null;
@@ -72,6 +73,10 @@ public class NoteSearcherXMLCoder extends AbstractXMLCoder<NoteSearcher> {
 			for (int i = 0; i < nSearcher.getLength(); i++) {
 				if (nSearcher.item(i).getNodeName().equals("type")) {
 					type = NoteSearcherType.valueOf(nSearcher.item(i).getTextContent());
+				}
+				
+				if (nSearcher.item(i).getNodeName().equals("folder")) {
+					folder = nSearcher.item(i).getTextContent();
 				}
 				
 				if (nSearcher.item(i).getNodeName().equals("order")) {
@@ -103,6 +108,7 @@ public class NoteSearcherXMLCoder extends AbstractXMLCoder<NoteSearcher> {
 			
 			return new NoteSearcher(
 					type,
+					folder,
 					order,
 					title,
 					icon,
@@ -130,6 +136,10 @@ public class NoteSearcherXMLCoder extends AbstractXMLCoder<NoteSearcher> {
 		Element type = document.createElement("type");
 		type.setTextContent(noteSearcher.getType().name());
 		root.appendChild(type);
+		
+		Element folder = document.createElement("folder");
+		folder.setTextContent(noteSearcher.getFolder());
+		root.appendChild(folder);
 		
 		Element order = document.createElement("order");
 		order.setTextContent(noteSearcher.getOrder() + "");

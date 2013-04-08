@@ -62,6 +62,7 @@ public class TaskSearcherXMLCoder extends AbstractXMLCoder<TaskSearcher> {
 			NodeList nSearcher = node.getChildNodes();
 			
 			TaskSearcherType type = TaskSearcherType.PERSONAL;
+			String folder = null;
 			int order = 0;
 			String title = null;
 			String icon = null;
@@ -72,6 +73,10 @@ public class TaskSearcherXMLCoder extends AbstractXMLCoder<TaskSearcher> {
 			for (int i = 0; i < nSearcher.getLength(); i++) {
 				if (nSearcher.item(i).getNodeName().equals("type")) {
 					type = TaskSearcherType.valueOf(nSearcher.item(i).getTextContent());
+				}
+				
+				if (nSearcher.item(i).getNodeName().equals("folder")) {
+					folder = nSearcher.item(i).getTextContent();
 				}
 				
 				if (nSearcher.item(i).getNodeName().equals("order")) {
@@ -103,6 +108,7 @@ public class TaskSearcherXMLCoder extends AbstractXMLCoder<TaskSearcher> {
 			
 			return new TaskSearcher(
 					type,
+					folder,
 					order,
 					title,
 					icon,
@@ -130,6 +136,10 @@ public class TaskSearcherXMLCoder extends AbstractXMLCoder<TaskSearcher> {
 		Element type = document.createElement("type");
 		type.setTextContent(taskSearcher.getType().name());
 		root.appendChild(type);
+		
+		Element folder = document.createElement("folder");
+		folder.setTextContent(taskSearcher.getFolder());
+		root.appendChild(folder);
 		
 		Element order = document.createElement("order");
 		order.setTextContent(taskSearcher.getOrder() + "");

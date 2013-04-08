@@ -153,6 +153,7 @@ public final class Constants {
 		// Default Note Searcher
 		DEFAULT_NOTE_SEARCHER = new NoteSearcher(
 				NoteSearcherType.DEFAULT,
+				null,
 				0,
 				"",
 				defaultNoteFilter,
@@ -176,6 +177,7 @@ public final class Constants {
 		// Main Note Searcher
 		MAIN_NOTE_SEARCHER = new NoteSearcher(
 				NoteSearcherType.DEFAULT,
+				null,
 				0,
 				Translations.getString("searcherlist.general.all"),
 				ImageUtils.getResourceFile("note.png"),
@@ -203,6 +205,7 @@ public final class Constants {
 		// Default Task Searcher
 		DEFAULT_TASK_SEARCHER = new TaskSearcher(
 				TaskSearcherType.DEFAULT,
+				null,
 				0,
 				"",
 				defaultTaskFilter,
@@ -226,6 +229,7 @@ public final class Constants {
 		// Main Task Searcher
 		MAIN_TASK_SEARCHER = new TaskSearcher(
 				TaskSearcherType.DEFAULT,
+				null,
 				0,
 				Translations.getString("searcherlist.general.all"),
 				ImageUtils.getResourceFile("task.png"),

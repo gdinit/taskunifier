@@ -259,6 +259,9 @@ public class NoteSearcherPanel extends JPanel implements SavePropertiesListener,
 							e.getX(),
 							e.getY());
 					
+					if (path == null)
+						return;
+					
 					Object node = path.getLastPathComponent();
 					
 					if (node instanceof FolderItem)

@@ -35,12 +35,6 @@ package com.leclercb.taskunifier.gui.components.tasksearcheredit.searcher;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 
 import javax.swing.DefaultComboBoxModel;
@@ -53,9 +47,7 @@ import javax.swing.filechooser.FileFilter;
 
 import org.jdesktop.swingx.renderer.DefaultListRenderer;
 
-import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.utils.CheckUtils;
-import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.FileUtils;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
@@ -67,22 +59,20 @@ import com.leclercb.taskunifier.gui.utils.FileChooserUtils;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class TaskSearcherPanel extends JPanel implements PropertyChangeListener {
+public class TaskSearcherPanel extends JPanel {
 	
 	private TaskSearcher searcher;
 	
 	private JComboBox searcherType;
+	private String searcherIconFile;
 	private JButton searcherIcon;
 	private JTextField searcherTitle;
+	private JTextField searcherFolder;
 	private JComboBox searcherTemplate;
 	
 	public TaskSearcherPanel(TaskSearcher searcher) {
 		CheckUtils.isNotNull(searcher);
 		this.searcher = searcher;
-		
-		this.searcher.addPropertyChangeListener(new WeakPropertyChangeListener(
-				this.searcher,
-				this));
 		
 		this.initialize();
 	}
@@ -103,16 +93,6 @@ public class TaskSearcherPanel extends JPanel implements PropertyChangeListener 
 		
 		this.searcherType = new JComboBox(searcherTypeModel);
 		this.searcherType.setSelectedItem(this.searcher.getType());
-		this.searcherType.addItemListener(new ItemListener() {
-			
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				TaskSearcherType type = (TaskSearcherType) TaskSearcherPanel.this.searcherType.getSelectedItem();
-				
-				if (type != null)
-					TaskSearcherPanel.this.searcher.setType(type);
-			}
-		});
 		
 		builder.appendI15d(
 				"searcheredit.searcher.type",
@@ -120,15 +100,17 @@ public class TaskSearcherPanel extends JPanel implements PropertyChangeListener 
 				this.searcherType);
 		
 		// Icon
+		this.searcherIconFile = this.searcher.getIcon();
+		
 		JPanel iconPanel = new JPanel(new BorderLayout());
 		
 		this.searcherIcon = new JButton();
 		iconPanel.add(this.searcherIcon, BorderLayout.CENTER);
-		this.searcherIcon.setIcon(this.searcher.getIcon() == null ? ImageUtils.getResourceImage(
+		this.searcherIcon.setIcon(this.searcherIconFile == null ? ImageUtils.getResourceImage(
 				"remove.png",
 				24,
-				24) : ImageUtils.getImage(this.searcher.getIcon(), 24, 24));
-		this.searcherIcon.setText(this.searcher.getIcon() == null ? Translations.getString("searcheredit.searcher.no_icon") : this.searcher.getIcon());
+				24) : ImageUtils.getImage(this.searcherIconFile, 24, 24));
+		this.searcherIcon.setText(this.searcherIconFile == null ? Translations.getString("searcheredit.searcher.no_icon") : this.searcherIconFile);
 		this.searcherIcon.addActionListener(new ActionListener() {
 			
 			@Override
@@ -166,13 +148,14 @@ public class TaskSearcherPanel extends JPanel implements PropertyChangeListener 
 				
 				String file = FileChooserUtils.getFile(
 						true,
-						TaskSearcherPanel.this.searcher.getIcon(),
+						TaskSearcherPanel.this.searcherIconFile,
 						fileFilter,
 						JFileChooser.FILES_ONLY,
 						null);
 				
-				if (file != null)
-					TaskSearcherPanel.this.searcher.setIcon(file);
+				if (file != null) {
+					TaskSearcherPanel.this.searcherIcon.setText(file);
+				}
 			}
 			
 		});
@@ -184,7 +167,8 @@ public class TaskSearcherPanel extends JPanel implements PropertyChangeListener 
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				TaskSearcherPanel.this.searcher.setIcon(null);
+				TaskSearcherPanel.this.searcherIconFile = null;
+				TaskSearcherPanel.this.searcherIcon.setText(Translations.getString("searcheredit.searcher.no_icon"));
 			}
 			
 		});
@@ -193,19 +177,19 @@ public class TaskSearcherPanel extends JPanel implements PropertyChangeListener 
 		
 		// Title
 		this.searcherTitle = new JTextField(this.searcher.getTitle());
-		this.searcherTitle.addKeyListener(new KeyAdapter() {
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				TaskSearcherPanel.this.searcher.setTitle(TaskSearcherPanel.this.searcherTitle.getText());
-			}
-			
-		});
 		
 		builder.appendI15d(
 				"searcheredit.searcher.title",
 				true,
 				this.searcherTitle);
+		
+		// Folder
+		this.searcherFolder = new JTextField(this.searcher.getFolder());
+		
+		builder.appendI15d(
+				"searcheredit.searcher.folder",
+				true,
+				this.searcherFolder);
 		
 		// Template
 		this.searcherTemplate = new JComboBox();
@@ -213,14 +197,6 @@ public class TaskSearcherPanel extends JPanel implements PropertyChangeListener 
 		this.searcherTemplate.setRenderer(new DefaultListRenderer(
 				StringValueTaskTemplateTitle.INSTANCE));
 		this.searcherTemplate.setSelectedItem(this.searcher.getTemplate());
-		this.searcherTemplate.addItemListener(new ItemListener() {
-			
-			@Override
-			public void itemStateChanged(ItemEvent event) {
-				TaskSearcherPanel.this.searcher.setTemplate((TaskTemplate) TaskSearcherPanel.this.searcherTemplate.getSelectedItem());
-			}
-			
-		});
 		
 		builder.appendI15d(
 				"searcheredit.searcher.template",
@@ -233,43 +209,16 @@ public class TaskSearcherPanel extends JPanel implements PropertyChangeListener 
 		this.add(panel, BorderLayout.NORTH);
 	}
 	
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(TaskSearcher.PROP_TYPE)) {
-			if (!EqualsUtils.equals(
-					this.searcherType.getSelectedItem(),
-					evt.getNewValue()))
-				this.searcherType.setSelectedItem(evt.getNewValue());
-		}
+	public void saveChanges() {
+		TaskSearcherType type = (TaskSearcherType) this.searcherType.getSelectedItem();
 		
-		if (evt.getPropertyName().equals(TaskSearcher.PROP_TITLE)) {
-			if (!EqualsUtils.equals(
-					this.searcherTitle.getText(),
-					evt.getNewValue()))
-				this.searcherTitle.setText((String) evt.getNewValue());
-		}
+		if (type != null)
+			this.searcher.setType(type);
 		
-		if (evt.getPropertyName().equals(TaskSearcher.PROP_ICON)) {
-			if (!EqualsUtils.equals(
-					this.searcherTitle.getText(),
-					evt.getNewValue())) {
-				this.searcherIcon.setIcon((String) evt.getNewValue() == null ? ImageUtils.getResourceImage(
-						"remove.png",
-						24,
-						24) : ImageUtils.getImage(
-						(String) evt.getNewValue(),
-						24,
-						24));
-				this.searcherIcon.setText((String) evt.getNewValue() == null ? Translations.getString("searcheredit.searcher.no_icon") : (String) evt.getNewValue());
-			}
-		}
-		
-		if (evt.getPropertyName().equals(TaskSearcher.PROP_TEMPLATE)) {
-			if (!EqualsUtils.equals(
-					this.searcherTemplate.getSelectedItem(),
-					evt.getNewValue()))
-				this.searcherTemplate.setSelectedItem(evt.getNewValue());
-		}
+		this.searcher.setIcon(this.searcherIconFile);
+		this.searcher.setTitle(this.searcherTitle.getText());
+		this.searcher.setFolder(this.searcherFolder.getText());
+		this.searcher.setTemplate((TaskTemplate) this.searcherTemplate.getSelectedItem());
 	}
 	
 }

@@ -2,7 +2,10 @@ HISTORY
 -------
 
 Version 3.2.2
+	- Major:
+		- Create sub-folders in the searcher categories
 	- Minor:
+		- Turkish translations
 		- FR 330: Task note on the right
 		- FR 335: Change global font
 		- BF 291: Print error

@@ -157,12 +157,14 @@ public class TaskSearcherFactory implements PropertyChangeListener, ListChangeSu
 	
 	public TaskSearcher create(
 			TaskSearcherType type,
+			String folder,
 			int order,
 			String title,
 			TaskFilter filter,
 			TaskSorter sorter) {
 		TaskSearcher searcher = new TaskSearcher(
 				type,
+				folder,
 				order,
 				title,
 				filter,
@@ -173,6 +175,7 @@ public class TaskSearcherFactory implements PropertyChangeListener, ListChangeSu
 	
 	public TaskSearcher create(
 			TaskSearcherType type,
+			String folder,
 			int order,
 			String title,
 			String icon,
@@ -180,6 +183,7 @@ public class TaskSearcherFactory implements PropertyChangeListener, ListChangeSu
 			TaskSorter sorter) {
 		TaskSearcher searcher = new TaskSearcher(
 				type,
+				folder,
 				order,
 				title,
 				icon,
@@ -191,6 +195,7 @@ public class TaskSearcherFactory implements PropertyChangeListener, ListChangeSu
 	
 	public TaskSearcher create(
 			TaskSearcherType type,
+			String folder,
 			int order,
 			String title,
 			String icon,
@@ -199,6 +204,7 @@ public class TaskSearcherFactory implements PropertyChangeListener, ListChangeSu
 			TaskTemplate template) {
 		TaskSearcher searcher = new TaskSearcher(
 				type,
+				folder,
 				order,
 				title,
 				icon,

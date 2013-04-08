@@ -101,7 +101,7 @@ public class TaskRuleActionCompleteTasks implements TaskRuleAction {
 		
 		TASK_FILTER_PANEL.setFilter(this.filter);
 		DIALOG.setVisible(true);
-		TASK_FILTER_PANEL.close();
+		TASK_FILTER_PANEL.saveChanges();
 	}
 	
 	@Override
