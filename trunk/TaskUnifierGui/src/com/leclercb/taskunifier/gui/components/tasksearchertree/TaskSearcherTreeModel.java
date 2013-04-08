@@ -669,8 +669,17 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 		}
 		
 		if (event.getValue() instanceof TaskSearcher) {
-			this.initializeGeneralCategory();
-			this.initializePersonalCategory();
+			switch (((TaskSearcher) event.getValue()).getType()) {
+				case GENERAL:
+					this.initializeGeneralCategory();
+					break;
+				case PERSONAL:
+					this.initializePersonalCategory();
+					break;
+				default:
+					break;
+			}
+			
 			return;
 		}
 		
@@ -739,7 +748,16 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 					|| event.getPropertyName().equals(TaskSearcher.PROP_FOLDER)) {
 				TaskSearcher searcher = this.tree.getSelectedTaskSearcher();
 				
-				this.initializePersonalCategory();
+				switch (((TaskSearcher) event.getSource()).getType()) {
+					case GENERAL:
+						this.initializeGeneralCategory();
+						break;
+					case PERSONAL:
+						this.initializePersonalCategory();
+						break;
+					default:
+						break;
+				}
 				
 				if (searcher != null)
 					this.updateSelection(this.findItemFromSearcher(searcher));
