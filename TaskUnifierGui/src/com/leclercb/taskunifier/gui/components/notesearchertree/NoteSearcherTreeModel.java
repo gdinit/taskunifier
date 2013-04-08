@@ -369,8 +369,11 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 					|| event.getPropertyName().equals(
 							ModelArchive.PROP_ARCHIVED)) {
 				Folder folder = this.tree.getSelectedFolder();
+				
 				this.initializeFolderCategory();
-				this.updateSelection(this.findItemFromFolder(folder));
+				
+				if (folder != null)
+					this.updateSelection(this.findItemFromFolder(folder));
 			}
 			
 			if (event.getPropertyName().equals(BasicModel.PROP_TITLE)
@@ -385,8 +388,11 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 			if (event.getPropertyName().equals(NoteSearcher.PROP_TYPE)
 					|| event.getPropertyName().equals(NoteSearcher.PROP_FOLDER)) {
 				NoteSearcher searcher = this.tree.getSelectedNoteSearcher();
+				
 				this.initializePersonalCategory();
-				this.updateSelection(this.findItemFromSearcher(searcher));
+				
+				if (searcher != null)
+					this.updateSelection(this.findItemFromSearcher(searcher));
 			}
 			
 			if (event.getPropertyName().equals(NoteSearcher.PROP_TITLE)
