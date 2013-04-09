@@ -36,22 +36,20 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 
 public enum TaskSearcherType {
 	
-	DEFAULT(false, false, ""),
-	GENERAL(true, true, Translations.getString("searcherlist.general")),
-	CONTEXT(false, false, Translations.getString("general.contexts")),
-	FOLDER(false, false, Translations.getString("general.folders")),
-	GOAL(false, false, Translations.getString("general.goals")),
-	LOCATION(false, false, Translations.getString("general.locations")),
-	TAG(false, false, Translations.getString("general.task.tags")),
-	PERSONAL(true, true, Translations.getString("searcherlist.personal"));
+	DEFAULT(false, ""),
+	GENERAL(true, Translations.getString("searcherlist.general")),
+	CONTEXT(false, Translations.getString("general.contexts")),
+	FOLDER(false, Translations.getString("general.folders")),
+	GOAL(false, Translations.getString("general.goals")),
+	LOCATION(false, Translations.getString("general.locations")),
+	TAG(false, Translations.getString("general.task.tags")),
+	PERSONAL(true, Translations.getString("searcherlist.personal"));
 	
 	private boolean editable;
-	private boolean deletable;
 	private String label;
 	
-	private TaskSearcherType(boolean editable, boolean deletable, String label) {
+	private TaskSearcherType(boolean editable, String label) {
 		this.setEditable(editable);
-		this.setDeletable(deletable);
 		this.setLabel(label);
 	}
 	
@@ -61,14 +59,6 @@ public enum TaskSearcherType {
 	
 	private void setEditable(boolean editable) {
 		this.editable = editable;
-	}
-	
-	public boolean isDeletable() {
-		return this.deletable;
-	}
-	
-	private void setDeletable(boolean deletable) {
-		this.deletable = deletable;
 	}
 	
 	public String getLabel() {

@@ -67,7 +67,7 @@ public class ActionDeleteTaskSearcher extends AbstractViewTaskSearcherSelectionA
 			boolean foundInFactory = TaskSearcherFactory.getInstance().contains(
 					searcher);
 			
-			if (foundInFactory && searcher.getType().isDeletable())
+			if (foundInFactory && searcher.getType().isEditable())
 				enabled = true;
 		}
 		
@@ -88,7 +88,7 @@ public class ActionDeleteTaskSearcher extends AbstractViewTaskSearcherSelectionA
 		boolean foundInFactory = TaskSearcherFactory.getInstance().contains(
 				searcher);
 		
-		if (foundInFactory && searcher.getType().isDeletable()) {
+		if (foundInFactory && searcher.getType().isEditable()) {
 			TaskSearcherFactory.getInstance().unregister(searcher);
 			Constants.UNDO_SUPPORT.postEdit(new TaskSearcherDeleteUndoableEdit(
 					searcher));

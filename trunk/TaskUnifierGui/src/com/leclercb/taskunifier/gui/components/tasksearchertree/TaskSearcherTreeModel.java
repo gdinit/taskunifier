@@ -632,7 +632,7 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 							0,
 							index + 1)), null);
 			
-			category.insert(c, 0);
+			category.add(c);
 			
 			return this.getCategoryFromFolder(c, folders, index + 1, create);
 		}

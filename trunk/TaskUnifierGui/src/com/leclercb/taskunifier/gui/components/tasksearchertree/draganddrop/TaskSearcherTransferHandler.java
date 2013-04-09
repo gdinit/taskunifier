@@ -156,6 +156,9 @@ public class TaskSearcherTransferHandler extends TransferHandler {
 				if (node != null && !(node instanceof SearcherItem))
 					return false;
 				
+				if (category != null && !category.getType().isEditable())
+					return false;
+				
 				SearcherItem dragItem = tree.getSearcherModel().findItemFromSearcher(
 						dragSearcher);
 				
@@ -275,15 +278,16 @@ public class TaskSearcherTransferHandler extends TransferHandler {
 				return true;
 			} else {
 				TaskSearcherTree tree = (TaskSearcherTree) support.getComponent();
-				SearcherNode node = this.getSearcherNodeForLocation(support);
-				
-				if (node != null && !(node instanceof SearcherItem))
-					return false;
 				
 				SearcherItem dragItem = tree.getSearcherModel().findItemFromSearcher(
 						dragSearcher);
 				
 				if (dragItem == null)
+					return false;
+				
+				SearcherNode node = this.getSearcherNodeForLocation(support);
+				
+				if (node != null && !(node instanceof SearcherItem))
 					return false;
 				
 				SearcherCategory category = null;
@@ -292,6 +296,9 @@ public class TaskSearcherTransferHandler extends TransferHandler {
 					category = (SearcherCategory) node.getParent();
 				else
 					category = this.getSearcherCategoryForLocation(support);
+				
+				if (category != null && !category.getType().isEditable())
+					return false;
 				
 				if (category.getType() == dragSearcher.getType()
 						&& EqualsUtils.equals(
