@@ -55,6 +55,7 @@ import com.leclercb.taskunifier.api.models.Folder;
 import com.leclercb.taskunifier.api.models.FolderFactory;
 import com.leclercb.taskunifier.api.models.ModelArchive;
 import com.leclercb.taskunifier.api.models.ModelParent;
+import com.leclercb.taskunifier.api.models.ModelStatus;
 import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.api.models.NoteFactory;
 import com.leclercb.taskunifier.gui.api.models.GuiModel;
@@ -132,6 +133,8 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 			((DefaultMutableTreeNode) this.getRoot()).add(this.folderCategory);
 		}
 		
+		boolean expanded = this.tree.isExpanded(TreeUtils.getPath(this.folderCategory));
+		
 		this.folderCategory.removeAllChildren();
 		
 		this.nodeStructureChanged(this.folderCategory);
@@ -168,10 +171,12 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 		}
 		
 		this.nodeStructureChanged(this.folderCategory);
-		TreeUtils.expandAll(
-				this.tree,
-				TreeUtils.getPath(this.folderCategory),
-				true);
+		
+		if (expanded)
+			TreeUtils.expandAll(
+					this.tree,
+					TreeUtils.getPath(this.folderCategory),
+					true);
 	}
 	
 	private void initializePersonalCategory() {
@@ -181,6 +186,8 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 					this.settingsPrefix + ".category.personal.expanded");
 			((DefaultMutableTreeNode) this.getRoot()).add(this.personalCategory);
 		}
+		
+		boolean expanded = this.tree.isExpanded(TreeUtils.getPath(this.personalCategory));
 		
 		this.personalCategory.removeAllChildren();
 		
@@ -213,10 +220,12 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 		}
 		
 		this.nodeStructureChanged(this.personalCategory);
-		TreeUtils.expandAll(
-				this.tree,
-				TreeUtils.getPath(this.personalCategory),
-				true);
+		
+		if (expanded)
+			TreeUtils.expandAll(
+					this.tree,
+					TreeUtils.getPath(this.personalCategory),
+					true);
 	}
 	
 	public FolderItem findItemFromFolder(Folder folder) {
@@ -364,7 +373,13 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 		}
 		
 		if (event.getSource() instanceof Folder) {
+			boolean statusUpdated = false;
+			
 			if (event.getPropertyName().equals(BasicModel.PROP_MODEL_STATUS)
+					&& ((ModelStatus) event.getOldValue()).isEndUserStatus() != ((ModelStatus) event.getNewValue()).isEndUserStatus())
+				statusUpdated = true;
+			
+			if (statusUpdated
 					|| event.getPropertyName().equals(ModelParent.PROP_PARENT)
 					|| event.getPropertyName().equals(
 							ModelArchive.PROP_ARCHIVED)) {

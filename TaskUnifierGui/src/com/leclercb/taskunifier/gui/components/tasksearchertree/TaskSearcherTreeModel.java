@@ -65,6 +65,7 @@ import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.ModelArchive;
 import com.leclercb.taskunifier.api.models.ModelNote;
 import com.leclercb.taskunifier.api.models.ModelParent;
+import com.leclercb.taskunifier.api.models.ModelStatus;
 import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.Tag;
 import com.leclercb.taskunifier.api.models.TagList;
@@ -174,6 +175,8 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 			((DefaultMutableTreeNode) this.getRoot()).add(this.generalCategory);
 		}
 		
+		boolean expanded = this.tree.isExpanded(TreeUtils.getPath(this.generalCategory));
+		
 		this.generalCategory.removeAllChildren();
 		
 		this.nodeStructureChanged(this.generalCategory);
@@ -205,10 +208,12 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 		}
 		
 		this.nodeStructureChanged(this.generalCategory);
-		TreeUtils.expandAll(
-				this.tree,
-				TreeUtils.getPath(this.generalCategory),
-				true);
+		
+		if (expanded)
+			TreeUtils.expandAll(
+					this.tree,
+					TreeUtils.getPath(this.generalCategory),
+					true);
 	}
 	
 	private void initializeContextCategory() {
@@ -220,6 +225,8 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 					this.settingsPrefix + ".category.context.expanded");
 			((DefaultMutableTreeNode) this.getRoot()).add(this.contextCategory);
 		}
+		
+		boolean expanded = this.tree.isExpanded(TreeUtils.getPath(this.contextCategory));
 		
 		this.contextCategory.removeAllChildren();
 		
@@ -255,10 +262,12 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 		}
 		
 		this.nodeStructureChanged(this.contextCategory);
-		TreeUtils.expandAll(
-				this.tree,
-				TreeUtils.getPath(this.contextCategory),
-				true);
+		
+		if (expanded)
+			TreeUtils.expandAll(
+					this.tree,
+					TreeUtils.getPath(this.contextCategory),
+					true);
 	}
 	
 	private void initializeFolderCategory() {
@@ -270,6 +279,8 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 					this.settingsPrefix + ".category.folder.expanded");
 			((DefaultMutableTreeNode) this.getRoot()).add(this.folderCategory);
 		}
+		
+		boolean expanded = this.tree.isExpanded(TreeUtils.getPath(this.folderCategory));
 		
 		this.folderCategory.removeAllChildren();
 		
@@ -307,10 +318,12 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 		}
 		
 		this.nodeStructureChanged(this.folderCategory);
-		TreeUtils.expandAll(
-				this.tree,
-				TreeUtils.getPath(this.folderCategory),
-				true);
+		
+		if (expanded)
+			TreeUtils.expandAll(
+					this.tree,
+					TreeUtils.getPath(this.folderCategory),
+					true);
 	}
 	
 	private void initializeGoalCategory() {
@@ -322,6 +335,8 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 					this.settingsPrefix + ".category.goal.expanded");
 			((DefaultMutableTreeNode) this.getRoot()).add(this.goalCategory);
 		}
+		
+		boolean expanded = this.tree.isExpanded(TreeUtils.getPath(this.goalCategory));
 		
 		this.goalCategory.removeAllChildren();
 		
@@ -357,10 +372,12 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 		}
 		
 		this.nodeStructureChanged(this.goalCategory);
-		TreeUtils.expandAll(
-				this.tree,
-				TreeUtils.getPath(this.goalCategory),
-				true);
+		
+		if (expanded)
+			TreeUtils.expandAll(
+					this.tree,
+					TreeUtils.getPath(this.goalCategory),
+					true);
 	}
 	
 	private void initializeLocationCategory() {
@@ -372,6 +389,8 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 					this.settingsPrefix + ".category.location.expanded");
 			((DefaultMutableTreeNode) this.getRoot()).add(this.locationCategory);
 		}
+		
+		boolean expanded = this.tree.isExpanded(TreeUtils.getPath(this.locationCategory));
 		
 		this.locationCategory.removeAllChildren();
 		
@@ -402,10 +421,12 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 		}
 		
 		this.nodeStructureChanged(this.locationCategory);
-		TreeUtils.expandAll(
-				this.tree,
-				TreeUtils.getPath(this.locationCategory),
-				true);
+		
+		if (expanded)
+			TreeUtils.expandAll(
+					this.tree,
+					TreeUtils.getPath(this.locationCategory),
+					true);
 	}
 	
 	private void initializeTagCategory() {
@@ -417,6 +438,8 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 					this.settingsPrefix + ".category.tag.expanded");
 			((DefaultMutableTreeNode) this.getRoot()).add(this.tagCategory);
 		}
+		
+		boolean expanded = this.tree.isExpanded(TreeUtils.getPath(this.tagCategory));
 		
 		this.tagCategory.removeAllChildren();
 		
@@ -433,10 +456,12 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 		}
 		
 		this.nodeStructureChanged(this.tagCategory);
-		TreeUtils.expandAll(
-				this.tree,
-				TreeUtils.getPath(this.tagCategory),
-				true);
+		
+		if (expanded)
+			TreeUtils.expandAll(
+					this.tree,
+					TreeUtils.getPath(this.tagCategory),
+					true);
 	}
 	
 	private void initializePersonalCategory() {
@@ -446,6 +471,8 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 					this.settingsPrefix + ".category.personal.expanded");
 			((DefaultMutableTreeNode) this.getRoot()).add(this.personalCategory);
 		}
+		
+		boolean expanded = this.tree.isExpanded(TreeUtils.getPath(this.personalCategory));
 		
 		this.personalCategory.removeAllChildren();
 		
@@ -478,10 +505,12 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 		}
 		
 		this.nodeStructureChanged(this.personalCategory);
-		TreeUtils.expandAll(
-				this.tree,
-				TreeUtils.getPath(this.personalCategory),
-				true);
+		
+		if (expanded)
+			TreeUtils.expandAll(
+					this.tree,
+					TreeUtils.getPath(this.personalCategory),
+					true);
 	}
 	
 	public ModelItem findItemFromModel(Model model) {
@@ -708,7 +737,13 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 		}
 		
 		if (event.getSource() instanceof Model) {
+			boolean statusUpdated = false;
+			
 			if (event.getPropertyName().equals(BasicModel.PROP_MODEL_STATUS)
+					&& ((ModelStatus) event.getOldValue()).isEndUserStatus() != ((ModelStatus) event.getNewValue()).isEndUserStatus())
+				statusUpdated = true;
+			
+			if (statusUpdated
 					|| event.getPropertyName().equals(ModelParent.PROP_PARENT)
 					|| event.getPropertyName().equals(
 							ModelArchive.PROP_ARCHIVED)) {

@@ -253,7 +253,8 @@ public class NoteSearcherTree extends JTree implements NoteSearcherView, Propert
 		SearcherCategory[] categories = this.getSearcherModel().getCategories();
 		for (SearcherCategory category : categories) {
 			if (category.getExpandedPropertyName() != null) {
-				this.setExpandedState(
+				TreeUtils.expandAll(
+						this,
 						TreeUtils.getPath(category),
 						Main.getSettings().getBooleanProperty(
 								category.getExpandedPropertyName(),
