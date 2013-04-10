@@ -278,7 +278,8 @@ public class TaskSearcherTree extends JTree implements TaskSearcherView, Propert
 		SearcherCategory[] categories = this.getSearcherModel().getCategories();
 		for (SearcherCategory category : categories) {
 			if (category.getExpandedPropertyName() != null) {
-				this.setExpandedState(
+				TreeUtils.expandAll(
+						this,
 						TreeUtils.getPath(category),
 						Main.getSettings().getBooleanProperty(
 								category.getExpandedPropertyName(),
