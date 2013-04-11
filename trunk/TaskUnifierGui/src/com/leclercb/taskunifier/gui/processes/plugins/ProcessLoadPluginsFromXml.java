@@ -53,7 +53,7 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.HttpUtils;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
-import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.io.xml.Xpp3DomDriver;
 
 public class ProcessLoadPluginsFromXml implements Process<Plugin[]> {
 	
@@ -125,7 +125,7 @@ public class ProcessLoadPluginsFromXml implements Process<Plugin[]> {
 			
 			XStream xstream = new TUXStream(
 					new PureJavaReflectionProvider(),
-					new DomDriver("UTF-8"));
+					new Xpp3DomDriver());
 			xstream.setMode(XStream.NO_REFERENCES);
 			xstream.alias("plugins", Plugin[].class);
 			xstream.alias("plugin", Plugin.class);

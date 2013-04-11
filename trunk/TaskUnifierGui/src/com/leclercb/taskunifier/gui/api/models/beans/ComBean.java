@@ -33,7 +33,10 @@
 package com.leclercb.taskunifier.gui.api.models.beans;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 
 import com.leclercb.taskunifier.api.models.templates.NoteTemplateFactory;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplateFactory;
@@ -43,7 +46,7 @@ import com.leclercb.taskunifier.gui.api.models.beans.converters.ComTaskBeanWithT
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
-import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.io.xml.Xpp3DomDriver;
 
 @XStreamAlias("com")
 public class ComBean {
@@ -118,7 +121,7 @@ public class ComBean {
 	public static void encodeToXML(OutputStream output, ComBean bean) {
 		XStream xstream = new TUXStream(
 				new PureJavaReflectionProvider(),
-				new DomDriver("UTF-8"));
+				new Xpp3DomDriver());
 		xstream.setMode(XStream.NO_REFERENCES);
 		xstream.processAnnotations(ComBean.class);
 		xstream.alias("note", ComNoteBean.class);
@@ -135,13 +138,17 @@ public class ComBean {
 				xstream.getReflectionProvider(),
 				TaskTemplateFactory.getInstance().getDefaultTemplate()));
 		
-		xstream.toXML(bean, output);
+		try {
+			xstream.toXML(bean, new OutputStreamWriter(output, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			xstream.toXML(bean, output);
+		}
 	}
 	
 	public static ComBean decodeFromXML(InputStream input) {
 		XStream xstream = new TUXStream(
 				new PureJavaReflectionProvider(),
-				new DomDriver("UTF-8"));
+				new Xpp3DomDriver());
 		xstream.setMode(XStream.NO_REFERENCES);
 		xstream.processAnnotations(ComBean.class);
 		xstream.alias("note", ComNoteBean.class);
@@ -158,7 +165,13 @@ public class ComBean {
 				xstream.getReflectionProvider(),
 				TaskTemplateFactory.getInstance().getDefaultTemplate()));
 		
-		return (ComBean) xstream.fromXML(input);
+		try {
+			return (ComBean) xstream.fromXML(new InputStreamReader(
+					input,
+					"UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			return (ComBean) xstream.fromXML(input);
+		}
 	}
 	
 }

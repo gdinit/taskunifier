@@ -35,7 +35,10 @@ package com.leclercb.taskunifier.api.models;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +55,7 @@ import com.leclercb.taskunifier.api.models.beans.ModelBean;
 import com.leclercb.taskunifier.api.xstream.TUXStream;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
-import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.io.xml.Xpp3DomDriver;
 
 public abstract class AbstractModelFactory<OM extends Model, OMB extends ModelBean, M extends Model, MB extends ModelBean> implements ModelFactory<OM, OMB, M, MB>, PropertyChangeListener {
 	
@@ -539,7 +542,7 @@ public abstract class AbstractModelFactory<OM extends Model, OMB extends ModelBe
 	public MB[] decodeBeansFromXML(InputStream input) {
 		XStream xstream = new TUXStream(
 				new PureJavaReflectionProvider(),
-				new DomDriver("UTF-8"));
+				new Xpp3DomDriver());
 		xstream.setMode(XStream.NO_REFERENCES);
 		xstream.alias(
 				this.getModelListNodeName(),
@@ -547,14 +550,18 @@ public abstract class AbstractModelFactory<OM extends Model, OMB extends ModelBe
 		xstream.alias(this.getModelNodeName(), this.getModelBeanClass());
 		xstream.processAnnotations(this.getModelBeanClass());
 		
-		return (MB[]) xstream.fromXML(input);
+		try {
+			return (MB[]) xstream.fromXML(new InputStreamReader(input, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			return (MB[]) xstream.fromXML(input);
+		}
 	}
 	
 	@Override
 	public void encodeBeansToXML(OutputStream output, MB[] beans) {
 		XStream xstream = new TUXStream(
 				new PureJavaReflectionProvider(),
-				new DomDriver("UTF-8"));
+				new Xpp3DomDriver());
 		xstream.setMode(XStream.NO_REFERENCES);
 		xstream.alias(
 				this.getModelListNodeName(),
@@ -563,7 +570,11 @@ public abstract class AbstractModelFactory<OM extends Model, OMB extends ModelBe
 		xstream.alias("modelid", DeprecatedModelId.class, ModelId.class);
 		xstream.processAnnotations(this.getModelBeanClass());
 		
-		xstream.toXML(beans, output);
+		try {
+			xstream.toXML(beans, new OutputStreamWriter(output, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			xstream.toXML(beans, output);
+		}
 	}
 	
 	@Override
