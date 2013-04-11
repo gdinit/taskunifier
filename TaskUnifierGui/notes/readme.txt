@@ -3,6 +3,7 @@ HISTORY
 
 Version 3.2.2
 	- Major:
+		- XML invalid characters
 		- Create sub-folders in the searcher categories
 	- Minor:
 		- Turkish translations
