@@ -33,14 +33,17 @@
 package com.leclercb.taskunifier.api.models.templates;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.xstream.TUXStream;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
-import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.io.xml.Xpp3DomDriver;
 
 public class TaskTemplateFactory extends AbstractTemplateFactory<TaskTemplate> {
 	
@@ -87,13 +90,22 @@ public class TaskTemplateFactory extends AbstractTemplateFactory<TaskTemplate> {
 	public void decodeFromXML(InputStream input) {
 		XStream xstream = new TUXStream(
 				new PureJavaReflectionProvider(),
-				new DomDriver("UTF-8"));
+				new Xpp3DomDriver());
 		xstream.setMode(XStream.NO_REFERENCES);
 		xstream.alias("templates", TaskTemplate[].class);
 		xstream.alias("template", TaskTemplate.class);
 		xstream.processAnnotations(TaskTemplate.class);
 		
-		TaskTemplate[] templates = (TaskTemplate[]) xstream.fromXML(input);
+		TaskTemplate[] templates = null;
+		
+		try {
+			templates = (TaskTemplate[]) xstream.fromXML(new InputStreamReader(
+					input,
+					"UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			templates = (TaskTemplate[]) xstream.fromXML(input);
+		}
+		
 		for (TaskTemplate template : templates) {
 			this.register(template);
 		}
@@ -103,13 +115,19 @@ public class TaskTemplateFactory extends AbstractTemplateFactory<TaskTemplate> {
 	public void encodeToXML(OutputStream output) {
 		XStream xstream = new TUXStream(
 				new PureJavaReflectionProvider(),
-				new DomDriver("UTF-8"));
+				new Xpp3DomDriver());
 		xstream.setMode(XStream.NO_REFERENCES);
 		xstream.alias("templates", TaskTemplate[].class);
 		xstream.alias("template", TaskTemplate.class);
 		xstream.processAnnotations(TaskTemplate.class);
 		
-		xstream.toXML(this.getList().toArray(new TaskTemplate[0]), output);
+		try {
+			xstream.toXML(
+					this.getList().toArray(new TaskTemplate[0]),
+					new OutputStreamWriter(output, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			xstream.toXML(this.getList().toArray(new TaskTemplate[0]), output);
+		}
 	}
 	
 }

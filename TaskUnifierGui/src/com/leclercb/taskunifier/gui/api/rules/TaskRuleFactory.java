@@ -33,7 +33,10 @@
 package com.leclercb.taskunifier.gui.api.rules;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 
 import com.leclercb.taskunifier.api.models.AbstractBasicModelFactory;
 import com.leclercb.taskunifier.api.models.ModelId;
@@ -42,7 +45,7 @@ import com.leclercb.taskunifier.api.xstream.TUXStream;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
-import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.io.xml.Xpp3DomDriver;
 
 public class TaskRuleFactory extends AbstractBasicModelFactory<TaskRule> {
 	
@@ -92,13 +95,22 @@ public class TaskRuleFactory extends AbstractBasicModelFactory<TaskRule> {
 	public void decodeFromXML(InputStream input) {
 		XStream xstream = new TUXStream(
 				new PureJavaReflectionProvider(),
-				new DomDriver("UTF-8"));
+				new Xpp3DomDriver());
 		xstream.setMode(XStream.ID_REFERENCES);
 		xstream.alias("rules", TaskRule[].class);
 		xstream.alias("rule", TaskRule.class);
 		xstream.processAnnotations(TaskRule.class);
 		
-		TaskRule[] rules = (TaskRule[]) xstream.fromXML(input);
+		TaskRule[] rules = null;
+		
+		try {
+			rules = (TaskRule[]) xstream.fromXML(new InputStreamReader(
+					input,
+					"UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			rules = (TaskRule[]) xstream.fromXML(input);
+		}
+		
 		for (TaskRule rule : rules) {
 			this.register(rule);
 		}
@@ -108,13 +120,19 @@ public class TaskRuleFactory extends AbstractBasicModelFactory<TaskRule> {
 	public void encodeToXML(OutputStream output) {
 		XStream xstream = new TUXStream(
 				new PureJavaReflectionProvider(),
-				new DomDriver("UTF-8"));
+				new Xpp3DomDriver());
 		xstream.setMode(XStream.ID_REFERENCES);
 		xstream.alias("rules", TaskRule[].class);
 		xstream.alias("rule", TaskRule.class);
 		xstream.processAnnotations(TaskRule.class);
 		
-		xstream.toXML(this.getList().toArray(new TaskRule[0]), output);
+		try {
+			xstream.toXML(
+					this.getList().toArray(new TaskRule[0]),
+					new OutputStreamWriter(output, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			xstream.toXML(this.getList().toArray(new TaskRule[0]), output);
+		}
 	}
 	
 }
