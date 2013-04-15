@@ -58,10 +58,10 @@ public class NoteSearcherPanel extends JPanel {
 	private NoteSearcher searcher;
 	
 	private JComboBox searcherType;
+	private JTextField searcherFolder;
 	private String searcherIconFile;
 	private JButton searcherIcon;
 	private JTextField searcherTitle;
-	private JTextField searcherFolder;
 	
 	public NoteSearcherPanel(NoteSearcher searcher) {
 		this.searcher = searcher;
@@ -89,6 +89,14 @@ public class NoteSearcherPanel extends JPanel {
 				"searcheredit.searcher.type",
 				true,
 				this.searcherType);
+		
+		// Folder
+		this.searcherFolder = new JTextField(this.searcher.getFolder());
+		
+		builder.appendI15d(
+				"searcheredit.searcher.folder",
+				true,
+				this.searcherFolder);
 		
 		// Icon
 		this.searcherIconFile = this.searcher.getIcon();
@@ -175,14 +183,6 @@ public class NoteSearcherPanel extends JPanel {
 				true,
 				this.searcherTitle);
 		
-		// Folder
-		this.searcherFolder = new JTextField(this.searcher.getFolder());
-		
-		builder.appendI15d(
-				"searcheredit.searcher.folder",
-				true,
-				this.searcherFolder);
-		
 		// Lay out the panel
 		panel.add(builder.getPanel(), BorderLayout.CENTER);
 		
@@ -195,9 +195,9 @@ public class NoteSearcherPanel extends JPanel {
 		if (type != null)
 			NoteSearcherPanel.this.searcher.setType(type);
 		
+		this.searcher.setFolder(this.searcherFolder.getText());
 		this.searcher.setIcon(this.searcherIconFile);
 		this.searcher.setTitle(this.searcherTitle.getText());
-		this.searcher.setFolder(this.searcherFolder.getText());
 	}
 	
 }

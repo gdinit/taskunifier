@@ -64,10 +64,10 @@ public class TaskSearcherPanel extends JPanel {
 	private TaskSearcher searcher;
 	
 	private JComboBox searcherType;
+	private JTextField searcherFolder;
 	private String searcherIconFile;
 	private JButton searcherIcon;
 	private JTextField searcherTitle;
-	private JTextField searcherFolder;
 	private JComboBox searcherTemplate;
 	
 	public TaskSearcherPanel(TaskSearcher searcher) {
@@ -98,6 +98,14 @@ public class TaskSearcherPanel extends JPanel {
 				"searcheredit.searcher.type",
 				true,
 				this.searcherType);
+		
+		// Folder
+		this.searcherFolder = new JTextField(this.searcher.getFolder());
+		
+		builder.appendI15d(
+				"searcheredit.searcher.folder",
+				true,
+				this.searcherFolder);
 		
 		// Icon
 		this.searcherIconFile = this.searcher.getIcon();
@@ -183,14 +191,6 @@ public class TaskSearcherPanel extends JPanel {
 				true,
 				this.searcherTitle);
 		
-		// Folder
-		this.searcherFolder = new JTextField(this.searcher.getFolder());
-		
-		builder.appendI15d(
-				"searcheredit.searcher.folder",
-				true,
-				this.searcherFolder);
-		
 		// Template
 		this.searcherTemplate = new JComboBox();
 		this.searcherTemplate.setModel(new TaskTemplateModel(true));
@@ -215,9 +215,9 @@ public class TaskSearcherPanel extends JPanel {
 		if (type != null)
 			this.searcher.setType(type);
 		
+		this.searcher.setFolder(this.searcherFolder.getText());
 		this.searcher.setIcon(this.searcherIconFile);
 		this.searcher.setTitle(this.searcherTitle.getText());
-		this.searcher.setFolder(this.searcherFolder.getText());
 		this.searcher.setTemplate((TaskTemplate) this.searcherTemplate.getSelectedItem());
 	}
 	
