@@ -129,7 +129,7 @@ public class ModelConfigurationDialogPanel extends TUDialogPanel {
 		header.setIcon(ImageUtils.getResourceImage("folder.png", 32, 32));
 		
 		JPanel tabbedPanel = new JPanel(new BorderLayout());
-		tabbedPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		tabbedPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
 		this.tabbedPane = new JTabbedPane();
 		

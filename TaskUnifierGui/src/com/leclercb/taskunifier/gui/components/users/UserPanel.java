@@ -73,6 +73,7 @@ public class UserPanel extends JPanel {
 	private JTextField userName;
 	private UserList userList;
 	
+	private JButton changeUserNameButton;
 	private JButton switchToUserButton;
 	private JButton createNewUserButton;
 	private JButton deleteUserButton;
@@ -200,12 +201,12 @@ public class UserPanel extends JPanel {
 		
 		this.userName = new JTextField();
 		
-		JButton changeUserNameButton = new JButton(new ChangeUserNameAction());
+		this.changeUserNameButton = new JButton(new ChangeUserNameAction());
 		
 		topPanel.add(new JLabel(Translations.getString("general.user_name")
 				+ ": "), BorderLayout.WEST);
 		topPanel.add(this.userName, BorderLayout.CENTER);
-		topPanel.add(changeUserNameButton, BorderLayout.EAST);
+		topPanel.add(this.changeUserNameButton, BorderLayout.EAST);
 		
 		this.userList = new UserList();
 		
@@ -219,17 +220,7 @@ public class UserPanel extends JPanel {
 					
 					@Override
 					public void valueChanged(ListSelectionEvent evt) {
-						boolean isMainUser = EqualsUtils.equals(
-								UserPanel.this.userList.getSelectedUser(),
-								Main.getCurrentUserId());
-						
-						String user = UserPanel.this.userList.getSelectedUser();
-						String username = UserUtils.getInstance().getUserName(
-								user);
-						
-						UserPanel.this.userName.setText(username);
-						UserPanel.this.switchToUserButton.setEnabled(!isMainUser);
-						UserPanel.this.deleteUserButton.setEnabled(!isMainUser);
+						UserPanel.this.updateButtonsState();
 					}
 					
 				});
@@ -238,15 +229,12 @@ public class UserPanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				boolean isMainUser = EqualsUtils.equals(
-						UserPanel.this.userList.getSelectedUser(),
-						Main.getCurrentUserId());
-				
-				UserPanel.this.switchToUserButton.setEnabled(!isMainUser);
-				UserPanel.this.deleteUserButton.setEnabled(!isMainUser);
+				UserPanel.this.updateButtonsState();
 			}
 			
 		});
+		
+		this.updateButtonsState();
 	}
 	
 	private void initializeButtonsPanel() {
@@ -260,6 +248,26 @@ public class UserPanel extends JPanel {
 				this.deleteUserButton);
 		
 		this.add(panel, BorderLayout.SOUTH);
+	}
+	
+	private void updateButtonsState() {
+		if (this.userList.getSelectedUser() == null) {
+			this.userName.setText("");
+			this.changeUserNameButton.setEnabled(false);
+			this.switchToUserButton.setEnabled(false);
+			this.deleteUserButton.setEnabled(false);
+			return;
+		}
+		
+		String user = this.userList.getSelectedUser();
+		String username = UserUtils.getInstance().getUserName(user);
+		
+		boolean isMainUser = EqualsUtils.equals(user, Main.getCurrentUserId());
+		
+		this.userName.setText(username);
+		this.changeUserNameButton.setEnabled(true);
+		this.switchToUserButton.setEnabled(!isMainUser);
+		this.deleteUserButton.setEnabled(!isMainUser);
 	}
 	
 	private class ChangeUserNameAction extends AbstractAction {
