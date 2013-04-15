@@ -47,6 +47,9 @@ import javax.swing.ToolTipManager;
 import javax.swing.TransferHandler;
 import javax.swing.tree.TreeNode;
 
+import com.leclercb.commons.api.event.listchange.ListChangeEvent;
+import com.leclercb.commons.api.event.listchange.ListChangeListener;
+import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
 import com.leclercb.commons.api.properties.events.WeakSavePropertiesListener;
@@ -63,8 +66,9 @@ import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.SearcherCa
 import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.TagItem;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.TaskSearcherProvider;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.utils.UserUtils;
 
-public class TaskSearcherTree extends JTree implements TaskSearcherView, PropertyChangeListener, SavePropertiesListener {
+public class TaskSearcherTree extends JTree implements TaskSearcherView, PropertyChangeListener, SavePropertiesListener, ListChangeListener {
 	
 	private String settingsPrefix;
 	
@@ -271,6 +275,9 @@ public class TaskSearcherTree extends JTree implements TaskSearcherView, Propert
 		Main.getSettings().addPropertyChangeListener(
 				new WeakPropertyChangeListener(Main.getSettings(), this));
 		
+		UserUtils.getInstance().addListChangeListener(
+				new WeakListChangeListener(UserUtils.getInstance(), this));
+		
 		this.updateExpandedState();
 	}
 	
@@ -301,13 +308,20 @@ public class TaskSearcherTree extends JTree implements TaskSearcherView, Propert
 	}
 	
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getPropertyName().equals(Synchronizing.PROP_SYNCHRONIZING)) {
-			if (!(Boolean) evt.getNewValue())
+	public void propertyChange(PropertyChangeEvent event) {
+		if (event.getPropertyName().equals(Synchronizing.PROP_SYNCHRONIZING)) {
+			if (!(Boolean) event.getNewValue())
 				this.getSearcherModel().update();
 		}
 		
-		if (evt.getPropertyName().equals(this.settingsPrefix + ".category")) {
+		if (event.getPropertyName().equals(this.settingsPrefix + ".category")) {
+			this.updateExpandedState();
+		}
+	}
+	
+	@Override
+	public void listChange(ListChangeEvent event) {
+		if (event.getChangeType() == ListChangeEvent.VALUE_CHANGED) {
 			this.updateExpandedState();
 		}
 	}
