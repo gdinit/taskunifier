@@ -58,6 +58,25 @@ import com.leclercb.taskunifier.gui.components.notes.table.NoteTable;
 public class NoteTransferHandler extends TransferHandler {
 	
 	@Override
+	public int getSourceActions(JComponent c) {
+		return TransferHandler.COPY;
+	}
+	
+	@Override
+	protected Transferable createTransferable(JComponent c) {
+		NoteTable table = (NoteTable) c;
+		Note[] notes = table.getSelectedNotes();
+		
+		List<ModelId> ids = new ArrayList<ModelId>();
+		for (Note note : notes)
+			ids.add(note.getModelId());
+		
+		return new ModelTransferable(new ModelTransferData(
+				ModelType.NOTE,
+				ids.toArray(new ModelId[0])));
+	}
+	
+	@Override
 	public boolean canImport(TransferSupport support) {
 		Transferable t = support.getTransferable();
 		
@@ -87,25 +106,6 @@ public class NoteTransferHandler extends TransferHandler {
 		}
 		
 		return false;
-	}
-	
-	@Override
-	protected Transferable createTransferable(JComponent c) {
-		NoteTable table = (NoteTable) c;
-		Note[] notes = table.getSelectedNotes();
-		
-		List<ModelId> ids = new ArrayList<ModelId>();
-		for (Note note : notes)
-			ids.add(note.getModelId());
-		
-		return new ModelTransferable(new ModelTransferData(
-				ModelType.NOTE,
-				ids.toArray(new ModelId[0])));
-	}
-	
-	@Override
-	public int getSourceActions(JComponent c) {
-		return TransferHandler.COPY;
 	}
 	
 	@Override

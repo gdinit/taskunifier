@@ -63,6 +63,25 @@ import com.leclercb.taskunifier.gui.utils.TaskUtils;
 public class TaskTransferHandler extends TransferHandler {
 	
 	@Override
+	public int getSourceActions(JComponent c) {
+		return TransferHandler.COPY_OR_MOVE;
+	}
+	
+	@Override
+	protected Transferable createTransferable(JComponent c) {
+		TaskTable table = (TaskTable) c;
+		Task[] tasks = table.getSelectedTasks();
+		
+		List<ModelId> ids = new ArrayList<ModelId>();
+		for (Task task : tasks)
+			ids.add(task.getModelId());
+		
+		return new ModelTransferable(new ModelTransferData(
+				ModelType.TASK,
+				ids.toArray(new ModelId[0])));
+	}
+	
+	@Override
 	public boolean canImport(TransferSupport support) {
 		Transferable t = support.getTransferable();
 		
@@ -121,25 +140,6 @@ public class TaskTransferHandler extends TransferHandler {
 		}
 		
 		return false;
-	}
-	
-	@Override
-	protected Transferable createTransferable(JComponent c) {
-		TaskTable table = (TaskTable) c;
-		Task[] tasks = table.getSelectedTasks();
-		
-		List<ModelId> ids = new ArrayList<ModelId>();
-		for (Task task : tasks)
-			ids.add(task.getModelId());
-		
-		return new ModelTransferable(new ModelTransferData(
-				ModelType.TASK,
-				ids.toArray(new ModelId[0])));
-	}
-	
-	@Override
-	public int getSourceActions(JComponent c) {
-		return TransferHandler.COPY_OR_MOVE;
 	}
 	
 	@Override

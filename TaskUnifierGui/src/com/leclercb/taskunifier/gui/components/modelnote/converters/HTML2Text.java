@@ -85,7 +85,7 @@ public class HTML2Text extends HTMLEditorKit.ParserCallback {
 		return this.stringBuffer.toString();
 	}
 	
-	public static String convert(String html) {
+	public static String convertToBasicHtml(String html) {
 		HTML2Text parser = new HTML2Text();
 		Reader in = new StringReader(html);
 		
