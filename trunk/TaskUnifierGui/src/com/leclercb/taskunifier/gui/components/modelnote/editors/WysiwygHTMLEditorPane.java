@@ -79,6 +79,7 @@ import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
 import com.leclercb.taskunifier.gui.components.modelnote.HTMLEditorInterface;
 import com.leclercb.taskunifier.gui.components.modelnote.converters.HTML2Text;
 import com.leclercb.taskunifier.gui.components.modelnote.converters.Text2HTML;
+import com.leclercb.taskunifier.gui.components.modelnote.editors.draganddrop.ModelNoteTransferHandler;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.TULinkDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -124,7 +125,7 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 	
 	@Override
 	public String getText() {
-		return HTML2Text.convert(this.htmlNote.getText());
+		return HTML2Text.convertToBasicHtml(this.htmlNote.getText());
 	}
 	
 	@Override
@@ -171,6 +172,7 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 		this.htmlNote.setContentType("text/html");
 		this.htmlNote.setEditorKit(new WysiwygHTMLEditorKit());
 		this.htmlNote.setFont(UIManager.getFont("Label.font"));
+		this.htmlNote.setTransferHandler(new ModelNoteTransferHandler());
 		this.htmlNote.getDocument().addUndoableEditListener(this.undoSupport);
 		this.undoSupport.initializeMaps(this.htmlNote);
 		
