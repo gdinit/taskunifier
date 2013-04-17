@@ -6,6 +6,7 @@ Version 3.2.2
 		- Turkish translations
 		- FR 330: Task note on the right
 		- FR 335: Change global font
+		- BF 152: Copy paste note problem
 		- BF 291: Print error
 		- Bug fixed: Change searcher template
 
