@@ -32,10 +32,12 @@
  */
 package com.leclercb.taskunifier.gui.commons.values;
 
+import com.leclercb.taskunifier.gui.translations.Translations;
+
 public class StringValueTaskTitle extends StringValueTitle {
 	
 	public static final StringValueTaskTitle INSTANCE = new StringValueTaskTitle(
-			"task.default.title");
+			Translations.getString("task.default.title"));
 	
 	public StringValueTaskTitle(String defaultTitle) {
 		super(defaultTitle);
