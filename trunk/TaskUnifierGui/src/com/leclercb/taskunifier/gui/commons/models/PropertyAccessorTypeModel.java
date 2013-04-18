@@ -52,6 +52,7 @@ public class PropertyAccessorTypeModel extends DefaultComboBoxModel {
 		
 		types.remove(PropertyAccessorType.MODEL);
 		types.remove(PropertyAccessorType.ORDER);
+		types.remove(PropertyAccessorType.TASK_REPEAT_FROM);
 		types.remove(PropertyAccessorType.VOID);
 		
 		return types.toArray(new PropertyAccessorType[0]);
