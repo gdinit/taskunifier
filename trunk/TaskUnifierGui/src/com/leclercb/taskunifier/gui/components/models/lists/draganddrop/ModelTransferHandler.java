@@ -32,6 +32,7 @@
  */
 package com.leclercb.taskunifier.gui.components.models.lists.draganddrop;
 
+import java.awt.Point;
 import java.awt.datatransfer.Transferable;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,7 @@ import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.utils.ModelFactoryUtils;
 import com.leclercb.taskunifier.gui.commons.transfer.ModelTransferData;
 import com.leclercb.taskunifier.gui.commons.transfer.ModelTransferable;
+import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class ModelTransferHandler<M extends ModelParent<M>> extends TransferHandler {
 	
@@ -60,6 +62,9 @@ public class ModelTransferHandler<M extends ModelParent<M>> extends TransferHand
 	public ModelTransferHandler(ModelType type) {
 		CheckUtils.isNotNull(type);
 		this.type = type;
+		
+		this.setDragImage(ImageUtils.getResourceImage("folder.png", 48, 48).getImage());
+		this.setDragImageOffset(new Point(-24, 0));
 	}
 	
 	@SuppressWarnings("unchecked")

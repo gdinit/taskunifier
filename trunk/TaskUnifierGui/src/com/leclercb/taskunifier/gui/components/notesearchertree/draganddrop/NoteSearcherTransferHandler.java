@@ -32,6 +32,7 @@
  */
 package com.leclercb.taskunifier.gui.components.notesearchertree.draganddrop;
 
+import java.awt.Point;
 import java.awt.datatransfer.Transferable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,8 +64,39 @@ import com.leclercb.taskunifier.gui.components.notesearchertree.nodes.SearcherCa
 import com.leclercb.taskunifier.gui.components.notesearchertree.nodes.SearcherItem;
 import com.leclercb.taskunifier.gui.components.notesearchertree.nodes.SearcherNode;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
+import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class NoteSearcherTransferHandler extends TransferHandler {
+	
+	public NoteSearcherTransferHandler() {
+		this.setDragImage(ImageUtils.getResourceImage("search.png", 48, 48).getImage());
+		this.setDragImageOffset(new Point(-24, 0));
+	}
+	
+	@Override
+	public int getSourceActions(JComponent c) {
+		return TransferHandler.COPY_OR_MOVE;
+	}
+	
+	@Override
+	protected Transferable createTransferable(JComponent c) {
+		NoteSearcherTree tree = (NoteSearcherTree) c;
+		NoteSearcher searcher = tree.getSelectedNoteSearcher();
+		Folder folder = tree.getSelectedFolder();
+		
+		if (searcher == null)
+			return null;
+		
+		if (folder == null) {
+			return new NoteSearcherTransferable(new NoteSearcherTransferData(
+					searcher), null);
+		}
+		
+		return new NoteSearcherTransferable(new NoteSearcherTransferData(
+				searcher), new ModelTransferData(
+				folder.getModelType(),
+				folder.getModelId()));
+	}
 	
 	@Override
 	public boolean canImport(TransferSupport support) {
@@ -160,31 +192,6 @@ public class NoteSearcherTransferHandler extends TransferHandler {
 		}
 		
 		return false;
-	}
-	
-	@Override
-	protected Transferable createTransferable(JComponent c) {
-		NoteSearcherTree tree = (NoteSearcherTree) c;
-		NoteSearcher searcher = tree.getSelectedNoteSearcher();
-		Folder folder = tree.getSelectedFolder();
-		
-		if (searcher == null)
-			return null;
-		
-		if (folder == null) {
-			return new NoteSearcherTransferable(new NoteSearcherTransferData(
-					searcher), null);
-		}
-		
-		return new NoteSearcherTransferable(new NoteSearcherTransferData(
-				searcher), new ModelTransferData(
-				folder.getModelType(),
-				folder.getModelId()));
-	}
-	
-	@Override
-	public int getSourceActions(JComponent c) {
-		return TransferHandler.COPY_OR_MOVE;
 	}
 	
 	@Override

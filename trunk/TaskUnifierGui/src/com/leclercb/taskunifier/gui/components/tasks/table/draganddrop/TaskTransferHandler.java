@@ -32,6 +32,7 @@
  */
 package com.leclercb.taskunifier.gui.components.tasks.table.draganddrop;
 
+import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.io.Reader;
@@ -58,9 +59,15 @@ import com.leclercb.taskunifier.gui.commons.transfer.ModelTransferable;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.components.tasks.table.TaskTable;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
+import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
 public class TaskTransferHandler extends TransferHandler {
+	
+	public TaskTransferHandler() {
+		this.setDragImage(ImageUtils.getResourceImage("task.png", 48, 48).getImage());
+		this.setDragImageOffset(new Point(-24, 0));
+	}
 	
 	@Override
 	public int getSourceActions(JComponent c) {
