@@ -7,6 +7,7 @@ Version 3.2.2
 		- Create sub-folders in the searcher categories
 	- Minor:
 		- Turkish translations
+		- Drap and drop image
 		- FR 330: Task note on the right
 		- FR 335: Change global font
 		- BF 152: Copy paste note problem
