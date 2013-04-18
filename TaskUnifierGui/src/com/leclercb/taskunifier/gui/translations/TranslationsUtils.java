@@ -40,6 +40,7 @@ import com.leclercb.taskunifier.api.models.enums.GoalLevel;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.api.synchronizer.SynchronizerChoice;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
 import com.leclercb.taskunifier.gui.api.searchers.filters.FilterLink;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.CalendarCondition;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.Condition;
@@ -304,6 +305,69 @@ public final class TranslationsUtils {
 		}
 		
 		return "#" + condition.name() + "#";
+	}
+	
+	public static String translatePropertyAccessorType(PropertyAccessorType type) {
+		switch (type) {
+			case BOOLEAN:
+				return Translations.getString("property_accessor_type.boolean");
+			case CALENDAR_DATE:
+				return Translations.getString("property_accessor_type.calendar_date");
+			case CALENDAR_DATE_TIME:
+				return Translations.getString("property_accessor_type.calendar_date_time");
+			case CONTACT:
+				return Translations.getString("property_accessor_type.contact");
+			case CONTEXT:
+				return Translations.getString("property_accessor_type.context");
+			case CONTEXTS:
+				return Translations.getString("property_accessor_type.contexts");
+			case DOUBLE:
+				return Translations.getString("property_accessor_type.double");
+			case FILE:
+				return Translations.getString("property_accessor_type.file");
+			case FOLDER:
+				return Translations.getString("property_accessor_type.folder");
+			case GOAL:
+				return Translations.getString("property_accessor_type.goal");
+			case GOALS:
+				return Translations.getString("property_accessor_type.goals");
+			case INTEGER:
+				return Translations.getString("property_accessor_type.integer");
+			case LOCATION:
+				return Translations.getString("property_accessor_type.location");
+			case LOCATIONS:
+				return Translations.getString("property_accessor_type.locations");
+			case MINUTES:
+				return Translations.getString("property_accessor_type.minutes");
+			case MODEL:
+				return Translations.getString("property_accessor_type.model");
+			case NOTE:
+				return Translations.getString("property_accessor_type.note");
+			case ORDER:
+				return Translations.getString("property_accessor_type.order");
+			case PERCENTAGE:
+				return Translations.getString("property_accessor_type.percentage");
+			case STAR:
+				return Translations.getString("property_accessor_type.star");
+			case STRING:
+				return Translations.getString("property_accessor_type.string");
+			case TAGS:
+				return Translations.getString("property_accessor_type.tags");
+			case TASK:
+				return Translations.getString("property_accessor_type.task");
+			case TASK_PRIORITY:
+				return Translations.getString("property_accessor_type.task_priority");
+			case TASK_REPEAT_FROM:
+				return Translations.getString("property_accessor_type.task_repeat_from");
+			case TIME:
+				return Translations.getString("property_accessor_type.time");
+			case TIMER:
+				return Translations.getString("property_accessor_type.timer");
+			case VOID:
+				return Translations.getString("property_accessor_type.void");
+		}
+		
+		return "#" + type.name() + "#";
 	}
 	
 }
