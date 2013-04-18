@@ -32,6 +32,7 @@
  */
 package com.leclercb.taskunifier.gui.components.notes.table.draganddrop;
 
+import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.io.Reader;
@@ -54,8 +55,14 @@ import com.leclercb.taskunifier.gui.actions.ActionDuplicateNotes;
 import com.leclercb.taskunifier.gui.commons.transfer.ModelTransferData;
 import com.leclercb.taskunifier.gui.commons.transfer.ModelTransferable;
 import com.leclercb.taskunifier.gui.components.notes.table.NoteTable;
+import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class NoteTransferHandler extends TransferHandler {
+	
+	public NoteTransferHandler() {
+		this.setDragImage(ImageUtils.getResourceImage("note.png", 48, 48).getImage());
+		this.setDragImageOffset(new Point(-24, 0));
+	}
 	
 	@Override
 	public int getSourceActions(JComponent c) {
