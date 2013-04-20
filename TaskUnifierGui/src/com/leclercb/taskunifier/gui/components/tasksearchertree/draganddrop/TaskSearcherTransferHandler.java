@@ -32,7 +32,6 @@
  */
 package com.leclercb.taskunifier.gui.components.tasksearchertree.draganddrop;
 
-import java.awt.Point;
 import java.awt.datatransfer.Transferable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,13 +64,13 @@ import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.ModelItem;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.SearcherCategory;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.SearcherItem;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.SearcherNode;
-import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class TaskSearcherTransferHandler extends TransferHandler {
 	
 	public TaskSearcherTransferHandler() {
-		this.setDragImage(ImageUtils.getResourceImage("search.png", 48, 48).getImage());
-		this.setDragImageOffset(new Point(-24, 0));
+		// this.setDragImage(ImageUtils.getResourceImage("search.png", 48,
+		// 48).getImage());
+		// this.setDragImageOffset(new Point(-24, 0));
 	}
 	
 	@Override
