@@ -1,6 +1,10 @@
 HISTORY
 -------
 
+Version 3.2.3
+	- Major:
+		- Bug fixed: Open .tue files on Windows
+
 Version 3.2.2
 	- Major:
 		- XML invalid characters
