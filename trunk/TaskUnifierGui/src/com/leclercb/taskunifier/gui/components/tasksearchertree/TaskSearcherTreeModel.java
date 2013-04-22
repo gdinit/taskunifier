@@ -675,6 +675,7 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 			if (!Synchronizing.getInstance().isSynchronizing())
 				this.updateBadges();
 			
+			this.updateSelection(null);
 			return;
 		}
 		
@@ -708,14 +709,13 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 				default:
 					break;
 			}
-			
-			return;
 		}
 		
 		if (event.getValue() instanceof Tag) {
 			this.initializeTagCategory();
-			return;
 		}
+		
+		this.updateSelection(null);
 	}
 	
 	@Override

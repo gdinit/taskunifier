@@ -347,18 +347,19 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 			if (!Synchronizing.getInstance().isSynchronizing())
 				this.updateBadges();
 			
+			this.updateSelection(null);
 			return;
 		}
 		
 		if (event.getValue() instanceof Folder) {
 			this.initializeFolderCategory();
-			return;
 		}
 		
 		if (event.getValue() instanceof NoteSearcher) {
 			this.initializePersonalCategory();
-			return;
 		}
+		
+		this.updateSelection(null);
 	}
 	
 	@Override
