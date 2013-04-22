@@ -34,3 +34,15 @@ Root: HKCR; Subkey: ".tue"; ValueType: string; ValueName: ""; ValueData: "TaskUn
 Root: HKCR; Subkey: "TaskUnifierExchangeFile"; ValueType: string; ValueName: ""; ValueData: "TaskUnifier Exchange File"; Flags: uninsdeletekey
 Root: HKCR; Subkey: "TaskUnifierExchangeFile\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\TaskUnifier.exe,0"
 Root: HKCR; Subkey: "TaskUnifierExchangeFile\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\TaskUnifier.exe"" ""%1"""
+
+[Code]
+
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+
+	if CurStep = ssPostInstall then
+	begin
+		SaveStringToFile('{app}\TaskUnifier.l4j.ini', '-Dcom.leclercb.taskunifier.resource_folder="{app}\resources"', False);
+	end
+
+end;
