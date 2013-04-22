@@ -52,6 +52,10 @@ public class ActionCreateNoteFromClipboard extends AbstractViewAction {
 	
 	@Override
 	public void actionPerformed(ActionEvent event) {
+		createNoteFromClipboard();
+	}
+	
+	public static void createNoteFromClipboard() {
 		ViewUtils.setNoteView(true);
 		ViewUtils.getCurrentNoteView().getNoteTableView().pasteNote();
 	}
