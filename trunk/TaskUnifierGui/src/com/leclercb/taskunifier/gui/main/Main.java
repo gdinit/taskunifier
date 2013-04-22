@@ -70,6 +70,7 @@ import com.leclercb.taskunifier.api.models.GoalFactory;
 import com.leclercb.taskunifier.api.models.LocationFactory;
 import com.leclercb.taskunifier.api.models.NoteFactory;
 import com.leclercb.taskunifier.api.models.TaskFactory;
+import com.leclercb.taskunifier.gui.actions.ActionAddTask;
 import com.leclercb.taskunifier.gui.actions.ActionImportComFile;
 import com.leclercb.taskunifier.gui.actions.ActionQuit;
 import com.leclercb.taskunifier.gui.api.models.GuiContact;
@@ -94,6 +95,7 @@ import com.leclercb.taskunifier.gui.commons.properties.PropertiesUtils;
 import com.leclercb.taskunifier.gui.components.license.LicenseUtils;
 import com.leclercb.taskunifier.gui.components.license.UserIdLicenseValidator;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
+import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.main.MainLoadFiles;
 import com.leclercb.taskunifier.gui.main.main.MainLoadLoggers;
@@ -375,7 +377,12 @@ public class Main {
 			if (arg == null)
 				continue;
 			
-			ActionImportComFile.importComFile(new File(arg));
+			if (arg.endsWith(".tue")) {
+				ActionImportComFile.importComFile(new File(arg));
+			} else {
+				ViewUtils.setTaskView(true);
+				ActionAddTask.addTask(arg, false);
+			}
 		}
 	}
 	
