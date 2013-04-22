@@ -3,6 +3,7 @@ HISTORY
 
 Version 3.2.3
 	- Major:
+		- BF 295: Add task/note problem
 		- Bug fixed: Open .tue files on Windows
 
 Version 3.2.2
