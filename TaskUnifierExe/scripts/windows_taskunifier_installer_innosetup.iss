@@ -42,7 +42,7 @@ begin
 
 	if CurStep = ssPostInstall then
 	begin
-		SaveStringToFile('{app}\TaskUnifier.l4j.ini', '-Dcom.leclercb.taskunifier.resource_folder="{app}\resources"', False);
+		SaveStringToFile(ExpandConstant('{app}') + '\TaskUnifier.l4j.ini', '-Dcom.leclercb.taskunifier.resource_folder="' + ExpandConstant('{app}') + '\resources"', False);
 	end
 
 end;
