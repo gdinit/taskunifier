@@ -604,9 +604,7 @@ public enum PropertyAccessorType {
 		if (model2 == null)
 			return -1;
 		
-		return CompareUtils.compareStringIgnoreCase(
-				model1.getTitle(),
-				model2.getTitle());
+		return CompareUtils.compare(model1.getModelId(), model2.getModelId());
 	}
 	
 	private int compareCalendars(

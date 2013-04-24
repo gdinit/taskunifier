@@ -1,6 +1,10 @@
 HISTORY
 -------
 
+Version 3.2.4
+	- Major:
+		- Bug fixed: Sort order with identical titles
+
 Version 3.2.3
 	- Major:
 		- BF 295: Add task/note problem
