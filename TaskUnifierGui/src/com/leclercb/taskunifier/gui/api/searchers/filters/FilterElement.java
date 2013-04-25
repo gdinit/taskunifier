@@ -39,8 +39,11 @@ import java.util.List;
 
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupport;
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
+import com.leclercb.commons.api.logger.ApiLogger;
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.Model;
+import com.leclercb.taskunifier.api.models.ModelStatus;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.Condition;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.converter.ConditionValueConverter;
@@ -51,7 +54,7 @@ import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 @XStreamAlias("element")
-public abstract class FilterElement<M extends Model, F extends Filter<M, F, ? extends FilterElement<M, F>>> implements PropertyChangeSupported {
+public abstract class FilterElement<M extends Model, F extends Filter<M, F, ? extends FilterElement<M, F>>> implements PropertyChangeSupported, PropertyChangeListener {
 	
 	public static final String PROP_PROPERTY = "property";
 	public static final String PROP_CONDITION = "condition";
@@ -154,8 +157,29 @@ public abstract class FilterElement<M extends Model, F extends Filter<M, F, ? ex
 	}
 	
 	private PropertyChangeEvent setValue(Object value) {
+		if (value != null && value instanceof Model) {
+			Model model = (Model) value;
+			if (model.getModelStatus().equals(ModelStatus.TO_DELETE)
+					|| model.getModelStatus().equals(ModelStatus.DELETED)) {
+				ApiLogger.getLogger().severe(
+						"You cannot assign a deleted model");
+				value = null;
+			}
+		}
+		
+		if (this.value != null && this.value instanceof Model) {
+			Model model = (Model) this.value;
+			model.removePropertyChangeListener(this);
+		}
+		
 		Object oldValue = this.value;
 		this.value = value;
+		
+		if (this.value != null && this.value instanceof Model) {
+			Model model = (Model) this.value;
+			model.addPropertyChangeListener(this);
+		}
+		
 		return new PropertyChangeEvent(this, PROP_VALUE, oldValue, value);
 	}
 	
@@ -242,6 +266,18 @@ public abstract class FilterElement<M extends Model, F extends Filter<M, F, ? ex
 		this.propertyChangeSupport.removePropertyChangeListener(
 				propertyName,
 				listener);
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+		if (event.getSource() instanceof Model
+				&& event.getPropertyName().equals(BasicModel.PROP_MODEL_STATUS)) {
+			Model model = (Model) event.getSource();
+			
+			if (model.getModelStatus().equals(ModelStatus.TO_DELETE)
+					|| model.getModelStatus().equals(ModelStatus.DELETED))
+				this.setValue(null);
+		}
 	}
 	
 }
