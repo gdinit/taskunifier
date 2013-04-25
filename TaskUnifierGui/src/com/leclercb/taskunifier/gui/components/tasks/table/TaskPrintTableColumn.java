@@ -78,7 +78,7 @@ public class TaskPrintTableColumn extends TUTableColumn<Task> {
 				if (property == null)
 					property = "";
 				
-				component.setText(property.replaceAll("\n", ""));
+				component.setText(property.replaceAll("\n", " "));
 				return component;
 			}
 			

@@ -51,6 +51,7 @@ import com.leclercb.taskunifier.gui.commons.editors.TitleEditor;
 import com.leclercb.taskunifier.gui.commons.values.IconValueNote;
 import com.leclercb.taskunifier.gui.commons.values.StringValueModelId;
 import com.leclercb.taskunifier.gui.commons.values.StringValueNoteTitle;
+import com.leclercb.taskunifier.gui.components.modelnote.converters.HTML2Text;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class NoteColumnList extends PropertyAccessorList<Note> {
@@ -248,7 +249,7 @@ public class NoteColumnList extends PropertyAccessorList<Note> {
 			@Override
 			public String getPropertyAsString(Note model) {
 				Object value = this.getProperty(model);
-				return (value == null ? null : "\n" + value.toString());
+				return (value == null ? null : HTML2Text.convertToPlainText((String) value));
 			}
 			
 			@Override

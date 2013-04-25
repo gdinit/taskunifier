@@ -76,7 +76,7 @@ public class NotePrintTableColumn extends TUTableColumn<Note> {
 				if (property == null)
 					property = "";
 				
-				this.setText(property.replaceAll("\n", ""));
+				this.setText(property.replaceAll("\n", " "));
 				return component;
 			}
 			
