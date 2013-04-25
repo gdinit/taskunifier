@@ -5,6 +5,7 @@ Version 3.2.4
 	- Minor:
 		- Bug fixed: Sort order with identical titles
 		- Bug fixed: Printed note format
+		- Bug fixed: Shell models
 
 Version 3.2.3
 	- Major:
