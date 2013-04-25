@@ -32,8 +32,11 @@
  */
 package com.leclercb.taskunifier.api.models.templates;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Calendar;
 
+import com.leclercb.commons.api.logger.ApiLogger;
 import com.leclercb.taskunifier.api.models.AbstractBasicModel;
 import com.leclercb.taskunifier.api.models.Context;
 import com.leclercb.taskunifier.api.models.Folder;
@@ -41,6 +44,7 @@ import com.leclercb.taskunifier.api.models.Goal;
 import com.leclercb.taskunifier.api.models.Location;
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.ModelList;
+import com.leclercb.taskunifier.api.models.ModelStatus;
 import com.leclercb.taskunifier.api.models.TagList;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.beans.TaskBean;
@@ -56,7 +60,7 @@ import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 @XStreamConverter(TaskTemplateConverter.class)
-public class TaskTemplate extends AbstractBasicModel implements Template<Task, TaskBean> {
+public class TaskTemplate extends AbstractBasicModel implements Template<Task, TaskBean>, PropertyChangeListener {
 	
 	public static final String PROP_TASK_TITLE = "taskTitle";
 	public static final String PROP_TASK_TAGS = "taskTags";
@@ -486,8 +490,23 @@ public class TaskTemplate extends AbstractBasicModel implements Template<Task, T
 	}
 	
 	public void setTaskFolder(Folder taskFolder, boolean force) {
+		if (taskFolder != null) {
+			if (taskFolder.getModelStatus().equals(ModelStatus.TO_DELETE)
+					|| taskFolder.getModelStatus().equals(ModelStatus.DELETED)) {
+				ApiLogger.getLogger().severe(
+						"You cannot assign a deleted model");
+				taskFolder = null;
+			}
+		}
+		
+		if (this.taskFolder != null)
+			this.taskFolder.removePropertyChangeListener(this);
+		
 		Folder oldTaskFolder = this.taskFolder;
 		this.taskFolder = taskFolder;
+		
+		if (this.taskFolder != null)
+			this.taskFolder.addPropertyChangeListener(this);
 		
 		boolean oldTaskFolderForce = this.taskFolderForce;
 		this.taskFolderForce = force;
@@ -699,6 +718,18 @@ public class TaskTemplate extends AbstractBasicModel implements Template<Task, T
 		String oldTaskNote = this.taskNote;
 		this.taskNote = taskNote;
 		this.updateProperty(PROP_TASK_NOTE, oldTaskNote, taskNote);
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+		if (event.getSource() instanceof Folder
+				&& event.getPropertyName().equals(PROP_MODEL_STATUS)) {
+			Folder taskFolder = (Folder) event.getSource();
+			
+			if (taskFolder.getModelStatus().equals(ModelStatus.TO_DELETE)
+					|| taskFolder.getModelStatus().equals(ModelStatus.DELETED))
+				this.setTaskFolder(null, true);
+		}
 	}
 	
 }

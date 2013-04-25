@@ -32,11 +32,15 @@
  */
 package com.leclercb.taskunifier.api.models.templates;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Calendar;
 
+import com.leclercb.commons.api.logger.ApiLogger;
 import com.leclercb.taskunifier.api.models.AbstractBasicModel;
 import com.leclercb.taskunifier.api.models.Folder;
 import com.leclercb.taskunifier.api.models.ModelId;
+import com.leclercb.taskunifier.api.models.ModelStatus;
 import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.api.models.beans.NoteBean;
 import com.leclercb.taskunifier.api.models.beans.converters.FolderConverter;
@@ -45,7 +49,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
 
 @XStreamConverter(NoteTemplateConverter.class)
-public class NoteTemplate extends AbstractBasicModel implements Template<Note, NoteBean> {
+public class NoteTemplate extends AbstractBasicModel implements Template<Note, NoteBean>, PropertyChangeListener {
 	
 	public static final String PROP_NOTE_TITLE = "noteTitle";
 	public static final String PROP_NOTE_FOLDER_FORCE = "noteFolderForce";
@@ -165,8 +169,23 @@ public class NoteTemplate extends AbstractBasicModel implements Template<Note, N
 	}
 	
 	public void setNoteFolder(Folder noteFolder, boolean force) {
+		if (noteFolder != null) {
+			if (noteFolder.getModelStatus().equals(ModelStatus.TO_DELETE)
+					|| noteFolder.getModelStatus().equals(ModelStatus.DELETED)) {
+				ApiLogger.getLogger().severe(
+						"You cannot assign a deleted model");
+				noteFolder = null;
+			}
+		}
+		
+		if (this.noteFolder != null)
+			this.noteFolder.removePropertyChangeListener(this);
+		
 		Folder oldNoteFolder = this.noteFolder;
 		this.noteFolder = noteFolder;
+		
+		if (this.noteFolder != null)
+			this.noteFolder.addPropertyChangeListener(this);
 		
 		boolean oldNoteFolderForce = this.noteFolderForce;
 		this.noteFolderForce = force;
@@ -184,6 +203,18 @@ public class NoteTemplate extends AbstractBasicModel implements Template<Note, N
 		String oldNoteNote = this.noteNote;
 		this.noteNote = noteNote;
 		this.updateProperty(PROP_NOTE_NOTE, oldNoteNote, noteNote);
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent event) {
+		if (event.getSource() instanceof Folder
+				&& event.getPropertyName().equals(PROP_MODEL_STATUS)) {
+			Folder noteFolder = (Folder) event.getSource();
+			
+			if (noteFolder.getModelStatus().equals(ModelStatus.TO_DELETE)
+					|| noteFolder.getModelStatus().equals(ModelStatus.DELETED))
+				this.setNoteFolder(null, true);
+		}
 	}
 	
 }
