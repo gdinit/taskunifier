@@ -78,6 +78,7 @@ import com.leclercb.taskunifier.gui.commons.values.StringValueModelId;
 import com.leclercb.taskunifier.gui.commons.values.StringValueTaskRepeat;
 import com.leclercb.taskunifier.gui.commons.values.StringValueTaskStatus;
 import com.leclercb.taskunifier.gui.commons.values.StringValueTaskTitle;
+import com.leclercb.taskunifier.gui.components.modelnote.converters.HTML2Text;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.TaskCustomColumnList;
@@ -1000,7 +1001,7 @@ public class TaskColumnList extends PropertyAccessorList<Task> {
 			@Override
 			public String getPropertyAsString(Task model) {
 				Object value = this.getProperty(model);
-				return (value == null ? null : "\n" + value.toString());
+				return (value == null ? null : HTML2Text.convertToPlainText((String) value));
 			}
 			
 			@Override

@@ -16,19 +16,40 @@ import com.leclercb.commons.gui.logger.GuiLogger;
 
 public class HTML2Text extends HTMLEditorKit.ParserCallback {
 	
+	private static List<HTML.Tag> DEFAULT_TAGS;
+	
+	static {
+		DEFAULT_TAGS = new ArrayList<HTML.Tag>();
+		
+		DEFAULT_TAGS.add(HTML.Tag.B);
+		DEFAULT_TAGS.add(HTML.Tag.I);
+		DEFAULT_TAGS.add(HTML.Tag.A);
+		DEFAULT_TAGS.add(HTML.Tag.UL);
+		DEFAULT_TAGS.add(HTML.Tag.OL);
+		DEFAULT_TAGS.add(HTML.Tag.LI);
+	}
+	
 	private List<HTML.Tag> keepTags;
 	private StringBuffer stringBuffer;
+	private String startTagSeparator;
+	private String endTagSeparator;
 	
 	private HTML2Text() {
-		this.keepTags = new ArrayList<HTML.Tag>();
-		this.keepTags.add(HTML.Tag.B);
-		this.keepTags.add(HTML.Tag.I);
-		this.keepTags.add(HTML.Tag.A);
-		this.keepTags.add(HTML.Tag.UL);
-		this.keepTags.add(HTML.Tag.OL);
-		this.keepTags.add(HTML.Tag.LI);
+		this(DEFAULT_TAGS, null, null);
+	}
+	
+	private HTML2Text(
+			List<HTML.Tag> keepTags,
+			String startTagSeparator,
+			String endTagSeparator) {
+		if (keepTags == null)
+			this.keepTags = new ArrayList<HTML.Tag>();
+		else
+			this.keepTags = new ArrayList<HTML.Tag>(keepTags);
 		
 		this.stringBuffer = new StringBuffer();
+		this.startTagSeparator = startTagSeparator;
+		this.endTagSeparator = endTagSeparator;
 	}
 	
 	public void parse(Reader in) throws IOException {
@@ -53,6 +74,9 @@ public class HTML2Text extends HTMLEditorKit.ParserCallback {
 			} else {
 				this.stringBuffer.append("<" + t + ">");
 			}
+		} else {
+			if (this.startTagSeparator != null)
+				this.stringBuffer.append(this.startTagSeparator);
 		}
 		
 		if (t.equals(HTML.Tag.P))
@@ -61,8 +85,12 @@ public class HTML2Text extends HTMLEditorKit.ParserCallback {
 	
 	@Override
 	public void handleEndTag(HTML.Tag t, int pos) {
-		if (this.keepTags.contains(t))
+		if (this.keepTags.contains(t)) {
 			this.stringBuffer.append("</" + t + ">");
+		} else {
+			if (this.endTagSeparator != null)
+				this.stringBuffer.append(this.endTagSeparator);
+		}
 	}
 	
 	@Override
@@ -86,7 +114,22 @@ public class HTML2Text extends HTMLEditorKit.ParserCallback {
 	}
 	
 	public static String convertToBasicHtml(String html) {
-		HTML2Text parser = new HTML2Text();
+		return convert(html, DEFAULT_TAGS, null, null);
+	}
+	
+	public static String convertToPlainText(String html) {
+		return convert(html, null, null, "\n");
+	}
+	
+	public static String convert(
+			String html,
+			List<HTML.Tag> keepTags,
+			String startTagSeparator,
+			String endTagSeparator) {
+		HTML2Text parser = new HTML2Text(
+				keepTags,
+				startTagSeparator,
+				endTagSeparator);
 		Reader in = new StringReader(html);
 		
 		try {
