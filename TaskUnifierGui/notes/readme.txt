@@ -2,8 +2,9 @@ HISTORY
 -------
 
 Version 3.2.4
-	- Major:
+	- Minor:
 		- Bug fixed: Sort order with identical titles
+		- Bug fixed: Printed note format
 
 Version 3.2.3
 	- Major:
