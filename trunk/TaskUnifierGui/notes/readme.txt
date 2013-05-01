@@ -6,6 +6,7 @@ Version 3.2.4
 		- Bug fixed: Sort order with identical titles
 		- Bug fixed: Printed note format
 		- Bug fixed: Shell models
+		- BF 297: Task/Note table model problem
 
 Version 3.2.3
 	- Major:
