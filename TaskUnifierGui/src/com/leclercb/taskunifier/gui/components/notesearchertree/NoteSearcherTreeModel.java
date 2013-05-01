@@ -347,7 +347,6 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 			if (!Synchronizing.getInstance().isSynchronizing())
 				this.updateBadges();
 			
-			this.updateSelection(null);
 			return;
 		}
 		
