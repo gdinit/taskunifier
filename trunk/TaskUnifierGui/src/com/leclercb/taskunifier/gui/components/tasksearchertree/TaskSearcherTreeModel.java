@@ -816,6 +816,17 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 	}
 	
 	public void update() {
+		TreeNode node = (TreeNode) this.tree.getSelectionPath().getLastPathComponent();
+		
+		Object selectedObject = null;
+		
+		if (node instanceof SearcherItem)
+			selectedObject = ((SearcherItem) node).getTaskSearcher();
+		if (node instanceof ModelItem)
+			selectedObject = ((ModelItem) node).getModel();
+		if (node instanceof TagItem)
+			selectedObject = ((TagItem) node).getTag();
+		
 		this.initializeGeneralCategory();
 		this.initializeContextCategory();
 		this.initializeFolderCategory();
@@ -824,6 +835,18 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 		this.initializePersonalCategory();
 		
 		this.updateBadges();
+		
+		if (selectedObject instanceof TaskSearcher)
+			selectedObject = this.findItemFromSearcher((TaskSearcher) selectedObject);
+		if (selectedObject instanceof Model)
+			selectedObject = this.findItemFromModel((Model) selectedObject);
+		if (selectedObject instanceof Tag)
+			selectedObject = this.findItemFromTag((Tag) selectedObject);
+		
+		if (selectedObject instanceof SearcherNode)
+			this.updateSelection((SearcherNode) selectedObject);
+		else
+			this.updateSelection(null);
 	}
 	
 	public void updateBadges() {
