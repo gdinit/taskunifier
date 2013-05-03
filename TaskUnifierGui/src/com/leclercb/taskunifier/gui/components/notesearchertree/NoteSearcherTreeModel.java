@@ -420,10 +420,29 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 	}
 	
 	public void update() {
+		TreeNode node = (TreeNode) this.tree.getSelectionPath().getLastPathComponent();
+		
+		Object selectedObject = null;
+		
+		if (node instanceof SearcherItem)
+			selectedObject = ((SearcherItem) node).getNoteSearcher();
+		if (node instanceof FolderItem)
+			selectedObject = ((FolderItem) node).getFolder();
+		
 		this.initializeFolderCategory();
 		this.initializePersonalCategory();
 		
 		this.updateBadges();
+		
+		if (selectedObject instanceof NoteSearcher)
+			selectedObject = this.findItemFromSearcher((NoteSearcher) selectedObject);
+		if (selectedObject instanceof Folder)
+			selectedObject = this.findItemFromFolder((Folder) selectedObject);
+		
+		if (selectedObject instanceof SearcherNode)
+			this.updateSelection((SearcherNode) selectedObject);
+		else
+			this.updateSelection(null);
 	}
 	
 	public void updateBadges() {
