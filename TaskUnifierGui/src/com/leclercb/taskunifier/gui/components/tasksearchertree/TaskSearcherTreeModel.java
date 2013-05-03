@@ -767,6 +767,8 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 				
 				if (model != null)
 					this.updateSelection(this.findItemFromModel(model));
+				else
+					this.updateSelection(null);
 			}
 			
 			if (event.getPropertyName().equals(BasicModel.PROP_TITLE)
@@ -786,6 +788,8 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 				
 				if (searcher != null)
 					this.updateSelection(this.findItemFromSearcher(searcher));
+				else
+					this.updateSelection(null);
 			}
 			
 			if (event.getPropertyName().equals(TaskSearcher.PROP_FOLDER)) {
@@ -804,6 +808,8 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 				
 				if (searcher != null)
 					this.updateSelection(this.findItemFromSearcher(searcher));
+				else
+					this.updateSelection(null);
 			}
 			
 			if (event.getPropertyName().equals(TaskSearcher.PROP_TITLE)
