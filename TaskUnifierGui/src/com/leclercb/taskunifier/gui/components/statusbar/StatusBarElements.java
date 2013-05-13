@@ -318,8 +318,7 @@ final class StatusBarElements implements ProgressMessageAddedListener, PropertyC
 		if (event.getPropertyName().equals(FrameView.PROP_SELECTED_VIEW)) {
 			this.updateRowCount();
 			
-			if (event != null
-					&& event.getOldValue() != null
+			if (event.getOldValue() != null
 					&& event.getOldValue() instanceof ViewItem) {
 				ViewItem oldView = (ViewItem) event.getOldValue();
 				
