@@ -93,7 +93,7 @@ public class TaskTemplateConfigurationDialogPanel extends TUDialogPanel {
 	}
 	
 	private void initializeButtonsPanel() {
-		ActionListener okListener = new ActionListener() {
+		this.okListener = new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -105,7 +105,7 @@ public class TaskTemplateConfigurationDialogPanel extends TUDialogPanel {
 		
 		JButton helpButton = Help.getInstance().getHelpButton(
 				"manage_task_templates");
-		JButton okButton = new TUOkButton(okListener);
+		JButton okButton = new TUOkButton(this.okListener);
 		
 		this.setButtons(okButton, helpButton, okButton);
 	}
