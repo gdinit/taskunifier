@@ -90,8 +90,10 @@ public final class Constants {
 	public static final String DOWNLOAD_URL = "http://www.taskunifier.com/index.php?page=download";
 	public static final String DONATE_URL = "http://sourceforge.net/p/taskunifier/donate/";
 	public static final String REVIEW_URL = "http://sourceforge.net/projects/taskunifier/reviews/";
-	public static final String BUG_URL = "http://sourceforge.net/p/taskunifier/bugs/";
-	public static final String FEATURE_REQUEST_URL = "http://sourceforge.net/p/taskunifier/feature-requests/";
+	public static final String FORUM_URL = "http://sourceforge.net/p/taskunifier/discussion/";
+	public static final String BUGS_URL = "http://sourceforge.net/p/taskunifier/bugs/";
+	public static final String FEATURE_REQUESTS_URL = "http://sourceforge.net/p/taskunifier/feature-requests/";
+	public static final String SUPPORT_REQUESTS_URL = "http://sourceforge.net/p/taskunifier/support-requests/";
 	public static final String TEST_CONNECTION = "http://www.taskunifier.com";
 	
 	public static final int TIMEOUT_HTTP_CALL = 30000;

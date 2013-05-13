@@ -50,7 +50,7 @@ public class ModelNoteTransferHandler extends TransferHandler {
 	
 	@Override
 	public int getSourceActions(JComponent c) {
-		return COPY;
+		return COPY_OR_MOVE;
 	}
 	
 	@Override
@@ -81,8 +81,13 @@ public class ModelNoteTransferHandler extends TransferHandler {
 	@Override
 	public void exportToClipboard(JComponent comp, Clipboard clip, int action)
 			throws IllegalStateException {
-		if (action == COPY) {
+		if (action == COPY || action == MOVE) {
 			clip.setContents(this.createTransferable(comp), null);
+			
+			if (action == MOVE) {
+				JEditorPane pane = (JEditorPane) comp;
+				pane.replaceSelection("");
+			}
 		}
 	}
 	

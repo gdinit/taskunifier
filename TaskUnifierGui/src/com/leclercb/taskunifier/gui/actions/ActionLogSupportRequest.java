@@ -38,23 +38,23 @@ import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.DesktopUtils;
 
-public class ActionLogFeatureRequest extends AbstractViewAction {
+public class ActionLogSupportRequest extends AbstractViewAction {
 	
-	public ActionLogFeatureRequest() {
-		super(Translations.getString("action.log_feature_request"));
+	public ActionLogSupportRequest() {
+		super(Translations.getString("action.log_support_request"));
 		
 		this.putValue(
 				SHORT_DESCRIPTION,
-				Translations.getString("action.log_feature_request"));
+				Translations.getString("action.log_support_request"));
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		ActionLogFeatureRequest.logFeatureRequest();
+		ActionLogSupportRequest.logSupportRequest();
 	}
 	
-	public static void logFeatureRequest() {
-		DesktopUtils.browse(Constants.FEATURE_REQUESTS_URL);
+	public static void logSupportRequest() {
+		DesktopUtils.browse(Constants.SUPPORT_REQUESTS_URL);
 	}
 	
 }
