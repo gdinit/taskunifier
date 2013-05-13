@@ -54,7 +54,7 @@ public class ActionLogBug extends AbstractViewAction {
 	}
 	
 	public static void logBug() {
-		DesktopUtils.browse(Constants.BUG_URL);
+		DesktopUtils.browse(Constants.BUGS_URL);
 	}
 	
 }

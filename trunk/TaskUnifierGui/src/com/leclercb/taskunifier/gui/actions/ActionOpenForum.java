@@ -38,23 +38,23 @@ import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.DesktopUtils;
 
-public class ActionLogFeatureRequest extends AbstractViewAction {
+public class ActionOpenForum extends AbstractViewAction {
 	
-	public ActionLogFeatureRequest() {
-		super(Translations.getString("action.log_feature_request"));
+	public ActionOpenForum() {
+		super(Translations.getString("action.open_forum"));
 		
 		this.putValue(
 				SHORT_DESCRIPTION,
-				Translations.getString("action.log_feature_request"));
+				Translations.getString("action.open_forum"));
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		ActionLogFeatureRequest.logFeatureRequest();
+		ActionOpenForum.openForum();
 	}
 	
-	public static void logFeatureRequest() {
-		DesktopUtils.browse(Constants.FEATURE_REQUESTS_URL);
+	public static void openForum() {
+		DesktopUtils.browse(Constants.FORUM_URL);
 	}
 	
 }

@@ -2,6 +2,9 @@ HISTORY
 -------
 
 Version 3.2.5
+	- Minor:
+		- BF 299: Cut action in model note
+		- FR 353: Add forum link
 
 Version 3.2.4
 	- Major:

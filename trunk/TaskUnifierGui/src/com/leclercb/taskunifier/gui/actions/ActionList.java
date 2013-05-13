@@ -73,6 +73,7 @@ public enum ActionList {
 	IMPORT_VCARD(Translations.getString("action.import_vcard"), "download.png", true),
 	LOG_BUG(Translations.getString("action.log_bug"), null, false),
 	LOG_FEATURE_REQUEST(Translations.getString("action.log_feature_request"), null, false),
+	LOG_SUPPORT_REQUEST(Translations.getString("action.log_support_request"), null, false),
 	MAIL_TO(Translations.getString("action.mail_to"), "mail.png", true),
 	MANAGE_BACKUPS(Translations.getString("action.manage_backups"), "save.png", true),
 	// TODO: PRO
@@ -87,6 +88,7 @@ public enum ActionList {
 	MANAGE_TASK_TEMPLATES(Translations.getString("action.manage_task_templates"), "template.png", true),
 	MANAGE_USERS(Translations.getString("action.manage_users"), "user.png", true),
 	NEW_WINDOW(Translations.getString("action.new_window"), "window_add.png", true),
+	OPEN_FORUM(Translations.getString("action.open_forum"), null, false),
 	PASTE(Translations.getString("action.paste"), "paste.png", false),
 	PUBLISH(Translations.getString("action.publish"), "publish.png", true),
 	PLUGIN_CONFIGURATION(Translations.getString("action.plugin_configuration"), "settings.png", true),
