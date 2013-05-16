@@ -41,7 +41,7 @@ public class TaskCustomColumnListConfigurationPanel extends DefaultConfiguration
 	
 	public TaskCustomColumnListConfigurationPanel(
 			ConfigurationGroup configuration) {
-		super(configuration);
+		super(configuration, "configuration_theme_task_custom_columns");
 		
 		this.initialize();
 		this.pack();
