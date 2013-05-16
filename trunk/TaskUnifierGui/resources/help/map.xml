@@ -3,6 +3,7 @@
 <map version="1.0">
 
 	<mapID target="taskunifier" url="pages/taskunifier.html" />
+	<mapID target="taskunifier_pro" url="pages/taskunifier_pro.html" />
 	<mapID target="quick_start" url="pages/quick_start.html" />
 	<mapID target="whats_new" url="pages/whats_new.html" />
 
@@ -14,6 +15,8 @@
 	<mapID target="configuration_publication" url="pages/configuration_publication.html" />
 	<mapID target="configuration_searcher" url="pages/configuration_searcher.html" />
 	<mapID target="configuration_synchronization" url="pages/configuration_synchronization.html" />
+	<mapID target="configuration_theme_task_custom_columns" url="pages/configuration_theme_task_custom_columns.html" />
+	<mapID target="configuration_theme_columns" url="pages/configuration_theme_columns.html" />
 	<mapID target="configuration_theme_general" url="pages/configuration_theme_general.html" />
 	<mapID target="configuration_theme_fields" url="pages/configuration_theme_fields.html" />
 	<mapID target="configuration_theme_importance" url="pages/configuration_theme_importance.html" />
