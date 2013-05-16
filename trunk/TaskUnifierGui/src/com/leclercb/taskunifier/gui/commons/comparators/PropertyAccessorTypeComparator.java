@@ -30,36 +30,28 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.commons.models;
+package com.leclercb.taskunifier.gui.commons.comparators;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.Comparator;
 
-import javax.swing.DefaultComboBoxModel;
-
+import com.leclercb.commons.api.utils.CompareUtils;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
-import com.leclercb.taskunifier.gui.commons.comparators.PropertyAccessorTypeComparator;
+import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 
-public class PropertyAccessorTypeModel extends DefaultComboBoxModel {
+public class PropertyAccessorTypeComparator implements Comparator<PropertyAccessorType> {
 	
-	public PropertyAccessorTypeModel(boolean firstNull) {
-		super(generateArray(firstNull));
+	public static final PropertyAccessorTypeComparator INSTANCE = new PropertyAccessorTypeComparator();
+	
+	private PropertyAccessorTypeComparator() {
+		
 	}
 	
-	private static PropertyAccessorType[] generateArray(boolean firstNull) {
-		List<PropertyAccessorType> types = new ArrayList<PropertyAccessorType>(
-				Arrays.asList(PropertyAccessorType.values()));
+	@Override
+	public int compare(PropertyAccessorType t1, PropertyAccessorType t2) {
+		String s1 = (t1 == null ? null : TranslationsUtils.translatePropertyAccessorType(t1));
+		String s2 = (t2 == null ? null : TranslationsUtils.translatePropertyAccessorType(t2));
 		
-		types.remove(PropertyAccessorType.MODEL);
-		types.remove(PropertyAccessorType.ORDER);
-		types.remove(PropertyAccessorType.TASK_REPEAT_FROM);
-		types.remove(PropertyAccessorType.VOID);
-		
-		Collections.sort(types, PropertyAccessorTypeComparator.INSTANCE);
-		
-		return types.toArray(new PropertyAccessorType[0]);
+		return CompareUtils.compareLocalizedString(s1, s2);
 	}
 	
 }
