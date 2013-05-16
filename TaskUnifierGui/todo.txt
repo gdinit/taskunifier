@@ -1,2 +1,3 @@
 - Translate pro panel
 - Add/remove custom fields action
+- Manage task rules help
