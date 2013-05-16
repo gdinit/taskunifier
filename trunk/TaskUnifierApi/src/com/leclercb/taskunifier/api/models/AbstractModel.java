@@ -32,49 +32,23 @@
  */
 package com.leclercb.taskunifier.api.models;
 
-import java.beans.PropertyChangeListener;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-import com.leclercb.commons.api.event.propertychange.PropertyChangeSupport;
-import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.commons.api.utils.CheckUtils;
-import com.leclercb.commons.api.utils.DateUtils;
-import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.models.beans.ModelBean;
 
-public abstract class AbstractModel implements Model {
+public abstract class AbstractModel extends AbstractBasicModel implements Model {
 	
-	private transient PropertyChangeSupport propertyChangeSupport;
-	
-	private ModelId modelId;
 	private Map<String, String> modelReferenceIds;
-	private ModelStatus modelStatus;
-	private Calendar modelCreationDate;
-	private Calendar modelUpdateDate;
-	private String title;
 	private int order;
-	private PropertyMap properties;
 	
 	public AbstractModel(ModelId modelId, String title) {
-		this.propertyChangeSupport = new PropertyChangeSupport(this);
+		super(modelId, title);
 		
-		if (modelId == null)
-			modelId = new ModelId();
-		
-		this.setModelId(modelId);
+		this.setOrder(0);
 		this.setModelReferenceIds(new HashMap<String, String>());
-		this.setModelStatus(ModelStatus.LOADED);
-		this.setModelCreationDate(Calendar.getInstance());
-		this.setModelUpdateDate(Calendar.getInstance());
-		this.setTitle(title);
-		this.setProperties(new PropertyMap());
 	}
 	
 	/**
@@ -137,16 +111,6 @@ public abstract class AbstractModel implements Model {
 	}
 	
 	/**
-	 * Returns the id of the model.
-	 * 
-	 * @return the id of the model
-	 */
-	@Override
-	public final ModelId getModelId() {
-		return this.modelId;
-	}
-	
-	/**
 	 * Sets the id of the model. Property name : {@link Model#PROP_MODEL_ID}
 	 * 
 	 * @param modelId
@@ -154,24 +118,15 @@ public abstract class AbstractModel implements Model {
 	 * @exception IllegalArgumentException
 	 *                if another model with the same id is found in the factory
 	 */
-	private final void setModelId(ModelId modelId) {
-		CheckUtils.isNotNull(modelId);
-		
-		if (!this.checkBeforeSet(this.getModelId(), modelId))
-			return;
-		
+	@Override
+	protected final void setModelId(ModelId modelId) {
 		Model newModel = this.getFactory().get(modelId);
 		
 		if (newModel != null && newModel != this)
 			throw new IllegalArgumentException(
 					"The model id you try to assign to this model already exists in the factory");
 		
-		ModelId oldModelId = this.modelId;
-		this.modelId = modelId;
-		this.propertyChangeSupport.firePropertyChange(
-				PROP_MODEL_ID,
-				oldModelId,
-				modelId);
+		super.setModelId(modelId);
 	}
 	
 	@Override
@@ -204,156 +159,6 @@ public abstract class AbstractModel implements Model {
 	}
 	
 	/**
-	 * Returns the status of the model.
-	 * 
-	 * @return the status of the model
-	 */
-	@Override
-	public final ModelStatus getModelStatus() {
-		return this.modelStatus;
-	}
-	
-	/**
-	 * Sets the status of the model. If the status is
-	 * {@link ModelStatus#TO_UPDATE} or {@link ModelStatus#TO_DELETE} the last
-	 * update date is set to the current date. Property name :
-	 * {@link Model#PROP_MODEL_STATUS}
-	 * 
-	 * @param modelStatus
-	 *            the status of the model
-	 * @exception IllegalStateException
-	 *                if the status of the model is {@link ModelStatus#DELETED}
-	 */
-	@Override
-	public final void setModelStatus(ModelStatus modelStatus) {
-		this.setModelStatus(modelStatus, false);
-	}
-	
-	private final void setModelStatus(ModelStatus modelStatus, boolean silent) {
-		CheckUtils.isNotNull(modelStatus);
-		
-		if (!this.checkBeforeSet(this.getModelStatus(), modelStatus))
-			return;
-		
-		if (this.modelStatus != null
-				&& this.modelStatus.equals(ModelStatus.DELETED)) {
-			throw new IllegalStateException(
-					"You cannot update the status of a deleted model");
-		}
-		
-		ModelStatus oldModelStatus = this.modelStatus;
-		this.modelStatus = modelStatus;
-		this.propertyChangeSupport.firePropertyChange(
-				PROP_MODEL_STATUS,
-				oldModelStatus,
-				modelStatus,
-				silent);
-		
-		if (modelStatus.equals(ModelStatus.TO_UPDATE)
-				|| modelStatus.equals(ModelStatus.TO_DELETE)
-				|| modelStatus.equals(ModelStatus.DELETED))
-			this.setModelUpdateDate(Calendar.getInstance(), true);
-	}
-	
-	/**
-	 * Returns the creation date of the model.
-	 * 
-	 * @return the creation date of the model
-	 */
-	@Override
-	public final Calendar getModelCreationDate() {
-		return DateUtils.cloneCalendar(this.modelCreationDate);
-	}
-	
-	/**
-	 * Sets the creation date of the model. Property name :
-	 * {@link Model#PROP_MODEL_CREATION_DATE}
-	 * 
-	 * @param modelCreationDate
-	 *            the creation date of the model
-	 */
-	@Override
-	public final void setModelCreationDate(Calendar modelCreationDate) {
-		CheckUtils.isNotNull(modelCreationDate);
-		
-		if (this.modelCreationDate != null
-				&& this.modelCreationDate.compareTo(modelCreationDate) <= 0)
-			return;
-		
-		Calendar oldCreationDate = this.modelCreationDate;
-		this.modelCreationDate = DateUtils.cloneCalendar(modelCreationDate);
-		this.propertyChangeSupport.firePropertyChange(
-				PROP_MODEL_CREATION_DATE,
-				oldCreationDate,
-				modelCreationDate);
-	}
-	
-	/**
-	 * Returns the last update date of the model.
-	 * 
-	 * @return the last update date of the model
-	 */
-	@Override
-	public final Calendar getModelUpdateDate() {
-		return DateUtils.cloneCalendar(this.modelUpdateDate);
-	}
-	
-	/**
-	 * Sets the last update date of the model. Property name :
-	 * {@link Model#PROP_MODEL_UPDATE_DATE}
-	 * 
-	 * @param modelUpdateDate
-	 *            the last update date of the model
-	 */
-	@Override
-	public final void setModelUpdateDate(Calendar modelUpdateDate) {
-		this.setModelUpdateDate(modelUpdateDate, false);
-	}
-	
-	private final void setModelUpdateDate(
-			Calendar modelUpdateDate,
-			boolean silent) {
-		CheckUtils.isNotNull(modelUpdateDate);
-		Calendar oldUpdateDate = this.modelUpdateDate;
-		this.modelUpdateDate = DateUtils.cloneCalendar(modelUpdateDate);
-		this.propertyChangeSupport.firePropertyChange(
-				PROP_MODEL_UPDATE_DATE,
-				oldUpdateDate,
-				modelUpdateDate,
-				silent);
-	}
-	
-	/**
-	 * Returns the title of the model.
-	 * 
-	 * @return the title of the model
-	 */
-	@Override
-	public String getTitle() {
-		return this.title;
-	}
-	
-	/**
-	 * Sets the title of the model. Property name : {@link Model#PROP_TITLE}
-	 * 
-	 * @param title
-	 *            the title of the model
-	 */
-	@Override
-	public void setTitle(String title) {
-		CheckUtils.isNotNull(title);
-		
-		title = title.trim();
-		
-		if (!this.checkBeforeSet(this.getTitle(), title))
-			return;
-		
-		String oldTitle = this.title;
-		this.title = title;
-		this.updateProperty(PROP_TITLE, oldTitle, title);
-	}
-	
-	/**
 	 * Returns the order of the model.
 	 * 
 	 * @return the order of the model
@@ -377,273 +182,6 @@ public abstract class AbstractModel implements Model {
 		int oldOrder = this.order;
 		this.order = order;
 		this.updateProperty(PROP_ORDER, oldOrder, order);
-	}
-	
-	/**
-	 * Returns the properties of the model.
-	 * 
-	 * @return the properties of the model
-	 */
-	@Override
-	public PropertyMap getProperties() {
-		return this.properties;
-	}
-	
-	/**
-	 * Sets the properties of the model.
-	 * 
-	 * @param properties
-	 *            the properties of the model
-	 */
-	private void setProperties(PropertyMap properties) {
-		CheckUtils.isNotNull(properties);
-		this.properties = properties;
-	}
-	
-	public void addProperties(Properties properties) {
-		if (properties == null)
-			return;
-		
-		for (Object key : properties.keySet()) {
-			this.properties.put(key, properties.get(key));
-		}
-	}
-	
-	/**
-	 * Performs some checks before a set method. To call at the beginning of
-	 * each set method.
-	 */
-	protected final boolean checkBeforeSet(Object oldValue, Object newValue) {
-		if (EqualsUtils.equals(oldValue, newValue))
-			return false;
-		
-		return true;
-	}
-	
-	/**
-	 * Performs some actions after a set of a property. To call after each
-	 * change of a non-indexed property.
-	 * 
-	 * @param property
-	 *            the property name
-	 * @param newValue
-	 *            the new value
-	 * @param oldValue
-	 *            the old value
-	 */
-	protected final void updateProperty(
-			String property,
-			Object oldValue,
-			Object newValue) {
-		this.updateProperty(property, oldValue, newValue, false);
-	}
-	
-	protected final void updateProperty(
-			String property,
-			Object oldValue,
-			Object newValue,
-			boolean silent) {
-		this.updateProperty(property, oldValue, newValue, true, silent);
-	}
-	
-	/**
-	 * Performs some actions after a set of a property. To call after each
-	 * change of a non-indexed property.
-	 * 
-	 * @param property
-	 *            the property name
-	 * @param newValue
-	 *            the new value
-	 * @param oldValue
-	 *            the old value
-	 * @param updateStatus
-	 *            update status or not
-	 */
-	protected final void updateProperty(
-			String property,
-			Object oldValue,
-			Object newValue,
-			boolean updateStatus,
-			boolean silent) {
-		if (updateStatus) {
-			if (this.getModelStatus() == ModelStatus.SHELL
-					|| this.getModelStatus() == ModelStatus.LOADED) {
-				if (oldValue == null
-						|| newValue == null
-						|| !EqualsUtils.equals(oldValue, newValue)) {
-					this.setModelStatus(ModelStatus.TO_UPDATE, true);
-				}
-			} else if (this.getModelStatus().equals(ModelStatus.TO_UPDATE)) {
-				this.setModelUpdateDate(Calendar.getInstance(), true);
-			}
-		}
-		
-		this.propertyChangeSupport.firePropertyChange(
-				property,
-				oldValue,
-				newValue,
-				silent);
-	}
-	
-	/**
-	 * Performs some actions after a set of a property. To call after each
-	 * change of an indexed property.
-	 * 
-	 * @param property
-	 *            the property name
-	 * @param index
-	 *            the index of the value
-	 * @param newValue
-	 *            the new value
-	 * @param oldValue
-	 *            the old value
-	 */
-	protected final void updateIndexedProperty(
-			String property,
-			int index,
-			Object oldValue,
-			Object newValue) {
-		this.updateIndexedProperty(property, index, oldValue, newValue, false);
-	}
-	
-	protected final void updateIndexedProperty(
-			String property,
-			int index,
-			Object oldValue,
-			Object newValue,
-			boolean silent) {
-		this.updateIndexedProperty(
-				property,
-				index,
-				oldValue,
-				newValue,
-				true,
-				silent);
-	}
-	
-	/**
-	 * Performs some actions after a set of a property. To call after each
-	 * change of an indexed property.
-	 * 
-	 * @param property
-	 *            the property name
-	 * @param index
-	 *            the index of the value
-	 * @param newValue
-	 *            the new value
-	 * @param oldValue
-	 *            the old value
-	 * @param updateStatus
-	 *            update status or not
-	 */
-	protected final void updateIndexedProperty(
-			String property,
-			int index,
-			Object oldValue,
-			Object newValue,
-			boolean updateStatus,
-			boolean silent) {
-		if (updateStatus) {
-			if (this.getModelStatus() == ModelStatus.SHELL
-					|| this.getModelStatus() == ModelStatus.LOADED) {
-				if (oldValue == null
-						|| newValue == null
-						|| !EqualsUtils.equals(oldValue, newValue)) {
-					this.setModelStatus(ModelStatus.TO_UPDATE, true);
-				}
-			} else if (this.getModelStatus().equals(ModelStatus.TO_UPDATE)) {
-				this.setModelUpdateDate(Calendar.getInstance(), true);
-			}
-		}
-		
-		this.propertyChangeSupport.fireIndexedPropertyChange(
-				property,
-				index,
-				oldValue,
-				newValue,
-				silent);
-	}
-	
-	/**
-	 * Check if this object equals the given object. Only the model id is used
-	 * to check if two models are equal.
-	 * 
-	 * @param o
-	 *            an object
-	 * @return true if this object equals the given object
-	 */
-	@Override
-	public final boolean equals(Object o) {
-		if (o == this) {
-			return true;
-		}
-		
-		if (o instanceof Model) {
-			Model model = (Model) o;
-			
-			return new EqualsBuilder().append(
-					this.getModelType(),
-					model.getModelType()).append(
-					this.getModelId(),
-					model.getModelId()).isEquals();
-		}
-		
-		return false;
-	}
-	
-	/**
-	 * Returns the hash code of this model. Only the model id is used to return
-	 * the hash code.
-	 * 
-	 * @return the hash code of this model
-	 */
-	@Override
-	public final int hashCode() {
-		HashCodeBuilder hashCode = new HashCodeBuilder();
-		hashCode.append(this.modelId);
-		
-		return hashCode.toHashCode();
-	}
-	
-	@Override
-	public int compareTo(BasicModel model) {
-		if (model == null)
-			return 1;
-		
-		return this.getModelId().compareTo(model.getModelId());
-	}
-	
-	@Override
-	public final String toString() {
-		return this.title;
-	}
-	
-	@Override
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		this.propertyChangeSupport.addPropertyChangeListener(listener);
-	}
-	
-	@Override
-	public void addPropertyChangeListener(
-			String propertyName,
-			PropertyChangeListener listener) {
-		this.propertyChangeSupport.addPropertyChangeListener(
-				propertyName,
-				listener);
-	}
-	
-	@Override
-	public void removePropertyChangeListener(PropertyChangeListener listener) {
-		this.propertyChangeSupport.removePropertyChangeListener(listener);
-	}
-	
-	@Override
-	public void removePropertyChangeListener(
-			String propertyName,
-			PropertyChangeListener listener) {
-		this.propertyChangeSupport.removePropertyChangeListener(
-				propertyName,
-				listener);
 	}
 	
 }
