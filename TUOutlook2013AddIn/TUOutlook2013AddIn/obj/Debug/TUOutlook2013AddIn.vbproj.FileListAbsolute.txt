@@ -1,0 +1,16 @@
+C:\Users\benjamin.leclerc\Documents\VisualStudio\TUOutlook2013AddIn\TUOutlook2013AddIn\bin\Debug\TUOutlook2013AddIn.dll.config
+C:\Users\benjamin.leclerc\Documents\VisualStudio\TUOutlook2013AddIn\TUOutlook2013AddIn\bin\Debug\TUOutlook2013AddIn.dll
+C:\Users\benjamin.leclerc\Documents\VisualStudio\TUOutlook2013AddIn\TUOutlook2013AddIn\bin\Debug\TUOutlook2013AddIn.pdb
+C:\Users\benjamin.leclerc\Documents\VisualStudio\TUOutlook2013AddIn\TUOutlook2013AddIn\bin\Debug\TUOutlook2013AddIn.xml
+C:\Users\benjamin.leclerc\Documents\VisualStudio\TUOutlook2013AddIn\TUOutlook2013AddIn\bin\Debug\TUOutlook2013AddIn.dll.manifest
+C:\Users\benjamin.leclerc\Documents\VisualStudio\TUOutlook2013AddIn\TUOutlook2013AddIn\bin\Debug\TUOutlook2013AddIn.vsto
+C:\Users\benjamin.leclerc\Documents\VisualStudio\TUOutlook2013AddIn\TUOutlook2013AddIn\bin\Debug\Microsoft.Office.Tools.Common.v4.0.Utilities.dll
+C:\Users\benjamin.leclerc\Documents\VisualStudio\TUOutlook2013AddIn\TUOutlook2013AddIn\bin\Debug\Microsoft.Office.Tools.Outlook.v4.0.Utilities.dll
+C:\Users\benjamin.leclerc\Documents\VisualStudio\TUOutlook2013AddIn\TUOutlook2013AddIn\bin\Debug\Microsoft.Office.Tools.Common.v4.0.Utilities.xml
+C:\Users\benjamin.leclerc\Documents\VisualStudio\TUOutlook2013AddIn\TUOutlook2013AddIn\bin\Debug\Microsoft.Office.Tools.Outlook.v4.0.Utilities.xml
+C:\Users\benjamin.leclerc\Documents\VisualStudio\TUOutlook2013AddIn\TUOutlook2013AddIn\obj\Debug\TUOutlook2013AddIn.Settings.resources
+C:\Users\benjamin.leclerc\Documents\VisualStudio\TUOutlook2013AddIn\TUOutlook2013AddIn\obj\Debug\TUOutlook2013AddIn.Resources.resources
+C:\Users\benjamin.leclerc\Documents\VisualStudio\TUOutlook2013AddIn\TUOutlook2013AddIn\obj\Debug\TUOutlook2013AddIn.vbproj.GenerateResource.Cache
+C:\Users\benjamin.leclerc\Documents\VisualStudio\TUOutlook2013AddIn\TUOutlook2013AddIn\obj\Debug\TUOutlook2013AddIn.dll
+C:\Users\benjamin.leclerc\Documents\VisualStudio\TUOutlook2013AddIn\TUOutlook2013AddIn\obj\Debug\TUOutlook2013AddIn.xml
+C:\Users\benjamin.leclerc\Documents\VisualStudio\TUOutlook2013AddIn\TUOutlook2013AddIn\obj\Debug\TUOutlook2013AddIn.pdb
