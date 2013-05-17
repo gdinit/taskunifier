@@ -22,6 +22,8 @@ Partial Class Settings
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.lbSocketPort = New System.Windows.Forms.Label()
+        Me.btOk = New System.Windows.Forms.Button()
         Me.tabs = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.lbCategories = New System.Windows.Forms.Label()
@@ -36,15 +38,31 @@ Partial Class Settings
         Me.cbNoteTitle = New System.Windows.Forms.CheckBox()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.lbDoNotChange = New System.Windows.Forms.Label()
-        Me.lbSocketPort = New System.Windows.Forms.Label()
         Me.tfSocketPort = New System.Windows.Forms.MaskedTextBox()
         Me.btCancel = New System.Windows.Forms.Button()
-        Me.btOk = New System.Windows.Forms.Button()
         Me.tabs.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
         Me.TabPage3.SuspendLayout()
         Me.SuspendLayout()
+        '
+        'lbSocketPort
+        '
+        Me.lbSocketPort.AutoSize = True
+        Me.lbSocketPort.Location = New System.Drawing.Point(18, 21)
+        Me.lbSocketPort.Name = "lbSocketPort"
+        Me.lbSocketPort.Size = New System.Drawing.Size(29, 13)
+        Me.lbSocketPort.TabIndex = 0
+        Me.lbSocketPort.Text = "Port:"
+        '
+        'btOk
+        '
+        Me.btOk.Location = New System.Drawing.Point(218, 204)
+        Me.btOk.Name = "btOk"
+        Me.btOk.Size = New System.Drawing.Size(75, 23)
+        Me.btOk.TabIndex = 6
+        Me.btOk.Text = "OK"
+        Me.btOk.UseVisualStyleBackColor = True
         '
         'tabs
         '
@@ -55,7 +73,7 @@ Partial Class Settings
         Me.tabs.Name = "tabs"
         Me.tabs.SelectedIndex = 0
         Me.tabs.Size = New System.Drawing.Size(362, 183)
-        Me.tabs.TabIndex = 8
+        Me.tabs.TabIndex = 7
         Me.tabs.Tag = ""
         '
         'TabPage1
@@ -97,6 +115,7 @@ Partial Class Settings
         Me.cbTaskNote.AutoSize = True
         Me.cbTaskNote.Checked = True
         Me.cbTaskNote.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.cbTaskNote.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.TUOutlook2013AddIn.MySettings.Default, "TaskNote", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.cbTaskNote.Location = New System.Drawing.Point(24, 92)
         Me.cbTaskNote.Name = "cbTaskNote"
         Me.cbTaskNote.Size = New System.Drawing.Size(49, 17)
@@ -109,6 +128,7 @@ Partial Class Settings
         Me.cbTaskDueDate.AutoSize = True
         Me.cbTaskDueDate.Checked = True
         Me.cbTaskDueDate.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.cbTaskDueDate.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.TUOutlook2013AddIn.MySettings.Default, "TaskDueDate", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.cbTaskDueDate.Location = New System.Drawing.Point(24, 69)
         Me.cbTaskDueDate.Name = "cbTaskDueDate"
         Me.cbTaskDueDate.Size = New System.Drawing.Size(72, 17)
@@ -121,6 +141,7 @@ Partial Class Settings
         Me.cbTaskStartDate.AutoSize = True
         Me.cbTaskStartDate.Checked = True
         Me.cbTaskStartDate.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.cbTaskStartDate.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.TUOutlook2013AddIn.MySettings.Default, "TaskStartDate", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.cbTaskStartDate.Location = New System.Drawing.Point(24, 45)
         Me.cbTaskStartDate.Name = "cbTaskStartDate"
         Me.cbTaskStartDate.Size = New System.Drawing.Size(74, 17)
@@ -133,6 +154,7 @@ Partial Class Settings
         Me.cbTaskTitle.AutoSize = True
         Me.cbTaskTitle.Checked = True
         Me.cbTaskTitle.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.cbTaskTitle.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.TUOutlook2013AddIn.MySettings.Default, "TaskTitle", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.cbTaskTitle.Location = New System.Drawing.Point(24, 21)
         Me.cbTaskTitle.Name = "cbTaskTitle"
         Me.cbTaskTitle.Size = New System.Drawing.Size(46, 17)
@@ -158,6 +180,7 @@ Partial Class Settings
         Me.cbNoteNote.AutoSize = True
         Me.cbNoteNote.Checked = True
         Me.cbNoteNote.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.cbNoteNote.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.TUOutlook2013AddIn.MySettings.Default, "NoteNote", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.cbNoteNote.Location = New System.Drawing.Point(23, 67)
         Me.cbNoteNote.Name = "cbNoteNote"
         Me.cbNoteNote.Size = New System.Drawing.Size(49, 17)
@@ -170,6 +193,7 @@ Partial Class Settings
         Me.cbNoteFolder.AutoSize = True
         Me.cbNoteFolder.Checked = True
         Me.cbNoteFolder.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.cbNoteFolder.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.TUOutlook2013AddIn.MySettings.Default, "NoteFolder", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.cbNoteFolder.Location = New System.Drawing.Point(23, 44)
         Me.cbNoteFolder.Name = "cbNoteFolder"
         Me.cbNoteFolder.Size = New System.Drawing.Size(55, 17)
@@ -182,6 +206,7 @@ Partial Class Settings
         Me.cbNoteTitle.AutoSize = True
         Me.cbNoteTitle.Checked = True
         Me.cbNoteTitle.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.cbNoteTitle.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.TUOutlook2013AddIn.MySettings.Default, "NoteTitle", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.cbNoteTitle.Location = New System.Drawing.Point(23, 20)
         Me.cbNoteTitle.Name = "cbNoteTitle"
         Me.cbNoteTitle.Size = New System.Drawing.Size(46, 17)
@@ -211,41 +236,25 @@ Partial Class Settings
         Me.lbDoNotChange.TabIndex = 5
         Me.lbDoNotChange.Text = "Do not change unless you know what you are doing !"
         '
-        'lbSocketPort
-        '
-        Me.lbSocketPort.AutoSize = True
-        Me.lbSocketPort.Location = New System.Drawing.Point(18, 21)
-        Me.lbSocketPort.Name = "lbSocketPort"
-        Me.lbSocketPort.Size = New System.Drawing.Size(29, 13)
-        Me.lbSocketPort.TabIndex = 0
-        Me.lbSocketPort.Text = "Port:"
-        '
         'tfSocketPort
         '
+        Me.tfSocketPort.DataBindings.Add(New System.Windows.Forms.Binding("Text", Global.TUOutlook2013AddIn.MySettings.Default, "SocketPort", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
         Me.tfSocketPort.Location = New System.Drawing.Point(53, 18)
         Me.tfSocketPort.Mask = "9999"
         Me.tfSocketPort.Name = "tfSocketPort"
         Me.tfSocketPort.Size = New System.Drawing.Size(62, 20)
         Me.tfSocketPort.TabIndex = 4
+        Me.tfSocketPort.Text = Global.TUOutlook2013AddIn.MySettings.Default.SocketPort
         Me.tfSocketPort.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'btCancel
         '
-        Me.btCancel.Location = New System.Drawing.Point(299, 201)
+        Me.btCancel.Location = New System.Drawing.Point(299, 204)
         Me.btCancel.Name = "btCancel"
         Me.btCancel.Size = New System.Drawing.Size(75, 23)
-        Me.btCancel.TabIndex = 10
+        Me.btCancel.TabIndex = 8
         Me.btCancel.Text = "Cancel"
         Me.btCancel.UseVisualStyleBackColor = True
-        '
-        'btOk
-        '
-        Me.btOk.Location = New System.Drawing.Point(218, 201)
-        Me.btOk.Name = "btOk"
-        Me.btOk.Size = New System.Drawing.Size(75, 23)
-        Me.btOk.TabIndex = 9
-        Me.btOk.Text = "OK"
-        Me.btOk.UseVisualStyleBackColor = True
         '
         'Settings
         '
@@ -254,8 +263,8 @@ Partial Class Settings
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(386, 235)
         Me.Controls.Add(Me.btCancel)
-        Me.Controls.Add(Me.btOk)
         Me.Controls.Add(Me.tabs)
+        Me.Controls.Add(Me.btOk)
         Me.Name = "Settings"
         Me.Text = "Settings"
         Me.tabs.ResumeLayout(False)
@@ -268,22 +277,22 @@ Partial Class Settings
         Me.ResumeLayout(False)
 
     End Sub
+    Friend WithEvents lbSocketPort As System.Windows.Forms.Label
+    Friend WithEvents tfSocketPort As System.Windows.Forms.MaskedTextBox
+    Friend WithEvents btOk As System.Windows.Forms.Button
     Friend WithEvents tabs As System.Windows.Forms.TabControl
     Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
-    Friend WithEvents lbCategories As System.Windows.Forms.Label
-    Friend WithEvents cbCategories As System.Windows.Forms.ComboBox
+    Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
     Friend WithEvents cbTaskNote As System.Windows.Forms.CheckBox
     Friend WithEvents cbTaskDueDate As System.Windows.Forms.CheckBox
     Friend WithEvents cbTaskStartDate As System.Windows.Forms.CheckBox
     Friend WithEvents cbTaskTitle As System.Windows.Forms.CheckBox
-    Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
-    Friend WithEvents cbNoteNote As System.Windows.Forms.CheckBox
+    Friend WithEvents lbCategories As System.Windows.Forms.Label
+    Friend WithEvents cbCategories As System.Windows.Forms.ComboBox
     Friend WithEvents cbNoteFolder As System.Windows.Forms.CheckBox
     Friend WithEvents cbNoteTitle As System.Windows.Forms.CheckBox
+    Friend WithEvents cbNoteNote As System.Windows.Forms.CheckBox
     Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
     Friend WithEvents lbDoNotChange As System.Windows.Forms.Label
-    Friend WithEvents lbSocketPort As System.Windows.Forms.Label
-    Friend WithEvents tfSocketPort As System.Windows.Forms.MaskedTextBox
     Friend WithEvents btCancel As System.Windows.Forms.Button
-    Friend WithEvents btOk As System.Windows.Forms.Button
 End Class
