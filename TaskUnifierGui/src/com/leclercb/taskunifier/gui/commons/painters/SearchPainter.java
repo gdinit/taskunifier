@@ -36,12 +36,14 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.text.Normalizer;
+import java.util.logging.Level;
 
 import javax.swing.JLabel;
 
 import org.jdesktop.swingx.painter.Painter;
 
 import com.leclercb.commons.api.utils.StringUtils;
+import com.leclercb.commons.gui.logger.GuiLogger;
 
 public class SearchPainter implements Painter<JLabel> {
 	
@@ -61,36 +63,43 @@ public class SearchPainter implements Painter<JLabel> {
 	
 	@Override
 	public void paint(Graphics2D g, JLabel object, int width, int height) {
-		if (this.searchText == null || this.searchText.length() == 0)
-			return;
-		
-		String text = object.getText();
-		String searchText = this.searchText;
-		
-		text = text.toLowerCase();
-		searchText = searchText.toString().toLowerCase();
-		
-		text = Normalizer.normalize(text, Normalizer.Form.NFD);
-		text = text.replaceAll("[^\\p{ASCII}]", "");
-		
-		searchText = Normalizer.normalize(searchText, Normalizer.Form.NFD);
-		searchText = searchText.replaceAll("[^\\p{ASCII}]", "");
-		
-		if (!StringUtils.containsLocalized(text, searchText))
-			return;
-		
-		FontMetrics metrics = object.getFontMetrics(object.getFont());
-		
-		String start = text.substring(0, text.indexOf(searchText));
-		
-		int startX = object.getIcon().getIconWidth()
-				+ object.getIconTextGap()
-				+ metrics.stringWidth(start);
-		
-		int length = metrics.stringWidth(searchText);
-		
-		g.setColor(Color.YELLOW);
-		g.fillRect(startX, 0, length + 1, height);
+		try {
+			if (this.searchText == null || this.searchText.length() == 0)
+				return;
+			
+			String text = object.getText();
+			String searchText = this.searchText;
+			
+			text = text.toLowerCase();
+			searchText = searchText.toString().toLowerCase();
+			
+			text = Normalizer.normalize(text, Normalizer.Form.NFD);
+			text = text.replaceAll("[^\\p{ASCII}]", "");
+			
+			searchText = Normalizer.normalize(searchText, Normalizer.Form.NFD);
+			searchText = searchText.replaceAll("[^\\p{ASCII}]", "");
+			
+			if (!StringUtils.containsLocalized(text, searchText))
+				return;
+			
+			FontMetrics metrics = object.getFontMetrics(object.getFont());
+			
+			String start = text.substring(0, text.indexOf(searchText));
+			
+			int startX = object.getIcon().getIconWidth()
+					+ object.getIconTextGap()
+					+ metrics.stringWidth(start);
+			
+			int length = metrics.stringWidth(searchText);
+			
+			g.setColor(Color.YELLOW);
+			g.fillRect(startX, 0, length + 2, height);
+		} catch (Throwable t) {
+			GuiLogger.getLogger().log(
+					Level.WARNING,
+					"Cannot paint search highlighting",
+					t);
+		}
 	}
 	
 }
