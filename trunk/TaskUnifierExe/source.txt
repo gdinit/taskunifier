@@ -26,7 +26,6 @@ How to build TaskUnifier:
 Run the following external tools configurations:
 - BizCal Build + Jar
 - Commons Build + Jar
-- JavaVersionGui Build + Jar
 - TaskUnifierApi Build + Jar
 - TaskUnifierGui Build + Jar
 - TaskUnifierExe Create Sources and Binaries
