@@ -1,3 +1,8 @@
+/*
+ * TaskUnifier
+ * Copyright (c) 2013, Benjamin Leclerc
+ * All rights reserved.
+ */
 package com.leclercb.taskunifier.plugin.sample;
 
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
