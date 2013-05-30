@@ -37,8 +37,8 @@ import javax.swing.RepaintManager;
 import javax.swing.SwingUtilities;
 
 /**
- * Usage: RepaintManager.setCurrentManager(new
- * CheckThreadViolationRepaintManager())
+ * Usage:
+ * RepaintManager.setCurrentManager(new CheckThreadViolationRepaintManager())
  */
 public class CheckThreadViolationRepaintManager extends RepaintManager {
 	
