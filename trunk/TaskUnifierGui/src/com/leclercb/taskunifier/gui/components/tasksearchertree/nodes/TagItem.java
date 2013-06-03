@@ -109,6 +109,7 @@ public class TagItem extends DefaultMutableTreeNode implements SearcherNode {
 				null,
 				filter,
 				defaultTaskSearcher.getSorter(),
+				defaultTaskSearcher.getGrouper(),
 				template);
 	}
 	

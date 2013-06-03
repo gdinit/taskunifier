@@ -119,6 +119,7 @@ public class FolderItem extends DefaultMutableTreeNode implements SearcherNode, 
 				null,
 				filter,
 				defaultNoteSearcher.getSorter(),
+				defaultNoteSearcher.getGrouper(),
 				template);
 		
 		if (folder != null) {
