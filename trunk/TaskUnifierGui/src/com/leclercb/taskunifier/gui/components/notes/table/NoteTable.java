@@ -264,6 +264,7 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 		this.refreshNotes();
 	}
 	
+	@Override
 	public void setSearchText(String searchText) {
 		this.searchHighlighter.setSearchText(searchText);
 	}

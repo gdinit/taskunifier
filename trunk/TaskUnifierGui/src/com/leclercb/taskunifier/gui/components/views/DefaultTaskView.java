@@ -98,7 +98,7 @@ public class DefaultTaskView extends JPanel implements TaskView, SavePropertiesL
 	
 	private TaskSearcherPanel taskSearcherPanel;
 	private QuickAddTaskPanel quickAddTaskPanel;
-	private TaskTable taskTable;
+	private TaskTableView taskTable;
 	private ModelNotePanel taskNote;
 	private TaskContactsPanel taskContacts;
 	private TaskTasksPanel taskTasks;
@@ -322,7 +322,9 @@ public class DefaultTaskView extends JPanel implements TaskView, SavePropertiesL
 		
 		JPanel taskPanel = new JPanel(new BorderLayout());
 		taskPanel.add(
-				ComponentFactory.createJScrollPane(this.taskTable, false),
+				ComponentFactory.createJScrollPane(
+						this.taskTable.getComponent(),
+						false),
 				BorderLayout.CENTER);
 		
 		this.taskSearcherPanel.addTaskSearcherSelectionChangeListener(this.taskTable);
