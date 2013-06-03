@@ -49,6 +49,7 @@ import java.util.List;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
@@ -119,6 +120,11 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 	
 	public TUTableProperties<Note> getTableProperties() {
 		return this.tableProperties;
+	}
+	
+	@Override
+	public JComponent getComponent() {
+		return this;
 	}
 	
 	@Override

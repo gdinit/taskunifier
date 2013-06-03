@@ -32,6 +32,8 @@
  */
 package com.leclercb.taskunifier.gui.components.notes;
 
+import javax.swing.JComponent;
+
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionChangeSupported;
@@ -40,6 +42,8 @@ import com.leclercb.taskunifier.gui.commons.events.NoteSearcherSelectionListener
 public interface NoteTableView extends ModelSelectionChangeSupported, PropertyChangeSupported, NoteSearcherSelectionListener {
 	
 	public static final String PROP_NOTE_COUNT = "noteCount";
+	
+	public abstract JComponent getComponent();
 	
 	public abstract Note[] getNotes();
 	

@@ -53,6 +53,7 @@ import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.DropMode;
 import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
@@ -134,6 +135,11 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 	
 	public TUTableProperties<Task> getTableProperties() {
 		return this.tableProperties;
+	}
+	
+	@Override
+	public JComponent getComponent() {
+		return this;
 	}
 	
 	@Override
@@ -273,6 +279,7 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 		this.refreshTasks();
 	}
 	
+	@Override
 	public void setSearchText(String searchText) {
 		this.searchHighlighter.setSearchText(searchText);
 	}
