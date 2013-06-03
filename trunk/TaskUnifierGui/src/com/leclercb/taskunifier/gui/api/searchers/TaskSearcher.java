@@ -46,6 +46,7 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilterElement;
+import com.leclercb.taskunifier.gui.api.searchers.groupers.TaskGrouper;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -60,6 +61,7 @@ public class TaskSearcher implements Cloneable, PropertyChangeSupported, ListCha
 	public static final String PROP_ICON = "icon";
 	public static final String PROP_FILTER = "filter";
 	public static final String PROP_SORTER = "sorter";
+	public static final String PROP_GROUPER = "grouper";
 	public static final String PROP_TEMPLATE = "template";
 	
 	@XStreamOmitField
@@ -89,6 +91,9 @@ public class TaskSearcher implements Cloneable, PropertyChangeSupported, ListCha
 	@XStreamAlias("sorter")
 	private TaskSorter sorter;
 	
+	@XStreamAlias("grouper")
+	private TaskGrouper grouper;
+	
 	@XStreamAlias("template")
 	private TaskTemplate template;
 	
@@ -98,19 +103,9 @@ public class TaskSearcher implements Cloneable, PropertyChangeSupported, ListCha
 			int order,
 			String title,
 			TaskFilter filter,
-			TaskSorter sorter) {
-		this(type, folder, order, title, null, filter, sorter);
-	}
-	
-	public TaskSearcher(
-			TaskSearcherType type,
-			String folder,
-			int order,
-			String title,
-			String icon,
-			TaskFilter filter,
-			TaskSorter sorter) {
-		this(type, folder, order, title, icon, filter, sorter, null);
+			TaskSorter sorter,
+			TaskGrouper grouper) {
+		this(type, folder, order, title, null, filter, sorter, grouper);
 	}
 	
 	public TaskSearcher(
@@ -121,6 +116,19 @@ public class TaskSearcher implements Cloneable, PropertyChangeSupported, ListCha
 			String icon,
 			TaskFilter filter,
 			TaskSorter sorter,
+			TaskGrouper grouper) {
+		this(type, folder, order, title, icon, filter, sorter, grouper, null);
+	}
+	
+	public TaskSearcher(
+			TaskSearcherType type,
+			String folder,
+			int order,
+			String title,
+			String icon,
+			TaskFilter filter,
+			TaskSorter sorter,
+			TaskGrouper grouper,
 			TaskTemplate template) {
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
 		
@@ -132,6 +140,7 @@ public class TaskSearcher implements Cloneable, PropertyChangeSupported, ListCha
 		this.setIcon(icon);
 		this.setFilter(filter);
 		this.setSorter(sorter);
+		this.setGrouper(grouper);
 		this.setTemplate(template);
 	}
 	
@@ -145,6 +154,7 @@ public class TaskSearcher implements Cloneable, PropertyChangeSupported, ListCha
 				this.icon,
 				this.filter.clone(),
 				this.sorter.clone(),
+				this.grouper.clone(),
 				this.template);
 	}
 	
@@ -280,6 +290,30 @@ public class TaskSearcher implements Cloneable, PropertyChangeSupported, ListCha
 				PROP_SORTER,
 				oldSorter,
 				sorter);
+	}
+	
+	public TaskGrouper getGrouper() {
+		return this.grouper;
+	}
+	
+	public void setGrouper(TaskGrouper grouper) {
+		CheckUtils.isNotNull(grouper);
+		
+		if (this.grouper != null) {
+			this.grouper.removeListChangeListener(this);
+			this.grouper.removePropertyChangeListener(this);
+		}
+		
+		TaskGrouper oldGrouper = this.grouper;
+		this.grouper = grouper;
+		
+		this.grouper.addListChangeListener(this);
+		this.grouper.addPropertyChangeListener(this);
+		
+		this.propertyChangeSupport.firePropertyChange(
+				PROP_SORTER,
+				oldGrouper,
+				grouper);
 	}
 	
 	public TaskTemplate getTemplate() {

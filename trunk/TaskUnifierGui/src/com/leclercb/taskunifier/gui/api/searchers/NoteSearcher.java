@@ -46,6 +46,7 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.templates.NoteTemplate;
 import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilterElement;
+import com.leclercb.taskunifier.gui.api.searchers.groupers.NoteGrouper;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorterElement;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
@@ -60,6 +61,7 @@ public class NoteSearcher implements Cloneable, PropertyChangeSupported, ListCha
 	public static final String PROP_ICON = "icon";
 	public static final String PROP_FILTER = "filter";
 	public static final String PROP_SORTER = "sorter";
+	public static final String PROP_GROUPER = "grouper";
 	public static final String PROP_TEMPLATE = "template";
 	
 	@XStreamOmitField
@@ -89,6 +91,9 @@ public class NoteSearcher implements Cloneable, PropertyChangeSupported, ListCha
 	@XStreamAlias("sorter")
 	private NoteSorter sorter;
 	
+	@XStreamAlias("grouper")
+	private NoteGrouper grouper;
+	
 	@XStreamAlias("template")
 	private NoteTemplate template;
 	
@@ -98,19 +103,9 @@ public class NoteSearcher implements Cloneable, PropertyChangeSupported, ListCha
 			int order,
 			String title,
 			NoteFilter filter,
-			NoteSorter sorter) {
-		this(type, folder, order, title, null, filter, sorter);
-	}
-	
-	public NoteSearcher(
-			NoteSearcherType type,
-			String folder,
-			int order,
-			String title,
-			String icon,
-			NoteFilter filter,
-			NoteSorter sorter) {
-		this(type, folder, order, title, icon, filter, sorter, null);
+			NoteSorter sorter,
+			NoteGrouper grouper) {
+		this(type, folder, order, title, null, filter, sorter, grouper);
 	}
 	
 	public NoteSearcher(
@@ -121,6 +116,19 @@ public class NoteSearcher implements Cloneable, PropertyChangeSupported, ListCha
 			String icon,
 			NoteFilter filter,
 			NoteSorter sorter,
+			NoteGrouper grouper) {
+		this(type, folder, order, title, icon, filter, sorter, grouper, null);
+	}
+	
+	public NoteSearcher(
+			NoteSearcherType type,
+			String folder,
+			int order,
+			String title,
+			String icon,
+			NoteFilter filter,
+			NoteSorter sorter,
+			NoteGrouper grouper,
 			NoteTemplate template) {
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
 		
@@ -132,6 +140,7 @@ public class NoteSearcher implements Cloneable, PropertyChangeSupported, ListCha
 		this.setIcon(icon);
 		this.setFilter(filter);
 		this.setSorter(sorter);
+		this.setGrouper(grouper);
 		this.setTemplate(template);
 	}
 	
@@ -145,6 +154,7 @@ public class NoteSearcher implements Cloneable, PropertyChangeSupported, ListCha
 				this.icon,
 				this.filter.clone(),
 				this.sorter.clone(),
+				this.grouper.clone(),
 				this.template);
 	}
 	
@@ -280,6 +290,30 @@ public class NoteSearcher implements Cloneable, PropertyChangeSupported, ListCha
 				PROP_SORTER,
 				oldSorter,
 				sorter);
+	}
+	
+	public NoteGrouper getGrouper() {
+		return this.grouper;
+	}
+	
+	public void setGrouper(NoteGrouper grouper) {
+		CheckUtils.isNotNull(grouper);
+		
+		if (this.grouper != null) {
+			this.grouper.removeListChangeListener(this);
+			this.grouper.removePropertyChangeListener(this);
+		}
+		
+		NoteGrouper oldGrouper = this.grouper;
+		this.grouper = grouper;
+		
+		this.grouper.addListChangeListener(this);
+		this.grouper.addPropertyChangeListener(this);
+		
+		this.propertyChangeSupport.firePropertyChange(
+				PROP_GROUPER,
+				oldGrouper,
+				grouper);
 	}
 	
 	public NoteTemplate getTemplate() {

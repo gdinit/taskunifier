@@ -70,7 +70,8 @@ public class ActionAddNoteSearcher extends AbstractViewAction {
 				Integer.MAX_VALUE,
 				Translations.getString("searcher.default.title"),
 				defaultNoteSearcher.getFilter(),
-				defaultNoteSearcher.getSorter());
+				defaultNoteSearcher.getSorter(),
+				defaultNoteSearcher.getGrouper());
 		
 		if (ViewUtils.getCurrentNoteView() != null)
 			ViewUtils.getCurrentNoteView().getNoteSearcherView().selectNoteSearcher(

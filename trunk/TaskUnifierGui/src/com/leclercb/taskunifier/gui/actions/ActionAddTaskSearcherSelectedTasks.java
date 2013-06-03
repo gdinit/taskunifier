@@ -91,7 +91,8 @@ public class ActionAddTaskSearcherSelectedTasks extends AbstractViewAction {
 				Integer.MAX_VALUE,
 				Translations.getString("searcher.default.title"),
 				mainFilter,
-				defaultTaskSearcher.getSorter());
+				defaultTaskSearcher.getSorter(),
+				defaultTaskSearcher.getGrouper());
 		
 		ViewType type = ViewUtils.getCurrentViewType();
 		

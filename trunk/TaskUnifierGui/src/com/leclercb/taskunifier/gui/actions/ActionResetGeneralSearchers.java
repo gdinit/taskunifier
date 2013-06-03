@@ -46,6 +46,7 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilterElement;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.DaysCondition;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.EnumCondition;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondition;
+import com.leclercb.taskunifier.gui.api.searchers.groupers.TaskGrouper;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
@@ -74,6 +75,7 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 		
 		TaskFilter filter;
 		TaskSorter sorter;
+		TaskGrouper grouper;
 		
 		sorter = new TaskSorter();
 		
@@ -86,6 +88,8 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 		sorter.addElement(new TaskSorterElement(
 				TaskColumnList.getInstance().get(TaskColumnList.TITLE),
 				SortOrder.ASCENDING));
+		
+		grouper = new TaskGrouper();
 		
 		// Not Completed
 		filter = new TaskFilter();
@@ -102,7 +106,8 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 				Translations.getString("searcherlist.general.not_completed"),
 				ImageUtils.getResourceFile("check.png"),
 				filter,
-				sorter.clone());
+				sorter.clone(),
+				grouper.clone());
 		
 		// Due Today
 		filter = new TaskFilter();
@@ -119,7 +124,8 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 				Translations.getString("searcherlist.general.due_today"),
 				ImageUtils.getResourceFile("calendar.png"),
 				filter,
-				sorter.clone());
+				sorter.clone(),
+				grouper.clone());
 		
 		// Overdue
 		filter = new TaskFilter();
@@ -136,7 +142,8 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 				Translations.getString("searcherlist.general.overdue"),
 				ImageUtils.getResourceFile("warning.png"),
 				filter,
-				sorter.clone());
+				sorter.clone(),
+				grouper.clone());
 		
 		// Hot List
 		filter = new TaskFilter();
@@ -158,7 +165,8 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 				Translations.getString("searcherlist.general.hot_list"),
 				ImageUtils.getResourceFile("hot_pepper.png"),
 				filter,
-				sorter.clone());
+				sorter.clone(),
+				grouper.clone());
 		
 		// Importance
 		filter = new TaskFilter();
@@ -179,7 +187,8 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 				Translations.getString("searcherlist.general.importance"),
 				ImageUtils.getResourceFile("importance.png"),
 				filter,
-				importanceSorter);
+				importanceSorter,
+				grouper.clone());
 		
 		// Starred
 		filter = new TaskFilter();
@@ -196,7 +205,8 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 				Translations.getString("searcherlist.general.starred"),
 				ImageUtils.getResourceFile("star.png"),
 				filter,
-				sorter.clone());
+				sorter.clone(),
+				grouper.clone());
 		
 		// Next Action
 		filter = new TaskFilter();
@@ -213,7 +223,8 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 				Translations.getString("searcherlist.general.next_action"),
 				ImageUtils.getResourceFile("next.png"),
 				filter,
-				sorter.clone());
+				sorter.clone(),
+				grouper.clone());
 		
 		// Completed
 		filter = new TaskFilter();
@@ -230,7 +241,8 @@ public class ActionResetGeneralSearchers extends AbstractViewAction {
 				Translations.getString("searcherlist.general.completed"),
 				ImageUtils.getResourceFile("check.png"),
 				filter,
-				sorter.clone());
+				sorter.clone(),
+				grouper.clone());
 		
 		for (TaskSearcher searcher : oldSearchers) {
 			if (searcher.getType().equals(TaskSearcherType.GENERAL))
