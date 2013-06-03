@@ -707,11 +707,20 @@ public interface ConfigurationFieldType<ComponentType extends JComponent, ValueT
 		private boolean first;
 		private PropertyMap settings;
 		private String propertyName;
+		private boolean trim;
 		
 		public PasswordField(PropertyMap settings, String propertyName) {
+			this(settings, propertyName, false);
+		}
+		
+		public PasswordField(
+				PropertyMap settings,
+				String propertyName,
+				boolean trim) {
 			this.first = true;
 			this.settings = settings;
 			this.propertyName = propertyName;
+			this.trim = trim;
 		}
 		
 		@Override
@@ -734,6 +743,9 @@ public interface ConfigurationFieldType<ComponentType extends JComponent, ValueT
 		
 		@Override
 		public String getFieldValue() {
+			if (trim)
+				return new String(this.getPassword()).trim();
+			
 			return new String(this.getPassword());
 		}
 		

@@ -4,6 +4,7 @@ HISTORY
 Version 3.2.5
 	- Major:
 		- Sorting error with titles
+		- BF 308: Improved normalizer
 	- Minor:
 		- BF 299: Cut action in model note
 		- BF 307: Search problem
