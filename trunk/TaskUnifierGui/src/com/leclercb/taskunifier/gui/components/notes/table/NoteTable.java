@@ -252,7 +252,7 @@ public class NoteTable extends JXTable implements NoteTableView, SavePropertiesL
 		return this.noteRowComparator.getNoteSearcher();
 	}
 	
-	private void setNoteSearcher(NoteSearcher searcher) {
+	public void setNoteSearcher(NoteSearcher searcher) {
 		CheckUtils.isNotNull(searcher);
 		
 		this.noteRowComparator.setNoteSearcher(searcher);
