@@ -46,6 +46,7 @@ import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.templates.NoteTemplate;
 import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilter;
+import com.leclercb.taskunifier.gui.api.searchers.groupers.NoteGrouper;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorter;
 
 public class NoteSearcherFactory implements PropertyChangeListener, ListChangeSupported, PropertyChangeSupported {
@@ -161,34 +162,16 @@ public class NoteSearcherFactory implements PropertyChangeListener, ListChangeSu
 			int order,
 			String title,
 			NoteFilter filter,
-			NoteSorter sorter) {
+			NoteSorter sorter,
+			NoteGrouper grouper) {
 		NoteSearcher searcher = new NoteSearcher(
 				type,
 				folder,
 				order,
 				title,
 				filter,
-				sorter);
-		this.register(searcher);
-		return searcher;
-	}
-	
-	public NoteSearcher create(
-			NoteSearcherType type,
-			String folder,
-			int order,
-			String title,
-			String icon,
-			NoteFilter filter,
-			NoteSorter sorter) {
-		NoteSearcher searcher = new NoteSearcher(
-				type,
-				folder,
-				order,
-				title,
-				icon,
-				filter,
-				sorter);
+				sorter,
+				grouper);
 		this.register(searcher);
 		return searcher;
 	}
@@ -201,6 +184,29 @@ public class NoteSearcherFactory implements PropertyChangeListener, ListChangeSu
 			String icon,
 			NoteFilter filter,
 			NoteSorter sorter,
+			NoteGrouper grouper) {
+		NoteSearcher searcher = new NoteSearcher(
+				type,
+				folder,
+				order,
+				title,
+				icon,
+				filter,
+				sorter,
+				grouper);
+		this.register(searcher);
+		return searcher;
+	}
+	
+	public NoteSearcher create(
+			NoteSearcherType type,
+			String folder,
+			int order,
+			String title,
+			String icon,
+			NoteFilter filter,
+			NoteSorter sorter,
+			NoteGrouper grouper,
 			NoteTemplate template) {
 		NoteSearcher searcher = new NoteSearcher(
 				type,
@@ -210,6 +216,7 @@ public class NoteSearcherFactory implements PropertyChangeListener, ListChangeSu
 				icon,
 				filter,
 				sorter,
+				grouper,
 				template);
 		this.register(searcher);
 		return searcher;

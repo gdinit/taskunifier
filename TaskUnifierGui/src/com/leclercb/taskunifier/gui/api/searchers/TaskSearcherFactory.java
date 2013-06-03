@@ -46,6 +46,7 @@ import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
+import com.leclercb.taskunifier.gui.api.searchers.groupers.TaskGrouper;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
 
 public class TaskSearcherFactory implements PropertyChangeListener, ListChangeSupported, PropertyChangeSupported {
@@ -161,34 +162,16 @@ public class TaskSearcherFactory implements PropertyChangeListener, ListChangeSu
 			int order,
 			String title,
 			TaskFilter filter,
-			TaskSorter sorter) {
+			TaskSorter sorter,
+			TaskGrouper grouper) {
 		TaskSearcher searcher = new TaskSearcher(
 				type,
 				folder,
 				order,
 				title,
 				filter,
-				sorter);
-		this.register(searcher);
-		return searcher;
-	}
-	
-	public TaskSearcher create(
-			TaskSearcherType type,
-			String folder,
-			int order,
-			String title,
-			String icon,
-			TaskFilter filter,
-			TaskSorter sorter) {
-		TaskSearcher searcher = new TaskSearcher(
-				type,
-				folder,
-				order,
-				title,
-				icon,
-				filter,
-				sorter);
+				sorter,
+				grouper);
 		this.register(searcher);
 		return searcher;
 	}
@@ -201,6 +184,29 @@ public class TaskSearcherFactory implements PropertyChangeListener, ListChangeSu
 			String icon,
 			TaskFilter filter,
 			TaskSorter sorter,
+			TaskGrouper grouper) {
+		TaskSearcher searcher = new TaskSearcher(
+				type,
+				folder,
+				order,
+				title,
+				icon,
+				filter,
+				sorter,
+				grouper);
+		this.register(searcher);
+		return searcher;
+	}
+	
+	public TaskSearcher create(
+			TaskSearcherType type,
+			String folder,
+			int order,
+			String title,
+			String icon,
+			TaskFilter filter,
+			TaskSorter sorter,
+			TaskGrouper grouper,
 			TaskTemplate template) {
 		TaskSearcher searcher = new TaskSearcher(
 				type,
@@ -210,6 +216,7 @@ public class TaskSearcherFactory implements PropertyChangeListener, ListChangeSu
 				icon,
 				filter,
 				sorter,
+				grouper,
 				template);
 		this.register(searcher);
 		return searcher;

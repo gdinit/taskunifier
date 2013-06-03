@@ -45,6 +45,7 @@ import com.leclercb.taskunifier.api.models.templates.TaskTemplateFactory;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcherType;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
+import com.leclercb.taskunifier.gui.api.searchers.groupers.TaskGrouper;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
 
 public class TaskSearcherXMLCoder extends AbstractXMLCoder<TaskSearcher> {
@@ -68,6 +69,7 @@ public class TaskSearcherXMLCoder extends AbstractXMLCoder<TaskSearcher> {
 			String icon = null;
 			TaskFilter filter = null;
 			TaskSorter sorter = null;
+			TaskGrouper grouper = null;
 			TaskTemplate template = null;
 			
 			for (int i = 0; i < nSearcher.getLength(); i++) {
@@ -106,6 +108,8 @@ public class TaskSearcherXMLCoder extends AbstractXMLCoder<TaskSearcher> {
 				}
 			}
 			
+			grouper = new TaskGrouper();
+			
 			return new TaskSearcher(
 					type,
 					folder,
@@ -114,6 +118,7 @@ public class TaskSearcherXMLCoder extends AbstractXMLCoder<TaskSearcher> {
 					icon,
 					filter,
 					sorter,
+					grouper,
 					template);
 		} catch (Exception e) {
 			throw new FactoryCoderException(e.getMessage(), e);

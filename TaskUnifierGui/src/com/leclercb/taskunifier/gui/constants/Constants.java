@@ -50,6 +50,8 @@ import com.leclercb.taskunifier.gui.api.searchers.coders.NoteSearcherXMLCoder;
 import com.leclercb.taskunifier.gui.api.searchers.coders.TaskSearcherXMLCoder;
 import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
+import com.leclercb.taskunifier.gui.api.searchers.groupers.NoteGrouper;
+import com.leclercb.taskunifier.gui.api.searchers.groupers.TaskGrouper;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorterElement;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
@@ -149,6 +151,9 @@ public final class Constants {
 				NoteColumnList.getInstance().get(NoteColumnList.TITLE),
 				SortOrder.ASCENDING));
 		
+		// Default Note Grouper
+		NoteGrouper defaultNoteGrouper = new NoteGrouper();
+		
 		// Default Note Filter
 		NoteFilter defaultNoteFilter = new NoteFilter();
 		
@@ -159,7 +164,8 @@ public final class Constants {
 				0,
 				"",
 				defaultNoteFilter,
-				defaultNoteSorter);
+				defaultNoteSorter,
+				defaultNoteGrouper);
 		
 		String value = Main.getSettings().getStringProperty(
 				"notesearcher.default_searcher");
@@ -184,7 +190,8 @@ public final class Constants {
 				Translations.getString("searcherlist.general.all"),
 				ImageUtils.getResourceFile("note.png"),
 				DEFAULT_NOTE_SEARCHER.getFilter().clone(),
-				DEFAULT_NOTE_SEARCHER.getSorter().clone());
+				DEFAULT_NOTE_SEARCHER.getSorter().clone(),
+				DEFAULT_NOTE_SEARCHER.getGrouper().clone());
 	}
 	
 	private static void initializeTaskSearcher() {
@@ -201,6 +208,9 @@ public final class Constants {
 				TaskColumnList.getInstance().get(TaskColumnList.TITLE),
 				SortOrder.ASCENDING));
 		
+		// Default Task Grouper
+		TaskGrouper defaultTaskGrouper = new TaskGrouper();
+		
 		// Default Task Filter
 		TaskFilter defaultTaskFilter = new TaskFilter();
 		
@@ -211,7 +221,8 @@ public final class Constants {
 				0,
 				"",
 				defaultTaskFilter,
-				defaultTaskSorter);
+				defaultTaskSorter,
+				defaultTaskGrouper);
 		
 		String value = Main.getSettings().getStringProperty(
 				"tasksearcher.default_searcher");
@@ -236,7 +247,8 @@ public final class Constants {
 				Translations.getString("searcherlist.general.all"),
 				ImageUtils.getResourceFile("task.png"),
 				DEFAULT_TASK_SEARCHER.getFilter().clone(),
-				DEFAULT_TASK_SEARCHER.getSorter().clone());
+				DEFAULT_TASK_SEARCHER.getSorter().clone(),
+				DEFAULT_TASK_SEARCHER.getGrouper().clone());
 	}
 	
 }

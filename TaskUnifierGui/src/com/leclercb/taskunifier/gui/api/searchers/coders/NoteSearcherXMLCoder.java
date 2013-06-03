@@ -45,6 +45,7 @@ import com.leclercb.taskunifier.api.models.templates.NoteTemplateFactory;
 import com.leclercb.taskunifier.gui.api.searchers.NoteSearcher;
 import com.leclercb.taskunifier.gui.api.searchers.NoteSearcherType;
 import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilter;
+import com.leclercb.taskunifier.gui.api.searchers.groupers.NoteGrouper;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorter;
 
 public class NoteSearcherXMLCoder extends AbstractXMLCoder<NoteSearcher> {
@@ -68,6 +69,7 @@ public class NoteSearcherXMLCoder extends AbstractXMLCoder<NoteSearcher> {
 			String icon = null;
 			NoteFilter filter = null;
 			NoteSorter sorter = null;
+			NoteGrouper grouper = null;
 			NoteTemplate template = null;
 			
 			for (int i = 0; i < nSearcher.getLength(); i++) {
@@ -106,6 +108,8 @@ public class NoteSearcherXMLCoder extends AbstractXMLCoder<NoteSearcher> {
 				}
 			}
 			
+			grouper = new NoteGrouper();
+			
 			return new NoteSearcher(
 					type,
 					folder,
@@ -114,6 +118,7 @@ public class NoteSearcherXMLCoder extends AbstractXMLCoder<NoteSearcher> {
 					icon,
 					filter,
 					sorter,
+					grouper,
 					template);
 		} catch (Exception e) {
 			throw new FactoryCoderException(e.getMessage(), e);
