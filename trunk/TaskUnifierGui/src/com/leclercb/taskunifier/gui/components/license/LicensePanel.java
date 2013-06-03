@@ -362,10 +362,18 @@ public class LicensePanel extends JPanel {
 						200,
 						235);
 				g2.drawString(LicensePanel.this.license.getVersion(), 200, 256);
-				g2.drawString(
-						StringValueCalendar.INSTANCE_DATE.getString(LicensePanel.this.license.getExpiration()),
-						200,
-						284);
+				
+				if (LicensePanel.this.license.getExpiration() == null) {
+					g2.drawString(
+							Translations.getString("date.never"),
+							200,
+							284);
+				} else {
+					g2.drawString(
+							StringValueCalendar.INSTANCE_DATE.getString(LicensePanel.this.license.getExpiration()),
+							200,
+							284);
+				}
 				
 				if (LicensePanel.this.expired) {
 					ImageIcon expiredIcon = ImageUtils.getResourceImage("expired.png");
