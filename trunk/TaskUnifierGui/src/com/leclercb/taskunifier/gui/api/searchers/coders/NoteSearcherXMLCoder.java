@@ -51,6 +51,7 @@ import com.leclercb.taskunifier.gui.api.searchers.sorters.NoteSorter;
 public class NoteSearcherXMLCoder extends AbstractXMLCoder<NoteSearcher> {
 	
 	private static final NoteSorterXMLCoder NOTE_SORTER_XML_CODER = new NoteSorterXMLCoder();
+	private static final NoteGrouperXMLCoder NOTE_GROUPER_XML_CODER = new NoteGrouperXMLCoder();
 	private static final NoteFilterXMLCoder NOTE_FILTER_XML_CODER = new NoteFilterXMLCoder();
 	
 	public NoteSearcherXMLCoder() {
@@ -69,7 +70,7 @@ public class NoteSearcherXMLCoder extends AbstractXMLCoder<NoteSearcher> {
 			String icon = null;
 			NoteFilter filter = null;
 			NoteSorter sorter = null;
-			NoteGrouper grouper = null;
+			NoteGrouper grouper = new NoteGrouper();
 			NoteTemplate template = null;
 			
 			for (int i = 0; i < nSearcher.getLength(); i++) {
@@ -98,6 +99,10 @@ public class NoteSearcherXMLCoder extends AbstractXMLCoder<NoteSearcher> {
 					sorter = this.decodeNoteSorter(nSearcher.item(i));
 				}
 				
+				if (nSearcher.item(i).getNodeName().equals("grouper")) {
+					grouper = this.decodeNoteGrouper(nSearcher.item(i));
+				}
+				
 				if (nSearcher.item(i).getNodeName().equals("filter")) {
 					filter = this.decodeNoteFilter(nSearcher.item(i));
 				}
@@ -107,8 +112,6 @@ public class NoteSearcherXMLCoder extends AbstractXMLCoder<NoteSearcher> {
 							new ModelId(nSearcher.item(i).getTextContent()));
 				}
 			}
-			
-			grouper = new NoteGrouper();
 			
 			return new NoteSearcher(
 					type,
@@ -127,6 +130,10 @@ public class NoteSearcherXMLCoder extends AbstractXMLCoder<NoteSearcher> {
 	
 	private NoteSorter decodeNoteSorter(Node node) throws FactoryCoderException {
 		return NOTE_SORTER_XML_CODER.decode(node);
+	}
+	
+	private NoteGrouper decodeNoteGrouper(Node node) throws FactoryCoderException {
+		return NOTE_GROUPER_XML_CODER.decode(node);
 	}
 	
 	private NoteFilter decodeNoteFilter(Node node) throws FactoryCoderException {
@@ -161,6 +168,9 @@ public class NoteSearcherXMLCoder extends AbstractXMLCoder<NoteSearcher> {
 		Element sorter = document.createElement("sorter");
 		root.appendChild(sorter);
 		
+		Element grouper = document.createElement("grouper");
+		root.appendChild(grouper);
+		
 		Element filter = document.createElement("filter");
 		root.appendChild(filter);
 		
@@ -171,6 +181,7 @@ public class NoteSearcherXMLCoder extends AbstractXMLCoder<NoteSearcher> {
 		}
 		
 		this.encodeNoteSorter(document, sorter, noteSearcher.getSorter());
+		this.encodeNoteGrouper(document, grouper, noteSearcher.getGrouper());
 		this.encodeNoteFilter(document, filter, noteSearcher.getFilter());
 	}
 	
@@ -179,6 +190,13 @@ public class NoteSearcherXMLCoder extends AbstractXMLCoder<NoteSearcher> {
 			Element root,
 			NoteSorter sorter) {
 		NOTE_SORTER_XML_CODER.encode(document, root, sorter);
+	}
+	
+	private void encodeNoteGrouper(
+			Document document,
+			Element root,
+			NoteGrouper grouper) {
+		NOTE_GROUPER_XML_CODER.encode(document, root, grouper);
 	}
 	
 	private void encodeNoteFilter(

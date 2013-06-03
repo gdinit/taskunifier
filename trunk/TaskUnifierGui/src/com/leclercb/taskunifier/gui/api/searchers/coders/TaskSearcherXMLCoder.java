@@ -51,6 +51,7 @@ import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
 public class TaskSearcherXMLCoder extends AbstractXMLCoder<TaskSearcher> {
 	
 	private static final TaskSorterXMLCoder TASK_SORTER_XML_CODER = new TaskSorterXMLCoder();
+	private static final TaskGrouperXMLCoder TASK_GROUPER_XML_CODER = new TaskGrouperXMLCoder();
 	private static final TaskFilterXMLCoder TASK_FILTER_XML_CODER = new TaskFilterXMLCoder();
 	
 	public TaskSearcherXMLCoder() {
@@ -69,7 +70,7 @@ public class TaskSearcherXMLCoder extends AbstractXMLCoder<TaskSearcher> {
 			String icon = null;
 			TaskFilter filter = null;
 			TaskSorter sorter = null;
-			TaskGrouper grouper = null;
+			TaskGrouper grouper = new TaskGrouper();
 			TaskTemplate template = null;
 			
 			for (int i = 0; i < nSearcher.getLength(); i++) {
@@ -98,6 +99,10 @@ public class TaskSearcherXMLCoder extends AbstractXMLCoder<TaskSearcher> {
 					sorter = this.decodeTaskSorter(nSearcher.item(i));
 				}
 				
+				if (nSearcher.item(i).getNodeName().equals("grouper")) {
+					grouper = this.decodeTaskGrouper(nSearcher.item(i));
+				}
+				
 				if (nSearcher.item(i).getNodeName().equals("filter")) {
 					filter = this.decodeTaskFilter(nSearcher.item(i));
 				}
@@ -107,8 +112,6 @@ public class TaskSearcherXMLCoder extends AbstractXMLCoder<TaskSearcher> {
 							new ModelId(nSearcher.item(i).getTextContent()));
 				}
 			}
-			
-			grouper = new TaskGrouper();
 			
 			return new TaskSearcher(
 					type,
@@ -127,6 +130,10 @@ public class TaskSearcherXMLCoder extends AbstractXMLCoder<TaskSearcher> {
 	
 	private TaskSorter decodeTaskSorter(Node node) throws FactoryCoderException {
 		return TASK_SORTER_XML_CODER.decode(node);
+	}
+	
+	private TaskGrouper decodeTaskGrouper(Node node) throws FactoryCoderException {
+		return TASK_GROUPER_XML_CODER.decode(node);
 	}
 	
 	private TaskFilter decodeTaskFilter(Node node) throws FactoryCoderException {
@@ -161,6 +168,9 @@ public class TaskSearcherXMLCoder extends AbstractXMLCoder<TaskSearcher> {
 		Element sorter = document.createElement("sorter");
 		root.appendChild(sorter);
 		
+		Element grouper = document.createElement("grouper");
+		root.appendChild(grouper);
+		
 		Element filter = document.createElement("filter");
 		root.appendChild(filter);
 		
@@ -171,6 +181,7 @@ public class TaskSearcherXMLCoder extends AbstractXMLCoder<TaskSearcher> {
 		}
 		
 		this.encodeTaskSorter(document, sorter, taskSearcher.getSorter());
+		this.encodeTaskGrouper(document, grouper, taskSearcher.getGrouper());
 		this.encodeTaskFilter(document, filter, taskSearcher.getFilter());
 	}
 	
@@ -179,6 +190,13 @@ public class TaskSearcherXMLCoder extends AbstractXMLCoder<TaskSearcher> {
 			Element root,
 			TaskSorter sorter) {
 		TASK_SORTER_XML_CODER.encode(document, root, sorter);
+	}
+	
+	private void encodeTaskGrouper(
+			Document document,
+			Element root,
+			TaskGrouper grouper) {
+		TASK_GROUPER_XML_CODER.encode(document, root, grouper);
 	}
 	
 	private void encodeTaskFilter(
