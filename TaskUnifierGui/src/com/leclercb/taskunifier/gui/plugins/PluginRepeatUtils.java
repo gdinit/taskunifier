@@ -295,7 +295,7 @@ public final class PluginRepeatUtils {
 		String strAmount = matcher.group(3);
 		Integer amount = null;
 		String strField = matcher.group(4);
-		Integer field = null;
+		Set<Integer> fields = new HashSet<Integer>();
 		
 		if (strAmount.matches("^(1|1st|first)$")) {
 			amount = 1;
@@ -310,27 +310,46 @@ public final class PluginRepeatUtils {
 		}
 		
 		if (strField.startsWith("mon")) {
-			field = Calendar.MONDAY;
+			fields.add(Calendar.MONDAY);
 		} else if (strField.startsWith("tue")) {
-			field = Calendar.TUESDAY;
+			fields.add(Calendar.TUESDAY);
 		} else if (strField.startsWith("wed")) {
-			field = Calendar.WEDNESDAY;
+			fields.add(Calendar.WEDNESDAY);
 		} else if (strField.startsWith("thu")) {
-			field = Calendar.THURSDAY;
+			fields.add(Calendar.THURSDAY);
 		} else if (strField.startsWith("fri")) {
-			field = Calendar.FRIDAY;
+			fields.add(Calendar.FRIDAY);
 		} else if (strField.startsWith("sat")) {
-			field = Calendar.SATURDAY;
+			fields.add(Calendar.SATURDAY);
 		} else if (strField.startsWith("sun")) {
-			field = Calendar.SUNDAY;
+			fields.add(Calendar.SUNDAY);
+		} else if (strField.equals("weekend")) {
+			fields.add(Calendar.SATURDAY);
+			fields.add(Calendar.SUNDAY);
+		} else if (strField.equals("weekday")) {
+			fields.add(Calendar.MONDAY);
+			fields.add(Calendar.TUESDAY);
+			fields.add(Calendar.WEDNESDAY);
+			fields.add(Calendar.THURSDAY);
+			fields.add(Calendar.FRIDAY);
 		}
 		
-		if (amount == null || field == null)
+		if (fields.size() == 0)
 			return null;
+		
+		int currentDay = date.get(Calendar.DAY_OF_WEEK);
+		int nextDay = currentDay;
+		
+		for (int i = 0; i < 7; i++) {
+			nextDay = (nextDay % 7) + 1;
+			
+			if (fields.contains(nextDay))
+				break;
+		}
 		
 		Calendar clone = DateUtils.cloneCalendar(date);
 		
-		date.set(Calendar.DAY_OF_WEEK, field);
+		date.set(Calendar.DAY_OF_WEEK, nextDay);
 		
 		int realAmount = amount;
 		if (amount > date.getActualMaximum(Calendar.DAY_OF_WEEK_IN_MONTH))
@@ -341,7 +360,7 @@ public final class PluginRepeatUtils {
 		if (date.compareTo(clone) <= 0) {
 			date.add(Calendar.MONTH, 1);
 			
-			date.set(Calendar.DAY_OF_WEEK, field);
+			date.set(Calendar.DAY_OF_WEEK, nextDay);
 			
 			realAmount = amount;
 			if (amount > date.getActualMaximum(Calendar.DAY_OF_WEEK_IN_MONTH))

@@ -2,10 +2,13 @@ HISTORY
 -------
 
 Version 3.2.5
+	- Major:
+		- Sorting error with titles
 	- Minor:
 		- BF 299: Cut action in model note
 		- BF 307: Search problem
 		- FR 353: Add forum link
+		- FR 357: New repeat possibilities
 
 Version 3.2.4
 	- Major:
