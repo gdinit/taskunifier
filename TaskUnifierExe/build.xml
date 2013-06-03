@@ -68,7 +68,7 @@
     	<copy file="${directory.exe}/scripts/linux_taskunifier.sh" tofile="${directory.exe}/temp/TaskUnifier/TaskUnifier.sh"/>
     	<chmod file="${directory.exe}/temp/TaskUnifier/TaskUnifier.sh" perm="ugo+rx"/>
     	<mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
-		<tar destfile="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/TaskUnifier_${taskunifier.version.underscored}_linux.tar">
+		<tar destfile="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/TaskUnifier_${taskunifier.version.underscored}_linux.tar.gz" compression="gzip">
 			<tarfileset dir="${directory.exe}/temp">
 				<include name="**/*"/>
 				<exclude name="**/TaskUnifier/TaskUnifier.sh"/>
@@ -211,7 +211,7 @@
 		</scp>
 		<scp password="${sourceforge.password}" todir="leclercb,taskunifier@frs.sourceforge.net:/home/frs/project/t/ta/taskunifier/binaries/TaskUnifier_${taskunifier.version.underscored}" trust="true">
 			<fileset dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}">
-				<include name="TaskUnifier_${taskunifier.version.underscored}_linux.tar"/>
+				<include name="TaskUnifier_${taskunifier.version.underscored}_linux.tar.gz"/>
 			</fileset>
 		</scp>
 		<scp password="${sourceforge.password}" todir="leclercb,taskunifier@frs.sourceforge.net:/home/frs/project/t/ta/taskunifier/binaries/TaskUnifier_${taskunifier.version.underscored}" trust="true">
