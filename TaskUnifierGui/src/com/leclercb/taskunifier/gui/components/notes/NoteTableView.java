@@ -36,13 +36,10 @@ import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionChangeSupported;
 import com.leclercb.taskunifier.gui.commons.events.NoteSearcherSelectionListener;
-import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
 
 public interface NoteTableView extends ModelSelectionChangeSupported, PropertyChangeSupported, NoteSearcherSelectionListener {
 	
 	public static final String PROP_NOTE_COUNT = "noteCount";
-	
-	public abstract TUTableProperties<Note> getTableProperties();
 	
 	public abstract Note[] getNotes();
 	
