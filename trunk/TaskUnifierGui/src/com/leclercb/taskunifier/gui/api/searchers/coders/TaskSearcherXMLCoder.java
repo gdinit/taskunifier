@@ -132,7 +132,8 @@ public class TaskSearcherXMLCoder extends AbstractXMLCoder<TaskSearcher> {
 		return TASK_SORTER_XML_CODER.decode(node);
 	}
 	
-	private TaskGrouper decodeTaskGrouper(Node node) throws FactoryCoderException {
+	private TaskGrouper decodeTaskGrouper(Node node)
+			throws FactoryCoderException {
 		return TASK_GROUPER_XML_CODER.decode(node);
 	}
 	
