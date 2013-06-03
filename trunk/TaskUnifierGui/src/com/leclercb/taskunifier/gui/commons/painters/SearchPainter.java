@@ -74,10 +74,7 @@ public class SearchPainter implements Painter<JLabel> {
 			searchText = searchText.toString().toLowerCase();
 			
 			text = Normalizer.normalize(text, Normalizer.Form.NFD);
-			text = text.replaceAll("[^\\p{ASCII}]", "");
-			
 			searchText = Normalizer.normalize(searchText, Normalizer.Form.NFD);
-			searchText = searchText.replaceAll("[^\\p{ASCII}]", "");
 			
 			if (!StringUtils.containsLocalized(text, searchText))
 				return;

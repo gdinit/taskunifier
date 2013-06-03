@@ -79,10 +79,7 @@ public enum StringCondition implements Condition<String, Object> {
 		String taskString = modelValue.toString().toLowerCase();
 		
 		string = Normalizer.normalize(string, Normalizer.Form.NFD);
-		string = string.replaceAll("[^\\p{ASCII}]", "");
-		
 		taskString = Normalizer.normalize(taskString, Normalizer.Form.NFD);
-		taskString = taskString.replaceAll("[^\\p{ASCII}]", "");
 		
 		switch (this) {
 			case CONTAINS:

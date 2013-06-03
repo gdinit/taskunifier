@@ -62,10 +62,7 @@ public class StringUtils {
 		s2 = s2.toLowerCase();
 		
 		s1 = Normalizer.normalize(s1, Normalizer.Form.NFD);
-		s1 = s1.replaceAll("[^\\p{ASCII}]", "");
-		
 		s2 = Normalizer.normalize(s2, Normalizer.Form.NFD);
-		s2 = s2.replaceAll("[^\\p{ASCII}]", "");
 		
 		return s1.contains(s2);
 	}
