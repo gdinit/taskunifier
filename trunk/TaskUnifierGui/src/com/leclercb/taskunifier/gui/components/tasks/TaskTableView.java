@@ -32,6 +32,8 @@
  */
 package com.leclercb.taskunifier.gui.components.tasks;
 
+import javax.swing.JComponent;
+
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionChangeSupported;
@@ -42,6 +44,8 @@ public interface TaskTableView extends TaskSelectionView, ModelSelectionChangeSu
 	
 	public static final String PROP_TASK_COUNT = "taskCount";
 	
+	public abstract JComponent getComponent();
+	
 	public abstract Task[] getTasks();
 	
 	public abstract int getTaskCount();
@@ -49,6 +53,8 @@ public interface TaskTableView extends TaskSelectionView, ModelSelectionChangeSu
 	public abstract void setSelectedTaskAndStartEdit(Task task);
 	
 	public abstract void refreshTasks();
+	
+	public abstract void setSearchText(String searchText);
 	
 	public abstract void printTasks(boolean selection) throws Exception;
 	
