@@ -74,7 +74,7 @@ public class DefaultNoteView extends JPanel implements NoteView, SavePropertiesL
 	private JSplitPane verticalSplitPane;
 	
 	private NoteSearcherPanel noteSearcherPanel;
-	private NoteTable noteTable;
+	private NoteTableView noteTable;
 	private ModelNotePanel noteNote;
 	
 	private JXSearchField searchField;
@@ -268,7 +268,9 @@ public class DefaultNoteView extends JPanel implements NoteView, SavePropertiesL
 		
 		JPanel notePanel = new JPanel(new BorderLayout());
 		notePanel.add(
-				ComponentFactory.createJScrollPane(this.noteTable, false),
+				ComponentFactory.createJScrollPane(
+						this.noteTable.getComponent(),
+						false),
 				BorderLayout.CENTER);
 		
 		this.noteSearcherPanel.addNoteSearcherSelectionChangeListener(this.noteTable);
