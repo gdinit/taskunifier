@@ -30,7 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.tasks;
+package com.leclercb.taskunifier.gui.components.tasks.table;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -54,8 +54,8 @@ import com.leclercb.taskunifier.gui.commons.events.ModelSelectionListener;
 import com.leclercb.taskunifier.gui.commons.events.TaskSearcherSelectionChangeEvent;
 import com.leclercb.taskunifier.gui.components.print.PrintUtils;
 import com.leclercb.taskunifier.gui.components.print.TablePrintable;
-import com.leclercb.taskunifier.gui.components.tasks.table.TaskPrintTable;
-import com.leclercb.taskunifier.gui.components.tasks.table.TaskTable;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
+import com.leclercb.taskunifier.gui.components.tasks.TaskTableView;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
@@ -255,6 +255,7 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 				JPanel tablePanel = new JPanel(new BorderLayout());
 				tablePanel.setOpaque(false);
 				TaskTable table = new TaskTable(this.tableProperties);
+				table.setSelectionModel(new TaskGroupTableSelectionModel(this));
 				table.setTaskSearcher(searcher);
 				tablePanel.add(table.getTableHeader(), BorderLayout.NORTH);
 				tablePanel.add(table, BorderLayout.CENTER);
