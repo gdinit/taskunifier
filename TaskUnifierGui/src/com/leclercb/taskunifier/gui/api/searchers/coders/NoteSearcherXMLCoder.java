@@ -132,7 +132,8 @@ public class NoteSearcherXMLCoder extends AbstractXMLCoder<NoteSearcher> {
 		return NOTE_SORTER_XML_CODER.decode(node);
 	}
 	
-	private NoteGrouper decodeNoteGrouper(Node node) throws FactoryCoderException {
+	private NoteGrouper decodeNoteGrouper(Node node)
+			throws FactoryCoderException {
 		return NOTE_GROUPER_XML_CODER.decode(node);
 	}
 	
