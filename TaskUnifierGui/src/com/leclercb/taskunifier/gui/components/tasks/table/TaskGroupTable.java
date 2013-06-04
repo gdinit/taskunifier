@@ -64,7 +64,7 @@ import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
 public class TaskGroupTable extends JPanel implements TaskTableView {
 	
-	private boolean main;
+	private int level;
 	
 	private TUTableProperties<Task> tableProperties;
 	private List<TaskTableView> tables;
@@ -72,11 +72,11 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 	private List<TaskSearcher> searchers;
 	
 	public TaskGroupTable(TUTableProperties<Task> tableProperties) {
-		this(tableProperties, true);
+		this(tableProperties, 0);
 	}
 	
-	private TaskGroupTable(TUTableProperties<Task> tableProperties, boolean main) {
-		this.main = main;
+	private TaskGroupTable(TUTableProperties<Task> tableProperties, int level) {
+		this.level = level;
 		
 		this.tableProperties = tableProperties;
 		this.tables = new ArrayList<TaskTableView>();
@@ -226,7 +226,7 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 		if (this.searchers == null
 				|| this.searchers.size() == 0
 				|| !this.doesContainDisplayedTasks(this.searcher)) {
-			if (this.main) {
+			if (this.level == 0) {
 				JPanel tablePanel = new JPanel(new BorderLayout());
 				tablePanel.setOpaque(false);
 				TaskTable table = new TaskTable(this.tableProperties);
@@ -256,7 +256,13 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 			if (this.doesContainDisplayedTasks(searcher)) {
 				JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 				titlePanel.setOpaque(false);
-				titlePanel.add(new JLabel(searcher.getTitle()));
+				
+				String spacer = "";
+				for (int i = 0; i < this.level; i++) {
+					spacer += "     ";
+				}
+				
+				titlePanel.add(new JLabel(spacer + searcher.getTitle()));
 				this.add(titlePanel);
 				
 				if (searcher.getGrouper().getElementCount() == 0) {
@@ -275,7 +281,8 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 					this.tables.add(table);
 				} else {
 					TaskGroupTable table = new TaskGroupTable(
-							this.tableProperties);
+							this.tableProperties,
+							this.level + 1);
 					table.taskSearcherSelectionChange(new TaskSearcherSelectionChangeEvent(
 							this,
 							searcher));
