@@ -6,6 +6,7 @@ Version 3.2.5
 		- Sorting error with titles
 		- BF 308: Improved normalizer
 	- Minor:
+		- Bug fixed: Remove backup problem
 		- BF 299: Cut action in model note
 		- BF 307: Search problem
 		- FR 353: Add forum link

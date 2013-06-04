@@ -288,7 +288,11 @@ public final class BackupUtils implements ListChangeSupported {
 		try {
 			File file = new File(folder + File.separator + "backup.properties");
 			Properties properties = new Properties();
-			properties.load(new FileInputStream(file));
+			
+			FileInputStream input = new FileInputStream(file);
+			properties.load(input);
+			input.close();
+			
 			return properties.getProperty("backup.name");
 		} catch (FileNotFoundException e) {
 			return null;

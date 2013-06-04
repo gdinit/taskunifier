@@ -41,8 +41,10 @@ import javax.swing.JTabbedPane;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
 import com.leclercb.taskunifier.gui.components.tasksearcheredit.filter.TaskFilterEditPanel;
+import com.leclercb.taskunifier.gui.components.tasksearcheredit.grouper.TaskGrouperPanel;
 import com.leclercb.taskunifier.gui.components.tasksearcheredit.searcher.TaskSearcherPanel;
 import com.leclercb.taskunifier.gui.components.tasksearcheredit.sorter.TaskSorterPanel;
+import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class TaskSearcherEditPanel extends JPanel {
@@ -50,6 +52,7 @@ public class TaskSearcherEditPanel extends JPanel {
 	private TaskSearcher searcher;
 	
 	private TaskSearcherPanel searcherPanel;
+	private TaskGrouperPanel grouperPanel;
 	private TaskSorterPanel sorterPanel;
 	private TaskFilterEditPanel filterEditPanel;
 	
@@ -64,11 +67,13 @@ public class TaskSearcherEditPanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		
 		this.searcherPanel = new TaskSearcherPanel(this.searcher);
+		this.grouperPanel = new TaskGrouperPanel(this.searcher.getGrouper());
 		this.sorterPanel = new TaskSorterPanel(this.searcher.getSorter());
 		this.filterEditPanel = new TaskFilterEditPanel();
 		this.filterEditPanel.setFilter(this.searcher.getFilter());
 		
 		this.searcherPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		this.grouperPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		this.sorterPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		this.filterEditPanel.setBorder(BorderFactory.createEmptyBorder(
 				5,
@@ -82,6 +87,13 @@ public class TaskSearcherEditPanel extends JPanel {
 			tabbedPane.addTab(
 					Translations.getString("searcheredit.tab.general"),
 					this.searcherPanel);
+		}
+		
+		// TODO: PRO
+		if (Main.isTmpProVersion()) {
+			tabbedPane.addTab(
+					Translations.getString("searcheredit.tab.grouper"),
+					this.grouperPanel);
 		}
 		
 		tabbedPane.addTab(
