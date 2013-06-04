@@ -34,9 +34,11 @@ package com.leclercb.taskunifier.gui.components.notes.table.sorter;
 
 import java.util.Comparator;
 
+import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.gui.api.searchers.NoteSearcher;
 import com.leclercb.taskunifier.gui.commons.comparators.NoteComparator;
+import com.leclercb.taskunifier.gui.constants.Constants;
 
 public class NoteRowComparator implements Comparator<Note> {
 	
@@ -44,7 +46,7 @@ public class NoteRowComparator implements Comparator<Note> {
 	private NoteComparator comparator;
 	
 	public NoteRowComparator() {
-		this.searcher = null;
+		this.searcher = Constants.getDefaultNoteSearcher();
 		this.comparator = new NoteComparator();
 	}
 	
@@ -53,12 +55,10 @@ public class NoteRowComparator implements Comparator<Note> {
 	}
 	
 	public void setNoteSearcher(NoteSearcher searcher) {
+		CheckUtils.isNotNull(searcher);
 		this.searcher = searcher;
 		
-		if (this.searcher == null)
-			this.comparator.setNoteSorter(null);
-		else
-			this.comparator.setNoteSorter(this.searcher.getSorter());
+		this.comparator.setNoteSorter(this.searcher.getSorter());
 	}
 	
 	@Override

@@ -34,9 +34,11 @@ package com.leclercb.taskunifier.gui.components.tasks.table.sorter;
 
 import java.util.Comparator;
 
+import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
 import com.leclercb.taskunifier.gui.commons.comparators.TaskComparator;
+import com.leclercb.taskunifier.gui.constants.Constants;
 
 public class TaskRowComparator implements Comparator<Task> {
 	
@@ -44,7 +46,7 @@ public class TaskRowComparator implements Comparator<Task> {
 	private TaskComparator comparator;
 	
 	public TaskRowComparator() {
-		this.searcher = null;
+		this.searcher = Constants.getDefaultTaskSearcher();
 		this.comparator = new TaskComparator();
 	}
 	
@@ -53,12 +55,10 @@ public class TaskRowComparator implements Comparator<Task> {
 	}
 	
 	public void setTaskSearcher(TaskSearcher searcher) {
+		CheckUtils.isNotNull(searcher);
 		this.searcher = searcher;
 		
-		if (this.searcher == null)
-			this.comparator.setTaskSorter(null);
-		else
-			this.comparator.setTaskSorter(this.searcher.getSorter());
+		this.comparator.setTaskSorter(this.searcher.getSorter());
 	}
 	
 	@Override
