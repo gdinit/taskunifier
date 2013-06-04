@@ -231,7 +231,10 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 				tablePanel.setOpaque(false);
 				TaskTable table = new TaskTable(this.tableProperties);
 				table.setSelectionModel(new TaskGroupTableSelectionModel(this));
-				table.setTaskSearcher(this.searcher);
+				
+				if (this.searcher != null)
+					table.setTaskSearcher(this.searcher);
+				
 				tablePanel.add(table.getTableHeader(), BorderLayout.NORTH);
 				tablePanel.add(table, BorderLayout.CENTER);
 				this.add(tablePanel);
