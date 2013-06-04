@@ -133,6 +133,7 @@ public class NoteSorterTableModel extends DefaultTableModel implements ListChang
 		return true;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		switch (col) {
