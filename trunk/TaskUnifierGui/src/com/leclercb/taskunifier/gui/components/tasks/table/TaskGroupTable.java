@@ -59,6 +59,7 @@ import com.leclercb.taskunifier.gui.components.tasks.TaskTableView;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
+import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.TaskGrouperUtils;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
@@ -219,7 +220,7 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 		this.tables.clear();
 		
 		this.removeAll();
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		this.setLayout(new BorderLayout());
 		this.validate();
 		this.repaint();
 		
@@ -227,8 +228,6 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 				|| this.searchers.size() == 0
 				|| !this.doesContainDisplayedTasks(this.searcher)) {
 			if (this.level == 0) {
-				JPanel tablePanel = new JPanel(new BorderLayout());
-				tablePanel.setOpaque(false);
 				TaskTable table = new TaskTable(this.tableProperties);
 				table.setSelectionModel(new TaskGroupTableSelectionModel(this));
 				
@@ -237,20 +236,22 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 							this,
 							this.searcher));
 				
-				tablePanel.add(table.getTableHeader(), BorderLayout.NORTH);
-				tablePanel.add(table, BorderLayout.CENTER);
-				this.add(tablePanel);
+				this.add(
+						ComponentFactory.createJScrollPane(table, false),
+						BorderLayout.CENTER);
 				
 				this.tables.add(table);
 			}
-			
-			this.add(Box.createVerticalGlue());
 			
 			this.validate();
 			this.repaint();
 			
 			return;
 		}
+		
+		JPanel mainPanel = new JPanel();
+		mainPanel.setOpaque(false);
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		
 		for (TaskSearcher searcher : this.searchers) {
 			if (this.doesContainDisplayedTasks(searcher)) {
@@ -263,7 +264,7 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 				}
 				
 				titlePanel.add(new JLabel(spacer + searcher.getTitle()));
-				this.add(titlePanel);
+				mainPanel.add(titlePanel);
 				
 				if (searcher.getGrouper().getElementCount() == 0) {
 					JPanel tablePanel = new JPanel(new BorderLayout());
@@ -276,7 +277,7 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 							searcher));
 					tablePanel.add(table.getTableHeader(), BorderLayout.NORTH);
 					tablePanel.add(table, BorderLayout.CENTER);
-					this.add(tablePanel);
+					mainPanel.add(tablePanel);
 					
 					this.tables.add(table);
 				} else {
@@ -286,14 +287,22 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 					table.taskSearcherSelectionChange(new TaskSearcherSelectionChangeEvent(
 							this,
 							searcher));
-					this.add(table);
+					mainPanel.add(table);
 					
 					this.tables.add(table);
 				}
 			}
 		}
 		
-		this.add(Box.createVerticalGlue());
+		mainPanel.add(Box.createVerticalGlue());
+		
+		if (this.level == 0) {
+			this.add(
+					ComponentFactory.createJScrollPane(mainPanel, false),
+					BorderLayout.CENTER);
+		} else {
+			this.add(mainPanel, BorderLayout.CENTER);
+		}
 		
 		this.validate();
 		this.repaint();
