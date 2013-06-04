@@ -267,7 +267,7 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
 		return this.taskRowComparator.getTaskSearcher();
 	}
 	
-	public void setTaskSearcher(TaskSearcher searcher) {
+	private void setTaskSearcher(TaskSearcher searcher) {
 		CheckUtils.isNotNull(searcher);
 		
 		this.taskRowComparator.setTaskSearcher(searcher);

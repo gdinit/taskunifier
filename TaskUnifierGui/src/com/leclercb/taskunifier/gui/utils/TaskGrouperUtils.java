@@ -35,16 +35,19 @@ package com.leclercb.taskunifier.gui.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.leclercb.taskunifier.api.models.ModelType;
+import com.leclercb.taskunifier.api.models.utils.ModelFactoryUtils;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
 import com.leclercb.taskunifier.gui.api.searchers.filters.FilterLink;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilterElement;
+import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.ModelCondition;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondition;
 import com.leclercb.taskunifier.gui.api.searchers.groupers.TaskGrouperElement;
 
-public final class TaskGroupUtils {
+public final class TaskGrouperUtils {
 	
-	private TaskGroupUtils() {
+	private TaskGrouperUtils() {
 		
 	}
 	
@@ -60,6 +63,65 @@ public final class TaskGroupUtils {
 		TaskSearcher s;
 		
 		switch (element.getProperty().getType()) {
+			case CALENDAR_DATE:
+			case CALENDAR_DATE_TIME:
+				s = searcher.clone();
+				s.setTitle(element.getProperty().toString());
+				searchers.add(s);
+				
+				break;
+			case CONTACT:
+			case CONTEXT:
+			case FOLDER:
+			case GOAL:
+			case LOCATION:
+			case NOTE:
+			case TASK:
+				List<?> models = null;
+				
+				switch (element.getProperty().getType()) {
+					case CONTACT:
+						models = ModelFactoryUtils.getFactory(ModelType.CONTACT).getList();
+						break;
+					case CONTEXT:
+						models = ModelFactoryUtils.getFactory(ModelType.CONTEXT).getList();
+						break;
+					case FOLDER:
+						models = ModelFactoryUtils.getFactory(ModelType.FOLDER).getList();
+						break;
+					case GOAL:
+						models = ModelFactoryUtils.getFactory(ModelType.GOAL).getList();
+						break;
+					case LOCATION:
+						models = ModelFactoryUtils.getFactory(
+								ModelType.LOCATION).getList();
+						break;
+					case NOTE:
+						models = ModelFactoryUtils.getFactory(ModelType.NOTE).getList();
+						break;
+					case TASK:
+						models = ModelFactoryUtils.getFactory(ModelType.TASK).getList();
+						break;
+					default:
+						break;
+				}
+				
+				if (models != null) {
+					for (Object o : models) {
+						s = searcher.clone();
+						s.setTitle(o.toString());
+						addMainFilter(
+								s,
+								new TaskFilterElement(
+										element.getProperty(),
+										ModelCondition.EQUALS,
+										o,
+										false));
+						searchers.add(s);
+					}
+				}
+				
+				break;
 			case STAR:
 			case BOOLEAN:
 				s = searcher.clone();
@@ -82,7 +144,9 @@ public final class TaskGroupUtils {
 				
 				break;
 			default:
-				searchers.add(searcher);
+				s = searcher.clone();
+				s.setTitle(element.getProperty().toString());
+				searchers.add(s);
 				
 				break;
 		}
