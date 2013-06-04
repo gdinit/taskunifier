@@ -42,6 +42,7 @@ import com.leclercb.commons.api.coder.exc.FactoryCoderException;
 import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.searchers.groupers.NoteGrouper;
+import com.leclercb.taskunifier.gui.api.searchers.groupers.NoteGrouperElement;
 import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 
 public class NoteGrouperXMLCoder extends AbstractXMLCoder<NoteGrouper> {
@@ -58,10 +59,18 @@ public class NoteGrouperXMLCoder extends AbstractXMLCoder<NoteGrouper> {
 			
 			for (int i = 0; i < nGrouper.getLength(); i++) {
 				if (nGrouper.item(i).getNodeName().equals("element")) {
-					PropertyAccessor<Note> column = NoteColumnList.getInstance().get(
-							nGrouper.item(i).getTextContent());
+					NodeList nElement = nGrouper.item(i).getChildNodes();
 					
-					grouper.addElement(column);
+					PropertyAccessor<Note> column = null;
+					
+					for (int j = 0; j < nElement.getLength(); j++) {
+						if (nElement.item(j).getNodeName().equals("column")) {
+							column = NoteColumnList.getInstance().get(
+									nElement.item(j).getTextContent());
+						}
+					}
+					
+					grouper.addElement(new NoteGrouperElement(column));
 				}
 			}
 			
@@ -73,10 +82,13 @@ public class NoteGrouperXMLCoder extends AbstractXMLCoder<NoteGrouper> {
 	
 	@Override
 	protected void encode(Document document, Element root, NoteGrouper grouper) {
-		for (PropertyAccessor<Note> e : grouper.getElements()) {
+		for (NoteGrouperElement e : grouper.getElements()) {
 			Element element = document.createElement("element");
-			element.setTextContent(e.getId());
 			root.appendChild(element);
+			
+			Element column = document.createElement("column");
+			column.setTextContent(e.getProperty().getId());
+			element.appendChild(column);
 		}
 	}
 	

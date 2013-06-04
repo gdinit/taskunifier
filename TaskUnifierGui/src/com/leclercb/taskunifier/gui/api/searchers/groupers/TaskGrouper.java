@@ -33,9 +33,8 @@
 package com.leclercb.taskunifier.gui.api.searchers.groupers;
 
 import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 
-public class TaskGrouper extends Grouper<Task> implements Cloneable {
+public class TaskGrouper extends Grouper<Task, TaskGrouperElement> implements Cloneable {
 	
 	public TaskGrouper() {
 		
@@ -45,8 +44,8 @@ public class TaskGrouper extends Grouper<Task> implements Cloneable {
 	public TaskGrouper clone() {
 		TaskGrouper sorter = new TaskGrouper();
 		
-		for (PropertyAccessor<Task> e : this.getElements())
-			sorter.addElement(e);
+		for (TaskGrouperElement e : this.getElements())
+			sorter.addElement(e.clone());
 		
 		return sorter;
 	}

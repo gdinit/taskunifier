@@ -30,24 +30,48 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.api.searchers.groupers;
+package com.leclercb.taskunifier.gui.commons.transfer;
 
-import com.leclercb.taskunifier.api.models.Note;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
-public class NoteGrouper extends Grouper<Note, NoteGrouperElement> implements Cloneable {
+import com.leclercb.commons.api.utils.CheckUtils;
+
+public class NoteGrouperTransferable implements Transferable {
 	
-	public NoteGrouper() {
-		
+	public static final DataFlavor NOTE_GROUPER_FLAVOR = new DataFlavor(
+			NoteGrouperTransferData.class,
+			"GROUPER_FLAVOR");
+	
+	public static final DataFlavor[] FLAVORS = { NOTE_GROUPER_FLAVOR };
+	
+	private static final List<DataFlavor> FLAVOR_LIST = Arrays.asList(FLAVORS);
+	
+	private NoteGrouperTransferData data;
+	
+	public NoteGrouperTransferable(NoteGrouperTransferData data) {
+		CheckUtils.isNotNull(data);
+		this.data = data;
 	}
 	
 	@Override
-	public NoteGrouper clone() {
-		NoteGrouper sorter = new NoteGrouper();
-		
-		for (NoteGrouperElement e : this.getElements())
-			sorter.addElement(e.clone());
-		
-		return sorter;
+	public DataFlavor[] getTransferDataFlavors() {
+		return FLAVORS;
+	}
+	
+	@Override
+	public boolean isDataFlavorSupported(DataFlavor flavor) {
+		return FLAVOR_LIST.contains(flavor);
+	}
+	
+	@Override
+	public Object getTransferData(DataFlavor flavor)
+			throws UnsupportedFlavorException, IOException {
+		return this.data;
 	}
 	
 }

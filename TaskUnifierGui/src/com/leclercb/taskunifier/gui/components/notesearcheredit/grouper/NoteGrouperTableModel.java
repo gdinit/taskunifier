@@ -30,68 +30,61 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.tasksearcheredit.sorter;
+package com.leclercb.taskunifier.gui.components.notesearcheredit.grouper;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
-import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
-import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
-import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
-import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
+import com.leclercb.taskunifier.gui.api.searchers.groupers.NoteGrouper;
+import com.leclercb.taskunifier.gui.api.searchers.groupers.NoteGrouperElement;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public class TaskSorterTableModel extends DefaultTableModel implements ListChangeListener, PropertyChangeListener {
+public class NoteGrouperTableModel extends DefaultTableModel implements ListChangeListener, PropertyChangeListener {
 	
-	private TaskSorter sorter;
+	private NoteGrouper grouper;
 	
-	public TaskSorterTableModel(TaskSorter sorter) {
-		this.sorter = sorter;
-		this.sorter.addListChangeListener(new WeakListChangeListener(
-				this.sorter,
-				this));
-		this.sorter.addPropertyChangeListener(new WeakPropertyChangeListener(
-				this.sorter,
+	public NoteGrouperTableModel(NoteGrouper grouper) {
+		this.grouper = grouper;
+		this.grouper.addListChangeListener(new WeakListChangeListener(
+				this.grouper,
 				this));
 	}
 	
-	public TaskSorter getTaskSorter() {
-		return this.sorter;
+	public NoteGrouper getNoteGrouper() {
+		return this.grouper;
 	}
 	
-	public TaskSorterElement getTaskSorterElement(int row) {
-		return this.sorter.getElement(row);
+	public NoteGrouperElement getNoteGrouperElement(int row) {
+		return this.grouper.getElement(row);
 	}
 	
 	@Override
 	public int getColumnCount() {
-		return 3;
+		return 2;
 	}
 	
 	@Override
 	public int getRowCount() {
-		if (this.sorter == null)
+		if (this.grouper == null)
 			return 0;
 		
-		return this.sorter.getElementCount();
+		return this.grouper.getElementCount();
 	}
 	
 	@Override
 	public String getColumnName(int col) {
 		switch (col) {
 			case 0:
-				return Translations.getString("sorter.order");
+				return Translations.getString("grouper.order");
 			case 1:
-				return Translations.getString("sorter.column");
-			case 2:
-				return Translations.getString("sorter.sort_order");
+				return Translations.getString("grouper.column");
 			default:
 				return null;
 		}
@@ -104,8 +97,6 @@ public class TaskSorterTableModel extends DefaultTableModel implements ListChang
 				return Integer.class;
 			case 1:
 				return PropertyAccessor.class;
-			case 2:
-				return SortOrder.class;
 			default:
 				return null;
 		}
@@ -117,9 +108,7 @@ public class TaskSorterTableModel extends DefaultTableModel implements ListChang
 			case 0:
 				return row + 1;
 			case 1:
-				return this.sorter.getElement(row).getProperty();
-			case 2:
-				return this.sorter.getElement(row).getSortOrder();
+				return this.grouper.getElement(row).getProperty();
 			default:
 				return null;
 		}
@@ -140,11 +129,8 @@ public class TaskSorterTableModel extends DefaultTableModel implements ListChang
 			case 0:
 				break;
 			case 1:
-				this.sorter.getElement(row).setProperty(
-						(PropertyAccessor<Task>) value);
-				break;
-			case 2:
-				this.sorter.getElement(row).setSortOrder((SortOrder) value);
+				this.grouper.getElement(row).setProperty(
+						(PropertyAccessor<Note>) value);
 				break;
 		}
 	}
