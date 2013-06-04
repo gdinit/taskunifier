@@ -59,7 +59,7 @@ import com.leclercb.taskunifier.gui.components.tasks.TaskTableView;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
-import com.leclercb.taskunifier.gui.utils.TaskGroupUtils;
+import com.leclercb.taskunifier.gui.utils.TaskGrouperUtils;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
 public class TaskGroupTable extends JPanel implements TaskTableView {
@@ -132,7 +132,7 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 	public void taskSearcherSelectionChange(
 			TaskSearcherSelectionChangeEvent event) {
 		this.searcher = event.getSelectedTaskSearcher();
-		this.searchers = TaskGroupUtils.getFilters(this.searcher);
+		this.searchers = TaskGrouperUtils.getFilters(this.searcher);
 		this.updateTables();
 	}
 	
@@ -233,7 +233,9 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 				table.setSelectionModel(new TaskGroupTableSelectionModel(this));
 				
 				if (this.searcher != null)
-					table.setTaskSearcher(this.searcher);
+					table.taskSearcherSelectionChange(new TaskSearcherSelectionChangeEvent(
+							this,
+							this.searcher));
 				
 				tablePanel.add(table.getTableHeader(), BorderLayout.NORTH);
 				tablePanel.add(table, BorderLayout.CENTER);
@@ -257,16 +259,30 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 				titlePanel.add(new JLabel(searcher.getTitle()));
 				this.add(titlePanel);
 				
-				JPanel tablePanel = new JPanel(new BorderLayout());
-				tablePanel.setOpaque(false);
-				TaskTable table = new TaskTable(this.tableProperties);
-				table.setSelectionModel(new TaskGroupTableSelectionModel(this));
-				table.setTaskSearcher(searcher);
-				tablePanel.add(table.getTableHeader(), BorderLayout.NORTH);
-				tablePanel.add(table, BorderLayout.CENTER);
-				this.add(tablePanel);
-				
-				this.tables.add(table);
+				if (searcher.getGrouper().getElementCount() == 0) {
+					JPanel tablePanel = new JPanel(new BorderLayout());
+					tablePanel.setOpaque(false);
+					TaskTable table = new TaskTable(this.tableProperties);
+					table.setSelectionModel(new TaskGroupTableSelectionModel(
+							this));
+					table.taskSearcherSelectionChange(new TaskSearcherSelectionChangeEvent(
+							this,
+							searcher));
+					tablePanel.add(table.getTableHeader(), BorderLayout.NORTH);
+					tablePanel.add(table, BorderLayout.CENTER);
+					this.add(tablePanel);
+					
+					this.tables.add(table);
+				} else {
+					TaskGroupTable table = new TaskGroupTable(
+							this.tableProperties);
+					table.taskSearcherSelectionChange(new TaskSearcherSelectionChangeEvent(
+							this,
+							searcher));
+					this.add(table);
+					
+					this.tables.add(table);
+				}
 			}
 		}
 		
