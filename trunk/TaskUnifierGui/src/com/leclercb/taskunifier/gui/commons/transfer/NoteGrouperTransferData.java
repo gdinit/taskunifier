@@ -30,24 +30,30 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.api.searchers.groupers;
+package com.leclercb.taskunifier.gui.commons.transfer;
 
-import com.leclercb.taskunifier.api.models.Note;
+import java.io.Serializable;
+import java.util.Arrays;
 
-public class NoteGrouper extends Grouper<Note, NoteGrouperElement> implements Cloneable {
+import com.leclercb.commons.api.utils.CheckUtils;
+
+public class NoteGrouperTransferData implements Serializable {
 	
-	public NoteGrouper() {
-		
+	private int[] elementIndexes;
+	
+	public NoteGrouperTransferData(int elementIndex) {
+		this.elementIndexes = new int[] { elementIndex };
 	}
 	
-	@Override
-	public NoteGrouper clone() {
-		NoteGrouper sorter = new NoteGrouper();
-		
-		for (NoteGrouperElement e : this.getElements())
-			sorter.addElement(e.clone());
-		
-		return sorter;
+	public NoteGrouperTransferData(int[] elementIndexes) {
+		CheckUtils.isNotNull(elementIndexes);
+		this.elementIndexes = Arrays.copyOf(
+				elementIndexes,
+				elementIndexes.length);
+	}
+	
+	public int[] getElementIndexes() {
+		return this.elementIndexes;
 	}
 	
 }

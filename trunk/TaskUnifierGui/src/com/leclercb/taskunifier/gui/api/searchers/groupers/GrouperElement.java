@@ -32,105 +32,49 @@
  */
 package com.leclercb.taskunifier.gui.api.searchers.groupers;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-
-import com.leclercb.commons.api.event.listchange.ListChangeEvent;
-import com.leclercb.commons.api.event.listchange.ListChangeListener;
-import com.leclercb.commons.api.event.listchange.ListChangeSupport;
-import com.leclercb.commons.api.event.listchange.ListChangeSupported;
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupport;
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Model;
+import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
-public abstract class Grouper<M extends Model, GE extends GrouperElement<M>> implements PropertyChangeListener, ListChangeSupported, PropertyChangeSupported {
+public class GrouperElement<M extends Model> implements PropertyChangeSupported {
 	
-	@XStreamOmitField
-	private transient ListChangeSupport listChangeSupport;
+	public static final String PROP_PROPERTY = "property";
 	
 	@XStreamOmitField
 	private transient PropertyChangeSupport propertyChangeSupport;
 	
-	@XStreamAlias("element")
-	private List<GE> elements;
+	@XStreamAlias("column")
+	private PropertyAccessor<M> property;
 	
-	public Grouper() {
-		this.listChangeSupport = new ListChangeSupport(this);
+	public GrouperElement(PropertyAccessor<M> property) {
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
 		
-		this.elements = new ArrayList<GE>();
+		this.setProperty(property);
 	}
 	
-	public int getIndexOf(GE element) {
-		return this.elements.indexOf(element);
+	public PropertyAccessor<M> getProperty() {
+		return this.property;
 	}
 	
-	public int getElementCount() {
-		return this.elements.size();
-	}
-	
-	public GE getElement(int index) {
-		return this.elements.get(index);
-	}
-	
-	public List<GE> getElements() {
-		return new ArrayList<GE>(this.elements);
-	}
-	
-	public void addElement(GE element) {
-		CheckUtils.isNotNull(element);
-		this.elements.add(element);
-		element.addPropertyChangeListener(this);
-		int index = this.elements.indexOf(element);
-		this.listChangeSupport.fireListChange(
-				ListChangeEvent.VALUE_ADDED,
-				index,
-				element);
-	}
-	
-	public void insertElement(GE element, int index) {
-		CheckUtils.isNotNull(element);
-		this.elements.add(index, element);
-		element.addPropertyChangeListener(this);
-		this.listChangeSupport.fireListChange(
-				ListChangeEvent.VALUE_ADDED,
-				index,
-				element);
-	}
-	
-	public void removeElement(GE element) {
-		CheckUtils.isNotNull(element);
-		
-		int index = this.elements.indexOf(element);
-		if (this.elements.remove(element)) {
-			element.removePropertyChangeListener(this);
-			this.listChangeSupport.fireListChange(
-					ListChangeEvent.VALUE_REMOVED,
-					index,
-					element);
-		}
+	public void setProperty(PropertyAccessor<M> property) {
+		CheckUtils.isNotNull(property);
+		PropertyAccessor<M> oldProperty = this.property;
+		this.property = property;
+		this.propertyChangeSupport.firePropertyChange(
+				PROP_PROPERTY,
+				oldProperty,
+				property);
 	}
 	
 	@Override
 	public String toString() {
-		return StringUtils.join(this.elements, ", ");
-	}
-	
-	@Override
-	public void addListChangeListener(ListChangeListener listener) {
-		this.listChangeSupport.addListChangeListener(listener);
-	}
-	
-	@Override
-	public void removeListChangeListener(ListChangeListener listener) {
-		this.listChangeSupport.removeListChangeListener(listener);
+		return this.property.toString();
 	}
 	
 	@Override
@@ -159,11 +103,6 @@ public abstract class Grouper<M extends Model, GE extends GrouperElement<M>> imp
 		this.propertyChangeSupport.removePropertyChangeListener(
 				propertyName,
 				listener);
-	}
-	
-	@Override
-	public void propertyChange(PropertyChangeEvent event) {
-		this.propertyChangeSupport.firePropertyChange(event);
 	}
 	
 }

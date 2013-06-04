@@ -42,6 +42,7 @@ import com.leclercb.commons.api.coder.exc.FactoryCoderException;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.searchers.groupers.TaskGrouper;
+import com.leclercb.taskunifier.gui.api.searchers.groupers.TaskGrouperElement;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 
 public class TaskGrouperXMLCoder extends AbstractXMLCoder<TaskGrouper> {
@@ -58,10 +59,18 @@ public class TaskGrouperXMLCoder extends AbstractXMLCoder<TaskGrouper> {
 			
 			for (int i = 0; i < nGrouper.getLength(); i++) {
 				if (nGrouper.item(i).getNodeName().equals("element")) {
-					PropertyAccessor<Task> column = TaskColumnList.getInstance().get(
-							nGrouper.item(i).getTextContent());
+					NodeList nElement = nGrouper.item(i).getChildNodes();
 					
-					grouper.addElement(column);
+					PropertyAccessor<Task> column = null;
+					
+					for (int j = 0; j < nElement.getLength(); j++) {
+						if (nElement.item(j).getNodeName().equals("column")) {
+							column = TaskColumnList.getInstance().get(
+									nElement.item(j).getTextContent());
+						}
+					}
+					
+					grouper.addElement(new TaskGrouperElement(column));
 				}
 			}
 			
@@ -73,10 +82,13 @@ public class TaskGrouperXMLCoder extends AbstractXMLCoder<TaskGrouper> {
 	
 	@Override
 	protected void encode(Document document, Element root, TaskGrouper grouper) {
-		for (PropertyAccessor<Task> e : grouper.getElements()) {
+		for (TaskGrouperElement e : grouper.getElements()) {
 			Element element = document.createElement("element");
-			element.setTextContent(e.getId());
 			root.appendChild(element);
+			
+			Element column = document.createElement("column");
+			column.setTextContent(e.getProperty().getId());
+			element.appendChild(column);
 		}
 	}
 	

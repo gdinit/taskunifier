@@ -35,13 +35,12 @@ package com.leclercb.taskunifier.gui.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
 import com.leclercb.taskunifier.gui.api.searchers.filters.FilterLink;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilterElement;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondition;
+import com.leclercb.taskunifier.gui.api.searchers.groupers.TaskGrouperElement;
 
 public final class TaskGroupUtils {
 	
@@ -55,18 +54,18 @@ public final class TaskGroupUtils {
 		if (searcher == null || searcher.getGrouper().getElementCount() == 0)
 			return searchers;
 		
-		PropertyAccessor<Task> element = searcher.getGrouper().getElement(0);
+		TaskGrouperElement element = searcher.getGrouper().getElement(0);
 		searcher.getGrouper().removeElement(element);
 		
 		TaskSearcher s;
 		
-		switch (element.getType()) {
+		switch (element.getProperty().getType()) {
 			case STAR:
 			case BOOLEAN:
 				s = searcher.clone();
 				s.setTitle("True");
 				addMainFilter(s, new TaskFilterElement(
-						element,
+						element.getProperty(),
 						StringCondition.EQUALS,
 						"true",
 						false));
@@ -75,7 +74,7 @@ public final class TaskGroupUtils {
 				s = searcher.clone();
 				s.setTitle("False");
 				addMainFilter(s, new TaskFilterElement(
-						element,
+						element.getProperty(),
 						StringCondition.EQUALS,
 						"false",
 						false));
