@@ -347,6 +347,8 @@ public class CalendarPanel extends JPanel implements SavePropertiesListener {
 		JXPanel searchPanel = new JXPanel(new BorderLayout());
 		searchPanel.setBackgroundPainter(new Painter<JXPanel>() {
 			
+			private SourceListStandardColorScheme scheme = new SourceListStandardColorScheme();
+			
 			@Override
 			public void paint(
 					Graphics2D g,
@@ -359,7 +361,7 @@ public class CalendarPanel extends JPanel implements SavePropertiesListener {
 						finalColor,
 						0.0f,
 						height,
-						new SourceListStandardColorScheme().getActiveBackgroundColor()));
+						this.scheme.getActiveBackgroundColor()));
 				g.fillRect(0, 0, width, height);
 			}
 			

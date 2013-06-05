@@ -35,21 +35,32 @@ package com.leclercb.taskunifier.gui.components.tasks.table;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.GradientPaint;
+import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable.PrintMode;
 
+import net.miginfocom.swing.MigLayout;
+
+import org.jdesktop.swingx.JXPanel;
+import org.jdesktop.swingx.painter.Painter;
+
+import com.explodingpixels.macwidgets.SourceListStandardColorScheme;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
+import com.leclercb.taskunifier.gui.commons.events.ModelSelectionChangeEvent;
+import com.leclercb.taskunifier.gui.commons.events.ModelSelectionChangeSupport;
+import com.leclercb.taskunifier.gui.commons.events.ModelSelectionChangeSupported;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionListener;
 import com.leclercb.taskunifier.gui.commons.events.TaskSearcherSelectionChangeEvent;
 import com.leclercb.taskunifier.gui.components.print.PrintUtils;
@@ -63,7 +74,7 @@ import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.TaskGrouperUtils;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
-public class TaskGroupTable extends JPanel implements TaskTableView {
+public class TaskGroupTable extends JXPanel implements TaskTableView, ModelSelectionChangeSupported, ModelSelectionListener {
 	
 	private int level;
 	
@@ -71,6 +82,8 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 	private List<TaskTableView> tables;
 	private TaskSearcher searcher;
 	private List<TaskSearcher> searchers;
+	private ModelSelectionChangeSupport modelSelectionChangeSupport;
+	private boolean isSelectionAdjusting;
 	
 	public TaskGroupTable(TUTableProperties<Task> tableProperties) {
 		this(tableProperties, 0);
@@ -82,13 +95,46 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 		this.tableProperties = tableProperties;
 		this.tables = new ArrayList<TaskTableView>();
 		this.searcher = null;
+		this.searchers = null;
+		this.modelSelectionChangeSupport = new ModelSelectionChangeSupport(this);
+		this.isSelectionAdjusting = false;
 		
 		this.initialize();
 	}
 	
 	private void initialize() {
-		this.setOpaque(true);
-		this.setBackground(Color.WHITE);
+		if (this.level == 0) {
+			this.setOpaque(true);
+			
+			this.setBackgroundPainter(new Painter<JPanel>() {
+				
+				private SourceListStandardColorScheme scheme = new SourceListStandardColorScheme();
+				
+				@Override
+				public void paint(
+						Graphics2D g,
+						JPanel obj,
+						int width,
+						int height) {
+					Graphics2D g2d = (Graphics2D) g.create();
+					
+					Paint p = new GradientPaint(
+							0,
+							0,
+							this.scheme.getActiveBackgroundColor(),
+							width,
+							height,
+							Color.WHITE);
+					
+					g2d.setPaint(p);
+					g2d.fillRect(0, 0, width, height);
+					g2d.dispose();
+				}
+				
+			});
+		} else {
+			this.setOpaque(false);
+		}
 		
 		this.updateTables();
 	}
@@ -118,15 +164,13 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 	
 	@Override
 	public void addModelSelectionChangeListener(ModelSelectionListener listener) {
-		// TODO Auto-generated method stub
-		
+		this.modelSelectionChangeSupport.addModelSelectionChangeListener(listener);
 	}
 	
 	@Override
 	public void removeModelSelectionChangeListener(
 			ModelSelectionListener listener) {
-		// TODO Auto-generated method stub
-		
+		this.modelSelectionChangeSupport.removeModelSelectionChangeListener(listener);
 	}
 	
 	@Override
@@ -217,6 +261,10 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 	}
 	
 	public void updateTables() {
+		for (TaskTableView table : this.tables) {
+			table.removeModelSelectionChangeListener(this);
+		}
+		
 		this.tables.clear();
 		
 		this.removeAll();
@@ -229,7 +277,6 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 				|| !this.doesContainDisplayedTasks(this.searcher)) {
 			if (this.level == 0) {
 				TaskTable table = new TaskTable(this.tableProperties);
-				table.setSelectionModel(new TaskGroupTableSelectionModel(this));
 				
 				if (this.searcher != null)
 					table.taskSearcherSelectionChange(new TaskSearcherSelectionChangeEvent(
@@ -240,6 +287,7 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 						ComponentFactory.createJScrollPane(table, false),
 						BorderLayout.CENTER);
 				
+				table.addModelSelectionChangeListener(this);
 				this.tables.add(table);
 			}
 			
@@ -250,8 +298,8 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 		}
 		
 		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new MigLayout("insets 0 0 0 0"));
 		mainPanel.setOpaque(false);
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		
 		for (TaskSearcher searcher : this.searchers) {
 			if (this.doesContainDisplayedTasks(searcher)) {
@@ -264,21 +312,20 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 				}
 				
 				titlePanel.add(new JLabel(spacer + searcher.getTitle()));
-				mainPanel.add(titlePanel);
+				mainPanel.add(titlePanel, "grow, wrap");
 				
 				if (searcher.getGrouper().getElementCount() == 0) {
 					JPanel tablePanel = new JPanel(new BorderLayout());
 					tablePanel.setOpaque(false);
 					TaskTable table = new TaskTable(this.tableProperties);
-					table.setSelectionModel(new TaskGroupTableSelectionModel(
-							this));
 					table.taskSearcherSelectionChange(new TaskSearcherSelectionChangeEvent(
 							this,
 							searcher));
 					tablePanel.add(table.getTableHeader(), BorderLayout.NORTH);
 					tablePanel.add(table, BorderLayout.CENTER);
-					mainPanel.add(tablePanel);
+					mainPanel.add(tablePanel, "wrap");
 					
+					table.addModelSelectionChangeListener(this);
 					this.tables.add(table);
 				} else {
 					TaskGroupTable table = new TaskGroupTable(
@@ -287,19 +334,22 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 					table.taskSearcherSelectionChange(new TaskSearcherSelectionChangeEvent(
 							this,
 							searcher));
-					mainPanel.add(table);
+					mainPanel.add(table, "wrap");
 					
+					table.addModelSelectionChangeListener(this);
 					this.tables.add(table);
 				}
 			}
 		}
 		
-		mainPanel.add(Box.createVerticalGlue());
-		
 		if (this.level == 0) {
-			this.add(
-					ComponentFactory.createJScrollPane(mainPanel, false),
-					BorderLayout.CENTER);
+			JScrollPane scrollPane = ComponentFactory.createJScrollPane(
+					mainPanel,
+					false);
+			scrollPane.setOpaque(false);
+			scrollPane.getViewport().setOpaque(false);
+			
+			this.add(scrollPane, BorderLayout.CENTER);
 		} else {
 			this.add(mainPanel, BorderLayout.CENTER);
 		}
@@ -331,6 +381,23 @@ public class TaskGroupTable extends JPanel implements TaskTableView {
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public void modelSelectionChange(ModelSelectionChangeEvent event) {
+		if (this.isSelectionAdjusting)
+			return;
+		
+		this.isSelectionAdjusting = true;
+		
+		for (TaskTableView table : this.tables) {
+			if (table != event.getSource())
+				table.setSelectedTasks(new Task[0]);
+		}
+		
+		this.isSelectionAdjusting = false;
+		
+		this.modelSelectionChangeSupport.fireModelSelectionChange(event.getSelectedModels());
 	}
 	
 }
