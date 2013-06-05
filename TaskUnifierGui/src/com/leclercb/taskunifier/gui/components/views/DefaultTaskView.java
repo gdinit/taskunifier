@@ -74,7 +74,7 @@ import com.leclercb.taskunifier.gui.components.taskfiles.TaskFilesColumnList;
 import com.leclercb.taskunifier.gui.components.taskfiles.TaskFilesPanel;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.components.tasks.TaskTableView;
-import com.leclercb.taskunifier.gui.components.tasks.table.TaskTable;
+import com.leclercb.taskunifier.gui.components.tasks.table.TaskGroupTable;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.TaskSearcherPanel;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.TaskSearcherView;
 import com.leclercb.taskunifier.gui.components.tasktasks.TaskTasksColumnList;
@@ -253,6 +253,8 @@ public class DefaultTaskView extends JPanel implements TaskView, SavePropertiesL
 		JXPanel searchPanel = new JXPanel(new BorderLayout());
 		searchPanel.setBackgroundPainter(new Painter<JXPanel>() {
 			
+			private SourceListStandardColorScheme scheme = new SourceListStandardColorScheme();
+			
 			@Override
 			public void paint(
 					Graphics2D g,
@@ -265,7 +267,7 @@ public class DefaultTaskView extends JPanel implements TaskView, SavePropertiesL
 						finalColor,
 						0.0f,
 						height,
-						new SourceListStandardColorScheme().getActiveBackgroundColor()));
+						this.scheme.getActiveBackgroundColor()));
 				g.fillRect(0, 0, width, height);
 			}
 			
@@ -315,17 +317,13 @@ public class DefaultTaskView extends JPanel implements TaskView, SavePropertiesL
 	}
 	
 	private void initializeTaskTable(JPanel middlePane) {
-		this.taskTable = new TaskTable(new TUTableProperties<Task>(
+		this.taskTable = new TaskGroupTable(new TUTableProperties<Task>(
 				TaskColumnList.getInstance(),
 				"task",
 				false));
 		
 		JPanel taskPanel = new JPanel(new BorderLayout());
-		taskPanel.add(
-				ComponentFactory.createJScrollPane(
-						this.taskTable.getComponent(),
-						false),
-				BorderLayout.CENTER);
+		taskPanel.add(this.taskTable.getComponent(), BorderLayout.CENTER);
 		
 		this.taskSearcherPanel.addTaskSearcherSelectionChangeListener(this.taskTable);
 		this.taskSearcherPanel.addPropertyChangeListener(
