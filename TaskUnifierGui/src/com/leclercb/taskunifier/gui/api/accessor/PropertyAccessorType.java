@@ -150,6 +150,69 @@ public enum PropertyAccessorType {
 		this.type = type;
 	}
 	
+	public Object getDefaultValue() {
+		switch (this) {
+			case BOOLEAN:
+				return false;
+			case STAR:
+				return false;
+			case CALENDAR_DATE:
+				return null;
+			case CALENDAR_DATE_TIME:
+				return null;
+			case DOUBLE:
+				return new Double(0);
+			case PERCENTAGE:
+				return new Double(0);
+			case INTEGER:
+				return new Integer(0);
+			case MINUTES:
+				return new Integer(0);
+			case ORDER:
+				return new Integer(0);
+			case TIME:
+				return new Integer(0);
+			case TASK_PRIORITY:
+				return null;
+			case TASK_REPEAT_FROM:
+				return null;
+			case STRING:
+				return null;
+			case FILE:
+				return null;
+			case TAGS:
+				return null;
+			case TIMER:
+				return null;
+			case CONTACT:
+				return null;
+			case CONTEXT:
+				return null;
+			case CONTEXTS:
+				return null;
+			case FOLDER:
+				return null;
+			case GOAL:
+				return null;
+			case GOALS:
+				return null;
+			case LOCATION:
+				return null;
+			case LOCATIONS:
+				return null;
+			case MODEL:
+				return null;
+			case NOTE:
+				return null;
+			case TASK:
+				return null;
+			case VOID:
+				return null;
+			default:
+				throw new UnsupportedOperationException();
+		}
+	}
+	
 	public String convertPropertyToString(Object value) {
 		switch (this) {
 			case BOOLEAN:

@@ -66,10 +66,10 @@ public class TaskPropertyAccessor extends DefaultPropertyAccessor<Task> {
 		CheckUtils.isNotNull(task);
 		
 		try {
-			Object property = task.getProperties().getObjectProperty(
+			Object property = task.getProperties().getGenericObjectProperty(
 					this.getPropertyName(),
 					this.getType().getType(),
-					null);
+					this.getType().getDefaultValue());
 			
 			if (property instanceof Model)
 				if (!((Model) property).getModelStatus().isEndUserStatus())
