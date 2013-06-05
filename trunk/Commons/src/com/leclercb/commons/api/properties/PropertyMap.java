@@ -349,6 +349,22 @@ public class PropertyMap extends Properties implements PropertyChangeSupported, 
 		}
 	}
 	
+	public <T> Object getGenericObjectProperty(
+			String key,
+			Class<T> cls,
+			Object def) {
+		try {
+			T value = this.getObjectProperty(key, cls);
+			
+			if (value == null)
+				return def;
+			
+			return value;
+		} catch (PropertiesException e) {
+			return def;
+		}
+	}
+	
 	public SimpleDateFormat getSimpleDateFormatProperty(String key) {
 		return this.getObjectProperty(key, SimpleDateFormat.class);
 	}
