@@ -321,7 +321,7 @@ public class TaskGroupTable extends JXPanel implements TaskTableView, ModelSelec
 						Direction.UP);
 				collapsiblePane.setLayout(new BorderLayout());
 				collapsiblePane.setOpaque(false);
-				collapsiblePane.setAnimated(true);
+				collapsiblePane.setAnimated(false);
 				
 				if (collapsiblePane.getContentPane() instanceof JPanel)
 					((JPanel) collapsiblePane.getContentPane()).setOpaque(false);
