@@ -38,11 +38,14 @@ import java.awt.FlowLayout;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -51,6 +54,8 @@ import javax.swing.JTable.PrintMode;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.jdesktop.swingx.JXCollapsiblePane;
+import org.jdesktop.swingx.JXCollapsiblePane.Direction;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.painter.Painter;
 
@@ -71,6 +76,7 @@ import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
+import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.TaskGrouperUtils;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
@@ -311,8 +317,48 @@ public class TaskGroupTable extends JXPanel implements TaskTableView, ModelSelec
 					spacer += "     ";
 				}
 				
-				titlePanel.add(new JLabel(spacer + searcher.getTitle()));
+				final JXCollapsiblePane collapsiblePane = new JXCollapsiblePane(
+						Direction.UP);
+				collapsiblePane.setLayout(new BorderLayout());
+				collapsiblePane.setOpaque(false);
+				collapsiblePane.setAnimated(true);
+				
+				if (collapsiblePane.getContentPane() instanceof JPanel)
+					((JPanel) collapsiblePane.getContentPane()).setOpaque(false);
+				
+				final JButton button = new JButton();
+				button.setBorderPainted(false);
+				button.setContentAreaFilled(false);
+				button.setIcon(ImageUtils.getResourceImage(
+						"collapse.png",
+						12,
+						12));
+				button.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent event) {
+						collapsiblePane.setCollapsed(!collapsiblePane.isCollapsed());
+						
+						if (collapsiblePane.isCollapsed())
+							button.setIcon(ImageUtils.getResourceImage(
+									"expand.png",
+									12,
+									12));
+						else
+							button.setIcon(ImageUtils.getResourceImage(
+									"collapse.png",
+									12,
+									12));
+					}
+					
+				});
+				
+				titlePanel.add(new JLabel(spacer));
+				titlePanel.add(button);
+				titlePanel.add(new JLabel(searcher.getTitle()));
+				
 				mainPanel.add(titlePanel, "grow, wrap");
+				mainPanel.add(collapsiblePane, "wrap");
 				
 				if (searcher.getGrouper().getElementCount() == 0) {
 					JPanel tablePanel = new JPanel(new BorderLayout());
@@ -323,7 +369,7 @@ public class TaskGroupTable extends JXPanel implements TaskTableView, ModelSelec
 							searcher));
 					tablePanel.add(table.getTableHeader(), BorderLayout.NORTH);
 					tablePanel.add(table, BorderLayout.CENTER);
-					mainPanel.add(tablePanel, "wrap");
+					collapsiblePane.add(tablePanel, BorderLayout.CENTER);
 					
 					table.addModelSelectionChangeListener(this);
 					this.tables.add(table);
@@ -334,7 +380,7 @@ public class TaskGroupTable extends JXPanel implements TaskTableView, ModelSelec
 					table.taskSearcherSelectionChange(new TaskSearcherSelectionChangeEvent(
 							this,
 							searcher));
-					mainPanel.add(table, "wrap");
+					collapsiblePane.add(table, BorderLayout.CENTER);
 					
 					table.addModelSelectionChangeListener(this);
 					this.tables.add(table);
