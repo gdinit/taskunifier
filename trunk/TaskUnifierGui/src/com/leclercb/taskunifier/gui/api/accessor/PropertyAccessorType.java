@@ -103,42 +103,44 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 
 public enum PropertyAccessorType {
 	
-	STRING(String.class),
-	FILE(String.class),
-	BOOLEAN(Boolean.class),
-	CALENDAR_DATE(Calendar.class),
-	CALENDAR_DATE_TIME(Calendar.class),
-	CONTACT(Contact.class),
-	CONTEXT(Context.class),
-	CONTEXTS(ModelList.class),
-	DOUBLE(Double.class),
-	FOLDER(Folder.class),
-	GOAL(Goal.class),
-	GOALS(ModelList.class),
-	INTEGER(Integer.class),
-	LOCATION(Location.class),
-	LOCATIONS(ModelList.class),
-	MINUTES(Integer.class),
-	MODEL(Model.class),
-	NOTE(Note.class),
-	ORDER(Integer.class),
-	PERCENTAGE(Double.class),
-	TASK_PRIORITY(TaskPriority.class),
-	TASK_REPEAT_FROM(TaskRepeatFrom.class),
-	STAR(Boolean.class),
-	TASK(Task.class),
-	TAGS(String.class),
-	TIME(Integer.class),
-	TIMER(Timer.class),
-	VOID(Void.class);
+	STRING(String.class, false),
+	FILE(String.class, false),
+	BOOLEAN(Boolean.class, true),
+	CALENDAR_DATE(Calendar.class, true),
+	CALENDAR_DATE_TIME(Calendar.class, true),
+	CONTACT(Contact.class, true),
+	CONTEXT(Context.class, true),
+	CONTEXTS(ModelList.class, false),
+	DOUBLE(Double.class, true),
+	FOLDER(Folder.class, true),
+	GOAL(Goal.class, true),
+	GOALS(ModelList.class, false),
+	INTEGER(Integer.class, true),
+	LOCATION(Location.class, true),
+	LOCATIONS(ModelList.class, false),
+	MINUTES(Integer.class, true),
+	MODEL(Model.class, false),
+	NOTE(Note.class, true),
+	ORDER(Integer.class, false),
+	PERCENTAGE(Double.class, true),
+	TASK_PRIORITY(TaskPriority.class, true),
+	TASK_REPEAT_FROM(TaskRepeatFrom.class, true),
+	STAR(Boolean.class, true),
+	TASK(Task.class, true),
+	TAGS(String.class, false),
+	TIME(Integer.class, true),
+	TIMER(Timer.class, false),
+	VOID(Void.class, false);
 	
 	private Class<?> type;
+	private boolean groupable;
 	private Comparator<?> comparator;
 	private TableCellRenderer renderer;
 	private TableCellEditor editor;
 	
-	private PropertyAccessorType(Class<?> type) {
+	private PropertyAccessorType(Class<?> type, boolean groupable) {
 		this.setType(type);
+		this.setGroupable(groupable);
 	}
 	
 	public Class<?> getType() {
@@ -148,6 +150,14 @@ public enum PropertyAccessorType {
 	private void setType(Class<?> type) {
 		CheckUtils.isNotNull(type);
 		this.type = type;
+	}
+	
+	public boolean isGroupable() {
+		return this.groupable;
+	}
+	
+	private void setGroupable(boolean groupable) {
+		this.groupable = groupable;
 	}
 	
 	public Object getDefaultValue() {

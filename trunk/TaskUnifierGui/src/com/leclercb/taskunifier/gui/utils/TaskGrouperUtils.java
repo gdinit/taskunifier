@@ -36,16 +36,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.leclercb.taskunifier.api.models.ModelType;
+import com.leclercb.taskunifier.api.models.enums.TaskPriority;
+import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.api.models.utils.ModelFactoryUtils;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
 import com.leclercb.taskunifier.gui.api.searchers.filters.FilterLink;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilterElement;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.DaysCondition;
+import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.EnumCondition;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.ModelCondition;
+import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.NumberCondition;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondition;
 import com.leclercb.taskunifier.gui.api.searchers.groupers.TaskGrouperElement;
+import com.leclercb.taskunifier.gui.commons.values.StringValueMinutes;
+import com.leclercb.taskunifier.gui.commons.values.StringValuePercentage;
 import com.leclercb.taskunifier.gui.translations.Translations;
+import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 
 public final class TaskGrouperUtils {
 	
@@ -164,6 +171,113 @@ public final class TaskGrouperUtils {
 				searchers.add(s);
 				
 				break;
+			case MINUTES:
+				for (int i = 0; i <= 105; i += 15) {
+					String startMn = StringValueMinutes.INSTANCE.getString(i + 1);
+					NumberCondition condition = NumberCondition.GREATER_THAN;
+					
+					if (i == 0) {
+						startMn = StringValueMinutes.INSTANCE.getString(i);
+						condition = NumberCondition.GREATER_THAN_OR_EQUALS;
+					}
+					
+					s = searcher.clone();
+					setTitle(element, s, startMn
+							+ " - "
+							+ StringValueMinutes.INSTANCE.getString(i + 15));
+					addMainFilter(
+							s,
+							new TaskFilterElement(
+									element.getProperty(),
+									condition,
+									i,
+									false),
+							new TaskFilterElement(
+									element.getProperty(),
+									NumberCondition.LESS_THAN,
+									i + 15,
+									false));
+					searchers.add(s);
+				}
+				
+				s = searcher.clone();
+				setTitle(element, s, Translations.getString(
+						"grouper.label.more_than",
+						StringValueMinutes.INSTANCE.getString(120)));
+				addMainFilter(s, new TaskFilterElement(
+						element.getProperty(),
+						NumberCondition.GREATER_THAN,
+						120,
+						false));
+				searchers.add(s);
+				
+				break;
+			case PERCENTAGE:
+				for (int i = 0; i <= 80; i += 20) {
+					String startPrc = StringValuePercentage.INSTANCE.getString(i + 1);
+					NumberCondition condition = NumberCondition.GREATER_THAN;
+					
+					if (i == 0) {
+						startPrc = StringValuePercentage.INSTANCE.getString(i);
+						condition = NumberCondition.GREATER_THAN_OR_EQUALS;
+					}
+					
+					s = searcher.clone();
+					setTitle(element, s, startPrc
+							+ " - "
+							+ StringValuePercentage.INSTANCE.getString(i + 20));
+					addMainFilter(
+							s,
+							new TaskFilterElement(
+									element.getProperty(),
+									condition,
+									i,
+									false),
+							new TaskFilterElement(
+									element.getProperty(),
+									NumberCondition.LESS_THAN_OR_EQUALS,
+									i + 20,
+									false));
+					searchers.add(s);
+				}
+				
+				break;
+			case TASK_PRIORITY:
+				for (TaskPriority p : TaskPriority.values()) {
+					s = searcher.clone();
+					setTitle(
+							element,
+							s,
+							TranslationsUtils.translateTaskPriority(p));
+					addMainFilter(
+							s,
+							new TaskFilterElement(
+									element.getProperty(),
+									EnumCondition.EQUALS,
+									p,
+									false));
+					searchers.add(s);
+				}
+				
+				break;
+			case TASK_REPEAT_FROM:
+				for (TaskRepeatFrom r : TaskRepeatFrom.values()) {
+					s = searcher.clone();
+					setTitle(
+							element,
+							s,
+							TranslationsUtils.translateTaskRepeatFrom(r));
+					addMainFilter(
+							s,
+							new TaskFilterElement(
+									element.getProperty(),
+									EnumCondition.EQUALS,
+									r,
+									false));
+					searchers.add(s);
+				}
+				
+				break;
 			case CONTACT:
 			case CONTEXT:
 			case FOLDER:
@@ -237,6 +351,12 @@ public final class TaskGrouperUtils {
 				searchers.add(s);
 				
 				break;
+			case DOUBLE:
+				// TODO
+			case INTEGER:
+				// TODO
+			case TIME:
+				// TODO
 			default:
 				s = searcher.clone();
 				setTitle(element, s, element.getProperty().toString());
