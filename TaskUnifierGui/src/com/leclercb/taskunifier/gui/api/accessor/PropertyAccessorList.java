@@ -131,4 +131,15 @@ public class PropertyAccessorList<T> {
 		return list;
 	}
 	
+	public List<PropertyAccessor<T>> getGroupableAccessors() {
+		List<PropertyAccessor<T>> list = new ArrayList<PropertyAccessor<T>>();
+		
+		for (PropertyAccessor<T> accessor : this.list) {
+			if (accessor.getType().isGroupable())
+				list.add(accessor);
+		}
+		
+		return list;
+	}
+	
 }

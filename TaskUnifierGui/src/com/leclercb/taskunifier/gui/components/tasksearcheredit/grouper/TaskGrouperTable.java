@@ -67,7 +67,7 @@ public class TaskGrouperTable extends JTable {
 		
 		// EDITORS
 		COLUMN_EDITOR = new DefaultCellEditor(new JComboBox(
-				TaskColumnList.getInstance().getAccessors().toArray()));
+				TaskColumnList.getInstance().getGroupableAccessors().toArray()));
 		
 		JComboBox comboBox = null;
 		

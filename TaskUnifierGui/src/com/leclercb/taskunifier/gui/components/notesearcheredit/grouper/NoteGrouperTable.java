@@ -67,7 +67,7 @@ public class NoteGrouperTable extends JTable {
 		
 		// EDITORS
 		COLUMN_EDITOR = new DefaultCellEditor(new JComboBox(
-				NoteColumnList.getInstance().getAccessors().toArray()));
+				NoteColumnList.getInstance().getGroupableAccessors().toArray()));
 		
 		JComboBox comboBox = null;
 		
