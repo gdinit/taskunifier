@@ -32,50 +32,12 @@
  */
 package com.leclercb.taskunifier.gui.commons.highlighters;
 
-import java.awt.Component;
+import org.jdesktop.swingx.decorator.HighlightPredicate;
 
-import org.jdesktop.swingx.decorator.AbstractHighlighter;
-import org.jdesktop.swingx.decorator.ComponentAdapter;
-import org.jdesktop.swingx.renderer.JRendererLabel;
-
-import com.leclercb.taskunifier.gui.commons.painters.SearchPainter;
-import com.leclercb.taskunifier.gui.swing.TUModelListLabel;
-
-public class SearchHighlighter extends AbstractHighlighter {
+public interface SearchHighlightPredicate extends HighlightPredicate {
 	
-	private SearchPainter painter;
+	public abstract String getSearchText();
 	
-	public SearchHighlighter(SearchHighlightPredicate predicate) {
-		super(predicate);
-		
-		this.painter = new SearchPainter();
-	}
-	
-	public String getSearchText() {
-		return ((SearchHighlightPredicate) this.getHighlightPredicate()).getSearchText();
-	}
-	
-	public void setSearchText(String searchText) {
-		((SearchHighlightPredicate) this.getHighlightPredicate()).setSearchText(searchText);
-	}
-	
-	@Override
-	protected Component doHighlight(Component renderer, ComponentAdapter adapter) {
-		if (adapter.isSelected())
-			return renderer;
-		
-		if (renderer instanceof JRendererLabel) {
-			JRendererLabel r = (JRendererLabel) renderer;
-			this.painter.setSearchText(this.getSearchText());
-			r.setPainter(this.painter);
-		}
-		
-		if (renderer instanceof TUModelListLabel) {
-			TUModelListLabel r = (TUModelListLabel) renderer;
-			r.highlightSearchText(this.getSearchText());
-		}
-		
-		return renderer;
-	}
+	public abstract void setSearchText(String searchText);
 	
 }

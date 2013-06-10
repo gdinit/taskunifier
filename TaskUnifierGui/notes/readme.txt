@@ -4,11 +4,12 @@ HISTORY
 Version 3.2.5
 	- Major:
 		- Sorting error with titles
+		- BF 307: Note search problem
 		- BF 308: Improved normalizer
 	- Minor:
 		- Bug fixed: Remove backup problem
 		- BF 299: Cut action in model note
-		- BF 307: Search problem
+		- BF 313: Searcher icon not saved
 		- FR 353: Add forum link
 		- FR 357: New repeat possibilities
 
