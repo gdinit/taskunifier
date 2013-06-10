@@ -97,6 +97,7 @@ import com.leclercb.taskunifier.gui.actions.ActionManageLicense;
 import com.leclercb.taskunifier.gui.actions.ActionManageModels;
 import com.leclercb.taskunifier.gui.actions.ActionManagePublisherPlugins;
 import com.leclercb.taskunifier.gui.actions.ActionManageSynchronizerPlugins;
+import com.leclercb.taskunifier.gui.actions.ActionManageTaskCustomColumns;
 import com.leclercb.taskunifier.gui.actions.ActionManageTaskRules;
 import com.leclercb.taskunifier.gui.actions.ActionManageTaskTemplates;
 import com.leclercb.taskunifier.gui.actions.ActionManageUsers;
@@ -285,6 +286,10 @@ public class MenuBar extends JMenuBar implements ListChangeListener, PropertyCha
 		
 		tasksMenu.addSeparator();
 		
+		// TODO: PRO
+		if (Main.isTmpProVersion()) {
+			tasksMenu.add(new ActionManageTaskCustomColumns(16, 16));
+		}
 		// TODO: PRO
 		if (Main.isTmpProVersion()) {
 			tasksMenu.add(new ActionManageTaskRules(16, 16));
