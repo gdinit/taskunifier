@@ -154,6 +154,10 @@ public class NoteSearcherPanel extends JPanel {
 				
 				if (file != null) {
 					NoteSearcherPanel.this.searcherIconFile = file;
+					NoteSearcherPanel.this.searcherIcon.setIcon(ImageUtils.getImage(
+							file,
+							24,
+							24));
 					NoteSearcherPanel.this.searcherIcon.setText(file);
 				}
 			}
@@ -168,6 +172,10 @@ public class NoteSearcherPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				NoteSearcherPanel.this.searcherIconFile = null;
+				NoteSearcherPanel.this.searcherIcon.setIcon(ImageUtils.getResourceImage(
+						"remove.png",
+						24,
+						24));
 				NoteSearcherPanel.this.searcherIcon.setText(Translations.getString("searcheredit.searcher.no_icon"));
 			}
 			
