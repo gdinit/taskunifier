@@ -1,2 +1,0 @@
-- Translate pro panel
-- "Manage task rules" help
