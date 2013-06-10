@@ -51,6 +51,7 @@ import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.configuration.api.DefaultConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.configuration.fields.synchronization.ChoiceFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.fields.synchronization.KeepTasksForFieldType;
@@ -66,7 +67,11 @@ public class SynchronizationConfigurationPanel extends DefaultConfigurationPanel
 	public SynchronizationConfigurationPanel(
 			ConfigurationGroup configuration,
 			boolean welcome) {
-		super(configuration, !welcome, "configuration_synchronization");
+		super(
+				ConfigurationTab.SYNCHRONIZATION,
+				configuration,
+				!welcome,
+				"configuration_synchronization");
 		
 		this.welcome = welcome;
 		

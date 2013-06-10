@@ -77,7 +77,7 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.ModelCondit
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondition;
 import com.leclercb.taskunifier.gui.commons.events.NoteSearcherSelectionChangeSupport;
 import com.leclercb.taskunifier.gui.commons.events.NoteSearcherSelectionListener;
-import com.leclercb.taskunifier.gui.components.configuration.ConfigurationTab;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.models.ModelConfigurationDialog;
 import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 import com.leclercb.taskunifier.gui.components.notesearchertree.nodes.FolderItem;

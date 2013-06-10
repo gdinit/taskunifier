@@ -37,8 +37,10 @@ import java.awt.BorderLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JTabbedPane;
 
+import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationPanel;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 
@@ -51,7 +53,7 @@ public class ListsConfigurationPanel extends ConfigurationPanel {
 	private ConfigurationPanel taskSnoozeListConfigurationPanel;
 	
 	public ListsConfigurationPanel(ConfigurationGroup configurationGroup) {
-		super(configurationGroup);
+		super(ConfigurationTab.LISTS, configurationGroup);
 		
 		this.initialize();
 	}
@@ -96,6 +98,37 @@ public class ListsConfigurationPanel extends ConfigurationPanel {
 				ComponentFactory.createJScrollPane(
 						this.taskSnoozeListConfigurationPanel,
 						false));
+	}
+	
+	@Override
+	public boolean setSelectedConfigurationTab(ConfigurationTab configurationTab) {
+		if (super.setSelectedConfigurationTab(configurationTab))
+			return true;
+		
+		CheckUtils.isNotNull(configurationTab);
+		
+		int i = 0;
+		
+		if (this.taskStatusesConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.taskPostponeListConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.taskSnoozeListConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		return false;
 	}
 	
 	@Override

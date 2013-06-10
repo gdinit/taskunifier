@@ -35,6 +35,7 @@ package com.leclercb.taskunifier.gui.components.configuration;
 import com.leclercb.commons.api.properties.events.ReloadPropertiesListener;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.swing.TUDialog;
 
 public class PluginConfigurationDialog extends TUDialog implements ConfigurationGroup, ReloadPropertiesListener {
@@ -62,6 +63,11 @@ public class PluginConfigurationDialog extends TUDialog implements Configuration
 	@Override
 	public void reloadProperties() {
 		PluginConfigurationDialogPanel.getInstance().reloadProperties();
+	}
+	
+	@Override
+	public boolean setSelectedConfigurationTab(ConfigurationTab configurationTab) {
+		return false;
 	}
 	
 	@Override

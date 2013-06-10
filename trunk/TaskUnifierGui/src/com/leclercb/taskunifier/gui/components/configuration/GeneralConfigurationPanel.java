@@ -38,6 +38,7 @@ import com.leclercb.taskunifier.gui.actions.ActionResetGeneralSearchers;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.configuration.api.DefaultConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.configuration.fields.general.LocaleFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.fields.general.ShortcutKeyFieldType;
@@ -53,10 +54,8 @@ public class GeneralConfigurationPanel extends DefaultConfigurationPanel {
 			ConfigurationGroup configuration,
 			boolean languageOnly,
 			boolean welcome) {
-		super(
-				configuration,
-				!languageOnly && !welcome,
-				languageOnly ? null : "configuration_general");
+		super(ConfigurationTab.GENERAL, configuration, !languageOnly
+				&& !welcome, languageOnly ? null : "configuration_general");
 		
 		this.languageOnly = languageOnly;
 		this.welcome = welcome;

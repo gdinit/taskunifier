@@ -42,6 +42,7 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationPanel;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 
 public class PluginConfigurationPanel extends ConfigurationPanel {
 	
@@ -51,7 +52,7 @@ public class PluginConfigurationPanel extends ConfigurationPanel {
 			ConfigurationGroup configurationGroup,
 			boolean welcome,
 			SynchronizerGuiPlugin plugin) {
-		super(configurationGroup);
+		super(ConfigurationTab.PLUGIN, configurationGroup);
 		
 		CheckUtils.isNotNull(plugin);
 		
@@ -76,6 +77,11 @@ public class PluginConfigurationPanel extends ConfigurationPanel {
 		
 		this.add(this.configPanel, BorderLayout.CENTER);
 		this.add(pluginInfo, BorderLayout.SOUTH);
+	}
+	
+	@Override
+	public boolean setSelectedConfigurationTab(ConfigurationTab configurationTab) {
+		return (this.getConfigurationTab() == configurationTab);
 	}
 	
 	@Override

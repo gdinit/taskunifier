@@ -39,6 +39,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 
 public abstract class CardPanel extends JPanel implements CardInterface, ConfigurationGroup {
 	
@@ -85,6 +86,11 @@ public abstract class CardPanel extends JPanel implements CardInterface, Configu
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder().append(this.id).toHashCode();
+	}
+	
+	@Override
+	public boolean setSelectedConfigurationTab(ConfigurationTab configurationTab) {
+		return false;
 	}
 	
 }

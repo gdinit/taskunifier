@@ -87,7 +87,9 @@ public class ProPanel extends JPanel implements ActionSupported, PropertyChangeL
 		this.setLayout(new BorderLayout());
 		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
-		JXLabel label = new JXLabel("license.pro_version_required");
+		JXLabel label = new JXLabel(
+				Translations.getString("license.pro_version_required"));
+		label.setLineWrap(true);
 		
 		this.add(label, BorderLayout.CENTER);
 		
@@ -112,11 +114,13 @@ public class ProPanel extends JPanel implements ActionSupported, PropertyChangeL
 			
 		};
 		
-		this.moreInfoButton = new JButton("More Info");
+		this.moreInfoButton = new JButton(
+				Translations.getString("license.more_info"));
 		this.moreInfoButton.setActionCommand("MORE_INFO");
 		this.moreInfoButton.addActionListener(listener);
 		
-		this.getTrialButton = new JButton("Get Trial");
+		this.getTrialButton = new JButton(
+				Translations.getString("license.get_trial"));
 		this.getTrialButton.setActionCommand("GET_TRIAL");
 		this.getTrialButton.addActionListener(listener);
 		

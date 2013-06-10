@@ -42,6 +42,7 @@ import javax.swing.WindowConstants;
 
 import com.leclercb.taskunifier.gui.components.configuration.GeneralConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.swing.TUDialog;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
@@ -93,6 +94,11 @@ public class LanguageDialog extends TUDialog implements ConfigurationGroup {
 		JPanel panel = new TUButtonsPanel(okButton);
 		
 		this.add(panel, BorderLayout.SOUTH);
+	}
+	
+	@Override
+	public boolean setSelectedConfigurationTab(ConfigurationTab configurationTab) {
+		return false;
 	}
 	
 	@Override

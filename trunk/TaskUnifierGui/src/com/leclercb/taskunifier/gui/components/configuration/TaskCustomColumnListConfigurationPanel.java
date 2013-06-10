@@ -34,6 +34,7 @@ package com.leclercb.taskunifier.gui.components.configuration;
 
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.configuration.api.DefaultConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.configuration.fields.lists.TaskCustomColumnListFieldType;
 
@@ -41,7 +42,10 @@ public class TaskCustomColumnListConfigurationPanel extends DefaultConfiguration
 	
 	public TaskCustomColumnListConfigurationPanel(
 			ConfigurationGroup configuration) {
-		super(configuration, "configuration_theme_task_custom_columns");
+		super(
+				ConfigurationTab.TASK_CUSTOM_COLUMN_LIST,
+				configuration,
+				"configuration_theme_task_custom_columns");
 		
 		this.initialize();
 		this.pack();

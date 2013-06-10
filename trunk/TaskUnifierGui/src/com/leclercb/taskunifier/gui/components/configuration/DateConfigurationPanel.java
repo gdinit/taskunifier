@@ -35,6 +35,7 @@ package com.leclercb.taskunifier.gui.components.configuration;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.configuration.api.DefaultConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.configuration.fields.date.DateFormatFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.fields.date.DayBreakHourFieldType;
@@ -50,7 +51,11 @@ public class DateConfigurationPanel extends DefaultConfigurationPanel {
 	public DateConfigurationPanel(
 			ConfigurationGroup configuration,
 			boolean showAfterRestart) {
-		super(configuration, showAfterRestart, "configuration_date");
+		super(
+				ConfigurationTab.DATE,
+				configuration,
+				showAfterRestart,
+				"configuration_date");
 		
 		this.initialize();
 		this.pack();

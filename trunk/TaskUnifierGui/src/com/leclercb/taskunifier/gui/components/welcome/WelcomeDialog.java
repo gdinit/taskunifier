@@ -52,6 +52,7 @@ import com.leclercb.taskunifier.gui.components.configuration.GeneralConfiguratio
 import com.leclercb.taskunifier.gui.components.configuration.ProxyConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.configuration.SynchronizationConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.welcome.panels.CardInterface;
 import com.leclercb.taskunifier.gui.components.welcome.panels.CardPanel;
 import com.leclercb.taskunifier.gui.components.welcome.panels.LicensePanel;
@@ -311,6 +312,11 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 		for (int i = this.currentPanel + 1; i < this.panels.size(); i++)
 			if (this.panels.get(i).isVisible())
 				this.nextButton.setText(Translations.getString("general.next"));
+	}
+	
+	@Override
+	public boolean setSelectedConfigurationTab(ConfigurationTab configurationTab) {
+		return false;
 	}
 	
 	@Override

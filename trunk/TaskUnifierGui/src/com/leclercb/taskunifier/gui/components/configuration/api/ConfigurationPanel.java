@@ -36,17 +36,30 @@ import com.leclercb.commons.gui.swing.panels.ScrollablePanel;
 
 public abstract class ConfigurationPanel extends ScrollablePanel implements ConfigurationGroup {
 	
+	private ConfigurationTab configurationTab;
 	private ConfigurationGroup configurationGroup;
 	
-	public ConfigurationPanel(ConfigurationGroup configurationGroup) {
+	public ConfigurationPanel(
+			ConfigurationTab configurationTab,
+			ConfigurationGroup configurationGroup) {
+		this.configurationTab = configurationTab;
 		this.configurationGroup = configurationGroup;
 		
 		this.setScrollableWidth(ScrollablePanel.ScrollableSizeHint.FIT);
 		this.setScrollableHeight(ScrollablePanel.ScrollableSizeHint.NONE);
 	}
 	
+	public ConfigurationTab getConfigurationTab() {
+		return this.configurationTab;
+	}
+	
 	public ConfigurationGroup getConfigurationGroup() {
 		return this.configurationGroup;
+	}
+	
+	@Override
+	public boolean setSelectedConfigurationTab(ConfigurationTab configurationTab) {
+		return (this.getConfigurationTab() == configurationTab);
 	}
 	
 }

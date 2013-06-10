@@ -64,7 +64,7 @@ import com.leclercb.taskunifier.gui.actions.ActionManageUsers;
 import com.leclercb.taskunifier.gui.actions.ActionScheduledSync;
 import com.leclercb.taskunifier.gui.actions.ActionSwitchToUserMenu;
 import com.leclercb.taskunifier.gui.actions.synchronize.ActionSynchronizeAndPublish;
-import com.leclercb.taskunifier.gui.components.configuration.ConfigurationTab;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 

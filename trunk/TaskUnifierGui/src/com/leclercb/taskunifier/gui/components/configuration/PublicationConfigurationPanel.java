@@ -40,6 +40,7 @@ import com.leclercb.taskunifier.gui.actions.publish.ActionPublishAll;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.configuration.api.DefaultConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.configuration.fields.publication.PublisherPluginFieldType;
 import com.leclercb.taskunifier.gui.main.Main;
@@ -48,7 +49,10 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 public class PublicationConfigurationPanel extends DefaultConfigurationPanel {
 	
 	public PublicationConfigurationPanel(ConfigurationGroup configuration) {
-		super(configuration, "configuration_publication");
+		super(
+				ConfigurationTab.PUBLICATION,
+				configuration,
+				"configuration_publication");
 		
 		this.initialize();
 		this.pack();

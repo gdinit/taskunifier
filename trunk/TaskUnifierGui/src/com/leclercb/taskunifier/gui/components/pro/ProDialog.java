@@ -32,8 +32,8 @@
  */
 package com.leclercb.taskunifier.gui.components.pro;
 
+import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.swing.TUDialog;
-import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class ProDialog extends TUDialog {
 	
@@ -45,7 +45,7 @@ public class ProDialog extends TUDialog {
 	
 	private void initialize() {
 		this.setModal(true);
-		this.setTitle(Translations.getString("general.pro"));
+		this.setTitle(Constants.TITLE_PRO);
 		this.setSize(500, 300);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
