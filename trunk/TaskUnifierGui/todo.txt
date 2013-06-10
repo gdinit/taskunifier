@@ -1,6 +1,2 @@
 - Translate pro panel
-- Add/remove custom fields action
 - "Manage task rules" help
-
-- Add grouper UI
-- Finish TaskGroupTable
