@@ -40,9 +40,11 @@ import javax.swing.BorderFactory;
 import javax.swing.JTabbedPane;
 
 import com.leclercb.commons.api.event.action.WeakActionListener;
+import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationPanel;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
@@ -63,7 +65,7 @@ public class ThemeConfigurationPanel extends ConfigurationPanel implements Actio
 	private ConfigurationPanel importanceConfigurationPanel;
 	
 	public ThemeConfigurationPanel(ConfigurationGroup configurationGroup) {
-		super(configurationGroup);
+		super(ConfigurationTab.THEME, configurationGroup);
 		
 		this.initialize();
 	}
@@ -186,6 +188,72 @@ public class ThemeConfigurationPanel extends ConfigurationPanel implements Actio
 				ComponentFactory.createJScrollPane(
 						this.importanceConfigurationPanel,
 						false));
+	}
+	
+	@Override
+	public boolean setSelectedConfigurationTab(ConfigurationTab configurationTab) {
+		if (super.setSelectedConfigurationTab(configurationTab))
+			return true;
+		
+		CheckUtils.isNotNull(configurationTab);
+		
+		int i = 0;
+		
+		if (this.generalConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.taskCustomColumnListConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.noteColumnsConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.taskColumnsConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.noteFieldsConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.taskFieldsConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.priorityConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.importanceConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		return false;
 	}
 	
 	@Override

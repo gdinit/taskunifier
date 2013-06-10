@@ -34,13 +34,14 @@ package com.leclercb.taskunifier.gui.components.configuration;
 
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.configuration.api.DefaultConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.configuration.fields.lists.TaskPostponeListFieldType;
 
 public class TaskPostponeListConfigurationPanel extends DefaultConfigurationPanel {
 	
 	public TaskPostponeListConfigurationPanel(ConfigurationGroup configuration) {
-		super(configuration);
+		super(ConfigurationTab.TASK_POSTPONE_LIST, configuration);
 		
 		this.initialize();
 		this.pack();

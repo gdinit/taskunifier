@@ -56,6 +56,7 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationPanel;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.main.main.MainSaveFiles;
@@ -100,9 +101,88 @@ public class ConfigurationDialogPanel extends TUDialogPanel implements Configura
 		this.initialize();
 	}
 	
-	public void setSelectedConfigurationTab(ConfigurationTab tab) {
-		CheckUtils.isNotNull(tab);
-		this.tabbedPane.setSelectedIndex(tab.ordinal());
+	@Override
+	public boolean setSelectedConfigurationTab(ConfigurationTab configurationTab) {
+		CheckUtils.isNotNull(configurationTab);
+		
+		int i = 0;
+		
+		if (this.generalConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.dateConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.backupConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.proxyConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.searcherConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.themeConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.toolbarConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.listsConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.publicationConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.synchronizationConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		i++;
+		
+		if (this.advancedConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+			this.tabbedPane.setSelectedIndex(i);
+			return true;
+		}
+		
+		return false;
 	}
 	
 	private void initialize() {

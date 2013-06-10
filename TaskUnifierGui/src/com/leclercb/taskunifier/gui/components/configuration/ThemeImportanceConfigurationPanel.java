@@ -38,6 +38,7 @@ import java.awt.event.ActionListener;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.configuration.api.DefaultConfigurationPanel;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -46,7 +47,10 @@ import com.leclercb.taskunifier.gui.utils.SettingsUtils;
 public class ThemeImportanceConfigurationPanel extends DefaultConfigurationPanel {
 	
 	public ThemeImportanceConfigurationPanel(ConfigurationGroup configuration) {
-		super(configuration, "configuration_theme_importance");
+		super(
+				ConfigurationTab.THEME_IMPORTANCE,
+				configuration,
+				"configuration_theme_importance");
 		
 		this.initialize();
 		this.pack();

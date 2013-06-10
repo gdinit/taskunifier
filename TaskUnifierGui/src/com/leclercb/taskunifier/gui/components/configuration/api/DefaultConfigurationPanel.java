@@ -57,19 +57,19 @@ public abstract class DefaultConfigurationPanel extends ConfigurationPanel {
 	private List<ConfigurationField> fields;
 	
 	public DefaultConfigurationPanel(ConfigurationGroup configurationGroup) {
-		this(configurationGroup, true, (JButton) null);
+		this(null, configurationGroup, true, (JButton) null);
 	}
 	
 	public DefaultConfigurationPanel(
 			ConfigurationGroup configurationGroup,
 			boolean showAfterRestart) {
-		this(configurationGroup, showAfterRestart, (JButton) null);
+		this(null, configurationGroup, showAfterRestart, (JButton) null);
 	}
 	
 	public DefaultConfigurationPanel(
 			ConfigurationGroup configurationGroup,
 			String helpId) {
-		this(configurationGroup, true, helpId);
+		this(null, configurationGroup, true, helpId);
 	}
 	
 	public DefaultConfigurationPanel(
@@ -77,6 +77,7 @@ public abstract class DefaultConfigurationPanel extends ConfigurationPanel {
 			boolean showAfterRestart,
 			String helpId) {
 		this(
+				null,
 				configurationGroup,
 				showAfterRestart,
 				(helpId == null ? null : Help.getInstance().getHelpButton(
@@ -84,10 +85,48 @@ public abstract class DefaultConfigurationPanel extends ConfigurationPanel {
 	}
 	
 	public DefaultConfigurationPanel(
+			ConfigurationTab configurationTab,
+			ConfigurationGroup configurationGroup) {
+		this(configurationTab, configurationGroup, true, (JButton) null);
+	}
+	
+	public DefaultConfigurationPanel(
+			ConfigurationTab configurationTab,
+			ConfigurationGroup configurationGroup,
+			boolean showAfterRestart) {
+		this(
+				configurationTab,
+				configurationGroup,
+				showAfterRestart,
+				(JButton) null);
+	}
+	
+	public DefaultConfigurationPanel(
+			ConfigurationTab configurationTab,
+			ConfigurationGroup configurationGroup,
+			String helpId) {
+		this(configurationTab, configurationGroup, true, helpId);
+	}
+	
+	public DefaultConfigurationPanel(
+			ConfigurationTab configurationTab,
+			ConfigurationGroup configurationGroup,
+			boolean showAfterRestart,
+			String helpId) {
+		this(
+				configurationTab,
+				configurationGroup,
+				showAfterRestart,
+				(helpId == null ? null : Help.getInstance().getHelpButton(
+						helpId)));
+	}
+	
+	public DefaultConfigurationPanel(
+			ConfigurationTab configurationTab,
 			ConfigurationGroup configurationGroup,
 			boolean showAfterRestart,
 			JButton helpButton) {
-		super(configurationGroup);
+		super(configurationTab, configurationGroup);
 		
 		this.showAfterRestart = showAfterRestart;
 		this.helpButton = helpButton;

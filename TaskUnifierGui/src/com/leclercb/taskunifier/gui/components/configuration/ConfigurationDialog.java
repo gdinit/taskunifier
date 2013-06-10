@@ -32,6 +32,7 @@
  */
 package com.leclercb.taskunifier.gui.components.configuration;
 
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.swing.TUDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
@@ -43,8 +44,9 @@ public class ConfigurationDialog extends TUDialog {
 		this.initialize();
 	}
 	
-	public void setSelectedConfigurationTab(ConfigurationTab tab) {
-		ConfigurationDialogPanel.getInstance().setSelectedConfigurationTab(tab);
+	public void setSelectedConfigurationTab(ConfigurationTab configurationTab) {
+		ConfigurationDialogPanel.getInstance().setSelectedConfigurationTab(
+				configurationTab);
 	}
 	
 	private void initialize() {

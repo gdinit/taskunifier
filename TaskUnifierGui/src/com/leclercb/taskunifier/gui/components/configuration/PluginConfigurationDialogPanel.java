@@ -52,6 +52,7 @@ import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationPanel;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.main.main.MainSaveFiles;
@@ -166,6 +167,11 @@ public class PluginConfigurationDialogPanel extends TUDialogPanel implements Con
 		
 		if (this.getDialog() != null)
 			this.getDialog().setTitle(this.plugin.getName());
+	}
+	
+	@Override
+	public boolean setSelectedConfigurationTab(ConfigurationTab configurationTab) {
+		return false;
 	}
 	
 	@Override

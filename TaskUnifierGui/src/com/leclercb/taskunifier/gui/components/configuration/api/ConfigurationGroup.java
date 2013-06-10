@@ -34,6 +34,9 @@ package com.leclercb.taskunifier.gui.components.configuration.api;
 
 public interface ConfigurationGroup {
 	
+	public abstract boolean setSelectedConfigurationTab(
+			ConfigurationTab configurationTab);
+	
 	public abstract void saveAndApplyConfig();
 	
 	public abstract void cancelConfig();

@@ -59,6 +59,7 @@ import com.leclercb.taskunifier.gui.actions.ActionList;
 import com.leclercb.taskunifier.gui.commons.comparators.ActionListComparator;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationPanel;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.configuration.toolbar.IconValueAction;
 import com.leclercb.taskunifier.gui.components.configuration.toolbar.StringValueAction;
 import com.leclercb.taskunifier.gui.main.Main;
@@ -75,7 +76,7 @@ public class ToolBarConfigurationPanel extends ConfigurationPanel {
 	private DefaultListModel rightModel;
 	
 	public ToolBarConfigurationPanel(ConfigurationGroup configurationGroup) {
-		super(configurationGroup);
+		super(ConfigurationTab.TOOLBAR, configurationGroup);
 		
 		this.initialize();
 	}
@@ -298,6 +299,11 @@ public class ToolBarConfigurationPanel extends ConfigurationPanel {
 		}
 		
 		return actions.toArray(new ActionList[0]);
+	}
+	
+	@Override
+	public boolean setSelectedConfigurationTab(ConfigurationTab configurationTab) {
+		return (this.getConfigurationTab() == configurationTab);
 	}
 	
 	@Override

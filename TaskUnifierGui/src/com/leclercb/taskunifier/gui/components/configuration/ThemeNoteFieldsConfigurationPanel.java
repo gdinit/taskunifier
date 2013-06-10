@@ -41,6 +41,7 @@ import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.configuration.api.DefaultConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 import com.leclercb.taskunifier.gui.main.Main;
@@ -48,7 +49,10 @@ import com.leclercb.taskunifier.gui.main.Main;
 public class ThemeNoteFieldsConfigurationPanel extends DefaultConfigurationPanel {
 	
 	public ThemeNoteFieldsConfigurationPanel(ConfigurationGroup configuration) {
-		super(configuration, "configuration_theme_fields");
+		super(
+				ConfigurationTab.THEME_NOTE_FIELDS,
+				configuration,
+				"configuration_theme_fields");
 		
 		this.initialize();
 		this.pack();

@@ -39,6 +39,7 @@ import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.configuration.api.DefaultConfigurationPanel;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -48,7 +49,10 @@ import com.leclercb.taskunifier.gui.utils.SettingsUtils;
 public class ThemePriorityConfigurationPanel extends DefaultConfigurationPanel {
 	
 	public ThemePriorityConfigurationPanel(ConfigurationGroup configuration) {
-		super(configuration, "configuration_theme_priority");
+		super(
+				ConfigurationTab.THEME_PRIORITY,
+				configuration,
+				"configuration_theme_priority");
 		
 		this.initialize();
 		this.pack();

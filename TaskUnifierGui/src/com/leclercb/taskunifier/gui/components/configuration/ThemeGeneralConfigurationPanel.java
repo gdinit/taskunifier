@@ -38,6 +38,7 @@ import java.awt.event.ActionListener;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.configuration.api.DefaultConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.configuration.fields.theme.FontNameFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.fields.theme.FontSizeFieldType;
@@ -48,7 +49,10 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 public class ThemeGeneralConfigurationPanel extends DefaultConfigurationPanel {
 	
 	public ThemeGeneralConfigurationPanel(ConfigurationGroup configuration) {
-		super(configuration, "configuration_theme_general");
+		super(
+				ConfigurationTab.THEME_GENERAL,
+				configuration,
+				"configuration_theme_general");
 		
 		this.initialize();
 		this.pack();

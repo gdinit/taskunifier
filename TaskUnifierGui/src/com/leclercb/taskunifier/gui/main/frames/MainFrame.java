@@ -145,7 +145,7 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 		
 		// TODO: pro
 		if (false)
-			this.setTitle(Constants.TITLE + " Pro - " + Constants.VERSION);
+			this.setTitle(Constants.TITLE_PRO + " - " + Constants.VERSION);
 		else
 			this.setTitle(Constants.TITLE + " - " + Constants.VERSION);
 		

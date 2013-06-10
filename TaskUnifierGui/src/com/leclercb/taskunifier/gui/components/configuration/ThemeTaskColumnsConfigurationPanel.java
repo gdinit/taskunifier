@@ -41,6 +41,7 @@ import com.leclercb.taskunifier.gui.commons.comparators.PropertyAccessorComparat
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.configuration.api.DefaultConfigurationPanel;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.main.Main;
@@ -48,7 +49,10 @@ import com.leclercb.taskunifier.gui.main.Main;
 public class ThemeTaskColumnsConfigurationPanel extends DefaultConfigurationPanel {
 	
 	public ThemeTaskColumnsConfigurationPanel(ConfigurationGroup configuration) {
-		super(configuration, "configuration_theme_columns");
+		super(
+				ConfigurationTab.THEME_TASK_COLUMNS,
+				configuration,
+				"configuration_theme_columns");
 		
 		this.initialize();
 		this.pack();
