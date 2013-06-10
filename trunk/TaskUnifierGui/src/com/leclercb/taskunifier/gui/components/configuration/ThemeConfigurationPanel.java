@@ -204,11 +204,13 @@ public class ThemeConfigurationPanel extends ConfigurationPanel implements Actio
 			return true;
 		}
 		
-		i++;
-		
-		if (this.taskCustomColumnListConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
-			this.tabbedPane.setSelectedIndex(i);
-			return true;
+		if (Main.isProVersion()) {
+			i++;
+			
+			if (this.taskCustomColumnListConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
+				this.tabbedPane.setSelectedIndex(i);
+				return true;
+			}
 		}
 		
 		i++;

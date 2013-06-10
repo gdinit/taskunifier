@@ -47,7 +47,9 @@ import javax.swing.event.ListSelectionListener;
 
 import com.leclercb.taskunifier.gui.api.searchers.groupers.TaskGrouper;
 import com.leclercb.taskunifier.gui.api.searchers.groupers.TaskGrouperElement;
+import com.leclercb.taskunifier.gui.components.pro.ProPanel;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
+import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
@@ -73,33 +75,41 @@ public class TaskGrouperPanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		
-		this.table = new TaskGrouperTable(this.grouper);
-		this.table.getSelectionModel().addListSelectionListener(
-				new ListSelectionListener() {
-					
-					@Override
-					public void valueChanged(ListSelectionEvent event) {
-						if (event.getValueIsAdjusting())
-							return;
+		// TODO: PRO
+		if (Main.isProVersion()) {
+			panel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+			
+			this.table = new TaskGrouperTable(this.grouper);
+			this.table.getSelectionModel().addListSelectionListener(
+					new ListSelectionListener() {
 						
-						if (TaskGrouperPanel.this.table.getSelectedRow() == -1) {
-							TaskGrouperPanel.this.removeButton.setEnabled(false);
-						} else {
-							TaskGrouperPanel.this.removeButton.setEnabled(true);
+						@Override
+						public void valueChanged(ListSelectionEvent event) {
+							if (event.getValueIsAdjusting())
+								return;
+							
+							if (TaskGrouperPanel.this.table.getSelectedRow() == -1) {
+								TaskGrouperPanel.this.removeButton.setEnabled(false);
+							} else {
+								TaskGrouperPanel.this.removeButton.setEnabled(true);
+							}
 						}
-					}
-					
-				});
-		
-		panel.add(this.table.getTableHeader(), BorderLayout.NORTH);
-		
-		panel.add(this.table, BorderLayout.CENTER);
-		
-		this.add(panel, BorderLayout.CENTER);
-		
-		this.initializeButtons();
+						
+					});
+			
+			panel.add(this.table.getTableHeader(), BorderLayout.NORTH);
+			
+			panel.add(this.table, BorderLayout.CENTER);
+			
+			this.add(panel, BorderLayout.CENTER);
+			
+			this.initializeButtons();
+		} else {
+			panel.add(new ProPanel(), BorderLayout.CENTER);
+			
+			this.add(panel, BorderLayout.CENTER);
+		}
 	}
 	
 	private void initializeButtons() {
