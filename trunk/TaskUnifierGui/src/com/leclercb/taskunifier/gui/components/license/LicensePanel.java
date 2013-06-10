@@ -352,27 +352,41 @@ public class LicensePanel extends JPanel {
 				
 				g2.setFont(font.deriveFont((float) 14.0).deriveFont(Font.PLAIN));
 				
-				g2.drawString(LicensePanel.this.license.getEmail(), 200, 187);
+				g2.drawString(
+						Translations.getString("license.email") + ": ",
+						90,
+						185);
+				g2.drawString(LicensePanel.this.license.getEmail(), 220, 185);
+				g2.drawString(Translations.getString("license.purchase_date")
+						+ ": ", 90, 210);
 				g2.drawString(
 						StringValueCalendar.INSTANCE_DATE.getString(LicensePanel.this.license.getPurchaseDate()),
-						200,
-						211);
+						220,
+						210);
+				g2.drawString(Translations.getString("license.license_type")
+						+ ": ", 90, 235);
 				g2.drawString(
 						StringValueLicenseType.INSTANCE.getString(LicensePanel.this.license.getLicenseType()),
-						200,
+						220,
 						235);
-				g2.drawString(LicensePanel.this.license.getVersion(), 200, 256);
+				g2.drawString(
+						Translations.getString("license.version") + ": ",
+						90,
+						260);
+				g2.drawString(LicensePanel.this.license.getVersion(), 220, 260);
 				
+				g2.drawString(Translations.getString("license.expiration")
+						+ ": ", 90, 285);
 				if (LicensePanel.this.license.getExpiration() == null) {
 					g2.drawString(
 							Translations.getString("date.never"),
-							200,
-							284);
+							220,
+							285);
 				} else {
 					g2.drawString(
 							StringValueCalendar.INSTANCE_DATE.getString(LicensePanel.this.license.getExpiration()),
-							200,
-							284);
+							220,
+							285);
 				}
 				
 				if (LicensePanel.this.expired) {
