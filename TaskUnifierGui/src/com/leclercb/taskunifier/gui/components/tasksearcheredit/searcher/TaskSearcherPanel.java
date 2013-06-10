@@ -163,6 +163,10 @@ public class TaskSearcherPanel extends JPanel {
 				
 				if (file != null) {
 					TaskSearcherPanel.this.searcherIconFile = file;
+					TaskSearcherPanel.this.searcherIcon.setIcon(ImageUtils.getImage(
+							file,
+							24,
+							24));
 					TaskSearcherPanel.this.searcherIcon.setText(file);
 				}
 			}
@@ -177,6 +181,10 @@ public class TaskSearcherPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				TaskSearcherPanel.this.searcherIconFile = null;
+				TaskSearcherPanel.this.searcherIcon.setIcon(ImageUtils.getResourceImage(
+						"remove.png",
+						24,
+						24));
 				TaskSearcherPanel.this.searcherIcon.setText(Translations.getString("searcheredit.searcher.no_icon"));
 			}
 			
