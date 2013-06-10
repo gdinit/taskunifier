@@ -162,6 +162,7 @@ public class TaskSearcherPanel extends JPanel {
 						null);
 				
 				if (file != null) {
+					TaskSearcherPanel.this.searcherIconFile = file;
 					TaskSearcherPanel.this.searcherIcon.setText(file);
 				}
 			}

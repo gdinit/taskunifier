@@ -83,9 +83,11 @@ public class SearchPainter implements Painter<JLabel> {
 			
 			String start = text.substring(0, text.indexOf(searchText));
 			
-			int startX = object.getIcon().getIconWidth()
-					+ object.getIconTextGap()
-					+ metrics.stringWidth(start);
+			int startX = metrics.stringWidth(start);
+			
+			if (object.getIcon() != null)
+				startX += object.getIcon().getIconWidth()
+						+ object.getIconTextGap();
 			
 			int length = metrics.stringWidth(searchText);
 			

@@ -35,16 +35,16 @@ package com.leclercb.taskunifier.gui.components.tasks.table.highlighters;
 import java.awt.Component;
 
 import org.jdesktop.swingx.decorator.ComponentAdapter;
-import org.jdesktop.swingx.decorator.HighlightPredicate;
 import org.jdesktop.swingx.renderer.JRendererLabel;
 
 import com.leclercb.commons.api.utils.StringUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.commons.highlighters.SearchHighlightPredicate;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.swing.TUModelListLabel;
 
-public class TaskSearchHighlightPredicate implements HighlightPredicate {
+public class TaskSearchHighlightPredicate implements SearchHighlightPredicate {
 	
 	private String searchText;
 	
@@ -52,10 +52,12 @@ public class TaskSearchHighlightPredicate implements HighlightPredicate {
 		
 	}
 	
+	@Override
 	public String getSearchText() {
 		return this.searchText;
 	}
 	
+	@Override
 	public void setSearchText(String searchText) {
 		this.searchText = searchText;
 	}
