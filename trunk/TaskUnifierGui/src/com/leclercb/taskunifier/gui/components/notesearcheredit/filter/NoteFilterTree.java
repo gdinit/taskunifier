@@ -47,13 +47,21 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import com.leclercb.commons.gui.utils.TreeUtils;
+import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.gui.api.searchers.filters.FilterLink;
 import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilter;
+import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilterElement;
+import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.ModelCondition;
+import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondition;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
+import com.leclercb.taskunifier.gui.components.notesearcheredit.filter.actions.NoteFilterActions;
+import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class NoteFilterTree extends JTree {
+public class NoteFilterTree extends JTree implements NoteFilterActions {
 	
 	public NoteFilterTree() {
 		this.initialize();
@@ -152,7 +160,7 @@ public class NoteFilterTree extends JTree {
 					JButton deleteButton = new JButton();
 					deleteButton.setText(Translations.getString("general.delete"));
 					deleteButton.setIcon(ImageUtils.getResourceImage(
-							"delete.png",
+							"remove.png",
 							16,
 							16));
 					deleteButton.addActionListener(new ActionListener() {
@@ -169,6 +177,71 @@ public class NoteFilterTree extends JTree {
 			}
 			
 		});
+	}
+	
+	@Override
+	public void actionAutoFill() {
+		this.getFilter().clearElement();
+		this.getFilter().clearFilters();
+		
+		this.getFilter().setLink(FilterLink.OR);
+		
+		Note[] notes = ViewUtils.getSelectedNotes();
+		for (Note note : notes) {
+			this.getFilter().addElement(
+					new NoteFilterElement(
+							NoteColumnList.getInstance().get(
+									NoteColumnList.MODEL),
+							ModelCondition.EQUALS,
+							note,
+							false));
+		}
+	}
+	
+	@Override
+	public void actionAddElement() {
+		TreeNode node = (TreeNode) this.getLastSelectedPathComponent();
+		
+		if (node == null || !(node instanceof NoteFilterTreeNode))
+			return;
+		
+		NoteFilterElement element = new NoteFilterElement(
+				NoteColumnList.getInstance().get(NoteColumnList.TITLE),
+				StringCondition.EQUALS,
+				"",
+				false);
+		
+		((NoteFilterTreeNode) node).getFilter().addElement(element);
+		
+		TreeUtils.expandAll(this, true);
+	}
+	
+	@Override
+	public void actionAddFilter() {
+		TreeNode node = (TreeNode) this.getLastSelectedPathComponent();
+		
+		if (node == null || !(node instanceof NoteFilterTreeNode))
+			return;
+		
+		((NoteFilterTreeNode) node).getFilter().addFilter(new NoteFilter());
+		
+		TreeUtils.expandAll(this, true);
+	}
+	
+	@Override
+	public void actionRemove() {
+		TreeNode node = (TreeNode) this.getLastSelectedPathComponent();
+		
+		if (node == null)
+			return;
+		
+		if (node instanceof NoteFilterTreeNode) {
+			((NoteFilterTreeNode) node).getFilter().getParent().removeFilter(
+					((NoteFilterTreeNode) node).getFilter());
+		} else if (node instanceof NoteFilterElementTreeNode) {
+			((NoteFilterElementTreeNode) node).getElement().getParent().removeElement(
+					((NoteFilterElementTreeNode) node).getElement());
+		}
 	}
 	
 }

@@ -47,13 +47,21 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import com.leclercb.commons.gui.utils.TreeUtils;
+import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.api.searchers.filters.FilterLink;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
+import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilterElement;
+import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.ModelCondition;
+import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondition;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
+import com.leclercb.taskunifier.gui.components.tasksearcheredit.filter.actions.TaskFilterActions;
+import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
-public class TaskFilterTree extends JTree {
+public class TaskFilterTree extends JTree implements TaskFilterActions {
 	
 	public TaskFilterTree() {
 		this.initialize();
@@ -170,6 +178,71 @@ public class TaskFilterTree extends JTree {
 			}
 			
 		});
+	}
+	
+	@Override
+	public void actionAutoFill() {
+		this.getFilter().clearElement();
+		this.getFilter().clearFilters();
+		
+		this.getFilter().setLink(FilterLink.OR);
+		
+		Task[] tasks = ViewUtils.getSelectedTasks();
+		for (Task task : tasks) {
+			this.getFilter().addElement(
+					new TaskFilterElement(
+							TaskColumnList.getInstance().get(
+									TaskColumnList.MODEL),
+							ModelCondition.EQUALS,
+							task,
+							false));
+		}
+	}
+	
+	@Override
+	public void actionAddElement() {
+		TreeNode node = (TreeNode) this.getLastSelectedPathComponent();
+		
+		if (node == null || !(node instanceof TaskFilterTreeNode))
+			return;
+		
+		TaskFilterElement element = new TaskFilterElement(
+				TaskColumnList.getInstance().get(TaskColumnList.TITLE),
+				StringCondition.EQUALS,
+				"",
+				false);
+		
+		((TaskFilterTreeNode) node).getFilter().addElement(element);
+		
+		TreeUtils.expandAll(this, true);
+	}
+	
+	@Override
+	public void actionAddFilter() {
+		TreeNode node = (TreeNode) this.getLastSelectedPathComponent();
+		
+		if (node == null || !(node instanceof TaskFilterTreeNode))
+			return;
+		
+		((TaskFilterTreeNode) node).getFilter().addFilter(new TaskFilter());
+		
+		TreeUtils.expandAll(this, true);
+	}
+	
+	@Override
+	public void actionRemove() {
+		TreeNode node = (TreeNode) this.getLastSelectedPathComponent();
+		
+		if (node == null)
+			return;
+		
+		if (node instanceof TaskFilterTreeNode) {
+			((TaskFilterTreeNode) node).getFilter().getParent().removeFilter(
+					((TaskFilterTreeNode) node).getFilter());
+		} else if (node instanceof TaskFilterElementTreeNode) {
+			((TaskFilterElementTreeNode) node).getElement().getParent().removeElement(
+					((TaskFilterElementTreeNode) node).getElement());
+		}
 	}
 	
 }
