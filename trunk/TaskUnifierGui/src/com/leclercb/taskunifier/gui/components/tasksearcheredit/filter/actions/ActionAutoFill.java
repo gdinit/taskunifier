@@ -56,7 +56,7 @@ public class ActionAutoFill extends AbstractAction {
 		CheckUtils.isNotNull(filterActions);
 		this.filterActions = filterActions;
 		
-		this.setEnabled(false);
+		this.setEnabled(true);
 	}
 	
 	@Override

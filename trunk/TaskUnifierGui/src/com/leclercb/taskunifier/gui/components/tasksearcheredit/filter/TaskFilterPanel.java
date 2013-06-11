@@ -33,8 +33,6 @@
 package com.leclercb.taskunifier.gui.components.tasksearcheredit.filter;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -43,19 +41,11 @@ import javax.swing.tree.TreeNode;
 import com.leclercb.commons.gui.utils.TreeUtils;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
-import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
-import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class TaskFilterPanel extends JPanel {
 	
-	private TaskFilter filter;
 	private TaskFilterTree tree;
-	
-	private JButton autoFillButton;
-	private JButton addElementButton;
-	private JButton addFilterButton;
-	private JButton removeButton;
 	
 	public TaskFilterPanel() {
 		this.initialize();
@@ -66,16 +56,10 @@ public class TaskFilterPanel extends JPanel {
 	}
 	
 	public void setFilter(TaskFilter filter) {
-		this.filter = filter;
 		this.tree.setFilter(filter);
 		
 		if (this.tree.getModel().getRoot() != null)
 			this.tree.setSelectionPath(TreeUtils.getPath((TreeNode) this.tree.getModel().getRoot()));
-		
-		this.autoFillButton.setEnabled(filter != null);
-		this.addElementButton.setEnabled(filter != null);
-		this.addFilterButton.setEnabled(filter != null);
-		this.removeButton.setEnabled(filter != null);
 	}
 	
 	public TaskFilterTree getTree() {
@@ -95,60 +79,19 @@ public class TaskFilterPanel extends JPanel {
 	}
 	
 	private void initializeButtons() {
-		ActionListener listener = new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				if (event.getActionCommand().equals("AUTO_FILL")) {
-					TaskFilterPanel.this.tree.actionAutoFill();
-				} else if (event.getActionCommand().equals("ADD_ELEMENT")) {
-					TaskFilterPanel.this.tree.actionAddElement();
-				} else if (event.getActionCommand().equals("ADD_FILTER")) {
-					TaskFilterPanel.this.tree.actionAddFilter();
-				} else if (event.getActionCommand().equals("REMOVE")) {
-					TaskFilterPanel.this.tree.actionRemove();
-				}
-			}
-			
-		};
-		
-		this.addElementButton = new JButton(
-				Translations.getString("searcheredit.add_element"),
-				ImageUtils.getResourceImage("add.png", 16, 16));
-		this.addElementButton.setActionCommand("ADD_ELEMENT");
-		this.addElementButton.addActionListener(listener);
-		this.addElementButton.setEnabled(false);
-		
-		this.addFilterButton = new JButton(
-				Translations.getString("searcheredit.add_filter"),
-				ImageUtils.getResourceImage("add.png", 16, 16));
-		this.addFilterButton.setActionCommand("ADD_FILTER");
-		this.addFilterButton.addActionListener(listener);
-		this.addFilterButton.setEnabled(false);
-		
-		this.removeButton = new JButton(ImageUtils.getResourceImage(
-				"remove.png",
-				16,
-				16));
-		this.removeButton.setActionCommand("REMOVE");
-		this.removeButton.addActionListener(listener);
-		this.removeButton.setEnabled(false);
-		
-		this.autoFillButton = new JButton(
-				Translations.getString("searcheredit.clear_and_auto_fill_with_selected_tasks"),
-				ImageUtils.getResourceImage("synchronize.png", 16, 16));
-		this.autoFillButton.setActionCommand("AUTO_FILL");
-		this.autoFillButton.addActionListener(listener);
-		this.autoFillButton.setEnabled(true);
+		JButton addElementButton = new JButton(this.tree.getAddElementAction());
+		JButton addFilterButton = new JButton(this.tree.getAddFilterAction());
+		JButton removeButton = new JButton(this.tree.getRemoveAction());
+		JButton autoFillButton = new JButton(this.tree.getAutoFillAction());
 		
 		// Do not show the auto fill button
-		this.autoFillButton.setVisible(false);
+		autoFillButton.setVisible(false);
 		
 		JPanel panel = new TUButtonsPanel(
-				this.addElementButton,
-				this.addFilterButton,
-				this.removeButton,
-				this.autoFillButton);
+				addElementButton,
+				addFilterButton,
+				removeButton,
+				autoFillButton);
 		
 		this.add(panel, BorderLayout.SOUTH);
 	}

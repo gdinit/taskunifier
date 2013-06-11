@@ -37,8 +37,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.Action;
 import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTree;
@@ -55,16 +55,40 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilterElement;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.ModelCondition;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondition;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
+import com.leclercb.taskunifier.gui.components.tasksearcheredit.filter.actions.ActionAddElement;
+import com.leclercb.taskunifier.gui.components.tasksearcheredit.filter.actions.ActionAddFilter;
+import com.leclercb.taskunifier.gui.components.tasksearcheredit.filter.actions.ActionAutoFill;
+import com.leclercb.taskunifier.gui.components.tasksearcheredit.filter.actions.ActionRemove;
 import com.leclercb.taskunifier.gui.components.tasksearcheredit.filter.actions.TaskFilterActions;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
-import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class TaskFilterTree extends JTree implements TaskFilterActions {
 	
+	private ActionAutoFill autoFillAction;
+	private ActionAddElement addElementAction;
+	private ActionAddFilter addFilterAction;
+	private ActionRemove removeAction;
+	
 	public TaskFilterTree() {
 		this.initialize();
+	}
+	
+	public Action getAutoFillAction() {
+		return this.autoFillAction;
+	}
+	
+	public Action getAddElementAction() {
+		return this.addElementAction;
+	}
+	
+	public Action getAddFilterAction() {
+		return this.addFilterAction;
+	}
+	
+	public Action getRemoveAction() {
+		return this.removeAction;
 	}
 	
 	public TaskFilter getFilter() {
@@ -73,6 +97,13 @@ public class TaskFilterTree extends JTree implements TaskFilterActions {
 	
 	public void setFilter(TaskFilter filter) {
 		this.getTaskFilterTreeModel().setFilter(filter);
+		
+		this.autoFillAction.setEnabled(filter != null);
+		this.addElementAction.setEnabled(filter != null);
+		this.addFilterAction.setEnabled(filter != null);
+		this.removeAction.setEnabled(filter != null);
+		
+		TreeUtils.expandAll(this, true);
 	}
 	
 	private TaskFilterTreeModel getTaskFilterTreeModel() {
@@ -80,6 +111,15 @@ public class TaskFilterTree extends JTree implements TaskFilterActions {
 	}
 	
 	private void initialize() {
+		this.autoFillAction = new ActionAutoFill(this);
+		this.addElementAction = new ActionAddElement(this);
+		this.addFilterAction = new ActionAddFilter(this);
+		this.removeAction = new ActionRemove(this);
+		
+		this.addTreeSelectionListener(this.addElementAction);
+		this.addTreeSelectionListener(this.addFilterAction);
+		this.addTreeSelectionListener(this.removeAction);
+		
 		this.setModel(new TaskFilterTreeModel());
 		
 		this.setLargeModel(true);
@@ -158,20 +198,10 @@ public class TaskFilterTree extends JTree implements TaskFilterActions {
 						});
 					}
 					
-					JButton deleteButton = new JButton();
-					deleteButton.setText(Translations.getString("general.delete"));
-					deleteButton.setIcon(ImageUtils.getResourceImage(
-							"delete.png",
-							16,
-							16));
-					deleteButton.addActionListener(new ActionListener() {
-						
-						@Override
-						public void actionPerformed(ActionEvent event) {
-							
-						}
-						
-					});
+					popup.addSeparator();
+					popup.add(TaskFilterTree.this.addElementAction);
+					popup.add(TaskFilterTree.this.addFilterAction);
+					popup.add(TaskFilterTree.this.removeAction);
 					
 					popup.show(event.getComponent(), event.getX(), event.getY());
 				}
