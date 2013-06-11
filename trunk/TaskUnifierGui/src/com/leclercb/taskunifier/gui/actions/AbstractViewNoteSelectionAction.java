@@ -67,13 +67,27 @@ public abstract class AbstractViewNoteSelectionAction extends AbstractViewAction
 		ViewList.getInstance().addPropertyChangeListener(
 				ViewList.PROP_CURRENT_VIEW,
 				new WeakPropertyChangeListener(ViewList.getInstance(), this));
+		
+		this.viewChanged(null);
 	}
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
-		if (event != null && event.getOldValue() != null) {
-			ViewItem oldView = (ViewItem) event.getOldValue();
-			
+		ViewItem oldView = null;
+		
+		if (event != null && event.getOldValue() != null)
+			oldView = (ViewItem) event.getOldValue();
+		
+		this.viewChanged(oldView);
+	}
+	
+	@Override
+	public final void modelSelectionChange(ModelSelectionChangeEvent event) {
+		this.setEnabled(this.shouldBeEnabled());
+	}
+	
+	private void viewChanged(ViewItem oldView) {
+		if (oldView != null) {
 			if (oldView.getViewType() == ViewType.NOTES) {
 				NoteTableView view = ((NoteView) oldView.getView()).getNoteTableView();
 				view.removeModelSelectionChangeListener(this);
@@ -90,11 +104,6 @@ public abstract class AbstractViewNoteSelectionAction extends AbstractViewAction
 			}
 		}
 		
-		this.setEnabled(this.shouldBeEnabled());
-	}
-	
-	@Override
-	public final void modelSelectionChange(ModelSelectionChangeEvent event) {
 		this.setEnabled(this.shouldBeEnabled());
 	}
 	

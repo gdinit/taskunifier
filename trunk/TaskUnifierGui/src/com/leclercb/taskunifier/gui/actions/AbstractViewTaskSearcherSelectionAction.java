@@ -68,13 +68,28 @@ public abstract class AbstractViewTaskSearcherSelectionAction extends AbstractVi
 		ViewList.getInstance().addPropertyChangeListener(
 				ViewList.PROP_CURRENT_VIEW,
 				new WeakPropertyChangeListener(ViewList.getInstance(), this));
+		
+		this.viewChanged(null);
 	}
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
-		if (event != null && event.getOldValue() != null) {
-			ViewItem oldView = (ViewItem) event.getOldValue();
-			
+		ViewItem oldView = null;
+		
+		if (event != null && event.getOldValue() != null)
+			oldView = (ViewItem) event.getOldValue();
+		
+		this.viewChanged(oldView);
+	}
+	
+	@Override
+	public void taskSearcherSelectionChange(
+			TaskSearcherSelectionChangeEvent event) {
+		this.setEnabled(this.shouldBeEnabled());
+	}
+	
+	private void viewChanged(ViewItem oldView) {
+		if (oldView != null) {
 			TaskSearcherView view = null;
 			
 			if (oldView.getViewType() == ViewType.CALENDAR)
@@ -103,12 +118,6 @@ public abstract class AbstractViewTaskSearcherSelectionAction extends AbstractVi
 						this));
 		}
 		
-		this.setEnabled(this.shouldBeEnabled());
-	}
-	
-	@Override
-	public void taskSearcherSelectionChange(
-			TaskSearcherSelectionChangeEvent event) {
 		this.setEnabled(this.shouldBeEnabled());
 	}
 	
