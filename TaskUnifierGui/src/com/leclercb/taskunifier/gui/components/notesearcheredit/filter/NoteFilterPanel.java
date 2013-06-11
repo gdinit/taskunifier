@@ -38,19 +38,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeNode;
 
 import com.leclercb.commons.gui.utils.TreeUtils;
-import com.leclercb.taskunifier.api.models.Note;
-import com.leclercb.taskunifier.gui.api.searchers.filters.FilterLink;
 import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilter;
-import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilterElement;
-import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.ModelCondition;
-import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondition;
-import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
-import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
@@ -95,38 +86,6 @@ public class NoteFilterPanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		
 		this.tree = new NoteFilterTree();
-		this.tree.getSelectionModel().addTreeSelectionListener(
-				new TreeSelectionListener() {
-					
-					@Override
-					public void valueChanged(TreeSelectionEvent event) {
-						if (NoteFilterPanel.this.tree.getSelectionCount() != 0) {
-							TreeNode node = (TreeNode) NoteFilterPanel.this.tree.getLastSelectedPathComponent();
-							
-							if (node instanceof NoteFilterTreeNode) {
-								if (((NoteFilterTreeNode) node).getFilter().getParent() != null) {
-									NoteFilterPanel.this.removeButton.setEnabled(true);
-								} else {
-									NoteFilterPanel.this.removeButton.setEnabled(false);
-								}
-								
-								NoteFilterPanel.this.addElementButton.setEnabled(true);
-								NoteFilterPanel.this.addFilterButton.setEnabled(true);
-								return;
-							} else if (node instanceof NoteFilterElementTreeNode) {
-								NoteFilterPanel.this.addElementButton.setEnabled(false);
-								NoteFilterPanel.this.addFilterButton.setEnabled(false);
-								NoteFilterPanel.this.removeButton.setEnabled(true);
-								return;
-							}
-						}
-						
-						NoteFilterPanel.this.addElementButton.setEnabled(false);
-						NoteFilterPanel.this.addFilterButton.setEnabled(false);
-						NoteFilterPanel.this.removeButton.setEnabled(false);
-					}
-					
-				});
 		
 		this.add(
 				ComponentFactory.createJScrollPane(this.tree, true),
@@ -141,56 +100,13 @@ public class NoteFilterPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				if (event.getActionCommand().equals("AUTO_FILL")) {
-					NoteFilterPanel.this.filter.clearElement();
-					NoteFilterPanel.this.filter.clearFilters();
-					
-					NoteFilterPanel.this.filter.setLink(FilterLink.OR);
-					
-					Note[] notes = ViewUtils.getSelectedNotes();
-					for (Note note : notes) {
-						NoteFilterPanel.this.filter.addElement(new NoteFilterElement(
-								NoteColumnList.getInstance().get(
-										NoteColumnList.MODEL),
-								ModelCondition.EQUALS,
-								note,
-								false));
-					}
-				} else if (event.getActionCommand().startsWith("ADD")) {
-					TreeNode node = (TreeNode) NoteFilterPanel.this.tree.getLastSelectedPathComponent();
-					
-					if (node == null || !(node instanceof NoteFilterTreeNode))
-						return;
-					
-					if (event.getActionCommand().equals("ADD_ELEMENT")) {
-						NoteFilterElement element = new NoteFilterElement(
-								NoteColumnList.getInstance().get(
-										NoteColumnList.TITLE),
-								StringCondition.EQUALS,
-								"",
-								false);
-						
-						((NoteFilterTreeNode) node).getFilter().addElement(
-								element);
-					} else if (event.getActionCommand().equals("ADD_FILTER")) {
-						((NoteFilterTreeNode) node).getFilter().addFilter(
-								new NoteFilter());
-					}
-					
-					for (int i = 0; i < NoteFilterPanel.this.tree.getRowCount(); i++)
-						NoteFilterPanel.this.tree.expandRow(i);
+					NoteFilterPanel.this.tree.actionAutoFill();
+				} else if (event.getActionCommand().equals("ADD_ELEMENT")) {
+					NoteFilterPanel.this.tree.actionAddElement();
+				} else if (event.getActionCommand().equals("ADD_FILTER")) {
+					NoteFilterPanel.this.tree.actionAddFilter();
 				} else if (event.getActionCommand().equals("REMOVE")) {
-					TreeNode node = (TreeNode) NoteFilterPanel.this.tree.getLastSelectedPathComponent();
-					
-					if (node == null)
-						return;
-					
-					if (node instanceof NoteFilterTreeNode) {
-						((NoteFilterTreeNode) node).getFilter().getParent().removeFilter(
-								((NoteFilterTreeNode) node).getFilter());
-					} else if (node instanceof NoteFilterElementTreeNode) {
-						((NoteFilterElementTreeNode) node).getElement().getParent().removeElement(
-								((NoteFilterElementTreeNode) node).getElement());
-					}
+					NoteFilterPanel.this.tree.actionRemove();
 				}
 			}
 			

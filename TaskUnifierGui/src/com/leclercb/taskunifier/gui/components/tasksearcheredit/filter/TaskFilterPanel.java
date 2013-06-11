@@ -38,19 +38,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeNode;
 
 import com.leclercb.commons.gui.utils.TreeUtils;
-import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.gui.api.searchers.filters.FilterLink;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
-import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilterElement;
-import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.ModelCondition;
-import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondition;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
-import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
@@ -95,38 +86,6 @@ public class TaskFilterPanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		
 		this.tree = new TaskFilterTree();
-		this.tree.getSelectionModel().addTreeSelectionListener(
-				new TreeSelectionListener() {
-					
-					@Override
-					public void valueChanged(TreeSelectionEvent event) {
-						if (TaskFilterPanel.this.tree.getSelectionCount() != 0) {
-							TreeNode node = (TreeNode) TaskFilterPanel.this.tree.getLastSelectedPathComponent();
-							
-							if (node instanceof TaskFilterTreeNode) {
-								if (((TaskFilterTreeNode) node).getFilter().getParent() != null) {
-									TaskFilterPanel.this.removeButton.setEnabled(true);
-								} else {
-									TaskFilterPanel.this.removeButton.setEnabled(false);
-								}
-								
-								TaskFilterPanel.this.addElementButton.setEnabled(true);
-								TaskFilterPanel.this.addFilterButton.setEnabled(true);
-								return;
-							} else if (node instanceof TaskFilterElementTreeNode) {
-								TaskFilterPanel.this.addElementButton.setEnabled(false);
-								TaskFilterPanel.this.addFilterButton.setEnabled(false);
-								TaskFilterPanel.this.removeButton.setEnabled(true);
-								return;
-							}
-						}
-						
-						TaskFilterPanel.this.addElementButton.setEnabled(false);
-						TaskFilterPanel.this.addFilterButton.setEnabled(false);
-						TaskFilterPanel.this.removeButton.setEnabled(false);
-					}
-					
-				});
 		
 		this.add(
 				ComponentFactory.createJScrollPane(this.tree, true),
@@ -141,56 +100,13 @@ public class TaskFilterPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				if (event.getActionCommand().equals("AUTO_FILL")) {
-					TaskFilterPanel.this.filter.clearElement();
-					TaskFilterPanel.this.filter.clearFilters();
-					
-					TaskFilterPanel.this.filter.setLink(FilterLink.OR);
-					
-					Task[] tasks = ViewUtils.getSelectedTasks();
-					for (Task task : tasks) {
-						TaskFilterPanel.this.filter.addElement(new TaskFilterElement(
-								TaskColumnList.getInstance().get(
-										TaskColumnList.MODEL),
-								ModelCondition.EQUALS,
-								task,
-								false));
-					}
-				} else if (event.getActionCommand().startsWith("ADD")) {
-					TreeNode node = (TreeNode) TaskFilterPanel.this.tree.getLastSelectedPathComponent();
-					
-					if (node == null || !(node instanceof TaskFilterTreeNode))
-						return;
-					
-					if (event.getActionCommand().equals("ADD_ELEMENT")) {
-						TaskFilterElement element = new TaskFilterElement(
-								TaskColumnList.getInstance().get(
-										TaskColumnList.TITLE),
-								StringCondition.EQUALS,
-								"",
-								false);
-						
-						((TaskFilterTreeNode) node).getFilter().addElement(
-								element);
-					} else if (event.getActionCommand().equals("ADD_FILTER")) {
-						((TaskFilterTreeNode) node).getFilter().addFilter(
-								new TaskFilter());
-					}
-					
-					for (int i = 0; i < TaskFilterPanel.this.tree.getRowCount(); i++)
-						TaskFilterPanel.this.tree.expandRow(i);
+					TaskFilterPanel.this.tree.actionAutoFill();
+				} else if (event.getActionCommand().equals("ADD_ELEMENT")) {
+					TaskFilterPanel.this.tree.actionAddElement();
+				} else if (event.getActionCommand().equals("ADD_FILTER")) {
+					TaskFilterPanel.this.tree.actionAddFilter();
 				} else if (event.getActionCommand().equals("REMOVE")) {
-					TreeNode node = (TreeNode) TaskFilterPanel.this.tree.getLastSelectedPathComponent();
-					
-					if (node == null)
-						return;
-					
-					if (node instanceof TaskFilterTreeNode) {
-						((TaskFilterTreeNode) node).getFilter().getParent().removeFilter(
-								((TaskFilterTreeNode) node).getFilter());
-					} else if (node instanceof TaskFilterElementTreeNode) {
-						((TaskFilterElementTreeNode) node).getElement().getParent().removeElement(
-								((TaskFilterElementTreeNode) node).getElement());
-					}
+					TaskFilterPanel.this.tree.actionRemove();
 				}
 			}
 			
