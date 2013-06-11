@@ -38,6 +38,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTree;
@@ -48,6 +49,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 import com.leclercb.taskunifier.gui.api.searchers.filters.FilterLink;
 import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilter;
+import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
@@ -102,9 +104,11 @@ public class NoteFilterTree extends JTree {
 							event.getY());
 					final TreeNode node = (TreeNode) path.getLastPathComponent();
 					
+					NoteFilterTree.this.setSelectionPath(path);
+					
+					JPopupMenu popup = new JPopupMenu();
+					
 					if (node instanceof NoteFilterTreeNode) {
-						JPopupMenu popup = new JPopupMenu();
-						
 						ButtonGroup group = new ButtonGroup();
 						
 						JRadioButtonMenuItem itemAnd = new JRadioButtonMenuItem(
@@ -143,12 +147,24 @@ public class NoteFilterTree extends JTree {
 							}
 							
 						});
-						
-						popup.show(
-								event.getComponent(),
-								event.getX(),
-								event.getY());
 					}
+					
+					JButton deleteButton = new JButton();
+					deleteButton.setText(Translations.getString("general.delete"));
+					deleteButton.setIcon(ImageUtils.getResourceImage(
+							"delete.png",
+							16,
+							16));
+					deleteButton.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent event) {
+							
+						}
+						
+					});
+					
+					popup.show(event.getComponent(), event.getX(), event.getY());
 				}
 			}
 			

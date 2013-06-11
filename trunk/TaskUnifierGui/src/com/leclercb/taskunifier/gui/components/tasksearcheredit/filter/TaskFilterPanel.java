@@ -42,6 +42,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeNode;
 
+import com.leclercb.commons.gui.utils.TreeUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.api.searchers.filters.FilterLink;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
@@ -76,6 +77,9 @@ public class TaskFilterPanel extends JPanel {
 	public void setFilter(TaskFilter filter) {
 		this.filter = filter;
 		this.tree.setFilter(filter);
+		
+		if (this.tree.getModel().getRoot() != null)
+			this.tree.setSelectionPath(TreeUtils.getPath((TreeNode) this.tree.getModel().getRoot()));
 		
 		this.autoFillButton.setEnabled(filter != null);
 		this.addElementButton.setEnabled(filter != null);
