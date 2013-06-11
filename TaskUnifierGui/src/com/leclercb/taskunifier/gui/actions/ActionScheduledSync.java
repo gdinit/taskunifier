@@ -87,13 +87,13 @@ public class ActionScheduledSync extends AbstractViewAction implements PropertyC
 	}
 	
 	public static void scheduledSync() {
-		if (!Main.isProVersion()) {
-			showProRequired();
-			return;
-		}
-		
 		boolean schedulerEnabled = Main.getUserSettings().getBooleanProperty(
 				"synchronizer.scheduler_enabled");
+		
+		if (!Main.isProVersion()) {
+			showProRequired();
+			schedulerEnabled = true;
+		}
 		
 		Main.getUserSettings().setBooleanProperty(
 				"synchronizer.scheduler_enabled",
