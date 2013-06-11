@@ -44,6 +44,7 @@ import com.leclercb.taskunifier.gui.components.tasksearcheredit.filter.TaskFilte
 import com.leclercb.taskunifier.gui.components.tasksearcheredit.grouper.TaskGrouperPanel;
 import com.leclercb.taskunifier.gui.components.tasksearcheredit.searcher.TaskSearcherPanel;
 import com.leclercb.taskunifier.gui.components.tasksearcheredit.sorter.TaskSorterPanel;
+import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class TaskSearcherEditPanel extends JPanel {
@@ -88,9 +89,12 @@ public class TaskSearcherEditPanel extends JPanel {
 					this.searcherPanel);
 		}
 		
-		tabbedPane.addTab(
-				Translations.getString("searcheredit.tab.grouper"),
-				this.grouperPanel);
+		// TODO: PRO
+		if (Main.isTmpProVersion()) {
+			tabbedPane.addTab(
+					Translations.getString("searcheredit.tab.grouper"),
+					this.grouperPanel);
+		}
 		
 		tabbedPane.addTab(
 				Translations.getString("searcheredit.tab.sorter"),

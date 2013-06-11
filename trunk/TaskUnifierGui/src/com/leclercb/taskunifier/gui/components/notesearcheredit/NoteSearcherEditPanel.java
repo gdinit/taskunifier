@@ -44,6 +44,7 @@ import com.leclercb.taskunifier.gui.components.notesearcheredit.filter.NoteFilte
 import com.leclercb.taskunifier.gui.components.notesearcheredit.grouper.NoteGrouperPanel;
 import com.leclercb.taskunifier.gui.components.notesearcheredit.searcher.NoteSearcherPanel;
 import com.leclercb.taskunifier.gui.components.notesearcheredit.sorter.NoteSorterPanel;
+import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class NoteSearcherEditPanel extends JPanel {
@@ -88,9 +89,12 @@ public class NoteSearcherEditPanel extends JPanel {
 					this.searcherPanel);
 		}
 		
-		tabbedPane.addTab(
-				Translations.getString("searcheredit.tab.grouper"),
-				this.grouperPanel);
+		// TODO: PRO
+		if (Main.isTmpProVersion()) {
+			tabbedPane.addTab(
+					Translations.getString("searcheredit.tab.grouper"),
+					this.grouperPanel);
+		}
 		
 		tabbedPane.addTab(
 				Translations.getString("searcheredit.tab.sorter"),
