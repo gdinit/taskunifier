@@ -37,8 +37,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.Action;
 import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTree;
@@ -55,16 +55,40 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilterElement;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.ModelCondition;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondition;
 import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
+import com.leclercb.taskunifier.gui.components.notesearcheredit.filter.actions.ActionAddElement;
+import com.leclercb.taskunifier.gui.components.notesearcheredit.filter.actions.ActionAddFilter;
+import com.leclercb.taskunifier.gui.components.notesearcheredit.filter.actions.ActionAutoFill;
+import com.leclercb.taskunifier.gui.components.notesearcheredit.filter.actions.ActionRemove;
 import com.leclercb.taskunifier.gui.components.notesearcheredit.filter.actions.NoteFilterActions;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
-import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class NoteFilterTree extends JTree implements NoteFilterActions {
 	
+	private ActionAutoFill autoFillAction;
+	private ActionAddElement addElementAction;
+	private ActionAddFilter addFilterAction;
+	private ActionRemove removeAction;
+	
 	public NoteFilterTree() {
 		this.initialize();
+	}
+	
+	public Action getAutoFillAction() {
+		return this.autoFillAction;
+	}
+	
+	public Action getAddElementAction() {
+		return this.addElementAction;
+	}
+	
+	public Action getAddFilterAction() {
+		return this.addFilterAction;
+	}
+	
+	public Action getRemoveAction() {
+		return this.removeAction;
 	}
 	
 	public NoteFilter getFilter() {
@@ -73,6 +97,13 @@ public class NoteFilterTree extends JTree implements NoteFilterActions {
 	
 	public void setFilter(NoteFilter filter) {
 		this.getNoteFilterTreeModel().setFilter(filter);
+		
+		this.autoFillAction.setEnabled(filter != null);
+		this.addElementAction.setEnabled(filter != null);
+		this.addFilterAction.setEnabled(filter != null);
+		this.removeAction.setEnabled(filter != null);
+		
+		TreeUtils.expandAll(this, true);
 	}
 	
 	private NoteFilterTreeModel getNoteFilterTreeModel() {
@@ -80,6 +111,15 @@ public class NoteFilterTree extends JTree implements NoteFilterActions {
 	}
 	
 	private void initialize() {
+		this.autoFillAction = new ActionAutoFill(this);
+		this.addElementAction = new ActionAddElement(this);
+		this.addFilterAction = new ActionAddFilter(this);
+		this.removeAction = new ActionRemove(this);
+		
+		this.addTreeSelectionListener(this.addElementAction);
+		this.addTreeSelectionListener(this.addFilterAction);
+		this.addTreeSelectionListener(this.removeAction);
+		
 		this.setModel(new NoteFilterTreeModel());
 		this.setLargeModel(true);
 		this.setRootVisible(true);
@@ -157,20 +197,10 @@ public class NoteFilterTree extends JTree implements NoteFilterActions {
 						});
 					}
 					
-					JButton deleteButton = new JButton();
-					deleteButton.setText(Translations.getString("general.delete"));
-					deleteButton.setIcon(ImageUtils.getResourceImage(
-							"remove.png",
-							16,
-							16));
-					deleteButton.addActionListener(new ActionListener() {
-						
-						@Override
-						public void actionPerformed(ActionEvent event) {
-							
-						}
-						
-					});
+					popup.addSeparator();
+					popup.add(NoteFilterTree.this.addElementAction);
+					popup.add(NoteFilterTree.this.addFilterAction);
+					popup.add(NoteFilterTree.this.removeAction);
 					
 					popup.show(event.getComponent(), event.getX(), event.getY());
 				}
