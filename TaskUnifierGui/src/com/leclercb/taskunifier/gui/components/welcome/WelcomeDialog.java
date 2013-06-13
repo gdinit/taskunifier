@@ -112,22 +112,19 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 				
 			});
 			
-			// TODO: PRO
-			if (Main.isTmpProVersion()) {
-				this.addPanel(new LicensePanel("LICENSE") {
+			this.addPanel(new LicensePanel("LICENSE") {
+				
+				@Override
+				public boolean next() {
+					if (!Main.isProVersion())
+						WelcomeDialog.this.setPanelVisible(
+								"SETTINGS_SYNCHRONIZATION",
+								false);
 					
-					@Override
-					public boolean next() {
-						if (!Main.isProVersion())
-							WelcomeDialog.this.setPanelVisible(
-									"SETTINGS_SYNCHRONIZATION",
-									false);
-						
-						return super.next();
-					}
-					
-				});
-			}
+					return super.next();
+				}
+				
+			});
 			
 			this.addPanel(new SettingsPanel(
 					"SETTINGS_GENERAL",

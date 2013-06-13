@@ -63,19 +63,19 @@ public class WelcomePanel extends CardPanel {
 	}
 	
 	private void initialize(String[] messages, TUButtonsPanel messageButtons) {
-		this.setLayout(new BorderLayout(0, 30));
+		this.setLayout(new BorderLayout(0, 20));
 		
 		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout(0, 30));
-		panel.setBorder(BorderFactory.createEmptyBorder(30, 20, 30, 20));
+		panel.setLayout(new BorderLayout(0, 20));
+		panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 0, 20));
 		
 		panel.add(new JLabel(
 				ImageUtils.getResourceImage("logo.png", 64, 64),
-				SwingConstants.CENTER));
+				SwingConstants.CENTER), BorderLayout.WEST);
 		
 		panel.add(new JLabel(
 				Translations.getString("general.welcome_message"),
-				SwingConstants.CENTER), BorderLayout.SOUTH);
+				SwingConstants.CENTER), BorderLayout.CENTER);
 		
 		this.add(panel, BorderLayout.NORTH);
 		
@@ -111,9 +111,9 @@ public class WelcomePanel extends CardPanel {
 				messagePanel.add(messageButtons, BorderLayout.SOUTH);
 			
 			messagePanel.setBorder(BorderFactory.createEmptyBorder(
+					10,
 					20,
-					20,
-					20,
+					10,
 					20));
 			
 			this.add(messagePanel, BorderLayout.CENTER);

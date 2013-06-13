@@ -74,30 +74,24 @@ public final class Constants {
 	
 	public static final String TITLE = "TaskUnifier";
 	public static final String TITLE_PRO = "TaskUnifier Pro";
-	public static final String VERSION = "3.2.5";
+	public static final String VERSION = "4.0.0";
 	public static final boolean BETA = false;
-	public static final String BETA_SYNC_EXP = "01/12/2012";
 	public static final String DEFAULT_SUFFIX = "_v3";
-	
-	public static final int PLUGIN_API_VERSION = 36;
-	public static final int WAIT_NO_LICENSE_TIME = 30;
-	public static final int WAIT_NO_LICENSE_ADDED_TIME = 15;
-	public static final int MAX_NO_LICENSE_SYNCS = 50;
-	
+	public static final int PLUGIN_API_VERSION = 40;
 	public static final int ITEM_TRIAL_ID = 11;
 	
 	public static final String PLUGINS_FILE = "http://www.taskunifier.com/plugins/plugins.xml";
 	public static final String VERSION_FILE = "http://www.taskunifier.com/version.txt";
 	public static final String PRO_URL = "http://www.taskunifier.com/index.php?page=pro";
-	public static final String GET_TRIAL_URL = "http://localhost:8080/TaskUnifierWebSite/web/php/services/trial_license.php";
+	public static final String GET_TRIAL_URL = "http://www.taskunifier.com/php/services/trial_license.php";
 	public static final String DOWNLOAD_URL = "http://www.taskunifier.com/index.php?page=download";
 	public static final String DONATE_URL = "http://sourceforge.net/p/taskunifier/donate/";
-	public static final String REVIEW_URL = "http://sourceforge.net/projects/taskunifier/reviews/";
+	public static final String REVIEW_URL = "http://sourceforge.net/p/taskunifier/reviews/";
 	public static final String FORUM_URL = "http://sourceforge.net/p/taskunifier/discussion/";
 	public static final String BUGS_URL = "http://sourceforge.net/p/taskunifier/bugs/";
 	public static final String FEATURE_REQUESTS_URL = "http://sourceforge.net/p/taskunifier/feature-requests/";
 	public static final String SUPPORT_REQUESTS_URL = "http://sourceforge.net/p/taskunifier/support-requests/";
-	public static final String TEST_CONNECTION = "http://www.taskunifier.com";
+	public static final String TEST_CONNECTION_URL = "http://www.taskunifier.com";
 	
 	public static final int TIMEOUT_HTTP_CALL = 30000;
 	

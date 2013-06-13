@@ -171,10 +171,6 @@ public class Main {
 		return PRO_VERSION;
 	}
 	
-	public static boolean isTmpProVersion() {
-		return DEVELOPER_MODE;
-	}
-	
 	private static String getLockFile() {
 		return DATA_FOLDER + File.separator + "taskunifier.lock";
 	}
@@ -594,9 +590,7 @@ public class Main {
 		try {
 			License.setLicenseValidator(new UserIdLicenseValidator());
 			
-			// TODO: check license
-			if (false)
-				LicenseUtils.checkLicense();
+			LicenseUtils.checkLicense();
 			
 			PRO_VERSION = true;
 		} catch (Exception e) {

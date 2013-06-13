@@ -341,14 +341,23 @@ public class LicensePanel extends JPanel {
 			
 			if (LicensePanel.this.license != null) {
 				Font font = FontUtils.getResourceFont("constantia.ttf");
-				g2.setFont(font.deriveFont((float) 20.0).deriveFont(Font.BOLD));
+				int width = 0;
+				
+				g2.setFont(font.deriveFont((float) 12.0).deriveFont(Font.PLAIN));
+				
+				String licensedTo = Translations.getString("license.licensed_to");
+				
+				width = g.getFontMetrics().stringWidth(licensedTo);
+				g2.drawString(licensedTo, (this.getWidth() - width) / 2, 120);
+				
+				g2.setFont(font.deriveFont((float) 16.0).deriveFont(Font.BOLD));
 				
 				String name = LicensePanel.this.license.getFirstName()
 						+ " "
 						+ LicensePanel.this.license.getLastName();
 				
-				int width = g.getFontMetrics().stringWidth(name);
-				g2.drawString(name, (this.getWidth() - width) / 2, 135);
+				width = g.getFontMetrics().stringWidth(name);
+				g2.drawString(name, (this.getWidth() - width) / 2, 140);
 				
 				g2.setFont(font.deriveFont((float) 14.0).deriveFont(Font.PLAIN));
 				

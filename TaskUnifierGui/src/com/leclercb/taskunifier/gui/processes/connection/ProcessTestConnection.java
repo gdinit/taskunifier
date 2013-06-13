@@ -91,7 +91,7 @@ public class ProcessTestConnection implements Process<HttpResponse> {
 					@Override
 					public HttpResponse call() throws Exception {
 						return HttpUtils.getHttpGetResponse(new URI(
-								Constants.TEST_CONNECTION));
+								Constants.TEST_CONNECTION_URL));
 					}
 					
 				}, Constants.TIMEOUT_HTTP_CALL);
