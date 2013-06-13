@@ -32,7 +32,6 @@
  */
 package com.leclercb.taskunifier.gui.processes.synchronization;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -71,8 +70,6 @@ import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 
 public class ProcessSynchronize implements Process<Void> {
 	
-	private static int NO_LICENSE_COUNT = 0;
-	
 	public enum Type {
 		
 		PUBLISH,
@@ -110,7 +107,6 @@ public class ProcessSynchronize implements Process<Void> {
 		
 		Synchronizing.getInstance().setSynchronizing(true);
 		
-		boolean noLicense = false;
 		SynchronizerGuiPlugin plugin = null;
 		
 		try {
@@ -156,94 +152,6 @@ public class ProcessSynchronize implements Process<Void> {
 				}
 				
 				SynchronizerUtils.initializeProxy(plugin);
-				
-				if (plugin.needsLicense()) {
-					boolean betaExp = false;
-					if (Constants.BETA_SYNC_EXP != null) {
-						Calendar betaExpDate = Calendar.getInstance();
-						SimpleDateFormat dateFormat = new SimpleDateFormat(
-								"dd/MM/yyyy");
-						betaExpDate.setTime(dateFormat.parse(Constants.BETA_SYNC_EXP));
-						betaExp = Calendar.getInstance().compareTo(betaExpDate) > 0;
-					}
-					
-					if (!Constants.BETA || (Constants.BETA && betaExp)) {
-						monitor.addMessage(new SynchronizerDefaultProgressMessage(
-								Translations.getString(
-										"synchronizer.checking_license",
-										plugin.getSynchronizerApi().getApiName()),
-								ImageUtils.getResourceImage("key.png", 16, 16)));
-						
-						boolean checkLicense = false;
-						
-						try {
-							checkLicense = plugin.checkLicense();
-						} catch (SynchronizerException exc) {
-							GuiLogger.getLogger().log(
-									Level.WARNING,
-									"Cannot check license of plugin "
-											+ plugin.getId(),
-									exc);
-						}
-						
-						if (!checkLicense) {
-							noLicense = true;
-							
-							String key = "synchronizer.no_license_count."
-									+ plugin.getId();
-							int noLicenseCount = Main.getSettings().getIntegerProperty(
-									key,
-									0);
-							noLicenseCount++;
-							Main.getSettings().setIntegerProperty(
-									key,
-									noLicenseCount);
-							
-							if (noLicenseCount > Constants.MAX_NO_LICENSE_SYNCS) {
-								monitor.addMessage(new SynchronizerDefaultProgressMessage(
-										Translations.getString("synchronizer.max_no_license_syncs_reached"),
-										ImageUtils.getResourceImage(
-												"error.png",
-												16,
-												16)));
-								
-								monitor.addMessage(new SynchronizerDefaultProgressMessage(
-										"----------"));
-								
-								continue;
-							} else {
-								monitor.addMessage(new SynchronizerDefaultProgressMessage(
-										Translations.getString(
-												"synchronizer.max_no_license_syncs_left",
-												Constants.MAX_NO_LICENSE_SYNCS
-														- noLicenseCount),
-										ImageUtils.getResourceImage(
-												"key.png",
-												16,
-												16)));
-							}
-							
-							int waitTime = Constants.WAIT_NO_LICENSE_TIME;
-							
-							waitTime += NO_LICENSE_COUNT
-									* Constants.WAIT_NO_LICENSE_ADDED_TIME;
-							
-							monitor.addMessage(new SynchronizerDefaultProgressMessage(
-									Translations.getString(
-											"synchronizer.wait_no_license",
-											waitTime),
-									ImageUtils.getResourceImage(
-											"clock.png",
-											16,
-											16)));
-							
-							Thread.sleep(waitTime * 1000);
-							
-							if (worker.isCancelled())
-								return null;
-						}
-					}
-				}
 				
 				monitor.addMessage(new SynchronizerDefaultProgressMessage(
 						Translations.getString(
@@ -363,9 +271,6 @@ public class ProcessSynchronize implements Process<Void> {
 			monitor.addMessage(new SynchronizerDefaultProgressMessage(
 					Translations.getString("synchronizer.synchronization_fully_completed"),
 					ImageUtils.getResourceImage("success.png", 16, 16)));
-			
-			if (noLicense)
-				NO_LICENSE_COUNT++;
 		} catch (InterruptedException e) {
 			return null;
 		} catch (Throwable t) {
