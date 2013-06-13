@@ -1,6 +1,13 @@
 HISTORY
 -------
 
+Version 4.0.0
+	- Major:
+		- Release of TaskUnifier Pro
+		- Pro feature: Add/remove custom task columns
+		- Pro feature: Group your tasks
+		- Pro feature: Synchronization and publication
+
 Version 3.2.5
 	- Major:
 		- Sorting error with titles

@@ -75,16 +75,6 @@ public class PluginListRenderer implements ListCellRenderer {
 			boolean cellHasFocus) {
 		Plugin plugin = (Plugin) value;
 		
-		String price = null;
-		if (plugin.getPrice() == null || plugin.getPrice().length() == 0) {
-			price = Translations.getString("plugin.price.free");
-		} else {
-			price = plugin.getPrice()
-					+ " ("
-					+ Translations.getString("plugin.price.free_trial")
-					+ ")";
-		}
-		
 		StringBuffer text = new StringBuffer();
 		text.append("<b>"
 				+ plugin.getName()
@@ -93,9 +83,7 @@ public class PluginListRenderer implements ListCellRenderer {
 				+ "<br />");
 		text.append(Translations.getString("plugin.author")
 				+ ": "
-				+ plugin.getAuthor()
-				+ "<br />");
-		text.append(Translations.getString("plugin.price") + ": " + price);
+				+ plugin.getAuthor());
 		
 		if (isSelected) {
 			this.panel.setBackground(UIManager.getColor("List.selectionBackground"));

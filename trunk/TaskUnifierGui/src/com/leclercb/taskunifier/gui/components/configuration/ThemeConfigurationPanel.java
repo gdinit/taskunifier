@@ -109,10 +109,6 @@ public class ThemeConfigurationPanel extends ConfigurationPanel implements Actio
 	}
 	
 	private void checkTaskCustomColumnListPanel() {
-		// TODO: PRO
-		if (!Main.isTmpProVersion())
-			return;
-		
 		if (Main.isProVersion()) {
 			if (this.taskCustomColumnListConfigurationIndex == -1) {
 				this.tabbedPane.addTab(

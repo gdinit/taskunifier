@@ -147,11 +147,8 @@ public class MenuBar extends JMenuBar implements ListChangeListener, PropertyCha
 		JMenu fileMenu = new JMenu(Translations.getString("menu.file"));
 		this.add(fileMenu);
 		
-		// TODO: PRO
-		if (Main.isTmpProVersion()) {
-			fileMenu.add(new ActionManageLicense(16, 16));
-			fileMenu.addSeparator();
-		}
+		fileMenu.add(new ActionManageLicense(16, 16));
+		fileMenu.addSeparator();
 		
 		fileMenu.add(new ActionNewWindow(16, 16));
 		fileMenu.add(new ActionCloseWindow(16, 16));
@@ -174,10 +171,8 @@ public class MenuBar extends JMenuBar implements ListChangeListener, PropertyCha
 		importMenu.add(new ActionImportModels(16, 16));
 		importMenu.add(new ActionImportSettings(16, 16));
 		importMenu.add(new ActionImportNoteSearchers(16, 16));
-		// TODO: PRO
-		if (Main.isTmpProVersion()) {
+		if (Main.isDeveloperMode())
 			importMenu.add(new ActionImportTaskRules(16, 16));
-		}
 		importMenu.add(new ActionImportTaskSearchers(16, 16));
 		importMenu.add(new ActionImportTaskTemplates(16, 16));
 		importMenu.add(new ActionImportVCard(16, 16));
@@ -189,10 +184,8 @@ public class MenuBar extends JMenuBar implements ListChangeListener, PropertyCha
 		exportMenu.add(new ActionExportModels(16, 16));
 		exportMenu.add(new ActionExportSettings(16, 16));
 		exportMenu.add(new ActionExportNoteSearchers(16, 16));
-		// TODO: PRO
-		if (Main.isTmpProVersion()) {
+		if (Main.isDeveloperMode())
 			exportMenu.add(new ActionExportTaskRules(16, 16));
-		}
 		exportMenu.add(new ActionExportTaskSearchers(16, 16));
 		exportMenu.add(new ActionExportTaskTemplates(16, 16));
 		exportMenu.add(new ActionExportVCard(16, 16));
@@ -286,14 +279,9 @@ public class MenuBar extends JMenuBar implements ListChangeListener, PropertyCha
 		
 		tasksMenu.addSeparator();
 		
-		// TODO: PRO
-		if (Main.isTmpProVersion()) {
-			tasksMenu.add(new ActionManageTaskCustomColumns(16, 16));
-		}
-		// TODO: PRO
-		if (Main.isTmpProVersion()) {
+		tasksMenu.add(new ActionManageTaskCustomColumns(16, 16));
+		if (Main.isDeveloperMode())
 			tasksMenu.add(new ActionManageTaskRules(16, 16));
-		}
 		tasksMenu.add(new ActionManageTaskTemplates(16, 16));
 		tasksMenu.add(new ActionCreateTaskTemplateFromTask(16, 16));
 		tasksMenu.add(new ActionTaskReminders(16, 16));

@@ -32,16 +32,10 @@
  */
 package com.leclercb.taskunifier.gui.components.synchronize;
 
-import java.util.logging.Level;
-
 import javax.swing.Icon;
-import javax.swing.JButton;
 
 import com.leclercb.commons.api.progress.ProgressMessageTransformer;
 import com.leclercb.commons.api.progress.event.ProgressMessageAddedEvent;
-import com.leclercb.commons.gui.logger.GuiLogger;
-import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
-import com.leclercb.taskunifier.gui.actions.ActionGetSerial;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.components.synchronize.progress.SynchronizerProgressMessageTransformer;
 import com.leclercb.taskunifier.gui.processes.synchronization.ProcessSynchronize;
@@ -51,12 +45,8 @@ import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class SynchronizerDialog extends TUWorkerDialog<Void> {
 	
-	private boolean serialNeeded;
-	
 	public SynchronizerDialog() {
 		super(Translations.getString("general.synchronization"));
-		
-		this.serialNeeded = false;
 		
 		final SynchronizerWorker worker = new SynchronizerWorker(false);
 		this.setWorker(worker);
@@ -65,21 +55,6 @@ public class SynchronizerDialog extends TUWorkerDialog<Void> {
 	public void add(SynchronizerGuiPlugin plugin, ProcessSynchronize.Type type) {
 		SynchronizerWorker worker = (SynchronizerWorker) this.getWorker();
 		worker.add(plugin, type);
-		
-		try {
-			if (!this.serialNeeded
-					&& plugin.needsLicense()
-					&& plugin.getLicenseUrl() != null
-					&& !plugin.checkLicense()) {
-				this.serialNeeded = true;
-				this.setSouthComponent(new JButton(new ActionGetSerial(
-						22,
-						22,
-						plugin.getLicenseUrl())));
-			}
-		} catch (SynchronizerException e) {
-			GuiLogger.getLogger().log(Level.WARNING, "Cannot check license", e);
-		}
 	}
 	
 	@Override

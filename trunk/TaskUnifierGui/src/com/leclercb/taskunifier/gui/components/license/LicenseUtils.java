@@ -33,6 +33,7 @@
 package com.leclercb.taskunifier.gui.components.license;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -53,20 +54,19 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
-import com.leclercb.taskunifier.gui.resources.Resources;
 
 public final class LicenseUtils {
 	
 	private static final String PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC"
-			+ "AQEAjbWn5Ts0sjDudj1oXHQnsRM5+H44nB+YF02Z"
-			+ "kK+zk7wJNCPjXJj518PjMC4GMExGmU+fb7q1PyWk"
-			+ "+39n/eMvov2Bfcvjzu0jxsrv9yzEaaRLdiD17GEz"
-			+ "KM8lOmUvBMN5sUGP+d86mGQT/6Akboi7RgI1q6p6"
-			+ "eXlwVOZpc8xNMtoAyoWBQg1X5aXneKSerxbuQ59Z"
-			+ "1E7u5myEbEVzJuYhOE8RVsAvtotMw+LjREymPttr"
-			+ "trMcqCzRMD3UVdDP/eolsD4mGzKVzweDbY2fWG2G"
-			+ "Tp8ImkCArQsH5YGfBSlPyuZ4O2bU/qszJ3KYJRTe"
-			+ "Vw/71cdeA6DCVuDR3BynEbRzZwIDAQAB";
+			+ "AQEA3wa0vKG6WaNPIHEWyatoV1UbyrSsTgzBLw+p"
+			+ "E2ooWfelvYkcNOu/kqLZK9foQnt2moqCgZdKrNEU"
+			+ "rFtgaNc2Ks3shF2tQR8GLsVIExm//4w0bdMOpbLI"
+			+ "JGnGqI6AAYHoUSFykglQ7ZnAsjEtgyxFQqhI3LSE"
+			+ "AxgqQtRXmKSGPOx59mmDTlRfMGT7joNJMRGyCq/N"
+			+ "bwLWGz5R5+VLcxiuOXEfz4fKeswfRbvx5L7q8Fi0"
+			+ "FXcwTaRpdM5SC4jaSPqJmT+Mk8Z6CYkojzmy3YMf"
+			+ "tbKq6tdps1eUKQ4nV5Qf8BJrrbfuqK14kJ7vqddv"
+			+ "GtGmpeGFGFwc/uTbVzIlpDRbtQIDAQAB";
 	
 	private static License LICENSE;
 	
@@ -145,7 +145,7 @@ public final class LicenseUtils {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		boolean generateKey = false;
+		boolean generateKey = true;
 		boolean encodeKey = true;
 		
 		if (generateKey) {
@@ -156,13 +156,16 @@ public final class LicenseUtils {
 			os = new FileOutputStream(
 					"src\\com\\leclercb\\taskunifier\\gui\\resources\\public_key");
 			IOUtils.write(keyPair.getPublic().getEncoded(), os);
+			os.close();
 			
 			os = new FileOutputStream("private_key");
 			IOUtils.write(keyPair.getPrivate().getEncoded(), os);
+			os.close();
 		}
 		
 		if (encodeKey) {
-			InputStream publicKey = Resources.class.getResourceAsStream("public_key");
+			InputStream publicKey = new FileInputStream(
+					"src\\com\\leclercb\\taskunifier\\gui\\resources\\public_key");
 			System.out.println(LicenseManager.keyEncoder(publicKey));
 		}
 	}

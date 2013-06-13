@@ -76,7 +76,6 @@ public class TaskGrouperPanel extends JPanel {
 		
 		JPanel panel = new JPanel(new BorderLayout());
 		
-		// TODO: PRO
 		if (Main.isProVersion()) {
 			panel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 			

@@ -33,7 +33,6 @@
 package com.leclercb.taskunifier.gui.api.synchronizer;
 
 import com.leclercb.taskunifier.api.synchronizer.SynchronizerPlugin;
-import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationPanel;
 
@@ -52,11 +51,5 @@ public interface SynchronizerGuiPlugin extends SynchronizerPlugin {
 	public abstract ConfigurationPanel getConfigurationPanel(
 			ConfigurationGroup configuration,
 			boolean welcome);
-	
-	public abstract String getLicenseUrl();
-	
-	public abstract boolean needsLicense();
-	
-	public abstract boolean checkLicense() throws SynchronizerException;
 	
 }
