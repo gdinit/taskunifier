@@ -30,7 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.tasks.table;
+package com.leclercb.taskunifier.gui.components.notes.table;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -63,46 +63,44 @@ import org.jdesktop.swingx.painter.Painter;
 
 import com.explodingpixels.macwidgets.SourceListStandardColorScheme;
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
-import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.api.models.TaskFactory;
-import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
+import com.leclercb.taskunifier.api.models.Note;
+import com.leclercb.taskunifier.api.models.NoteFactory;
+import com.leclercb.taskunifier.gui.api.searchers.NoteSearcher;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionChangeEvent;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionChangeSupport;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionChangeSupported;
 import com.leclercb.taskunifier.gui.commons.events.ModelSelectionListener;
-import com.leclercb.taskunifier.gui.commons.events.TaskSearcherSelectionChangeEvent;
+import com.leclercb.taskunifier.gui.commons.events.NoteSearcherSelectionChangeEvent;
+import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
+import com.leclercb.taskunifier.gui.components.notes.NoteTableView;
 import com.leclercb.taskunifier.gui.components.print.PrintUtils;
 import com.leclercb.taskunifier.gui.components.print.TablePrintable;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
-import com.leclercb.taskunifier.gui.components.tasks.TaskTableView;
 import com.leclercb.taskunifier.gui.constants.Constants;
-import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.table.TUTableProperties;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
-import com.leclercb.taskunifier.gui.utils.TaskGrouperUtils;
-import com.leclercb.taskunifier.gui.utils.TaskUtils;
+import com.leclercb.taskunifier.gui.utils.NoteGrouperUtils;
 
-public class TaskGroupTable extends JXPanel implements TaskTableView, ModelSelectionChangeSupported, ModelSelectionListener, PropertyChangeSupported, PropertyChangeListener {
+public class NoteGroupTable extends JXPanel implements NoteTableView, ModelSelectionChangeSupported, ModelSelectionListener, PropertyChangeSupported, PropertyChangeListener {
 	
 	private int level;
 	
-	private TUTableProperties<Task> tableProperties;
-	private List<TaskTableView> tables;
-	private TaskSearcher searcher;
-	private List<TaskSearcher> searchers;
+	private TUTableProperties<Note> tableProperties;
+	private List<NoteTableView> tables;
+	private NoteSearcher searcher;
+	private List<NoteSearcher> searchers;
 	private ModelSelectionChangeSupport modelSelectionChangeSupport;
 	private boolean isSelectionAdjusting;
 	
-	public TaskGroupTable(TUTableProperties<Task> tableProperties) {
+	public NoteGroupTable(TUTableProperties<Note> tableProperties) {
 		this(tableProperties, 0);
 	}
 	
-	private TaskGroupTable(TUTableProperties<Task> tableProperties, int level) {
+	private NoteGroupTable(TUTableProperties<Note> tableProperties, int level) {
 		this.level = level;
 		
 		this.tableProperties = tableProperties;
-		this.tables = new ArrayList<TaskTableView>();
+		this.tables = new ArrayList<NoteTableView>();
 		this.searcher = null;
 		this.searchers = null;
 		this.modelSelectionChangeSupport = new ModelSelectionChangeSupport(this);
@@ -154,20 +152,20 @@ public class TaskGroupTable extends JXPanel implements TaskTableView, ModelSelec
 	}
 	
 	@Override
-	public Task[] getSelectedTasks() {
-		List<Task> tasks = new ArrayList<Task>();
+	public Note[] getSelectedNotes() {
+		List<Note> notes = new ArrayList<Note>();
 		
-		for (TaskTableView table : this.tables) {
-			tasks.addAll(Arrays.asList(table.getSelectedTasks()));
+		for (NoteTableView table : this.tables) {
+			notes.addAll(Arrays.asList(table.getSelectedNotes()));
 		}
 		
-		return tasks.toArray(new Task[0]);
+		return notes.toArray(new Note[0]);
 	}
 	
 	@Override
-	public void setSelectedTasks(Task[] tasks) {
-		for (TaskTableView table : this.tables) {
-			table.setSelectedTasks(tasks);
+	public void setSelectedNotes(Note[] notes) {
+		for (NoteTableView table : this.tables) {
+			table.setSelectedNotes(notes);
 		}
 	}
 	
@@ -183,94 +181,94 @@ public class TaskGroupTable extends JXPanel implements TaskTableView, ModelSelec
 	}
 	
 	@Override
-	public void taskSearcherSelectionChange(
-			TaskSearcherSelectionChangeEvent event) {
-		this.searcher = event.getSelectedTaskSearcher();
-		this.searchers = TaskGrouperUtils.getFilters(this.searcher);
+	public void noteSearcherSelectionChange(
+			NoteSearcherSelectionChangeEvent event) {
+		this.searcher = event.getSelectedNoteSearcher();
+		this.searchers = NoteGrouperUtils.getFilters(this.searcher);
 		this.updateTables();
 	}
 	
 	@Override
-	public Task[] getTasks() {
-		List<Task> tasks = new ArrayList<Task>();
+	public Note[] getNotes() {
+		List<Note> notes = new ArrayList<Note>();
 		
-		for (TaskTableView table : this.tables) {
-			tasks.addAll(Arrays.asList(table.getTasks()));
+		for (NoteTableView table : this.tables) {
+			notes.addAll(Arrays.asList(table.getNotes()));
 		}
 		
-		return tasks.toArray(new Task[0]);
+		return notes.toArray(new Note[0]);
 	}
 	
 	@Override
-	public int getTaskCount() {
+	public int getNoteCount() {
 		int count = 0;
 		
-		for (TaskTableView table : this.tables) {
-			count += table.getTaskCount();
+		for (NoteTableView table : this.tables) {
+			count += table.getNoteCount();
 		}
 		
 		return count;
 	}
 	
 	@Override
-	public void setSelectedTaskAndStartEdit(Task task) {
-		for (TaskTableView table : this.tables) {
-			table.setSelectedTaskAndStartEdit(task);
+	public void setSelectedNoteAndStartEdit(Note note) {
+		for (NoteTableView table : this.tables) {
+			table.setSelectedNoteAndStartEdit(note);
 		}
 	}
 	
 	@Override
-	public void refreshTasks() {
-		for (TaskTableView table : this.tables) {
-			table.refreshTasks();
+	public void refreshNotes() {
+		for (NoteTableView table : this.tables) {
+			table.refreshNotes();
 		}
 	}
 	
 	@Override
 	public void setSearchText(String searchText) {
-		for (TaskTableView table : this.tables) {
+		for (NoteTableView table : this.tables) {
 			table.setSearchText(searchText);
 		}
 	}
 	
 	@Override
-	public void printTasks(boolean selection) throws Exception {
-		Task[] tasks = null;
+	public void printNotes(boolean selection) throws Exception {
+		Note[] notes = null;
 		
 		if (selection)
-			tasks = this.getSelectedTasks();
+			notes = this.getSelectedNotes();
 		else
-			tasks = this.getTasks();
+			notes = this.getNotes();
 		
 		TablePrintable tablePrintable = new TablePrintable(
-				new TaskPrintTable(new TUTableProperties<Task>(
-						TaskColumnList.getInstance(),
+				new NotePrintTable(new TUTableProperties<Note>(
+						NoteColumnList.getInstance(),
 						this.tableProperties.getPropertyName() + ".print",
-						false), tasks),
+						false), notes),
 				PrintMode.NORMAL,
 				0.7,
 				new MessageFormat(Constants.TITLE
 						+ " - "
 						+ this.searcher.getTitle()),
-				new MessageFormat(this.getTaskCount() + " tasks | Page - {0}"));
+				new MessageFormat(this.getNoteCount() + " notes | Page - {0}"));
 		
-		PrintUtils.printTable("view.tasks.print", tablePrintable);
+		PrintUtils.printTable("view.notes.print", tablePrintable);
 	}
 	
 	@Override
-	public void pasteTask() {
-		this.tables.get(0).pasteTask();
+	public void pasteNote() {
+		this.tables.get(0).pasteNote();
 	}
 	
 	@Override
 	public void commitChanges() {
-		for (TaskTableView table : this.tables) {
+		for (NoteTableView table : this.tables) {
 			table.commitChanges();
 		}
 	}
 	
 	public void updateTables() {
-		for (TaskTableView table : this.tables) {
+		for (NoteTableView table : this.tables) {
 			table.removeModelSelectionChangeListener(this);
 			table.removePropertyChangeListener(this);
 		}
@@ -284,12 +282,12 @@ public class TaskGroupTable extends JXPanel implements TaskTableView, ModelSelec
 		
 		if (this.searchers == null
 				|| this.searchers.size() == 0
-				|| !this.doesContainDisplayedTasks(this.searcher)) {
+				|| !this.doesContainDisplayedNotes(this.searcher)) {
 			if (this.level == 0) {
-				TaskTable table = new TaskTable(this.tableProperties);
+				NoteTable table = new NoteTable(this.tableProperties);
 				
 				if (this.searcher != null)
-					table.taskSearcherSelectionChange(new TaskSearcherSelectionChangeEvent(
+					table.noteSearcherSelectionChange(new NoteSearcherSelectionChangeEvent(
 							this,
 							this.searcher));
 				
@@ -305,7 +303,7 @@ public class TaskGroupTable extends JXPanel implements TaskTableView, ModelSelec
 			this.validate();
 			this.repaint();
 			
-			this.firePropertyChange(PROP_TASK_COUNT, null, this.getTaskCount());
+			this.firePropertyChange(PROP_NOTE_COUNT, null, this.getNoteCount());
 			
 			return;
 		}
@@ -314,8 +312,8 @@ public class TaskGroupTable extends JXPanel implements TaskTableView, ModelSelec
 		mainPanel.setLayout(new MigLayout("insets 0 0 0 0"));
 		mainPanel.setOpaque(false);
 		
-		for (TaskSearcher searcher : this.searchers) {
-			if (this.doesContainDisplayedTasks(searcher)) {
+		for (NoteSearcher searcher : this.searchers) {
+			if (this.doesContainDisplayedNotes(searcher)) {
 				JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 				titlePanel.setOpaque(false);
 				
@@ -370,8 +368,8 @@ public class TaskGroupTable extends JXPanel implements TaskTableView, ModelSelec
 				if (searcher.getGrouper().getElementCount() == 0) {
 					JPanel tablePanel = new JPanel(new BorderLayout());
 					tablePanel.setOpaque(false);
-					TaskTable table = new TaskTable(this.tableProperties);
-					table.taskSearcherSelectionChange(new TaskSearcherSelectionChangeEvent(
+					NoteTable table = new NoteTable(this.tableProperties);
+					table.noteSearcherSelectionChange(new NoteSearcherSelectionChangeEvent(
 							this,
 							searcher));
 					tablePanel.add(table.getTableHeader(), BorderLayout.NORTH);
@@ -382,10 +380,10 @@ public class TaskGroupTable extends JXPanel implements TaskTableView, ModelSelec
 					table.addPropertyChangeListener(this);
 					this.tables.add(table);
 				} else {
-					TaskGroupTable table = new TaskGroupTable(
+					NoteGroupTable table = new NoteGroupTable(
 							this.tableProperties,
 							this.level + 1);
-					table.taskSearcherSelectionChange(new TaskSearcherSelectionChangeEvent(
+					table.noteSearcherSelectionChange(new NoteSearcherSelectionChangeEvent(
 							this,
 							searcher));
 					collapsiblePane.add(table, BorderLayout.CENTER);
@@ -412,29 +410,15 @@ public class TaskGroupTable extends JXPanel implements TaskTableView, ModelSelec
 		this.validate();
 		this.repaint();
 		
-		this.firePropertyChange(PROP_TASK_COUNT, null, this.getTaskCount());
+		this.firePropertyChange(PROP_NOTE_COUNT, null, this.getNoteCount());
 	}
 	
-	private boolean doesContainDisplayedTasks(TaskSearcher searcher) {
-		List<Task> tasks = TaskFactory.getInstance().getList();
+	private boolean doesContainDisplayedNotes(NoteSearcher searcher) {
+		List<Note> notes = NoteFactory.getInstance().getList();
 		
-		boolean indentSubtasks = Main.getSettings().getBooleanProperty(
-				"task.indent_subtasks");
-		
-		for (Task task : tasks) {
-			if (indentSubtasks) {
-				if (TaskUtils.showTask(task, null, searcher.getFilter())) {
-					return true;
-				}
-			} else {
-				if (TaskUtils.showUnindentTask(
-						task,
-						null,
-						searcher.getFilter(),
-						false)) {
-					return true;
-				}
-			}
+		for (Note note : notes) {
+			if (searcher.getFilter().include(note, null))
+				return true;
 		}
 		
 		return false;
@@ -447,9 +431,9 @@ public class TaskGroupTable extends JXPanel implements TaskTableView, ModelSelec
 		
 		this.isSelectionAdjusting = true;
 		
-		for (TaskTableView table : this.tables) {
+		for (NoteTableView table : this.tables) {
 			if (table != event.getSource())
-				table.setSelectedTasks(new Task[0]);
+				table.setSelectedNotes(new Note[0]);
 		}
 		
 		this.isSelectionAdjusting = false;
@@ -459,8 +443,8 @@ public class TaskGroupTable extends JXPanel implements TaskTableView, ModelSelec
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
-		if (event.getPropertyName().equals(TaskTableView.PROP_TASK_COUNT)) {
-			this.firePropertyChange(PROP_TASK_COUNT, null, this.getTaskCount());
+		if (event.getPropertyName().equals(NoteTableView.PROP_NOTE_COUNT)) {
+			this.firePropertyChange(PROP_NOTE_COUNT, null, this.getNoteCount());
 		}
 	}
 	

@@ -60,7 +60,7 @@ import com.leclercb.taskunifier.gui.components.modelnote.ModelNotePanel;
 import com.leclercb.taskunifier.gui.components.modelnote.ModelNoteView;
 import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 import com.leclercb.taskunifier.gui.components.notes.NoteTableView;
-import com.leclercb.taskunifier.gui.components.notes.table.NoteTable;
+import com.leclercb.taskunifier.gui.components.notes.table.NoteGroupTable;
 import com.leclercb.taskunifier.gui.components.notesearchertree.NoteSearcherPanel;
 import com.leclercb.taskunifier.gui.components.notesearchertree.NoteSearcherView;
 import com.leclercb.taskunifier.gui.main.Main;
@@ -263,17 +263,13 @@ public class DefaultNoteView extends JPanel implements NoteView, SavePropertiesL
 	}
 	
 	private void initializeNoteTable(JPanel middlePane) {
-		this.noteTable = new NoteTable(new TUTableProperties<Note>(
+		this.noteTable = new NoteGroupTable(new TUTableProperties<Note>(
 				NoteColumnList.getInstance(),
 				"note",
 				false));
 		
 		JPanel notePanel = new JPanel(new BorderLayout());
-		notePanel.add(
-				ComponentFactory.createJScrollPane(
-						this.noteTable.getComponent(),
-						false),
-				BorderLayout.CENTER);
+		notePanel.add(this.noteTable.getComponent(), BorderLayout.CENTER);
 		
 		this.noteSearcherPanel.addNoteSearcherSelectionChangeListener(this.noteTable);
 		this.noteSearcherPanel.addPropertyChangeListener(
