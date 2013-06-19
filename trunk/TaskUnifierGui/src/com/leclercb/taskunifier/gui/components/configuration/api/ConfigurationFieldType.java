@@ -69,7 +69,11 @@ import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
+import com.leclercb.taskunifier.api.models.Model;
+import com.leclercb.taskunifier.api.models.ModelList;
+import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.gui.swing.TUFileField;
+import com.leclercb.taskunifier.gui.swing.TUModelListField;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public interface ConfigurationFieldType<ComponentType extends JComponent, ValueType> {
@@ -894,6 +898,73 @@ public interface ConfigurationFieldType<ComponentType extends JComponent, ValueT
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
 			this.setFile(FileChooser.this.getPropertyValue());
+		}
+		
+	}
+	
+	public static class ModelListField<M extends Model> extends TUModelListField<M> implements ConfigurationFieldType<TUModelListField<M>, ModelList<M>>, PropertyChangeListener {
+		
+		private boolean first;
+		private PropertyMap settings;
+		private String propertyName;
+		
+		public ModelListField(
+				PropertyMap settings,
+				String propertyName,
+				ModelType type) {
+			super(type);
+			
+			this.first = true;
+			this.settings = settings;
+			this.propertyName = propertyName;
+		}
+		
+		@Override
+		public void initializeFieldComponent() {
+			ModelList<M> modelList = getPropertyValue();
+			
+			this.setModelList(modelList);
+			
+			if (this.first) {
+				this.first = false;
+				
+				this.settings.addPropertyChangeListener(
+						propertyName,
+						new WeakPropertyChangeListener(this.settings, this));
+			}
+		}
+		
+		@Override
+		public TUModelListField<M> getFieldComponent() {
+			return this;
+		}
+		
+		@Override
+		public ModelList<M> getFieldValue() {
+			return this.getModelList();
+		}
+		
+		@SuppressWarnings("unchecked")
+		@Override
+		public ModelList<M> getPropertyValue() {
+			return this.settings.getObjectProperty(
+					propertyName,
+					ModelList.class);
+		}
+		
+		@Override
+		public void saveAndApplyConfig() {
+			this.settings.setObjectProperty(
+					propertyName,
+					ModelList.class,
+					this.getFieldValue());
+		}
+		
+		@Override
+		public void propertyChange(PropertyChangeEvent event) {
+			ModelList<M> modelList = getPropertyValue();
+			
+			this.setModelList(modelList);
 		}
 		
 	}
