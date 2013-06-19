@@ -4,6 +4,8 @@ Version 4.0.0
 		- Pro feature: Add/remove custom task columns
 		- Pro feature: Group your tasks
 		- Pro feature: Synchronization and publication
+	- Minor:
+		- BF 328: Drop down for length field
 
 Version 3.2.5
 	- Major:
