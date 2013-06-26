@@ -9,6 +9,7 @@ Version 4.0.0
 		- Pro feature: Synchronization and publication
 	- Minor:
 		- BF 328: Drop down for length field
+		- FR 190: Move task in week list view
 
 Version 3.2.5
 	- Major:
