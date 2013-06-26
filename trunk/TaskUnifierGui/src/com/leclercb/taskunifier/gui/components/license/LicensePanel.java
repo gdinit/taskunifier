@@ -42,7 +42,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.InputStream;
 import java.util.logging.Level;
 
@@ -65,7 +64,6 @@ import com.leclercb.commons.api.license.exceptions.LicenseVersionExpiredExceptio
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
 import com.leclercb.taskunifier.gui.commons.values.StringValueLicenseType;
-import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.resources.Resources;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
@@ -311,7 +309,9 @@ public class LicensePanel extends JPanel {
 								Level.INFO,
 								null);
 						
-						JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
+						JXErrorPane.showDialog(
+								FrameUtils.getCurrentWindow(),
+								info);
 						
 						return;
 					}
@@ -332,7 +332,7 @@ public class LicensePanel extends JPanel {
 					"Incorrect license: " + license,
 					e);
 		}
-
+		
 		ErrorInfo info = new ErrorInfo(
 				Translations.getString("general.error"),
 				Translations.getString("license.error.invalid_license"),
