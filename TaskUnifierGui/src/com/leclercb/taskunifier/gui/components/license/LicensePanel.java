@@ -42,6 +42,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.InputStream;
 import java.util.logging.Level;
 
@@ -52,7 +53,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXHeader;
+import org.jdesktop.swingx.error.ErrorInfo;
 
 import com.leclercb.commons.api.license.License;
 import com.leclercb.commons.api.license.LicenseManager;
@@ -62,6 +65,8 @@ import com.leclercb.commons.api.license.exceptions.LicenseVersionExpiredExceptio
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
 import com.leclercb.taskunifier.gui.commons.values.StringValueLicenseType;
+import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.resources.Resources;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -287,6 +292,8 @@ public class LicensePanel extends JPanel {
 	}
 	
 	private void saveLicense(String license) {
+		Exception exception = null;
+		
 		try {
 			InputStream publicKey = Resources.class.getResourceAsStream("public_key");
 			LicenseManager lm = new LicenseManager(publicKey, null);
@@ -295,7 +302,17 @@ public class LicensePanel extends JPanel {
 			if (l != null) {
 				if (l.getLicenseType() == LicenseType.TRIAL) {
 					if (!LicenseUtils.isFirstTrialLicense()) {
-						// TODO: only one trial license key allowed
+						ErrorInfo info = new ErrorInfo(
+								Translations.getString("general.error"),
+								Translations.getString("license.error.one_trial_maximum"),
+								null,
+								"GUI",
+								null,
+								Level.INFO,
+								null);
+						
+						JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
+						
 						return;
 					}
 				}
@@ -308,13 +325,24 @@ public class LicensePanel extends JPanel {
 						"Incorrect license: " + license);
 			}
 		} catch (Exception e) {
+			exception = e;
+			
 			GuiLogger.getLogger().log(
 					Level.WARNING,
 					"Incorrect license: " + license,
 					e);
 		}
+
+		ErrorInfo info = new ErrorInfo(
+				Translations.getString("general.error"),
+				Translations.getString("license.error.invalid_license"),
+				null,
+				"GUI",
+				exception,
+				Level.WARNING,
+				null);
 		
-		// TODO: license incorrect message
+		JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 	}
 	
 	private class LicenseInfoPanel extends JPanel {
