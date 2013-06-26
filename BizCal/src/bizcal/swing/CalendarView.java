@@ -211,6 +211,10 @@ public abstract class CalendarView {
 		this.font = desc.getFont();
 	}
 	
+	public CalendarListener getCalendarListener() {
+		return this.listener;
+	}
+	
 	public Event[] getSelectedEvents() {
 		return this._selectedEvents.toArray(new Event[0]);
 	}

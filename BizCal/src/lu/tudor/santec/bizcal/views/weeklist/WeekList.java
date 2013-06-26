@@ -3,29 +3,32 @@ package lu.tudor.santec.bizcal.views.weeklist;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
+import lu.tudor.santec.bizcal.views.WeekListViewPanel;
 import bizcal.common.CalendarViewConfig;
 import bizcal.common.Event;
 
 public class WeekList extends JPanel {
 	
 	private CalendarViewConfig config;
+	private WeekListViewPanel parent;
 	
 	private JLabel label;
-	private JList list;
+	private WeekJList list;
 	
-	public WeekList(CalendarViewConfig config) {
+	public WeekList(CalendarViewConfig config, WeekListViewPanel parent) {
 		this.config = config;
+		this.parent = parent;
 		
 		this.label = new JLabel();
 		this.label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -36,7 +39,7 @@ public class WeekList extends JPanel {
 				0,
 				Color.LIGHT_GRAY));
 		
-		this.list = new JList() {
+		this.list = new WeekJList(this.parent) {
 			
 			@Override
 			public String getToolTipText(MouseEvent evt) {
@@ -70,7 +73,15 @@ public class WeekList extends JPanel {
 				Color.LIGHT_GRAY));
 	}
 	
-	public JList getList() {
+	public void setDate(Calendar date) {
+		this.list.setDate(date);
+	}
+	
+	public Calendar getDate() {
+		return this.list.getDate();
+	}
+	
+	public WeekJList getList() {
 		return this.list;
 	}
 	
