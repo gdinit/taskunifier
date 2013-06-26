@@ -134,7 +134,7 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 			this.addPanel(new SettingsPanel(
 					"SETTINGS_DATE",
 					Translations.getString("configuration.tab.date"),
-					new DateConfigurationPanel(this, false)));
+					new DateConfigurationPanel(this, false, true)));
 			
 			this.addPanel(new SettingsPanel(
 					"SETTINGS_SYNCHRONIZATION",
