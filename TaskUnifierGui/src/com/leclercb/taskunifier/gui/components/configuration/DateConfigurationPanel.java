@@ -48,14 +48,19 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class DateConfigurationPanel extends DefaultConfigurationPanel {
 	
+	private boolean welcome;
+	
 	public DateConfigurationPanel(
 			ConfigurationGroup configuration,
-			boolean showAfterRestart) {
+			boolean showAfterRestart,
+			boolean welcome) {
 		super(
 				ConfigurationTab.DATE,
 				configuration,
 				showAfterRestart,
 				"configuration_date");
+		
+		this.welcome = welcome;
 		
 		this.initialize();
 		this.pack();
@@ -117,49 +122,51 @@ public class DateConfigurationPanel extends DefaultConfigurationPanel {
 						"date.use_start_time",
 						Translations.getString("configuration.date.use_start_time"))));
 		
-		this.addField(new ConfigurationField(
-				"SEPARATOR_3",
-				null,
-				new ConfigurationFieldType.Separator()));
-		
-		this.addField(new ConfigurationField(
-				"DAY_START_HOUR",
-				Translations.getString("configuration.date.day_start_hour"),
-				true,
-				new DayStartHourFieldType()));
-		
-		this.addField(new ConfigurationField(
-				"DAY_BREAK_HOUR",
-				Translations.getString("configuration.date.day_break_hour"),
-				true,
-				new DayBreakHourFieldType()));
-		
-		this.addField(new ConfigurationField(
-				"DAY_END_HOUR",
-				Translations.getString("configuration.date.day_end_hour"),
-				true,
-				new DayEndHourFieldType()));
-		
-		this.addField(new ConfigurationField(
-				"SEPARATOR_4",
-				null,
-				new ConfigurationFieldType.Separator()));
-		
-		this.addField(new ConfigurationField(
-				"ALWAYS_SHOW_REMINDER",
-				null,
-				new ConfigurationFieldType.CheckBox(
-						Main.getSettings(),
-						"reminder.always_show_reminder",
-						Translations.getString("configuration.date.reminder.always_show_reminder"))));
-		
-		this.addField(new ConfigurationField(
-				"SHOW_OVERDUE_TASKS",
-				null,
-				new ConfigurationFieldType.CheckBox(
-						Main.getSettings(),
-						"reminder.show_overdue_tasks",
-						Translations.getString("configuration.date.reminder.show_overdue_tasks"))));
+		if (!this.welcome) {
+			this.addField(new ConfigurationField(
+					"SEPARATOR_3",
+					null,
+					new ConfigurationFieldType.Separator()));
+			
+			this.addField(new ConfigurationField(
+					"DAY_START_HOUR",
+					Translations.getString("configuration.date.day_start_hour"),
+					true,
+					new DayStartHourFieldType()));
+			
+			this.addField(new ConfigurationField(
+					"DAY_BREAK_HOUR",
+					Translations.getString("configuration.date.day_break_hour"),
+					true,
+					new DayBreakHourFieldType()));
+			
+			this.addField(new ConfigurationField(
+					"DAY_END_HOUR",
+					Translations.getString("configuration.date.day_end_hour"),
+					true,
+					new DayEndHourFieldType()));
+			
+			this.addField(new ConfigurationField(
+					"SEPARATOR_4",
+					null,
+					new ConfigurationFieldType.Separator()));
+			
+			this.addField(new ConfigurationField(
+					"ALWAYS_SHOW_REMINDER",
+					null,
+					new ConfigurationFieldType.CheckBox(
+							Main.getSettings(),
+							"reminder.always_show_reminder",
+							Translations.getString("configuration.date.reminder.always_show_reminder"))));
+			
+			this.addField(new ConfigurationField(
+					"SHOW_OVERDUE_TASKS",
+					null,
+					new ConfigurationFieldType.CheckBox(
+							Main.getSettings(),
+							"reminder.show_overdue_tasks",
+							Translations.getString("configuration.date.reminder.show_overdue_tasks"))));
+		}
 	}
 	
 }

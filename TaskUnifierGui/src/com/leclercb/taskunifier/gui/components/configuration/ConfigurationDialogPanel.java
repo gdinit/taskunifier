@@ -270,7 +270,10 @@ public class ConfigurationDialogPanel extends TUDialogPanel implements Configura
 	}
 	
 	private void initializeDatePanel() {
-		this.dateConfigurationPanel = new DateConfigurationPanel(this, true);
+		this.dateConfigurationPanel = new DateConfigurationPanel(
+				this,
+				true,
+				false);
 		this.tabbedPane.addTab(
 				Translations.getString("configuration.tab.date"),
 				ComponentFactory.createJScrollPane(
