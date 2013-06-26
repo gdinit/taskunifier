@@ -26,6 +26,7 @@
 package bizcal.common;
 
 import java.awt.Color;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ import bizcal.util.LocaleBroker;
 /**
  * @author Fredrik Bertilsson
  */
-public class Event implements Comparable {
+public class Event implements Comparable, Serializable {
 	
 	// =============================================
 	// constants to store parameters

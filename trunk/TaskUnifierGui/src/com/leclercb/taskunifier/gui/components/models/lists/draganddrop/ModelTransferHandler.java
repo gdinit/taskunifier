@@ -117,8 +117,6 @@ public class ModelTransferHandler<M extends ModelParent<M>> extends TransferHand
 						return false;
 				
 				return true;
-			} else {
-				return true;
 			}
 		}
 		

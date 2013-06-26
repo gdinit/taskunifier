@@ -80,7 +80,7 @@ public class WeekListView extends CalendarView implements MouseListener {
 		};
 		
 		for (int i = 0; i < 7; i++) {
-			this.weekLists[i] = new WeekList(config);
+			this.weekLists[i] = new WeekList(config, parent);
 			this.weekLists[i].getList().addMouseListener(this);
 			this.weekLists[i].getList().addListSelectionListener(
 					selectionListener);
@@ -178,6 +178,7 @@ public class WeekListView extends CalendarView implements MouseListener {
 					}
 				}
 				
+				this.weekLists[i].setDate(day);
 				this.weekLists[i].setEvents(dayEvents, day.getTime());
 			}
 		}
