@@ -111,11 +111,11 @@ public enum PropertyAccessorType {
 	CONTACT(Contact.class, true),
 	CONTEXT(Context.class, true),
 	CONTEXTS(ModelList.class, false),
-	DOUBLE(Double.class, true),
+	DOUBLE(Double.class, false),
 	FOLDER(Folder.class, true),
 	GOAL(Goal.class, true),
 	GOALS(ModelList.class, false),
-	INTEGER(Integer.class, true),
+	INTEGER(Integer.class, false),
 	LOCATION(Location.class, true),
 	LOCATIONS(ModelList.class, false),
 	MINUTES(Integer.class, true),
@@ -128,7 +128,7 @@ public enum PropertyAccessorType {
 	STAR(Boolean.class, true),
 	TASK(Task.class, true),
 	TAGS(String.class, false),
-	TIME(Integer.class, true),
+	TIME(Integer.class, false),
 	TIMER(Timer.class, false),
 	VOID(Void.class, false);
 	
