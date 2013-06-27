@@ -351,12 +351,6 @@ public final class TaskGrouperUtils {
 				searchers.add(s);
 				
 				break;
-			case DOUBLE:
-				// TODO
-			case INTEGER:
-				// TODO
-			case TIME:
-				// TODO
 			default:
 				s = searcher.clone();
 				setTitle(element, s, element.getProperty().toString());
