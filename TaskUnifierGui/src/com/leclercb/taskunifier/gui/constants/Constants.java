@@ -82,9 +82,9 @@ public final class Constants {
 	
 	public static final String PLUGINS_FILE = "http://www.taskunifier.com/plugins/plugins.xml";
 	public static final String VERSION_FILE = "http://www.taskunifier.com/version.txt";
-	public static final String PRO_URL = "http://www.taskunifier.com/index.php?page=pro";
-	public static final String GET_TRIAL_URL = "http://www.taskunifier.com/php/services/trial_license.php";
-	public static final String DOWNLOAD_URL = "http://www.taskunifier.com/index.php?page=download";
+	public static final String PRO_URL = "http://www.taskunifier.com/pages/pro";
+	public static final String GET_TRIAL_URL = "http://www.taskunifier.com/services/trial_license";
+	public static final String DOWNLOAD_URL = "http://www.taskunifier.com/pages/download";
 	public static final String DONATE_URL = "http://sourceforge.net/p/taskunifier/donate/";
 	public static final String REVIEW_URL = "http://sourceforge.net/p/taskunifier/reviews/";
 	public static final String FORUM_URL = "http://sourceforge.net/p/taskunifier/discussion/";
