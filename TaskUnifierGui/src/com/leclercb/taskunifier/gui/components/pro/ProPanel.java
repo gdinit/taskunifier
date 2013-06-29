@@ -33,6 +33,7 @@
 package com.leclercb.taskunifier.gui.components.pro;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -87,11 +88,23 @@ public class ProPanel extends JPanel implements ActionSupported, PropertyChangeL
 		this.setLayout(new BorderLayout());
 		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout());
+		panel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		
+		this.add(panel, BorderLayout.CENTER);
+		
+		JPanel insidePanel = new JPanel();
+		insidePanel.setLayout(new BorderLayout());
+		insidePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		
+		panel.add(insidePanel, BorderLayout.CENTER);
+		
 		JXLabel label = new JXLabel(
 				Translations.getString("license.pro_version_required"));
 		label.setLineWrap(true);
 		
-		this.add(label, BorderLayout.CENTER);
+		insidePanel.add(label, BorderLayout.CENTER);
 		
 		ActionListener listener = new ActionListener() {
 			
@@ -141,6 +154,8 @@ public class ProPanel extends JPanel implements ActionSupported, PropertyChangeL
 		this.enterLicenseButton.addActionListener(listener);
 		
 		this.buttonsPanel = new TUButtonsPanel(
+				false,
+				true,
 				this.moreInfoButton,
 				this.getTrialButton,
 				this.buyLicenseButton,

@@ -48,6 +48,7 @@ import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -190,6 +191,11 @@ public class LicensePanel extends JPanel {
 				10,
 				0,
 				10));
+		
+		this.licenseEnter.add(
+				new JLabel(Translations.getString("license.enter_license")
+						+ ": "),
+				BorderLayout.NORTH);
 		
 		this.licenseArea = new JTextArea();
 		
