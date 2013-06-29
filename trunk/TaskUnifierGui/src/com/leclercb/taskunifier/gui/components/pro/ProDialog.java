@@ -46,7 +46,7 @@ public class ProDialog extends TUDialog {
 	private void initialize() {
 		this.setModal(true);
 		this.setTitle(Constants.TITLE_PRO);
-		this.setSize(700, 300);
+		this.setSize(800, 300);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		
