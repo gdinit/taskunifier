@@ -104,7 +104,7 @@ public class NoteGrouperPanel extends JPanel {
 			
 			this.initializeButtons();
 		} else {
-			panel.add(new ProPanel(), BorderLayout.CENTER);
+			panel.add(new ProPanel(true), BorderLayout.CENTER);
 			
 			this.add(panel, BorderLayout.CENTER);
 		}

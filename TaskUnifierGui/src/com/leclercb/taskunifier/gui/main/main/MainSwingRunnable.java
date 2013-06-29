@@ -108,7 +108,8 @@ public class MainSwingRunnable implements Runnable {
 			Main.handleArguments(this.args);
 			
 			if (Main.isFirstExecution()) {
-				ActionSynchronizeAndPublish.synchronizeAndPublish(false);
+				if (Main.isProVersion())
+					ActionSynchronizeAndPublish.synchronizeAndPublish(false);
 			} else {
 				boolean syncStart = Main.getUserSettings().getBooleanProperty(
 						"synchronizer.sync_start");

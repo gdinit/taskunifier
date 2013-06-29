@@ -41,6 +41,8 @@ import javax.swing.JPanel;
 import org.jdesktop.swingx.JXHeader;
 
 import com.leclercb.taskunifier.gui.components.license.LicenseUtils;
+import com.leclercb.taskunifier.gui.components.pro.ProPanel;
+import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
@@ -62,13 +64,24 @@ public class LicensePanel extends CardPanel {
 		this.add(header, BorderLayout.NORTH);
 		
 		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		
-		com.leclercb.taskunifier.gui.components.license.LicensePanel licensePanel = new com.leclercb.taskunifier.gui.components.license.LicensePanel();
-		licensePanel.setLicense(LicenseUtils.loadLicense(), false);
-		licensePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		
-		mainPanel.add(licensePanel);
+		if (Main.isProVersion()) {
+			mainPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+			
+			com.leclercb.taskunifier.gui.components.license.LicensePanel licensePanel = new com.leclercb.taskunifier.gui.components.license.LicensePanel();
+			licensePanel.setLicense(LicenseUtils.loadLicense(), false);
+			licensePanel.setBorder(BorderFactory.createEmptyBorder(
+					20,
+					20,
+					20,
+					20));
+			mainPanel.add(licensePanel);
+		} else {
+			mainPanel.setLayout(new BorderLayout());
+			
+			ProPanel proPanel = new ProPanel(false);
+			mainPanel.add(proPanel);
+		}
 		
 		this.add(mainPanel, BorderLayout.CENTER);
 	}
