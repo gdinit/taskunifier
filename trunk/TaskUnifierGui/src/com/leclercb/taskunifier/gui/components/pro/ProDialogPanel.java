@@ -61,7 +61,7 @@ public class ProDialogPanel extends TUDialogPanel {
 	private void initialize() {
 		this.setLayout(new BorderLayout());
 		
-		this.proPanel = new ProPanel();
+		this.proPanel = new ProPanel(true);
 		this.add(this.proPanel, BorderLayout.CENTER);
 		
 		this.proPanel.addActionListener(new ActionListener() {

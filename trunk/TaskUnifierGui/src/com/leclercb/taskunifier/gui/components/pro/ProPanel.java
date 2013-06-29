@@ -67,6 +67,8 @@ public class ProPanel extends JPanel implements ActionSupported, PropertyChangeL
 	
 	private ActionSupport actionSupport;
 	
+	private boolean feature;
+	
 	private TUButtonsPanel buttonsPanel;
 	
 	private JButton moreInfoButton;
@@ -74,8 +76,10 @@ public class ProPanel extends JPanel implements ActionSupported, PropertyChangeL
 	private JButton buyLicenseButton;
 	private JButton enterLicenseButton;
 	
-	public ProPanel() {
+	public ProPanel(boolean feature) {
 		this.actionSupport = new ActionSupport(this);
+		
+		this.feature = feature;
 		
 		this.initialize();
 	}
@@ -100,8 +104,12 @@ public class ProPanel extends JPanel implements ActionSupported, PropertyChangeL
 		
 		panel.add(insidePanel, BorderLayout.CENTER);
 		
-		JXLabel label = new JXLabel(
-				Translations.getString("license.pro_version_required"));
+		String message = Translations.getString("license.feature_pro_version_required");
+		
+		if (!this.feature)
+			message = Translations.getString("license.pro_version_required");
+		
+		JXLabel label = new JXLabel(message);
 		label.setLineWrap(true);
 		
 		insidePanel.add(label, BorderLayout.CENTER);
@@ -154,8 +162,6 @@ public class ProPanel extends JPanel implements ActionSupported, PropertyChangeL
 		this.enterLicenseButton.addActionListener(listener);
 		
 		this.buttonsPanel = new TUButtonsPanel(
-				false,
-				true,
 				this.moreInfoButton,
 				this.getTrialButton,
 				this.buyLicenseButton,
