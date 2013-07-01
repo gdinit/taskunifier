@@ -162,6 +162,8 @@ public class ProPanel extends JPanel implements ActionSupported, PropertyChangeL
 		this.enterLicenseButton.addActionListener(listener);
 		
 		this.buttonsPanel = new TUButtonsPanel(
+				false,
+				false,
 				this.moreInfoButton,
 				this.getTrialButton,
 				this.buyLicenseButton,

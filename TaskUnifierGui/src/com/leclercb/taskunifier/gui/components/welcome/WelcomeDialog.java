@@ -115,6 +115,27 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 			this.addPanel(new LicensePanel("LICENSE") {
 				
 				@Override
+				public void display() {
+					Main.getActionSupport().addActionListener(
+							new ActionListener() {
+								
+								@Override
+								public void actionPerformed(ActionEvent event) {
+									if (EqualsUtils.equals(
+											event.getActionCommand(),
+											"PRO_VERSION")) {
+										if (Main.isProVersion()) {
+											WelcomeDialog.this.setPanelVisible(
+													"LICENSE",
+													false);
+										}
+									}
+								}
+								
+							});
+				}
+				
+				@Override
 				public boolean next() {
 					if (!Main.isProVersion())
 						WelcomeDialog.this.setPanelVisible(
