@@ -175,6 +175,8 @@ public class LicensePanel extends JPanel {
 		});
 		
 		this.licenseInfoButtonsPanel = new TUButtonsPanel(
+				false,
+				false,
 				this.changeLicenseButton);
 		this.licenseInfoButtonsPanel.setOpaque(false);
 		
@@ -227,6 +229,8 @@ public class LicensePanel extends JPanel {
 		});
 		
 		this.licenseEnterButtonsPanel = new TUButtonsPanel(
+				false,
+				false,
 				this.enterLicenseButton,
 				this.getTrialButton);
 		this.licenseEnter.add(this.licenseEnterButtonsPanel, BorderLayout.SOUTH);
@@ -289,15 +293,16 @@ public class LicensePanel extends JPanel {
 		
 		panel.add(builder.getPanel(), BorderLayout.CENTER);
 		
-		this.licenseGetTrialButtonsPanel = new TUButtonsPanel(getTrialButton);
+		this.licenseGetTrialButtonsPanel = new TUButtonsPanel(
+				false,
+				false,
+				getTrialButton);
 		panel.add(this.licenseGetTrialButtonsPanel, BorderLayout.SOUTH);
 		
 		this.add(this.licenseGetTrial, "GET_TRIAL");
 	}
 	
 	private void saveLicense(String license) {
-		Exception exception = null;
-		
 		try {
 			InputStream publicKey = Resources.class.getResourceAsStream("public_key");
 			LicenseManager lm = new LicenseManager(publicKey, null);
@@ -326,29 +331,25 @@ public class LicensePanel extends JPanel {
 				LicenseUtils.saveLicense(license);
 				this.setLicense(l, false);
 			} else {
-				GuiLogger.getLogger().log(
-						Level.WARNING,
-						"Incorrect license: " + license);
+				throw new Exception("Invalid license: " + license);
 			}
 		} catch (Exception e) {
-			exception = e;
-			
 			GuiLogger.getLogger().log(
 					Level.WARNING,
-					"Incorrect license: " + license,
+					"Invalid license: " + license,
 					e);
+			
+			ErrorInfo info = new ErrorInfo(
+					Translations.getString("general.error"),
+					Translations.getString("license.error.invalid_license"),
+					null,
+					"GUI",
+					e,
+					Level.WARNING,
+					null);
+			
+			JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 		}
-		
-		ErrorInfo info = new ErrorInfo(
-				Translations.getString("general.error"),
-				Translations.getString("license.error.invalid_license"),
-				null,
-				"GUI",
-				exception,
-				Level.WARNING,
-				null);
-		
-		JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
 	}
 	
 	private class LicenseInfoPanel extends JPanel {
