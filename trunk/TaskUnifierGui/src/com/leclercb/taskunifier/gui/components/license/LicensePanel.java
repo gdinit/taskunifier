@@ -365,6 +365,8 @@ public class LicensePanel extends JPanel {
 		public void paintComponent(Graphics g) {
 			super.paintComponents(g);
 			
+			License l = LicensePanel.this.license;
+			
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setRenderingHint(
 					RenderingHints.KEY_ANTIALIASING,
@@ -374,25 +376,33 @@ public class LicensePanel extends JPanel {
 			
 			g2.drawImage(icon.getImage(), 0, 0, null);
 			
-			if (LicensePanel.this.license != null) {
+			if (l != null) {
 				Font font = FontUtils.getResourceFont("constantia.ttf");
 				int width = 0;
 				
-				g2.setFont(font.deriveFont((float) 12.0).deriveFont(Font.PLAIN));
-				
-				String licensedTo = Translations.getString("license.licensed_to");
-				
-				width = g.getFontMetrics().stringWidth(licensedTo);
-				g2.drawString(licensedTo, (this.getWidth() - width) / 2, 120);
-				
-				g2.setFont(font.deriveFont((float) 16.0).deriveFont(Font.BOLD));
-				
-				String name = LicensePanel.this.license.getFirstName()
-						+ " "
-						+ LicensePanel.this.license.getLastName();
-				
-				width = g.getFontMetrics().stringWidth(name);
-				g2.drawString(name, (this.getWidth() - width) / 2, 140);
+				if (l.getFirstName() != null
+						&& l.getFirstName().length() != 0
+						&& l.getLastName() != null
+						&& l.getLastName().length() != 0) {
+					g2.setFont(font.deriveFont((float) 12.0).deriveFont(
+							Font.PLAIN));
+					
+					String licensedTo = Translations.getString("license.licensed_to");
+					
+					width = g.getFontMetrics().stringWidth(licensedTo);
+					g2.drawString(
+							licensedTo,
+							(this.getWidth() - width) / 2,
+							120);
+					
+					g2.setFont(font.deriveFont((float) 16.0).deriveFont(
+							Font.BOLD));
+					
+					String name = l.getFirstName() + " " + l.getLastName();
+					
+					width = g.getFontMetrics().stringWidth(name);
+					g2.drawString(name, (this.getWidth() - width) / 2, 140);
+				}
 				
 				g2.setFont(font.deriveFont((float) 14.0).deriveFont(Font.PLAIN));
 				
@@ -400,35 +410,35 @@ public class LicensePanel extends JPanel {
 						Translations.getString("license.email") + ": ",
 						90,
 						185);
-				g2.drawString(LicensePanel.this.license.getEmail(), 220, 185);
+				g2.drawString(l.getEmail(), 220, 185);
 				g2.drawString(Translations.getString("license.purchase_date")
 						+ ": ", 90, 210);
 				g2.drawString(
-						StringValueCalendar.INSTANCE_DATE.getString(LicensePanel.this.license.getPurchaseDate()),
+						StringValueCalendar.INSTANCE_DATE.getString(l.getPurchaseDate()),
 						220,
 						210);
 				g2.drawString(Translations.getString("license.license_type")
 						+ ": ", 90, 235);
 				g2.drawString(
-						StringValueLicenseType.INSTANCE.getString(LicensePanel.this.license.getLicenseType()),
+						StringValueLicenseType.INSTANCE.getString(l.getLicenseType()),
 						220,
 						235);
 				g2.drawString(
 						Translations.getString("license.version") + ": ",
 						90,
 						260);
-				g2.drawString(LicensePanel.this.license.getVersion(), 220, 260);
+				g2.drawString(l.getVersion(), 220, 260);
 				
 				g2.drawString(Translations.getString("license.expiration")
 						+ ": ", 90, 285);
-				if (LicensePanel.this.license.getExpiration() == null) {
+				if (l.getExpiration() == null) {
 					g2.drawString(
 							Translations.getString("date.never"),
 							220,
 							285);
 				} else {
 					g2.drawString(
-							StringValueCalendar.INSTANCE_DATE.getString(LicensePanel.this.license.getExpiration()),
+							StringValueCalendar.INSTANCE_DATE.getString(l.getExpiration()),
 							220,
 							285);
 				}
@@ -441,7 +451,7 @@ public class LicensePanel extends JPanel {
 							(this.getWidth() - expiredIcon.getIconWidth()) / 2,
 							(this.getHeight() - expiredIcon.getIconHeight()) / 2,
 							null);
-				} else if (LicensePanel.this.license.getLicenseType() == LicenseType.TRIAL) {
+				} else if (l.getLicenseType() == LicenseType.TRIAL) {
 					ImageIcon trialIcon = ImageUtils.getResourceImage(
 							"trial.png",
 							100,
