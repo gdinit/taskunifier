@@ -63,7 +63,9 @@ public class AboutPanel extends JPanel implements ListChangeListener {
 		
 		JLabel icon = new JLabel(
 				ImageUtils.getResourceImage("logo.png", 48, 48));
-		JLabel title = new JLabel(Constants.TITLE + " - " + Constants.VERSION);
+		JLabel title = new JLabel(Constants.TITLE
+				+ " - "
+				+ Constants.getVersion());
 		
 		JTabbedPane tabbedPane = new JTabbedPane();
 		

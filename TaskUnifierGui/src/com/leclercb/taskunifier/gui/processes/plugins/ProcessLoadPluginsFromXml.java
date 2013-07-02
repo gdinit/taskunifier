@@ -138,14 +138,14 @@ public class ProcessLoadPluginsFromXml implements Process<Plugin[]> {
 				// Check min version
 				if (plugin.getMinVersion() != null
 						&& plugin.getMinVersion().length() != 0) {
-					if (Constants.VERSION.compareTo(plugin.getMinVersion()) < 0)
+					if (Constants.getVersion().compareTo(plugin.getMinVersion()) < 0)
 						continue;
 				}
 				
 				// Check max version
 				if (plugin.getMaxVersion() != null
 						&& plugin.getMaxVersion().length() != 0) {
-					if (Constants.VERSION.compareTo(plugin.getMaxVersion()) > 0)
+					if (Constants.getVersion().compareTo(plugin.getMaxVersion()) > 0)
 						continue;
 				}
 				

@@ -234,7 +234,7 @@ public class MainSwingRunnable implements Runnable {
 				&& Constants.BETA) {
 			messages.add(Translations.getString(
 					"welcome.message.beta",
-					Constants.VERSION));
+					Constants.getVersion()));
 		}
 		
 		if (Main.isVersionUpdated()

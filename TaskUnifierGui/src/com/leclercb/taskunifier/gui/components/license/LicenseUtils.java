@@ -129,7 +129,7 @@ public final class LicenseUtils {
 			throw new NoLicenseException();
 		
 		try {
-			license.validate(Calendar.getInstance(), Constants.VERSION);
+			license.validate(Calendar.getInstance(), Constants.getVersion());
 		} catch (LicenseException e) {
 			GuiLogger.getLogger().log(
 					Level.SEVERE,
