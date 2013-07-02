@@ -299,7 +299,10 @@ public class TaskSearcherTransferHandler extends TransferHandler {
 				else
 					category = this.getSearcherCategoryForLocation(support);
 				
-				if (category != null && !category.getType().isEditable())
+				if (category == null)
+					return false;
+				
+				if (!category.getType().isEditable())
 					return false;
 				
 				if (category.getType() == dragSearcher.getType()
