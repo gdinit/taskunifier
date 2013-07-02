@@ -2,12 +2,9 @@
 <project basedir="." default="main" name="TaskUnifierPluginSample">
 	
     <property environment="env"/>
-	
-	<property name="directory.gui" value="../TaskUnifierGui"/>
-	<property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
-    <property name="java.debuglevel" value="source,lines,vars"/>
-    <property name="java.target" value="1.6"/>
-    <property name="java.source" value="1.6"/>
+
+	<property name="directory.exe" value="../TaskUnifierExe"/>
+	<property file="${directory.exe}/build.properties"/>
 	
     <path id="build.classpath">
         <pathelement location="bin"/>
