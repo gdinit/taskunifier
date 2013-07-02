@@ -74,7 +74,7 @@ public final class Constants {
 		
 	}
 	
-	private static String VERSION = "4.0.0";
+	private static String VERSION = null;
 	
 	public static String getVersion() {
 		return VERSION;
