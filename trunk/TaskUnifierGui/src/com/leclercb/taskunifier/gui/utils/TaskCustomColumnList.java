@@ -110,7 +110,7 @@ public final class TaskCustomColumnList implements ListEventSupported<PropertyAc
 				this.items.add(accessor);
 		}
 		
-		pattern = Pattern.compile("custom_field\\.([a-z0-9-]+)\\.([a-z0-9_]+)");
+		pattern = Pattern.compile("task\\.custom_field\\.([a-z0-9-]+)\\.([a-z0-9_]+)");
 		
 		List<Task> tasks = TaskFactory.getInstance().getList();
 		for (Task task : tasks) {
@@ -173,7 +173,7 @@ public final class TaskCustomColumnList implements ListEventSupported<PropertyAc
 		List<Task> tasks = TaskFactory.getInstance().getList();
 		for (Task task : tasks) {
 			task.getProperties().setStringProperty(
-					"custom_field." + uuid + "." + type.name().toLowerCase(),
+					"task.custom_field." + uuid + "." + type.name().toLowerCase(),
 					null);
 		}
 		
@@ -229,7 +229,7 @@ public final class TaskCustomColumnList implements ListEventSupported<PropertyAc
 		
 		List<Task> tasks = TaskFactory.getInstance().getList();
 		for (Task task : tasks) {
-			task.getProperties().remove("custom_field." + uuid + "." + type);
+			task.getProperties().remove("task.custom_field." + uuid + "." + type);
 		}
 		
 		this.items.remove(accessor);
