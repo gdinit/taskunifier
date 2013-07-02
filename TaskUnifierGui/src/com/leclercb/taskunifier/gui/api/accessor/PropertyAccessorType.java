@@ -455,7 +455,7 @@ public enum PropertyAccessorType {
 				break;
 			case CONTACT:
 				this.renderer = new DefaultTableRenderer(new MappedValue(
-						StringValueModel.INSTANCE_NO_VALUE,
+						StringValueModel.INSTANCE,
 						IconValueModel.INSTANCE));
 				break;
 			case CONTEXT:
