@@ -110,6 +110,21 @@ public class TaskContactsPanel extends JPanel implements TaskContactsView, Model
 			
 			@Override
 			public void actionPerformed(ActionEvent evt) {
+				Contact newContact = this.getContact();
+				
+				if (newContact == null) {
+					ActionManageModels.manageModels(ModelConfigurationTab.CONTACTS);
+					newContact = this.getContact();
+					
+					if (newContact == null)
+						return;
+				}
+				
+				TaskContactsPanel.this.table.getContactGroup().add(
+						new ContactItem(newContact, null));
+			}
+			
+			private Contact getContact() {
 				List<Contact> contacts = new ArrayList<Contact>(
 						ContactFactory.getInstance().getList());
 				
@@ -117,21 +132,13 @@ public class TaskContactsPanel extends JPanel implements TaskContactsView, Model
 						contacts,
 						BasicModelComparator.INSTANCE_NULL_LAST);
 				
-				Contact newContact = null;
 				for (Contact contact : contacts) {
 					if (contact.getModelStatus().isEndUserStatus()) {
-						newContact = contact;
-						break;
+						return contact;
 					}
 				}
 				
-				if (newContact == null) {
-					ActionManageModels.manageModels(ModelConfigurationTab.CONTACTS);
-					return;
-				}
-				
-				TaskContactsPanel.this.table.getContactGroup().add(
-						new ContactItem(newContact, null));
+				return null;
 			}
 			
 		};
