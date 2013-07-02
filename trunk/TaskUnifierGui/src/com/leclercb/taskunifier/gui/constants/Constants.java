@@ -33,6 +33,7 @@
 package com.leclercb.taskunifier.gui.constants;
 
 import java.io.InputStream;
+import java.util.Properties;
 import java.util.logging.Level;
 
 import javax.swing.SortOrder;
@@ -60,6 +61,7 @@ import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 import com.leclercb.taskunifier.gui.components.synchronize.progress.NotificationSynchronizerProgressMessageListener;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.resources.Resources;
 import com.leclercb.taskunifier.gui.threads.communicator.progress.NotificationCommunicatorProgressMessageListener;
 import com.leclercb.taskunifier.gui.threads.reminder.progress.NotificationReminderProgressMessageListener;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -72,9 +74,24 @@ public final class Constants {
 		
 	}
 	
+	private static String VERSION = "4.0.0";
+	
+	public static String getVersion() {
+		return VERSION;
+	}
+	
+	static {
+		try {
+			Properties properties = new Properties();
+			properties.load(Resources.class.getResourceAsStream("general.properties"));
+			VERSION = (String) properties.get("version");
+		} catch (Exception e) {
+			GuiLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
+		}
+	}
+	
 	public static final String TITLE = "TaskUnifier";
 	public static final String TITLE_PRO = "TaskUnifier Pro";
-	public static final String VERSION = "4.0.0";
 	public static final boolean BETA = false;
 	public static final String DEFAULT_SUFFIX = "_v3";
 	public static final int PLUGIN_API_VERSION = 40;
@@ -101,11 +118,11 @@ public final class Constants {
 	private static TaskSearcher DEFAULT_TASK_SEARCHER;
 	private static TaskSearcher MAIN_TASK_SEARCHER;
 	
-	public static final ProgressMonitor PROGRESS_MONITOR = new ProgressMonitor();
+	public static ProgressMonitor PROGRESS_MONITOR;
 	
-	public static final TransferActionListener TRANSFER_ACTION_LISTENER = new TransferActionListener();
+	public static TransferActionListener TRANSFER_ACTION_LISTENER;
 	
-	public static final UndoSupport UNDO_SUPPORT = new UndoSupport();
+	public static UndoSupport UNDO_SUPPORT;
 	
 	public static NoteSearcher getDefaultNoteSearcher() {
 		return DEFAULT_NOTE_SEARCHER.clone();
@@ -124,10 +141,14 @@ public final class Constants {
 	}
 	
 	public static void initialize() {
+		PROGRESS_MONITOR = new ProgressMonitor();
+		TRANSFER_ACTION_LISTENER = new TransferActionListener();
+		UNDO_SUPPORT = new UndoSupport();
+		
 		// Notification Listeners
-		Constants.PROGRESS_MONITOR.addProgressMessageAddedListener(new NotificationCommunicatorProgressMessageListener());
-		Constants.PROGRESS_MONITOR.addProgressMessageAddedListener(new NotificationSynchronizerProgressMessageListener());
-		Constants.PROGRESS_MONITOR.addProgressMessageAddedListener(new NotificationReminderProgressMessageListener());
+		PROGRESS_MONITOR.addProgressMessageAddedListener(new NotificationCommunicatorProgressMessageListener());
+		PROGRESS_MONITOR.addProgressMessageAddedListener(new NotificationSynchronizerProgressMessageListener());
+		PROGRESS_MONITOR.addProgressMessageAddedListener(new NotificationReminderProgressMessageListener());
 		
 		// Initialize Searchers
 		initializeNoteSearcher();

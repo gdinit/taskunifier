@@ -144,9 +144,9 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 		this.setIconImage(ImageUtils.getResourceImage("logo.png").getImage());
 		
 		if (Main.isProVersion())
-			this.setTitle(Constants.TITLE_PRO + " - " + Constants.VERSION);
+			this.setTitle(Constants.TITLE_PRO + " - " + Constants.getVersion());
 		else
-			this.setTitle(Constants.TITLE + " - " + Constants.VERSION);
+			this.setTitle(Constants.TITLE + " - " + Constants.getVersion());
 		
 		this.addWindowListener(new WindowAdapter() {
 			
@@ -394,13 +394,13 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 		if (Main.isProVersion())
 			this.setTitle(Constants.TITLE_PRO
 					+ " - "
-					+ Constants.VERSION
+					+ Constants.getVersion()
 					+ " - "
 					+ view.getLabel());
 		else
 			this.setTitle(Constants.TITLE
 					+ " - "
-					+ Constants.VERSION
+					+ Constants.getVersion()
 					+ " - "
 					+ view.getLabel());
 		

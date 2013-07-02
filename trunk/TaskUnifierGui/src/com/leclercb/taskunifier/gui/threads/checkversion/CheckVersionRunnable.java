@@ -72,7 +72,7 @@ public class CheckVersionRunnable implements Runnable {
 			if (version.length() > 10)
 				throw new Exception();
 			
-			if (Constants.VERSION.compareTo(version) < 0) {
+			if (Constants.getVersion().compareTo(version) < 0) {
 				GuiLogger.getLogger().info("New version available : " + version);
 				
 				String showed = Main.getSettings().getStringProperty(
@@ -111,7 +111,7 @@ public class CheckVersionRunnable implements Runnable {
 							FrameUtils.getCurrentWindow(),
 							Translations.getString(
 									"action.check_version.no_new_version_available",
-									Constants.VERSION),
+									Constants.getVersion()),
 							Translations.getString("general.information"),
 							JOptionPane.INFORMATION_MESSAGE);
 				}

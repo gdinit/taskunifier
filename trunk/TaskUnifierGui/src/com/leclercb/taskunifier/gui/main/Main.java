@@ -320,7 +320,7 @@ public class Main {
 					"Loading protocol handlers...");
 			loadCustomProtocolHandlers();
 			
-			VERSION_UPDATED = !Constants.VERSION.equals(PREVIOUS_VERSION);
+			VERSION_UPDATED = !Constants.getVersion().equals(PREVIOUS_VERSION);
 			
 			Constants.initialize();
 			
@@ -422,7 +422,7 @@ public class Main {
 				new SortedProperties(defaultProperties),
 				defaultProperties);
 		
-		PREVIOUS_VERSION = Constants.VERSION;
+		PREVIOUS_VERSION = Constants.getVersion();
 		VERSION_UPDATED = false;
 		OUTDATED_PLUGINS = false;
 		

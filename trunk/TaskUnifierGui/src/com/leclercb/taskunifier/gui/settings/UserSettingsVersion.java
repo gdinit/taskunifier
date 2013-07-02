@@ -54,7 +54,7 @@ public final class UserSettingsVersion {
 				"general.user.version");
 		
 		if (Main.isFirstExecution())
-			version = Constants.VERSION;
+			version = Constants.getVersion();
 		
 		final String oldVersion = version;
 		
@@ -68,7 +68,7 @@ public final class UserSettingsVersion {
 		
 		Main.getUserSettings().setStringProperty(
 				"general.user.version",
-				Constants.VERSION);
+				Constants.getVersion());
 		
 		return oldVersion;
 	}
