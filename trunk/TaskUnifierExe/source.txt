@@ -29,3 +29,11 @@ Run the following external tools configurations:
 - TaskUnifierApi Build + Jar
 - TaskUnifierGui Build + Jar
 - TaskUnifierExe Create Sources and Binaries
+
+---------------------
+Configuration values:
+---------------------
+
+- build.properties
+- tools/innosetup/innosetup.bat:
+	- Line 1: Path to ISCC.exe
