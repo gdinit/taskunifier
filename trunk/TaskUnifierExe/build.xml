@@ -26,6 +26,9 @@
 	</target>
 	
 	<target depends="taskunifier-version-underscored" name="create-sources">
+		<echo message="Deleting existing sources..."/>
+		<delete file="${directory.exe}/sources/TaskUnifier_${taskunifier.version.underscored}_src.zip"/>
+		
 		<echo message="Creating sources zip file..."/>
 		<zip destfile="${directory.exe}/sources/TaskUnifier_${taskunifier.version.underscored}_src.zip">
 		    <zipfileset dir="${directory.api}" prefix="TaskUnifierApi">
@@ -40,6 +43,9 @@
 	</target>
 	
 	<target name="create-binaries">
+		<echo message="Deleting existing binaries..."/>
+		<delete dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
+		
 		<antcall target="create-linux-binary"/>
 		<antcall target="create-mac-binary"/>
 		<antcall target="create-windows-binary"/>
