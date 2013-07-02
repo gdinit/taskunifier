@@ -100,6 +100,7 @@ public final class Constants {
 	public static final String PLUGINS_FILE = "http://www.taskunifier.com/plugins/plugins.xml";
 	public static final String VERSION_FILE = "http://www.taskunifier.com/version.txt";
 	public static final String PRO_URL = "http://www.taskunifier.com/pages/pro";
+	public static final String BUY_URL = "http://www.taskunifier.com/pages/pro#buy";
 	public static final String GET_TRIAL_URL = "http://www.taskunifier.com/services/trial_license";
 	public static final String DOWNLOAD_URL = "http://www.taskunifier.com/pages/download";
 	public static final String DONATE_URL = "http://sourceforge.net/p/taskunifier/donate/";

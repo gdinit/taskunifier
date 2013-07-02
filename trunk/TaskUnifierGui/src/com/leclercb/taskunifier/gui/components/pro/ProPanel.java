@@ -187,7 +187,7 @@ public class ProPanel extends JPanel implements ActionSupported, PropertyChangeL
 	}
 	
 	public void buyLicense() {
-		DesktopUtils.browse(Constants.PRO_URL);
+		DesktopUtils.browse(Constants.BUY_URL);
 		this.actionSupport.fireActionPerformed(0, ACTION_BUY_LICENSE);
 	}
 	
