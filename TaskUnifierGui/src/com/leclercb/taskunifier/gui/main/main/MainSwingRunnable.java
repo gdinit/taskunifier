@@ -60,6 +60,9 @@ import com.leclercb.taskunifier.gui.actions.synchronize.ActionSynchronizeAndPubl
 import com.leclercb.taskunifier.gui.components.tips.TipsDialog;
 import com.leclercb.taskunifier.gui.components.welcome.LanguageDialog;
 import com.leclercb.taskunifier.gui.components.welcome.WelcomeDialog;
+import com.leclercb.taskunifier.gui.components.welcome.panels.CardPanel;
+import com.leclercb.taskunifier.gui.components.welcome.panels.EnterLicensePanel;
+import com.leclercb.taskunifier.gui.components.welcome.panels.WelcomePanel;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
@@ -239,13 +242,34 @@ public class MainSwingRunnable implements Runnable {
 		
 		if (Main.isVersionUpdated()
 				&& Main.getPreviousVersion() != null
-				&& Main.getPreviousVersion().compareTo("4.0.0") < 0) {
+				&& Main.getPreviousVersion().compareTo("4.0.0") < 0
+				&& !Main.isProVersion()) {
 			messages.add(Translations.getString("welcome.message.taskunifier_4_released"));
+			
+			MainSplashScreen.getInstance().close();
+			
+			List<CardPanel> panels = new ArrayList<CardPanel>();
+			panels.add(new WelcomePanel(
+					"MESSAGES",
+					messages.toArray(new String[0]),
+					messageButtons));
+			panels.add(new EnterLicensePanel("LICENSE"));
+			
+			WelcomeDialog dialog = new WelcomeDialog(panels);
+			dialog.setVisible(true);
+			dialog.dispose();
+			
+			return;
 		}
 		
 		if (Main.isFirstExecution() || messages.size() > 0) {
 			MainSplashScreen.getInstance().close();
-			new WelcomeDialog(messages.toArray(new String[0]), messageButtons).setVisible(true);
+			
+			WelcomeDialog dialog = new WelcomeDialog(
+					messages.toArray(new String[0]),
+					messageButtons);
+			dialog.setVisible(true);
+			dialog.dispose();
 		}
 	}
 	

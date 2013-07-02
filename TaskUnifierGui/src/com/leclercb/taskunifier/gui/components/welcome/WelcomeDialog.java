@@ -178,14 +178,18 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 	}
 	
 	public WelcomeDialog(List<CardPanel> panels) {
+		this.panels = new ArrayList<CardPanel>();
+		
+		this.initialize();
+		
 		CheckUtils.isNotNull(panels);
 		
 		if (panels.size() == 0)
 			throw new IllegalArgumentException();
 		
-		this.panels = new ArrayList<CardPanel>(panels);
-		
-		this.initialize();
+		for (CardPanel panel : panels) {
+			this.addPanel(panel);
+		}
 	}
 	
 	private void initialize() {
