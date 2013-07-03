@@ -55,7 +55,6 @@ import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGr
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.components.welcome.panels.CardInterface;
 import com.leclercb.taskunifier.gui.components.welcome.panels.CardPanel;
-import com.leclercb.taskunifier.gui.components.welcome.panels.LicensePanel;
 import com.leclercb.taskunifier.gui.components.welcome.panels.SettingsPanel;
 import com.leclercb.taskunifier.gui.components.welcome.panels.WelcomePanel;
 import com.leclercb.taskunifier.gui.main.Main;
@@ -112,41 +111,6 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 				
 			});
 			
-			this.addPanel(new LicensePanel("LICENSE") {
-				
-				@Override
-				public void display() {
-					Main.getActionSupport().addActionListener(
-							new ActionListener() {
-								
-								@Override
-								public void actionPerformed(ActionEvent event) {
-									if (EqualsUtils.equals(
-											event.getActionCommand(),
-											"PRO_VERSION")) {
-										if (Main.isProVersion()) {
-											WelcomeDialog.this.setPanelVisible(
-													"LICENSE",
-													false);
-										}
-									}
-								}
-								
-							});
-				}
-				
-				@Override
-				public boolean next() {
-					if (!Main.isProVersion())
-						WelcomeDialog.this.setPanelVisible(
-								"SETTINGS_SYNCHRONIZATION",
-								false);
-					
-					return super.next();
-				}
-				
-			});
-			
 			this.addPanel(new SettingsPanel(
 					"SETTINGS_GENERAL",
 					Translations.getString("configuration.tab.general"),
@@ -157,23 +121,25 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 					Translations.getString("configuration.tab.date"),
 					new DateConfigurationPanel(this, false, true)));
 			
-			this.addPanel(new SettingsPanel(
-					"SETTINGS_SYNCHRONIZATION",
-					Translations.getString("configuration.tab.synchronization"),
-					new SynchronizationConfigurationPanel(this, true),
-					new CardInterface() {
-						
-						@Override
-						public boolean next() {
-							return true;
-						}
-						
-						@Override
-						public void display() {
-							ActionManageSynchronizerPlugins.manageSynchronizerPlugins();
-						}
-						
-					}));
+			if (Main.isProVersion()) {
+				this.addPanel(new SettingsPanel(
+						"SETTINGS_SYNCHRONIZATION",
+						Translations.getString("configuration.tab.synchronization"),
+						new SynchronizationConfigurationPanel(this, true),
+						new CardInterface() {
+							
+							@Override
+							public boolean next() {
+								return true;
+							}
+							
+							@Override
+							public void display() {
+								ActionManageSynchronizerPlugins.manageSynchronizerPlugins();
+							}
+							
+						}));
+			}
 		}
 	}
 	
