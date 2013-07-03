@@ -58,15 +58,15 @@ import com.leclercb.taskunifier.gui.main.Main;
 public final class LicenseUtils {
 	
 	private static final String PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC"
-			+ "AQEA3wa0vKG6WaNPIHEWyatoV1UbyrSsTgzBLw+p"
-			+ "E2ooWfelvYkcNOu/kqLZK9foQnt2moqCgZdKrNEU"
-			+ "rFtgaNc2Ks3shF2tQR8GLsVIExm//4w0bdMOpbLI"
-			+ "JGnGqI6AAYHoUSFykglQ7ZnAsjEtgyxFQqhI3LSE"
-			+ "AxgqQtRXmKSGPOx59mmDTlRfMGT7joNJMRGyCq/N"
-			+ "bwLWGz5R5+VLcxiuOXEfz4fKeswfRbvx5L7q8Fi0"
-			+ "FXcwTaRpdM5SC4jaSPqJmT+Mk8Z6CYkojzmy3YMf"
-			+ "tbKq6tdps1eUKQ4nV5Qf8BJrrbfuqK14kJ7vqddv"
-			+ "GtGmpeGFGFwc/uTbVzIlpDRbtQIDAQAB";
+			+ "AQEAhohNXK6blnWsh24Mc+RrehiTlIWLHZNV5sWx"
+			+ "6h2TlPK6uufHJpx9SrQbln8CSJzQ8c1UayXTL8KH"
+			+ "LwJ743BGTqsWXUXYiGYqjAQL/KE03UrebRifuVL3"
+			+ "Fada+hmzF8NYMfKKDUqv++MA0zknzMywGk2bB0gx"
+			+ "4l2oO7g5psBc1XjWPaE0LV3b0hbKTCUxHqLTqBwN"
+			+ "i39hIfKZ+gTlzRriUZLWc/AUmbRTvFzyA9EYHOWP"
+			+ "rTprRRcoOcvsnkSNODQFcpoiIV4EvK03JuIBGK+S"
+			+ "sS/yZrLtaWrV5HUzzkdKWqjES3iU3xnsGGh+Z5XD"
+			+ "dF2GXHHvbQKNLEF/C1TVs4RusQIDAQAB";
 	
 	private static License LICENSE;
 	
