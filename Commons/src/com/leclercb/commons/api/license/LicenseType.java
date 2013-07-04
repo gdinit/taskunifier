@@ -35,6 +35,7 @@ package com.leclercb.commons.api.license;
 public enum LicenseType {
 	
 	LIFETIME,
+	MANUAL,
 	SINGLE_VERSION,
 	TRIAL;
 	

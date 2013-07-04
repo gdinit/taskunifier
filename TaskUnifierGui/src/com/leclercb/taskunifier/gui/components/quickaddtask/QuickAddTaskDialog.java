@@ -86,7 +86,7 @@ public class QuickAddTaskDialog extends TUDialog {
 		
 		this.loadWindowSettings("window.quick_task");
 		
-		this.quickTaskPanel = new QuickAddTaskPanel();
+		this.quickTaskPanel = new QuickAddTaskPanel(false);
 		this.quickTaskPanel.setBorder(BorderFactory.createEmptyBorder(
 				10,
 				10,

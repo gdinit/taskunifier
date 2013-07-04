@@ -80,33 +80,46 @@ public class ActionAddQuickTask extends AbstractViewAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String task = e.getActionCommand();
-		ActionAddQuickTask.addQuickTask(task, true);
+		ActionAddQuickTask.addQuickTask(task, true, true);
 	}
 	
-	public static Task addQuickTask(String task, boolean edit) {
+	public static Task addQuickTask(
+			String task,
+			boolean edit,
+			boolean useSearcherTemplate) {
 		return addQuickTask(
 				TaskTemplateFactory.getInstance().getDefaultTemplate(),
 				task,
-				edit);
+				edit,
+				useSearcherTemplate);
 	}
 	
 	public static Task addQuickTask(
 			TaskTemplate template,
 			String task,
-			boolean edit) {
+			boolean edit,
+			boolean useSearcherTemplate) {
 		CheckUtils.isNotNull(task);
 		
 		ViewType viewType = ViewUtils.getCurrentViewType();
 		
+		TaskTemplate searcherTemplate = null;
+		
 		if (viewType != ViewType.TASKS && viewType != ViewType.CALENDAR) {
 			ViewUtils.setTaskView(true);
 			viewType = ViewUtils.getCurrentViewType();
+		} else {
+			if (useSearcherTemplate)
+				searcherTemplate = ViewUtils.getSelectedTaskSearcher().getTemplate();
 		}
 		
 		TaskBean bean = new TaskBean();
 		
 		if (template != null)
 			template.applyTo(bean);
+		
+		if (searcherTemplate != null)
+			searcherTemplate.applyTo(bean);
 		
 		task = task.trim();
 		
@@ -125,7 +138,7 @@ public class ActionAddQuickTask extends AbstractViewAction {
 			
 			char lastChar = title.charAt(title.length() - 1);
 			
-			pattern = Pattern.compile("[&@*<>][^&@*<>]+");
+			pattern = Pattern.compile("([&@*<>][^&@*<>]+)|(\\*)");
 			matcher = pattern.matcher(task);
 			
 			while (matcher.find()) {
@@ -141,7 +154,11 @@ public class ActionAddQuickTask extends AbstractViewAction {
 				s = s.trim();
 				
 				char c = s.charAt(0);
-				s = s.substring(1).trim();
+				
+				if (s.length() > 0)
+					s = s.substring(1).trim();
+				else
+					s = "";
 				
 				if (c == '&') { // Tag
 					if (bean.getTags() != null)
@@ -150,7 +167,10 @@ public class ActionAddQuickTask extends AbstractViewAction {
 						bean.setTags(TagList.fromString(s));
 				} else if (c == '@') { // Context, Folder, Goal, Location
 					findModel(s.toLowerCase(), bean);
-				} else if (c == '*') { // Priority, Status
+				} else if (c == '*') { // Star, Priority, Status
+					if (s.length() == 0)
+						bean.setStar(true);
+					
 					findStatusPriority(s.toLowerCase(), bean);
 				} else if (c == '>') { // Start Date
 					findDate(s, true, bean);

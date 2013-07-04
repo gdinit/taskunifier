@@ -57,12 +57,16 @@ public class QuickAddTaskPanel extends JPanel implements ActionSupported {
 	
 	private ActionSupport actionSupport;
 	
+	private boolean useSearcherTemplate;
+	
 	private JTextField textField;
 	private JButton button;
 	private JButton buttonTemplate;
 	
-	public QuickAddTaskPanel() {
+	public QuickAddTaskPanel(boolean useSearcherTemplate) {
 		this.actionSupport = new ActionSupport(this);
+		
+		this.useSearcherTemplate = useSearcherTemplate;
 		
 		this.initialize();
 	}
@@ -133,14 +137,18 @@ public class QuickAddTaskPanel extends JPanel implements ActionSupported {
 	
 	private void addQuickTask() {
 		String title = this.textField.getText();
-		ActionAddQuickTask.addQuickTask(title, false);
+		ActionAddQuickTask.addQuickTask(title, false, this.useSearcherTemplate);
 		this.textField.setText("");
 		this.actionSupport.fireActionPerformed(0, ACTION_QUICK_TASK_ADDED);
 	}
 	
 	private void addQuickTask(TaskTemplate template) {
 		String title = this.textField.getText();
-		ActionAddQuickTask.addQuickTask(template, title, false);
+		ActionAddQuickTask.addQuickTask(
+				template,
+				title,
+				false,
+				this.useSearcherTemplate);
 		this.textField.setText("");
 		this.actionSupport.fireActionPerformed(0, ACTION_QUICK_TASK_ADDED);
 	}

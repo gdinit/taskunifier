@@ -160,6 +160,7 @@ public class ActionImportComFile extends AbstractViewAction {
 					for (ComQuickTaskBean quickTask : bean.getQuickTasks()) {
 						tasks.add(ActionAddQuickTask.addQuickTask(
 								quickTask.getTitle(),
+								false,
 								false));
 					}
 				}
