@@ -40,8 +40,6 @@ import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -70,11 +68,11 @@ import org.jdesktop.swingx.JXEditorPane;
 
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
-import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.gui.actions.ActionCopy;
 import com.leclercb.taskunifier.gui.actions.ActionCut;
 import com.leclercb.taskunifier.gui.actions.ActionPaste;
+import com.leclercb.taskunifier.gui.commons.listeners.PopupTriggerMouseListener;
 import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
 import com.leclercb.taskunifier.gui.components.modelnote.HTMLEditorInterface;
 import com.leclercb.taskunifier.gui.components.modelnote.converters.HTML2Text;
@@ -355,38 +353,6 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 		component.addMouseListener(new PopupTriggerMouseListener(
 				menu,
 				component));
-	}
-	
-	private static class PopupTriggerMouseListener extends MouseAdapter {
-		
-		private JPopupMenu popup;
-		private JComponent component;
-		
-		public PopupTriggerMouseListener(JPopupMenu popup, JComponent component) {
-			CheckUtils.isNotNull(popup);
-			CheckUtils.isNotNull(component);
-			
-			this.popup = popup;
-			this.component = component;
-		}
-		
-		private void showMenuIfPopupTrigger(MouseEvent e) {
-			if (e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3) {
-				this.component.requestFocus();
-				this.popup.show(this.component, e.getX() + 3, e.getY() + 3);
-			}
-		}
-		
-		@Override
-		public void mousePressed(MouseEvent e) {
-			this.showMenuIfPopupTrigger(e);
-		}
-		
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			this.showMenuIfPopupTrigger(e);
-		}
-		
 	}
 	
 	private JComponent createFontSizeComboBox(final JTextComponent component) {

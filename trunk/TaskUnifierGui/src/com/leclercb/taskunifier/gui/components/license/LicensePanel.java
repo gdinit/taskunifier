@@ -48,8 +48,10 @@ import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -63,6 +65,10 @@ import com.leclercb.commons.api.license.LicenseType;
 import com.leclercb.commons.api.license.exceptions.LicenseExpiredException;
 import com.leclercb.commons.api.license.exceptions.LicenseVersionExpiredException;
 import com.leclercb.commons.gui.logger.GuiLogger;
+import com.leclercb.taskunifier.gui.actions.ActionCopy;
+import com.leclercb.taskunifier.gui.actions.ActionCut;
+import com.leclercb.taskunifier.gui.actions.ActionPaste;
+import com.leclercb.taskunifier.gui.commons.listeners.PopupTriggerMouseListener;
 import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
 import com.leclercb.taskunifier.gui.commons.values.StringValueLicenseType;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
@@ -200,6 +206,7 @@ public class LicensePanel extends JPanel {
 				BorderLayout.NORTH);
 		
 		this.licenseArea = new JTextArea();
+		this.addContextMenu(this.licenseArea);
 		
 		this.licenseEnter.add(
 				ComponentFactory.createJScrollPane(this.licenseArea, true),
@@ -236,6 +243,18 @@ public class LicensePanel extends JPanel {
 		this.licenseEnter.add(this.licenseEnterButtonsPanel, BorderLayout.SOUTH);
 		
 		this.add(this.licenseEnter, "ENTER");
+	}
+	
+	private void addContextMenu(JComponent component) {
+		JPopupMenu menu = new JPopupMenu();
+		
+		menu.add(new ActionCopy(16, 16));
+		menu.add(new ActionCut(16, 16));
+		menu.add(new ActionPaste(16, 16));
+		
+		component.addMouseListener(new PopupTriggerMouseListener(
+				menu,
+				component));
 	}
 	
 	public void initializeLicenseGetTrial() {
