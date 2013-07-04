@@ -169,11 +169,9 @@ public class License {
 			throws LicenseExpiredException {
 		CheckUtils.isNotNull(currentDate);
 		
-		if (this.getLicenseType().equals(LicenseType.TRIAL)) {
-			if (this.getExpiration() == null
-					|| currentDate.after(this.getExpiration())) {
-				throw new LicenseExpiredException();
-			}
+		if (this.getExpiration() != null
+				&& currentDate.after(this.getExpiration())) {
+			throw new LicenseExpiredException();
 		}
 	}
 	
@@ -181,14 +179,10 @@ public class License {
 			throws LicenseVersionExpiredException {
 		CheckUtils.isNotNull(currentVersion);
 		
-		if (this.getLicenseType().equals(LicenseType.SINGLE_VERSION)) {
-			if (this.getVersion() == null) {
-				throw new LicenseVersionExpiredException();
-			}
-			
-			if (!currentVersion.startsWith(this.getVersion())) {
-				throw new LicenseVersionExpiredException();
-			}
+		if (this.getVersion() != null
+				&& this.getVersion().length() != 0
+				&& !currentVersion.startsWith(this.getVersion())) {
+			throw new LicenseVersionExpiredException();
 		}
 	}
 	
