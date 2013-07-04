@@ -1,6 +1,11 @@
 HISTORY
 -------
 
+Version 4.0.1
+	- Minor:
+		- FR 362: Set star via quick add task
+		- BF 320: Quick add task not using selected searcher
+
 Version 4.0.0
 	- Major:
 		- Release of TaskUnifier Pro

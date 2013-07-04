@@ -61,6 +61,8 @@ public final class TranslationsUtils {
 		switch (type) {
 			case LIFETIME:
 				return Translations.getString("license.type.lifetime");
+			case MANUAL:
+				return Translations.getString("license.type.manual");
 			case SINGLE_VERSION:
 				return Translations.getString("license.type.single_version");
 			case TRIAL:

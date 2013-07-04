@@ -188,7 +188,7 @@ public class CalendarPanel extends JPanel implements SavePropertiesListener {
 		
 		JPanel quickAddTaskPanel = new JPanel(new BorderLayout(3, 3));
 		quickAddTaskPanel.setOpaque(false);
-		quickAddTaskPanel.add(new QuickAddTaskPanel(), BorderLayout.CENTER);
+		quickAddTaskPanel.add(new QuickAddTaskPanel(true), BorderLayout.CENTER);
 		quickAddTaskPanel.add(
 				Help.getInstance().getHelpButton("task_quick_add"),
 				BorderLayout.EAST);

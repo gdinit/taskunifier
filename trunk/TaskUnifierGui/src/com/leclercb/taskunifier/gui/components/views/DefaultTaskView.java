@@ -304,7 +304,7 @@ public class DefaultTaskView extends JPanel implements TaskView, SavePropertiesL
 	}
 	
 	private void initializeQuickAddTask(JPanel middlePane) {
-		this.quickAddTaskPanel = new QuickAddTaskPanel();
+		this.quickAddTaskPanel = new QuickAddTaskPanel(true);
 		
 		JPanel panel = new JPanel(new BorderLayout(3, 3));
 		panel.setOpaque(false);
