@@ -45,9 +45,12 @@ public class UserIdLicenseValidator implements LicenseValidator {
 	@Override
 	public void validate(License license) throws LicenseException {
 		if (license.getLicenseType() == LicenseType.TRIAL) {
-			if (!EqualsUtils.equals(
-					license.getProperty("user_id"),
-					Main.getCurrentUserId()))
+			String userId = license.getProperty("user_id");
+			
+			if (userId == null || userId.length() == 0)
+				return;
+			
+			if (!EqualsUtils.equals(userId, Main.getCurrentUserId()))
 				throw new InvalidLicenseException();
 		}
 	}
