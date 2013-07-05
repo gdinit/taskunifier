@@ -54,6 +54,7 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.StringCondi
 import com.leclercb.taskunifier.gui.api.searchers.groupers.TaskGrouperElement;
 import com.leclercb.taskunifier.gui.commons.values.StringValueMinutes;
 import com.leclercb.taskunifier.gui.commons.values.StringValuePercentage;
+import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 
@@ -376,9 +377,9 @@ public final class TaskGrouperUtils {
 				
 				break;
 			case TAGS:
-				TagList list = TaskTagList.getInstance().getTags();
+				TagList tags = TaskTagList.getInstance().getTags();
 				
-				for (Tag tag : list) {
+				for (Tag tag : tags) {
 					s = searcher.clone();
 					setTitle(element, s, tag.toString());
 					addMainFilter(
@@ -401,6 +402,40 @@ public final class TaskGrouperUtils {
 				searchers.add(s);
 				
 				break;
+			case STRING:
+				if (element.getProperty().equals(
+						TaskColumnList.getInstance().get(TaskColumnList.STATUS))) {
+					List<String> statuses = TaskStatusList.getInstance().getStatuses();
+					
+					for (String status : statuses) {
+						s = searcher.clone();
+						setTitle(element, s, status);
+						addMainFilter(
+								s,
+								new TaskFilterElement(
+										element.getProperty(),
+										StringCondition.EQUALS,
+										status,
+										false));
+						searchers.add(s);
+					}
+					
+					s = searcher.clone();
+					setTitle(
+							element,
+							s,
+							Translations.getString("general.no_value"));
+					addMainFilter(
+							s,
+							new TaskFilterElement(
+									element.getProperty(),
+									StringCondition.EQUALS,
+									null,
+									false));
+					searchers.add(s);
+					
+					break;
+				}
 			default:
 				s = searcher.clone();
 				setTitle(element, s, element.getProperty().toString());
