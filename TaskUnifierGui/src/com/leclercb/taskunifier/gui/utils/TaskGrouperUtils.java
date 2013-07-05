@@ -36,9 +36,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.leclercb.taskunifier.api.models.ModelType;
+import com.leclercb.taskunifier.api.models.Tag;
+import com.leclercb.taskunifier.api.models.TagList;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.api.models.utils.ModelFactoryUtils;
+import com.leclercb.taskunifier.api.models.utils.TaskTagList;
 import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
 import com.leclercb.taskunifier.gui.api.searchers.filters.FilterLink;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
@@ -170,6 +173,15 @@ public final class TaskGrouperUtils {
 						false));
 				searchers.add(s);
 				
+				s = searcher.clone();
+				setTitle(element, s, Translations.getString("general.no_value"));
+				addMainFilter(s, new TaskFilterElement(
+						element.getProperty(),
+						DaysCondition.EQUALS,
+						null,
+						false));
+				searchers.add(s);
+				
 				break;
 			case MINUTES:
 				for (int i = 0; i <= 105; i += 15) {
@@ -280,9 +292,12 @@ public final class TaskGrouperUtils {
 				break;
 			case CONTACT:
 			case CONTEXT:
+			case CONTEXTS:
 			case FOLDER:
 			case GOAL:
+			case GOALS:
 			case LOCATION:
+			case LOCATIONS:
 			case NOTE:
 			case TASK:
 				List<?> models = null;
@@ -329,6 +344,15 @@ public final class TaskGrouperUtils {
 					}
 				}
 				
+				s = searcher.clone();
+				setTitle(element, s, Translations.getString("general.no_value"));
+				addMainFilter(s, new TaskFilterElement(
+						element.getProperty(),
+						ModelCondition.EQUALS,
+						null,
+						false));
+				searchers.add(s);
+				
 				break;
 			case STAR:
 			case BOOLEAN:
@@ -347,6 +371,32 @@ public final class TaskGrouperUtils {
 						element.getProperty(),
 						StringCondition.EQUALS,
 						"false",
+						false));
+				searchers.add(s);
+				
+				break;
+			case TAGS:
+				TagList list = TaskTagList.getInstance().getTags();
+				
+				for (Tag tag : list) {
+					s = searcher.clone();
+					setTitle(element, s, tag.toString());
+					addMainFilter(
+							s,
+							new TaskFilterElement(
+									element.getProperty(),
+									StringCondition.CONTAINS,
+									tag.toString(),
+									false));
+					searchers.add(s);
+				}
+				
+				s = searcher.clone();
+				setTitle(element, s, Translations.getString("general.no_value"));
+				addMainFilter(s, new TaskFilterElement(
+						element.getProperty(),
+						StringCondition.EQUALS,
+						null,
 						false));
 				searchers.add(s);
 				
