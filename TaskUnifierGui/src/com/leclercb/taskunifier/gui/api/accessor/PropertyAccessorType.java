@@ -103,7 +103,7 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 
 public enum PropertyAccessorType {
 	
-	STRING(String.class, false),
+	STRING(String.class, true),
 	FILE(String.class, false),
 	BOOLEAN(Boolean.class, true),
 	CALENDAR_DATE(Calendar.class, true),
