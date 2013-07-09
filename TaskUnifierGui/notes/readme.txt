@@ -4,6 +4,7 @@ HISTORY
 Version 4.0.1
 	- Major:
 		- Add new grouping fields
+		- Fixed issue in synchronization
 	- Minor:
 		- FR 362: Set star via quick add task
 		- BF 320: Quick add task not using selected searcher
