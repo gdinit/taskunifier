@@ -42,6 +42,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -118,7 +119,7 @@ public class NoteGrouperPanel extends JPanel {
 				if (event.getActionCommand().equals("ADD")) {
 					NoteGrouperElement element = new NoteGrouperElement(
 							NoteColumnList.getInstance().get(
-									NoteColumnList.TITLE));
+									NoteColumnList.TITLE), SortOrder.ASCENDING);
 					
 					NoteGrouperPanel.this.grouper.addElement(element);
 				} else {

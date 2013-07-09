@@ -34,17 +34,21 @@ package com.leclercb.taskunifier.gui.api.searchers.groupers;
 
 import java.beans.PropertyChangeListener;
 
+import javax.swing.SortOrder;
+
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupport;
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
+import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 public class GrouperElement<M extends Model> implements PropertyChangeSupported {
 	
 	public static final String PROP_PROPERTY = "property";
+	public static final String PROP_SORT_ORDER = "sortOrder";
 	
 	@XStreamOmitField
 	private transient PropertyChangeSupport propertyChangeSupport;
@@ -52,10 +56,14 @@ public class GrouperElement<M extends Model> implements PropertyChangeSupported 
 	@XStreamAlias("column")
 	private PropertyAccessor<M> property;
 	
-	public GrouperElement(PropertyAccessor<M> property) {
+	@XStreamAlias("sortorder")
+	private SortOrder sortOrder;
+	
+	public GrouperElement(PropertyAccessor<M> property, SortOrder sortOrder) {
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
 		
 		this.setProperty(property);
+		this.setSortOrder(sortOrder);
 	}
 	
 	public PropertyAccessor<M> getProperty() {
@@ -72,9 +80,26 @@ public class GrouperElement<M extends Model> implements PropertyChangeSupported 
 				property);
 	}
 	
+	public SortOrder getSortOrder() {
+		return this.sortOrder;
+	}
+	
+	public void setSortOrder(SortOrder sortOrder) {
+		CheckUtils.isNotNull(sortOrder);
+		SortOrder oldSortOrder = this.sortOrder;
+		this.sortOrder = sortOrder;
+		this.propertyChangeSupport.firePropertyChange(
+				PROP_SORT_ORDER,
+				oldSortOrder,
+				sortOrder);
+	}
+	
 	@Override
 	public String toString() {
-		return this.property.toString();
+		return this.property
+				+ " ("
+				+ TranslationsUtils.translateSortOrder(this.sortOrder)
+				+ ")";
 	}
 	
 	@Override

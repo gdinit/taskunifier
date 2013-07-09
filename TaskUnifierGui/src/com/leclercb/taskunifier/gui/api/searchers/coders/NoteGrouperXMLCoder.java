@@ -32,6 +32,8 @@
  */
 package com.leclercb.taskunifier.gui.api.searchers.coders;
 
+import javax.swing.SortOrder;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -62,15 +64,20 @@ public class NoteGrouperXMLCoder extends AbstractXMLCoder<NoteGrouper> {
 					NodeList nElement = nGrouper.item(i).getChildNodes();
 					
 					PropertyAccessor<Note> column = null;
+					SortOrder sortOrder = SortOrder.ASCENDING;
 					
 					for (int j = 0; j < nElement.getLength(); j++) {
 						if (nElement.item(j).getNodeName().equals("column")) {
 							column = NoteColumnList.getInstance().get(
 									nElement.item(j).getTextContent());
 						}
+						
+						if (nElement.item(j).getNodeName().equals("sortorder")) {
+							sortOrder = SortOrder.valueOf(nElement.item(j).getTextContent());
+						}
 					}
 					
-					grouper.addElement(new NoteGrouperElement(column));
+					grouper.addElement(new NoteGrouperElement(column, sortOrder));
 				}
 			}
 			
@@ -89,6 +96,10 @@ public class NoteGrouperXMLCoder extends AbstractXMLCoder<NoteGrouper> {
 			Element column = document.createElement("column");
 			column.setTextContent(e.getProperty().getId());
 			element.appendChild(column);
+			
+			Element sortOrder = document.createElement("sortorder");
+			sortOrder.setTextContent(e.getSortOrder().name());
+			element.appendChild(sortOrder);
 		}
 	}
 	

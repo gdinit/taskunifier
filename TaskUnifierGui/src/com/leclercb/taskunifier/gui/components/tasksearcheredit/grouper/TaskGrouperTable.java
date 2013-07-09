@@ -46,6 +46,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import org.jdesktop.swingx.renderer.DefaultListRenderer;
+import org.jdesktop.swingx.renderer.DefaultTableRenderer;
 
 import com.leclercb.taskunifier.gui.api.searchers.groupers.TaskGrouper;
 import com.leclercb.taskunifier.gui.api.searchers.groupers.TaskGrouperElement;
@@ -57,13 +58,16 @@ public class TaskGrouperTable extends JTable {
 	
 	private static final DefaultTableCellRenderer ORDER_RENDERER;
 	private static final DefaultTableCellRenderer COLUMN_RENDERER;
+	private static final DefaultTableRenderer SORT_ORDER_RENDERER;
 	
 	private static final DefaultCellEditor COLUMN_EDITOR;
+	private static final DefaultCellEditor SORT_ORDER_EDITOR;
 	
 	static {
 		// RENDERERS
 		ORDER_RENDERER = new DefaultTableCellRenderer();
 		COLUMN_RENDERER = new DefaultTableCellRenderer();
+		SORT_ORDER_RENDERER = new DefaultTableRenderer(StringValueSortOrder.INSTANCE);
 		
 		// EDITORS
 		COLUMN_EDITOR = new DefaultCellEditor(new JComboBox(
@@ -74,6 +78,8 @@ public class TaskGrouperTable extends JTable {
 		comboBox = new JComboBox(SortOrder.values());
 		comboBox.setRenderer(new DefaultListRenderer(
 				StringValueSortOrder.INSTANCE));
+		
+		SORT_ORDER_EDITOR = new DefaultCellEditor(comboBox);
 	}
 	
 	public TaskGrouperTable(TaskGrouper grouper) {
@@ -132,6 +138,8 @@ public class TaskGrouperTable extends JTable {
 				return super.getCellEditor(row, col);
 			case 1:
 				return COLUMN_EDITOR;
+			case 2:
+				return SORT_ORDER_EDITOR;
 			default:
 				return super.getCellEditor(row, col);
 		}
@@ -144,6 +152,8 @@ public class TaskGrouperTable extends JTable {
 				return ORDER_RENDERER;
 			case 1:
 				return COLUMN_RENDERER;
+			case 2:
+				return SORT_ORDER_RENDERER;
 			default:
 				return super.getCellRenderer(row, col);
 		}

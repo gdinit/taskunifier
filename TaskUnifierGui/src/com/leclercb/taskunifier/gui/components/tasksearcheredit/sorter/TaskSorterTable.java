@@ -46,19 +46,19 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import org.jdesktop.swingx.renderer.DefaultListRenderer;
+import org.jdesktop.swingx.renderer.DefaultTableRenderer;
 
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorter;
 import com.leclercb.taskunifier.gui.api.searchers.sorters.TaskSorterElement;
 import com.leclercb.taskunifier.gui.commons.values.StringValueSortOrder;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.components.tasksearcheredit.sorter.draganddrop.TaskSorterTransferHandler;
-import com.leclercb.taskunifier.gui.components.tasksearcheredit.sorter.renderers.TaskSorterSortOrderRenderer;
 
 public class TaskSorterTable extends JTable {
 	
 	private static final DefaultTableCellRenderer ORDER_RENDERER;
 	private static final DefaultTableCellRenderer COLUMN_RENDERER;
-	private static final DefaultTableCellRenderer SORT_ORDER_RENDERER;
+	private static final DefaultTableRenderer SORT_ORDER_RENDERER;
 	
 	private static final DefaultCellEditor COLUMN_EDITOR;
 	private static final DefaultCellEditor SORT_ORDER_EDITOR;
@@ -67,7 +67,7 @@ public class TaskSorterTable extends JTable {
 		// RENDERERS
 		ORDER_RENDERER = new DefaultTableCellRenderer();
 		COLUMN_RENDERER = new DefaultTableCellRenderer();
-		SORT_ORDER_RENDERER = new TaskSorterSortOrderRenderer();
+		SORT_ORDER_RENDERER = new DefaultTableRenderer(StringValueSortOrder.INSTANCE);
 		
 		// EDITORS
 		COLUMN_EDITOR = new DefaultCellEditor(new JComboBox(

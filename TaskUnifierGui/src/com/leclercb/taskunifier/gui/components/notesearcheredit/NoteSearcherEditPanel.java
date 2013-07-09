@@ -51,8 +51,8 @@ public class NoteSearcherEditPanel extends JPanel {
 	private NoteSearcher searcher;
 	
 	private NoteSearcherPanel searcherPanel;
-	private NoteGrouperPanel grouperPanel;
 	private NoteSorterPanel sorterPanel;
+	private NoteGrouperPanel grouperPanel;
 	private NoteFilterEditPanel filterEditPanel;
 	
 	public NoteSearcherEditPanel(NoteSearcher searcher, boolean showInfoPanel) {
@@ -66,14 +66,14 @@ public class NoteSearcherEditPanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		
 		this.searcherPanel = new NoteSearcherPanel(this.searcher);
-		this.grouperPanel = new NoteGrouperPanel(this.searcher.getGrouper());
 		this.sorterPanel = new NoteSorterPanel(this.searcher.getSorter());
+		this.grouperPanel = new NoteGrouperPanel(this.searcher.getGrouper());
 		this.filterEditPanel = new NoteFilterEditPanel();
 		this.filterEditPanel.setFilter(this.searcher.getFilter());
 		
 		this.searcherPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		this.grouperPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		this.sorterPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		this.grouperPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		this.filterEditPanel.setBorder(BorderFactory.createEmptyBorder(
 				5,
 				5,
@@ -89,12 +89,12 @@ public class NoteSearcherEditPanel extends JPanel {
 		}
 		
 		tabbedPane.addTab(
-				Translations.getString("searcheredit.tab.grouper"),
-				this.grouperPanel);
-		
-		tabbedPane.addTab(
 				Translations.getString("searcheredit.tab.sorter"),
 				this.sorterPanel);
+		
+		tabbedPane.addTab(
+				Translations.getString("searcheredit.tab.grouper"),
+				this.grouperPanel);
 		
 		tabbedPane.addTab(
 				Translations.getString("searcheredit.tab.filter"),
