@@ -33,17 +33,12 @@
 package com.leclercb.taskunifier.gui.components.license;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.KeyPair;
 import java.util.Calendar;
 import java.util.logging.Level;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 import com.leclercb.commons.api.license.License;
 import com.leclercb.commons.api.license.LicenseManager;
@@ -142,32 +137,6 @@ public final class LicenseUtils {
 	
 	public static boolean isFirstTrialLicense() {
 		return !Main.getSettings().getBooleanProperty("license.trial.used");
-	}
-	
-	public static void main(String[] args) throws Exception {
-		boolean generateKey = true;
-		boolean encodeKey = true;
-		
-		if (generateKey) {
-			KeyPair keyPair = LicenseManager.generateKeys("RSA", 2048);
-			
-			OutputStream os = null;
-			
-			os = new FileOutputStream(
-					"src\\com\\leclercb\\taskunifier\\gui\\resources\\public_key");
-			IOUtils.write(keyPair.getPublic().getEncoded(), os);
-			os.close();
-			
-			os = new FileOutputStream("private_key");
-			IOUtils.write(keyPair.getPrivate().getEncoded(), os);
-			os.close();
-		}
-		
-		if (encodeKey) {
-			InputStream publicKey = new FileInputStream(
-					"src\\com\\leclercb\\taskunifier\\gui\\resources\\public_key");
-			System.out.println(LicenseManager.keyEncoder(publicKey));
-		}
 	}
 	
 }
