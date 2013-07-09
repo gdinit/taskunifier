@@ -83,6 +83,8 @@ public final class MainSplashScreen {
 					RenderingHints.VALUE_ANTIALIAS_ON);
 			
 			if (Main.isProVersion()) {
+				String proMsg = "PRO";
+				
 				this.g2d.setColor(new Color(234, 255, 234));
 				this.g2d.fillRect(180, 85, 250, 40);
 				
@@ -90,10 +92,10 @@ public final class MainSplashScreen {
 				this.g2d.setFont(this.g2d.getFont().deriveFont(Font.BOLD).deriveFont(
 						(float) 16.0));
 				metrics = this.g2d.getFontMetrics(this.g2d.getFont());
-				stringWidth = metrics.stringWidth("PRO Version");
+				stringWidth = metrics.stringWidth(proMsg);
 				
 				this.g2d.setColor(new Color(40, 155, 60));
-				this.g2d.drawString("PRO Version", 420 - stringWidth, 105);
+				this.g2d.drawString(proMsg, 420 - stringWidth, 105);
 			}
 			
 			this.g2d.setColor(new Color(234, 255, 234));
