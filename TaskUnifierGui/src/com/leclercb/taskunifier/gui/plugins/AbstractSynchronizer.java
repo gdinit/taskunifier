@@ -362,7 +362,7 @@ public abstract class AbstractSynchronizer implements Synchronizer {
 						for (Model model : models) {
 							Task task = (Task) model;
 							if (task.getModelStatus().isEndUserStatus()) {
-								if (task.getModelReferenceId("toodledo") == null
+								if (task.getModelReferenceId(AbstractSynchronizer.this.keyId) == null
 										|| task.getModelStatus().equals(
 												ModelStatus.TO_UPDATE)) {
 									for (Task child : task.getAllChildren()) {
