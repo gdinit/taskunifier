@@ -76,9 +76,10 @@ public class NoteGrouperPanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		
 		if (Main.isProVersion()) {
+			panel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+			
 			this.table = new NoteGrouperTable(this.grouper);
 			this.table.getSelectionModel().addListSelectionListener(
 					new ListSelectionListener() {
