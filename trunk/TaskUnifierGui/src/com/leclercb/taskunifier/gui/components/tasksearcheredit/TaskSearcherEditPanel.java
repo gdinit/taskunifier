@@ -51,8 +51,8 @@ public class TaskSearcherEditPanel extends JPanel {
 	private TaskSearcher searcher;
 	
 	private TaskSearcherPanel searcherPanel;
-	private TaskGrouperPanel grouperPanel;
 	private TaskSorterPanel sorterPanel;
+	private TaskGrouperPanel grouperPanel;
 	private TaskFilterEditPanel filterEditPanel;
 	
 	public TaskSearcherEditPanel(TaskSearcher searcher, boolean showInfoPanel) {
@@ -66,14 +66,14 @@ public class TaskSearcherEditPanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		
 		this.searcherPanel = new TaskSearcherPanel(this.searcher);
-		this.grouperPanel = new TaskGrouperPanel(this.searcher.getGrouper());
 		this.sorterPanel = new TaskSorterPanel(this.searcher.getSorter());
+		this.grouperPanel = new TaskGrouperPanel(this.searcher.getGrouper());
 		this.filterEditPanel = new TaskFilterEditPanel();
 		this.filterEditPanel.setFilter(this.searcher.getFilter());
 		
 		this.searcherPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		this.grouperPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		this.sorterPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		this.grouperPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		this.filterEditPanel.setBorder(BorderFactory.createEmptyBorder(
 				5,
 				5,
@@ -89,12 +89,12 @@ public class TaskSearcherEditPanel extends JPanel {
 		}
 		
 		tabbedPane.addTab(
-				Translations.getString("searcheredit.tab.grouper"),
-				this.grouperPanel);
-		
-		tabbedPane.addTab(
 				Translations.getString("searcheredit.tab.sorter"),
 				this.sorterPanel);
+		
+		tabbedPane.addTab(
+				Translations.getString("searcheredit.tab.grouper"),
+				this.grouperPanel);
 		
 		tabbedPane.addTab(
 				Translations.getString("searcheredit.tab.filter"),

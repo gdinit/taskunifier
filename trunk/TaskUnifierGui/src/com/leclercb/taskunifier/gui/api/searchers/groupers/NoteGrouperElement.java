@@ -32,18 +32,22 @@
  */
 package com.leclercb.taskunifier.gui.api.searchers.groupers;
 
+import javax.swing.SortOrder;
+
 import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 
 public class NoteGrouperElement extends GrouperElement<Note> implements Cloneable {
 	
-	public NoteGrouperElement(PropertyAccessor<Note> property) {
-		super(property);
+	public NoteGrouperElement(
+			PropertyAccessor<Note> property,
+			SortOrder sortOrder) {
+		super(property, sortOrder);
 	}
 	
 	@Override
 	public NoteGrouperElement clone() {
-		return new NoteGrouperElement(this.getProperty());
+		return new NoteGrouperElement(this.getProperty(), this.getSortOrder());
 	}
 	
 }

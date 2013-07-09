@@ -33,7 +33,10 @@
 package com.leclercb.taskunifier.gui.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import javax.swing.SortOrder;
 
 import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.Tag;
@@ -443,6 +446,9 @@ public final class TaskGrouperUtils {
 				
 				break;
 		}
+		
+		if (element.getSortOrder() == SortOrder.DESCENDING)
+			Collections.reverse(searchers);
 		
 		return searchers;
 	}

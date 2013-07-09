@@ -35,6 +35,7 @@ package com.leclercb.taskunifier.gui.components.tasksearcheredit.grouper;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
@@ -67,7 +68,7 @@ public class TaskGrouperTableModel extends DefaultTableModel implements ListChan
 	
 	@Override
 	public int getColumnCount() {
-		return 2;
+		return 3;
 	}
 	
 	@Override
@@ -85,6 +86,8 @@ public class TaskGrouperTableModel extends DefaultTableModel implements ListChan
 				return Translations.getString("grouper.order");
 			case 1:
 				return Translations.getString("grouper.column");
+			case 2:
+				return Translations.getString("grouper.sort_order");
 			default:
 				return null;
 		}
@@ -97,6 +100,8 @@ public class TaskGrouperTableModel extends DefaultTableModel implements ListChan
 				return Integer.class;
 			case 1:
 				return PropertyAccessor.class;
+			case 2:
+				return SortOrder.class;
 			default:
 				return null;
 		}
@@ -109,6 +114,8 @@ public class TaskGrouperTableModel extends DefaultTableModel implements ListChan
 				return row + 1;
 			case 1:
 				return this.grouper.getElement(row).getProperty();
+			case 2:
+				return this.grouper.getElement(row).getSortOrder();
 			default:
 				return null;
 		}
@@ -131,6 +138,9 @@ public class TaskGrouperTableModel extends DefaultTableModel implements ListChan
 			case 1:
 				this.grouper.getElement(row).setProperty(
 						(PropertyAccessor<Task>) value);
+				break;
+			case 2:
+				this.grouper.getElement(row).setSortOrder((SortOrder) value);
 				break;
 		}
 	}

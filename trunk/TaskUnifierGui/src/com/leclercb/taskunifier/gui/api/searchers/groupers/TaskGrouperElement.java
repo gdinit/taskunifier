@@ -32,18 +32,22 @@
  */
 package com.leclercb.taskunifier.gui.api.searchers.groupers;
 
+import javax.swing.SortOrder;
+
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 
 public class TaskGrouperElement extends GrouperElement<Task> implements Cloneable {
 	
-	public TaskGrouperElement(PropertyAccessor<Task> property) {
-		super(property);
+	public TaskGrouperElement(
+			PropertyAccessor<Task> property,
+			SortOrder sortOrder) {
+		super(property, sortOrder);
 	}
 	
 	@Override
 	public TaskGrouperElement clone() {
-		return new TaskGrouperElement(this.getProperty());
+		return new TaskGrouperElement(this.getProperty(), this.getSortOrder());
 	}
 	
 }

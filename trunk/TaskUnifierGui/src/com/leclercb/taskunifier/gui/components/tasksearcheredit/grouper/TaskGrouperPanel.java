@@ -42,6 +42,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -119,7 +120,7 @@ public class TaskGrouperPanel extends JPanel {
 				if (event.getActionCommand().equals("ADD")) {
 					TaskGrouperElement element = new TaskGrouperElement(
 							TaskColumnList.getInstance().get(
-									TaskColumnList.TITLE));
+									TaskColumnList.TITLE), SortOrder.ASCENDING);
 					
 					TaskGrouperPanel.this.grouper.addElement(element);
 				} else {
