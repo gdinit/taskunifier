@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="TaskUnifierApi Library">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/commons.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
