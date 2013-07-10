@@ -52,7 +52,7 @@ import com.leclercb.taskunifier.gui.main.Main;
 
 public final class LicenseUtils {
 	
-	private static final String PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC"
+	public static final String PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC"
 			+ "AQEAhohNXK6blnWsh24Mc+RrehiTlIWLHZNV5sWx"
 			+ "6h2TlPK6uufHJpx9SrQbln8CSJzQ8c1UayXTL8KH"
 			+ "LwJ743BGTqsWXUXYiGYqjAQL/KE03UrebRifuVL3"

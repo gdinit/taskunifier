@@ -55,6 +55,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.apache.commons.io.IOUtils;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.error.ErrorInfo;
@@ -72,7 +73,6 @@ import com.leclercb.taskunifier.gui.commons.listeners.PopupTriggerMouseListener;
 import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
 import com.leclercb.taskunifier.gui.commons.values.StringValueLicenseType;
 import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
-import com.leclercb.taskunifier.gui.resources.Resources;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
@@ -323,7 +323,7 @@ public class LicensePanel extends JPanel {
 	
 	private void saveLicense(String license) {
 		try {
-			InputStream publicKey = Resources.class.getResourceAsStream("public_key");
+			InputStream publicKey = IOUtils.toInputStream(LicenseUtils.PUBLIC_KEY);
 			LicenseManager lm = new LicenseManager(publicKey, null);
 			License l = lm.readLicense(license);
 			
