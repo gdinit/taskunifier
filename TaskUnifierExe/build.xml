@@ -83,6 +83,7 @@
 				<include name="**/TaskUnifier/TaskUnifier.sh"/>
 			</tarfileset>
 		</tar>
+		<antcall target="clean"/>
     </target>
 	
 	<target depends="taskunifier-version-underscored, check-os" name="create-mac-binary" if="isMac">
@@ -139,6 +140,8 @@
 		<exec executable="${directory.exe}/scripts/mac_create_dmg.sh" failonerror="true">
 			<arg line="${taskunifier.version.underscored}"/>
 		</exec>
+
+		<antcall target="clean"/>
 	</target>
 	
 	<target depends="taskunifier-version-underscored, check-os" name="create-windows-binary" if="isWindows">
@@ -156,6 +159,7 @@
 		  <arg line="/c tools\\innosetup\\innosetup.bat ${taskunifier.general.version}"/>
 		</exec>
 		<zip destfile="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/TaskUnifier_${taskunifier.version.underscored}_installer_windows.zip" basedir="${directory.exe}/temp" includes="setup.exe"/>
+		<antcall target="clean"/>
 	</target>
 	
 	<target depends="taskunifier-version-underscored" name="create-other-binary">
@@ -163,10 +167,10 @@
     	<antcall target="create-binary"/>
     	<mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
 	    <zip destfile="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/TaskUnifier_${taskunifier.version.underscored}_other.zip" basedir="${directory.exe}/temp"/>
+		<antcall target="clean"/>
 	</target>
 	
 	<target name="clean">
-		<echo message="Cleaning..."/>
 		<delete dir="${directory.exe}/temp"/>
 		<delete file="${directory.gui}/resources/taskunifier.properties"/>
 	</target>
