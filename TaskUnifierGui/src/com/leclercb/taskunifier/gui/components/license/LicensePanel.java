@@ -55,7 +55,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import org.apache.commons.io.IOUtils;
 import org.jdesktop.swingx.JXErrorPane;
 import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.error.ErrorInfo;
@@ -323,7 +322,7 @@ public class LicensePanel extends JPanel {
 	
 	private void saveLicense(String license) {
 		try {
-			InputStream publicKey = IOUtils.toInputStream(LicenseUtils.PUBLIC_KEY);
+			InputStream publicKey = LicenseManager.keyDecoder(LicenseUtils.PUBLIC_KEY);
 			LicenseManager lm = new LicenseManager(publicKey, null);
 			License l = lm.readLicense(license);
 			
