@@ -1,6 +1,10 @@
 HISTORY
 -------
 
+Version 4.0.2
+	- Major:
+		- Problem entering license key
+
 Version 4.0.1
 	- Major:
 		- Add new grouping fields

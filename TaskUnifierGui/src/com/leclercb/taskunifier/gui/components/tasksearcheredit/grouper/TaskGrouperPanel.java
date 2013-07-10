@@ -120,7 +120,8 @@ public class TaskGrouperPanel extends JPanel {
 				if (event.getActionCommand().equals("ADD")) {
 					TaskGrouperElement element = new TaskGrouperElement(
 							TaskColumnList.getInstance().get(
-									TaskColumnList.TITLE), SortOrder.ASCENDING);
+									TaskColumnList.TITLE),
+							SortOrder.ASCENDING);
 					
 					TaskGrouperPanel.this.grouper.addElement(element);
 				} else {

@@ -67,7 +67,8 @@ public class TaskGrouperTable extends JTable {
 		// RENDERERS
 		ORDER_RENDERER = new DefaultTableCellRenderer();
 		COLUMN_RENDERER = new DefaultTableCellRenderer();
-		SORT_ORDER_RENDERER = new DefaultTableRenderer(StringValueSortOrder.INSTANCE);
+		SORT_ORDER_RENDERER = new DefaultTableRenderer(
+				StringValueSortOrder.INSTANCE);
 		
 		// EDITORS
 		COLUMN_EDITOR = new DefaultCellEditor(new JComboBox(

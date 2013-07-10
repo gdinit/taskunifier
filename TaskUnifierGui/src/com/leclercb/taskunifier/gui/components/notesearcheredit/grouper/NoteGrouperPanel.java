@@ -120,7 +120,8 @@ public class NoteGrouperPanel extends JPanel {
 				if (event.getActionCommand().equals("ADD")) {
 					NoteGrouperElement element = new NoteGrouperElement(
 							NoteColumnList.getInstance().get(
-									NoteColumnList.TITLE), SortOrder.ASCENDING);
+									NoteColumnList.TITLE),
+							SortOrder.ASCENDING);
 					
 					NoteGrouperPanel.this.grouper.addElement(element);
 				} else {
