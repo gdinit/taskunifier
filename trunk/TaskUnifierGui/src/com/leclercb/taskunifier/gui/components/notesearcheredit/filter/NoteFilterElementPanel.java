@@ -33,11 +33,12 @@
 package com.leclercb.taskunifier.gui.components.notesearcheredit.filter;
 
 import com.leclercb.taskunifier.api.models.Note;
+import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.NoteFilterElement;
 import com.leclercb.taskunifier.gui.components.notes.NoteColumnList;
 import com.leclercb.taskunifier.gui.components.searcheredit.filter.DefaultFilterElementPanel;
 
-public class NoteFilterElementPanel extends DefaultFilterElementPanel<Note, NoteFilterElement> {
+public class NoteFilterElementPanel extends DefaultFilterElementPanel<Note, NoteFilter, NoteFilterElement> {
 	
 	public NoteFilterElementPanel() {
 		super(NoteColumnList.getInstance());

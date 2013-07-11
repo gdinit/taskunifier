@@ -54,7 +54,7 @@ import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 @XStreamAlias("element")
-public abstract class FilterElement<M extends Model, F extends Filter<M, F, ? extends FilterElement<M, F>>> implements PropertyChangeSupported, PropertyChangeListener {
+public abstract class FilterElement<M extends Model, F extends Filter<M, F, FE>, FE extends FilterElement<M, F, FE>> implements PropertyChangeSupported, PropertyChangeListener {
 	
 	public static final String PROP_PROPERTY = "property";
 	public static final String PROP_CONDITION = "condition";

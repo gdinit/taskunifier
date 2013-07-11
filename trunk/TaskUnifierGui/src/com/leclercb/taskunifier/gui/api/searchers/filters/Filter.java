@@ -51,7 +51,7 @@ import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
-public abstract class Filter<M extends Model, F extends Filter<M, F, FE>, FE extends FilterElement<M, F>> implements ListChangeListener, PropertyChangeListener, ListChangeSupported, PropertyChangeSupported {
+public abstract class Filter<M extends Model, F extends Filter<M, F, FE>, FE extends FilterElement<M, F, FE>> implements ListChangeListener, PropertyChangeListener, ListChangeSupported, PropertyChangeSupported {
 	
 	public static final String PROP_LINK = "link";
 	
