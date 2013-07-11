@@ -33,11 +33,12 @@
 package com.leclercb.taskunifier.gui.components.tasksearcheredit.filter;
 
 import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilterElement;
 import com.leclercb.taskunifier.gui.components.searcheredit.filter.DefaultFilterElementPanel;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 
-public class TaskFilterElementPanel extends DefaultFilterElementPanel<Task, TaskFilterElement> {
+public class TaskFilterElementPanel extends DefaultFilterElementPanel<Task, TaskFilter, TaskFilterElement> {
 	
 	public TaskFilterElementPanel() {
 		super(TaskColumnList.getInstance());

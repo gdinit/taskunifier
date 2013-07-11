@@ -51,7 +51,7 @@ import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("taskelement")
-public class TaskFilterElement extends FilterElement<Task, TaskFilter> implements Cloneable {
+public class TaskFilterElement extends FilterElement<Task, TaskFilter, TaskFilterElement> implements Cloneable {
 	
 	public TaskFilterElement() {
 		

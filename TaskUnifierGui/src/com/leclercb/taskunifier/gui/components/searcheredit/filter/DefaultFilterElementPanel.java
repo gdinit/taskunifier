@@ -46,6 +46,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.leclercb.taskunifier.gui.api.searchers.filters.Filter;
 import org.jdesktop.swingx.JXComboBox;
 import org.jdesktop.swingx.renderer.DefaultListRenderer;
 
@@ -80,7 +81,7 @@ import com.leclercb.taskunifier.gui.commons.values.StringValueTaskRepeatFrom;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
 
-public class DefaultFilterElementPanel<M extends Model, FE extends FilterElement<M, ?>> extends JPanel {
+public class DefaultFilterElementPanel<M extends Model, F extends Filter<M, F, FE>, FE extends FilterElement<M, F, FE>> extends JPanel {
 	
 	private PropertyAccessorList<M> list;
 	
