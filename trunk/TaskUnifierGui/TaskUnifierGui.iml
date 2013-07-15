@@ -7,7 +7,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="Commons" />
     <orderEntry type="module" module-name="TaskUnifierApi" />
+    <orderEntry type="library" name="Commons Library" level="project" />
     <orderEntry type="library" name="TaskUnifierGui Library" level="project" />
   </component>
 </module>
