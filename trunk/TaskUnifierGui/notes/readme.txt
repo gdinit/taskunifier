@@ -1,6 +1,10 @@
 HISTORY
 -------
 
+Version 4.0.3
+    - Major:
+        - Fixed issue group by contexts, goals and locations
+
 Version 4.0.2
 	- Major:
 		- Problem entering license key
