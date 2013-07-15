@@ -8,6 +8,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="BizCal Libraries" level="project" />
+    <orderEntry type="library" name="TaskUnifierGui Library" level="project" />
   </component>
 </module>
 
