@@ -30,12 +30,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package com.leclercb.taskunifier.gui.components.tasksearchertree;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
+import com.leclercb.commons.api.utils.DateUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.utils.TreeUtils;
 import com.leclercb.taskunifier.api.models.*;
@@ -51,6 +53,7 @@ import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.*;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -59,6 +62,7 @@ import javax.swing.tree.TreeNode;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -77,12 +81,16 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
     private SearcherCategory tagCategory;
     private SearcherCategory personalCategory;
 
+    private Calendar updateBadgesNeeded;
+
     public TaskSearcherTreeModel(String settingsPrefix, TaskSearcherTree tree) {
         super(new SearcherCategory(TaskSearcherType.DEFAULT, null));
 
         this.settingsPrefix = settingsPrefix;
 
         this.tree = tree;
+
+        this.updateBadgesNeeded = null;
 
         this.initializeDefaultSearcher();
         this.initializeGeneralCategory();
@@ -109,6 +117,8 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 
         Main.getSettings().addPropertyChangeListener(
                 new WeakPropertyChangeListener(Main.getSettings(), this));
+
+        new UpdateBadgesThread().start();
     }
 
     public SearcherItem getDefaultSearcher() {
@@ -635,9 +645,13 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 
     @Override
     public void listChange(ListChangeEvent event) {
+        if (event.getValue() instanceof Note) {
+            return;
+        }
+
         if (event.getValue() instanceof Task) {
             if (!Synchronizing.getInstance().isSynchronizing())
-                this.updateBadges();
+                this.updateBadgesNeeded();
 
             return;
         }
@@ -683,18 +697,23 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 
     @Override
     public void propertyChange(PropertyChangeEvent event) {
-        if (Synchronizing.getInstance().isSynchronizing())
+        if (Synchronizing.getInstance().isSynchronizing()) {
             return;
+        }
 
-        if (event.getPropertyName().equals("tasksearcher.show_completed_tasks")) {
-            this.updateBadges();
-
+        if (event.getSource() instanceof Note) {
             return;
         }
 
         if (event.getSource() instanceof Task) {
             if (!event.getPropertyName().equals(ModelNote.PROP_NOTE))
-                this.updateBadges();
+                this.updateBadgesNeeded();
+
+            return;
+        }
+
+        if (event.getPropertyName().equals("tasksearcher.show_completed_tasks")) {
+            this.updateBadgesNeeded();
 
             return;
         }
@@ -804,7 +823,7 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
         this.initializeLocationCategory();
         this.initializePersonalCategory();
 
-        this.updateBadges();
+        this.updateBadgesNeeded();
 
         if (selectedObject instanceof TaskSearcher)
             selectedObject = this.findItemFromSearcher((TaskSearcher) selectedObject);
@@ -819,7 +838,11 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
             this.updateSelection(null);
     }
 
-    public void updateBadges() {
+    public void updateBadgesNeeded() {
+        this.updateBadgesNeeded = Calendar.getInstance();
+    }
+
+    private void updateBadges() {
         this.updateBadges(this.defaultSearcher);
 
         SearcherCategory[] categories = this.getCategories();
@@ -832,8 +855,6 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
                     this.updateBadges((SearcherCategory) category.getChildAt(i));
             }
         }
-
-        this.nodeChanged((TreeNode) this.getRoot());
     }
 
     private void updateBadges(SearcherCategory category) {
@@ -846,8 +867,17 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
         }
     }
 
-    private void updateBadges(SearcherNode node) {
+    private void updateBadges(final SearcherNode node) {
         node.updateBadgeCount();
+
+        ProcessUtils.executeOrInvokeAndWait(new Runnable() {
+
+            @Override
+            public void run() {
+                TaskSearcherTreeModel.this.nodeChanged(node);
+            }
+
+        });
 
         for (int i = 0; i < node.getChildCount(); i++) {
             if (node.getChildAt(i) instanceof SearcherNode)
@@ -863,6 +893,29 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
         if (this.tree.getSelectionModel().getSelectionPath() == null)
             this.tree.getSelectionModel().setSelectionPath(
                     TreeUtils.getPath(this.getDefaultSearcher()));
+    }
+
+    private class UpdateBadgesThread extends Thread {
+
+        @Override
+        public void run() {
+            while (!this.isInterrupted()) {
+                try {
+                    if (TaskSearcherTreeModel.this.updateBadgesNeeded != null &&
+                            DateUtils.getDiffInSeconds(
+                                    TaskSearcherTreeModel.this.updateBadgesNeeded,
+                                    Calendar.getInstance()) > 3) {
+                        TaskSearcherTreeModel.this.updateBadgesNeeded = null;
+
+                        TaskSearcherTreeModel.this.updateBadges();
+                    }
+
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+
+                }
+            }
+        }
     }
 
 }
