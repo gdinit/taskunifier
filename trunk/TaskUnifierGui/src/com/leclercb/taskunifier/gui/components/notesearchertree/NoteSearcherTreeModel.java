@@ -30,12 +30,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package com.leclercb.taskunifier.gui.components.notesearchertree;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
+import com.leclercb.commons.api.utils.DateUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.utils.TreeUtils;
 import com.leclercb.taskunifier.api.models.*;
@@ -52,6 +54,7 @@ import com.leclercb.taskunifier.gui.components.notesearchertree.nodes.SearcherIt
 import com.leclercb.taskunifier.gui.components.notesearchertree.nodes.SearcherNode;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.constants.Constants;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -60,6 +63,7 @@ import javax.swing.tree.TreeNode;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -73,12 +77,16 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
     private SearcherCategory folderCategory;
     private SearcherCategory personalCategory;
 
+    private Calendar updateBadgesNeeded;
+
     public NoteSearcherTreeModel(String settingsPrefix, NoteSearcherTree tree) {
         super(new SearcherCategory(NoteSearcherType.DEFAULT, null));
 
         this.settingsPrefix = settingsPrefix;
 
         this.tree = tree;
+
+        this.updateBadgesNeeded = null;
 
         this.initializeDefaultSearcher();
         this.initializeFolderCategory();
@@ -97,6 +105,8 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
                 new WeakPropertyChangeListener(
                         NoteSearcherFactory.getInstance(),
                         this));
+
+        new UpdateBadgesThread().start();
     }
 
     public SearcherItem getDefaultSearcher() {
@@ -336,8 +346,12 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
     public void listChange(ListChangeEvent event) {
         if (event.getValue() instanceof Note) {
             if (!Synchronizing.getInstance().isSynchronizing())
-                this.updateBadges();
+                this.updateBadgesNeeded();
 
+            return;
+        }
+
+        if (event.getValue() instanceof Task) {
             return;
         }
 
@@ -354,12 +368,17 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
 
     @Override
     public void propertyChange(PropertyChangeEvent event) {
-        if (Synchronizing.getInstance().isSynchronizing())
+        if (Synchronizing.getInstance().isSynchronizing()) {
             return;
+        }
 
         if (event.getSource() instanceof Note) {
-            this.updateBadges();
+            this.updateBadgesNeeded();
 
+            return;
+        }
+
+        if (event.getSource() instanceof Task) {
             return;
         }
 
@@ -427,7 +446,7 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
         this.initializeFolderCategory();
         this.initializePersonalCategory();
 
-        this.updateBadges();
+        this.updateBadgesNeeded();
 
         if (selectedObject instanceof NoteSearcher)
             selectedObject = this.findItemFromSearcher((NoteSearcher) selectedObject);
@@ -440,7 +459,11 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
             this.updateSelection(null);
     }
 
-    public void updateBadges() {
+    public void updateBadgesNeeded() {
+        this.updateBadgesNeeded = Calendar.getInstance();
+    }
+
+    private void updateBadges() {
         this.updateBadges(this.defaultSearcher);
 
         SearcherCategory[] categories = this.getCategories();
@@ -453,8 +476,6 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
                     this.updateBadges((SearcherCategory) category.getChildAt(i));
             }
         }
-
-        this.nodeChanged((TreeNode) this.getRoot());
     }
 
     private void updateBadges(SearcherCategory category) {
@@ -467,8 +488,17 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
         }
     }
 
-    private void updateBadges(SearcherNode node) {
+    private void updateBadges(final SearcherNode node) {
         node.updateBadgeCount();
+
+        ProcessUtils.executeOrInvokeAndWait(new Runnable() {
+
+            @Override
+            public void run() {
+                NoteSearcherTreeModel.this.nodeChanged(node);
+            }
+
+        });
 
         for (int i = 0; i < node.getChildCount(); i++) {
             if (node.getChildAt(i) instanceof SearcherNode)
@@ -484,6 +514,29 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
         if (this.tree.getSelectionModel().getSelectionPath() == null)
             this.tree.getSelectionModel().setSelectionPath(
                     TreeUtils.getPath(this.getDefaultSearcher()));
+    }
+
+    private class UpdateBadgesThread extends Thread {
+
+        @Override
+        public void run() {
+            while (!this.isInterrupted()) {
+                try {
+                    if (NoteSearcherTreeModel.this.updateBadgesNeeded != null &&
+                            DateUtils.getDiffInSeconds(
+                                    NoteSearcherTreeModel.this.updateBadgesNeeded,
+                                    Calendar.getInstance()) > 3) {
+                        NoteSearcherTreeModel.this.updateBadgesNeeded = null;
+
+                        NoteSearcherTreeModel.this.updateBadges();
+                    }
+
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+
+                }
+            }
+        }
     }
 
 }

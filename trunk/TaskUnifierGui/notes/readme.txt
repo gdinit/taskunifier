@@ -3,6 +3,7 @@ HISTORY
 
 Version 4.0.3
     - Major:
+        - Improved performance
         - Fixed issue group by contexts, goals and locations
 
 Version 4.0.2
