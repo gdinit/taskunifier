@@ -46,6 +46,7 @@ import com.leclercb.taskunifier.gui.api.searchers.TaskSearcher;
 import com.leclercb.taskunifier.gui.commons.events.TaskSearcherSelectionListener;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.draganddrop.TaskSearcherTransferHandler;
+import com.leclercb.taskunifier.gui.components.tasksearchertree.menu.TaskSearcherTreeMenu;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.ModelItem;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.SearcherCategory;
 import com.leclercb.taskunifier.gui.components.tasksearchertree.nodes.TagItem;
@@ -55,14 +56,19 @@ import com.leclercb.taskunifier.gui.utils.UserUtils;
 
 import javax.swing.*;
 import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class TaskSearcherTree extends JTree implements TaskSearcherView, PropertyChangeListener, SavePropertiesListener, ListChangeListener {
 
     private String settingsPrefix;
+
+    private TaskSearcherTreeMenu taskSearcherTreeMenu;
 
     public TaskSearcherTree(String settingsPrefix) {
         this.settingsPrefix = settingsPrefix;
@@ -86,6 +92,7 @@ public class TaskSearcherTree extends JTree implements TaskSearcherView, Propert
         this.initializeToolTipText();
         this.initializeDragAndDrop();
         this.initializeCopyAndPaste();
+        this.initializeTaskSearcherTreeMenu();
         this.initializeExpandedState();
 
         Synchronizing.getInstance().addPropertyChangeListener(
@@ -259,6 +266,32 @@ public class TaskSearcherTree extends JTree implements TaskSearcherView, Propert
                         KeyEvent.VK_V,
                         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
                 TransferHandler.getPasteAction().getValue(Action.NAME));
+    }
+
+    private void initializeTaskSearcherTreeMenu() {
+        this.taskSearcherTreeMenu = new TaskSearcherTreeMenu();
+
+        this.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent event) {
+                // Or BUTTON3 due to a bug with OSX
+                if (event.isPopupTrigger()
+                        || event.getButton() == MouseEvent.BUTTON3) {
+                    TreePath path = TaskSearcherTree.this.getPathForLocation(event.getX(), event.getY());
+
+                    if (path != null) {
+                        TaskSearcherTree.this.setSelectionPath(path);
+
+                        TaskSearcherTree.this.taskSearcherTreeMenu.show(
+                                event.getComponent(),
+                                event.getX(),
+                                event.getY());
+                    }
+                }
+            }
+
+        });
     }
 
     private void initializeExpandedState() {

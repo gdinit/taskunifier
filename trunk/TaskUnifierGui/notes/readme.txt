@@ -1,6 +1,10 @@
 HISTORY
 -------
 
+Version 4.0.4
+    - Minor:
+        - FR 380: Edit task field via tab key
+
 Version 4.0.3
     - Major:
         - Improved performance
