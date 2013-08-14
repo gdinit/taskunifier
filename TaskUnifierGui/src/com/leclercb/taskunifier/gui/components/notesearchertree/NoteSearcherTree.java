@@ -44,6 +44,7 @@ import com.leclercb.taskunifier.api.models.Note;
 import com.leclercb.taskunifier.gui.api.searchers.NoteSearcher;
 import com.leclercb.taskunifier.gui.commons.events.NoteSearcherSelectionListener;
 import com.leclercb.taskunifier.gui.components.notesearchertree.draganddrop.NoteSearcherTransferHandler;
+import com.leclercb.taskunifier.gui.components.notesearchertree.menu.NoteSearcherTreeMenu;
 import com.leclercb.taskunifier.gui.components.notesearchertree.nodes.FolderItem;
 import com.leclercb.taskunifier.gui.components.notesearchertree.nodes.NoteSearcherProvider;
 import com.leclercb.taskunifier.gui.components.notesearchertree.nodes.SearcherCategory;
@@ -53,14 +54,19 @@ import com.leclercb.taskunifier.gui.utils.UserUtils;
 
 import javax.swing.*;
 import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class NoteSearcherTree extends JTree implements NoteSearcherView, PropertyChangeListener, SavePropertiesListener, ListChangeListener {
 
     private String settingsPrefix;
+
+    private NoteSearcherTreeMenu noteSearcherTreeMenu;
 
     public NoteSearcherTree(String settingsPrefix) {
         this.settingsPrefix = settingsPrefix;
@@ -84,6 +90,7 @@ public class NoteSearcherTree extends JTree implements NoteSearcherView, Propert
         this.initializeToolTipText();
         this.initializeDragAndDrop();
         this.initializeCopyAndPaste();
+        this.initializeNoteSearcherTreeMenu();
         this.initializeExpandedState();
 
         Synchronizing.getInstance().addPropertyChangeListener(
@@ -234,6 +241,32 @@ public class NoteSearcherTree extends JTree implements NoteSearcherView, Propert
                         KeyEvent.VK_V,
                         Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
                 TransferHandler.getPasteAction().getValue(Action.NAME));
+    }
+
+    private void initializeNoteSearcherTreeMenu() {
+        this.noteSearcherTreeMenu = new NoteSearcherTreeMenu();
+
+        this.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent event) {
+                // Or BUTTON3 due to a bug with OSX
+                if (event.isPopupTrigger()
+                        || event.getButton() == MouseEvent.BUTTON3) {
+                    TreePath path = NoteSearcherTree.this.getPathForLocation(event.getX(), event.getY());
+
+                    if (path != null) {
+                        NoteSearcherTree.this.setSelectionPath(path);
+
+                        NoteSearcherTree.this.noteSearcherTreeMenu.show(
+                                event.getComponent(),
+                                event.getX(),
+                                event.getY());
+                    }
+                }
+            }
+
+        });
     }
 
     private void initializeExpandedState() {
