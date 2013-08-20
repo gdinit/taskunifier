@@ -30,6 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package com.leclercb.taskunifier.gui.components.notesearchertree;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
@@ -83,8 +84,8 @@ public class NoteSearcherTree extends JTree implements NoteSearcherView, Propert
         this.setShowsRootHandles(true);
         this.setRowHeight(20);
 
-        this.setSelectionModel(new NoteSearcherTreeSelectionModel());
         this.setModel(new NoteSearcherTreeModel(this.settingsPrefix, this));
+        this.setSelectionModel(new NoteSearcherTreeSelectionModel(this.getSearcherModel()));
         this.setUI(new NoteSearcherTreeUI());
 
         this.initializeToolTipText();

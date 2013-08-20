@@ -30,6 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package com.leclercb.taskunifier.gui.components.tasksearchertree;
 
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
@@ -85,8 +86,8 @@ public class TaskSearcherTree extends JTree implements TaskSearcherView, Propert
         this.setShowsRootHandles(true);
         this.setRowHeight(20);
 
-        this.setSelectionModel(new TaskSearcherTreeSelectionModel());
         this.setModel(new TaskSearcherTreeModel(this.settingsPrefix, this));
+        this.setSelectionModel(new TaskSearcherTreeSelectionModel(this.getSearcherModel()));
         this.setUI(new TaskSearcherTreeUI());
 
         this.initializeToolTipText();
