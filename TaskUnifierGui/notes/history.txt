@@ -1,5 +1,6 @@
 Version 4.0.4
     - Minor:
+        - SR 57: Load deleted custom task columns
         - FR 380: Edit task field via tab key
         - Add right click menu for searcher trees
         - Bug fixed: Collapse current selection in searcher trees
