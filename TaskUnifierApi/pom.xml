@@ -17,31 +17,6 @@
         </developer>
     </developers>
 
-    <repositories>
-        <repository>
-            <id>MavenCentral</id>
-            <name>Maven Central Repository</name>
-            <url>http://repo1.maven.org/maven2</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>ApacheReleases</id>
-            <name>Apache Releases Repository</name>
-            <url>https://repository.apache.org/content/repositories/releases</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.leclercb</groupId>
