@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.leclercb</groupId>
-	<artifactId>taskunifier-cl</artifactId>
+	<artifactId>taskunifier-addon-cl</artifactId>
 	<version>4.0.0</version>
 	<packaging>jar</packaging>
 
-	<name>TaskUnifier Command Line</name>
-	<description>TaskUnifier Command Line Project</description>
+	<name>TaskUnifier Addon Command Line</name>
+	<description>TaskUnifier Addon Command Line Project</description>
 
     <developers>
         <developer>
