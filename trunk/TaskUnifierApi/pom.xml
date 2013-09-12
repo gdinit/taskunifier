@@ -3,8 +3,8 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.leclercb.taskunifier</groupId>
-	<artifactId>api</artifactId>
+	<groupId>com.leclercb</groupId>
+	<artifactId>taskunifier-api</artifactId>
 	<version>4.0.0</version>
 	<packaging>jar</packaging>
 
