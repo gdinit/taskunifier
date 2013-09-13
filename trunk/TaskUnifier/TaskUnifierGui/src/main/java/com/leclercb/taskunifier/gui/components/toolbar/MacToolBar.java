@@ -32,41 +32,24 @@
  */
 package com.leclercb.taskunifier.gui.components.toolbar;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-
-import org.apache.commons.lang3.StringUtils;
-
 import com.explodingpixels.macwidgets.MacWidgetFactory;
+import com.explodingpixels.macwidgets.UnifiedToolBar;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
 import com.leclercb.commons.api.properties.events.WeakSavePropertiesListener;
 import com.leclercb.commons.gui.logger.GuiLogger;
-import com.leclercb.taskunifier.gui.actions.ActionAddNote;
-import com.leclercb.taskunifier.gui.actions.ActionAddSubTask;
-import com.leclercb.taskunifier.gui.actions.ActionAddTask;
-import com.leclercb.taskunifier.gui.actions.ActionAddTemplateTask;
-import com.leclercb.taskunifier.gui.actions.ActionAddTemplateTaskMenu;
-import com.leclercb.taskunifier.gui.actions.ActionChangeView;
-import com.leclercb.taskunifier.gui.actions.ActionConfiguration;
-import com.leclercb.taskunifier.gui.actions.ActionDelete;
-import com.leclercb.taskunifier.gui.actions.ActionList;
-import com.leclercb.taskunifier.gui.actions.ActionManageUsers;
-import com.leclercb.taskunifier.gui.actions.ActionScheduledSync;
-import com.leclercb.taskunifier.gui.actions.ActionSwitchToUserMenu;
+import com.leclercb.taskunifier.gui.actions.*;
 import com.leclercb.taskunifier.gui.actions.synchronize.ActionSynchronizeAndPublish;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
 import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 public class MacToolBar extends UnifiedToolBar implements SavePropertiesListener, PropertyChangeListener {
 	
@@ -77,7 +60,7 @@ public class MacToolBar extends UnifiedToolBar implements SavePropertiesListener
 	}
 	
 	private void initialize() {
-		this.initializeActions();
+        this.initializeActions();
 		
 		final JPopupMenu toolbarMenu = new JPopupMenu();
 		toolbarMenu.add(new ActionConfiguration(
