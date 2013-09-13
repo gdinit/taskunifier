@@ -18,11 +18,11 @@
     </developers>
 
     <dependencies>
-		<dependency>
-			<groupId>com.leclercb</groupId>
-			<artifactId>taskunifier-gui</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>com.leclercb</groupId>
+            <artifactId>taskunifier-gui</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <scm>
