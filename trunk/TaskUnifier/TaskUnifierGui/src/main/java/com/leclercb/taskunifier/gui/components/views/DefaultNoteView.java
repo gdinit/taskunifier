@@ -117,7 +117,9 @@ public class DefaultNoteView extends JPanel implements NoteView, SavePropertiesL
 		this.setLayout(new BorderLayout());
 		
 		if (SystemUtils.IS_OS_MAC && LookAndFeelUtils.isSytemLookAndFeel()) {
-			this.horizontalSplitPane = ComponentFactory.createThinJSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+			this.horizontalSplitPane = ComponentFactory.createThinJSplitPane(
+                    JSplitPane.HORIZONTAL_SPLIT,
+                    Main.getSettings().getIntegerProperty("view.notes.window.split.divider_size"));
 		} else {
 			this.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
 			

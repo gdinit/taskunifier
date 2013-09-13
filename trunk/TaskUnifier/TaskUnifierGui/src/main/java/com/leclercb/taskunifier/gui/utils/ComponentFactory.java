@@ -50,6 +50,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 
+import com.leclercb.taskunifier.gui.main.Main;
 import org.apache.commons.lang3.SystemUtils;
 import org.jdesktop.swingx.JXComboBox;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -252,11 +253,11 @@ public final class ComponentFactory {
 		return scrollPane;
 	}
 	
-	public static JSplitPane createThinJSplitPane(int orientation) {
+	public static JSplitPane createThinJSplitPane(int orientation, int dividerSize) {
 		JSplitPane splitPane = new JSplitPane(orientation);
 		
 		splitPane.setContinuousLayout(true);
-		splitPane.setDividerSize(1);
+		splitPane.setDividerSize(dividerSize);
 		((BasicSplitPaneUI) splitPane.getUI()).getDivider().setBorder(
 				BorderFactory.createMatteBorder(0, 1, 0, 0, new Color(0xa5a5a5)));
 		splitPane.setBorder(BorderFactory.createEmptyBorder());
