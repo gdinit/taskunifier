@@ -42,14 +42,14 @@
 			<arch name="x86_64"/>
 			<arch name="i386"/>
 			
-			<classpath dir="${directory.gui}/dist">
-				<include name="taskunifiergui.jar" />
-			</classpath>
+			<jarfileset dir="${directory.gui}/target">
+				<include name="taskunifier-gui-${taskunifier.version}.jar" />
+			</jarfileset>
 			
-			<classpath dir="${directory.gui}">
-				<include name="lib/" />
-				<exclude name="lib/applejavaextensions.jar" />
-			</classpath>
+			<jarfileset dir="${directory.gui}">
+				<include name="dependencies/" />
+				<exclude name="dependencies/AppleJavaExtensions-*.jar" />
+			</jarfileset>
 
 			<bundledocument extensions="tue"
 					icon="${directory.gui}/resources/icon.icns"
