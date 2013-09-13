@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Closed Source" pattern="src[taskunifier-plugin-googlecal]:*..*||src[taskunifier-plugin-googletasks]:*..*||src[taskunifier-plugin-networkshare]:*..*||src[taskunifier-plugin-sample]:*..*||src[taskunifier-plugin-toodledo]:*..*" />
+</component>

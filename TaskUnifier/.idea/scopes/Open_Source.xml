@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Open Source" pattern="src[bizcal]:*..*||src[commons]:*..*||src[taskunifier-addon-cl]:*..*||src[taskunifier-api]:*..*||src[taskunifier-gui]:*..*" />
+</component>
