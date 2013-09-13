@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.leclercb</groupId>
+    <artifactId>taskunifier</artifactId>
+    <version>4.0.0</version>
+    <packaging>pom</packaging>
+
+    <name>TaskUnifier</name>
+    <description>TaskUnifier Project</description>
+
+    <developers>
+        <developer>
+            <name>Benjamin Leclerc</name>
+        </developer>
+    </developers>
+
+    <modules>
+        <module>BizCal</module>
+        <module>Commons</module>
+        <module>TaskUnifierAddonCommandLine</module>
+        <module>TaskUnifierApi</module>
+        <module>TaskUnifierGui</module>
+        <module>TaskUnifierPluginSample</module>
+    </modules>
+
+    <profiles>
+        <profile>
+            <id>extra-plugins</id>
+            <modules>
+                <module>TaskUnifierPluginGoogleCalendar</module>
+                <module>TaskUnifierPluginGoogleTasks</module>
+                <module>TaskUnifierPluginNetworkShare</module>
+                <module>TaskUnifierPluginToodledo</module>
+            </modules>
+        </profile>
+    </profiles>
+
+</project>
