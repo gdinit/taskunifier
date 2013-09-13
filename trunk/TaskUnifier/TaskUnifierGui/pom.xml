@@ -6,8 +6,8 @@
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier-gui</artifactId>
     <packaging>jar</packaging>
-	
-	<parent>
+
+    <parent>
         <groupId>com.leclercb</groupId>
         <artifactId>taskunifier</artifactId>
         <version>4.0.0</version>
@@ -25,13 +25,28 @@
     <dependencies>
         <dependency>
             <groupId>com.leclercb</groupId>
+            <artifactId>bizcal</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.leclercb</groupId>
+            <artifactId>commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.leclercb</groupId>
             <artifactId>taskunifier-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.apple</groupId>
-            <artifactId>AppleJavaExtensions</artifactId>
-            <version>1.4</version>
+            <groupId>com.explodingpixels</groupId>
+            <artifactId>mac_widgets</artifactId>
+            <version>0.9.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.2.3</version>
         </dependency>
         <dependency>
             <groupId>com.google.api-client</groupId>
@@ -137,6 +152,27 @@
             <groupId>org.swinglabs.swingx</groupId>
             <artifactId>swingx-all</artifactId>
             <version>1.6.5-1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.android</groupId>
+            <artifactId>vcard</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/android-vcard.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.apple</groupId>
+            <artifactId>AppleJavaExtensions</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/applejavaextensions.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>net.snarl</groupId>
+            <artifactId>snarl</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/snarlnetworkebridge-1.1-v3.jar</systemPath>
         </dependency>
     </dependencies>
 

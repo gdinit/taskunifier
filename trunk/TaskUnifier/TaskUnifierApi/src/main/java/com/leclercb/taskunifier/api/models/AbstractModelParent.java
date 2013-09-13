@@ -191,7 +191,7 @@ public abstract class AbstractModelParent<M extends AbstractModelParent<M>> exte
 		return new ArrayList<M>(this.children);
 	}
 	
-	private void addChild(M child) {
+	protected void addChild(M child) {
 		CheckUtils.isNotNull(child);
 		
 		if (this.children.contains(child))
@@ -199,8 +199,8 @@ public abstract class AbstractModelParent<M extends AbstractModelParent<M>> exte
 		
 		this.children.add(child);
 	}
-	
-	private void removeChild(M child) {
+
+    protected void removeChild(M child) {
 		this.children.remove(child);
 	}
 	
