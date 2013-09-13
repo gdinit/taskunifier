@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Maven: com.apple:AppleJavaExtensions:1.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/TaskUnifierGui/lib/applejavaextensions.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
