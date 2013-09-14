@@ -5,7 +5,7 @@
 
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier-plugin-googlecal</artifactId>
-    <version>3.0</version>
+    <version>3.0</version><!-- PROJECT -->
     <packaging>jar</packaging>
 
     <parent>
@@ -54,7 +54,7 @@
             <!--
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>${taskunifier.version}</version>
+                <version>1.7</version>
                 <executions>
                     <execution>
                         <phase>install</phase>
