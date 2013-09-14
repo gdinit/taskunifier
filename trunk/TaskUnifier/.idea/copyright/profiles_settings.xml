@@ -1,8 +1,7 @@
 <component name="CopyrightManager">
   <settings default="">
     <module2copyright>
-      <element module="Open Source" copyright="TaskUnifier Open Source" />
-      <element module="Closed Source" copyright="TaskUnifier Closed Source" />
+      <element module="Open Source" copyright="TaskUnifier" />
     </module2copyright>
     <LanguageOptions name="ActionScript">
       <option name="fileTypeOverride" value="1" />
