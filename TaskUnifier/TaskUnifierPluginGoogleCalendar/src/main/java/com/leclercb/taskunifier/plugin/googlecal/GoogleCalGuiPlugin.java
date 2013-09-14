@@ -11,6 +11,7 @@ import java.util.logging.Level;
 
 import javax.help.HelpSet;
 
+import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationPanel;
@@ -27,11 +28,11 @@ public class GoogleCalGuiPlugin extends GoogleCalPlugin implements SynchronizerG
         GoogleCalApi.getInstance().setApplicationName("TaskUnifier");
 
         try {
-            Properties properties = new Properties();
+            PropertyMap properties = new PropertyMap();
             properties.load(Resources.class.getResourceAsStream("general.properties"));
 
-            GoogleCalApi.getInstance().setClientId(properties.get("googlecal.client_id"));
-            GoogleCalApi.getInstance().setClientSecret(properties.get("googlecal.client_secret"));
+            GoogleCalApi.getInstance().setClientId(properties.getStringProperty("googlecal.client_id"));
+            GoogleCalApi.getInstance().setClientSecret(properties.getStringProperty("googlecal.client_secret"));
         } catch (Exception e) {
             PluginLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
         }
