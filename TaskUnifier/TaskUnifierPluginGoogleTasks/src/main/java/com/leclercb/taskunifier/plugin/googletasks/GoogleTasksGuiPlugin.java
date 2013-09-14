@@ -1,0 +1,81 @@
+/*
+ * TaskUnifier
+ * Copyright (c) 2013, Benjamin Leclerc
+ * All rights reserved.
+ */
+package com.leclercb.taskunifier.plugin.googletasks;
+
+import java.net.URL;
+import java.util.Properties;
+import java.util.logging.Level;
+
+import javax.help.HelpSet;
+
+import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
+import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationPanel;
+import com.leclercb.taskunifier.gui.plugins.PluginApi;
+import com.leclercb.taskunifier.gui.plugins.PluginLogger;
+import com.leclercb.taskunifier.plugin.googletasks.help.PluginHelp;
+import com.leclercb.taskunifier.plugin.googletasks.resources.Resources;
+
+public class GoogleTasksGuiPlugin extends GoogleTasksPlugin implements SynchronizerGuiPlugin {
+	
+	private HelpSet helpSet;
+	
+	public GoogleTasksGuiPlugin() {
+		GoogleTasksApi.getInstance().setApplicationName("TaskUnifier");
+
+        try {
+            Properties properties = new Properties();
+            properties.load(Resources.class.getResourceAsStream("general.properties"));
+
+            GoogleTasksApi.getInstance().setClientId(properties.get("googletasks.client_id"));
+            GoogleTasksApi.getInstance().setClientSecret(properties.get("googletasks.client_secret"));
+        } catch (Exception e) {
+            PluginLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
+        }
+	}
+	
+	@Override
+	public String getAccountLabel() {
+		return PluginApi.getUserSettings().getStringProperty(
+				"plugin.googletasks.email");
+	}
+	
+	@Override
+	public void loadPlugin() {
+		try {
+			URL url = PluginHelp.class.getResource("help.xml");
+			this.helpSet = new HelpSet(null, url);
+			PluginApi.addHelpSet(this.helpSet);
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	@Override
+	public void installPlugin() {
+		GoogleTasksApi.getInstance().resetSynchronizerParameters(
+				PluginApi.getUserSettings());
+	}
+	
+	@Override
+	public void deletePlugin() {
+		if (this.helpSet != null)
+			PluginApi.removeHelpSet(this.helpSet);
+	}
+	
+	@Override
+	public int getPluginApiVersion() {
+		return 40; // See: Constants.PLUGIN_API_VERSION
+	}
+	
+	@Override
+	public ConfigurationPanel getConfigurationPanel(
+			ConfigurationGroup configuration,
+			boolean welcome) {
+		return new GoogleTasksConfigurationPanel(configuration, welcome);
+	}
+	
+}

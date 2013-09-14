@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+
+<toc version="2.0">
+
+	<tocitem text="Google Tasks Plugin Help" target="plugin_googletasks_main">
+		
+		<tocitem text="Configuration" target="plugin_googletasks_configuration" />
+		
+	</tocitem>
+
+</toc>

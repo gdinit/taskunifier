@@ -1,0 +1,46 @@
+Version 2.8
+	- Update for TaskUnifier 4.0.0
+
+Version 2.7
+	- Update for TaskUnifier 3.2.5
+
+Version 2.6
+	- Update for TaskUnifier 3.1.9
+
+Version 2.5
+	- Update for TaskUnifier 3.1.8
+
+Version 2.4
+	- Update for TaskUnifier 3.1.6
+
+Version 2.3
+	- BF 168: Refresh token not saved
+
+Version 2.2
+	- Update for TaskUnifier 3.0.4
+	- BF 168: Refresh token not saved
+
+Version 2.1
+	- Update for TaskUnifier 3.0.1
+
+Version 2.0
+	- Update for TaskUnifier 3.0.0
+
+Version 1.5
+	- Update for TaskUnifier 2.3.1
+
+Version 1.4
+	- Update for TaskUnifier 2.3.0
+	- BF 3497496: Incorrect timezone
+
+Version 1.3
+	- Improved license check
+
+Version 1.2
+	- Reset connection if email has changed
+	- Improved error messages
+	- Reduced size of plugin files
+	- BF 3483547: Sync error if task completed
+
+Version 1.1
+	- Initial release
