@@ -32,35 +32,35 @@
 
         <setversionmain
                 pomFile="${basedir}/TaskUnifierPluginGoogleCalendar/pom.xml"
-                propertyFile="${basedir}/TaskUnifierPluginGoogleCalendar/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
-
-        <setversionmain
-                pomFile="${basedir}/TaskUnifierPluginGoogleTasks/pom.xml"
-                propertyFile="${basedir}/TaskUnifierPluginGoogleTasks/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
-
-        <setversionmain
-                pomFile="${basedir}/TaskUnifierPluginNetworkShare/pom.xml"
-                propertyFile="${basedir}/TaskUnifierPluginNetworkShare/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
-
-        <setversionmain
-                pomFile="${basedir}/TaskUnifierPluginToodledo/pom.xml"
-                propertyFile="${basedir}/TaskUnifierPluginToodledo/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
-
-        <setversionparent
-                pomFile="${basedir}/TaskUnifierPluginGoogleCalendar/pom.xml"
                 propertyFile="${basedir}/TaskUnifierPluginGoogleCalendar/src/main/resources/com/leclercb/taskunifier/plugin/googlecal/resources/general.properties"/>
 
-        <setversionparent
+        <setversionmain
                 pomFile="${basedir}/TaskUnifierPluginGoogleTasks/pom.xml"
                 propertyFile="${basedir}/TaskUnifierPluginGoogleTasks/src/main/resources/com/leclercb/taskunifier/plugin/googletasks/resources/general.properties"/>
 
-        <setversionparent
+        <setversionmain
                 pomFile="${basedir}/TaskUnifierPluginNetworkShare/pom.xml"
                 propertyFile="${basedir}/TaskUnifierPluginNetworkShare/src/main/resources/com/leclercb/taskunifier/plugin/networkshare/resources/general.properties"/>
 
-        <setversionparent
+        <setversionmain
                 pomFile="${basedir}/TaskUnifierPluginToodledo/pom.xml"
                 propertyFile="${basedir}/TaskUnifierPluginToodledo/src/main/resources/com/leclercb/taskunifier/plugin/toodledo/resources/general.properties"/>
+
+        <setversionparent
+                pomFile="${basedir}/TaskUnifierPluginGoogleCalendar/pom.xml"
+                propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
+
+        <setversionparent
+                pomFile="${basedir}/TaskUnifierPluginGoogleTasks/pom.xml"
+                propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
+
+        <setversionparent
+                pomFile="${basedir}/TaskUnifierPluginNetworkShare/pom.xml"
+                propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
+
+        <setversionparent
+                pomFile="${basedir}/TaskUnifierPluginToodledo/pom.xml"
+                propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
     </target>
 
     <macrodef name="setversionmain">
