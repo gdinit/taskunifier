@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Maven: com.android:vcard:1.0">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/TaskUnifierGui/lib/android-vcard.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
