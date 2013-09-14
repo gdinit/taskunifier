@@ -5,7 +5,7 @@
 
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier-plugin-sample</artifactId>
-    <version>4.0.0</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <parent>
@@ -21,17 +21,17 @@
         <dependency>
             <groupId>com.leclercb</groupId>
             <artifactId>commons</artifactId>
-            <version>${project.version}</version>
+            <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.leclercb</groupId>
             <artifactId>taskunifier-api</artifactId>
-            <version>${project.version}</version>
+            <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.leclercb</groupId>
             <artifactId>taskunifier-gui</artifactId>
-            <version>${project.version}</version>
+            <version>${parent.version}</version>
         </dependency>
     </dependencies>
 

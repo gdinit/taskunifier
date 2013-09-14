@@ -5,13 +5,13 @@
 
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier-plugin-toodledo</artifactId>
-    <version>4.0.0</version>
+    <version>8.4</version>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>com.leclercb</groupId>
         <artifactId>taskunifier</artifactId>
-        <version>4.0.0</version><!-- PARENT -->
+        <version>4.0.4</version><!-- PARENT -->
     </parent>
 
     <name>TaskUnifier Plugin Toodledo</name>
@@ -21,17 +21,17 @@
         <dependency>
             <groupId>com.leclercb</groupId>
             <artifactId>commons</artifactId>
-            <version>${project.version}</version>
+            <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.leclercb</groupId>
             <artifactId>taskunifier-api</artifactId>
-            <version>${project.version}</version>
+            <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.leclercb</groupId>
             <artifactId>taskunifier-gui</artifactId>
-            <version>${project.version}</version>
+            <version>${parent.version}</version>
         </dependency>
     </dependencies>
 
