@@ -5,12 +5,6 @@
  */
 package com.leclercb.taskunifier.plugin.googlecal;
 
-import java.net.URL;
-import java.util.Properties;
-import java.util.logging.Level;
-
-import javax.help.HelpSet;
-
 import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
@@ -19,6 +13,10 @@ import com.leclercb.taskunifier.gui.plugins.PluginApi;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
 import com.leclercb.taskunifier.plugin.googlecal.help.PluginHelp;
 import com.leclercb.taskunifier.plugin.googlecal.resources.Resources;
+
+import javax.help.HelpSet;
+import java.net.URL;
+import java.util.logging.Level;
 
 public class GoogleCalGuiPlugin extends GoogleCalPlugin implements SynchronizerGuiPlugin {
 	
@@ -29,7 +27,7 @@ public class GoogleCalGuiPlugin extends GoogleCalPlugin implements SynchronizerG
 
         try {
             PropertyMap properties = new PropertyMap();
-            properties.load(Resources.class.getResourceAsStream("general.properties"));
+            properties.load(Resources.class.getResourceAsStream("private.properties"));
 
             GoogleCalApi.getInstance().setClientId(properties.getStringProperty("googlecal.client_id"));
             GoogleCalApi.getInstance().setClientSecret(properties.getStringProperty("googlecal.client_secret"));
