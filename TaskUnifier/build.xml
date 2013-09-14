@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="set-version" name="TaskUnifier">
+
+    <property environment="env"/>
+
+    <target name="set-version">
+        <echo message="Set version in POM files..."/>
+        <replace file="${src}/index.html" token="@@@" value="wombat"/>
+    </target>
+
+</project>
