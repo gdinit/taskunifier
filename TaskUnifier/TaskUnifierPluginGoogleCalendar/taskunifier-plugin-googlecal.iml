@@ -10,7 +10,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="commons" />
+    <orderEntry type="library" name="Maven: com.leclercb:commons:4.0.0" level="project" />
     <orderEntry type="library" name="Maven: ecs:ecs:1.4.2" level="project" />
     <orderEntry type="library" name="Maven: com.jgoodies:forms:1.2.1" level="project" />
     <orderEntry type="library" name="Maven: ical4j:ical4j:0.9.20" level="project" />
@@ -80,8 +80,12 @@
     <orderEntry type="library" name="Maven: com.miglayout:miglayout-swing:4.2" level="project" />
     <orderEntry type="library" name="Maven: com.miglayout:miglayout-core:4.2" level="project" />
     <orderEntry type="library" name="Maven: org.swinglabs.swingx:swingx-all:1.6.5-1" level="project" />
-    <orderEntry type="module" module-name="taskunifier-api" />
-    <orderEntry type="module" module-name="taskunifier-gui" />
+    <orderEntry type="library" name="Maven: com.leclercb:taskunifier-api:4.0.0" level="project" />
+    <orderEntry type="library" name="Maven: com.leclercb:taskunifier-gui:4.0.0" level="project" />
+    <orderEntry type="library" name="Maven: com.leclercb:bizcal:4.0.0" level="project" />
+    <orderEntry type="library" name="Maven: com.android:vcard:1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.apple:AppleJavaExtensions:1.0" level="project" />
+    <orderEntry type="library" name="Maven: net.snarl:snarl:1.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.apis:google-api-services-calendar:v3-rev60-1.17.0-rc" level="project" />
   </component>
 </module>
