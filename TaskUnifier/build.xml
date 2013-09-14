@@ -42,6 +42,10 @@
                 pomFile="${basedir}/TaskUnifierPluginNetworkShare/pom.xml"
                 propertyFile="${basedir}/TaskUnifierPluginNetworkShare/src/main/resources/com/leclercb/taskunifier/plugin/networkshare/resources/general.properties"/>
 
+        <setversionmainfixed
+                pomFile="${basedir}/TaskUnifierPluginSample/pom.xml"
+                version="1.0"/>
+
         <setversionmain
                 pomFile="${basedir}/TaskUnifierPluginToodledo/pom.xml"
                 propertyFile="${basedir}/TaskUnifierPluginToodledo/src/main/resources/com/leclercb/taskunifier/plugin/toodledo/resources/general.properties"/>
@@ -59,6 +63,10 @@
                 propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
 
         <setversionparent
+                pomFile="${basedir}/TaskUnifierPluginSample/pom.xml"
+                propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
+
+        <setversionparent
                 pomFile="${basedir}/TaskUnifierPluginToodledo/pom.xml"
                 propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
     </target>
@@ -72,6 +80,17 @@
             <replaceregexp file="@{pomFile}"
                            match="&lt;version&gt;[0-9]+(\.[0-9]+)*&lt;/version&gt;"
                            replace="&lt;version&gt;${taskunifier.version}&lt;/version&gt;"
+                           byline="true"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="setversionmainfixed">
+        <attribute name="pomFile"/>
+        <attribute name="version"/>
+        <sequential>
+            <replaceregexp file="@{pomFile}"
+                           match="&lt;version&gt;[0-9]+(\.[0-9]+)*&lt;/version&gt;"
+                           replace="&lt;version&gt;@{version}&lt;/version&gt;"
                            byline="true"/>
         </sequential>
     </macrodef>
