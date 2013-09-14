@@ -71,9 +71,9 @@
                                                 global="true"/>
 
                                         <copy file="${basedir}/history.txt"
-                                              tofile="../../TaskUnifierWebSite/plugins/networkshare/files/history_${project.version.underscored}.txt"/>
+                                              tofile="${directory.web}/plugins/networkshare/files/history_${project.version.underscored}.txt"/>
                                         <copy file="${basedir}/target/taskunifier-plugin-networkshare-${project.version}.jar"
-                                              tofile="../../TaskUnifierWebSite/plugins/networkshare/files/TaskUnifierPluginNetworkShare_${project.version.underscored}.jar"/>
+                                              tofile="${directory.web}/plugins/networkshare/files/TaskUnifierPluginNetworkShare_${project.version.underscored}.jar"/>
                                     </tasks>
                                 </configuration>
                                 <goals>

@@ -76,9 +76,9 @@
                                                 global="true"/>
 
                                         <copy file="${basedir}/history.txt"
-                                              tofile="../../TaskUnifierWebSite/plugins/googlecal/files/history_${project.version.underscored}.txt"/>
+                                              tofile="${directory.web}/plugins/googlecal/files/history_${project.version.underscored}.txt"/>
                                         <copy file="${basedir}/target/taskunifier-plugin-googlecal-${project.version}.jar"
-                                              tofile="../../TaskUnifierWebSite/plugins/googlecal/files/TaskUnifierPluginGoogleCalendar_${project.version.underscored}.jar"/>
+                                              tofile="${directory.web}/plugins/googlecal/files/TaskUnifierPluginGoogleCalendar_${project.version.underscored}.jar"/>
                                     </tasks>
                                 </configuration>
                                 <goals>

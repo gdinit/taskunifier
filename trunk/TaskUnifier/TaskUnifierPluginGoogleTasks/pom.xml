@@ -75,9 +75,9 @@
                                                 global="true"/>
 
                                         <copy file="${basedir}/history.txt"
-                                              tofile="../../TaskUnifierWebSite/plugins/googletasks/files/history_${project.version.underscored}.txt"/>
+                                              tofile="${directory.web}/plugins/googletasks/files/history_${project.version.underscored}.txt"/>
                                         <copy file="${basedir}/target/taskunifier-plugin-googletasks-${project.version}.jar"
-                                              tofile="../../TaskUnifierWebSite/plugins/googletasks/files/TaskUnifierPluginGoogleTasks_${project.version.underscored}.jar"/>
+                                              tofile="${directory.web}/plugins/googletasks/files/TaskUnifierPluginGoogleTasks_${project.version.underscored}.jar"/>
                                     </tasks>
                                 </configuration>
                                 <goals>

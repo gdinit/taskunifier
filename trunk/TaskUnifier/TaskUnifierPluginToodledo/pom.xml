@@ -71,9 +71,9 @@
                                                 global="true"/>
 
                                         <copy file="${basedir}/history.txt"
-                                              tofile="../../TaskUnifierWebSite/plugins/toodledo/files/history_${project.version.underscored}.txt"/>
+                                              tofile="${directory.web}/plugins/toodledo/files/history_${project.version.underscored}.txt"/>
                                         <copy file="${basedir}/target/taskunifier-plugin-toodledo-${project.version}.jar"
-                                              tofile="../../TaskUnifierWebSite/plugins/toodledo/files/TaskUnifierPluginToodledo_${project.version.underscored}.jar"/>
+                                              tofile="${directory.web}/plugins/toodledo/files/TaskUnifierPluginToodledo_${project.version.underscored}.jar"/>
                                     </tasks>
                                 </configuration>
                                 <goals>
