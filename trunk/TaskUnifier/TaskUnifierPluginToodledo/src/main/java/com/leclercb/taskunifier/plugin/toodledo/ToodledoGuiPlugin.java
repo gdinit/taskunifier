@@ -11,6 +11,7 @@ import java.util.logging.Level;
 
 import javax.help.HelpSet;
 
+import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationPanel;
@@ -31,10 +32,10 @@ public class ToodledoGuiPlugin extends ToodledoPlugin implements SynchronizerGui
 		ToodledoApi.getInstance().setVersion(getVersionFromConstants());
 
         try {
-            Properties properties = new Properties();
+            PropertyMap properties = new PropertyMap();
             properties.load(Resources.class.getResourceAsStream("general.properties"));
 
-            ToodledoApi.getInstance().setApiKey(properties.get("toodledo.api_key"));
+            ToodledoApi.getInstance().setApiKey(properties.getStringProperty("toodledo.api_key"));
         } catch (Exception e) {
             PluginLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
         }

@@ -11,6 +11,7 @@ import java.util.logging.Level;
 
 import javax.help.HelpSet;
 
+import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationPanel;
@@ -27,11 +28,11 @@ public class GoogleTasksGuiPlugin extends GoogleTasksPlugin implements Synchroni
 		GoogleTasksApi.getInstance().setApplicationName("TaskUnifier");
 
         try {
-            Properties properties = new Properties();
+            PropertyMap properties = new PropertyMap();
             properties.load(Resources.class.getResourceAsStream("general.properties"));
 
-            GoogleTasksApi.getInstance().setClientId(properties.get("googletasks.client_id"));
-            GoogleTasksApi.getInstance().setClientSecret(properties.get("googletasks.client_secret"));
+            GoogleTasksApi.getInstance().setClientId(properties.getStringProperty("googletasks.client_id"));
+            GoogleTasksApi.getInstance().setClientSecret(properties.getStringProperty("googletasks.client_secret"));
         } catch (Exception e) {
             PluginLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
         }

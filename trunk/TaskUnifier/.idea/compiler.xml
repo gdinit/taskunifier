@@ -37,6 +37,7 @@
     <bytecodeTargetLevel>
       <module name="bizcal" target="1.6" />
       <module name="commons" target="1.6" />
+      <module name="taskunifier" target="1.6" />
       <module name="taskunifier-addon-cl" target="1.6" />
       <module name="taskunifier-api" target="1.6" />
       <module name="taskunifier-gui" target="1.6" />
