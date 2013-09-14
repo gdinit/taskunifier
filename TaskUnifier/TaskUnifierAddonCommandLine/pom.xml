@@ -10,7 +10,8 @@
     <parent>
         <groupId>com.leclercb</groupId>
         <artifactId>taskunifier</artifactId>
-        <version>4.0.4</version><!-- PARENT -->
+        <version>4.0.4</version>
+        <!-- PARENT -->
     </parent>
 
     <name>TaskUnifier Addon Command Line</name>
@@ -28,6 +29,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
                 <configuration>
                     <archive>
                         <manifest>

@@ -10,7 +10,8 @@
     <parent>
         <groupId>com.leclercb</groupId>
         <artifactId>taskunifier</artifactId>
-        <version>4.0.4</version><!-- PARENT -->
+        <version>4.0.4</version>
+        <!-- PARENT -->
     </parent>
 
     <name>TaskUnifier Api</name>
@@ -20,7 +21,7 @@
         <dependency>
             <groupId>com.leclercb</groupId>
             <artifactId>commons</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 

@@ -5,7 +5,8 @@
 
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier</artifactId>
-    <version>4.0.4</version><!-- PROJECT -->
+    <version>4.0.4</version>
+    <!-- PROJECT -->
     <packaging>pom</packaging>
 
     <name>TaskUnifier</name>
@@ -275,6 +276,27 @@
             <groupId>org.swinglabs.swingx</groupId>
             <artifactId>swingx-all</artifactId>
             <version>1.6.5-1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.android</groupId>
+            <artifactId>vcard</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/TaskUnifierGui/lib/android-vcard.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.apple</groupId>
+            <artifactId>AppleJavaExtensions</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/TaskUnifierGui/lib/applejavaextensions.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>net.snarl</groupId>
+            <artifactId>snarl</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/TaskUnifierGui/lib/snarlnetworkebridge-1.1-v3.jar</systemPath>
         </dependency>
     </dependencies>
 
