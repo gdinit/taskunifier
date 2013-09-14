@@ -78,8 +78,8 @@
             <local name="taskunifier.version"/>
             <property file="@{propertyFile}" prefix="taskunifier"/>
             <replaceregexp file="@{pomFile}"
-                           match="&lt;version&gt;[0-9]+(\.[0-9]+)*&lt;/version&gt;"
-                           replace="&lt;version&gt;${taskunifier.version}&lt;/version&gt;"
+                           match="&lt;version&gt;[0-9]+(\.[0-9]+)*&lt;/version&gt;&lt;!-- PROJECT --&gt;"
+                           replace="&lt;version&gt;${taskunifier.version}&lt;/version&gt;&lt;!-- PROJECT --&gt;"
                            byline="true"/>
         </sequential>
     </macrodef>
@@ -89,8 +89,8 @@
         <attribute name="version"/>
         <sequential>
             <replaceregexp file="@{pomFile}"
-                           match="&lt;version&gt;[0-9]+(\.[0-9]+)*&lt;/version&gt;&lt;!-- MAIN --&gt;"
-                           replace="&lt;version&gt;@{version}&lt;/version&gt;&lt;!-- MAIN --&gt;"
+                           match="&lt;version&gt;[0-9]+(\.[0-9]+)*&lt;/version&gt;&lt;!-- PROJECT --&gt;"
+                           replace="&lt;version&gt;@{version}&lt;/version&gt;&lt;!-- PROJECT --&gt;"
                            byline="true"/>
         </sequential>
     </macrodef>

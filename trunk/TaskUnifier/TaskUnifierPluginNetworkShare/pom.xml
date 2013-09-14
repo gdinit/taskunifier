@@ -5,7 +5,7 @@
 
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier-plugin-networkshare</artifactId>
-    <version>1.7</version>
+    <version>1.7</version><!-- PROJECT -->
     <packaging>jar</packaging>
 
     <parent>
