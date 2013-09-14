@@ -5,12 +5,13 @@
 
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier-plugin-googlecal</artifactId>
+    <version>4.0.0</version>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>com.leclercb</groupId>
         <artifactId>taskunifier</artifactId>
-        <version>4.0.0</version>
+        <version>4.0.0</version><!-- PARENT -->
     </parent>
 
     <name>TaskUnifier Plugin Google Calendar</name>

@@ -1,11 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="set-version" name="TaskUnifier">
+<project basedir="." default="setversion" name="TaskUnifier">
 
     <property environment="env"/>
 
-    <target name="set-version">
+    <target name="setversion">
         <echo message="Set version in POM files..."/>
-        <replace file="${src}/index.html" token="@@@" value="wombat"/>
+
+        <setversionmain
+                pomFile="${basedir}/pom.xml"
+                propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
     </target>
+
+    <macrodef name="setversionmain">
+        <attribute name="pomFile"/>
+        <attribute name="propertyFile"/>
+        <sequential>
+            <property file="@{propertyFile}"/>
+            <replaceregexp file="@{pomFile}"
+                           match="<version>([0-9]\.)+</version>"
+                           replace="<version>${general.version}</version>"
+                           byline="true"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="setversionparent">
+        <attribute name="pomFile"/>
+        <attribute name="propertyFile"/>
+        <sequential>
+            <property file="@{propertyFile}"/>
+            <replaceregexp file="@{pomFile}"
+                           match="<version>([0-9]\.)+</version>&lt;!-- PARENT --&gt;"
+                           replace="<version>${general.version}</version>&lt;!-- PARENT --&gt;"
+                           byline="true"/>
+        </sequential>
+    </macrodef>
 
 </project>

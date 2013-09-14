@@ -82,10 +82,6 @@
     <orderEntry type="library" name="Maven: org.swinglabs.swingx:swingx-all:1.6.5-1" level="project" />
     <orderEntry type="module" module-name="taskunifier-api" />
     <orderEntry type="module" module-name="taskunifier-gui" />
-    <orderEntry type="module" module-name="bizcal" />
-    <orderEntry type="library" name="Maven: com.android:vcard:1.0" level="project" />
-    <orderEntry type="library" name="Maven: com.apple:AppleJavaExtensions:1.0" level="project" />
-    <orderEntry type="library" name="Maven: net.snarl:snarl:1.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.apis:google-api-services-tasks:v1-rev19-1.17.0-rc" level="project" />
   </component>
 </module>
