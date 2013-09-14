@@ -5,12 +5,6 @@
  */
 package com.leclercb.taskunifier.plugin.toodledo;
 
-import java.net.URL;
-import java.util.Properties;
-import java.util.logging.Level;
-
-import javax.help.HelpSet;
-
 import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
@@ -21,6 +15,10 @@ import com.leclercb.taskunifier.gui.plugins.PluginLogger;
 import com.leclercb.taskunifier.plugin.toodledo.help.PluginHelp;
 import com.leclercb.taskunifier.plugin.toodledo.resources.Resources;
 import com.leclercb.taskunifier.plugin.toodledo.translations.PluginTranslations;
+
+import javax.help.HelpSet;
+import java.net.URL;
+import java.util.logging.Level;
 
 public class ToodledoGuiPlugin extends ToodledoPlugin implements SynchronizerGuiPlugin {
 	
@@ -33,7 +31,7 @@ public class ToodledoGuiPlugin extends ToodledoPlugin implements SynchronizerGui
 
         try {
             PropertyMap properties = new PropertyMap();
-            properties.load(Resources.class.getResourceAsStream("general.properties"));
+            properties.load(Resources.class.getResourceAsStream("private.properties"));
 
             ToodledoApi.getInstance().setApiKey(properties.getStringProperty("toodledo.api_key"));
         } catch (Exception e) {
