@@ -12,6 +12,10 @@
     <name>TaskUnifier</name>
     <description>TaskUnifier Project</description>
 
+    <properties>
+        <directory.web>../../TaskUnifierWebSite</directory.web>
+    </properties>
+
     <developers>
         <developer>
             <name>Benjamin Leclerc</name>
