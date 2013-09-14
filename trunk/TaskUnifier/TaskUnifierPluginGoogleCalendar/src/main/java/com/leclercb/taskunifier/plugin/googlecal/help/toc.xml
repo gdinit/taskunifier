@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+
+<toc version="2.0">
+
+	<tocitem text="Google Calendar Plugin Help" target="plugin_googlecal_main">
+		
+		<tocitem text="Configuration" target="plugin_googlecal_configuration" />
+		
+	</tocitem>
+
+</toc>
