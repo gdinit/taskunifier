@@ -6,8 +6,8 @@
     <groupId>com.leclercb</groupId>
     <artifactId>bizcal</artifactId>
     <packaging>jar</packaging>
-	
-	<parent>
+
+    <parent>
         <groupId>com.leclercb</groupId>
         <artifactId>taskunifier</artifactId>
         <version>4.0.0</version>
@@ -56,8 +56,8 @@
     </dependencies>
 
     <scm>
-        <connection>scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/BizCal</connection>
-        <developerConnection>scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/BizCal
+        <connection>scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifier/BizCal</connection>
+        <developerConnection>scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifier/BizCal
         </developerConnection>
     </scm>
 

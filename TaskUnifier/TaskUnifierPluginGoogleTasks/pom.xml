@@ -6,8 +6,8 @@
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier-plugin-googletasks</artifactId>
     <packaging>jar</packaging>
-	
-	<parent>
+
+    <parent>
         <groupId>com.leclercb</groupId>
         <artifactId>taskunifier</artifactId>
         <version>4.0.0</version>
@@ -23,20 +23,24 @@
     </developers>
 
     <dependencies>
-		<dependency>
-			<groupId>com.leclercb</groupId>
-			<artifactId>taskunifier-gui</artifactId>
-			<version>${project.version}</version>
-		</dependency><dependency>
-    <groupId>com.google.apis</groupId>
-    <artifactId>google-api-services-tasks</artifactId>
-    <version>v1-rev19-1.17.0-rc</version>
-</dependency>
+        <dependency>
+            <groupId>com.leclercb</groupId>
+            <artifactId>taskunifier-gui</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-tasks</artifactId>
+            <version>v1-rev19-1.17.0-rc</version>
+        </dependency>
     </dependencies>
 
     <scm>
-        <connection>scm:svn:https://leclercb@subversion.assembla.com/svn/leclercb/TaskUnifier/trunk/TaskUnifierPluginGoogleTasks</connection>
-        <developerConnection>scm:svn:https://leclercb@subversion.assembla.com/svn/leclercb/TaskUnifier/trunk/TaskUnifierPluginGoogleTasks</developerConnection>
+        <connection>scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifier/TaskUnifierPluginGoogleTasks
+        </connection>
+        <developerConnection>
+            scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifier/TaskUnifierPluginGoogleTasks
+        </developerConnection>
     </scm>
 
     <build>

@@ -23,19 +23,11 @@
         <module>TaskUnifierAddonCommandLine</module>
         <module>TaskUnifierApi</module>
         <module>TaskUnifierGui</module>
+        <module>TaskUnifierPluginGoogleCalendar</module>
+        <module>TaskUnifierPluginGoogleTasks</module>
+        <module>TaskUnifierPluginNetworkShare</module>
         <module>TaskUnifierPluginSample</module>
+        <module>TaskUnifierPluginToodledo</module>
     </modules>
-
-    <profiles>
-        <profile>
-            <id>extra-plugins</id>
-            <modules>
-                <module>TaskUnifierPluginGoogleCalendar</module>
-                <module>TaskUnifierPluginGoogleTasks</module>
-                <module>TaskUnifierPluginNetworkShare</module>
-                <module>TaskUnifierPluginToodledo</module>
-            </modules>
-        </profile>
-    </profiles>
 
 </project>

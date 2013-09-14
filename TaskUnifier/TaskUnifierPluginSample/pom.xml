@@ -6,8 +6,8 @@
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier-plugin-sample</artifactId>
     <packaging>jar</packaging>
-	
-	<parent>
+
+    <parent>
         <groupId>com.leclercb</groupId>
         <artifactId>taskunifier</artifactId>
         <version>4.0.0</version>
@@ -31,8 +31,10 @@
     </dependencies>
 
     <scm>
-        <connection>scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifierPluginSample</connection>
-        <developerConnection>scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifierPluginSample
+        <connection>scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifier/TaskUnifierPluginSample
+        </connection>
+        <developerConnection>
+            scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifier/TaskUnifierPluginSample
         </developerConnection>
     </scm>
 

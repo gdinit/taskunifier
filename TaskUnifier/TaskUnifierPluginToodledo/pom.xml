@@ -6,8 +6,8 @@
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier-plugin-toodledo</artifactId>
     <packaging>jar</packaging>
-	
-	<parent>
+
+    <parent>
         <groupId>com.leclercb</groupId>
         <artifactId>taskunifier</artifactId>
         <version>4.0.0</version>
@@ -32,10 +32,10 @@
 
     <scm>
         <connection>
-            scm:svn:https://leclercb@subversion.assembla.com/svn/leclercb/TaskUnifier/trunk/TaskUnifierPluginToodledo
+            scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifier/TaskUnifierPluginToodledo
         </connection>
         <developerConnection>
-            scm:svn:https://leclercb@subversion.assembla.com/svn/leclercb/TaskUnifier/trunk/TaskUnifierPluginToodledo
+            scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifier/TaskUnifierPluginToodledo
         </developerConnection>
     </scm>
 
