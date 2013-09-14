@@ -78,6 +78,9 @@
     <orderEntry type="library" name="Maven: com.miglayout:miglayout-swing:4.2" level="project" />
     <orderEntry type="library" name="Maven: com.miglayout:miglayout-core:4.2" level="project" />
     <orderEntry type="library" name="Maven: org.swinglabs.swingx:swingx-all:1.6.5-1" level="project" />
+    <orderEntry type="library" name="Maven: com.android:vcard:1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.apple:AppleJavaExtensions:1.0" level="project" />
+    <orderEntry type="library" name="Maven: net.snarl:snarl:1.0" level="project" />
   </component>
 </module>
 

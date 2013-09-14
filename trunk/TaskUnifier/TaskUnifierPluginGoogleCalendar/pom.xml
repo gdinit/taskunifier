@@ -5,13 +5,15 @@
 
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier-plugin-googlecal</artifactId>
-    <version>3.0</version><!-- PROJECT -->
+    <version>3.0</version>
+    <!-- PROJECT -->
     <packaging>jar</packaging>
 
     <parent>
         <groupId>com.leclercb</groupId>
         <artifactId>taskunifier</artifactId>
-        <version>4.0.4</version><!-- PARENT -->
+        <version>4.0.4</version>
+        <!-- PARENT -->
     </parent>
 
     <name>TaskUnifier Plugin Google Calendar</name>
@@ -21,17 +23,17 @@
         <dependency>
             <groupId>com.leclercb</groupId>
             <artifactId>commons</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.leclercb</groupId>
             <artifactId>taskunifier-api</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.leclercb</groupId>
             <artifactId>taskunifier-gui</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.apis</groupId>
@@ -49,37 +51,63 @@
         </developerConnection>
     </scm>
 
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <phase>install</phase>
-                        <configuration>
-                            <tasks>
-                                <propertyregex
-                                        property="project.version.underscored"
-                                        override="false"
-                                        input="${project.version}"
-                                        regexp="\."
-                                        replace="_"
-                                        global="true"/>
+    <profiles>
+        <profile>
+            <id>website</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <phase>install</phase>
+                                <configuration>
+                                    <tasks>
+                                        <taskdef resource="net/sf/antcontrib/antcontrib.properties"
+                                                 classpathref="maven.plugin.classpath"/>
 
-                                <copy file="${basedir}/history.txt"
-                                      tofile="${directory.web}/plugins/googlecal/files/history_${project.version.underscored}.txt"/>
-                                <copy file="${basedir}/target/taskunifier-plugin-googlecal-${project.version}.jar"
-                                      tofile="${directory.web}/plugins/googlecal/files/TaskUnifierPluginGoogleCalendar_${project.version.underscored}.jar"/>
-                            </tasks>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+                                        <propertyregex
+                                                property="project.version.underscored"
+                                                override="false"
+                                                input="${project.version}"
+                                                regexp="\."
+                                                replace="_"
+                                                global="true"/>
+
+                                        <copy file="${basedir}/history.txt"
+                                              tofile="../../TaskUnifierWebSite/plugins/googlecal/files/history_${project.version.underscored}.txt"/>
+                                        <copy file="${basedir}/target/taskunifier-plugin-googlecal-${project.version}.jar"
+                                              tofile="../../TaskUnifierWebSite/plugins/googlecal/files/TaskUnifierPluginGoogleCalendar_${project.version.underscored}.jar"/>
+                                    </tasks>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant-nodeps</artifactId>
+                                <version>1.8.1</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

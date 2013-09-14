@@ -5,13 +5,15 @@
 
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier-plugin-sample</artifactId>
-    <version>1.0</version><!-- PROJECT -->
+    <version>1.0</version>
+    <!-- PROJECT -->
     <packaging>jar</packaging>
 
     <parent>
         <groupId>com.leclercb</groupId>
         <artifactId>taskunifier</artifactId>
-        <version>4.0.4</version><!-- PARENT -->
+        <version>4.0.4</version>
+        <!-- PARENT -->
     </parent>
 
     <name>TaskUnifier Plugin Sample</name>
@@ -21,17 +23,17 @@
         <dependency>
             <groupId>com.leclercb</groupId>
             <artifactId>commons</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.leclercb</groupId>
             <artifactId>taskunifier-api</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.leclercb</groupId>
             <artifactId>taskunifier-gui</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 
@@ -42,10 +44,5 @@
             scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifier/TaskUnifierPluginSample
         </developerConnection>
     </scm>
-
-    <build>
-        <plugins>
-        </plugins>
-    </build>
 
 </project>
