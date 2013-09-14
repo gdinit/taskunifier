@@ -1,0 +1,194 @@
+Version 8.4
+	- Update for TaskUnifier 4.0.0
+
+Version 8.3
+	- BF 309: Trim email
+
+Version 8.2
+	- Update for TaskUnifier 3.1.9
+	- Option to disable SSL
+
+Version 8.1
+	- Update for TaskUnifier 3.1.8
+	- Archive goals
+
+Version 8.0
+	- Update for TaskUnifier 3.1.6
+	- Bug fixed: Locations latitude/longitude
+	- Bug fixed: Sub-sub-tasks
+
+Version 7.9
+	- Improved performance
+
+Version 7.8
+	- The authentication key that you provided has expired or is invalid
+
+Version 7.7
+	- The authentication key that you provided has expired or is invalid
+
+Version 7.6
+	- Improved error handling
+
+Version 7.5
+	- Refresh token before expiration
+
+Version 7.4
+	- Update for TaskUnifier 3.0.4
+
+Version 7.3
+	- Handle untitled tasks
+
+Version 7.2
+	- Improved stats in Toodledo
+
+Version 7.1
+	- Update for TaskUnifier 3.0.1
+
+Version 7.0
+	- Update for TaskUnifier 3.0.0
+
+Version 6.8
+	- Update for TaskUnifier 2.3.0
+
+Version 6.7
+	- Improved synchronization of contacts
+
+Version 6.6
+	- Bug fixed: Note synchronization
+	- Improved synchronization of contacts
+
+Version 6.5
+	- Improved synchronization of contacts
+
+Version 6.4
+	- BF 3487237: Subtask synchronization error
+	- BF 3487215: Repeat with parent lost
+	- Synchronize contacts
+	- Synchronize linked tasks and linked files
+	- Improved license check
+	
+Version 6.3
+	- BF 3487237: Subtask synchronization error
+
+Version 6.2
+	- Bug fixed: Invalid parent ID
+
+Version 6.1
+	- Update for TaskUnifier 2.1.0
+
+Version 6.0
+	- Update for TaskUnifier 2.0.0
+
+Version 5.2
+	- Synchronize folder archived flag
+	- Synchronize task contacts
+	- Update for TaskUnifier 1.8.6
+
+Version 5.1
+	- Update for TaskUnifier 1.8.4
+
+Version 5.0
+	- Update for TaskUnifier 1.8.2
+
+Version 4.9
+	- Bug fixed: Sync repeat from value to Toodledo
+	- Option when changing email
+
+Version 4.8
+	- Bug fixed: Keep Toodledo version
+
+Version 4.7
+	- Update for TaskUnifier 1.3.0
+	- Synchronize start date reminder
+	- Synchronize task order
+	- Bug fixed: Location in new tasks
+
+Version 4.6
+	- Update for TaskUnifier 1.2.2
+	- Fetch note creation date
+
+Version 4.5
+	- Update for TaskUnifier 1.2.0
+
+Version 4.4
+	- Update for TaskUnifier 1.0.5
+	- Bug fixed: Conflict choice problem
+
+Version 4.3
+	- Bug fixed: You cannot update the status of a deleted model
+
+Version 4.2
+	- FR 3381078: Added repeat values
+	- Update for TaskUnifier 1.0.3
+
+Version 4.1
+	- BF 3372102: Move subtasks
+
+Version 4.0
+	- Update for TaskUnifier 1.0.0
+
+Version 3.9
+	- Update for TaskUnifier 0.9.9
+	- Use SSL
+
+Version 3.8
+	- BF 3316801: Repeat from completion date
+
+Version 3.7
+	- FR 3308388: Hide due time and/or start time
+	- BF 3316801: Repeat from completion date
+
+Version 3.6
+	- Sync task progress
+	- Improved error messages
+
+Version 3.5
+	- Update for TaskUnifier 0.9.3
+	- Bug fixed: Subtask problem
+
+Version 3.4
+	- Bug fixed: Synchronizing new notes from Toodledo
+
+Version 3.3
+	- Bug fixed: Invalid XML characters
+
+Version 3.2
+	- Improved sync time (for deleted notes/tasks)
+	- Bug fixed: Completed repeated task
+
+Version 3.1
+	- Bug fixed: Subtasks with Pro+ account
+
+Version 3.0
+	- Synchronize notes in Toodledo
+
+Version 2.3
+	- Bug fixed: duplicate repeating tasks
+	- Improved error handling
+	- FR 3222224: Synchronize reminder value
+
+Version 2.2
+	- Improved performance with more than 1000 tasks
+
+Version 2.1
+	- Improved repeat feature
+
+Version 2.0
+	- BF3286647: The authentication key that you provided as expired
+
+Version 1.9
+	- Offline repeat (requires at least TaskUnifier 0.8.7)
+	- BF 3286647: The authentication key that you provided as expired
+
+Version 1.8
+	- Default repeat values
+
+Version 1.7
+	- If start/due time is 0:00 no time will be set in Toodledo
+	- If empty start/due time: time will be 0:00 instead of 12:00
+	- Bug fixed: daylight issue with Toodledo
+	- Bug fixed: task parent not always retrieved from Toodledo
+
+Version 1.6
+	- Improved license validator
+	- BF 3266506: Repeat With Parent
