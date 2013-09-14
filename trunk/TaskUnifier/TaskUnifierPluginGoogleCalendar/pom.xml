@@ -6,8 +6,8 @@
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier-plugin-googlecal</artifactId>
     <packaging>jar</packaging>
-	
-	<parent>
+
+    <parent>
         <groupId>com.leclercb</groupId>
         <artifactId>taskunifier</artifactId>
         <version>4.0.0</version>
@@ -37,10 +37,10 @@
 
     <scm>
         <connection>
-            scm:svn:https://leclercb@subversion.assembla.com/svn/leclercb/TaskUnifier/trunk/TaskUnifierPluginGoogleCalendar
+            scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifier/TaskUnifierPluginGoogleCalendar
         </connection>
         <developerConnection>
-            scm:svn:https://leclercb@subversion.assembla.com/svn/leclercb/TaskUnifier/trunk/TaskUnifierPluginGoogleCalendar
+            scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifier/TaskUnifierPluginGoogleCalendar
         </developerConnection>
     </scm>
 
@@ -79,10 +79,18 @@
                         <phase>install</phase>
                         <configuration>
                             <tasks>
-                                <copy file="history.txt"
-                                      tofile="${directory.web}/plugins/googlecal/files/history_${taskunifier.version.underscored}.txt"/>
-                                <copy file="${generated.jar}"
-                                      tofile="${directory.web}/plugins/googlecal/files/TaskUnifierPluginGoogleCalendar_${taskunifier.version.underscored}.jar"/>
+                                <propertyregex
+                                        property="project.version.underscored"
+                                        override="false"
+                                        input="${project.version}"
+                                        regexp="\."
+                                        replace="_"
+                                        global="true"/>
+
+                                <copy file="${basedir}/history.txt"
+                                      tofile="${directory.web}/plugins/googlecal/files/history_${project.version.underscored}.txt"/>
+                                <copy file="${basedir}/target/taskunifier-plugin-googlecal-${project.version}.jar"
+                                      tofile="${directory.web}/plugins/googlecal/files/TaskUnifierPluginGoogleCalendar_${project.version.underscored}.jar"/>
                             </tasks>
                         </configuration>
                         <goals>

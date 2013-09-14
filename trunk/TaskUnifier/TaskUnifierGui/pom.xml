@@ -177,8 +177,8 @@
     </dependencies>
 
     <scm>
-        <connection>scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifierGui</connection>
-        <developerConnection>scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifierGui
+        <connection>scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifier/TaskUnifierGui</connection>
+        <developerConnection>scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifier/TaskUnifierGui
         </developerConnection>
     </scm>
 
