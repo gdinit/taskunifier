@@ -3,6 +3,22 @@
 
     <property environment="env"/>
 
+    <target name="copyprivatefiles">
+        <echo message="Copy private files..."/>
+
+        <copy
+                file="${basedir}/Private/private_googlecal.properties"
+                tofile="${basedir}/TaskUnifierPluginGoogleCalendar/src/main/resources/com/leclercb/taskunifier/plugin/googlecal/resources/private.properties"/>
+
+        <copy
+                file="${basedir}/Private/private_googletasks.properties"
+                tofile="${basedir}/TaskUnifierPluginGoogleTasks/src/main/resources/com/leclercb/taskunifier/plugin/googletasks/resources/private.properties"/>
+
+        <copy
+                file="${basedir}/Private/private_toodledo.properties"
+                tofile="${basedir}/TaskUnifierPluginToodledo/src/main/resources/com/leclercb/taskunifier/plugin/toodledo/resources/private.properties"/>
+    </target>
+
     <target name="setversion">
         <echo message="Set version in POM files..."/>
 
