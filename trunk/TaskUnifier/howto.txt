@@ -1,0 +1,30 @@
+TaskUnifier
+-----------
+
+1) Copy the private properties to the real location
+    - Copy the private properties to the "Private" folder
+    - Load build.xml
+    - Execute target "copy-private-files"
+
+2) Install the 3rd party libraries in the local Maven repository
+    - Load build.xml
+    - Execute target "install-libs"
+
+3) Set the version in the POM files
+    - Set the version in the "general.properties" file of the module
+    - Load build.xml
+    - Execute target "set-version"
+
+4) Create the packages of each module
+    - Maven install "TaskUnifier"
+
+5) Create the sources and the binaries
+    - Load TaskUnifierExe/build.xml
+    - Execute target "create-sources-binaries"
+
+6) Upload the sources and the binaries
+    - Create the new folder on SourceForge
+    - Load TaskUnifierExe/build.xml
+    - Execute target "upload-sources-binaries-version"
+    - Set the name and the platform of the binaries on SourceForge
+    - Upload the updated web site files on TaskUnifier.com
