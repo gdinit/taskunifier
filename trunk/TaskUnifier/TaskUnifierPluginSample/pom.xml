@@ -6,14 +6,12 @@
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier-plugin-sample</artifactId>
     <version>1.0</version>
-    <!-- PROJECT -->
     <packaging>jar</packaging>
 
     <parent>
         <groupId>com.leclercb</groupId>
         <artifactId>taskunifier</artifactId>
         <version>4.0.4</version>
-        <!-- PARENT -->
     </parent>
 
     <name>TaskUnifier Plugin Sample</name>

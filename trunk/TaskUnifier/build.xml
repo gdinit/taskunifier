@@ -22,105 +22,80 @@
     <target name="setversion">
         <echo message="Set version in POM files..."/>
 
-        <setversionmain
+        <setversionpom
                 pomFile="${basedir}/pom.xml"
-                propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
+                projectPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"
+                parentPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
 
-        <setversionparent
+        <setversionpom
                 pomFile="${basedir}/BizCal/pom.xml"
-                propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
+                projectPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"
+                parentPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
 
-        <setversionparent
+        <setversionpom
                 pomFile="${basedir}/Commons/pom.xml"
-                propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
+                projectPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"
+                parentPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
 
-        <setversionparent
+        <setversionpom
                 pomFile="${basedir}/TaskUnifierAddonCommandLine/pom.xml"
-                propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
+                projectPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"
+                parentPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
 
-        <setversionparent
+        <setversionpom
                 pomFile="${basedir}/TaskUnifierApi/pom.xml"
-                propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
+                projectPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"
+                parentPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
 
-        <setversionparent
+        <setversionpom
                 pomFile="${basedir}/TaskUnifierGui/pom.xml"
-                propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
+                projectPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"
+                parentPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
 
-        <setversionparent
+        <setversionpom
                 pomFile="${basedir}/TaskUnifierPluginGoogleCalendar/pom.xml"
-                propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
+                projectPropertyFile="${basedir}/TaskUnifierPluginGoogleCalendar/src/main/resources/com/leclercb/taskunifier/plugin/googlecal/resources/general.properties"
+                parentPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
 
-        <setversionparent
+        <setversionpom
                 pomFile="${basedir}/TaskUnifierPluginGoogleTasks/pom.xml"
-                propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
+                projectPropertyFile="${basedir}/TaskUnifierPluginGoogleTasks/src/main/resources/com/leclercb/taskunifier/plugin/googletasks/resources/general.properties"
+                parentPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
 
-        <setversionparent
+        <setversionpom
                 pomFile="${basedir}/TaskUnifierPluginNetworkShare/pom.xml"
-                propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
+                projectPropertyFile="${basedir}/TaskUnifierPluginNetworkShare/src/main/resources/com/leclercb/taskunifier/plugin/networkshare/resources/general.properties"
+                parentPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
 
-        <setversionparent
+        <setversionpom
                 pomFile="${basedir}/TaskUnifierPluginSample/pom.xml"
-                propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
+                projectPropertyFile="${basedir}/TaskUnifierPluginSample/src/main/resources/com/leclercb/taskunifier/plugin/sample/resources/general.properties"
+                parentPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
 
-        <setversionparent
+        <setversionpom
                 pomFile="${basedir}/TaskUnifierPluginToodledo/pom.xml"
-                propertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
-
-        <setversionmain
-                pomFile="${basedir}/TaskUnifierPluginGoogleCalendar/pom.xml"
-                propertyFile="${basedir}/TaskUnifierPluginGoogleCalendar/src/main/resources/com/leclercb/taskunifier/plugin/googlecal/resources/general.properties"/>
-
-        <setversionmain
-                pomFile="${basedir}/TaskUnifierPluginGoogleTasks/pom.xml"
-                propertyFile="${basedir}/TaskUnifierPluginGoogleTasks/src/main/resources/com/leclercb/taskunifier/plugin/googletasks/resources/general.properties"/>
-
-        <setversionmain
-                pomFile="${basedir}/TaskUnifierPluginNetworkShare/pom.xml"
-                propertyFile="${basedir}/TaskUnifierPluginNetworkShare/src/main/resources/com/leclercb/taskunifier/plugin/networkshare/resources/general.properties"/>
-
-        <setversionmainfixed
-                pomFile="${basedir}/TaskUnifierPluginSample/pom.xml"
-                version="1.0"/>
-
-        <setversionmain
-                pomFile="${basedir}/TaskUnifierPluginToodledo/pom.xml"
-                propertyFile="${basedir}/TaskUnifierPluginToodledo/src/main/resources/com/leclercb/taskunifier/plugin/toodledo/resources/general.properties"/>
+                projectPropertyFile="${basedir}/TaskUnifierPluginToodledo/src/main/resources/com/leclercb/taskunifier/plugin/toodledo/resources/general.properties"
+                parentPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
     </target>
 
-    <macrodef name="setversionmain">
+    <macrodef name="setversionpom">
         <attribute name="pomFile"/>
-        <attribute name="propertyFile"/>
+        <attribute name="projectPropertyFile"/>
+        <attribute name="parentPropertyFile"/>
         <sequential>
-            <local name="taskunifier.version"/>
-            <property file="@{propertyFile}" prefix="taskunifier"/>
-            <replaceregexp file="@{pomFile}"
-                           match="&lt;version&gt;[0-9]+(\.[0-9]+)*&lt;/version&gt;&lt;!-- PROJECT --&gt;"
-                           replace="&lt;version&gt;${taskunifier.version}&lt;/version&gt;&lt;!-- PROJECT --&gt;"
-                           byline="true"/>
-        </sequential>
-    </macrodef>
+            <local name="taskunifier.project.version"/>
+            <property file="@{projectPropertyFile}" prefix="taskunifier.project"/>
 
-    <macrodef name="setversionmainfixed">
-        <attribute name="pomFile"/>
-        <attribute name="version"/>
-        <sequential>
-            <replaceregexp file="@{pomFile}"
-                           match="&lt;version&gt;[0-9]+(\.[0-9]+)*&lt;/version&gt;&lt;!-- PROJECT --&gt;"
-                           replace="&lt;version&gt;@{version}&lt;/version&gt;&lt;!-- PROJECT --&gt;"
-                           byline="true"/>
-        </sequential>
-    </macrodef>
+            <local name="taskunifier.parent.version"/>
+            <property file="@{parentPropertyFile}" prefix="taskunifier.parent"/>
 
-    <macrodef name="setversionparent">
-        <attribute name="pomFile"/>
-        <attribute name="propertyFile"/>
-        <sequential>
-            <local name="taskunifier.version"/>
-            <property file="@{propertyFile}" prefix="taskunifier"/>
-            <replaceregexp file="@{pomFile}"
-                           match="&lt;version&gt;[0-9]+(\.[0-9]+)*&lt;/version&gt;&lt;!-- PARENT --&gt;"
-                           replace="&lt;version&gt;${taskunifier.version}&lt;/version&gt;&lt;!-- PARENT --&gt;"
-                           byline="true"/>
+            <xslt
+                    in="@{pomFile}"
+                    out="@{pomFile}"
+                    style="${basedir}/pom.xsl">
+                <param name="projectVersion" expression="${taskunifier.project.version}"/>
+                <param name="parentVersion" expression="$(taskunifier.parent.version}"/>
+            </xslt>
         </sequential>
     </macrodef>
 
