@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="setversion" name="TaskUnifier">
+<project basedir="." default="setversion" name="TaskUnifier" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
     <property environment="env"/>
+
+    <taskdef
+            resource="org/apache/maven/artifact/ant/antlib.xml"
+            uri="antlib:org.apache.maven.artifact.ant"
+            classpath="${basedir}/TaskUnifierExe/tools/maven-ant-tasks/maven-ant-tasks-2.1.3.jar"/>
+
+    <target name="install-libs">
+        <artifact:pom id="maven_install" file="${basedir}/TaskUnifierGui/lib/android-vcard-1.0.pom"/>
+        <artifact:install file="${basedir}/TaskUnifierGui/lib/android-vcard-1.0.jar" pomrefid="maven_install"/>
+
+        <artifact:pom id="maven_install" file="${basedir}/TaskUnifierGui/lib/applejavaextensions-1.0.pom"/>
+        <artifact:install file="${basedir}/TaskUnifierGui/lib/applejavaextensions-1.0.jar" pomrefid="maven_install"/>
+
+        <artifact:pom id="maven_install" file="${basedir}/TaskUnifierGui/lib/snarlnetworkebridge-1.1-v3.pom"/>
+        <artifact:install file="${basedir}/TaskUnifierGui/lib/snarlnetworkebridge-1.1-v3.jar" pomrefid="maven_install"/>
+    </target>
 
     <target name="copyprivatefiles">
         <echo message="Copy private files..."/>
