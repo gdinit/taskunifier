@@ -61,9 +61,9 @@
                         <version>1.7</version>
                         <executions>
                             <execution>
-                                <phase>install</phase>
+                                <phase>package</phase>
                                 <configuration>
-                                    <tasks>
+                                    <target>
                                         <taskdef resource="net/sf/antcontrib/antcontrib.properties"
                                                  classpathref="maven.plugin.classpath"/>
 
@@ -79,7 +79,7 @@
                                               tofile="${directory.web}/plugins/googlecal/files/history_${project.version.underscored}.txt"/>
                                         <copy file="${basedir}/target/taskunifier-plugin-googlecal-${project.version}.jar"
                                               tofile="${directory.web}/plugins/googlecal/files/TaskUnifierPluginGoogleCalendar_${project.version.underscored}.jar"/>
-                                    </tasks>
+                                    </target>
                                 </configuration>
                                 <goals>
                                     <goal>run</goal>
