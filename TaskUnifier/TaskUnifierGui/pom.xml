@@ -31,21 +31,6 @@
             <artifactId>taskunifier-api</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.android</groupId>
-            <artifactId>vcard</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.apple</groupId>
-            <artifactId>AppleJavaExtensions</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.snarl</groupId>
-            <artifactId>snarl</artifactId>
-            <version>1.1-v3</version>
-        </dependency>
     </dependencies>
 
     <scm>
