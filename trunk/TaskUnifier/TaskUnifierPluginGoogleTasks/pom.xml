@@ -32,11 +32,6 @@
             <artifactId>taskunifier-gui</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.apis</groupId>
-            <artifactId>google-api-services-tasks</artifactId>
-            <version>v1-rev19-1.17.0-rc</version>
-        </dependency>
     </dependencies>
 
     <scm>

@@ -279,6 +279,31 @@
             <artifactId>swingx-all</artifactId>
             <version>1.6.5-1</version>
         </dependency>
+        <dependency>
+            <groupId>com.android</groupId>
+            <artifactId>vcard</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.apple</groupId>
+            <artifactId>AppleJavaExtensions</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.snarl</groupId>
+            <artifactId>snarl</artifactId>
+            <version>1.1-v3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-calendar</artifactId>
+            <version>v3-rev60-1.17.0-rc</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-tasks</artifactId>
+            <version>v1-rev19-1.17.0-rc</version>
+        </dependency>
     </dependencies>
 
     <build>
