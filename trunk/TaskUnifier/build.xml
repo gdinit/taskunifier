@@ -94,7 +94,7 @@
                     out="${basedir}/tmp.xml"
                     style="${basedir}/pom.xsl">
                 <param name="projectVersion" expression="${taskunifier.project.version}"/>
-                <param name="parentVersion" expression="$(taskunifier.parent.version}"/>
+                <param name="parentVersion" expression="${taskunifier.parent.version}"/>
             </xslt>
 
             <copy file="${basedir}/tmp.xml" tofile="@{pomFile}"/>
