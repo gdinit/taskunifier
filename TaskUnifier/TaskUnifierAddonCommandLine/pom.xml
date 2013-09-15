@@ -11,7 +11,6 @@
         <groupId>com.leclercb</groupId>
         <artifactId>taskunifier</artifactId>
         <version>4.0.4</version>
-        <!-- PARENT -->
     </parent>
 
     <name>TaskUnifier Addon Command Line</name>

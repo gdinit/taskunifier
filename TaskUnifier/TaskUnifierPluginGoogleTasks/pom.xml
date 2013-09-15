@@ -6,14 +6,12 @@
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier-plugin-googletasks</artifactId>
     <version>2.8</version>
-    <!-- PROJECT -->
     <packaging>jar</packaging>
 
     <parent>
         <groupId>com.leclercb</groupId>
         <artifactId>taskunifier</artifactId>
         <version>4.0.4</version>
-        <!-- PARENT -->
     </parent>
 
     <name>TaskUnifier Plugin Google Tasks</name>
