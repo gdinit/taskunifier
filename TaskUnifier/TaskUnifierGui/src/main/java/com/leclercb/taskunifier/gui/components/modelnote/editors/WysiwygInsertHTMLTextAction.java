@@ -32,95 +32,94 @@
  */
 package com.leclercb.taskunifier.gui.components.modelnote.editors;
 
-import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.util.logging.Level;
-
-import javax.swing.AbstractAction;
-import javax.swing.JEditorPane;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.html.HTML;
-import javax.swing.text.html.HTMLDocument;
-import javax.swing.text.html.HTMLEditorKit;
-
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.html.HTML;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.util.logging.Level;
+
 public class WysiwygInsertHTMLTextAction extends AbstractAction {
-	
-	protected JEditorPane editor;
-	protected String html;
-	protected HTML.Tag tag;
-	
-	public WysiwygInsertHTMLTextAction(
-			JEditorPane editor,
-			String icon,
-			String description,
-			String html,
-			HTML.Tag tag) {
-		super(description);
-		
-		CheckUtils.isNotNull(editor);
-		CheckUtils.isNotNull(icon);
-		
-		this.editor = editor;
-		
-		this.setHtml(html);
-		this.setTag(tag);
-		
-		this.putValue(SMALL_ICON, ImageUtils.getResourceImage(icon, 16, 16));
-		this.putValue(SHORT_DESCRIPTION, description);
-	}
-	
-	public String getHtml() {
-		return this.html;
-	}
-	
-	public void setHtml(String html) {
-		CheckUtils.isNotNull(html);
-		this.html = html;
-	}
-	
-	public HTML.Tag getTag() {
-		return this.tag;
-	}
-	
-	public void setTag(HTML.Tag tag) {
-		CheckUtils.isNotNull(tag);
-		this.tag = tag;
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		if (this.editor.isEditable()) {
-			HTMLDocument document = (HTMLDocument) this.editor.getDocument();
-			HTMLEditorKit editorKit = (HTMLEditorKit) this.editor.getEditorKit();
-			int offset = this.editor.getCaretPosition();
-			
-			try {
-				document.insertString(offset, " ", null);
-				editorKit.insertHTML(
-						document,
-						offset,
-						this.html,
-						0,
-						0,
-						this.tag);
-			} catch (BadLocationException e) {
-				GuiLogger.getLogger().log(
-						Level.WARNING,
-						"Wysiwyg action error",
-						e);
-			} catch (IOException e) {
-				GuiLogger.getLogger().log(
-						Level.WARNING,
-						"Wysiwyg action error",
-						e);
-			}
-			
-			this.editor.requestFocus();
-		}
-	}
-	
+
+    protected JEditorPane editor;
+    protected String html;
+    protected HTML.Tag tag;
+
+    public WysiwygInsertHTMLTextAction(
+            JEditorPane editor,
+            String icon,
+            String description,
+            String html,
+            HTML.Tag tag) {
+        super(description);
+
+        CheckUtils.isNotNull(editor);
+        CheckUtils.isNotNull(icon);
+
+        this.editor = editor;
+
+        this.setHtml(html);
+        this.setTag(tag);
+
+        this.putValue(SMALL_ICON, ImageUtils.getResourceImage(icon, 16, 16));
+        this.putValue(SHORT_DESCRIPTION, description);
+    }
+
+    public String getHtml() {
+        return this.html;
+    }
+
+    public void setHtml(String html) {
+        CheckUtils.isNotNull(html);
+        this.html = html;
+    }
+
+    public HTML.Tag getTag() {
+        return this.tag;
+    }
+
+    public void setTag(HTML.Tag tag) {
+        CheckUtils.isNotNull(tag);
+        this.tag = tag;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        if (this.editor.isEditable()) {
+            HTMLDocument document = (HTMLDocument) this.editor.getDocument();
+            HTMLEditorKit editorKit = (HTMLEditorKit) this.editor.getEditorKit();
+            int offset = this.editor.getCaretPosition();
+
+            try {
+                document.insertString(offset, " ", null);
+                editorKit.insertHTML(
+                        document,
+                        offset,
+                        this.html,
+                        0,
+                        0,
+                        this.tag);
+                document.insertString(offset, " ", null);
+            } catch (BadLocationException e) {
+                GuiLogger.getLogger().log(
+                        Level.WARNING,
+                        "Wysiwyg action error",
+                        e);
+            } catch (IOException e) {
+                GuiLogger.getLogger().log(
+                        Level.WARNING,
+                        "Wysiwyg action error",
+                        e);
+            }
+
+            this.editor.requestFocus();
+        }
+    }
+
 }
