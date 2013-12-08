@@ -1,6 +1,12 @@
 HISTORY
 -------
 
+Version 4.0.5
+    - Minor:
+        - BF 360: Create link when note is empty
+        - BF 363: Save task selection when sync occurs
+        - Updated chinese translations (thanks to Fanicy)
+
 Version 4.0.4
     - Minor:
         - SR 57: Load deleted custom task columns

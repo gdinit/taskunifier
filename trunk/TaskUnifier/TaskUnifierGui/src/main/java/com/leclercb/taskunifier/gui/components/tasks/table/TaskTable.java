@@ -50,6 +50,7 @@ import com.leclercb.taskunifier.gui.commons.events.TaskSearcherSelectionChangeEv
 import com.leclercb.taskunifier.gui.commons.highlighters.SearchHighlighter;
 import com.leclercb.taskunifier.gui.components.print.PrintUtils;
 import com.leclercb.taskunifier.gui.components.print.TablePrintable;
+import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.components.tasks.TaskTableView;
 import com.leclercb.taskunifier.gui.components.tasks.table.draganddrop.TaskTransferHandler;
@@ -381,10 +382,24 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
             }
 
         });
+
+        Synchronizing.getInstance().addPropertyChangeListener(
+                Synchronizing.PROP_SYNCHRONIZING,
+                new WeakPropertyChangeListener(
+                        Synchronizing.getInstance(),
+                        this));
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent event) {
+        if (event.getSource() instanceof Synchronizing) {
+            if (!(Boolean) event.getNewValue()) {
+                Task[] tasks = this.getSelectedTasks();
+                ((TaskTableModel) this.getModel()).fireTableDataChanged();
+                this.setSelectedTasks(tasks);
+            }
+        }
+
         if (event.getPropertyName().equals("task.indent_subtasks"))
             TaskTable.this.refreshTasks();
 
