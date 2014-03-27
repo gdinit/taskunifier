@@ -1,34 +1,23 @@
----------------------------------------
-How to import source code into Eclipse:
----------------------------------------
+---------------------------------------------
+How to import source code into IntelliJ IDEA:
+---------------------------------------------
 
-1/ Install Subclipse in Eclipse
-2/ Checkout the following projects:
-	- https://svn.code.sf.net/p/taskunifier/code/trunk/BizCal
-	- https://svn.code.sf.net/p/taskunifier/code/trunk/Commons
-	- https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifierApi
-	- https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifierExe
-	- https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifierGui
-3/ Import the user libraries:
-	a) Go to the preferences of Eclipse
-	b) Go to user libraries
-	c) Import Commons/.settings/Commons.userlibraries
-	d) Import TaskUnifierGui/.settings/TaskUnifierGui.userlibraries
-4/ Restart Eclipse
-
-Multiple "Run Configurations" will be added automatically.
-Multiple "External Tools Configurations" will be added automatically.
+1/ Open the following project:
+	- https://leclercb@svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifier
+2/ Add the following ANT files:
+    - TaskUnifier/build.xml
+    - TaskUnifier/TaskUnifierExe/build.xml
+3/ Run the following ANT targets:
+    - copy-private-files
+    - install-libs
 
 -------------------------
 How to build TaskUnifier:
 -------------------------
 
-Run the following external tools configurations:
-- BizCal Build + Jar
-- Commons Build + Jar
-- TaskUnifierApi Build + Jar
-- TaskUnifierGui Build + Jar
-- TaskUnifierExe Create Sources and Binaries
+1/ Run the ANT target "set-version"
+2/ Run the TaskUnifier "install" with Maven
+3/ Run the ANT targer "create-sources-binaries"
 
 ---------------------
 Configuration values:
