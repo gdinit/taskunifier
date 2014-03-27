@@ -32,42 +32,35 @@
  */
 package com.leclercb.taskunifier.gui.commons.converters;
 
+import com.jgoodies.binding.value.BindingConverter;
+
 import java.util.Calendar;
 import java.util.Date;
 
-import com.jgoodies.binding.value.AbstractConverter;
-import com.jgoodies.binding.value.ValueModel;
+public class TemplateTimeConverter implements BindingConverter<Integer, Date> {
 
-@SuppressWarnings("deprecation")
-public class TemplateTimeConverter extends AbstractConverter {
-	
-	public TemplateTimeConverter(ValueModel subject) {
-		super(subject);
-	}
-	
-	@Override
-	public void setValue(Object date) {
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime((Date) date);
-		
-		this.subject.setValue((calendar.get(Calendar.HOUR_OF_DAY) * 60)
-				+ calendar.get(Calendar.MINUTE));
-	}
-	
-	@Override
-	public Object convertFromSubject(Object length) {
-		int hour = 0;
-		int minute = 0;
-		
-		if (length != null) {
-			hour = ((Integer) length) / 60;
-			minute = ((Integer) length) % 60;
-		}
-		
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(0, 0, 0, hour, minute, 0);
-		
-		return calendar.getTime();
-	}
-	
+    @Override
+    public Integer sourceValue(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        return (calendar.get(Calendar.HOUR_OF_DAY) * 60) + calendar.get(Calendar.MINUTE);
+    }
+
+    @Override
+    public Date targetValue(Integer length) {
+        int hour = 0;
+        int minute = 0;
+
+        if (length != null) {
+            hour = length / 60;
+            minute = length % 60;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(0, 0, 0, hour, minute, 0);
+
+        return calendar.getTime();
+    }
+
 }
