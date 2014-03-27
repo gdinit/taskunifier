@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.leclercb</groupId>
         <artifactId>taskunifier</artifactId>
-        <version>4.0.5</version>
+        <version>4.1.0</version>
     </parent>
 
     <name>Commons</name>

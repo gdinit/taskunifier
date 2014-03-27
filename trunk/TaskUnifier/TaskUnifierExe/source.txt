@@ -15,9 +15,10 @@ How to import source code into IntelliJ IDEA:
 How to build TaskUnifier:
 -------------------------
 
-1/ Run the ANT target "set-version"
-2/ Run "clean" and "install" with Maven
-3/ Run the ANT targer "create-sources-binaries"
+1/ Set the version in general.properties (TaskUnifierGui)
+2/ Run the ANT target "set-version"
+3/ Run "clean" and "install" with Maven
+4/ Run the ANT targer "create-sources-binaries"
 
 ---------------------
 Configuration values:
