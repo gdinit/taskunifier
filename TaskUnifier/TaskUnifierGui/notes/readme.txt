@@ -1,7 +1,7 @@
 HISTORY
 -------
 
-Version 4.0.5
+Version 4.1.0
     - Minor:
         - BF 343: Increase model selection panel width
         - BF 360: Create link when note is empty
