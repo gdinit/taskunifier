@@ -3,6 +3,7 @@ HISTORY
 
 Version 4.0.5
     - Minor:
+        - BF 343: Increase model selection panel width
         - BF 360: Create link when note is empty
         - BF 363: Save task selection when sync occurs
         - Updated chinese translations (thanks to Fanicy)
