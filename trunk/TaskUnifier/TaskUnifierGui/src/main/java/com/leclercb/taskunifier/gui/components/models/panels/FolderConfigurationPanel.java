@@ -47,6 +47,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import com.jgoodies.binding.value.ConverterValueModel;
 import org.jdesktop.swingx.JXColorSelectionButton;
 
 import com.jgoodies.binding.adapter.Bindings;
@@ -71,148 +72,150 @@ import com.leclercb.taskunifier.gui.utils.FormBuilder;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class FolderConfigurationPanel extends JSplitPane implements IModelList {
-	
-	private ModelList modelList;
-	
-	public FolderConfigurationPanel() {
-		this.initialize();
-	}
-	
-	@Override
-	public void addNewModel() {
-		this.modelList.addNewModel();
-	}
-	
-	@Override
-	public Model[] getSelectedModels() {
-		return this.modelList.getSelectedModels();
-	}
-	
-	@Override
-	public void setSelectedModel(Model model) {
-		this.modelList.setSelectedModel(model);
-	}
-	
-	private void initialize() {
-		this.setBorder(null);
-		
-		// Initialize Fields
-		final JTextField folderTitle = new JTextField();
-		final JCheckBox folderArchived = new JCheckBox();
-		final JXColorSelectionButton folderColor = new JXColorSelectionButton();
-		final JButton removeColor = new JButton();
-		
-		// Set Disabled
-		folderTitle.setEnabled(false);
-		folderArchived.setEnabled(false);
-		folderColor.setEnabled(false);
-		removeColor.setEnabled(false);
-		
-		// Initialize Model List
-		this.modelList = new ModelList(new FolderModel(false, true) {
-			
-			@Override
-			protected void fireContentsChanged(
-					Object source,
-					int index0,
-					int index1) {
-				this.superFireContentsChanged(source, index0, index1);
-			}
-			
-		}, folderTitle) {
-			
-			private BeanAdapter<Folder> adapter;
-			
-			{
-				this.adapter = new BeanAdapter<Folder>((Folder) null, true);
-				
-				ValueModel titleModel = this.adapter.getValueModel(BasicModel.PROP_TITLE);
-				Bindings.bind(folderTitle, titleModel);
-				
-				ValueModel archivedModel = this.adapter.getValueModel(ModelArchive.PROP_ARCHIVED);
-				Bindings.bind(folderArchived, archivedModel);
-				
-				ValueModel colorModel = this.adapter.getValueModel(GuiModel.PROP_COLOR);
-				Bindings.bind(folderColor, "background", new ColorConverter(
-						colorModel));
-			}
-			
-			@Override
-			public Model addModel() {
-				return FolderFactory.getInstance().create(
-						Translations.getString("folder.default.title"));
-			}
-			
-			@Override
-			public void removeModel(Model model) {
-				FolderFactory.getInstance().markToDelete((Folder) model);
-			}
-			
-			@Override
-			public void modelsSelected(Model[] models) {
-				Model model = null;
-				
-				if (models != null && models.length == 1)
-					model = models[0];
-				
-				this.adapter.setBean(model != null ? (Folder) model : null);
-				
-				folderTitle.setEnabled(model != null);
-				folderArchived.setEnabled(model != null);
-				folderColor.setEnabled(model != null);
-				removeColor.setEnabled(model != null);
-			}
-			
-		};
-		
-		this.modelList.getModelList().setDragEnabled(true);
-		this.modelList.getModelList().setTransferHandler(
-				new ModelTransferHandler<Folder>(ModelType.FOLDER));
-		this.modelList.getModelList().setDropMode(DropMode.ON_OR_INSERT);
-		
-		this.setLeftComponent(this.modelList);
-		
-		JPanel rightPanel = new JPanel();
-		rightPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		rightPanel.setLayout(new BorderLayout());
-		this.setRightComponent(ComponentFactory.createJScrollPane(
-				rightPanel,
-				false));
-		
-		FormBuilder builder = new FormBuilder(
-				"right:pref, 4dlu, fill:default:grow");
-		
-		// Folder Title
-		builder.appendI15d("general.folder.title", true, folderTitle);
-		
-		// Folder Archived
-		builder.appendI15d("general.folder.archived", true, folderArchived);
-		
-		// Folder Color
-		JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		
-		builder.appendI15d("general.color", true, p);
-		
-		folderColor.setPreferredSize(new Dimension(24, 24));
-		folderColor.setBorder(BorderFactory.createEmptyBorder());
-		
-		removeColor.setIcon(ImageUtils.getResourceImage("remove.png", 16, 16));
-		removeColor.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				((GuiFolder) FolderConfigurationPanel.this.modelList.getSelectedModels()[0]).setColor(null);
-			}
-			
-		});
-		
-		p.add(folderColor);
-		p.add(removeColor);
-		
-		// Lay out the panel
-		rightPanel.add(builder.getPanel(), BorderLayout.CENTER);
-		
-		this.setDividerLocation(200);
-	}
-	
+
+    private ModelList modelList;
+
+    public FolderConfigurationPanel() {
+        this.initialize();
+    }
+
+    @Override
+    public void addNewModel() {
+        this.modelList.addNewModel();
+    }
+
+    @Override
+    public Model[] getSelectedModels() {
+        return this.modelList.getSelectedModels();
+    }
+
+    @Override
+    public void setSelectedModel(Model model) {
+        this.modelList.setSelectedModel(model);
+    }
+
+    private void initialize() {
+        this.setBorder(null);
+
+        // Initialize Fields
+        final JTextField folderTitle = new JTextField();
+        final JCheckBox folderArchived = new JCheckBox();
+        final JXColorSelectionButton folderColor = new JXColorSelectionButton();
+        final JButton removeColor = new JButton();
+
+        // Set Disabled
+        folderTitle.setEnabled(false);
+        folderArchived.setEnabled(false);
+        folderColor.setEnabled(false);
+        removeColor.setEnabled(false);
+
+        // Initialize Model List
+        this.modelList = new ModelList(new FolderModel(false, true) {
+
+            @Override
+            protected void fireContentsChanged(
+                    Object source,
+                    int index0,
+                    int index1) {
+                this.superFireContentsChanged(source, index0, index1);
+            }
+
+        }, folderTitle) {
+
+            private BeanAdapter<Folder> adapter;
+
+            {
+                this.adapter = new BeanAdapter<Folder>((Folder) null, true);
+
+                ValueModel titleModel = this.adapter.getValueModel(BasicModel.PROP_TITLE);
+                Bindings.bind(folderTitle, titleModel);
+
+                ValueModel archivedModel = this.adapter.getValueModel(ModelArchive.PROP_ARCHIVED);
+                Bindings.bind(folderArchived, archivedModel);
+
+                ValueModel colorModel = this.adapter.getValueModel(GuiModel.PROP_COLOR);
+                Bindings.bind(
+                        folderColor,
+                        "background",
+                        new ConverterValueModel(colorModel, new ColorConverter()));
+            }
+
+            @Override
+            public Model addModel() {
+                return FolderFactory.getInstance().create(
+                        Translations.getString("folder.default.title"));
+            }
+
+            @Override
+            public void removeModel(Model model) {
+                FolderFactory.getInstance().markToDelete((Folder) model);
+            }
+
+            @Override
+            public void modelsSelected(Model[] models) {
+                Model model = null;
+
+                if (models != null && models.length == 1)
+                    model = models[0];
+
+                this.adapter.setBean(model != null ? (Folder) model : null);
+
+                folderTitle.setEnabled(model != null);
+                folderArchived.setEnabled(model != null);
+                folderColor.setEnabled(model != null);
+                removeColor.setEnabled(model != null);
+            }
+
+        };
+
+        this.modelList.getModelList().setDragEnabled(true);
+        this.modelList.getModelList().setTransferHandler(
+                new ModelTransferHandler<Folder>(ModelType.FOLDER));
+        this.modelList.getModelList().setDropMode(DropMode.ON_OR_INSERT);
+
+        this.setLeftComponent(this.modelList);
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        rightPanel.setLayout(new BorderLayout());
+        this.setRightComponent(ComponentFactory.createJScrollPane(
+                rightPanel,
+                false));
+
+        FormBuilder builder = new FormBuilder(
+                "right:pref, 4dlu, fill:default:grow");
+
+        // Folder Title
+        builder.appendI15d("general.folder.title", true, folderTitle);
+
+        // Folder Archived
+        builder.appendI15d("general.folder.archived", true, folderArchived);
+
+        // Folder Color
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        builder.appendI15d("general.color", true, p);
+
+        folderColor.setPreferredSize(new Dimension(24, 24));
+        folderColor.setBorder(BorderFactory.createEmptyBorder());
+
+        removeColor.setIcon(ImageUtils.getResourceImage("remove.png", 16, 16));
+        removeColor.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ((GuiFolder) FolderConfigurationPanel.this.modelList.getSelectedModels()[0]).setColor(null);
+            }
+
+        });
+
+        p.add(folderColor);
+        p.add(removeColor);
+
+        // Lay out the panel
+        rightPanel.add(builder.getPanel(), BorderLayout.CENTER);
+
+        this.setDividerLocation(200);
+    }
+
 }

@@ -50,6 +50,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import com.jgoodies.binding.value.ConverterValueModel;
 import org.jdesktop.swingx.JXColorSelectionButton;
 import org.jdesktop.swingx.renderer.DefaultListRenderer;
 
@@ -81,204 +82,206 @@ import com.leclercb.taskunifier.gui.utils.FormBuilder;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class GoalConfigurationPanel extends JSplitPane implements IModelList {
-	
-	private ModelList modelList;
-	
-	public GoalConfigurationPanel() {
-		this.initialize();
-	}
-	
-	@Override
-	public void addNewModel() {
-		this.modelList.addNewModel();
-	}
-	
-	@Override
-	public Model[] getSelectedModels() {
-		return this.modelList.getSelectedModels();
-	}
-	
-	@Override
-	public void setSelectedModel(Model model) {
-		this.modelList.setSelectedModel(model);
-	}
-	
-	private void initialize() {
-		this.setBorder(null);
-		
-		// Initialize Fields
-		final JTextField goalTitle = new JTextField();
-		final JComboBox goalLevel = new JComboBox();
-		final JComboBox goalContributes = ComponentFactory.createModelComboBox(
-				null,
-				true);
-		final JCheckBox goalArchived = new JCheckBox();
-		final JXColorSelectionButton goalColor = new JXColorSelectionButton();
-		final JButton removeColor = new JButton();
-		
-		// Overwrite renderer
-		goalContributes.setRenderer(new DefaultListRenderer(
-				StringValueModel.INSTANCE,
-				IconValueModel.INSTANCE));
-		
-		// Set Disabled
-		goalTitle.setEnabled(false);
-		goalLevel.setEnabled(false);
-		goalContributes.setEnabled(false);
-		goalArchived.setEnabled(false);
-		goalColor.setEnabled(false);
-		removeColor.setEnabled(false);
-		
-		// Initialize Model List
-		this.modelList = new ModelList(new GoalModel(false, true) {
-			
-			@Override
-			protected void fireContentsChanged(
-					Object source,
-					int index0,
-					int index1) {
-				this.superFireContentsChanged(source, index0, index1);
-			}
-			
-		}, goalTitle) {
-			
-			private BeanAdapter<Goal> adapter;
-			
-			{
-				this.adapter = new BeanAdapter<Goal>((Goal) null, true);
-				
-				ValueModel titleModel = this.adapter.getValueModel(BasicModel.PROP_TITLE);
-				Bindings.bind(goalTitle, titleModel);
-				
-				ValueModel levelModel = this.adapter.getValueModel(Goal.PROP_LEVEL);
-				goalLevel.setModel(new ComboBoxAdapter<GoalLevel>(
-						GoalLevel.values(),
-						levelModel));
-				
-				ValueModel contributesModel = this.adapter.getValueModel(Goal.PROP_CONTRIBUTES);
-				goalContributes.setModel(new ComboBoxAdapter<Goal>(
-						new GoalContributeModel(true, true),
-						contributesModel));
-				
-				ValueModel archivedModel = this.adapter.getValueModel(ModelArchive.PROP_ARCHIVED);
-				Bindings.bind(goalArchived, archivedModel);
-				
-				ValueModel colorModel = this.adapter.getValueModel(GuiModel.PROP_COLOR);
-				Bindings.bind(goalColor, "background", new ColorConverter(
-						colorModel));
-			}
-			
-			@Override
-			public Model addModel() {
-				return GoalFactory.getInstance().create(
-						Translations.getString("goal.default.title"));
-			}
-			
-			@Override
-			public void removeModel(Model model) {
-				GoalFactory.getInstance().markToDelete((Goal) model);
-			}
-			
-			@Override
-			public void modelsSelected(Model[] models) {
-				Model model = null;
-				
-				if (models != null && models.length == 1)
-					model = models[0];
-				
-				this.adapter.setBean(model != null ? (Goal) model : null);
-				
-				goalTitle.setEnabled(model != null);
-				goalLevel.setEnabled(model != null);
-				goalContributes.setEnabled(model != null);
-				goalArchived.setEnabled(model != null);
-				goalColor.setEnabled(model != null);
-				removeColor.setEnabled(model != null);
-				
-				if (model != null)
-					goalContributes.setEnabled(!((Goal) model).getLevel().equals(
-							GoalLevel.LIFE_TIME));
-			}
-			
-		};
-		
-		this.modelList.getModelList().setDragEnabled(true);
-		this.modelList.getModelList().setTransferHandler(
-				new ModelTransferHandler<Goal>(ModelType.GOAL));
-		this.modelList.getModelList().setDropMode(DropMode.ON_OR_INSERT);
-		
-		this.setLeftComponent(this.modelList);
-		
-		JPanel rightPanel = new JPanel();
-		rightPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		rightPanel.setLayout(new BorderLayout());
-		this.setRightComponent(ComponentFactory.createJScrollPane(
-				rightPanel,
-				false));
-		
-		FormBuilder builder = new FormBuilder(
-				"right:pref, 4dlu, fill:default:grow");
-		
-		// Goal Title
-		builder.appendI15d("general.goal.title", true, goalTitle);
-		
-		// Goal Level
-		builder.appendI15d("general.goal.level", true, goalLevel);
-		
-		goalLevel.setRenderer(new DefaultListRenderer(
-				StringValueGoalLevel.INSTANCE));
-		goalLevel.addItemListener(new ItemListener() {
-			
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				Goal goal = null;
-				Model[] models = GoalConfigurationPanel.this.modelList.getSelectedModels();
-				
-				if (models != null && models.length == 1)
-					goal = (Goal) models[0];
-				
-				if (goal == null) {
-					goalContributes.setEnabled(false);
-					return;
-				}
-				
-				goalContributes.setEnabled(!goal.getLevel().equals(
-						GoalLevel.LIFE_TIME));
-			}
-			
-		});
-		
-		// Goal Contributes
-		builder.appendI15d("general.goal.contributes", true, goalContributes);
-		
-		// Folder Archived
-		builder.appendI15d("general.goal.archived", true, goalArchived);
-		
-		// Goal Color
-		JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		
-		builder.appendI15d("general.color", true, p);
-		
-		goalColor.setPreferredSize(new Dimension(24, 24));
-		goalColor.setBorder(BorderFactory.createEmptyBorder());
-		
-		removeColor.setIcon(ImageUtils.getResourceImage("remove.png", 16, 16));
-		removeColor.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				((GuiGoal) GoalConfigurationPanel.this.modelList.getSelectedModels()[0]).setColor(null);
-			}
-			
-		});
-		
-		p.add(goalColor);
-		p.add(removeColor);
-		
-		// Lay out the panel
-		rightPanel.add(builder.getPanel(), BorderLayout.CENTER);
-		
-		this.setDividerLocation(200);
-	}
-	
+
+    private ModelList modelList;
+
+    public GoalConfigurationPanel() {
+        this.initialize();
+    }
+
+    @Override
+    public void addNewModel() {
+        this.modelList.addNewModel();
+    }
+
+    @Override
+    public Model[] getSelectedModels() {
+        return this.modelList.getSelectedModels();
+    }
+
+    @Override
+    public void setSelectedModel(Model model) {
+        this.modelList.setSelectedModel(model);
+    }
+
+    private void initialize() {
+        this.setBorder(null);
+
+        // Initialize Fields
+        final JTextField goalTitle = new JTextField();
+        final JComboBox goalLevel = new JComboBox();
+        final JComboBox goalContributes = ComponentFactory.createModelComboBox(
+                null,
+                true);
+        final JCheckBox goalArchived = new JCheckBox();
+        final JXColorSelectionButton goalColor = new JXColorSelectionButton();
+        final JButton removeColor = new JButton();
+
+        // Overwrite renderer
+        goalContributes.setRenderer(new DefaultListRenderer(
+                StringValueModel.INSTANCE,
+                IconValueModel.INSTANCE));
+
+        // Set Disabled
+        goalTitle.setEnabled(false);
+        goalLevel.setEnabled(false);
+        goalContributes.setEnabled(false);
+        goalArchived.setEnabled(false);
+        goalColor.setEnabled(false);
+        removeColor.setEnabled(false);
+
+        // Initialize Model List
+        this.modelList = new ModelList(new GoalModel(false, true) {
+
+            @Override
+            protected void fireContentsChanged(
+                    Object source,
+                    int index0,
+                    int index1) {
+                this.superFireContentsChanged(source, index0, index1);
+            }
+
+        }, goalTitle) {
+
+            private BeanAdapter<Goal> adapter;
+
+            {
+                this.adapter = new BeanAdapter<Goal>((Goal) null, true);
+
+                ValueModel titleModel = this.adapter.getValueModel(BasicModel.PROP_TITLE);
+                Bindings.bind(goalTitle, titleModel);
+
+                ValueModel levelModel = this.adapter.getValueModel(Goal.PROP_LEVEL);
+                goalLevel.setModel(new ComboBoxAdapter<GoalLevel>(
+                        GoalLevel.values(),
+                        levelModel));
+
+                ValueModel contributesModel = this.adapter.getValueModel(Goal.PROP_CONTRIBUTES);
+                goalContributes.setModel(new ComboBoxAdapter<Goal>(
+                        new GoalContributeModel(true, true),
+                        contributesModel));
+
+                ValueModel archivedModel = this.adapter.getValueModel(ModelArchive.PROP_ARCHIVED);
+                Bindings.bind(goalArchived, archivedModel);
+
+                ValueModel colorModel = this.adapter.getValueModel(GuiModel.PROP_COLOR);
+                Bindings.bind(
+                        goalColor,
+                        "background",
+                        new ConverterValueModel(colorModel, new ColorConverter()));
+            }
+
+            @Override
+            public Model addModel() {
+                return GoalFactory.getInstance().create(
+                        Translations.getString("goal.default.title"));
+            }
+
+            @Override
+            public void removeModel(Model model) {
+                GoalFactory.getInstance().markToDelete((Goal) model);
+            }
+
+            @Override
+            public void modelsSelected(Model[] models) {
+                Model model = null;
+
+                if (models != null && models.length == 1)
+                    model = models[0];
+
+                this.adapter.setBean(model != null ? (Goal) model : null);
+
+                goalTitle.setEnabled(model != null);
+                goalLevel.setEnabled(model != null);
+                goalContributes.setEnabled(model != null);
+                goalArchived.setEnabled(model != null);
+                goalColor.setEnabled(model != null);
+                removeColor.setEnabled(model != null);
+
+                if (model != null)
+                    goalContributes.setEnabled(!((Goal) model).getLevel().equals(
+                            GoalLevel.LIFE_TIME));
+            }
+
+        };
+
+        this.modelList.getModelList().setDragEnabled(true);
+        this.modelList.getModelList().setTransferHandler(
+                new ModelTransferHandler<Goal>(ModelType.GOAL));
+        this.modelList.getModelList().setDropMode(DropMode.ON_OR_INSERT);
+
+        this.setLeftComponent(this.modelList);
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        rightPanel.setLayout(new BorderLayout());
+        this.setRightComponent(ComponentFactory.createJScrollPane(
+                rightPanel,
+                false));
+
+        FormBuilder builder = new FormBuilder(
+                "right:pref, 4dlu, fill:default:grow");
+
+        // Goal Title
+        builder.appendI15d("general.goal.title", true, goalTitle);
+
+        // Goal Level
+        builder.appendI15d("general.goal.level", true, goalLevel);
+
+        goalLevel.setRenderer(new DefaultListRenderer(
+                StringValueGoalLevel.INSTANCE));
+        goalLevel.addItemListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                Goal goal = null;
+                Model[] models = GoalConfigurationPanel.this.modelList.getSelectedModels();
+
+                if (models != null && models.length == 1)
+                    goal = (Goal) models[0];
+
+                if (goal == null) {
+                    goalContributes.setEnabled(false);
+                    return;
+                }
+
+                goalContributes.setEnabled(!goal.getLevel().equals(
+                        GoalLevel.LIFE_TIME));
+            }
+
+        });
+
+        // Goal Contributes
+        builder.appendI15d("general.goal.contributes", true, goalContributes);
+
+        // Folder Archived
+        builder.appendI15d("general.goal.archived", true, goalArchived);
+
+        // Goal Color
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        builder.appendI15d("general.color", true, p);
+
+        goalColor.setPreferredSize(new Dimension(24, 24));
+        goalColor.setBorder(BorderFactory.createEmptyBorder());
+
+        removeColor.setIcon(ImageUtils.getResourceImage("remove.png", 16, 16));
+        removeColor.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ((GuiGoal) GoalConfigurationPanel.this.modelList.getSelectedModels()[0]).setColor(null);
+            }
+
+        });
+
+        p.add(goalColor);
+        p.add(removeColor);
+
+        // Lay out the panel
+        rightPanel.add(builder.getPanel(), BorderLayout.CENTER);
+
+        this.setDividerLocation(200);
+    }
+
 }

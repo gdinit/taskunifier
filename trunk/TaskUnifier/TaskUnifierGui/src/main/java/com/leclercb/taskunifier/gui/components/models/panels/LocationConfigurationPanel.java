@@ -48,6 +48,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.NumberFormatter;
 
+import com.jgoodies.binding.value.ConverterValueModel;
 import org.jdesktop.swingx.JXColorSelectionButton;
 
 import com.jgoodies.binding.adapter.Bindings;
@@ -69,169 +70,171 @@ import com.leclercb.taskunifier.gui.utils.FormBuilder;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class LocationConfigurationPanel extends JSplitPane implements IModelList {
-	
-	private ModelList modelList;
-	
-	public LocationConfigurationPanel() {
-		this.initialize();
-	}
-	
-	@Override
-	public void addNewModel() {
-		this.modelList.addNewModel();
-	}
-	
-	@Override
-	public Model[] getSelectedModels() {
-		return this.modelList.getSelectedModels();
-	}
-	
-	@Override
-	public void setSelectedModel(Model model) {
-		this.modelList.setSelectedModel(model);
-	}
-	
-	private void initialize() {
-		this.setBorder(null);
-		
-		// Initialize Fields
-		final JTextField locationTitle = new JTextField();
-		final JTextArea locationDescription = new JTextArea(5, 5);
-		final JFormattedTextField locationLatitude = new JFormattedTextField(
-				new NumberFormatter());
-		final JFormattedTextField locationLongitude = new JFormattedTextField(
-				new NumberFormatter());
-		final JXColorSelectionButton locationColor = new JXColorSelectionButton();
-		final JButton removeColor = new JButton();
-		
-		// Set Disabled
-		locationTitle.setEnabled(false);
-		locationDescription.setEnabled(false);
-		locationLatitude.setEnabled(false);
-		locationLongitude.setEnabled(false);
-		locationColor.setEnabled(false);
-		removeColor.setEnabled(false);
-		
-		// Initialize Model List
-		this.modelList = new ModelList(new LocationModel(false) {
-			
-			@Override
-			protected void fireContentsChanged(
-					Object source,
-					int index0,
-					int index1) {
-				this.superFireContentsChanged(source, index0, index1);
-			}
-			
-		}, locationTitle) {
-			
-			private BeanAdapter<Location> adapter;
-			
-			{
-				this.adapter = new BeanAdapter<Location>((Location) null, true);
-				
-				ValueModel titleModel = this.adapter.getValueModel(BasicModel.PROP_TITLE);
-				Bindings.bind(locationTitle, titleModel);
-				
-				ValueModel descriptionModel = this.adapter.getValueModel(Location.PROP_DESCRIPTION);
-				Bindings.bind(locationDescription, descriptionModel);
-				
-				ValueModel latitudeModel = this.adapter.getValueModel(Location.PROP_LATITUDE);
-				Bindings.bind(locationLatitude, latitudeModel);
-				
-				ValueModel longitudeModel = this.adapter.getValueModel(Location.PROP_LONGITUDE);
-				Bindings.bind(locationLongitude, longitudeModel);
-				
-				ValueModel colorModel = this.adapter.getValueModel(GuiModel.PROP_COLOR);
-				Bindings.bind(locationColor, "background", new ColorConverter(
-						colorModel));
-			}
-			
-			@Override
-			public Model addModel() {
-				return LocationFactory.getInstance().create(
-						Translations.getString("location.default.title"));
-			}
-			
-			@Override
-			public void removeModel(Model model) {
-				LocationFactory.getInstance().markToDelete((Location) model);
-			}
-			
-			@Override
-			public void modelsSelected(Model[] models) {
-				Model model = null;
-				
-				if (models != null && models.length == 1)
-					model = models[0];
-				
-				this.adapter.setBean(model != null ? (Location) model : null);
-				
-				locationTitle.setEnabled(model != null);
-				locationDescription.setEnabled(model != null);
-				locationLatitude.setEnabled(model != null);
-				locationLongitude.setEnabled(model != null);
-				locationColor.setEnabled(model != null);
-				removeColor.setEnabled(model != null);
-			}
-			
-		};
-		
-		this.setLeftComponent(this.modelList);
-		
-		JPanel rightPanel = new JPanel();
-		rightPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		rightPanel.setLayout(new BorderLayout());
-		this.setRightComponent(ComponentFactory.createJScrollPane(
-				rightPanel,
-				false));
-		
-		FormBuilder builder = new FormBuilder(
-				"right:pref, 4dlu, fill:default:grow");
-		
-		// Location Title
-		builder.appendI15d("general.location.title", true, locationTitle);
-		
-		// Location Description
-		builder.appendI15d(
-				"general.location.description",
-				true,
-				ComponentFactory.createJScrollPane(locationDescription, true));
-		
-		// Location Latitude
-		builder.appendI15d("general.location.latitude", true, locationLatitude);
-		
-		// Location Longitude
-		builder.appendI15d(
-				"general.location.longitude",
-				true,
-				locationLongitude);
-		
-		// Location Color
-		JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		
-		builder.appendI15d("general.color", true, p);
-		
-		locationColor.setPreferredSize(new Dimension(24, 24));
-		locationColor.setBorder(BorderFactory.createEmptyBorder());
-		
-		removeColor.setIcon(ImageUtils.getResourceImage("remove.png", 16, 16));
-		removeColor.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				((GuiLocation) LocationConfigurationPanel.this.modelList.getSelectedModels()[0]).setColor(null);
-			}
-			
-		});
-		
-		p.add(locationColor);
-		p.add(removeColor);
-		
-		// Lay out the panel
-		rightPanel.add(builder.getPanel(), BorderLayout.CENTER);
-		
-		this.setDividerLocation(200);
-	}
-	
+
+    private ModelList modelList;
+
+    public LocationConfigurationPanel() {
+        this.initialize();
+    }
+
+    @Override
+    public void addNewModel() {
+        this.modelList.addNewModel();
+    }
+
+    @Override
+    public Model[] getSelectedModels() {
+        return this.modelList.getSelectedModels();
+    }
+
+    @Override
+    public void setSelectedModel(Model model) {
+        this.modelList.setSelectedModel(model);
+    }
+
+    private void initialize() {
+        this.setBorder(null);
+
+        // Initialize Fields
+        final JTextField locationTitle = new JTextField();
+        final JTextArea locationDescription = new JTextArea(5, 5);
+        final JFormattedTextField locationLatitude = new JFormattedTextField(
+                new NumberFormatter());
+        final JFormattedTextField locationLongitude = new JFormattedTextField(
+                new NumberFormatter());
+        final JXColorSelectionButton locationColor = new JXColorSelectionButton();
+        final JButton removeColor = new JButton();
+
+        // Set Disabled
+        locationTitle.setEnabled(false);
+        locationDescription.setEnabled(false);
+        locationLatitude.setEnabled(false);
+        locationLongitude.setEnabled(false);
+        locationColor.setEnabled(false);
+        removeColor.setEnabled(false);
+
+        // Initialize Model List
+        this.modelList = new ModelList(new LocationModel(false) {
+
+            @Override
+            protected void fireContentsChanged(
+                    Object source,
+                    int index0,
+                    int index1) {
+                this.superFireContentsChanged(source, index0, index1);
+            }
+
+        }, locationTitle) {
+
+            private BeanAdapter<Location> adapter;
+
+            {
+                this.adapter = new BeanAdapter<Location>((Location) null, true);
+
+                ValueModel titleModel = this.adapter.getValueModel(BasicModel.PROP_TITLE);
+                Bindings.bind(locationTitle, titleModel);
+
+                ValueModel descriptionModel = this.adapter.getValueModel(Location.PROP_DESCRIPTION);
+                Bindings.bind(locationDescription, descriptionModel);
+
+                ValueModel latitudeModel = this.adapter.getValueModel(Location.PROP_LATITUDE);
+                Bindings.bind(locationLatitude, latitudeModel);
+
+                ValueModel longitudeModel = this.adapter.getValueModel(Location.PROP_LONGITUDE);
+                Bindings.bind(locationLongitude, longitudeModel);
+
+                ValueModel colorModel = this.adapter.getValueModel(GuiModel.PROP_COLOR);
+                Bindings.bind(
+                        locationColor,
+                        "background",
+                        new ConverterValueModel(colorModel, new ColorConverter()));
+            }
+
+            @Override
+            public Model addModel() {
+                return LocationFactory.getInstance().create(
+                        Translations.getString("location.default.title"));
+            }
+
+            @Override
+            public void removeModel(Model model) {
+                LocationFactory.getInstance().markToDelete((Location) model);
+            }
+
+            @Override
+            public void modelsSelected(Model[] models) {
+                Model model = null;
+
+                if (models != null && models.length == 1)
+                    model = models[0];
+
+                this.adapter.setBean(model != null ? (Location) model : null);
+
+                locationTitle.setEnabled(model != null);
+                locationDescription.setEnabled(model != null);
+                locationLatitude.setEnabled(model != null);
+                locationLongitude.setEnabled(model != null);
+                locationColor.setEnabled(model != null);
+                removeColor.setEnabled(model != null);
+            }
+
+        };
+
+        this.setLeftComponent(this.modelList);
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        rightPanel.setLayout(new BorderLayout());
+        this.setRightComponent(ComponentFactory.createJScrollPane(
+                rightPanel,
+                false));
+
+        FormBuilder builder = new FormBuilder(
+                "right:pref, 4dlu, fill:default:grow");
+
+        // Location Title
+        builder.appendI15d("general.location.title", true, locationTitle);
+
+        // Location Description
+        builder.appendI15d(
+                "general.location.description",
+                true,
+                ComponentFactory.createJScrollPane(locationDescription, true));
+
+        // Location Latitude
+        builder.appendI15d("general.location.latitude", true, locationLatitude);
+
+        // Location Longitude
+        builder.appendI15d(
+                "general.location.longitude",
+                true,
+                locationLongitude);
+
+        // Location Color
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        builder.appendI15d("general.color", true, p);
+
+        locationColor.setPreferredSize(new Dimension(24, 24));
+        locationColor.setBorder(BorderFactory.createEmptyBorder());
+
+        removeColor.setIcon(ImageUtils.getResourceImage("remove.png", 16, 16));
+        removeColor.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ((GuiLocation) LocationConfigurationPanel.this.modelList.getSelectedModels()[0]).setColor(null);
+            }
+
+        });
+
+        p.add(locationColor);
+        p.add(removeColor);
+
+        // Lay out the panel
+        rightPanel.add(builder.getPanel(), BorderLayout.CENTER);
+
+        this.setDividerLocation(200);
+    }
+
 }

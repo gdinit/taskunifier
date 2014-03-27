@@ -32,29 +32,22 @@
  */
 package com.leclercb.taskunifier.gui.commons.converters;
 
+import com.jgoodies.binding.value.BindingConverter;
 import org.apache.commons.lang3.StringUtils;
 
-import com.jgoodies.binding.value.AbstractConverter;
-import com.jgoodies.binding.value.ValueModel;
+public class TaskTagsConverter implements BindingConverter<String[], Object> {
 
-@SuppressWarnings("deprecation")
-public class TaskTagsConverter extends AbstractConverter {
-	
-	public TaskTagsConverter(ValueModel subject) {
-		super(subject);
-	}
-	
-	@Override
-	public void setValue(Object tags) {
-		this.subject.setValue(tags.toString().split(","));
-	}
-	
-	@Override
-	public Object convertFromSubject(Object tags) {
-		if (tags == null)
-			return null;
-		
-		return StringUtils.join((String[]) tags, ", ");
-	}
-	
+    @Override
+    public String[] sourceValue(Object tags) {
+        return tags.toString().split(",");
+    }
+
+    @Override
+    public Object targetValue(String[] tags) {
+        if (tags == null)
+            return null;
+
+        return StringUtils.join(tags, ", ");
+    }
+
 }

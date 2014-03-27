@@ -32,29 +32,23 @@
  */
 package com.leclercb.taskunifier.gui.commons.converters;
 
-import java.awt.Color;
+import com.jgoodies.binding.value.BindingConverter;
 
-import com.jgoodies.binding.value.AbstractConverter;
-import com.jgoodies.binding.value.ValueModel;
+import java.awt.*;
 
-@SuppressWarnings("deprecation")
-public class ColorConverter extends AbstractConverter {
-	
-	public ColorConverter(ValueModel subject) {
-		super(subject);
-	}
-	
-	@Override
-	public void setValue(Object color) {
-		this.subject.setValue(color);
-	}
-	
-	@Override
-	public Object convertFromSubject(Object color) {
-		if (color == null)
-			return Color.GRAY;
-		
-		return color;
-	}
-	
+public class ColorConverter implements BindingConverter<Color, Color> {
+
+    @Override
+    public Color sourceValue(Color color) {
+        return color;
+    }
+
+    @Override
+    public Color targetValue(Color color) {
+        if (color == null)
+            return Color.GRAY;
+
+        return color;
+    }
+
 }

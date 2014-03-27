@@ -48,6 +48,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import com.jgoodies.binding.value.ConverterValueModel;
 import org.jdesktop.swingx.JXColorSelectionButton;
 
 import com.jgoodies.binding.adapter.Bindings;
@@ -72,194 +73,196 @@ import com.leclercb.taskunifier.gui.utils.FormBuilder;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class ContactConfigurationPanel extends JSplitPane implements IModelList {
-	
-	private ModelList modelList;
-	
-	public ContactConfigurationPanel() {
-		this.initialize();
-	}
-	
-	@Override
-	public void addNewModel() {
-		this.modelList.addNewModel();
-	}
-	
-	@Override
-	public Model[] getSelectedModels() {
-		return this.modelList.getSelectedModels();
-	}
-	
-	@Override
-	public void setSelectedModel(Model model) {
-		this.modelList.setSelectedModel(model);
-	}
-	
-	private void initialize() {
-		this.setBorder(null);
-		
-		// Initialize Fields
-		final JCheckBox contactCurrentUser = new JCheckBox();
-		final JTextField contactTitle = new JTextField();
-		final JTextField contactFirstName = new JTextField();
-		final JTextField contactLastName = new JTextField();
-		final JTextField contactEmail = new JTextField();
-		final JXColorSelectionButton contactColor = new JXColorSelectionButton();
-		final JButton removeColor = new JButton();
-		
-		// Set Disabled
-		contactCurrentUser.setEnabled(false);
-		contactTitle.setEnabled(false);
-		contactFirstName.setEnabled(false);
-		contactLastName.setEnabled(false);
-		contactEmail.setEnabled(false);
-		contactColor.setEnabled(false);
-		removeColor.setEnabled(false);
-		
-		// Initialize Model List
-		this.modelList = new ModelList(new ContactModel(false) {
-			
-			@Override
-			protected void fireContentsChanged(
-					Object source,
-					int index0,
-					int index1) {
-				this.superFireContentsChanged(source, index0, index1);
-			}
-			
-		}, contactTitle) {
-			
-			private BeanAdapter<Contact> adapter;
-			
-			{
-				this.adapter = new BeanAdapter<Contact>((Contact) null, true);
-				
-				ValueModel titleModel = this.adapter.getValueModel(BasicModel.PROP_TITLE);
-				Bindings.bind(contactTitle, titleModel);
-				
-				ValueModel firstNameModel = this.adapter.getValueModel(Contact.PROP_FIRSTNAME);
-				Bindings.bind(contactFirstName, firstNameModel);
-				
-				ValueModel lastNameModel = this.adapter.getValueModel(Contact.PROP_LASTNAME);
-				Bindings.bind(contactLastName, lastNameModel);
-				
-				ValueModel emailModel = this.adapter.getValueModel(Contact.PROP_EMAIL);
-				Bindings.bind(contactEmail, emailModel);
-				
-				ValueModel colorModel = this.adapter.getValueModel(GuiModel.PROP_COLOR);
-				Bindings.bind(contactColor, "background", new ColorConverter(
-						colorModel));
-			}
-			
-			@Override
-			public Model addModel() {
-				return ContactFactory.getInstance().create(
-						Translations.getString("contact.default.title"));
-			}
-			
-			@Override
-			public void removeModel(Model model) {
-				ContactFactory.getInstance().markToDelete((Contact) model);
-			}
-			
-			@Override
-			public void modelsSelected(Model[] models) {
-				Model model = null;
-				
-				if (models != null && models.length == 1)
-					model = models[0];
-				
-				this.adapter.setBean(model != null ? (Contact) model : null);
-				
-				contactCurrentUser.setEnabled(model != null);
-				contactTitle.setEnabled(model != null);
-				contactFirstName.setEnabled(model != null);
-				contactLastName.setEnabled(model != null);
-				contactEmail.setEnabled(model != null);
-				contactColor.setEnabled(model != null);
-				removeColor.setEnabled(model != null);
-				
-				contactCurrentUser.setSelected(EqualsUtils.equals(
-						model,
-						ContactUtils.getCurrentUser()));
-			}
-			
-		};
-		
-		this.modelList.addButton(new JButton(new ActionImportVCard(16, 16)));
-		
-		this.setLeftComponent(this.modelList);
-		
-		JPanel rightPanel = new JPanel();
-		rightPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		rightPanel.setLayout(new BorderLayout());
-		this.setRightComponent(ComponentFactory.createJScrollPane(
-				rightPanel,
-				false));
-		
-		FormBuilder builder = new FormBuilder(
-				"right:pref, 4dlu, fill:default:grow");
-		
-		// Contact Title
-		builder.appendI15d("general.contact.title", true, contactTitle);
-		
-		// Contact FirstName
-		builder.appendI15d("general.contact.firstname", true, contactFirstName);
-		
-		// Contact LastName
-		builder.appendI15d("general.contact.lastname", true, contactLastName);
-		
-		// Contact Email
-		builder.appendI15d("general.contact.email", true, contactEmail);
-		
-		// Contact Color
-		JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		
-		builder.appendI15d("general.color", true, p);
-		
-		contactColor.setPreferredSize(new Dimension(24, 24));
-		contactColor.setBorder(BorderFactory.createEmptyBorder());
-		
-		removeColor.setIcon(ImageUtils.getResourceImage("remove.png", 16, 16));
-		removeColor.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				((GuiContact) ContactConfigurationPanel.this.modelList.getSelectedModels()[0]).setColor(null);
-			}
-			
-		});
-		
-		p.add(contactColor);
-		p.add(removeColor);
-		
-		// Contact Current User
-		builder.appendI15d("general.contact.me", true, contactCurrentUser);
-		
-		contactCurrentUser.addItemListener(new ItemListener() {
-			
-			@Override
-			public void itemStateChanged(ItemEvent event) {
-				Model model = null;
-				Model[] models = ContactConfigurationPanel.this.modelList.getSelectedModels();
-				
-				if (models != null && models.length == 1)
-					model = models[0];
-				
-				if (EqualsUtils.equals(model, ContactUtils.getCurrentUser())) {
-					if (!contactCurrentUser.isSelected())
-						ContactUtils.setCurrentUser(null);
-				} else {
-					if (contactCurrentUser.isSelected())
-						ContactUtils.setCurrentUser((Contact) model);
-				}
-			}
-			
-		});
-		
-		// Lay out the panel
-		rightPanel.add(builder.getPanel(), BorderLayout.CENTER);
-		
-		this.setDividerLocation(200);
-	}
-	
+
+    private ModelList modelList;
+
+    public ContactConfigurationPanel() {
+        this.initialize();
+    }
+
+    @Override
+    public void addNewModel() {
+        this.modelList.addNewModel();
+    }
+
+    @Override
+    public Model[] getSelectedModels() {
+        return this.modelList.getSelectedModels();
+    }
+
+    @Override
+    public void setSelectedModel(Model model) {
+        this.modelList.setSelectedModel(model);
+    }
+
+    private void initialize() {
+        this.setBorder(null);
+
+        // Initialize Fields
+        final JCheckBox contactCurrentUser = new JCheckBox();
+        final JTextField contactTitle = new JTextField();
+        final JTextField contactFirstName = new JTextField();
+        final JTextField contactLastName = new JTextField();
+        final JTextField contactEmail = new JTextField();
+        final JXColorSelectionButton contactColor = new JXColorSelectionButton();
+        final JButton removeColor = new JButton();
+
+        // Set Disabled
+        contactCurrentUser.setEnabled(false);
+        contactTitle.setEnabled(false);
+        contactFirstName.setEnabled(false);
+        contactLastName.setEnabled(false);
+        contactEmail.setEnabled(false);
+        contactColor.setEnabled(false);
+        removeColor.setEnabled(false);
+
+        // Initialize Model List
+        this.modelList = new ModelList(new ContactModel(false) {
+
+            @Override
+            protected void fireContentsChanged(
+                    Object source,
+                    int index0,
+                    int index1) {
+                this.superFireContentsChanged(source, index0, index1);
+            }
+
+        }, contactTitle) {
+
+            private BeanAdapter<Contact> adapter;
+
+            {
+                this.adapter = new BeanAdapter<Contact>((Contact) null, true);
+
+                ValueModel titleModel = this.adapter.getValueModel(BasicModel.PROP_TITLE);
+                Bindings.bind(contactTitle, titleModel);
+
+                ValueModel firstNameModel = this.adapter.getValueModel(Contact.PROP_FIRSTNAME);
+                Bindings.bind(contactFirstName, firstNameModel);
+
+                ValueModel lastNameModel = this.adapter.getValueModel(Contact.PROP_LASTNAME);
+                Bindings.bind(contactLastName, lastNameModel);
+
+                ValueModel emailModel = this.adapter.getValueModel(Contact.PROP_EMAIL);
+                Bindings.bind(contactEmail, emailModel);
+
+                ValueModel colorModel = this.adapter.getValueModel(GuiModel.PROP_COLOR);
+                Bindings.bind(
+                        contactColor,
+                        "background",
+                        new ConverterValueModel(colorModel, new ColorConverter()));
+            }
+
+            @Override
+            public Model addModel() {
+                return ContactFactory.getInstance().create(
+                        Translations.getString("contact.default.title"));
+            }
+
+            @Override
+            public void removeModel(Model model) {
+                ContactFactory.getInstance().markToDelete((Contact) model);
+            }
+
+            @Override
+            public void modelsSelected(Model[] models) {
+                Model model = null;
+
+                if (models != null && models.length == 1)
+                    model = models[0];
+
+                this.adapter.setBean(model != null ? (Contact) model : null);
+
+                contactCurrentUser.setEnabled(model != null);
+                contactTitle.setEnabled(model != null);
+                contactFirstName.setEnabled(model != null);
+                contactLastName.setEnabled(model != null);
+                contactEmail.setEnabled(model != null);
+                contactColor.setEnabled(model != null);
+                removeColor.setEnabled(model != null);
+
+                contactCurrentUser.setSelected(EqualsUtils.equals(
+                        model,
+                        ContactUtils.getCurrentUser()));
+            }
+
+        };
+
+        this.modelList.addButton(new JButton(new ActionImportVCard(16, 16)));
+
+        this.setLeftComponent(this.modelList);
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        rightPanel.setLayout(new BorderLayout());
+        this.setRightComponent(ComponentFactory.createJScrollPane(
+                rightPanel,
+                false));
+
+        FormBuilder builder = new FormBuilder(
+                "right:pref, 4dlu, fill:default:grow");
+
+        // Contact Title
+        builder.appendI15d("general.contact.title", true, contactTitle);
+
+        // Contact FirstName
+        builder.appendI15d("general.contact.firstname", true, contactFirstName);
+
+        // Contact LastName
+        builder.appendI15d("general.contact.lastname", true, contactLastName);
+
+        // Contact Email
+        builder.appendI15d("general.contact.email", true, contactEmail);
+
+        // Contact Color
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        builder.appendI15d("general.color", true, p);
+
+        contactColor.setPreferredSize(new Dimension(24, 24));
+        contactColor.setBorder(BorderFactory.createEmptyBorder());
+
+        removeColor.setIcon(ImageUtils.getResourceImage("remove.png", 16, 16));
+        removeColor.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ((GuiContact) ContactConfigurationPanel.this.modelList.getSelectedModels()[0]).setColor(null);
+            }
+
+        });
+
+        p.add(contactColor);
+        p.add(removeColor);
+
+        // Contact Current User
+        builder.appendI15d("general.contact.me", true, contactCurrentUser);
+
+        contactCurrentUser.addItemListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent event) {
+                Model model = null;
+                Model[] models = ContactConfigurationPanel.this.modelList.getSelectedModels();
+
+                if (models != null && models.length == 1)
+                    model = models[0];
+
+                if (EqualsUtils.equals(model, ContactUtils.getCurrentUser())) {
+                    if (!contactCurrentUser.isSelected())
+                        ContactUtils.setCurrentUser(null);
+                } else {
+                    if (contactCurrentUser.isSelected())
+                        ContactUtils.setCurrentUser((Contact) model);
+                }
+            }
+
+        });
+
+        // Lay out the panel
+        rightPanel.add(builder.getPanel(), BorderLayout.CENTER);
+
+        this.setDividerLocation(200);
+    }
+
 }
