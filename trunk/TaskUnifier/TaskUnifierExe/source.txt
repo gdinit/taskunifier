@@ -16,7 +16,7 @@ How to build TaskUnifier:
 -------------------------
 
 1/ Run the ANT target "set-version"
-2/ Run the TaskUnifier "install" with Maven
+2/ Run "clean" and "install" with Maven
 3/ Run the ANT targer "create-sources-binaries"
 
 ---------------------
