@@ -32,7 +32,7 @@
  */
 package com.leclercb.taskunifier.gui.components.modelselectiontable;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 
 import javax.swing.JPanel;
 
@@ -67,9 +67,10 @@ public class ModelSelectionPanel extends JPanel implements ModelSelectionView {
 			ModelType modelType) {
 		this.setOpaque(false);
 		this.setLayout(new BorderLayout());
+        this.setPreferredSize(new Dimension(250, 350));
 		
 		this.table = new ModelSelectionTable(tableProperties, modelType);
-		
+
 		this.add(this.table.getTableHeader(), BorderLayout.NORTH);
 		this.add(
 				ComponentFactory.createJScrollPane(this.table, false),
