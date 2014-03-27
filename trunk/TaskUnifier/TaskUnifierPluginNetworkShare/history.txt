@@ -1,7 +1,5 @@
-Version 1.8
-	- Update for TaskUnifier 4.1.0
-
 Version 1.7
+	- Update for TaskUnifier 4.1.0
 	- Do not share notes if their folder is not shared
 
 Version 1.6
