@@ -1,6 +1,10 @@
 HISTORY
 -------
 
+Version 4.1.1
+    - Minor:
+        - Auto-save before sync
+
 Version 4.1.0
     - Minor:
         - BF 343: Increase model selection panel width
