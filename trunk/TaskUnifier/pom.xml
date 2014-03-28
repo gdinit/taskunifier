@@ -4,7 +4,7 @@
 
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier</artifactId>
-    <version>4.1.0</version>
+    <version>4.1.1</version>
     <packaging>pom</packaging>
 
     <name>TaskUnifier</name>
