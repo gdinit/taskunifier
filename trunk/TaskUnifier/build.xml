@@ -31,6 +31,10 @@
                 tofile="${basedir}/TaskUnifierPluginGoogleTasks/src/main/resources/com/leclercb/taskunifier/plugin/googletasks/resources/private.properties"/>
 
         <copy
+                file="${basedir}/Private/private_organitask.properties"
+                tofile="${basedir}/TaskUnifierPluginOrganiTask/src/main/resources/com/leclercb/taskunifier/plugin/organitask/resources/private.properties"/>
+
+        <copy
                 file="${basedir}/Private/private_toodledo.properties"
                 tofile="${basedir}/TaskUnifierPluginToodledo/src/main/resources/com/leclercb/taskunifier/plugin/toodledo/resources/private.properties"/>
     </target>
@@ -81,6 +85,11 @@
         <set-version-pom
                 pomFile="${basedir}/TaskUnifierPluginNetworkShare/pom.xml"
                 projectPropertyFile="${basedir}/TaskUnifierPluginNetworkShare/src/main/resources/com/leclercb/taskunifier/plugin/networkshare/resources/general.properties"
+                parentPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
+
+        <set-version-pom
+                pomFile="${basedir}/TaskUnifierPluginOrganiTask/pom.xml"
+                projectPropertyFile="${basedir}/TaskUnifierPluginOrganiTask/src/main/resources/com/leclercb/taskunifier/plugin/organitask/resources/general.properties"
                 parentPropertyFile="${basedir}/TaskUnifierGui/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties"/>
 
         <set-version-pom

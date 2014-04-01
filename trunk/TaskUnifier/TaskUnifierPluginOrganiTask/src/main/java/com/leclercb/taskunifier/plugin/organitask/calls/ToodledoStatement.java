@@ -23,8 +23,6 @@ import com.leclercb.taskunifier.api.models.beans.NoteBean;
 import com.leclercb.taskunifier.api.models.beans.TaskBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerConnectionException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
-import com.leclercb.taskunifier.plugin.toodledo.ToodledoApi;
-import com.leclercb.taskunifier.plugin.toodledo.ToodledoConnection;
 import com.leclercb.taskunifier.plugin.toodledo.calls.exc.ToodledoConnectionException;
 
 public class ToodledoStatement {
@@ -82,9 +80,9 @@ public class ToodledoStatement {
 		return callGetKey.getKey(password, token);
 	}
 	
-	private ToodledoConnection connection;
+	private com.leclercb.taskunifier.plugin.toodledo.OrganiTaskConnection connection;
 	
-	public ToodledoStatement(ToodledoConnection connection) {
+	public ToodledoStatement(com.leclercb.taskunifier.plugin.toodledo.OrganiTaskConnection connection) {
 		CheckUtils.isNotNull(connection);
 		this.connection = connection;
 	}
@@ -773,7 +771,7 @@ public class ToodledoStatement {
 		if (!this.connection.isConnected())
 			throw new SynchronizerConnectionException(
 					false,
-					ToodledoApi.getInstance().getApiId(),
+					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getApiId(),
 					null,
 					"The connection is closed");
 	}

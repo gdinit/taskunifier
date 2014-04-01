@@ -9,7 +9,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
-import com.leclercb.taskunifier.plugin.toodledo.ToodledoApi;
 
 final class CallGetKey extends AbstractCall {
 	
@@ -19,7 +18,7 @@ final class CallGetKey extends AbstractCall {
 		CheckUtils.isNotNull(token);
 		
 		return DigestUtils.md5Hex(DigestUtils.md5Hex(password)
-				+ ToodledoApi.getInstance().getApiKey()
+				+ com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getApiKey()
 				+ token);
 	}
 	

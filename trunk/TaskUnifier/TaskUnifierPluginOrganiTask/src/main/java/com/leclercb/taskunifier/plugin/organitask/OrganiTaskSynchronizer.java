@@ -3,7 +3,7 @@
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
  */
-package com.leclercb.taskunifier.plugin.toodledo;
+package com.leclercb.taskunifier.plugin.organitask;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,7 +53,7 @@ import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoDeletedContact;
 import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoStatement;
 import com.leclercb.taskunifier.plugin.toodledo.calls.exc.ToodledoApiException;
 
-public class ToodledoSynchronizer extends AbstractSynchronizer {
+public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 	
 	private ToodledoStatement statement;
 	private ToodledoAccountInfo accountInfo;
@@ -69,7 +69,7 @@ public class ToodledoSynchronizer extends AbstractSynchronizer {
 	private Calendar lastGoalEdit;
 	private Calendar lastLocationEdit;
 	
-	ToodledoSynchronizer(ToodledoConnection connection) {
+	OrganiTaskSynchronizer(OrganiTaskConnection connection) {
 		super(connection, "toodledo");
 		
 		this.statement = connection.getStatement();
@@ -77,7 +77,7 @@ public class ToodledoSynchronizer extends AbstractSynchronizer {
 	
 	@Override
 	public SynchronizerPlugin getPlugin() {
-		return PluginApi.getPlugin(ToodledoPlugin.ID);
+		return PluginApi.getPlugin(OrganiTaskPlugin.ID);
 	}
 	
 	public Calendar getLastNoteEdit() {
@@ -148,7 +148,7 @@ public class ToodledoSynchronizer extends AbstractSynchronizer {
 	public void synchronize(SynchronizerChoice choice, ProgressMonitor monitor)
 			throws SynchronizerException {
 		this.addedTasks = null;
-		this.accountInfo = ((ToodledoConnection) this.getConnection()).getAccountInfo();
+		this.accountInfo = ((OrganiTaskConnection) this.getConnection()).getAccountInfo();
 		
 		this.synchronizeModels(choice, monitor, new ModelType[] {
 				ModelType.CONTEXT,
@@ -797,7 +797,7 @@ public class ToodledoSynchronizer extends AbstractSynchronizer {
 				
 				@Override
 				public Void call() {
-					List<ModelBean> deletedContacts = ToodledoSynchronizer.this.getDeletedContacts();
+					List<ModelBean> deletedContacts = OrganiTaskSynchronizer.this.getDeletedContacts();
 					List<ToodledoDeletedContact> toodledoDeletedContacts = new ArrayList<ToodledoDeletedContact>();
 					
 					for (ModelBean deletedContact : deletedContacts) {

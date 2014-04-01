@@ -3,21 +3,21 @@
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
  */
-package com.leclercb.taskunifier.plugin.toodledo;
+package com.leclercb.taskunifier.plugin.organitask;
 
 import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.taskunifier.api.synchronizer.SynchronizerApi;
 import com.leclercb.taskunifier.api.synchronizer.SynchronizerPlugin;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
-import com.leclercb.taskunifier.plugin.toodledo.resources.Resources;
+import com.leclercb.taskunifier.plugin.organitask.resources.Resources;
 
 import java.util.logging.Level;
 
-public class ToodledoPlugin implements SynchronizerPlugin {
+public class OrganiTaskPlugin implements SynchronizerPlugin {
 	
-	public static final String ID = "4";
+	public static final String ID = "6";
 	
-	private static String NAME = "Toodledo Plugin";
+	private static String NAME = "OrganiTask Plugin";
 	private static String AUTHOR = "Benjamin Leclerc";
 	private static String VERSION = null;
 	
@@ -32,7 +32,7 @@ public class ToodledoPlugin implements SynchronizerPlugin {
 		}
 	}
 	
-	public ToodledoPlugin() {
+	public OrganiTaskPlugin() {
 		
 	}
 	
@@ -68,7 +68,7 @@ public class ToodledoPlugin implements SynchronizerPlugin {
 	
 	@Override
 	public SynchronizerApi getSynchronizerApi() {
-		return ToodledoApi.getInstance();
+		return OrganiTaskApi.getInstance();
 	}
 	
 }

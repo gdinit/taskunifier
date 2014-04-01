@@ -9,14 +9,13 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
-import com.leclercb.taskunifier.plugin.toodledo.ToodledoApi;
 
 final class CallGetSignature extends AbstractCall {
 	
 	public String getSignature(String info) throws SynchronizerException {
 		CheckUtils.isNotNull(info);
 		
-		return DigestUtils.md5Hex(info + ToodledoApi.getInstance().getApiKey());
+		return DigestUtils.md5Hex(info + com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getApiKey());
 	}
 	
 }
