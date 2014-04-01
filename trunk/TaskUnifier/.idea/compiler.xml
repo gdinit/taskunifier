@@ -30,6 +30,7 @@
         <module name="taskunifier-plugin-googlecal" />
         <module name="taskunifier-plugin-googletasks" />
         <module name="taskunifier-plugin-networkshare" />
+        <module name="taskunifier-plugin-organitask" />
         <module name="taskunifier-plugin-sample" />
         <module name="taskunifier-plugin-toodledo" />
       </profile>
@@ -44,6 +45,7 @@
       <module name="taskunifier-plugin-googlecal" target="1.6" />
       <module name="taskunifier-plugin-googletasks" target="1.6" />
       <module name="taskunifier-plugin-networkshare" target="1.6" />
+      <module name="taskunifier-plugin-organitask" target="1.6" />
       <module name="taskunifier-plugin-sample" target="1.6" />
       <module name="taskunifier-plugin-toodledo" target="1.6" />
     </bytecodeTargetLevel>

@@ -1,0 +1,96 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.leclercb</groupId>
+    <artifactId>taskunifier-plugin-organitask</artifactId>
+    <version>0.1</version>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>com.leclercb</groupId>
+        <artifactId>taskunifier</artifactId>
+        <version>4.1.1</version>
+    </parent>
+
+    <name>TaskUnifier Plugin OrganiTask</name>
+    <description>TaskUnifier Plugin OrganiTask Project</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.leclercb</groupId>
+            <artifactId>commons</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.leclercb</groupId>
+            <artifactId>taskunifier-api</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.leclercb</groupId>
+            <artifactId>taskunifier-gui</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+    </dependencies>
+
+    <scm>
+        <connection>
+            scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifier/TaskUnifierPluginOrganiTask
+        </connection>
+        <developerConnection>
+            scm:svn:https://svn.code.sf.net/p/taskunifier/code/trunk/TaskUnifier/TaskUnifierPluginOrganiTask
+        </developerConnection>
+    </scm>
+
+    <profiles>
+        <profile>
+            <id>website</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <configuration>
+                                    <target>
+                                        <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath"/>
+
+                                        <propertyregex property="project.version.underscored" override="false" input="${project.version}" regexp="\." replace="_" global="true"/>
+
+                                        <copy file="${basedir}/history.txt" tofile="${directory.web}/plugins/organitask/files/history_${project.version.underscored}.txt"/>
+                                        <copy file="${basedir}/target/taskunifier-plugin-organitask-${project.version}.jar" tofile="${directory.web}/plugins/organitask/files/TaskUnifierPluginOrganiTask_${project.version.underscored}.jar"/>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant-nodeps</artifactId>
+                                <version>1.8.1</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

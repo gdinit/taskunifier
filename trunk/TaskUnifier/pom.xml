@@ -29,6 +29,7 @@
         <module>TaskUnifierPluginGoogleCalendar</module>
         <module>TaskUnifierPluginGoogleTasks</module>
         <module>TaskUnifierPluginNetworkShare</module>
+        <module>TaskUnifierPluginOrganiTask</module>
         <module>TaskUnifierPluginSample</module>
         <module>TaskUnifierPluginToodledo</module>
     </modules>

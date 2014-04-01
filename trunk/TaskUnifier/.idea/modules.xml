@@ -11,6 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/TaskUnifierPluginGoogleCalendar/taskunifier-plugin-googlecal.iml" filepath="$PROJECT_DIR$/TaskUnifierPluginGoogleCalendar/taskunifier-plugin-googlecal.iml" />
       <module fileurl="file://$PROJECT_DIR$/TaskUnifierPluginGoogleTasks/taskunifier-plugin-googletasks.iml" filepath="$PROJECT_DIR$/TaskUnifierPluginGoogleTasks/taskunifier-plugin-googletasks.iml" />
       <module fileurl="file://$PROJECT_DIR$/TaskUnifierPluginNetworkShare/taskunifier-plugin-networkshare.iml" filepath="$PROJECT_DIR$/TaskUnifierPluginNetworkShare/taskunifier-plugin-networkshare.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TaskUnifierPluginOrganiTask/taskunifier-plugin-organitask.iml" filepath="$PROJECT_DIR$/TaskUnifierPluginOrganiTask/taskunifier-plugin-organitask.iml" />
       <module fileurl="file://$PROJECT_DIR$/TaskUnifierPluginSample/taskunifier-plugin-sample.iml" filepath="$PROJECT_DIR$/TaskUnifierPluginSample/taskunifier-plugin-sample.iml" />
       <module fileurl="file://$PROJECT_DIR$/TaskUnifierPluginToodledo/taskunifier-plugin-toodledo.iml" filepath="$PROJECT_DIR$/TaskUnifierPluginToodledo/taskunifier-plugin-toodledo.iml" />
     </modules>
