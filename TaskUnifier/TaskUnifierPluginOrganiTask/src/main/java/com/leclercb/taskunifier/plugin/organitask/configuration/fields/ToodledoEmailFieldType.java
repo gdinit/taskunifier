@@ -3,7 +3,7 @@
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
  */
-package com.leclercb.taskunifier.plugin.toodledo.configuration.fields;
+package com.leclercb.taskunifier.plugin.organitask.configuration.fields;
 
 import javax.swing.JOptionPane;
 
@@ -11,7 +11,6 @@ import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
 import com.leclercb.taskunifier.gui.plugins.PluginApi;
 import com.leclercb.taskunifier.gui.translations.Translations;
-import com.leclercb.taskunifier.plugin.toodledo.ToodledoApi;
 import com.leclercb.taskunifier.plugin.toodledo.translations.PluginTranslations;
 
 public class ToodledoEmailFieldType extends ConfigurationFieldType.TextField {
@@ -27,7 +26,7 @@ public class ToodledoEmailFieldType extends ConfigurationFieldType.TextField {
 		if (!EqualsUtils.equalsStringIgnoreCase(
 				currentEmail,
 				this.getFieldValue())) {
-			ToodledoApi.getInstance().resetConnectionParameters(
+			com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().resetConnectionParameters(
 					PluginApi.getUserSettings());
 			
 			if (currentEmail != null && currentEmail.length() != 0) {

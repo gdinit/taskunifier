@@ -3,7 +3,7 @@
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
  */
-package com.leclercb.taskunifier.plugin.toodledo;
+package com.leclercb.taskunifier.plugin.organitask;
 
 import javax.swing.JOptionPane;
 
@@ -21,11 +21,11 @@ import com.leclercb.taskunifier.plugin.toodledo.configuration.fields.ToodledoEma
 import com.leclercb.taskunifier.plugin.toodledo.configuration.fields.ToodledoEnableSSLFieldType;
 import com.leclercb.taskunifier.plugin.toodledo.configuration.fields.ToodledoPasswordFieldType;
 
-public class ToodledoConfigurationPanel extends DefaultConfigurationPanel {
+public class OrganiTaskConfigurationPanel extends DefaultConfigurationPanel {
 	
-	public ToodledoConfigurationPanel(
-			ConfigurationGroup configuration,
-			boolean welcome) {
+	public OrganiTaskConfigurationPanel(
+            ConfigurationGroup configuration,
+            boolean welcome) {
 		super(configuration, "plugin_toodledo_configuration");
 		this.initialize(welcome);
 		this.pack();
@@ -52,7 +52,7 @@ public class ToodledoConfigurationPanel extends DefaultConfigurationPanel {
 				null,
 				new ConfigurationFieldType.Label(PluginApi.getTranslation(
 						"configuration.synchronization.create_account",
-						ToodledoApi.getInstance().getApiName()))));
+						OrganiTaskApi.getInstance().getApiName()))));
 		
 		this.addField(new ConfigurationField(
 				"CREATE_ACCOUNT",
@@ -63,7 +63,7 @@ public class ToodledoConfigurationPanel extends DefaultConfigurationPanel {
 					
 					@Override
 					public void createAccount() {
-						ToodledoConfigurationPanel.this.saveAndApplyConfig();
+						OrganiTaskConfigurationPanel.this.saveAndApplyConfig();
 						
 						String email = PluginApi.getUserSettings().getStringProperty(
 								"toodledo.email");
@@ -79,8 +79,8 @@ public class ToodledoConfigurationPanel extends DefaultConfigurationPanel {
 								throw new Exception(
 										PluginApi.getTranslation("error.empty_password"));
 							
-							PluginApi.initializeProxy(PluginApi.getPlugin(ToodledoPlugin.ID));
-							ToodledoApi.getInstance().createAccount(
+							PluginApi.initializeProxy(PluginApi.getPlugin(com.leclercb.taskunifier.plugin.toodledo.OrganiTaskPlugin.ID));
+							com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().createAccount(
 									email,
 									password);
 							

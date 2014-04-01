@@ -9,7 +9,6 @@ import java.util.List;
 
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerApiException;
-import com.leclercb.taskunifier.plugin.toodledo.ToodledoApi;
 import com.leclercb.taskunifier.plugin.toodledo.calls.exc.ToodledoApiException;
 import com.leclercb.taskunifier.plugin.toodledo.calls.exc.ToodledoConnectionException;
 import com.leclercb.taskunifier.plugin.toodledo.calls.exc.ToodledoSettingsException;
@@ -146,7 +145,7 @@ public enum ToodledoErrors {
 		
 		throw new ToodledoApiException(
 				false,
-				ToodledoApi.getInstance().getApiId(),
+				com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getApiId(),
 				code + "",
 				message + toString(models));
 	}

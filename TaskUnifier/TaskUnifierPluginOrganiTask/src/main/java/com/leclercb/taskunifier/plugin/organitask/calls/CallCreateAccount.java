@@ -22,7 +22,6 @@ import org.xml.sax.InputSource;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerParsingException;
-import com.leclercb.taskunifier.plugin.toodledo.ToodledoApi;
 import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoErrors.ToodledoErrorType;
 
 final class CallCreateAccount extends AbstractCall {
@@ -37,7 +36,7 @@ final class CallCreateAccount extends AbstractCall {
 		params.add(new BasicNameValuePair("pass", password));
 		params.add(new BasicNameValuePair(
 				"appid",
-				ToodledoApi.getInstance().getApplicationId()));
+				com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getApplicationId()));
 		params.add(new BasicNameValuePair(
 				"sig",
 				new CallGetSignature().getSignature(email)));

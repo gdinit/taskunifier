@@ -9,7 +9,6 @@ import java.util.List;
 
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerSettingsException;
-import com.leclercb.taskunifier.plugin.toodledo.ToodledoApi;
 import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoErrors;
 import com.leclercb.taskunifier.plugin.toodledo.translations.PluginTranslations;
 
@@ -22,7 +21,7 @@ public class ToodledoSettingsException extends SynchronizerSettingsException {
 			ToodledoErrors error) {
 		super(
 				error.isExpected(),
-				ToodledoApi.getInstance().getApiId(),
+				com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getApiId(),
 				error.getCode() + "",
 				PluginTranslations.getString(error.getTranslation())
 						+ ToodledoErrors.toString(models));

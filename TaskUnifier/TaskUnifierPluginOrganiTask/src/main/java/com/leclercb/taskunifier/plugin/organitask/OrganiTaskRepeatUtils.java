@@ -30,7 +30,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.plugin.toodledo;
+package com.leclercb.taskunifier.plugin.organitask;
 
 import java.util.Calendar;
 import java.util.HashSet;
@@ -45,9 +45,9 @@ import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 
-public final class ToodledoRepeatUtils {
+public final class OrganiTaskRepeatUtils {
 	
-	private ToodledoRepeatUtils() {
+	private OrganiTaskRepeatUtils() {
 		
 	}
 	

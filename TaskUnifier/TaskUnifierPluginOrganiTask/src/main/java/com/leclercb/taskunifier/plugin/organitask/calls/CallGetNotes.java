@@ -16,7 +16,6 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.beans.NoteBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerConnectionException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
-import com.leclercb.taskunifier.plugin.toodledo.ToodledoConnection;
 
 final class CallGetNotes extends AbstractCallNote {
 	
@@ -24,7 +23,7 @@ final class CallGetNotes extends AbstractCallNote {
 	
 	public NoteBean[] getNotes(
 			ToodledoAccountInfo accountInfo,
-			ToodledoConnection connection,
+			com.leclercb.taskunifier.plugin.toodledo.OrganiTaskConnection connection,
 			String key) throws SynchronizerException {
 		int start = 0;
 		ToodledoNoteList list = this.getNotes(accountInfo, key, start, NUM);
@@ -66,7 +65,7 @@ final class CallGetNotes extends AbstractCallNote {
 	
 	public NoteBean[] getNotesModifiedAfter(
 			ToodledoAccountInfo accountInfo,
-			ToodledoConnection connection,
+			com.leclercb.taskunifier.plugin.toodledo.OrganiTaskConnection connection,
 			String key,
 			Calendar modifiedAfter) throws SynchronizerException {
 		int start = 0;

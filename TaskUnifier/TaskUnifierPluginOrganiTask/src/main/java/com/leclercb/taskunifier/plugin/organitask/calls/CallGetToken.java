@@ -22,7 +22,6 @@ import org.xml.sax.InputSource;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerParsingException;
-import com.leclercb.taskunifier.plugin.toodledo.ToodledoApi;
 import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoErrors.ToodledoErrorType;
 
 final class CallGetToken extends AbstractCall {
@@ -34,14 +33,14 @@ final class CallGetToken extends AbstractCall {
 		params.add(new BasicNameValuePair("userid", userId));
 		params.add(new BasicNameValuePair(
 				"appid",
-				ToodledoApi.getInstance().getApplicationId()));
+				com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getApplicationId()));
 		params.add(new BasicNameValuePair("vers", ""
-				+ ToodledoApi.getInstance().getVersion()));
-		if (ToodledoApi.getInstance().getDevice() != null)
+				+ com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getVersion()));
+		if (com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getDevice() != null)
 			params.add(new BasicNameValuePair("device", ""
-					+ ToodledoApi.getInstance().getDevice()));
+					+ com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getDevice()));
 		params.add(new BasicNameValuePair("os", ""
-				+ ToodledoApi.getInstance().getOS()));
+				+ com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getOS()));
 		params.add(new BasicNameValuePair(
 				"sig",
 				new CallGetSignature().getSignature(userId)));

@@ -3,7 +3,7 @@
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
  */
-package com.leclercb.taskunifier.plugin.toodledo.translations;
+package com.leclercb.taskunifier.plugin.organitask.translations;
 
 import java.util.ArrayList;
 import java.util.List;

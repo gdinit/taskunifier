@@ -27,7 +27,6 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerNotConnectedExc
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerParsingException;
 import com.leclercb.taskunifier.gui.plugins.PluginApi;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
-import com.leclercb.taskunifier.plugin.toodledo.ToodledoApi;
 import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoErrors.ToodledoErrorType;
 
 abstract class AbstractCall {
@@ -65,20 +64,20 @@ abstract class AbstractCall {
 			HttpResponse response = HttpUtils.getHttpGetResponse(
 					URIUtils.createURI(
 							scheme,
-							ToodledoApi.getInstance().getApiUrl(),
+							com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getApiUrl(),
 							-1,
 							path,
 							URLEncodedUtils.format(parameters, "UTF-8"),
 							null),
-					ToodledoApi.getInstance().getProxyHost(),
-					ToodledoApi.getInstance().getProxyPort(),
-					ToodledoApi.getInstance().getProxyUsername(),
-					ToodledoApi.getInstance().getProxyPassword());
+					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getProxyHost(),
+					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getProxyPort(),
+					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getProxyUsername(),
+					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getProxyPassword());
 			
 			PluginLogger.getLogger().fine(
 					URIUtils.createURI(
 							scheme,
-							ToodledoApi.getInstance().getApiUrl(),
+							com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getApiUrl(),
 							-1,
 							path,
 							URLEncodedUtils.format(parameters, "UTF-8"),
@@ -119,7 +118,7 @@ abstract class AbstractCall {
 		try {
 			URI uri = URIUtils.createURI(
 					scheme,
-					ToodledoApi.getInstance().getApiUrl(),
+					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getApiUrl(),
 					-1,
 					path,
 					null,
@@ -128,10 +127,10 @@ abstract class AbstractCall {
 			HttpResponse response = HttpUtils.getHttpPostResponse(
 					uri,
 					parameters,
-					ToodledoApi.getInstance().getProxyHost(),
-					ToodledoApi.getInstance().getProxyPort(),
-					ToodledoApi.getInstance().getProxyUsername(),
-					ToodledoApi.getInstance().getProxyPassword());
+					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getProxyHost(),
+					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getProxyPort(),
+					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getProxyUsername(),
+					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getProxyPassword());
 			
 			StringBuffer logMessage = new StringBuffer();
 			

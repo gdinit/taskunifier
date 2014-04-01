@@ -16,7 +16,6 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.beans.TaskBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerConnectionException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
-import com.leclercb.taskunifier.plugin.toodledo.ToodledoConnection;
 
 final class CallGetTasks extends AbstractCallTask {
 	
@@ -25,7 +24,7 @@ final class CallGetTasks extends AbstractCallTask {
 	
 	public TaskBean[] getTasks(
 			ToodledoAccountInfo accountInfo,
-			ToodledoConnection connection,
+			com.leclercb.taskunifier.plugin.toodledo.OrganiTaskConnection connection,
 			String key) throws SynchronizerException {
 		int start = 0;
 		ToodledoTaskList list = this.getTasks(accountInfo, key, start, NUM);
@@ -68,7 +67,7 @@ final class CallGetTasks extends AbstractCallTask {
 	
 	public TaskBean[] getTasksNotCompleted(
 			ToodledoAccountInfo accountInfo,
-			ToodledoConnection connection,
+			com.leclercb.taskunifier.plugin.toodledo.OrganiTaskConnection connection,
 			String key) throws SynchronizerException {
 		int start = 0;
 		ToodledoTaskList list = this.getTasksNotCompleted(
@@ -124,7 +123,7 @@ final class CallGetTasks extends AbstractCallTask {
 	
 	public TaskBean[] getTasksModifiedAfter(
 			ToodledoAccountInfo accountInfo,
-			ToodledoConnection connection,
+			com.leclercb.taskunifier.plugin.toodledo.OrganiTaskConnection connection,
 			String key,
 			Calendar modifiedAfter) throws SynchronizerException {
 		int start = 0;
