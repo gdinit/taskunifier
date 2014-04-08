@@ -3,7 +3,7 @@
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
  */
-package com.leclercb.taskunifier.plugin.toodledo.calls;
+package com.leclercb.taskunifier.plugin.organitask.calls;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -43,40 +43,6 @@ final class ToodledoTranslations {
 		
 	}
 	
-	public static Calendar translateGMTDateUserInput(long timeStamp) {
-		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-		c.setTimeInMillis(timeStamp * 1000);
-		
-		Calendar calendar = Calendar.getInstance();
-		calendar.clear();
-		calendar.set(
-				c.get(Calendar.YEAR),
-				c.get(Calendar.MONTH),
-				c.get(Calendar.DAY_OF_MONTH),
-				c.get(Calendar.HOUR_OF_DAY),
-				c.get(Calendar.MINUTE),
-				c.get(Calendar.SECOND));
-		
-		return calendar;
-	}
-	
-	public static long translateGMTDateUserInput(Calendar calendar) {
-		if (calendar == null)
-			return 0;
-		
-		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-		c.clear();
-		c.set(
-				calendar.get(Calendar.YEAR),
-				calendar.get(Calendar.MONTH),
-				calendar.get(Calendar.DAY_OF_MONTH),
-				calendar.get(Calendar.HOUR_OF_DAY),
-				calendar.get(Calendar.MINUTE),
-				calendar.get(Calendar.SECOND));
-		
-		return (c.getTimeInMillis()) / 1000;
-	}
-	
 	public static Calendar translateGMTDate(long timeStamp) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(timeStamp * 1000);
@@ -88,167 +54,6 @@ final class ToodledoTranslations {
 			return 0;
 		
 		return calendar.getTimeInMillis() / 1000;
-	}
-	
-	public static String translateDateFormat(int dateFormat) {
-		switch (dateFormat) {
-			case 0:
-				return "MMM dd, yyyy";
-			case 1:
-				return "MM/dd/yyyy";
-			case 2:
-				return "dd/MM/yyyy";
-			default:
-				return null;
-		}
-	}
-	
-	public static String translateGoalLevel(GoalLevel level) {
-		switch (level) {
-			case LIFE_TIME:
-				return "0";
-			case LONG_TERM:
-				return "1";
-			case SHORT_TERM:
-				return "2";
-			default:
-				return null;
-		}
-	}
-	
-	public static GoalLevel translateGoalLevel(int level) {
-		switch (level) {
-			case 0:
-				return GoalLevel.LIFE_TIME;
-			case 1:
-				return GoalLevel.LONG_TERM;
-			case 2:
-				return GoalLevel.SHORT_TERM;
-			default:
-				return null;
-		}
-	}
-	
-	public static String translateTaskPriority(TaskPriority priority) {
-		switch (priority) {
-			case NEGATIVE:
-				return "-1";
-			case LOW:
-				return "0";
-			case MEDIUM:
-				return "1";
-			case HIGH:
-				return "2";
-			case TOP:
-				return "3";
-			default:
-				return null;
-		}
-	}
-	
-	public static TaskPriority translateTaskPriority(int priority) {
-		switch (priority) {
-			case -1:
-				return TaskPriority.NEGATIVE;
-			case 0:
-				return TaskPriority.LOW;
-			case 1:
-				return TaskPriority.MEDIUM;
-			case 2:
-				return TaskPriority.HIGH;
-			case 3:
-				return TaskPriority.TOP;
-			default:
-				return null;
-		}
-	}
-	
-	public static String translateTaskRepeatFrom(TaskRepeatFrom repeatFrom) {
-		switch (repeatFrom) {
-			case DUE_DATE:
-				return "0";
-			case COMPLETION_DATE:
-				return "1";
-			default:
-				return null;
-		}
-	}
-	
-	public static TaskRepeatFrom translateTaskRepeatFrom(int repeatFrom) {
-		switch (repeatFrom) {
-			case 0:
-				return TaskRepeatFrom.DUE_DATE;
-			case 1:
-				return TaskRepeatFrom.COMPLETION_DATE;
-			default:
-				return null;
-		}
-	}
-	
-	public static String translateTaskStatus(String status) {
-		if (EqualsUtils.equalsStringIgnoreCase(status, "None"))
-			return "0";
-		
-		if (EqualsUtils.equalsStringIgnoreCase(status, "Next Action"))
-			return "1";
-		
-		if (EqualsUtils.equalsStringIgnoreCase(status, "Active"))
-			return "2";
-		
-		if (EqualsUtils.equalsStringIgnoreCase(status, "Planning"))
-			return "3";
-		
-		if (EqualsUtils.equalsStringIgnoreCase(status, "Delegated"))
-			return "4";
-		
-		if (EqualsUtils.equalsStringIgnoreCase(status, "Waiting"))
-			return "5";
-		
-		if (EqualsUtils.equalsStringIgnoreCase(status, "Hold"))
-			return "6";
-		
-		if (EqualsUtils.equalsStringIgnoreCase(status, "Postponed"))
-			return "7";
-		
-		if (EqualsUtils.equalsStringIgnoreCase(status, "Someday"))
-			return "8";
-		
-		if (EqualsUtils.equalsStringIgnoreCase(status, "Cancelled"))
-			return "9";
-		
-		if (EqualsUtils.equalsStringIgnoreCase(status, "Reference"))
-			return "10";
-		
-		return "0";
-	}
-	
-	public static String translateTaskStatus(int status) {
-		switch (status) {
-			case 0:
-				return "None";
-			case 1:
-				return "Next Action";
-			case 2:
-				return "Active";
-			case 3:
-				return "Planning";
-			case 4:
-				return "Delegated";
-			case 5:
-				return "Waiting";
-			case 6:
-				return "Hold";
-			case 7:
-				return "Postponed";
-			case 8:
-				return "Someday";
-			case 9:
-				return "Cancelled";
-			case 10:
-				return "Reference";
-			default:
-				return null;
-		}
 	}
 	
 	public static void translateTaskContactList(

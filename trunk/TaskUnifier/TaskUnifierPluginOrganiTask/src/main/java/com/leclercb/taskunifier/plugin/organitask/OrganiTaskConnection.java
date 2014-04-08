@@ -8,7 +8,6 @@ package com.leclercb.taskunifier.plugin.organitask;
 import java.net.NoRouteToHostException;
 import java.net.URI;
 import java.net.UnknownHostException;
-import java.util.Arrays;
 import java.util.Properties;
 
 import javax.swing.JOptionPane;
@@ -16,14 +15,6 @@ import javax.swing.SwingUtilities;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson.JacksonFactory;
-import com.google.api.services.tasks.Tasks;
 import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.HttpResponse;
@@ -35,12 +26,13 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerNotConnectedExc
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerSettingsException;
 import com.leclercb.taskunifier.gui.plugins.PluginApi;
 import com.leclercb.taskunifier.gui.utils.DesktopUtils;
+import com.leclercb.taskunifier.plugin.organitask.calls.OrganiTaskStatement;
+import com.leclercb.taskunifier.plugin.organitask.calls.OrganiTaskToken;
+import com.leclercb.taskunifier.plugin.organitask.translations.PluginTranslations;
 
 public class OrganiTaskConnection implements Connection {
 
     private boolean connected;
-
-    private Tasks service;
 
     private String code;
 
@@ -49,7 +41,6 @@ public class OrganiTaskConnection implements Connection {
 
     OrganiTaskConnection() {
         this.connected = false;
-        this.service = null;
 
         this.code = null;
 
@@ -57,8 +48,8 @@ public class OrganiTaskConnection implements Connection {
         this.refreshToken = null;
     }
 
-    public Tasks getService() {
-        return this.service;
+    public String getAccessToken() {
+        return accessToken;
     }
 
     @Override
@@ -74,45 +65,26 @@ public class OrganiTaskConnection implements Connection {
         if (settingsEmail == null || settingsEmail.length() == 0) {
             throw new SynchronizerSettingsException(
                     true,
-                    GoogleTasksApi.getInstance().getApiId(),
+                    OrganiTaskApi.getInstance().getApiId(),
                     null,
                     PluginTranslations.getString("error.no_email"));
         }
 
         try {
-            HttpTransport httpTransport = new NetHttpTransport();
-            JacksonFactory jsonFactory = new JacksonFactory();
+            final String authorizationUrl = "http://www.organitask.com/web/en/app?action=authorize&client_id=" +
+                    OrganiTaskApi.getInstance().getClientId() +
+                    "&redirect_uri=http%3A%2F%2Fwww.organitask.com%2Fweb%2Fen%2Fapp%3Faction%3Doauth_code&response_type=code";
 
-            String clientId = GoogleTasksApi.getInstance().getClientId();
-            String clientSecret = GoogleTasksApi.getInstance().getClientSecret();
-
-            String redirectUri = "urn:ietf:wg:oauth:2.0:oob";
-
-            String[] scopes = new String[] {
-                    "https://www.googleapis.com/auth/tasks",
-                    "https://www.googleapis.com/auth/userinfo.email" };
-
-            Credential credential = null;
+            OrganiTaskToken token = null;
 
             if (this.accessToken == null || this.refreshToken == null) {
-                GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                        httpTransport,
-                        jsonFactory,
-                        clientId,
-                        clientSecret,
-                        Arrays.asList(scopes)).setAccessType("offline").setApprovalPrompt(
-                        "auto").build();
-
-                final String authorizationUrl = flow.newAuthorizationUrl().setRedirectUri(
-                        redirectUri).build();
-
                 SwingUtilities.invokeAndWait(new Runnable() {
 
                     @Override
                     public void run() {
                         DesktopUtils.browse(authorizationUrl);
 
-                        GoogleTasksConnection.this.code = JOptionPane.showInputDialog(
+                        OrganiTaskConnection.this.code = JOptionPane.showInputDialog(
                                 PluginApi.getCurrentWindow(),
                                 PluginTranslations.getString("connection.code.message"),
                                 PluginTranslations.getString("connection.code.title"),
@@ -124,60 +96,44 @@ public class OrganiTaskConnection implements Connection {
                 if (this.code == null)
                     throw new SynchronizerConnectionException(
                             true,
-                            GoogleTasksApi.getInstance().getApiId(),
+                            OrganiTaskApi.getInstance().getApiId(),
                             null,
                             PluginApi.getTranslation("synchronizer.cancelled_by_user"));
 
-                GoogleTokenResponse response = flow.newTokenRequest(this.code).setRedirectUri(
-                        redirectUri).execute();
+                token = OrganiTaskStatement.getToken(this.code);
 
-                credential = flow.createAndStoreCredential(response, null);
-
-                this.accessToken = credential.getAccessToken();
-                this.refreshToken = credential.getRefreshToken();
+                this.accessToken = token.getAccessToken();
+                this.refreshToken = token.getRefreshToken();
             } else {
-                credential = new GoogleCredential.Builder().setClientSecrets(
-                        clientId,
-                        clientSecret).setJsonFactory(jsonFactory).setTransport(
-                        httpTransport).build().setRefreshToken(
-                        this.refreshToken).setAccessToken(this.accessToken);
+
             }
 
             // Get Google Email
             HttpResponse response = HttpUtils.getHttpGetResponse(
                     new URI(
-                            "https://www.googleapis.com/userinfo/email?alt=json&access_token="
-                                    + credential.getAccessToken()),
-                    GoogleTasksApi.getInstance().getProxyHost(),
-                    GoogleTasksApi.getInstance().getProxyPort(),
-                    GoogleTasksApi.getInstance().getProxyUsername(),
-                    GoogleTasksApi.getInstance().getProxyPassword());
+                            "https://www.organitask.com/api/v1/auth/check?access_token="
+                                    + token.getAccessToken()),
+                    OrganiTaskApi.getInstance().getProxyHost(),
+                    OrganiTaskApi.getInstance().getProxyPort(),
+                    OrganiTaskApi.getInstance().getProxyUsername(),
+                    OrganiTaskApi.getInstance().getProxyPassword());
 
             if (response.isSuccessfull()) {
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode root = mapper.readTree(response.getContent());
-                String email = root.path("data").path("email").textValue();
+                String email = root.path("user_email").textValue();
 
                 if (!EqualsUtils.equalsStringIgnoreCase(email, settingsEmail)) {
                     throw new SynchronizerSettingsException(
                             true,
-                            GoogleTasksApi.getInstance().getApiId(),
+                            OrganiTaskApi.getInstance().getApiId(),
                             null,
-                            PluginTranslations.getString("error.invalid_google_email"));
+                            PluginTranslations.getString("error.invalid_organitask_email"));
                 }
             }
 
-            Tasks.Builder builder = new Tasks.Builder(
-                    httpTransport,
-                    jsonFactory,
-                    credential);
-            builder.setApplicationName(GoogleTasksApi.getInstance().getApplicationName());
-
-            this.service = builder.build();
-
             this.connected = true;
         } catch (SynchronizerException e) {
-            this.service = null;
             this.connected = false;
 
             throw e;
@@ -192,21 +148,23 @@ public class OrganiTaskConnection implements Connection {
                     e.getMessage(),
                     PluginApi.getTranslation("error.not_connected_internet"));
         } catch (Exception e) {
-            this.service = null;
             this.connected = false;
 
             throw new SynchronizerConnectionException(
                     false,
-                    GoogleTasksApi.getInstance().getApiId(),
+                    OrganiTaskApi.getInstance().getApiId(),
                     null,
                     e.getMessage(),
                     e);
         }
     }
 
+    public void reconnect() {
+        this.connected = false;
+    }
+
     @Override
     public void disconnect() {
-        this.service = null;
         this.connected = false;
     }
 
@@ -214,17 +172,17 @@ public class OrganiTaskConnection implements Connection {
     public void loadParameters(Properties properties) {
         PropertyMap p = new PropertyMap(properties);
 
-        this.accessToken = p.getStringProperty("plugin.googletasks.access_token");
-        this.refreshToken = p.getStringProperty("plugin.googletasks.refresh_token");
+        this.accessToken = p.getStringProperty("plugin.organitask.access_token");
+        this.refreshToken = p.getStringProperty("plugin.organitask.refresh_token");
     }
 
     @Override
     public void saveParameters(Properties properties) {
         PropertyMap p = new PropertyMap(properties);
 
-        p.setStringProperty("plugin.googletasks.access_token", this.accessToken);
+        p.setStringProperty("plugin.organitask.access_token", this.accessToken);
         p.setStringProperty(
-                "plugin.googletasks.refresh_token",
+                "plugin.organitask.refresh_token",
                 this.refreshToken);
     }
 

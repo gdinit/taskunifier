@@ -7,21 +7,21 @@ package com.leclercb.taskunifier.plugin.organitask.configuration.fields;
 
 import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationFieldType;
 import com.leclercb.taskunifier.gui.plugins.PluginApi;
-import com.leclercb.taskunifier.plugin.toodledo.translations.PluginTranslations;
+import com.leclercb.taskunifier.plugin.organitask.translations.PluginTranslations;
 
-public class ToodledoEnableSSLFieldType extends ConfigurationFieldType.CheckBox {
+public class OrganiTaskEnableSSLFieldType extends ConfigurationFieldType.CheckBox {
 	
-	public ToodledoEnableSSLFieldType() {
+	public OrganiTaskEnableSSLFieldType() {
 		super(
 				PluginApi.getUserSettings(),
-				"toodledo.enable_ssl",
+				"plugin.organitask.enable_ssl",
 				PluginTranslations.getString("enable_ssl"));
 	}
 	
 	@Override
 	public Boolean getPropertyValue() {
 		if (PluginApi.getUserSettings().getBooleanProperty(
-				"toodledo.enable_ssl") == null)
+				"plugin.organitask.enable_ssl") == null)
 			return true;
 		
 		return super.getPropertyValue();
