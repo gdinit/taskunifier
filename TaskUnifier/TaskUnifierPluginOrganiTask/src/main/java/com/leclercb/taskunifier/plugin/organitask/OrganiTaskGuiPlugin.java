@@ -20,62 +20,62 @@ import java.net.URL;
 import java.util.logging.Level;
 
 public class OrganiTaskGuiPlugin extends OrganiTaskPlugin implements SynchronizerGuiPlugin {
-	
-	private HelpSet helpSet;
-	
-	public OrganiTaskGuiPlugin() {
-		PluginTranslations.setLocale(PluginApi.getLocale());
+
+    private HelpSet helpSet;
+
+    public OrganiTaskGuiPlugin() {
+        PluginTranslations.setLocale(PluginApi.getLocale());
 
         try {
             PropertyMap properties = new PropertyMap();
             properties.load(Resources.class.getResourceAsStream("private.properties"));
 
-            OrganiTaskApi.getInstance().setClientId(properties.getStringProperty("organitask.client_id"));
-            OrganiTaskApi.getInstance().setClientRandomId(properties.getStringProperty("organitask.client_random_id"));
-            OrganiTaskApi.getInstance().setClientSecret(properties.getStringProperty("organitask.client_secret"));
+            OrganiTaskApi.getInstance().setClientId(properties.getStringProperty("plugin.organitask.client_id"));
+            OrganiTaskApi.getInstance().setClientRandomId(properties.getStringProperty("plugin.organitask.client_random_id"));
+            OrganiTaskApi.getInstance().setClientSecret(properties.getStringProperty("plugin.organitask.client_secret"));
         } catch (Exception e) {
             PluginLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
         }
-	}
-	
-	@Override
-	public String getAccountLabel() {
-		return PluginApi.getUserSettings().getStringProperty("organitask.email");
-	}
-	
-	@Override
-	public void loadPlugin() {
-		try {
-			URL url = PluginHelp.class.getResource("help.xml");
-			this.helpSet = new HelpSet(null, url);
-			PluginApi.addHelpSet(this.helpSet);
-		} catch (Exception e) {
-			
-		}
-	}
-	
-	@Override
-	public void installPlugin() {
-		OrganiTaskApi.getInstance().resetSynchronizerParameters(
-				PluginApi.getUserSettings());
-	}
-	
-	@Override
-	public void deletePlugin() {
-		if (this.helpSet != null)
-			PluginApi.removeHelpSet(this.helpSet);
-	}
-	
-	@Override
-	public int getPluginApiVersion() {
-		return 40; // See: Constants.PLUGIN_API_VERSION
-	}
-	
-	@Override
-	public ConfigurationPanel getConfigurationPanel(
-			ConfigurationGroup configuration,
-			boolean welcome) {
-		return new OrganiTaskConfigurationPanel(configuration, welcome);
-	}
-	
+    }
+
+    @Override
+    public String getAccountLabel() {
+        return PluginApi.getUserSettings().getStringProperty("plugin.organitask.email");
+    }
+
+    @Override
+    public void loadPlugin() {
+        try {
+            URL url = PluginHelp.class.getResource("help.xml");
+            this.helpSet = new HelpSet(null, url);
+            PluginApi.addHelpSet(this.helpSet);
+        } catch (Exception e) {
+
+        }
+    }
+
+    @Override
+    public void installPlugin() {
+        OrganiTaskApi.getInstance().resetSynchronizerParameters(
+                PluginApi.getUserSettings());
+    }
+
+    @Override
+    public void deletePlugin() {
+        if (this.helpSet != null)
+            PluginApi.removeHelpSet(this.helpSet);
+    }
+
+    @Override
+    public int getPluginApiVersion() {
+        return 40; // See: Constants.PLUGIN_API_VERSION
+    }
+
+    @Override
+    public ConfigurationPanel getConfigurationPanel(
+            ConfigurationGroup configuration,
+            boolean welcome) {
+        return new OrganiTaskConfigurationPanel(configuration, welcome);
+    }
+
 }

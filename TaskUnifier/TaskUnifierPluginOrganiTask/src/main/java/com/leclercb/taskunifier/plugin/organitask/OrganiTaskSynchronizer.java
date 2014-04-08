@@ -50,12 +50,11 @@ import com.leclercb.taskunifier.gui.plugins.PluginApi;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
 import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoAccountInfo;
 import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoDeletedContact;
-import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoStatement;
 import com.leclercb.taskunifier.plugin.toodledo.calls.exc.ToodledoApiException;
 
 public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 	
-	private ToodledoStatement statement;
+	private com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskStatement statement;
 	private ToodledoAccountInfo accountInfo;
 	
 	private List<Task> addedTasks;
@@ -88,28 +87,12 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 		this.lastNoteEdit = lastNoteAddEdit;
 	}
 	
-	public Calendar getLastNoteDelete() {
-		return this.lastNoteDelete;
-	}
-	
-	public void setLastNoteDelete(Calendar lastNoteDelete) {
-		this.lastNoteDelete = lastNoteDelete;
-	}
-	
 	public Calendar getLastTaskEdit() {
 		return this.lastTaskEdit;
 	}
 	
 	public void setLastTaskEdit(Calendar lastTaskAddEdit) {
 		this.lastTaskEdit = lastTaskAddEdit;
-	}
-	
-	public Calendar getLastTaskDelete() {
-		return this.lastTaskDelete;
-	}
-	
-	public void setLastTaskDelete(Calendar lastTaskDelete) {
-		this.lastTaskDelete = lastTaskDelete;
 	}
 	
 	public Calendar getLastContextEdit() {
@@ -134,14 +117,6 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 	
 	public void setLastGoalEdit(Calendar lastGoalEdit) {
 		this.lastGoalEdit = lastGoalEdit;
-	}
-	
-	public Calendar getLastLocationEdit() {
-		return this.lastLocationEdit;
-	}
-	
-	public void setLastLocationEdit(Calendar lastLocationEdit) {
-		this.lastLocationEdit = lastLocationEdit;
 	}
 	
 	@Override

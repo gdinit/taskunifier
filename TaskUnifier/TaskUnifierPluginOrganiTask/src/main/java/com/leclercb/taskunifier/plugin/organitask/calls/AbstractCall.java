@@ -3,7 +3,7 @@
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
  */
-package com.leclercb.taskunifier.plugin.toodledo.calls;
+package com.leclercb.taskunifier.plugin.organitask.calls;
 
 import java.net.NoRouteToHostException;
 import java.net.URI;
@@ -11,6 +11,7 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
 
+import com.leclercb.taskunifier.plugin.organitask.OrganiTaskApi;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
@@ -38,19 +39,8 @@ abstract class AbstractCall {
 	protected String getScheme() {
 		if (EqualsUtils.equals(
 				PluginApi.getUserSettings().getBooleanProperty(
-						"toodledo.enable_ssl"),
+						"plugin.organitask.enable_ssl"),
 				true))
-			return "https";
-		
-		return "http";
-	}
-	
-	protected String getScheme(ToodledoAccountInfo accountInfo) {
-		if (accountInfo.isProMember()
-				&& EqualsUtils.equals(
-						PluginApi.getUserSettings().getBooleanProperty(
-								"toodledo.enable_ssl"),
-						true))
 			return "https";
 		
 		return "http";
@@ -64,20 +54,20 @@ abstract class AbstractCall {
 			HttpResponse response = HttpUtils.getHttpGetResponse(
 					URIUtils.createURI(
 							scheme,
-							com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getApiUrl(),
+							OrganiTaskApi.getInstance().getApiUrl(),
 							-1,
 							path,
 							URLEncodedUtils.format(parameters, "UTF-8"),
 							null),
-					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getProxyHost(),
-					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getProxyPort(),
-					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getProxyUsername(),
-					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getProxyPassword());
+					OrganiTaskApi.getInstance().getProxyHost(),
+					OrganiTaskApi.getInstance().getProxyPort(),
+					OrganiTaskApi.getInstance().getProxyUsername(),
+					OrganiTaskApi.getInstance().getProxyPassword());
 			
 			PluginLogger.getLogger().fine(
 					URIUtils.createURI(
 							scheme,
-							com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getApiUrl(),
+							OrganiTaskApi.getInstance().getApiUrl(),
 							-1,
 							path,
 							URLEncodedUtils.format(parameters, "UTF-8"),
@@ -118,7 +108,7 @@ abstract class AbstractCall {
 		try {
 			URI uri = URIUtils.createURI(
 					scheme,
-					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getApiUrl(),
+					OrganiTaskApi.getInstance().getApiUrl(),
 					-1,
 					path,
 					null,
@@ -127,10 +117,10 @@ abstract class AbstractCall {
 			HttpResponse response = HttpUtils.getHttpPostResponse(
 					uri,
 					parameters,
-					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getProxyHost(),
-					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getProxyPort(),
-					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getProxyUsername(),
-					com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getProxyPassword());
+					OrganiTaskApi.getInstance().getProxyHost(),
+					OrganiTaskApi.getInstance().getProxyPort(),
+					OrganiTaskApi.getInstance().getProxyUsername(),
+					OrganiTaskApi.getInstance().getProxyPassword());
 			
 			StringBuffer logMessage = new StringBuffer();
 			

@@ -3,7 +3,7 @@
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
  */
-package com.leclercb.taskunifier.plugin.toodledo.calls;
+package com.leclercb.taskunifier.plugin.organitask.calls;
 
 import java.util.Calendar;
 import java.util.List;
@@ -23,15 +23,16 @@ import com.leclercb.taskunifier.api.models.beans.NoteBean;
 import com.leclercb.taskunifier.api.models.beans.TaskBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerConnectionException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
+import com.leclercb.taskunifier.plugin.organitask.OrganiTaskConnection;
 import com.leclercb.taskunifier.plugin.toodledo.calls.exc.ToodledoConnectionException;
 
-public class ToodledoStatement {
+public class OrganiTaskStatement {
 	
 	private static CallGetUserId callGetUserId = new CallGetUserId();
 	private static CallCreateAccount callCreateAccount = new CallCreateAccount();
 	private static CallGetToken callGetToken = new CallGetToken();
 	private static CallGetKey callGetKey = new CallGetKey();
-	private static CallGetAccountInfo callGetAccountInfo = new CallGetAccountInfo();
+	private static CallGetAuthInfo callGetAuthInfo = new CallGetAuthInfo();
 	private static CallGetContexts callGetContexts = new CallGetContexts();
 	private static CallGetFolders callGetFolders = new CallGetFolders();
 	private static CallGetGoals callGetGoals = new CallGetGoals();
@@ -66,34 +67,24 @@ public class ToodledoStatement {
 		return callCreateAccount.createAccount(email, password);
 	}
 	
-	public static String getUserId(String email, String password)
-			throws SynchronizerException {
-		return callGetUserId.getUserId(email, password);
+	public static OrganiTaskToken getToken(String code) throws SynchronizerException {
+		return callGetToken.getToken(code);
 	}
 	
-	public static String getToken(String userId) throws SynchronizerException {
-		return callGetToken.getToken(userId);
-	}
+	private OrganiTaskConnection connection;
 	
-	public static String getKey(String password, String token)
-			throws SynchronizerException {
-		return callGetKey.getKey(password, token);
-	}
-	
-	private com.leclercb.taskunifier.plugin.toodledo.OrganiTaskConnection connection;
-	
-	public ToodledoStatement(com.leclercb.taskunifier.plugin.toodledo.OrganiTaskConnection connection) {
+	public OrganiTaskStatement(OrganiTaskConnection connection) {
 		CheckUtils.isNotNull(connection);
 		this.connection = connection;
 	}
 	
-	public ToodledoAccountInfo getAccountInfo() throws SynchronizerException {
+	public OrganiTaskAuthInfo getAuthInfo() throws SynchronizerException {
 		try {
 			// this.checkConnection();
-			return callGetAccountInfo.getAccountInfo(this.connection.getKey());
+			return callGetAuthInfo.getAuthInfo(this.connection.getAccessToken());
 		} catch (ToodledoConnectionException e) {
 			this.connection.reconnect();
-			return callGetAccountInfo.getAccountInfo(this.connection.getKey());
+			return callGetAuthInfo.getAuthInfo(this.connection.getAccessToken());
 		}
 	}
 	

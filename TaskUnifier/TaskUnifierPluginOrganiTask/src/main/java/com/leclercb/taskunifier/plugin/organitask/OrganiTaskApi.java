@@ -7,18 +7,13 @@ package com.leclercb.taskunifier.plugin.organitask;
 
 import java.util.Properties;
 
-import org.apache.commons.lang3.SystemUtils;
-
 import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Model;
-import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.synchronizer.Connection;
 import com.leclercb.taskunifier.api.synchronizer.SynchronizerApi;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
-import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoErrors;
-import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoStatement;
-import com.leclercb.taskunifier.plugin.toodledo.calls.exc.ToodledoSettingsException;
+import com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskStatement;
 
 /**
  * This plugin will synchronize your contexts, folders,
@@ -46,18 +41,29 @@ public final class OrganiTaskApi extends SynchronizerApi {
 		
 		return INSTANCE;
 	}
-	
+
+    private String apiUrl;
 	private String clientId;
 	private String clientRandomId;
 	private String clientSecret;
 	
 	private OrganiTaskApi() {
 		super("ORGANITASK", "OrganiTask", "http://www.organitask.com");
-		
+
+        this.setApiUrl("www.organitask.com/api/v1");
 		this.setClientId("");
         this.setClientRandomId("");
         this.setClientSecret("");
 	}
+
+    public String getApiUrl() {
+        return this.apiUrl;
+    }
+
+    public void setApiUrl(String apiUrl) {
+        CheckUtils.isNotNull(apiUrl);
+        this.apiUrl = apiUrl;
+    }
 
     public String getClientId() {
         return clientId;
@@ -88,7 +94,7 @@ public final class OrganiTaskApi extends SynchronizerApi {
 
     public void createAccount(String email, String password)
 			throws SynchronizerException {
-		ToodledoStatement.createAccount(email, password);
+		OrganiTaskStatement.createAccount(email, password);
 	}
 	
 	@Override
@@ -99,22 +105,7 @@ public final class OrganiTaskApi extends SynchronizerApi {
 	@Override
 	public OrganiTaskConnection getConnection(Properties properties)
 			throws SynchronizerException {
-		CheckUtils.isNotNull(properties);
-		PropertyMap p = new PropertyMap(properties);
-		
-		if (p.getStringProperty("toodledo.email") == null)
-			throw new ToodledoSettingsException(
-					null,
-					ToodledoErrors.ERROR_ACCOUNT_10);
-		
-		if (p.getStringProperty("toodledo.password") == null)
-			throw new ToodledoSettingsException(
-					null,
-					ToodledoErrors.ERROR_ACCOUNT_11);
-		
-		return new OrganiTaskConnection(
-				p.getStringProperty("toodledo.email"),
-				p.getStringProperty("toodledo.password"));
+		return new OrganiTaskConnection();
 	}
 	
 	@Override
@@ -134,10 +125,9 @@ public final class OrganiTaskApi extends SynchronizerApi {
 	public void resetConnectionParameters(Properties properties) {
 		CheckUtils.isNotNull(properties);
 		PropertyMap p = new PropertyMap(properties);
-		
-		p.setStringProperty("toodledo.connection.userid", null);
-		p.setStringProperty("toodledo.connection.token", null);
-		p.setCalendarProperty("toodledo.connection.token_creation_date", null);
+
+        p.setStringProperty("plugin.organitask.access_token", null);
+        p.setStringProperty("plugin.organitask.refresh_token", null);
 	}
 	
 	@Override
@@ -145,14 +135,11 @@ public final class OrganiTaskApi extends SynchronizerApi {
 		CheckUtils.isNotNull(properties);
 		PropertyMap p = new PropertyMap(properties);
 		
-		p.setCalendarProperty("organitask.synchronizer.last_context_edit", null);
-		p.setCalendarProperty("organitask.synchronizer.last_folder_edit", null);
-		p.setCalendarProperty("organitask.synchronizer.last_goal_edit", null);
-		p.setCalendarProperty("organitask.synchronizer.last_location_edit", null);
-		p.setCalendarProperty("organitask.synchronizer.last_note_edit", null);
-		p.setCalendarProperty("organitask.synchronizer.last_note_delete", null);
-		p.setCalendarProperty("organitask.synchronizer.last_task_edit", null);
-		p.setCalendarProperty("organitask.synchronizer.last_task_delete", null);
+		p.setCalendarProperty("plugin.organitask.synchronizer.last_context_edit", null);
+		p.setCalendarProperty("plugin.organitask.synchronizer.last_folder_edit", null);
+		p.setCalendarProperty("plugin.organitask.synchronizer.last_goal_edit", null);
+		p.setCalendarProperty("plugin.organitask.synchronizer.last_note_edit", null);
+		p.setCalendarProperty("plugin.organitask.synchronizer.last_task_edit", null);
 	}
 	
 }

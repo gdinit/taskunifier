@@ -3,7 +3,7 @@
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
  */
-package com.leclercb.taskunifier.plugin.toodledo.calls;
+package com.leclercb.taskunifier.plugin.organitask.calls;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -12,6 +12,8 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -28,58 +30,28 @@ import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoErrors.ToodledoErr
 abstract class AbstractCallContext extends AbstractCall {
 	
 	/**
-	 * Example : <contexts> <context> <id>123</id> <name>Work</name> </context>
-	 * </contexts>
+	 * Example : [{"team_id":4,"parent_id":null,"id":20,"creation_date":"1396878407","update_date":"1396878407","title":"@Work","color":"FF0000","contexts":[]},{"team_id":4,"parent_id":null,"id":19,"creation_date":"1396878407","update_date":"1396878407","title":"@Home","color":"0000FF","contexts":[]}]
 	 * 
-	 * @param url
-	 * @param inputStream
+	 * @param context
+	 * @param content
 	 * @return
 	 * @throws SynchronizerException
 	 */
 	protected ContextBean[] getResponseMessage(
 			Context context,
-			ToodledoAccountInfo accountInfo,
 			String content) throws SynchronizerException {
 		CheckUtils.isNotNull(content);
 		
 		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			factory.setIgnoringComments(true);
-			
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			StringReader reader = new StringReader(content);
-			InputSource inputSource = new InputSource(reader);
-			Document document = builder.parse(inputSource);
-			reader.close();
-			NodeList childNodes = document.getChildNodes();
-			
-			if (!childNodes.item(0).getNodeName().equals("contexts"))
-				this.throwResponseError(
-						context,
-						ToodledoErrorType.CONTEXT,
-						content,
-						childNodes.item(0));
-			
-			NodeList nContexts = childNodes.item(0).getChildNodes();
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(content);
+
 			List<ContextBean> contexts = new ArrayList<ContextBean>();
 			
-			for (int i = 0; i < nContexts.getLength(); i++) {
-				NodeList nContext = nContexts.item(i).getChildNodes();
-				
-				String id = null;
-				String title = null;
-				
-				for (int j = 0; j < nContext.getLength(); j++) {
-					if (nContext.item(j).getNodeName().equals("id"))
-						id = nContext.item(j).getTextContent();
-					
-					if (nContext.item(j).getNodeName().equals("name"))
-						title = nContext.item(j).getTextContent();
-				}
-				
+			while (root.iterator().hasNext()) {
 				ContextBean bean = ContextFactory.getInstance().createOriginalBean();
 				
-				bean.getModelReferenceIds().put("toodledo", id);
+				bean.getModelReferenceIds().put("organitask", root.path("id").textValue());
 				bean.setModelStatus(ModelStatus.LOADED);
 				bean.setModelUpdateDate(accountInfo.getLastContextEdit());
 				bean.setTitle(title);
