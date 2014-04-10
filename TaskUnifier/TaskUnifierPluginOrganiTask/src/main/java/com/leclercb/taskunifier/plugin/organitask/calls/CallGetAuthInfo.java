@@ -37,7 +37,7 @@ final class CallGetAuthInfo extends AbstractCall {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("access_token", accessToken));
 
-        String content = super.callGet("http", "/auth/check", params);
+        String content = super.callGet("/auth/check", params);
 
         return this.getResponseMessage(content);
     }

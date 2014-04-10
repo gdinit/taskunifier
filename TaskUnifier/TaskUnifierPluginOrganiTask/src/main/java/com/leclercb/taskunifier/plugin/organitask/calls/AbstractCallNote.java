@@ -3,7 +3,7 @@
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
  */
-package com.leclercb.taskunifier.plugin.toodledo.calls;
+package com.leclercb.taskunifier.plugin.organitask.calls;
 
 import java.io.StringReader;
 import java.util.Calendar;

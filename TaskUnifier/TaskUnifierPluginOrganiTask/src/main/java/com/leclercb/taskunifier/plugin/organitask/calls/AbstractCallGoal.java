@@ -22,7 +22,7 @@ import java.util.List;
 abstract class AbstractCallGoal extends AbstractCall {
 
     /**
-     * Example : [{"team_id":1,"parent_id":null,"id":1,"creation_date":"1395847564","update_date":"1395847564","title":"Master OrganiTask","color":"FF8C00","level":"SHORT","goals":[]}]
+     * Example: [{"team_id":1,"parent_id":null,"id":1,"creation_date":"1395847564","update_date":"1395847564","title":"Master OrganiTask","color":"FF8C00","level":"SHORT","goals":[]}]
      *
      * @param content
      * @return

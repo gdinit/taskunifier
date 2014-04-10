@@ -22,7 +22,7 @@ import java.util.List;
 abstract class AbstractCallContext extends AbstractCall {
 
     /**
-     * Example : [{"team_id":4,"parent_id":null,"id":20,"creation_date":"1396878407","update_date":"1396878407","title":"@Work","color":"FF0000","contexts":[]},{"team_id":4,"parent_id":null,"id":19,"creation_date":"1396878407","update_date":"1396878407","title":"@Home","color":"0000FF","contexts":[]}]
+     * Example: [{"team_id":4,"parent_id":null,"id":20,"creation_date":"1396878407","update_date":"1396878407","title":"@Work","color":"FF0000","contexts":[]},{"team_id":4,"parent_id":null,"id":19,"creation_date":"1396878407","update_date":"1396878407","title":"@Home","color":"0000FF","contexts":[]}]
      *
      * @param content
      * @return

@@ -3,7 +3,7 @@
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
  */
-package com.leclercb.taskunifier.plugin.toodledo.calls;
+package com.leclercb.taskunifier.plugin.organitask.calls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,19 +17,16 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 
 final class CallGetContexts extends AbstractCallContext {
 	
-	public ContextBean[] getContexts(ToodledoAccountInfo accountInfo, String key)
+	public ContextBean[] getContexts(String accessToken)
 			throws SynchronizerException {
-		CheckUtils.isNotNull(key);
-		CheckUtils.isNotNull(accountInfo);
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
-		params.add(new BasicNameValuePair("f", "xml"));
-		
-		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/contexts/get.php", params);
-		
-		return this.getResponseMessage(null, accountInfo, content);
+        CheckUtils.isNotNull(accessToken);
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("access_token", accessToken));
+
+        String content = super.callGet("/contexts", params);
+
+        return this.getResponseMessage(content);
 	}
 	
 }

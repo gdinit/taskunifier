@@ -24,8 +24,7 @@ import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoErrors.ToodledoErr
 abstract class AbstractCallDelete extends AbstractCall {
 	
 	/**
-	 * Example :
-	 * <deleted>12345</deleted>
+	 * Example: [{"team_id":1,"id":41,"deletion_date":"1396508858"}]
 	 * 
 	 * @param url
 	 * @param inputStream
