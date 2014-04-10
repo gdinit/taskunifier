@@ -13,7 +13,7 @@ import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.synchronizer.Connection;
 import com.leclercb.taskunifier.api.synchronizer.SynchronizerApi;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
-import com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskStatement;
+import com.leclercb.taskunifier.plugin.organitask.calls.OrganiTaskStatement;
 
 /**
  * This plugin will synchronize your contexts, folders,
@@ -91,11 +91,6 @@ public final class OrganiTaskApi extends SynchronizerApi {
         CheckUtils.isNotNull(clientSecret);
         this.clientSecret = clientSecret;
     }
-
-    public void createAccount(String email, String password)
-			throws SynchronizerException {
-		OrganiTaskStatement.createAccount(email, password);
-	}
 	
 	@Override
 	public void flagAsNew(Model model) {
@@ -134,12 +129,8 @@ public final class OrganiTaskApi extends SynchronizerApi {
 	public void resetSynchronizerParameters(Properties properties) {
 		CheckUtils.isNotNull(properties);
 		PropertyMap p = new PropertyMap(properties);
-		
-		p.setCalendarProperty("plugin.organitask.synchronizer.last_context_edit", null);
-		p.setCalendarProperty("plugin.organitask.synchronizer.last_folder_edit", null);
-		p.setCalendarProperty("plugin.organitask.synchronizer.last_goal_edit", null);
-		p.setCalendarProperty("plugin.organitask.synchronizer.last_note_edit", null);
-		p.setCalendarProperty("plugin.organitask.synchronizer.last_task_edit", null);
+
+		p.setCalendarProperty("plugin.organitask.synchronizer.last_sync", null);
 	}
 	
 }

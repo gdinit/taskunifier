@@ -3,107 +3,71 @@
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
  */
-package com.leclercb.taskunifier.plugin.toodledo.calls;
+package com.leclercb.taskunifier.plugin.organitask.calls;
 
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leclercb.commons.api.utils.CheckUtils;
-import com.leclercb.taskunifier.api.models.Folder;
 import com.leclercb.taskunifier.api.models.FolderFactory;
+import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.ModelStatus;
 import com.leclercb.taskunifier.api.models.beans.FolderBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerParsingException;
-import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoErrors.ToodledoErrorType;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 abstract class AbstractCallFolder extends AbstractCall {
-	
-	/**
-	 * Example : <folders> <folder> <id>123</id> <private>0</private>
-	 * <archived>0</archived> <order>1</order> <name>Shopping</name> </folder>
-	 * </folders>
-	 * 
-	 * @param url
-	 * @param inputStream
-	 * @return
-	 * @throws SynchronizerException
-	 */
-	protected FolderBean[] getResponseMessage(
-			Folder folder,
-			ToodledoAccountInfo accountInfo,
-			String content) throws SynchronizerException {
-		CheckUtils.isNotNull(content);
-		
-		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			factory.setIgnoringComments(true);
-			
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			StringReader reader = new StringReader(content);
-			InputSource inputSource = new InputSource(reader);
-			Document document = builder.parse(inputSource);
-			reader.close();
-			NodeList childNodes = document.getChildNodes();
-			
-			if (!childNodes.item(0).getNodeName().equals("folders"))
-				this.throwResponseError(
-						folder,
-						ToodledoErrorType.FOLDER,
-						content,
-						childNodes.item(0));
-			
-			NodeList nFolders = childNodes.item(0).getChildNodes();
-			List<FolderBean> folders = new ArrayList<FolderBean>();
-			
-			for (int i = 0; i < nFolders.getLength(); i++) {
-				NodeList nFolder = nFolders.item(i).getChildNodes();
-				
-				String id = null;
-				String title = null;
-				boolean archived = false;
-				
-				for (int j = 0; j < nFolder.getLength(); j++) {
-					if (nFolder.item(j).getNodeName().equals("id"))
-						id = nFolder.item(j).getTextContent();
-					
-					if (nFolder.item(j).getNodeName().equals("name"))
-						title = nFolder.item(j).getTextContent();
-					
-					if (nFolder.item(j).getNodeName().equals("archived"))
-						archived = nFolder.item(j).getTextContent().equals("1");
-				}
-				
-				FolderBean bean = FolderFactory.getInstance().createOriginalBean();
-				
-				bean.getModelReferenceIds().put("toodledo", id);
-				bean.setModelStatus(ModelStatus.LOADED);
-				bean.setModelUpdateDate(accountInfo.getLastFolderEdit());
-				bean.setTitle(title);
-				bean.setArchived(archived);
-				
-				folders.add(bean);
-			}
-			
-			return folders.toArray(new FolderBean[0]);
-		} catch (SynchronizerException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new SynchronizerParsingException(
-					"Error while parsing response ("
-							+ this.getClass().getName()
-							+ ")",
-					content,
-					e);
-		}
-	}
-	
+
+    /**
+     * Example : [{"team_id":1,"parent_id":null,"id":1,"creation_date":"1395847564","update_date":"1395847564","title":"Getting Started","color":"00FF00","folders":[]}]
+     *
+     * @param content
+     * @return
+     * @throws SynchronizerException
+     */
+    protected FolderBean[] getResponseMessage(String content) throws SynchronizerException {
+        CheckUtils.isNotNull(content);
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(content);
+
+            List<FolderBean> folders = new ArrayList<FolderBean>();
+            folders = this.getFolderBeans(root, null);
+
+            return folders.toArray(new FolderBean[0]);
+        } catch (Exception e) {
+            throw new SynchronizerParsingException(
+                    "Error while parsing response ("
+                            + this.getClass().getName()
+                            + ")",
+                    content,
+                    e);
+        }
+    }
+
+    private List<FolderBean> getFolderBeans(JsonNode node, ModelId parentId) {
+        List<FolderBean> folders = new ArrayList<FolderBean>();
+        Iterator<JsonNode> iterator = node.iterator();
+
+        while (iterator.hasNext()) {
+            FolderBean bean = FolderFactory.getInstance().createOriginalBean();
+
+            bean.setModelId(new ModelId());
+            bean.getModelReferenceIds().put("organitask", node.path("id").textValue());
+            bean.setModelStatus(ModelStatus.LOADED);
+            bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").longValue()));
+            bean.setParent(parentId);
+            bean.setTitle(node.path("title").textValue());
+
+            folders.add(bean);
+            folders.addAll(this.getFolderBeans(node.path("folders"), bean.getModelId()));
+        }
+
+        return folders;
+    }
+
 }

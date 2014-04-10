@@ -35,6 +35,22 @@ final class CallGetToken extends AbstractCall {
         return this.getResponseMessage(content);
     }
 
+    public OrganiTaskToken refreshToken(String refreshToken) throws SynchronizerException {
+        CheckUtils.isNotNull(refreshToken);
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("client_id", OrganiTaskApi.getInstance().getClientId() + "_" + OrganiTaskApi.getInstance().getClientRandomId()));
+        params.add(new BasicNameValuePair("client_secret", OrganiTaskApi.getInstance().getClientSecret()));
+        params.add(new BasicNameValuePair("redirect_uri", "http%3A%2F%2Fwww.organitask.com%2Fweb%2Fen%2Fapp%3Faction%3Doauth_code"));
+        params.add(new BasicNameValuePair("grant_type", "refresh_token"));
+        params.add(new BasicNameValuePair("refresh_token", refreshToken));
+
+        String scheme = super.getScheme();
+        String content = super.callGet(scheme, "/auth/oauth/v2/token", params);
+
+        return this.getResponseMessage(content);
+    }
+
     /**
      * Example : {"access_token":"NTQzZDZlZDI5MTUxY2FjNGU5ZWZkMGIwODExODY3YmZlNzNlZjA2ZTU0NTlmMWZkZWIxMjA2MmIzZDZlZWFmYQ","expires_in":3600,"token_type":"bearer","scope":null,"refresh_token":"NDc1MjhmN2Y4M2RiNWRhZTY2MDg3MGY2NDk2ZWIwZmVhZmNlOWY4MDQyMmExZjM5NTZiYjU2M2E3MTQ0MmE1YQ"}
      *

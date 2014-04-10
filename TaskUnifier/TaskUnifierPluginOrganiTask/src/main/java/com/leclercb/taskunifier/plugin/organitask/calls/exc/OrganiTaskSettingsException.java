@@ -3,22 +3,22 @@
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
  */
-package com.leclercb.taskunifier.plugin.toodledo.calls.exc;
+package com.leclercb.taskunifier.plugin.organitask.calls.exc;
 
 import java.util.List;
 
 import com.leclercb.taskunifier.api.models.Model;
-import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerApiException;
+import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerSettingsException;
 import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoErrors;
 import com.leclercb.taskunifier.plugin.toodledo.translations.PluginTranslations;
 
-public class ToodledoApiException extends SynchronizerApiException {
+public class OrganiTaskSettingsException extends SynchronizerSettingsException {
 	
 	private ToodledoErrors error;
 	
-	public <M extends Model> ToodledoApiException(
-			List<M> models,
-			ToodledoErrors error) {
+	public <M extends Model> OrganiTaskSettingsException(
+            List<M> models,
+            ToodledoErrors error) {
 		super(
 				error.isExpected(),
 				com.leclercb.taskunifier.plugin.toodledo.OrganiTaskApi.getInstance().getApiId(),
@@ -29,20 +29,20 @@ public class ToodledoApiException extends SynchronizerApiException {
 		this.error = error;
 	}
 	
-	public ToodledoApiException(
-			boolean expected,
-			String apiId,
-			String code,
-			String message) {
+	public OrganiTaskSettingsException(
+            boolean expected,
+            String apiId,
+            String code,
+            String message) {
 		super(expected, apiId, code, message);
 	}
 	
-	public ToodledoApiException(
-			boolean expected,
-			String apiId,
-			String code,
-			String message,
-			Throwable throwable) {
+	public OrganiTaskSettingsException(
+            boolean expected,
+            String apiId,
+            String code,
+            String message,
+            Throwable throwable) {
 		super(expected, apiId, code, message, throwable);
 	}
 	
