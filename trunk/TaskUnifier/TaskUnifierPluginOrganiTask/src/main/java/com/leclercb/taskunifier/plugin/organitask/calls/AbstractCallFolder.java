@@ -22,7 +22,7 @@ import java.util.List;
 abstract class AbstractCallFolder extends AbstractCall {
 
     /**
-     * Example : [{"team_id":1,"parent_id":null,"id":1,"creation_date":"1395847564","update_date":"1395847564","title":"Getting Started","color":"00FF00","folders":[]}]
+     * Example: [{"team_id":1,"parent_id":null,"id":1,"creation_date":"1395847564","update_date":"1395847564","title":"Getting Started","color":"00FF00","folders":[]}]
      *
      * @param content
      * @return

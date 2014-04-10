@@ -3,7 +3,7 @@
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
  */
-package com.leclercb.taskunifier.plugin.toodledo.calls;
+package com.leclercb.taskunifier.plugin.organitask.calls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,20 +16,17 @@ import com.leclercb.taskunifier.api.models.beans.GoalBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 
 final class CallGetGoals extends AbstractCallGoal {
-	
-	public GoalBean[] getGoals(ToodledoAccountInfo accountInfo, String key)
-			throws SynchronizerException {
-		CheckUtils.isNotNull(key);
-		CheckUtils.isNotNull(accountInfo);
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
-		params.add(new BasicNameValuePair("f", "xml"));
-		
-		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/goals/get.php", params);
-		
-		return this.getResponseMessage(null, accountInfo, content);
-	}
-	
+
+    public GoalBean[] getGoals(String accessToken)
+            throws SynchronizerException {
+        CheckUtils.isNotNull(accessToken);
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("access_token", accessToken));
+
+        String content = super.callGet("/goals", params);
+
+        return this.getResponseMessage(content);
+    }
+
 }

@@ -47,13 +47,12 @@ abstract class AbstractCall {
 	}
 	
 	protected String callGet(
-			String scheme,
 			String path,
 			List<NameValuePair> parameters) throws SynchronizerException {
 		try {
 			HttpResponse response = HttpUtils.getHttpGetResponse(
 					URIUtils.createURI(
-							scheme,
+							this.getScheme(),
 							OrganiTaskApi.getInstance().getApiUrl(),
 							-1,
 							path,
@@ -66,7 +65,7 @@ abstract class AbstractCall {
 			
 			PluginLogger.getLogger().fine(
 					URIUtils.createURI(
-							scheme,
+							this.getScheme(),
 							OrganiTaskApi.getInstance().getApiUrl(),
 							-1,
 							path,
@@ -103,12 +102,11 @@ abstract class AbstractCall {
 	
 	protected String call(
             String requestMethod,
-			String scheme,
 			String path,
 			String body) throws SynchronizerException {
 		try {
 			URI uri = URIUtils.createURI(
-					scheme,
+					this.getScheme(),
 					OrganiTaskApi.getInstance().getApiUrl(),
 					-1,
 					path,
