@@ -20,17 +20,18 @@ import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.commons.api.utils.HttpUtils;
 import com.leclercb.taskunifier.api.synchronizer.Connection;
-import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerConnectionException;
-import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
-import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerNotConnectedException;
-import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerSettingsException;
+import com.leclercb.taskunifier.api.synchronizer.exc.*;
 import com.leclercb.taskunifier.gui.plugins.PluginApi;
 import com.leclercb.taskunifier.gui.utils.DesktopUtils;
+import com.leclercb.taskunifier.plugin.organitask.calls.OrganiTaskAuthInfo;
 import com.leclercb.taskunifier.plugin.organitask.calls.OrganiTaskStatement;
 import com.leclercb.taskunifier.plugin.organitask.calls.OrganiTaskToken;
 import com.leclercb.taskunifier.plugin.organitask.translations.PluginTranslations;
 
 public class OrganiTaskConnection implements Connection {
+
+    private OrganiTaskStatement statement;
+    private OrganiTaskAuthInfo authInfo;
 
     private boolean connected;
 
@@ -46,10 +47,24 @@ public class OrganiTaskConnection implements Connection {
 
         this.accessToken = null;
         this.refreshToken = null;
+
+        this.statement = new OrganiTaskStatement(this);
     }
 
     public String getAccessToken() {
         return accessToken;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public OrganiTaskStatement getStatement() {
+        return this.statement;
+    }
+
+    public OrganiTaskAuthInfo getAuthInfo() {
+        return this.accountInfo;
     }
 
     @Override
@@ -104,32 +119,31 @@ public class OrganiTaskConnection implements Connection {
 
                 this.accessToken = token.getAccessToken();
                 this.refreshToken = token.getRefreshToken();
-            } else {
 
+                this.authInfo = this.statement.getAuthInfo();
+            } else {
+                try {
+                    this.authInfo = this.statement.getAuthInfo();
+                } catch (SynchronizerHttpException e) {
+                    if (e.getCode() == 403) {
+                        token = OrganiTaskStatement.refreshToken(this.refreshToken);
+
+                        this.accessToken = token.getAccessToken();
+                        this.refreshToken = token.getRefreshToken();
+
+                        this.authInfo = this.statement.getAuthInfo();
+                    } else {
+                        throw e;
+                    }
+                }
             }
 
-            // Get Google Email
-            HttpResponse response = HttpUtils.getHttpGetResponse(
-                    new URI(
-                            "https://www.organitask.com/api/v1/auth/check?access_token="
-                                    + token.getAccessToken()),
-                    OrganiTaskApi.getInstance().getProxyHost(),
-                    OrganiTaskApi.getInstance().getProxyPort(),
-                    OrganiTaskApi.getInstance().getProxyUsername(),
-                    OrganiTaskApi.getInstance().getProxyPassword());
-
-            if (response.isSuccessfull()) {
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode root = mapper.readTree(response.getContent());
-                String email = root.path("user_email").textValue();
-
-                if (!EqualsUtils.equalsStringIgnoreCase(email, settingsEmail)) {
-                    throw new SynchronizerSettingsException(
-                            true,
-                            OrganiTaskApi.getInstance().getApiId(),
-                            null,
-                            PluginTranslations.getString("error.invalid_organitask_email"));
-                }
+            if (!EqualsUtils.equalsStringIgnoreCase(authInfo.getUserEmail(), settingsEmail)) {
+                throw new SynchronizerSettingsException(
+                        true,
+                        OrganiTaskApi.getInstance().getApiId(),
+                        null,
+                        PluginTranslations.getString("error.invalid_organitask_email"));
             }
 
             this.connected = true;
@@ -137,16 +151,6 @@ public class OrganiTaskConnection implements Connection {
             this.connected = false;
 
             throw e;
-        } catch (NoRouteToHostException e) {
-            throw new SynchronizerNotConnectedException(
-                    true,
-                    e.getMessage(),
-                    PluginApi.getTranslation("error.not_connected_internet"));
-        } catch (UnknownHostException e) {
-            throw new SynchronizerNotConnectedException(
-                    true,
-                    e.getMessage(),
-                    PluginApi.getTranslation("error.not_connected_internet"));
         } catch (Exception e) {
             this.connected = false;
 
@@ -159,8 +163,12 @@ public class OrganiTaskConnection implements Connection {
         }
     }
 
-    public void reconnect() {
-        this.connected = false;
+    public void reconnect() throws SynchronizerException {
+        if (!this.connected)
+            return;
+
+        this.disconnect();
+        this.connect();
     }
 
     @Override

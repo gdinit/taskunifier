@@ -46,110 +46,116 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
 public final class HttpUtils {
-	
-	private HttpUtils() {
-		
-	}
-	
-	public static HttpResponse getHttpGetResponse(URI uri) throws Exception {
-		return getHttpGetResponse(uri, null, 0, null, null);
-	}
-	
-	public static HttpResponse getHttpGetResponse(
-			URI uri,
-			final String host,
-			final int port,
-			final String username,
-			final String password) throws Exception {
-		return getHttpResponse(true, uri, null, host, port, username, password);
-	}
-	
-	public static HttpResponse getHttpPostResponse(
-			URI uri,
-			List<NameValuePair> parameters) throws Exception {
-		return getHttpPostResponse(uri, parameters, null, 0, null, null);
-	}
-	
-	public static HttpResponse getHttpPostResponse(
-			URI uri,
-			List<NameValuePair> parameters,
-			final String host,
-			final int port,
-			final String username,
-			final String password) throws Exception {
-		return getHttpResponse(
-				false,
-				uri,
-				parameters,
-				host,
-				port,
-				username,
-				password);
-	}
-	
-	private static HttpResponse getHttpResponse(
-			boolean get,
-			URI uri,
-			List<NameValuePair> parameters,
-			final String host,
-			final int port,
-			final String username,
-			final String password) throws Exception {
-		HttpURLConnection connection = null;
-		
-		if (host == null || host.length() == 0) {
-			connection = (HttpURLConnection) uri.toURL().openConnection();
-		} else {
-			if (username != null && username.length() != 0 && password != null) {
-				Authenticator.setDefault(new Authenticator() {
-					
-					@Override
-					protected PasswordAuthentication getPasswordAuthentication() {
-						return new PasswordAuthentication(
-								username,
-								password.toCharArray());
-					}
-					
-				});
-			}
-			
-			Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(
-					host,
-					port));
-			connection = (HttpURLConnection) uri.toURL().openConnection(proxy);
-		}
-		
-		connection.setUseCaches(false);
-		
-		if (!get && parameters != null && parameters.size() != 0) {
-			connection.setDoOutput(true);
-			IOUtils.write(
-					URLEncodedUtils.format(parameters, "UTF-8"),
-					connection.getOutputStream());
-		}
-		
-		InputStream inputStream = null;
-		
-		if (connection.getResponseCode() == 200)
-			inputStream = connection.getInputStream();
-		else
-			inputStream = connection.getErrorStream();
-		
-		if (inputStream == null)
-			throw new Exception("HTTP error: "
-					+ connection.getResponseCode()
-					+ " - "
-					+ connection.getResponseMessage());
-		
-		byte[] bytes = null;
-		
-		if (connection.getResponseCode() == 200)
-			bytes = IOUtils.toByteArray(inputStream);
-		
-		return new HttpResponse(
-				connection.getResponseCode(),
-				connection.getResponseMessage(),
-				bytes);
-	}
-	
+
+    private HttpUtils() {
+
+    }
+
+    public static HttpResponse getHttpGetResponse(URI uri) throws Exception {
+        return getHttpGetResponse(uri, null, 0, null, null);
+    }
+
+    public static HttpResponse getHttpGetResponse(
+            URI uri,
+            final String host,
+            final int port,
+            final String username,
+            final String password) throws Exception {
+        return getHttpResponse("GET", uri, null, null, host, port, username, password);
+    }
+
+    public static HttpResponse getHttpPostResponse(
+            URI uri,
+            List<NameValuePair> parameters) throws Exception {
+        return getHttpPostResponse(uri, parameters, null, 0, null, null);
+    }
+
+    public static HttpResponse getHttpPostResponse(
+            URI uri,
+            List<NameValuePair> parameters,
+            final String host,
+            final int port,
+            final String username,
+            final String password) throws Exception {
+        return getHttpResponse(
+                "POST",
+                uri,
+                URLEncodedUtils.format(parameters, "UTF-8"),
+                null,
+                host,
+                port,
+                username,
+                password);
+    }
+
+    public static HttpResponse getHttpResponse(
+            String requestMethod,
+            URI uri,
+            String body,
+            String contentType,
+            final String host,
+            final int port,
+            final String username,
+            final String password) throws Exception {
+        HttpURLConnection connection = null;
+
+        if (host == null || host.length() == 0) {
+            connection = (HttpURLConnection) uri.toURL().openConnection();
+        } else {
+            if (username != null && username.length() != 0 && password != null) {
+                Authenticator.setDefault(new Authenticator() {
+
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(
+                                username,
+                                password.toCharArray());
+                    }
+
+                });
+            }
+
+            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(
+                    host,
+                    port));
+            connection = (HttpURLConnection) uri.toURL().openConnection(proxy);
+        }
+
+        connection.setRequestMethod(requestMethod);
+        connection.setUseCaches(false);
+
+        if (contentType != null)
+            connection.setRequestProperty("Content-Type", contentType);
+
+        if (body != null) {
+            connection.setDoOutput(true);
+            IOUtils.write(
+                    body,
+                    connection.getOutputStream());
+        }
+
+        InputStream inputStream = null;
+
+        if (connection.getResponseCode() > 200 && connection.getResponseCode() < 300)
+            inputStream = connection.getInputStream();
+        else
+            inputStream = connection.getErrorStream();
+
+        if (inputStream == null)
+            throw new Exception("HTTP error: "
+                    + connection.getResponseCode()
+                    + " - "
+                    + connection.getResponseMessage());
+
+        byte[] bytes = null;
+
+        if (connection.getResponseCode() > 200 && connection.getResponseCode() < 300)
+            bytes = IOUtils.toByteArray(inputStream);
+
+        return new HttpResponse(
+                connection.getResponseCode(),
+                connection.getResponseMessage(),
+                bytes);
+    }
+
 }

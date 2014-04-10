@@ -85,7 +85,7 @@ abstract class AbstractCall {
 			
 			PluginLogger.getLogger().fine(response.getContent());
 			
-			return stripNonValidXMLCharacters(response.getContent());
+			return response.getContent();
 		} catch (NoRouteToHostException e) {
 			throw new SynchronizerNotConnectedException(
 					true,
@@ -101,10 +101,11 @@ abstract class AbstractCall {
 		}
 	}
 	
-	protected String callPost(
+	protected String call(
+            String requestMethod,
 			String scheme,
 			String path,
-			List<NameValuePair> parameters) throws SynchronizerException {
+			String body) throws SynchronizerException {
 		try {
 			URI uri = URIUtils.createURI(
 					scheme,
@@ -114,26 +115,17 @@ abstract class AbstractCall {
 					null,
 					null);
 			
-			HttpResponse response = HttpUtils.getHttpPostResponse(
+			HttpResponse response = HttpUtils.getHttpResponse(
+                    requestMethod,
 					uri,
-					parameters,
+					body,
+                    "application/json",
 					OrganiTaskApi.getInstance().getProxyHost(),
 					OrganiTaskApi.getInstance().getProxyPort(),
 					OrganiTaskApi.getInstance().getProxyUsername(),
 					OrganiTaskApi.getInstance().getProxyPassword());
 			
-			StringBuffer logMessage = new StringBuffer();
-			
-			logMessage.append(uri);
-			
-			if (parameters != null)
-				for (NameValuePair parameter : parameters)
-					logMessage.append("\n"
-							+ parameter.getName()
-							+ " = "
-							+ parameter.getValue());
-			
-			PluginLogger.getLogger().fine(logMessage.toString());
+			PluginLogger.getLogger().fine(uri + "\nBody:\n" + body);
 			
 			if (!response.isSuccessfull()) {
 				PluginLogger.getLogger().warning(
@@ -147,7 +139,7 @@ abstract class AbstractCall {
 			
 			PluginLogger.getLogger().fine(response.getContent());
 			
-			return stripNonValidXMLCharacters(response.getContent());
+			return response.getContent();
 		} catch (NoRouteToHostException e) {
 			throw new SynchronizerNotConnectedException(
 					true,
@@ -193,28 +185,6 @@ abstract class AbstractCall {
 		String message = errorNode.getTextContent();
 		
 		ToodledoErrors.throwError(models, type, code, message);
-	}
-	
-	private static String stripNonValidXMLCharacters(String in) {
-		StringBuffer out = new StringBuffer();
-		char current;
-		
-		if (in == null)
-			return null;
-		
-		for (int i = 0; i < in.length(); i++) {
-			current = in.charAt(i);
-			
-			if ((current == 0x9)
-					|| (current == 0xA)
-					|| (current == 0xD)
-					|| ((current >= 0x20) && (current <= 0xD7FF))
-					|| ((current >= 0xE000) && (current <= 0xFFFD))
-					|| ((current >= 0x10000) && (current <= 0x10FFFF)))
-				out.append(current);
-		}
-		
-		return out.toString();
 	}
 	
 }
