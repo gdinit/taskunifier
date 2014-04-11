@@ -47,7 +47,7 @@ public class HttpResponse {
 	}
 	
 	public boolean isSuccessfull() {
-		return this.code == 200;
+		return this.code >= 200 && this.code < 300;
 	}
 	
 	public int getCode() {

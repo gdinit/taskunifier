@@ -74,13 +74,12 @@ abstract class AbstractCallGoal extends AbstractCall {
     private GoalBean getGoalBean(JsonNode node, ModelId parentId) {
         GoalBean bean = GoalFactory.getInstance().createOriginalBean();
 
-        bean.setModelId(new ModelId());
-        bean.getModelReferenceIds().put("organitask", node.path("id").textValue());
+        bean.getModelReferenceIds().put("organitask", node.path("id").asText());
         bean.setModelStatus(ModelStatus.LOADED);
-        bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").longValue()));
+        bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").asLong()));
         bean.setParent(parentId);
-        bean.setTitle(node.path("title").textValue());
-        bean.setLevel(OrganiTaskTranslations.translateGoalLevel(node.path("level").textValue()));
+        bean.setTitle(node.path("title").asText());
+        bean.setLevel(OrganiTaskTranslations.translateGoalLevel(node.path("level").asText()));
 
         return bean;
     }
