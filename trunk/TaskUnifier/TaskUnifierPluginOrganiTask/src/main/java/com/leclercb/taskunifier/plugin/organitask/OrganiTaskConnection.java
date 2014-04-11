@@ -70,7 +70,7 @@ public class OrganiTaskConnection implements Connection {
     @Override
     public void connect() throws SynchronizerException {
         String settingsEmail = PluginApi.getUserSettings().getStringProperty(
-                "plugin.googletasks.email");
+                "plugin.organitask.email");
 
         if (settingsEmail == null || settingsEmail.length() == 0) {
             throw new SynchronizerSettingsException(
