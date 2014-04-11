@@ -93,7 +93,7 @@ abstract class AbstractCall {
                 PluginLogger.getLogger().warning(
                         response.getCode() + ": " + response.getMessage());
 
-                if (response.getCode() == 403) {
+                if (response.getCode() == 401 || response.getCode() == 403) {
                     throw new OrganiTaskConnectionException(
                             true,
                             OrganiTaskApi.getInstance().getApiId(),
@@ -110,6 +110,10 @@ abstract class AbstractCall {
             PluginLogger.getLogger().fine(response.getContent());
 
             return response.getContent();
+        } catch (OrganiTaskConnectionException e) {
+            throw e;
+        } catch (SynchronizerHttpException e) {
+            throw e;
         } catch (NoRouteToHostException e) {
             throw new SynchronizerNotConnectedException(
                     true,
