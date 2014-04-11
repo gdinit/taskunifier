@@ -77,6 +77,18 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
         this.lastSync = Calendar.getInstance();
     }
 
+    protected boolean isTreeModelType(ModelType type) {
+        switch (type) {
+            case CONTEXT:
+            case FOLDER:
+            case GOAL:
+            case TASK:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     @Override
     protected boolean isUpdatedModels(ModelType type)
             throws SynchronizerException {
