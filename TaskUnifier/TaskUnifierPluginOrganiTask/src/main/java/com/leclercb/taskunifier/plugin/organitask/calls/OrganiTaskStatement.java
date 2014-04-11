@@ -5,26 +5,16 @@
  */
 package com.leclercb.taskunifier.plugin.organitask.calls;
 
-import java.util.Calendar;
-import java.util.List;
-
 import com.leclercb.commons.api.utils.CheckUtils;
-import com.leclercb.taskunifier.api.models.Context;
-import com.leclercb.taskunifier.api.models.Folder;
-import com.leclercb.taskunifier.api.models.Goal;
-import com.leclercb.taskunifier.api.models.Location;
-import com.leclercb.taskunifier.api.models.Note;
-import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.api.models.beans.ContextBean;
-import com.leclercb.taskunifier.api.models.beans.FolderBean;
-import com.leclercb.taskunifier.api.models.beans.GoalBean;
-import com.leclercb.taskunifier.api.models.beans.LocationBean;
-import com.leclercb.taskunifier.api.models.beans.NoteBean;
-import com.leclercb.taskunifier.api.models.beans.TaskBean;
+import com.leclercb.taskunifier.api.models.*;
+import com.leclercb.taskunifier.api.models.beans.*;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerConnectionException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.plugin.organitask.OrganiTaskConnection;
 import com.leclercb.taskunifier.plugin.toodledo.calls.exc.ToodledoConnectionException;
+
+import java.util.Calendar;
+import java.util.List;
 
 public class OrganiTaskStatement {
 

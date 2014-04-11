@@ -51,24 +51,38 @@ abstract class AbstractCallGoal extends AbstractCall {
 
     private List<GoalBean> getGoalBeans(JsonNode node, ModelId parentId) {
         List<GoalBean> goals = new ArrayList<GoalBean>();
-        Iterator<JsonNode> iterator = node.iterator();
 
-        while (iterator.hasNext()) {
-            GoalBean bean = GoalFactory.getInstance().createOriginalBean();
+        if (node.isArray()) {
+            Iterator<JsonNode> iterator = node.iterator();
 
-            bean.setModelId(new ModelId());
-            bean.getModelReferenceIds().put("organitask", node.path("id").textValue());
-            bean.setModelStatus(ModelStatus.LOADED);
-            bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").longValue()));
-            bean.setParent(parentId);
-            bean.setTitle(node.path("title").textValue());
-            bean.setLevel(OrganiTaskTranslations.translateGoalLevel(node.path("level").textValue()));
+            while (iterator.hasNext()) {
+                JsonNode item = iterator.next();
 
+                GoalBean bean = this.getGoalBean(item, parentId);
+                goals.add(bean);
+                goals.addAll(this.getGoalBeans(item.path("goals"), bean.getModelId()));
+            }
+        } else {
+            GoalBean bean = this.getGoalBean(node, parentId);
             goals.add(bean);
             goals.addAll(this.getGoalBeans(node.path("goals"), bean.getModelId()));
         }
 
         return goals;
+    }
+
+    private GoalBean getGoalBean(JsonNode node, ModelId parentId) {
+        GoalBean bean = GoalFactory.getInstance().createOriginalBean();
+
+        bean.setModelId(new ModelId());
+        bean.getModelReferenceIds().put("organitask", node.path("id").textValue());
+        bean.setModelStatus(ModelStatus.LOADED);
+        bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").longValue()));
+        bean.setParent(parentId);
+        bean.setTitle(node.path("title").textValue());
+        bean.setLevel(OrganiTaskTranslations.translateGoalLevel(node.path("level").textValue()));
+
+        return bean;
     }
 
 }

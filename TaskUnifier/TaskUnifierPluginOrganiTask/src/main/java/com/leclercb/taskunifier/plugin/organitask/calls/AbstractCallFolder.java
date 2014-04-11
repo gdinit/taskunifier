@@ -51,23 +51,37 @@ abstract class AbstractCallFolder extends AbstractCall {
 
     private List<FolderBean> getFolderBeans(JsonNode node, ModelId parentId) {
         List<FolderBean> folders = new ArrayList<FolderBean>();
-        Iterator<JsonNode> iterator = node.iterator();
 
-        while (iterator.hasNext()) {
-            FolderBean bean = FolderFactory.getInstance().createOriginalBean();
+        if (node.isArray()) {
+            Iterator<JsonNode> iterator = node.iterator();
 
-            bean.setModelId(new ModelId());
-            bean.getModelReferenceIds().put("organitask", node.path("id").textValue());
-            bean.setModelStatus(ModelStatus.LOADED);
-            bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").longValue()));
-            bean.setParent(parentId);
-            bean.setTitle(node.path("title").textValue());
+            while (iterator.hasNext()) {
+                JsonNode item = iterator.next();
 
+                FolderBean bean = this.getFolderBean(item, parentId);
+                folders.add(bean);
+                folders.addAll(this.getFolderBeans(item.path("folders"), bean.getModelId()));
+            }
+        } else {
+            FolderBean bean = this.getFolderBean(node, parentId);
             folders.add(bean);
             folders.addAll(this.getFolderBeans(node.path("folders"), bean.getModelId()));
         }
 
         return folders;
+    }
+
+    private FolderBean getFolderBean(JsonNode node, ModelId parentId) {
+        FolderBean bean = FolderFactory.getInstance().createOriginalBean();
+
+        bean.setModelId(new ModelId());
+        bean.getModelReferenceIds().put("organitask", node.path("id").textValue());
+        bean.setModelStatus(ModelStatus.LOADED);
+        bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").longValue()));
+        bean.setParent(parentId);
+        bean.setTitle(node.path("title").textValue());
+
+        return bean;
     }
 
 }

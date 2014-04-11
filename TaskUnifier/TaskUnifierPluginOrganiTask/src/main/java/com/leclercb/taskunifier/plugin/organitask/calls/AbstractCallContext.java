@@ -51,23 +51,37 @@ abstract class AbstractCallContext extends AbstractCall {
 
     private List<ContextBean> getContextBeans(JsonNode node, ModelId parentId) {
         List<ContextBean> contexts = new ArrayList<ContextBean>();
-        Iterator<JsonNode> iterator = node.iterator();
 
-        while (iterator.hasNext()) {
-            ContextBean bean = ContextFactory.getInstance().createOriginalBean();
+        if (node.isArray()) {
+            Iterator<JsonNode> iterator = node.iterator();
 
-            bean.setModelId(new ModelId());
-            bean.getModelReferenceIds().put("organitask", node.path("id").textValue());
-            bean.setModelStatus(ModelStatus.LOADED);
-            bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").longValue()));
-            bean.setParent(parentId);
-            bean.setTitle(node.path("title").textValue());
+            while (iterator.hasNext()) {
+                JsonNode item = iterator.next();
 
+                ContextBean bean = this.getContextBean(item, parentId);
+                contexts.add(bean);
+                contexts.addAll(this.getContextBeans(item.path("contexts"), bean.getModelId()));
+            }
+        } else {
+            ContextBean bean = this.getContextBean(node, parentId);
             contexts.add(bean);
             contexts.addAll(this.getContextBeans(node.path("contexts"), bean.getModelId()));
         }
 
         return contexts;
+    }
+
+    private ContextBean getContextBean(JsonNode node, ModelId parentId) {
+        ContextBean bean = ContextFactory.getInstance().createOriginalBean();
+
+        bean.setModelId(new ModelId());
+        bean.getModelReferenceIds().put("organitask", node.path("id").textValue());
+        bean.setModelStatus(ModelStatus.LOADED);
+        bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").longValue()));
+        bean.setParent(parentId);
+        bean.setTitle(node.path("title").textValue());
+
+        return bean;
     }
 
 }

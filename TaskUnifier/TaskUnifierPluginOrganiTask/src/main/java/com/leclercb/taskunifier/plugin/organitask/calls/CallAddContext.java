@@ -3,37 +3,28 @@
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
  */
-package com.leclercb.taskunifier.plugin.toodledo.calls;
+package com.leclercb.taskunifier.plugin.organitask.calls;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Context;
+import com.leclercb.taskunifier.api.models.beans.ContextBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 
 final class CallAddContext extends AbstractCallContext {
-	
-	public String addContext(
-			ToodledoAccountInfo accountInfo,
-			String key,
-			Context context) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
-		CheckUtils.isNotNull(context);
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
-		params.add(new BasicNameValuePair("name", context.getTitle()));
-		params.add(new BasicNameValuePair("f", "xml"));
-		
-		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/contexts/add.php", params);
-		
-		return this.getResponseMessage(context, accountInfo, content)[0].getModelReferenceIds().get(
-				"toodledo");
-	}
-	
+
+    public ContextBean addContext(String accessToken, Context context) throws SynchronizerException {
+        CheckUtils.isNotNull(accessToken);
+        CheckUtils.isNotNull(context);
+
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode node = mapper.createObjectNode();
+        node.put("title", context.getTitle());
+
+        String content = super.call("POST", "/contexts", accessToken, node.toString());
+
+        return this.getResponseMessage(content)[0];
+    }
+
 }
