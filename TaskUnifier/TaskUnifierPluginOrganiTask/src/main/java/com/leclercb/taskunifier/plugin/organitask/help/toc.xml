@@ -2,9 +2,9 @@
 
 <toc version="2.0">
 
-	<tocitem text="Toodledo Plugin Help" target="plugin_toodledo_main">
+	<tocitem text="OrganiTask Plugin Help" target="plugin_organitask_main">
 		
-		<tocitem text="Configuration" target="plugin_toodledo_configuration" />
+		<tocitem text="Configuration" target="plugin_organitask_configuration" />
 		
 	</tocitem>
 
