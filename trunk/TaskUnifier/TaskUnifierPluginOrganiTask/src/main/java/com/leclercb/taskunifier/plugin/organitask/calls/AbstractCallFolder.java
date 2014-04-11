@@ -65,7 +65,9 @@ abstract class AbstractCallFolder extends AbstractCall {
         } else {
             FolderBean bean = this.getFolderBean(node, parentId);
             folders.add(bean);
-            folders.addAll(this.getFolderBeans(node.path("folders"), bean.getModelId()));
+
+            if (node.has("folders") && node.path("folders").isArray())
+                folders.addAll(this.getFolderBeans(node.path("folders"), bean.getModelId()));
         }
 
         return folders;

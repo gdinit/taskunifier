@@ -65,7 +65,9 @@ abstract class AbstractCallGoal extends AbstractCall {
         } else {
             GoalBean bean = this.getGoalBean(node, parentId);
             goals.add(bean);
-            goals.addAll(this.getGoalBeans(node.path("goals"), bean.getModelId()));
+
+            if (node.has("goals") && node.path("goals").isArray())
+                goals.addAll(this.getGoalBeans(node.path("goals"), bean.getModelId()));
         }
 
         return goals;
