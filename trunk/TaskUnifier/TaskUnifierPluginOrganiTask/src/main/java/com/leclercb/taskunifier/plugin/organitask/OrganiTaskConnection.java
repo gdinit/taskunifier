@@ -20,6 +20,7 @@ import com.leclercb.taskunifier.plugin.organitask.calls.exc.OrganiTaskConnection
 import com.leclercb.taskunifier.plugin.organitask.translations.PluginTranslations;
 
 import javax.swing.*;
+import java.net.URLEncoder;
 import java.util.Properties;
 
 public class OrganiTaskConnection implements Connection {
@@ -80,9 +81,9 @@ public class OrganiTaskConnection implements Connection {
         }
 
         try {
-            final String authorizationUrl = "http://www.organitask.com/web/en/app?action=authorize&client_id=" +
+            final String authorizationUrl = OrganiTaskApi.getInstance().getWebUrl() + "/web/en/app?action=authorize&client_id=" +
                     OrganiTaskApi.getInstance().getClientId() +
-                    "&redirect_uri=http%3A%2F%2Fwww.organitask.com%2Fweb%2Fen%2Fapp%3Faction%3Doauth_code&response_type=code";
+                    "&redirect_uri=" + URLEncoder.encode(OrganiTaskApi.getInstance().getWebUrl() + "/web/en/app?action=oauth_code&response_type=code");
 
             OrganiTaskToken token = null;
 
