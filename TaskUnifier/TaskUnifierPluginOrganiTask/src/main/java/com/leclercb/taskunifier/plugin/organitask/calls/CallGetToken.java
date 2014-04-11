@@ -14,6 +14,7 @@ import com.leclercb.taskunifier.plugin.organitask.OrganiTaskApi;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ final class CallGetToken extends AbstractCall {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("client_id", OrganiTaskApi.getInstance().getClientId() + "_" + OrganiTaskApi.getInstance().getClientRandomId()));
         params.add(new BasicNameValuePair("client_secret", OrganiTaskApi.getInstance().getClientSecret()));
-        params.add(new BasicNameValuePair("redirect_uri", "http%3A%2F%2Fwww.organitask.com%2Fweb%2Fen%2Fapp%3Faction%3Doauth_code"));
+        params.add(new BasicNameValuePair("redirect_uri", URLEncoder.encode(OrganiTaskApi.getInstance().getWebUrl() + "/web/en/app?action=oauth_code&response_type=code")));
         params.add(new BasicNameValuePair("grant_type", "authorization_code"));
         params.add(new BasicNameValuePair("code", code));
 
@@ -40,7 +41,7 @@ final class CallGetToken extends AbstractCall {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("client_id", OrganiTaskApi.getInstance().getClientId() + "_" + OrganiTaskApi.getInstance().getClientRandomId()));
         params.add(new BasicNameValuePair("client_secret", OrganiTaskApi.getInstance().getClientSecret()));
-        params.add(new BasicNameValuePair("redirect_uri", "http%3A%2F%2Fwww.organitask.com%2Fweb%2Fen%2Fapp%3Faction%3Doauth_code"));
+        params.add(new BasicNameValuePair("redirect_uri", URLEncoder.encode(OrganiTaskApi.getInstance().getWebUrl() + "/web/en/app?action=oauth_code&response_type=code")));
         params.add(new BasicNameValuePair("grant_type", "refresh_token"));
         params.add(new BasicNameValuePair("refresh_token", refreshToken));
 
