@@ -65,7 +65,9 @@ abstract class AbstractCallContext extends AbstractCall {
         } else {
             ContextBean bean = this.getContextBean(node, parentId);
             contexts.add(bean);
-            contexts.addAll(this.getContextBeans(node.path("contexts"), bean.getModelId()));
+
+            if (node.has("contexts") && node.path("contexts").isArray())
+                contexts.addAll(this.getContextBeans(node.path("contexts"), bean.getModelId()));
         }
 
         return contexts;

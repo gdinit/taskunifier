@@ -66,7 +66,9 @@ abstract class AbstractCallTask extends AbstractCall {
         } else {
             TaskBean bean = this.getTaskBean(node, parentId);
             tasks.add(bean);
-            tasks.addAll(this.getTaskBeans(node.path("tasks"), bean.getModelId()));
+
+            if (node.has("tasks") && node.path("tasks").isArray())
+                tasks.addAll(this.getTaskBeans(node.path("tasks"), bean.getModelId()));
         }
 
         return tasks;
