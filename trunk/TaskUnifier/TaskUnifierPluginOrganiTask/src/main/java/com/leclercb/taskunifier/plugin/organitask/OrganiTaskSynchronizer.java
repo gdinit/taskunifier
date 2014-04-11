@@ -50,7 +50,6 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.gui.plugins.AbstractSynchronizer;
 import com.leclercb.taskunifier.gui.plugins.PluginApi;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
-import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoDeletedContact;
 import com.leclercb.taskunifier.plugin.toodledo.calls.exc.ToodledoApiException;
 
 public class OrganiTaskSynchronizer extends AbstractSynchronizer {
@@ -732,10 +731,10 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
                 @Override
                 public Void call() {
                     List<ModelBean> deletedContacts = OrganiTaskSynchronizer.this.getDeletedContacts();
-                    List<ToodledoDeletedContact> toodledoDeletedContacts = new ArrayList<ToodledoDeletedContact>();
+                    List<com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact> toodledoDeletedContacts = new ArrayList<com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact>();
 
                     for (ModelBean deletedContact : deletedContacts) {
-                        ToodledoDeletedContact toodledoDeletedContact = new ToodledoDeletedContact();
+                        com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact toodledoDeletedContact = new com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact();
                         toodledoDeletedContact.setModelId(deletedContact.getModelId());
                         toodledoDeletedContact.setModelUpdateDate(deletedContact.getModelUpdateDate());
 
@@ -746,8 +745,8 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
                     for (Contact contact : contacts) {
                         if (contact.getModelStatus() == ModelStatus.TO_DELETE
                                 || contact.getModelStatus() == ModelStatus.DELETED) {
-                            ToodledoDeletedContact toodledoDeletedContact = null;
-                            for (ToodledoDeletedContact deletedContact : toodledoDeletedContacts) {
+                            com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact toodledoDeletedContact = null;
+                            for (com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact deletedContact : toodledoDeletedContacts) {
                                 if (contact.getModelId().equals(
                                         deletedContact.getModelId())) {
                                     toodledoDeletedContact = deletedContact;
@@ -758,7 +757,7 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
                             if (toodledoDeletedContact != null)
                                 continue;
 
-                            toodledoDeletedContact = new ToodledoDeletedContact();
+                            toodledoDeletedContact = new com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact();
                             toodledoDeletedContact.setModelId(contact.getModelId());
                             toodledoDeletedContact.setModelUpdateDate(contact.getModelUpdateDate());
 
@@ -780,9 +779,9 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
                     }
 
                     ByteArrayOutputStream output = new ByteArrayOutputStream();
-                    ToodledoDeletedContact.encodeBeansToXML(
+                    com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact.encodeBeansToXML(
                             output,
-                            toodledoDeletedContacts.toArray(new ToodledoDeletedContact[0]));
+                            toodledoDeletedContacts.toArray(new com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact[0]));
                     String xml = "<!-- DO NOT EDIT THIS NOTE -->\n"
                             + output.toString();
                     note.setNote(StringEscapeUtils.escapeHtml4(xml));
@@ -809,9 +808,9 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 
         try {
             if (note != null) {
-                ToodledoDeletedContact[] deletedContacts = ToodledoDeletedContact.decodeBeansFromXML(IOUtils.toInputStream(StringEscapeUtils.unescapeHtml4(note.getNote())));
+                com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact[] deletedContacts = com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact.decodeBeansFromXML(IOUtils.toInputStream(StringEscapeUtils.unescapeHtml4(note.getNote())));
 
-                for (ToodledoDeletedContact deletedContact : deletedContacts) {
+                for (com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact deletedContact : deletedContacts) {
                     ContactBean bean = new ContactBean();
                     bean.setModelId(deletedContact.getModelId());
                     bean.setModelStatus(ModelStatus.DELETED);

@@ -29,8 +29,7 @@ final class CallGetToken extends AbstractCall {
         params.add(new BasicNameValuePair("grant_type", "authorization_code"));
         params.add(new BasicNameValuePair("code", code));
 
-        String scheme = super.getScheme();
-        String content = super.callGet(scheme, "/auth/oauth/v2/token", params);
+        String content = super.callGet("/auth/oauth/v2/token", params);
 
         return this.getResponseMessage(content);
     }
@@ -45,14 +44,13 @@ final class CallGetToken extends AbstractCall {
         params.add(new BasicNameValuePair("grant_type", "refresh_token"));
         params.add(new BasicNameValuePair("refresh_token", refreshToken));
 
-        String scheme = super.getScheme();
-        String content = super.callGet(scheme, "/auth/oauth/v2/token", params);
+        String content = super.callGet("/auth/oauth/v2/token", params);
 
         return this.getResponseMessage(content);
     }
 
     /**
-     * Example : {"access_token":"NTQzZDZlZDI5MTUxY2FjNGU5ZWZkMGIwODExODY3YmZlNzNlZjA2ZTU0NTlmMWZkZWIxMjA2MmIzZDZlZWFmYQ","expires_in":3600,"token_type":"bearer","scope":null,"refresh_token":"NDc1MjhmN2Y4M2RiNWRhZTY2MDg3MGY2NDk2ZWIwZmVhZmNlOWY4MDQyMmExZjM5NTZiYjU2M2E3MTQ0MmE1YQ"}
+     * Example: {"access_token":"NTQzZDZlZDI5MTUxY2FjNGU5ZWZkMGIwODExODY3YmZlNzNlZjA2ZTU0NTlmMWZkZWIxMjA2MmIzZDZlZWFmYQ","expires_in":3600,"token_type":"bearer","scope":null,"refresh_token":"NDc1MjhmN2Y4M2RiNWRhZTY2MDg3MGY2NDk2ZWIwZmVhZmNlOWY4MDQyMmExZjM5NTZiYjU2M2E3MTQ0MmE1YQ"}
      *
      * @param content
      * @return

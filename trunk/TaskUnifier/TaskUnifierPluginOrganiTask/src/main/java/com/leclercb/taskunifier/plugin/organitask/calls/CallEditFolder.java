@@ -3,54 +3,31 @@
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
  */
-package com.leclercb.taskunifier.plugin.toodledo.calls;
+package com.leclercb.taskunifier.plugin.organitask.calls;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Folder;
 import com.leclercb.taskunifier.api.models.beans.FolderBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 
 final class CallEditFolder extends AbstractCallFolder {
-	
-	public void editFolder(
-			ToodledoAccountInfo accountInfo,
-			String key,
-			Folder folder) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
-		CheckUtils.isNotNull(folder);
-		
-		if (folder.getModelReferenceId("toodledo") == null)
-			throw new IllegalArgumentException("You cannot edit a new folder");
-		
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
-		params.add(new BasicNameValuePair(
-				"id",
-				folder.getModelReferenceId("toodledo")));
-		params.add(new BasicNameValuePair("name", folder.getTitle()));
-		params.add(new BasicNameValuePair(
-				"archived",
-				(folder.isArchived() ? "1" : "0")));
-		params.add(new BasicNameValuePair("f", "xml"));
-		
-		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/folders/edit.php", params);
-		
-		FolderBean[] folders = this.getResponseMessage(
-				folder,
-				accountInfo,
-				content);
-		
-		if (folders.length != 1)
-			throw new SynchronizerException(false, "Edition of folder "
-					+ folder.getModelId()
-					+ " has failed");
-	}
-	
+
+    public FolderBean editFolder(String accessToken, Folder folder) throws SynchronizerException {
+        CheckUtils.isNotNull(accessToken);
+        CheckUtils.isNotNull(folder);
+
+        if (folder.getModelReferenceId("organitask") == null)
+            throw new IllegalArgumentException("You cannot edit a new folder");
+
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode node = mapper.createObjectNode();
+        node.put("title", folder.getTitle());
+
+        String content = super.call("PUT", "/folders/" + folder.getModelReferenceId("organitask"), accessToken, node.toString());
+
+        return this.getResponseMessage(content)[0];
+    }
+
 }

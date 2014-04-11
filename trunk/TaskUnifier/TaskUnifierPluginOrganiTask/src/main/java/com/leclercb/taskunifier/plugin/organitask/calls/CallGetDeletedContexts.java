@@ -14,14 +14,15 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 import java.util.List;
 
-final class CallGetContexts extends AbstractCallContext {
+final class CallGetDeletedContexts extends AbstractCallContext {
 
-    public ContextBean[] getContexts(String accessToken)
+    public ContextBean[] getDeletedContexts(String accessToken)
             throws SynchronizerException {
         CheckUtils.isNotNull(accessToken);
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("access_token", accessToken));
+        params.add(new BasicNameValuePair("deleted", "true"));
 
         String content = super.callGet("/contexts", params);
 

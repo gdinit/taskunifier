@@ -5,28 +5,16 @@
  */
 package com.leclercb.taskunifier.plugin.organitask.calls;
 
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.leclercb.taskunifier.plugin.organitask.calls.OrganiTaskAuthInfo;
-import com.leclercb.taskunifier.plugin.organitask.calls.OrganiTaskToken;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerParsingException;
-import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoErrors.ToodledoErrorType;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 final class CallGetAuthInfo extends AbstractCall {
 
@@ -43,7 +31,7 @@ final class CallGetAuthInfo extends AbstractCall {
     }
 
     /**
-     * Example : {"locale":"en","team_member_id":3001,"user_id":1001,"team_id":2001,"team_main":true,"offer_id":3,"role":"ADMIN","account_type":"PRO","points":100,"user_email":"test1001@me.com","team_title":"test1001@me.com","subscription_validity":1396877371,"subscription_days_left":0,"messages":[]}
+     * Example: {"locale":"en","team_member_id":3001,"user_id":1001,"team_id":2001,"team_main":true,"offer_id":3,"role":"ADMIN","account_type":"PRO","points":100,"user_email":"test1001@me.com","team_title":"test1001@me.com","subscription_validity":1396877371,"subscription_days_left":0,"messages":[]}
      *
      * @param content
      * @return

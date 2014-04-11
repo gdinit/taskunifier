@@ -6,24 +6,24 @@
 package com.leclercb.taskunifier.plugin.organitask.calls;
 
 public final class OrganiTaskAuthInfo {
-	
-	private String locale;
-	private int teamMemberId;
-	private int userId;
-	private int teamId;
-	private boolean teamMain;
-	private int offerId;
-	private String role;
-	private String accountType;
-	private int points;
-	private String userEmail;
-	private String teamTitle;
-	private long subscriptionValidity;
-	private int subscriptionDaysLeft;
-	
-	protected OrganiTaskAuthInfo() {
-		
-	}
+
+    private String locale;
+    private int teamMemberId;
+    private int userId;
+    private int teamId;
+    private boolean teamMain;
+    private int offerId;
+    private String role;
+    private String accountType;
+    private int points;
+    private String userEmail;
+    private String teamTitle;
+    private long subscriptionValidity;
+    private int subscriptionDaysLeft;
+
+    protected OrganiTaskAuthInfo() {
+
+    }
 
     public String getLocale() {
         return locale;

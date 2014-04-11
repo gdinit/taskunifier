@@ -6,7 +6,7 @@
 package com.leclercb.taskunifier.plugin.organitask.calls;
 
 import com.leclercb.commons.api.utils.CheckUtils;
-import com.leclercb.taskunifier.api.models.beans.ContextBean;
+import com.leclercb.taskunifier.api.models.beans.GoalBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -14,16 +14,17 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 import java.util.List;
 
-final class CallGetContexts extends AbstractCallContext {
+final class CallGetDeletedGoals extends AbstractCallGoal {
 
-    public ContextBean[] getContexts(String accessToken)
+    public GoalBean[] getDeletedGoals(String accessToken)
             throws SynchronizerException {
         CheckUtils.isNotNull(accessToken);
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("access_token", accessToken));
+        params.add(new BasicNameValuePair("deleted", "true"));
 
-        String content = super.callGet("/contexts", params);
+        String content = super.callGet("/goals", params);
 
         return this.getResponseMessage(content);
     }
