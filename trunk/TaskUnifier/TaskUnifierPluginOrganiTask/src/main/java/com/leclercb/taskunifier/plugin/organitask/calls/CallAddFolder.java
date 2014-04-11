@@ -14,7 +14,7 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 
 final class CallAddFolder extends AbstractCallFolder {
 
-    public FolderBean addFolder(String accessToken, Folder folder) throws SynchronizerException {
+    public FolderBean addFolder(String accessToken, Folder folder, boolean syncParent) throws SynchronizerException {
         CheckUtils.isNotNull(accessToken);
         CheckUtils.isNotNull(folder);
 

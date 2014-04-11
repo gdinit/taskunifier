@@ -14,6 +14,8 @@ import com.leclercb.taskunifier.plugin.organitask.OrganiTaskApi;
 import com.leclercb.taskunifier.plugin.organitask.OrganiTaskConnection;
 import com.leclercb.taskunifier.plugin.organitask.calls.exc.OrganiTaskConnectionException;
 
+import java.util.Calendar;
+
 public class OrganiTaskStatement {
 
     private static CallGetToken callGetToken = new CallGetToken();
@@ -74,58 +76,58 @@ public class OrganiTaskStatement {
         }
     }
 
-    public ContextBean[] getContexts()
+    public ContextBean[] getContexts(Calendar updatedAfter)
             throws SynchronizerException {
         try {
             this.checkConnection();
-            return callGetContexts.getContexts(this.connection.getAccessToken());
+            return callGetContexts.getContexts(this.connection.getAccessToken(), updatedAfter);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
-            return callGetContexts.getContexts(this.connection.getAccessToken());
+            return callGetContexts.getContexts(this.connection.getAccessToken(), updatedAfter);
         }
     }
 
-    public FolderBean[] getFolders()
+    public FolderBean[] getFolders(Calendar updatedAfter)
             throws SynchronizerException {
         try {
             this.checkConnection();
-            return callGetFolders.getFolders(this.connection.getAccessToken());
+            return callGetFolders.getFolders(this.connection.getAccessToken(), updatedAfter);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
-            return callGetFolders.getFolders(this.connection.getAccessToken());
+            return callGetFolders.getFolders(this.connection.getAccessToken(), updatedAfter);
         }
     }
 
-    public GoalBean[] getGoals()
+    public GoalBean[] getGoals(Calendar updatedAfter)
             throws SynchronizerException {
         try {
             this.checkConnection();
-            return callGetGoals.getGoals(this.connection.getAccessToken());
+            return callGetGoals.getGoals(this.connection.getAccessToken(), updatedAfter);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
-            return callGetGoals.getGoals(this.connection.getAccessToken());
+            return callGetGoals.getGoals(this.connection.getAccessToken(), updatedAfter);
         }
     }
 
-    public NoteBean[] getNotes()
+    public NoteBean[] getNotes(Calendar updatedAfter)
             throws SynchronizerException {
         try {
             this.checkConnection();
-            return callGetNotes.getNotes(this.connection.getAccessToken());
+            return callGetNotes.getNotes(this.connection.getAccessToken(), updatedAfter);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
-            return callGetNotes.getNotes(this.connection.getAccessToken());
+            return callGetNotes.getNotes(this.connection.getAccessToken(), updatedAfter);
         }
     }
 
-    public TaskBean[] getTasks()
+    public TaskBean[] getTasks(Calendar updatedAfter)
             throws SynchronizerException {
         try {
             this.checkConnection();
-            return callGetTasks.getTasks(this.connection.getAccessToken());
+            return callGetTasks.getTasks(this.connection.getAccessToken(), updatedAfter);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
-            return callGetTasks.getTasks(this.connection.getAccessToken());
+            return callGetTasks.getTasks(this.connection.getAccessToken(), updatedAfter);
         }
     }
 
@@ -179,149 +181,239 @@ public class OrganiTaskStatement {
         }
     }
 
-    public ContextBean addContext(Context context)
+    public ContextBean addContext(Context context, boolean syncParent)
             throws SynchronizerException {
         try {
             this.checkConnection();
             return callAddContext.addContext(
                     this.connection.getAccessToken(),
-                    context);
+                    context,
+                    syncParent);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
             return callAddContext.addContext(
                     this.connection.getAccessToken(),
-                    context);
+                    context,
+                    syncParent);
         }
     }
 
-    public FolderBean addFolder(Folder folder)
+    public FolderBean addFolder(Folder folder, boolean syncParent)
             throws SynchronizerException {
         try {
             this.checkConnection();
             return callAddFolder.addFolder(
                     this.connection.getAccessToken(),
-                    folder);
+                    folder,
+                    syncParent);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
             return callAddFolder.addFolder(
                     this.connection.getAccessToken(),
-                    folder);
+                    folder,
+                    syncParent);
         }
     }
 
-    public GoalBean addGoal(Goal goal)
+    public GoalBean addGoal(Goal goal, boolean syncParent)
             throws SynchronizerException {
         try {
             this.checkConnection();
             return callAddGoal.addGoal(
                     this.connection.getAccessToken(),
-                    goal);
+                    goal,
+                    syncParent);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
             return callAddGoal.addGoal(
                     this.connection.getAccessToken(),
-                    goal);
+                    goal,
+                    syncParent);
         }
     }
 
-    public NoteBean addNote(Note note)
+    public NoteBean addNote(Note note, boolean syncParent)
             throws SynchronizerException {
         try {
             this.checkConnection();
             return callAddNote.addNote(
                     this.connection.getAccessToken(),
-                    note);
+                    note,
+                    syncParent);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
             return callAddNote.addNote(
                     this.connection.getAccessToken(),
-                    note);
+                    note,
+                    syncParent);
         }
     }
 
-    public TaskBean addTask(Task task) throws SynchronizerException {
+    public TaskBean addTask(Task task, boolean syncParent) throws SynchronizerException {
         try {
             this.checkConnection();
             return callAddTask.addTask(
                     this.connection.getAccessToken(),
-                    task);
+                    task,
+                    syncParent);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
             return callAddTask.addTask(
                     this.connection.getAccessToken(),
-                    task);
+                    task,
+                    syncParent);
         }
     }
 
-    public void editContext(Context context)
+    public void editContext(Context context, boolean syncParent)
             throws SynchronizerException {
         try {
             this.checkConnection();
             callEditContext.editContext(
                     this.connection.getAccessToken(),
-                    context);
+                    context,
+                    syncParent);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
             callEditContext.editContext(
                     this.connection.getAccessToken(),
+                    context,
+                    syncParent);
+        }
+    }
+
+    public void editFolder(Folder folder, boolean syncParent)
+            throws SynchronizerException {
+        try {
+            this.checkConnection();
+            callEditFolder.editFolder(
+                    this.connection.getAccessToken(),
+                    folder,
+                    syncParent);
+        } catch (OrganiTaskConnectionException e) {
+            this.connection.reconnect();
+            callEditFolder.editFolder(
+                    this.connection.getAccessToken(),
+                    folder,
+                    syncParent);
+        }
+    }
+
+    public void editGoal(Goal goal, boolean syncParent)
+            throws SynchronizerException {
+        try {
+            this.checkConnection();
+            callEditGoal.editGoal(
+                    this.connection.getAccessToken(),
+                    goal,
+                    syncParent);
+        } catch (OrganiTaskConnectionException e) {
+            this.connection.reconnect();
+            callEditGoal.editGoal(
+                    this.connection.getAccessToken(),
+                    goal,
+                    syncParent);
+        }
+    }
+
+    public void editNote(Note note, boolean syncParent)
+            throws SynchronizerException {
+        try {
+            this.checkConnection();
+            callEditNote.editNote(
+                    this.connection.getAccessToken(),
+                    note,
+                    syncParent);
+        } catch (OrganiTaskConnectionException e) {
+            this.connection.reconnect();
+            callEditNote.editNote(
+                    this.connection.getAccessToken(),
+                    note,
+                    syncParent);
+        }
+    }
+
+    public void editTask(Task task, boolean syncParent) throws SynchronizerException {
+        try {
+            this.checkConnection();
+            callEditTask.editTask(
+                    this.connection.getAccessToken(),
+                    task,
+                    syncParent);
+        } catch (OrganiTaskConnectionException e) {
+            this.connection.reconnect();
+            callEditTask.editTask(
+                    this.connection.getAccessToken(),
+                    task,
+                    syncParent);
+        }
+    }
+
+    public void editContextParent(Context context) throws SynchronizerException {
+        try {
+            this.checkConnection();
+            callEditContext.editContextParent(
+                    this.connection.getAccessToken(),
+                    context);
+        } catch (OrganiTaskConnectionException e) {
+            this.connection.reconnect();
+            callEditContext.editContextParent(
+                    this.connection.getAccessToken(),
                     context);
         }
     }
 
-    public void editFolder(Folder folder)
-            throws SynchronizerException {
+    public void editFolderParent(Folder folder) throws SynchronizerException {
         try {
             this.checkConnection();
-            callEditFolder.editFolder(
+            callEditFolder.editFolderParent(
                     this.connection.getAccessToken(),
                     folder);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
-            callEditFolder.editFolder(
+            callEditFolder.editFolderParent(
                     this.connection.getAccessToken(),
                     folder);
         }
     }
 
-    public void editGoal(Goal goal)
-            throws SynchronizerException {
+    public void editGoalParent(Goal goal) throws SynchronizerException {
         try {
             this.checkConnection();
-            callEditGoal.editGoal(
+            callEditGoal.editGoalParent(
                     this.connection.getAccessToken(),
                     goal);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
-            callEditGoal.editGoal(
+            callEditGoal.editGoalParent(
                     this.connection.getAccessToken(),
                     goal);
         }
     }
 
-    public void editNote(Note note)
-            throws SynchronizerException {
+    public void editNoteParent(Note note) throws SynchronizerException {
         try {
             this.checkConnection();
-            callEditNote.editNote(
+            callEditNote.editNoteParent(
                     this.connection.getAccessToken(),
                     note);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
-            callEditNote.editNote(
+            callEditNote.editNoteParent(
                     this.connection.getAccessToken(),
                     note);
         }
     }
 
-    public void editTask(Task task) throws SynchronizerException {
+    public void editTaskParent(Task task) throws SynchronizerException {
         try {
             this.checkConnection();
-            callEditTask.editTask(
+            callEditTask.editTaskParent(
                     this.connection.getAccessToken(),
                     task);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
-            callEditTask.editTask(
+            callEditTask.editTaskParent(
                     this.connection.getAccessToken(),
                     task);
         }

@@ -14,7 +14,7 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 
 final class CallAddContext extends AbstractCallContext {
 
-    public ContextBean addContext(String accessToken, Context context) throws SynchronizerException {
+    public ContextBean addContext(String accessToken, Context context, boolean syncParent) throws SynchronizerException {
         CheckUtils.isNotNull(accessToken);
         CheckUtils.isNotNull(context);
 

@@ -14,7 +14,7 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 
 final class CallAddNote extends AbstractCallNote {
 
-    public NoteBean addNote(String accessToken, Note note) throws SynchronizerException {
+    public NoteBean addNote(String accessToken, Note note, boolean syncParent) throws SynchronizerException {
         CheckUtils.isNotNull(accessToken);
         CheckUtils.isNotNull(note);
 

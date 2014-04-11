@@ -14,7 +14,7 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 
 final class CallAddGoal extends AbstractCallGoal {
 
-    public GoalBean addGoal(String accessToken, Goal goal) throws SynchronizerException {
+    public GoalBean addGoal(String accessToken, Goal goal, boolean syncParent) throws SynchronizerException {
         CheckUtils.isNotNull(accessToken);
         CheckUtils.isNotNull(goal);
 

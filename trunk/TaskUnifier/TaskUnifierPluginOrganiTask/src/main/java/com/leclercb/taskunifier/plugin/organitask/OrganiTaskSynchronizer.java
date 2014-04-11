@@ -5,44 +5,10 @@
  */
 package com.leclercb.taskunifier.plugin.organitask;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Properties;
-import java.util.concurrent.Callable;
-import java.util.logging.Level;
-
-import com.leclercb.taskunifier.plugin.organitask.calls.OrganiTaskAuthInfo;
-import com.leclercb.taskunifier.plugin.organitask.calls.OrganiTaskStatement;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.lang3.StringEscapeUtils;
-
 import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.properties.PropertyMap;
-import com.leclercb.commons.api.utils.EqualsUtils;
-import com.leclercb.taskunifier.api.models.Contact;
-import com.leclercb.taskunifier.api.models.ContactFactory;
-import com.leclercb.taskunifier.api.models.Context;
-import com.leclercb.taskunifier.api.models.ContextFactory;
-import com.leclercb.taskunifier.api.models.Folder;
-import com.leclercb.taskunifier.api.models.FolderFactory;
-import com.leclercb.taskunifier.api.models.Goal;
-import com.leclercb.taskunifier.api.models.GoalFactory;
-import com.leclercb.taskunifier.api.models.Location;
-import com.leclercb.taskunifier.api.models.LocationFactory;
-import com.leclercb.taskunifier.api.models.Model;
-import com.leclercb.taskunifier.api.models.ModelStatus;
-import com.leclercb.taskunifier.api.models.ModelType;
-import com.leclercb.taskunifier.api.models.Note;
-import com.leclercb.taskunifier.api.models.NoteFactory;
-import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.api.models.*;
 import com.leclercb.taskunifier.api.models.beans.ContactBean;
-import com.leclercb.taskunifier.api.models.beans.ContextBean;
-import com.leclercb.taskunifier.api.models.beans.FolderBean;
-import com.leclercb.taskunifier.api.models.beans.GoalBean;
-import com.leclercb.taskunifier.api.models.beans.LocationBean;
 import com.leclercb.taskunifier.api.models.beans.ModelBean;
 import com.leclercb.taskunifier.api.synchronizer.SynchronizerChoice;
 import com.leclercb.taskunifier.api.synchronizer.SynchronizerPlugin;
@@ -50,7 +16,16 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.gui.plugins.AbstractSynchronizer;
 import com.leclercb.taskunifier.gui.plugins.PluginApi;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
-import com.leclercb.taskunifier.plugin.toodledo.calls.exc.ToodledoApiException;
+import com.leclercb.taskunifier.plugin.organitask.calls.OrganiTaskAuthInfo;
+import com.leclercb.taskunifier.plugin.organitask.calls.OrganiTaskDeletedContact;
+import com.leclercb.taskunifier.plugin.organitask.calls.OrganiTaskStatement;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.lang3.StringEscapeUtils;
+
+import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.logging.Level;
 
 public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 
@@ -90,7 +65,6 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
                 ModelType.CONTEXT,
                 ModelType.FOLDER,
                 ModelType.GOAL,
-                ModelType.LOCATION,
                 ModelType.NOTE,
                 ModelType.CONTACT,
                 ModelType.NOTE,
@@ -106,71 +80,7 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
     @Override
     protected boolean isUpdatedModels(ModelType type)
             throws SynchronizerException {
-        if (type == ModelType.CONTACT) {
-            return true;
-        }
-
-        if (type == ModelType.CONTEXT) {
-            if (this.lastContextEdit == null
-                    || this.accountInfo.getLastContextEdit().compareTo(
-                    this.lastContextEdit) > 0) {
-                return true;
-            }
-
-            return false;
-        }
-
-        if (type == ModelType.FOLDER) {
-            if (this.lastFolderEdit == null
-                    || this.accountInfo.getLastFolderEdit().compareTo(
-                    this.lastFolderEdit) > 0) {
-                return true;
-            }
-
-            return false;
-        }
-
-        if (type == ModelType.GOAL) {
-            if (this.lastGoalEdit == null
-                    || this.accountInfo.getLastGoalEdit().compareTo(
-                    this.lastGoalEdit) > 0) {
-                return true;
-            }
-
-            return false;
-        }
-
-        if (type == ModelType.LOCATION) {
-            if (this.lastLocationEdit == null
-                    || this.accountInfo.getLastLocationEdit().compareTo(
-                    this.lastLocationEdit) > 0) {
-                return true;
-            }
-
-            return false;
-        }
-
-        if (type == ModelType.NOTE) {
-            if (this.lastNoteEdit == null
-                    || this.accountInfo.getLastNotebookEdit().compareTo(
-                    this.lastNoteEdit) > 0) {
-                return true;
-            }
-
-            return false;
-        }
-
-        if (type == ModelType.TASK) {
-            if (this.lastTaskEdit == null
-                    || this.accountInfo.getLastTaskEdit().compareTo(
-                    this.lastTaskEdit) > 0) {
-                return true;
-            }
-
-            return false;
-        }
-
-        return false;
+        return true;
     }
 
     @Override
@@ -201,74 +111,27 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
         }
 
         if (type == ModelType.CONTEXT) {
-            if (this.lastContextEdit == null
-                    || this.accountInfo.getLastContextEdit().compareTo(
-                    this.lastContextEdit) > 0) {
-                beans.addAll(Arrays.asList(this.statement.getContexts(this.accountInfo)));
-            }
-
+            beans.addAll(Arrays.asList(this.statement.getContexts(this.lastSync)));
             return beans;
         }
 
         if (type == ModelType.FOLDER) {
-            if (this.lastFolderEdit == null
-                    || this.accountInfo.getLastFolderEdit().compareTo(
-                    this.lastFolderEdit) > 0) {
-                beans.addAll(Arrays.asList(this.statement.getFolders(this.accountInfo)));
-            }
-
+            beans.addAll(Arrays.asList(this.statement.getFolders(this.lastSync)));
             return beans;
         }
 
         if (type == ModelType.GOAL) {
-            if (this.lastGoalEdit == null
-                    || this.accountInfo.getLastGoalEdit().compareTo(
-                    this.lastGoalEdit) > 0) {
-                beans.addAll(Arrays.asList(this.statement.getGoals(this.accountInfo)));
-            }
-
-            return beans;
-        }
-
-        if (type == ModelType.LOCATION) {
-            if (this.lastLocationEdit == null
-                    || this.accountInfo.getLastLocationEdit().compareTo(
-                    this.lastLocationEdit) > 0) {
-                beans.addAll(Arrays.asList(this.statement.getLocations(this.accountInfo)));
-            }
-
+            beans.addAll(Arrays.asList(this.statement.getGoals(this.lastSync)));
             return beans;
         }
 
         if (type == ModelType.NOTE) {
-            if (this.lastNoteEdit == null
-                    || this.accountInfo.getLastNotebookEdit().compareTo(
-                    this.lastNoteEdit) > 0) {
-                if (this.lastNoteEdit == null) {
-                    beans.addAll(Arrays.asList(this.statement.getNotes(this.accountInfo)));
-                } else {
-                    beans.addAll(Arrays.asList(this.statement.getNotesModifiedAfter(
-                            this.accountInfo,
-                            this.lastNoteEdit)));
-                }
-            }
-
+            beans.addAll(Arrays.asList(this.statement.getNotes(this.lastSync)));
             return beans;
         }
 
         if (type == ModelType.TASK) {
-            if (this.lastTaskEdit == null
-                    || this.accountInfo.getLastTaskEdit().compareTo(
-                    this.lastTaskEdit) > 0) {
-                if (this.lastTaskEdit == null) {
-                    beans.addAll(Arrays.asList(this.statement.getTasks(this.accountInfo)));
-                } else {
-                    beans.addAll(Arrays.asList(this.statement.getTasksModifiedAfter(
-                            this.accountInfo,
-                            this.lastTaskEdit)));
-                }
-            }
-
+            beans.addAll(Arrays.asList(this.statement.getTasks(this.lastSync)));
             return beans;
         }
 
@@ -288,56 +151,32 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 
         if (type == ModelType.CONTEXT) {
             for (Model model : models) {
-                ids.add(this.statement.addContext(
-                        this.accountInfo,
-                        (Context) model));
+                ids.add(this.statement.addContext((Context) model, false).getModelReferenceIds().get("organitask"));
             }
         }
 
         if (type == ModelType.FOLDER) {
             for (Model model : models) {
-                ids.add(this.statement.addFolder(
-                        this.accountInfo,
-                        (Folder) model));
+                ids.add(this.statement.addFolder((Folder) model, false).getModelReferenceIds().get("organitask"));
             }
         }
 
         if (type == ModelType.GOAL) {
             for (Model model : models) {
-                ids.add(this.statement.addGoal(this.accountInfo, (Goal) model));
-            }
-        }
-
-        if (type == ModelType.LOCATION) {
-            for (Model model : models) {
-                ids.add(this.statement.addLocation(
-                        this.accountInfo,
-                        (Location) model));
+                ids.add(this.statement.addGoal((Goal) model, false).getModelReferenceIds().get("organitask"));
             }
         }
 
         if (type == ModelType.NOTE) {
-            List<Note> notes = new ArrayList<Note>();
-
-            for (Model model : models)
-                notes.add((Note) model);
-
-            ids.addAll(this.statement.addNotes(
-                    this.accountInfo,
-                    notes.toArray(new Note[0])));
+            for (Model model : models) {
+                ids.add(this.statement.addNote((Note) model, false).getModelReferenceIds().get("organitask"));
+            }
         }
 
         if (type == ModelType.TASK) {
-            this.addedTasks = new ArrayList<Task>();
-
-            for (Model model : models)
-                this.addedTasks.add((Task) model);
-
-            ids.addAll(this.statement.addTasks(
-                    this.accountInfo,
-                    this.addedTasks.toArray(new Task[0]),
-                    false,
-                    false));
+            for (Model model : models) {
+                ids.add(this.statement.addTask((Task) model, false).getModelReferenceIds().get("organitask"));
+            }
         }
 
         return ids;
@@ -352,13 +191,11 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 
         if (type == ModelType.CONTEXT) {
             for (Model model : models) {
-                try {
-                    this.statement.editContext(
-                            this.accountInfo,
-                            (Context) model);
-                } catch (ToodledoApiException e) {
-                    this.handleUpdateModelException(e, model);
-                }
+                this.statement.editContext((Context) model, false);
+            }
+
+            for (Model model : models) {
+                this.statement.editContextParent((Context) model);
             }
 
             return;
@@ -366,11 +203,11 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 
         if (type == ModelType.FOLDER) {
             for (Model model : models) {
-                try {
-                    this.statement.editFolder(this.accountInfo, (Folder) model);
-                } catch (ToodledoApiException e) {
-                    this.handleUpdateModelException(e, model);
-                }
+                this.statement.editFolder((Folder) model, false);
+            }
+
+            for (Model model : models) {
+                this.statement.editFolderParent((Folder) model);
             }
 
             return;
@@ -378,64 +215,36 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 
         if (type == ModelType.GOAL) {
             for (Model model : models) {
-                try {
-                    this.statement.editGoal(this.accountInfo, (Goal) model);
-                } catch (ToodledoApiException e) {
-                    this.handleUpdateModelException(e, model);
-                }
+                this.statement.editGoal((Goal) model, false);
             }
 
-            return;
-        }
-
-        if (type == ModelType.LOCATION) {
             for (Model model : models) {
-                try {
-                    this.statement.editLocation(
-                            this.accountInfo,
-                            (Location) model);
-                } catch (ToodledoApiException e) {
-                    this.handleUpdateModelException(e, model);
-                }
+                this.statement.editGoalParent((Goal) model);
             }
 
             return;
         }
 
         if (type == ModelType.NOTE) {
-            List<Note> notes = new ArrayList<Note>();
+            for (Model model : models) {
+                this.statement.editNote((Note) model, false);
+            }
 
-            for (Model model : models)
-                notes.add((Note) model);
-
-            this.statement.editNotes(
-                    this.accountInfo,
-                    notes.toArray(new Note[0]));
+            for (Model model : models) {
+                this.statement.editNoteParent((Note) model);
+            }
 
             return;
         }
 
         if (type == ModelType.TASK) {
-            List<Task> tasks = new ArrayList<Task>();
+            for (Model model : models) {
+                this.statement.editTask((Task) model, false);
+            }
 
-            for (Model model : models)
-                tasks.add((Task) model);
-
-            this.statement.editTasks(
-                    this.accountInfo,
-                    tasks.toArray(new Task[0]),
-                    false,
-                    false);
-
-            tasks.addAll(this.addedTasks);
-
-            this.statement.editTasksParent(
-                    this.accountInfo,
-                    tasks.toArray(new Task[0]));
-
-            this.statement.editTasksMeta(
-                    this.accountInfo,
-                    tasks.toArray(new Task[0]));
+            for (Model model : models) {
+                this.statement.editTaskParent((Task) model);
+            }
 
             return;
         }
@@ -450,13 +259,7 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 
         if (type == ModelType.CONTEXT) {
             for (Model model : models) {
-                try {
-                    this.statement.deleteContext(
-                            this.accountInfo,
-                            (Context) model);
-                } catch (ToodledoApiException e) {
-                    this.handleDeleteModelException(e, model);
-                }
+                this.statement.deleteContext((Context) model);
             }
 
             return;
@@ -464,13 +267,7 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 
         if (type == ModelType.FOLDER) {
             for (Model model : models) {
-                try {
-                    this.statement.deleteFolder(
-                            this.accountInfo,
-                            (Folder) model);
-                } catch (ToodledoApiException e) {
-                    this.handleDeleteModelException(e, model);
-                }
+                this.statement.deleteFolder((Folder) model);
             }
 
             return;
@@ -478,52 +275,24 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 
         if (type == ModelType.GOAL) {
             for (Model model : models) {
-                try {
-                    this.statement.deleteGoal(this.accountInfo, (Goal) model);
-                } catch (ToodledoApiException e) {
-                    this.handleDeleteModelException(e, model);
-                }
-            }
-
-            return;
-        }
-
-        if (type == ModelType.LOCATION) {
-            for (Model model : models) {
-                try {
-                    this.statement.deleteLocation(
-                            this.accountInfo,
-                            (Location) model);
-                } catch (ToodledoApiException e) {
-                    this.handleDeleteModelException(e, model);
-                }
+                this.statement.deleteGoal((Goal) model);
             }
 
             return;
         }
 
         if (type == ModelType.NOTE) {
-            List<Note> notes = new ArrayList<Note>();
-
-            for (Model model : models)
-                notes.add((Note) model);
-
-            this.statement.deleteNotes(
-                    this.accountInfo,
-                    notes.toArray(new Note[0]));
+            for (Model model : models) {
+                this.statement.deleteNote((Note) model);
+            }
 
             return;
         }
 
         if (type == ModelType.TASK) {
-            List<Task> tasks = new ArrayList<Task>();
-
-            for (Model model : models)
-                tasks.add((Task) model);
-
-            this.statement.deleteTasks(
-                    this.accountInfo,
-                    tasks.toArray(new Task[0]));
+            for (Model model : models) {
+                this.statement.deleteTask((Task) model);
+            }
 
             return;
         }
@@ -539,156 +308,26 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
         }
 
         if (type == ModelType.CONTEXT) {
-            if (this.lastContextEdit == null
-                    || this.accountInfo.getLastContextEdit().compareTo(
-                    this.lastContextEdit) > 0) {
-                ContextBean[] beans = this.statement.getContexts(this.accountInfo);
-                List<Context> models = ContextFactory.getInstance().getList();
-
-                main:
-                for (Context model : models) {
-                    if (!model.getModelStatus().isEndUserStatus())
-                        continue;
-
-                    for (ContextBean bean : beans)
-                        if (EqualsUtils.equalsString(
-                                model.getModelReferenceId("toodledo"),
-                                bean.getModelReferenceIds().get("toodledo")))
-                            continue main;
-
-                    deletedModels.add(model.toBean());
-                }
-            }
+            deletedModels.addAll(Arrays.asList(this.statement.getDeletedContexts()));
         }
 
         if (type == ModelType.FOLDER) {
-            if (this.lastFolderEdit == null
-                    || this.accountInfo.getLastFolderEdit().compareTo(
-                    this.lastFolderEdit) > 0) {
-                FolderBean[] beans = this.statement.getFolders(this.accountInfo);
-                List<Folder> models = FolderFactory.getInstance().getList();
-
-                main:
-                for (Folder model : models) {
-                    if (!model.getModelStatus().isEndUserStatus())
-                        continue;
-
-                    for (FolderBean bean : beans)
-                        if (EqualsUtils.equalsString(
-                                model.getModelReferenceId("toodledo"),
-                                bean.getModelReferenceIds().get("toodledo")))
-                            continue main;
-
-                    deletedModels.add(model.toBean());
-                }
-            }
+            deletedModels.addAll(Arrays.asList(this.statement.getDeletedFolders()));
         }
 
         if (type == ModelType.GOAL) {
-            if (this.lastGoalEdit == null
-                    || this.accountInfo.getLastGoalEdit().compareTo(
-                    this.lastGoalEdit) > 0) {
-                GoalBean[] beans = this.statement.getGoals(this.accountInfo);
-                List<Goal> models = GoalFactory.getInstance().getList();
-
-                main:
-                for (Goal model : models) {
-                    if (!model.getModelStatus().isEndUserStatus())
-                        continue;
-
-                    for (GoalBean bean : beans)
-                        if (EqualsUtils.equalsString(
-                                model.getModelReferenceId("toodledo"),
-                                bean.getModelReferenceIds().get("toodledo")))
-                            continue main;
-
-                    deletedModels.add(model.toBean());
-                }
-            }
-        }
-
-        if (type == ModelType.LOCATION) {
-            if (this.lastLocationEdit == null
-                    || this.accountInfo.getLastLocationEdit().compareTo(
-                    this.lastLocationEdit) > 0) {
-                LocationBean[] beans = this.statement.getLocations(this.accountInfo);
-                List<Location> models = LocationFactory.getInstance().getList();
-
-                main:
-                for (Location model : models) {
-                    if (!model.getModelStatus().isEndUserStatus())
-                        continue;
-
-                    for (LocationBean bean : beans)
-                        if (EqualsUtils.equalsString(
-                                model.getModelReferenceId("toodledo"),
-                                bean.getModelReferenceIds().get("toodledo")))
-                            continue main;
-
-                    deletedModels.add(model.toBean());
-                }
-            }
+            deletedModels.addAll(Arrays.asList(this.statement.getDeletedGoals()));
         }
 
         if (type == ModelType.NOTE) {
-            if (this.lastNoteDelete == null
-                    || this.accountInfo.getLastNotebookDelete().compareTo(
-                    this.lastNoteDelete) > 0) {
-                deletedModels.addAll(Arrays.asList(this.statement.getDeletedNotes(
-                        this.accountInfo,
-                        this.getLastNoteDelete())));
-            }
+            deletedModels.addAll(Arrays.asList(this.statement.getDeletedNotes()));
         }
 
         if (type == ModelType.TASK) {
-            if (this.lastTaskDelete == null
-                    || this.accountInfo.getLastTaskDelete().compareTo(
-                    this.lastTaskDelete) > 0) {
-                deletedModels.addAll(Arrays.asList(this.statement.getDeletedTasks(
-                        this.accountInfo,
-                        this.getLastTaskDelete())));
-            }
+            deletedModels.addAll(Arrays.asList(this.statement.getDeletedTasks()));
         }
 
         return deletedModels;
-    }
-
-    private void handleUpdateModelException(
-            ToodledoApiException exc,
-            Model model) throws SynchronizerException {
-        if (exc.getError() != null) {
-            if (exc.getError().getCode() != 5)
-                throw exc;
-
-            switch (exc.getError().getType()) {
-                case CONTEXT:
-                case FOLDER:
-                case GOAL:
-                case LOCATION:
-                    return;
-            }
-        }
-
-        throw exc;
-    }
-
-    private void handleDeleteModelException(
-            ToodledoApiException exc,
-            Model model) throws ToodledoApiException {
-        if (exc.getError() != null) {
-            if (exc.getError().getCode() != 4)
-                throw exc;
-
-            switch (exc.getError().getType()) {
-                case CONTEXT:
-                case FOLDER:
-                case GOAL:
-                case LOCATION:
-                    return;
-            }
-        }
-
-        throw exc;
     }
 
     private void createContactsNote() throws SynchronizerException {
@@ -731,37 +370,37 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
                 @Override
                 public Void call() {
                     List<ModelBean> deletedContacts = OrganiTaskSynchronizer.this.getDeletedContacts();
-                    List<com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact> toodledoDeletedContacts = new ArrayList<com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact>();
+                    List<OrganiTaskDeletedContact> organitaskDeletedContacts = new ArrayList<OrganiTaskDeletedContact>();
 
                     for (ModelBean deletedContact : deletedContacts) {
-                        com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact toodledoDeletedContact = new com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact();
-                        toodledoDeletedContact.setModelId(deletedContact.getModelId());
-                        toodledoDeletedContact.setModelUpdateDate(deletedContact.getModelUpdateDate());
+                        OrganiTaskDeletedContact organitaskDeletedContact = new OrganiTaskDeletedContact();
+                        organitaskDeletedContact.setModelId(deletedContact.getModelId());
+                        organitaskDeletedContact.setModelUpdateDate(deletedContact.getModelUpdateDate());
 
-                        toodledoDeletedContacts.add(toodledoDeletedContact);
+                        organitaskDeletedContacts.add(organitaskDeletedContact);
                     }
 
                     List<Contact> contacts = ContactFactory.getInstance().getList();
                     for (Contact contact : contacts) {
                         if (contact.getModelStatus() == ModelStatus.TO_DELETE
                                 || contact.getModelStatus() == ModelStatus.DELETED) {
-                            com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact toodledoDeletedContact = null;
-                            for (com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact deletedContact : toodledoDeletedContacts) {
+                            OrganiTaskDeletedContact organitaskDeletedContact = null;
+                            for (OrganiTaskDeletedContact deletedContact : organitaskDeletedContacts) {
                                 if (contact.getModelId().equals(
                                         deletedContact.getModelId())) {
-                                    toodledoDeletedContact = deletedContact;
+                                    organitaskDeletedContact = deletedContact;
                                     break;
                                 }
                             }
 
-                            if (toodledoDeletedContact != null)
+                            if (organitaskDeletedContact != null)
                                 continue;
 
-                            toodledoDeletedContact = new com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact();
-                            toodledoDeletedContact.setModelId(contact.getModelId());
-                            toodledoDeletedContact.setModelUpdateDate(contact.getModelUpdateDate());
+                            organitaskDeletedContact = new OrganiTaskDeletedContact();
+                            organitaskDeletedContact.setModelId(contact.getModelId());
+                            organitaskDeletedContact.setModelUpdateDate(contact.getModelUpdateDate());
 
-                            toodledoDeletedContacts.add(toodledoDeletedContact);
+                            organitaskDeletedContacts.add(organitaskDeletedContact);
                         }
                     }
 
@@ -779,9 +418,9 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
                     }
 
                     ByteArrayOutputStream output = new ByteArrayOutputStream();
-                    com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact.encodeBeansToXML(
+                    OrganiTaskDeletedContact.encodeBeansToXML(
                             output,
-                            toodledoDeletedContacts.toArray(new com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact[0]));
+                            organitaskDeletedContacts.toArray(new OrganiTaskDeletedContact[0]));
                     String xml = "<!-- DO NOT EDIT THIS NOTE -->\n"
                             + output.toString();
                     note.setNote(StringEscapeUtils.escapeHtml4(xml));
@@ -808,9 +447,9 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 
         try {
             if (note != null) {
-                com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact[] deletedContacts = com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact.decodeBeansFromXML(IOUtils.toInputStream(StringEscapeUtils.unescapeHtml4(note.getNote())));
+                OrganiTaskDeletedContact[] deletedContacts = OrganiTaskDeletedContact.decodeBeansFromXML(IOUtils.toInputStream(StringEscapeUtils.unescapeHtml4(note.getNote())));
 
-                for (com.leclercb.taskunifier.plugin.toodledo.calls.OrganiTaskDeletedContact deletedContact : deletedContacts) {
+                for (OrganiTaskDeletedContact deletedContact : deletedContacts) {
                     ContactBean bean = new ContactBean();
                     bean.setModelId(deletedContact.getModelId());
                     bean.setModelStatus(ModelStatus.DELETED);
@@ -832,14 +471,7 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
     public void loadParameters(Properties properties) {
         PropertyMap p = new PropertyMap(properties);
 
-        this.setLastContextEdit(p.getCalendarProperty("toodledo.synchronizer.last_context_edit"));
-        this.setLastFolderEdit(p.getCalendarProperty("toodledo.synchronizer.last_folder_edit"));
-        this.setLastGoalEdit(p.getCalendarProperty("toodledo.synchronizer.last_goal_edit"));
-        this.setLastLocationEdit(p.getCalendarProperty("toodledo.synchronizer.last_location_edit"));
-        this.setLastNoteEdit(p.getCalendarProperty("toodledo.synchronizer.last_note_edit"));
-        this.setLastNoteDelete(p.getCalendarProperty("toodledo.synchronizer.last_note_delete"));
-        this.setLastTaskEdit(p.getCalendarProperty("toodledo.synchronizer.last_task_edit"));
-        this.setLastTaskDelete(p.getCalendarProperty("toodledo.synchronizer.last_task_delete"));
+        this.setLastSync(p.getCalendarProperty("organitask.synchronizer.last_sync"));
     }
 
     @Override
@@ -847,29 +479,8 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
         PropertyMap p = new PropertyMap(properties);
 
         p.setCalendarProperty(
-                "toodledo.synchronizer.last_context_edit",
-                this.getLastContextEdit());
-        p.setCalendarProperty(
-                "toodledo.synchronizer.last_folder_edit",
-                this.getLastFolderEdit());
-        p.setCalendarProperty(
-                "toodledo.synchronizer.last_goal_edit",
-                this.getLastGoalEdit());
-        p.setCalendarProperty(
-                "toodledo.synchronizer.last_location_edit",
-                this.getLastLocationEdit());
-        p.setCalendarProperty(
-                "toodledo.synchronizer.last_note_edit",
-                this.getLastNoteEdit());
-        p.setCalendarProperty(
-                "toodledo.synchronizer.last_note_delete",
-                this.getLastNoteDelete());
-        p.setCalendarProperty(
-                "toodledo.synchronizer.last_task_edit",
-                this.getLastTaskEdit());
-        p.setCalendarProperty(
-                "toodledo.synchronizer.last_task_delete",
-                this.getLastTaskDelete());
+                "organitask.synchronizer.last_sync",
+                this.getLastSync());
     }
 
 }
