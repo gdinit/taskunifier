@@ -14,6 +14,7 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerNotConnectedExc
 import com.leclercb.taskunifier.gui.plugins.PluginApi;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
 import com.leclercb.taskunifier.plugin.organitask.OrganiTaskApi;
+import com.leclercb.taskunifier.plugin.organitask.calls.exc.OrganiTaskConnectionException;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
@@ -43,56 +44,8 @@ abstract class AbstractCall {
 
     protected String callGet(
             String path,
-            List<NameValuePair> parameters) throws SynchronizerException {
-        try {
-            HttpResponse response = HttpUtils.getHttpGetResponse(
-                    URIUtils.createURI(
-                            this.getScheme(),
-                            OrganiTaskApi.getInstance().getApiUrl(),
-                            -1,
-                            path,
-                            URLEncodedUtils.format(parameters, "UTF-8"),
-                            null),
-                    OrganiTaskApi.getInstance().getProxyHost(),
-                    OrganiTaskApi.getInstance().getProxyPort(),
-                    OrganiTaskApi.getInstance().getProxyUsername(),
-                    OrganiTaskApi.getInstance().getProxyPassword());
-
-            PluginLogger.getLogger().fine(
-                    URIUtils.createURI(
-                            this.getScheme(),
-                            OrganiTaskApi.getInstance().getApiUrl(),
-                            -1,
-                            path,
-                            URLEncodedUtils.format(parameters, "UTF-8"),
-                            null).toString());
-
-            if (!response.isSuccessfull()) {
-                PluginLogger.getLogger().warning(
-                        response.getCode() + ": " + response.getMessage());
-
-                throw new SynchronizerHttpException(
-                        false,
-                        response.getCode(),
-                        response.getMessage());
-            }
-
-            PluginLogger.getLogger().fine(response.getContent());
-
-            return response.getContent();
-        } catch (NoRouteToHostException e) {
-            throw new SynchronizerNotConnectedException(
-                    true,
-                    e.getMessage(),
-                    PluginApi.getTranslation("error.not_connected_internet"));
-        } catch (UnknownHostException e) {
-            throw new SynchronizerNotConnectedException(
-                    true,
-                    e.getMessage(),
-                    PluginApi.getTranslation("error.not_connected_internet"));
-        } catch (Exception e) {
-            throw new SynchronizerHttpException(false, 0, e.getMessage(), e);
-        }
+            List<NameValuePair> params) throws SynchronizerException {
+        return this.call("GET", path, params, null);
     }
 
     protected String call(
@@ -100,10 +53,18 @@ abstract class AbstractCall {
             String path,
             String accessToken,
             String body) throws SynchronizerException {
-        try {
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("access_token", accessToken));
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("access_token", accessToken));
 
+        return this.call(requestMethod, path, params, body);
+    }
+
+    protected String call(
+            String requestMethod,
+            String path,
+            List<NameValuePair> params,
+            String body) throws SynchronizerException {
+        try {
             URI uri = URIUtils.createURI(
                     this.getScheme(),
                     OrganiTaskApi.getInstance().getApiUrl(),
@@ -122,16 +83,28 @@ abstract class AbstractCall {
                     OrganiTaskApi.getInstance().getProxyUsername(),
                     OrganiTaskApi.getInstance().getProxyPassword());
 
-            PluginLogger.getLogger().fine(uri + "\nBody:\n" + body);
+            if (body == null) {
+                PluginLogger.getLogger().fine(uri.toString());
+            } else {
+                PluginLogger.getLogger().fine(uri + "\nBody:\n" + body);
+            }
 
             if (!response.isSuccessfull()) {
                 PluginLogger.getLogger().warning(
                         response.getCode() + ": " + response.getMessage());
 
-                throw new SynchronizerHttpException(
-                        false,
-                        response.getCode(),
-                        response.getMessage());
+                if (response.getCode() == 403) {
+                    throw new OrganiTaskConnectionException(
+                            true,
+                            OrganiTaskApi.getInstance().getApiId(),
+                            response.getCode() + "",
+                            response.getMessage());
+                } else {
+                    throw new SynchronizerHttpException(
+                            false,
+                            response.getCode(),
+                            response.getMessage());
+                }
             }
 
             PluginLogger.getLogger().fine(response.getContent());

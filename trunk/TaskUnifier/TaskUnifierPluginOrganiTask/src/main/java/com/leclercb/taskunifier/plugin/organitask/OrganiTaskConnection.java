@@ -5,28 +5,22 @@
  */
 package com.leclercb.taskunifier.plugin.organitask;
 
-import java.net.NoRouteToHostException;
-import java.net.URI;
-import java.net.UnknownHostException;
-import java.util.Properties;
-
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.commons.api.utils.EqualsUtils;
-import com.leclercb.commons.api.utils.HttpResponse;
-import com.leclercb.commons.api.utils.HttpUtils;
 import com.leclercb.taskunifier.api.synchronizer.Connection;
-import com.leclercb.taskunifier.api.synchronizer.exc.*;
+import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerConnectionException;
+import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
+import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerSettingsException;
 import com.leclercb.taskunifier.gui.plugins.PluginApi;
 import com.leclercb.taskunifier.gui.utils.DesktopUtils;
 import com.leclercb.taskunifier.plugin.organitask.calls.OrganiTaskAuthInfo;
 import com.leclercb.taskunifier.plugin.organitask.calls.OrganiTaskStatement;
 import com.leclercb.taskunifier.plugin.organitask.calls.OrganiTaskToken;
+import com.leclercb.taskunifier.plugin.organitask.calls.exc.OrganiTaskConnectionException;
 import com.leclercb.taskunifier.plugin.organitask.translations.PluginTranslations;
+
+import javax.swing.*;
+import java.util.Properties;
 
 public class OrganiTaskConnection implements Connection {
 
@@ -64,7 +58,7 @@ public class OrganiTaskConnection implements Connection {
     }
 
     public OrganiTaskAuthInfo getAuthInfo() {
-        return this.accountInfo;
+        return this.authInfo;
     }
 
     @Override
@@ -124,17 +118,13 @@ public class OrganiTaskConnection implements Connection {
             } else {
                 try {
                     this.authInfo = this.statement.getAuthInfo();
-                } catch (SynchronizerHttpException e) {
-                    if (e.getCode() == 403) {
-                        token = OrganiTaskStatement.refreshToken(this.refreshToken);
+                } catch (OrganiTaskConnectionException e) {
+                    token = OrganiTaskStatement.refreshToken(this.refreshToken);
 
-                        this.accessToken = token.getAccessToken();
-                        this.refreshToken = token.getRefreshToken();
+                    this.accessToken = token.getAccessToken();
+                    this.refreshToken = token.getRefreshToken();
 
-                        this.authInfo = this.statement.getAuthInfo();
-                    } else {
-                        throw e;
-                    }
+                    this.authInfo = this.statement.getAuthInfo();
                 }
             }
 

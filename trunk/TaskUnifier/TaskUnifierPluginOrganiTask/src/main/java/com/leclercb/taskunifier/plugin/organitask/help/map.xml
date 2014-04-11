@@ -2,7 +2,7 @@
 
 <map version="1.0">
 
-	<mapID target="plugin_toodledo_main" url="pages/main.html" />
-	<mapID target="plugin_toodledo_configuration" url="pages/configuration.html" />
+	<mapID target="plugin_organitask_main" url="pages/main.html" />
+	<mapID target="plugin_organitask_configuration" url="pages/configuration.html" />
 	
 </map>

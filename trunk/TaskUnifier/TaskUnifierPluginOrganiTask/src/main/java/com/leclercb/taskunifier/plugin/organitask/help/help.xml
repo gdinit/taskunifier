@@ -3,7 +3,7 @@
 <helpset version="1.0">
 
 	<!-- title -->
-	<title>Toodledo Plugin Help</title>
+	<title>OrganiTask Plugin Help</title>
 
 	<!-- maps -->
 	<maps>
@@ -32,7 +32,7 @@
 		<name>main</name>
 		<size width="900" height="600" />
 		<location x="50" y="50" />
-		<title>Toodledo Plugin Help</title>
+		<title>OrganiTask Plugin Help</title>
 		<toolbar>
 			<helpaction>javax.help.BackAction</helpaction>
 			<helpaction>javax.help.ForwardAction</helpaction>
