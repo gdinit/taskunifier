@@ -136,7 +136,7 @@ public final class HttpUtils {
 
         InputStream inputStream = null;
 
-        if (connection.getResponseCode() > 200 && connection.getResponseCode() < 300)
+        if (connection.getResponseCode() >= 200 && connection.getResponseCode() < 300)
             inputStream = connection.getInputStream();
         else
             inputStream = connection.getErrorStream();
@@ -149,7 +149,7 @@ public final class HttpUtils {
 
         byte[] bytes = null;
 
-        if (connection.getResponseCode() > 200 && connection.getResponseCode() < 300)
+        if (connection.getResponseCode() >= 200 && connection.getResponseCode() < 300)
             bytes = IOUtils.toByteArray(inputStream);
 
         return new HttpResponse(

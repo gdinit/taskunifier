@@ -4,6 +4,7 @@ HISTORY
 Version 4.1.1
     - Minor:
         - Auto-save before sync
+        - Synchronize with OrganiTask
 
 Version 4.1.0
     - Minor:

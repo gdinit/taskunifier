@@ -30,9 +30,9 @@ public class OrganiTaskGuiPlugin extends OrganiTaskPlugin implements Synchronize
             PropertyMap properties = new PropertyMap();
             properties.load(Resources.class.getResourceAsStream("private.properties"));
 
-            OrganiTaskApi.getInstance().setClientId(properties.getStringProperty("plugin.organitask.client_id"));
-            OrganiTaskApi.getInstance().setClientRandomId(properties.getStringProperty("plugin.organitask.client_random_id"));
-            OrganiTaskApi.getInstance().setClientSecret(properties.getStringProperty("plugin.organitask.client_secret"));
+            OrganiTaskApi.getInstance().setClientId(properties.getStringProperty("organitask.client_id"));
+            OrganiTaskApi.getInstance().setClientRandomId(properties.getStringProperty("organitask.client_random_id"));
+            OrganiTaskApi.getInstance().setClientSecret(properties.getStringProperty("organitask.client_secret"));
         } catch (Exception e) {
             PluginLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
         }
