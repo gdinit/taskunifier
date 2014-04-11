@@ -25,6 +25,7 @@ final class CallAddTask extends AbstractCallTask {
         node.put("star", task.isStar());
         node.put("tags", task.getTags().toString());
         node.put("duration", task.getLength());
+        node.put("node", task.getNote());
 
         String content = super.call("POST", "/tasks", accessToken, node.toString());
 
