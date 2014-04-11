@@ -72,9 +72,9 @@ abstract class AbstractCallDeleted extends AbstractCall {
     private ModelBean getModelBean(ModelType modelType, JsonNode node) {
         ModelBean bean = ModelFactoryUtils.getFactory(modelType).createOriginalBean();
 
-        bean.getModelReferenceIds().put("organitask", node.path("id").textValue());
+        bean.getModelReferenceIds().put("organitask", node.path("id").asText());
         bean.setModelStatus(ModelStatus.DELETED);
-        bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("deletion_date").longValue()));
+        bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("deletion_date").asLong()));
 
         return bean;
     }

@@ -75,17 +75,16 @@ abstract class AbstractCallTask extends AbstractCall {
     private TaskBean getTaskBean(JsonNode node, ModelId parentId) {
         TaskBean bean = TaskFactory.getInstance().createOriginalBean();
 
-        bean.setModelId(new ModelId());
-        bean.getModelReferenceIds().put("organitask", node.path("id").textValue());
+        bean.getModelReferenceIds().put("organitask", node.path("id").asText());
         bean.setModelStatus(ModelStatus.LOADED);
-        bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").longValue()));
+        bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").asLong()));
         bean.setParent(parentId);
-        bean.setTitle(node.path("title").textValue());
-        bean.setCompleted(node.path("completed").booleanValue());
-        bean.setStar(node.path("star").booleanValue());
-        bean.setTags(TagList.fromString(node.path("tags").textValue()));
-        bean.setLength(node.path("duration").intValue());
-        bean.setNote(node.path("note").textValue());
+        bean.setTitle(node.path("title").asText());
+        bean.setCompleted(node.path("completed").asBoolean());
+        bean.setStar(node.path("star").asBoolean());
+        bean.setTags(TagList.fromString(node.path("tags").asText()));
+        bean.setLength(node.path("duration").asInt());
+        bean.setNote(node.path("note").asText());
 
         return bean;
     }

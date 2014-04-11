@@ -47,19 +47,19 @@ final class CallGetAuthInfo extends AbstractCall {
 
             OrganiTaskAuthInfo token = new OrganiTaskAuthInfo();
 
-            token.setLocale(root.path("locale").textValue());
-            token.setTeamMemberId(root.path("team_member_id").intValue());
-            token.setUserId(root.path("user_id").intValue());
-            token.setTeamId(root.path("team_id").intValue());
-            token.setTeamMain(root.path("team_main").booleanValue());
-            token.setOfferId(root.path("offer_id").intValue());
-            token.setRole(root.path("role").textValue());
-            token.setAccountType(root.path("account_type").textValue());
-            token.setPoints(root.path("points").intValue());
-            token.setUserEmail(root.path("user_email").textValue());
-            token.setTeamTitle(root.path("team_title").textValue());
-            token.setSubscriptionValidity(root.path("subscription_validity").intValue());
-            token.setSubscriptionDaysLeft(root.path("subscription_days_left").intValue());
+            token.setLocale(root.path("locale").asText());
+            token.setTeamMemberId(root.path("team_member_id").asInt());
+            token.setUserId(root.path("user_id").asInt());
+            token.setTeamId(root.path("team_id").asInt());
+            token.setTeamMain(root.path("team_main").asBoolean());
+            token.setOfferId(root.path("offer_id").asInt());
+            token.setRole(root.path("role").asText());
+            token.setAccountType(root.path("account_type").asText());
+            token.setPoints(root.path("points").asInt());
+            token.setUserEmail(root.path("user_email").asText());
+            token.setTeamTitle(root.path("team_title").asText());
+            token.setSubscriptionValidity(root.path("subscription_validity").asInt());
+            token.setSubscriptionDaysLeft(root.path("subscription_days_left").asInt());
 
             return token;
         } catch (Exception e) {
