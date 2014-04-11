@@ -85,6 +85,7 @@ abstract class AbstractCallTask extends AbstractCall {
         bean.setStar(node.path("star").booleanValue());
         bean.setTags(TagList.fromString(node.path("tags").textValue()));
         bean.setLength(node.path("duration").intValue());
+        bean.setNote(node.path("note").textValue());
 
         return bean;
     }

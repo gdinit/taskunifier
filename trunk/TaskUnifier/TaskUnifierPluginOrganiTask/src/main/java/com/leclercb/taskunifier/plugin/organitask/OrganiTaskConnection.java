@@ -82,8 +82,8 @@ public class OrganiTaskConnection implements Connection {
 
         try {
             final String authorizationUrl = OrganiTaskApi.getInstance().getWebUrl() + "/web/en/app?action=authorize&client_id=" +
-                    OrganiTaskApi.getInstance().getClientId() +
-                    "&redirect_uri=" + URLEncoder.encode(OrganiTaskApi.getInstance().getWebUrl() + "/web/en/app?action=oauth_code&response_type=code");
+                    OrganiTaskApi.getInstance().getClientId() + "_" + OrganiTaskApi.getInstance().getClientRandomId() +
+                    "&redirect_uri=" + URLEncoder.encode(OrganiTaskApi.getInstance().getWebUrl() + "/web/en/app?action=oauth_code") + "&response_type=code";
 
             OrganiTaskToken token = null;
 

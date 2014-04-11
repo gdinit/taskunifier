@@ -28,6 +28,7 @@ final class CallEditTask extends AbstractCallTask {
         node.put("star", task.isStar());
         node.put("tags", task.getTags().toString());
         node.put("duration", task.getLength());
+        node.put("node", task.getNote());
 
         if (syncParent)
             node.put("parent_id", task.getModelReferenceId("organitask"));
