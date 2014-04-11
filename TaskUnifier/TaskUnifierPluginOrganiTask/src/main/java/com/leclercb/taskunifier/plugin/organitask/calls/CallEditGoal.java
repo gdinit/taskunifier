@@ -14,7 +14,7 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 
 final class CallEditGoal extends AbstractCallGoal {
 
-    public GoalBean editGoal(String accessToken, Goal goal) throws SynchronizerException {
+    public GoalBean editGoal(String accessToken, Goal goal, boolean syncParent) throws SynchronizerException {
         CheckUtils.isNotNull(accessToken);
         CheckUtils.isNotNull(goal);
 
@@ -25,6 +25,25 @@ final class CallEditGoal extends AbstractCallGoal {
         ObjectNode node = mapper.createObjectNode();
         node.put("title", goal.getTitle());
         node.put("level", OrganiTaskTranslations.translateGoalLevel(goal.getLevel()));
+
+        if (syncParent)
+            node.put("parent_id", goal.getModelReferenceId("organitask"));
+
+        String content = super.call("PUT", "/goals/" + goal.getModelReferenceId("organitask"), accessToken, node.toString());
+
+        return this.getResponseMessage(content)[0];
+    }
+
+    public GoalBean editGoalParent(String accessToken, Goal goal) throws SynchronizerException {
+        CheckUtils.isNotNull(accessToken);
+        CheckUtils.isNotNull(goal);
+
+        if (goal.getModelReferenceId("organitask") == null)
+            throw new IllegalArgumentException("You cannot edit a new goal");
+
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode node = mapper.createObjectNode();
+        node.put("parent_id", goal.getModelReferenceId("organitask"));
 
         String content = super.call("PUT", "/goals/" + goal.getModelReferenceId("organitask"), accessToken, node.toString());
 

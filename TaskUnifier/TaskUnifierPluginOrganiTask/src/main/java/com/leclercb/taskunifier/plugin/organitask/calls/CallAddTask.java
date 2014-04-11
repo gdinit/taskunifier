@@ -14,7 +14,7 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 
 final class CallAddTask extends AbstractCallTask {
 
-    public TaskBean addTask(String accessToken, Task task) throws SynchronizerException {
+    public TaskBean addTask(String accessToken, Task task, boolean syncParent) throws SynchronizerException {
         CheckUtils.isNotNull(accessToken);
         CheckUtils.isNotNull(task);
 
