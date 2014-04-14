@@ -84,9 +84,9 @@ abstract class AbstractCall {
                     OrganiTaskApi.getInstance().getProxyPassword());
 
             if (body == null) {
-                PluginLogger.getLogger().fine(uri.toString());
+                PluginLogger.getLogger().fine(requestMethod + ": " + uri.toString());
             } else {
-                PluginLogger.getLogger().fine(uri + "\nBody:\n" + body);
+                PluginLogger.getLogger().fine(requestMethod + ": " + uri + "\nBody:\n" + body);
             }
 
             if (!response.isSuccessfull()) {
