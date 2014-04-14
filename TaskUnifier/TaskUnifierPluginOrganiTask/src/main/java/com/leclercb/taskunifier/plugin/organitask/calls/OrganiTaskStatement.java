@@ -232,20 +232,18 @@ public class OrganiTaskStatement {
         }
     }
 
-    public NoteBean addNote(Note note, boolean syncParent)
+    public NoteBean addNote(Note note)
             throws SynchronizerException {
         try {
             this.checkConnection();
             return callAddNote.addNote(
                     this.connection.getAccessToken(),
-                    note,
-                    syncParent);
+                    note);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
             return callAddNote.addNote(
                     this.connection.getAccessToken(),
-                    note,
-                    syncParent);
+                    note);
         }
     }
 
@@ -316,20 +314,18 @@ public class OrganiTaskStatement {
         }
     }
 
-    public void editNote(Note note, boolean syncParent)
+    public void editNote(Note note)
             throws SynchronizerException {
         try {
             this.checkConnection();
             callEditNote.editNote(
                     this.connection.getAccessToken(),
-                    note,
-                    syncParent);
+                    note);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
             callEditNote.editNote(
                     this.connection.getAccessToken(),
-                    note,
-                    syncParent);
+                    note);
         }
     }
 
@@ -388,20 +384,6 @@ public class OrganiTaskStatement {
             callEditGoal.editGoalParent(
                     this.connection.getAccessToken(),
                     goal);
-        }
-    }
-
-    public void editNoteParent(Note note) throws SynchronizerException {
-        try {
-            this.checkConnection();
-            callEditNote.editNoteParent(
-                    this.connection.getAccessToken(),
-                    note);
-        } catch (OrganiTaskConnectionException e) {
-            this.connection.reconnect();
-            callEditNote.editNoteParent(
-                    this.connection.getAccessToken(),
-                    note);
         }
     }
 

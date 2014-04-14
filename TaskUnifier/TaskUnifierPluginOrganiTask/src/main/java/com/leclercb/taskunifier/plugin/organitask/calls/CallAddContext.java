@@ -20,6 +20,12 @@ final class CallAddContext extends AbstractCallContext {
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
+
+        if (syncParent && context.getParent() != null && context.getParent().getModelReferenceId("organitask") != null)
+            node.put("parent_id", context.getParent().getModelReferenceId("organitask"));
+        else
+            node.put("parent_id", (String) null);
+
         node.put("title", context.getTitle());
 
         String content = super.call("POST", "/contexts", accessToken, node.toString());

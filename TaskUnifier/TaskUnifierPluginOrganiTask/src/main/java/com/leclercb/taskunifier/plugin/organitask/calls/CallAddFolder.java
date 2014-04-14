@@ -20,6 +20,12 @@ final class CallAddFolder extends AbstractCallFolder {
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
+
+        if (syncParent && folder.getParent() != null && folder.getParent().getModelReferenceId("organitask") != null)
+            node.put("parent_id", folder.getParent().getModelReferenceId("organitask"));
+        else
+            node.put("parent_id", (String) null);
+
         node.put("title", folder.getTitle());
 
         String content = super.call("POST", "/folders", accessToken, node.toString());

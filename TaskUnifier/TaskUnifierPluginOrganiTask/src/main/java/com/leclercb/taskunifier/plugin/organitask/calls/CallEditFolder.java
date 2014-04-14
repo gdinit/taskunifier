@@ -23,10 +23,13 @@ final class CallEditFolder extends AbstractCallFolder {
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
-        node.put("title", folder.getTitle());
 
-        if (syncParent)
-            node.put("parent_id", folder.getModelReferenceId("organitask"));
+        if (syncParent && folder.getParent() != null && folder.getParent().getModelReferenceId("organitask") != null)
+            node.put("parent_id", folder.getParent().getModelReferenceId("organitask"));
+        else
+            node.put("parent_id", (String) null);
+
+        node.put("title", folder.getTitle());
 
         String content = super.call("PUT", "/folders/" + folder.getModelReferenceId("organitask"), accessToken, node.toString());
 
@@ -42,7 +45,11 @@ final class CallEditFolder extends AbstractCallFolder {
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
-        node.put("parent_id", folder.getModelReferenceId("organitask"));
+
+        if (folder.getParent() != null && folder.getParent().getModelReferenceId("organitask") != null)
+            node.put("parent_id", folder.getParent().getModelReferenceId("organitask"));
+        else
+            node.put("parent_id", (String) null);
 
         String content = super.call("PUT", "/folders/" + folder.getModelReferenceId("organitask"), accessToken, node.toString());
 
