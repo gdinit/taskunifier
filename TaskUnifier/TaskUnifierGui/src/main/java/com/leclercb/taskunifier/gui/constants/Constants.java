@@ -94,7 +94,7 @@ public final class Constants {
 	public static final String TITLE_PRO = "TaskUnifier Pro";
 	public static final boolean BETA = false;
 	public static final String DEFAULT_SUFFIX = "_v3";
-	public static final int PLUGIN_API_VERSION = 40;
+	public static final int PLUGIN_API_VERSION = 41;
 	public static final int ITEM_TRIAL_ID = 11;
 	
 	public static final String PLUGINS_FILE = "http://www.taskunifier.com/plugins/plugins.xml";

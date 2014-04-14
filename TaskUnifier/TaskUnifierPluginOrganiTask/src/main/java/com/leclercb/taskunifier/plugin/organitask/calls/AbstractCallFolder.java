@@ -11,6 +11,7 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.FolderFactory;
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.ModelStatus;
+import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.beans.FolderBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerParsingException;
@@ -36,7 +37,7 @@ abstract class AbstractCallFolder extends AbstractCall {
             JsonNode root = mapper.readTree(content);
 
             List<FolderBean> folders = new ArrayList<FolderBean>();
-            folders = this.getFolderBeans(root, null);
+            folders = this.getFolderBeans(root);
 
             return folders.toArray(new FolderBean[0]);
         } catch (Exception e) {
@@ -49,7 +50,7 @@ abstract class AbstractCallFolder extends AbstractCall {
         }
     }
 
-    private List<FolderBean> getFolderBeans(JsonNode node, ModelId parentId) {
+    private List<FolderBean> getFolderBeans(JsonNode node) {
         List<FolderBean> folders = new ArrayList<FolderBean>();
 
         if (node.isArray()) {
@@ -58,28 +59,31 @@ abstract class AbstractCallFolder extends AbstractCall {
             while (iterator.hasNext()) {
                 JsonNode item = iterator.next();
 
-                FolderBean bean = this.getFolderBean(item, parentId);
+                FolderBean bean = this.getFolderBean(item);
                 folders.add(bean);
-                folders.addAll(this.getFolderBeans(item.path("folders"), bean.getModelId()));
+                folders.addAll(this.getFolderBeans(item.path("folders")));
             }
         } else {
-            FolderBean bean = this.getFolderBean(node, parentId);
+            FolderBean bean = this.getFolderBean(node);
             folders.add(bean);
 
             if (node.has("folders") && node.path("folders").isArray())
-                folders.addAll(this.getFolderBeans(node.path("folders"), bean.getModelId()));
+                folders.addAll(this.getFolderBeans(node.path("folders")));
         }
 
         return folders;
     }
 
-    private FolderBean getFolderBean(JsonNode node, ModelId parentId) {
+    private FolderBean getFolderBean(JsonNode node) {
         FolderBean bean = FolderFactory.getInstance().createOriginalBean();
 
         bean.getModelReferenceIds().put("organitask", node.path("id").asText());
         bean.setModelStatus(ModelStatus.LOADED);
+        bean.setModelCreationDate(OrganiTaskTranslations.translateUTCDate(node.path("creation_date").asLong()));
         bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").asLong()));
-        bean.setParent(parentId);
+        bean.setParent(OrganiTaskTranslations.getModelOrCreateShell(
+                ModelType.FOLDER,
+                node.path("parent_id").asText()));
         bean.setTitle(node.path("title").asText());
 
         return bean;

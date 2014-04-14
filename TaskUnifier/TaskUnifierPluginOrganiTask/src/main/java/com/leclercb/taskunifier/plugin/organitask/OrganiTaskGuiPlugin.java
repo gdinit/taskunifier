@@ -68,7 +68,7 @@ public class OrganiTaskGuiPlugin extends OrganiTaskPlugin implements Synchronize
 
     @Override
     public int getPluginApiVersion() {
-        return 40; // See: Constants.PLUGIN_API_VERSION
+        return 41; // See: Constants.PLUGIN_API_VERSION
     }
 
     @Override

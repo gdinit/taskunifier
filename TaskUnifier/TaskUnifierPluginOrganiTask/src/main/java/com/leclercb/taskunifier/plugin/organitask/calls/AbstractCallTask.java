@@ -8,10 +8,7 @@ package com.leclercb.taskunifier.plugin.organitask.calls;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leclercb.commons.api.utils.CheckUtils;
-import com.leclercb.taskunifier.api.models.ModelId;
-import com.leclercb.taskunifier.api.models.ModelStatus;
-import com.leclercb.taskunifier.api.models.TagList;
-import com.leclercb.taskunifier.api.models.TaskFactory;
+import com.leclercb.taskunifier.api.models.*;
 import com.leclercb.taskunifier.api.models.beans.TaskBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerParsingException;
@@ -37,7 +34,7 @@ abstract class AbstractCallTask extends AbstractCall {
             JsonNode root = mapper.readTree(content);
 
             List<TaskBean> tasks = new ArrayList<TaskBean>();
-            tasks = this.getTaskBeans(root, null);
+            tasks = this.getTaskBeans(root);
 
             return tasks.toArray(new TaskBean[0]);
         } catch (Exception e) {
@@ -50,7 +47,7 @@ abstract class AbstractCallTask extends AbstractCall {
         }
     }
 
-    private List<TaskBean> getTaskBeans(JsonNode node, ModelId parentId) {
+    private List<TaskBean> getTaskBeans(JsonNode node) {
         List<TaskBean> tasks = new ArrayList<TaskBean>();
 
         if (node.isArray()) {
@@ -59,33 +56,53 @@ abstract class AbstractCallTask extends AbstractCall {
             while (iterator.hasNext()) {
                 JsonNode item = iterator.next();
 
-                TaskBean bean = this.getTaskBean(item, parentId);
+                TaskBean bean = this.getTaskBean(item);
                 tasks.add(bean);
-                tasks.addAll(this.getTaskBeans(item.path("tasks"), bean.getModelId()));
+                tasks.addAll(this.getTaskBeans(item.path("tasks")));
             }
         } else {
-            TaskBean bean = this.getTaskBean(node, parentId);
+            TaskBean bean = this.getTaskBean(node);
             tasks.add(bean);
 
             if (node.has("tasks") && node.path("tasks").isArray())
-                tasks.addAll(this.getTaskBeans(node.path("tasks"), bean.getModelId()));
+                tasks.addAll(this.getTaskBeans(node.path("tasks")));
         }
 
         return tasks;
     }
 
-    private TaskBean getTaskBean(JsonNode node, ModelId parentId) {
+    private TaskBean getTaskBean(JsonNode node) {
         TaskBean bean = TaskFactory.getInstance().createOriginalBean();
 
         bean.getModelReferenceIds().put("organitask", node.path("id").asText());
         bean.setModelStatus(ModelStatus.LOADED);
+        bean.setModelCreationDate(OrganiTaskTranslations.translateUTCDate(node.path("creation_date").asLong()));
         bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").asLong()));
-        bean.setParent(parentId);
         bean.setTitle(node.path("title").asText());
         bean.setCompleted(node.path("completed").asBoolean());
+        bean.setCompletedOn(OrganiTaskTranslations.translateUTCDate(node.path("completion_date").asLong()));
         bean.setStar(node.path("star").asBoolean());
         bean.setTags(TagList.fromString(node.path("tags").asText()));
+        bean.getContexts().add(OrganiTaskTranslations.getModelOrCreateShell(
+                ModelType.CONTEXT,
+                node.path("context_id").asText()));
+        bean.setFolder(OrganiTaskTranslations.getModelOrCreateShell(
+                ModelType.FOLDER,
+                node.path("folder_id").asText()));
+        bean.getGoals().add(OrganiTaskTranslations.getModelOrCreateShell(
+                ModelType.GOAL,
+                node.path("goal_id").asText()));
+        bean.setParent(OrganiTaskTranslations.getModelOrCreateShell(
+                ModelType.TASK,
+                node.path("parent_id").asText()));
+        bean.setStartDate(OrganiTaskTranslations.translateUTCDate(node.path("start_date").asLong()));
+        bean.setDueDate(OrganiTaskTranslations.translateUTCDate(node.path("due_date").asLong()));
+        bean.setStartDateReminder(node.path("start_date_reminder").asInt());
+        bean.setDueDateReminder(node.path("due_date_reminder").asInt());
         bean.setLength(node.path("duration").asInt());
+        bean.setRepeatFrom(OrganiTaskTranslations.translateTaskRepeatFrom(node.path("repeat_from").asText()));
+        bean.setProgress(node.path("progress").asInt() / 100);
+        bean.setPriority(OrganiTaskTranslations.translateTaskPriority(node.path("priority").asText()));
         bean.setNote(node.path("note").asText());
 
         return bean;

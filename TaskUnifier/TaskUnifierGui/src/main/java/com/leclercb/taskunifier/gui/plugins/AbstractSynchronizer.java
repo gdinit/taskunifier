@@ -531,14 +531,7 @@ public abstract class AbstractSynchronizer implements Synchronizer {
         }
     }
 
-    protected boolean isTreeModelType(ModelType type) {
-        switch (type) {
-            case TASK:
-                return true;
-            default:
-                return false;
-        }
-    }
+    protected abstract boolean isTreeModelType(ModelType type);
 
     protected abstract boolean isUpdatedModels(ModelType type)
             throws SynchronizerException;

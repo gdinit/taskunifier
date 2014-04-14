@@ -6,6 +6,8 @@
 package com.leclercb.taskunifier.plugin.organitask.calls;
 
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.taskunifier.api.models.ModelType;
+import com.leclercb.taskunifier.api.models.beans.ModelBean;
 import com.leclercb.taskunifier.api.models.beans.NoteBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import org.apache.http.NameValuePair;
@@ -14,9 +16,9 @@ import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
 import java.util.List;
 
-final class CallGetDeletedNotes extends AbstractCallNote {
+final class CallGetDeletedNotes extends AbstractCallDeleted {
 
-    public NoteBean[] getDeletedNotes(String accessToken)
+    public ModelBean[] getDeletedNotes(String accessToken)
             throws SynchronizerException {
         CheckUtils.isNotNull(accessToken);
 
@@ -26,7 +28,7 @@ final class CallGetDeletedNotes extends AbstractCallNote {
 
         String content = super.callGet("/notes", params);
 
-        return this.getResponseMessage(content);
+        return this.getResponseMessage(ModelType.NOTE, content);
     }
 
 }

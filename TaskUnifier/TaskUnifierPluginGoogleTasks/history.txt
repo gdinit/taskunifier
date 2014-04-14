@@ -1,3 +1,6 @@
+Version 3.0
+	- Update for TaskUnifier 4.1.1
+
 Version 2.9
 	- Update for TaskUnifier 4.1.0
 

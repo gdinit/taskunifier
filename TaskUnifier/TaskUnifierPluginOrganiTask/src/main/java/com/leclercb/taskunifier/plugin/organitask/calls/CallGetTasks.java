@@ -23,6 +23,7 @@ final class CallGetTasks extends AbstractCallTask {
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("access_token", accessToken));
+        params.add(new BasicNameValuePair("notes", "true"));
 
         if (updatedAfter != null)
             params.add(new BasicNameValuePair("update_date", OrganiTaskTranslations.translateUTCDate(updatedAfter) + ""));

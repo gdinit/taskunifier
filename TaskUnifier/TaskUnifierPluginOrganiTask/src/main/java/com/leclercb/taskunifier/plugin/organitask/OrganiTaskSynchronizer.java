@@ -77,6 +77,7 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
         this.lastSync = Calendar.getInstance();
     }
 
+    @Override
     protected boolean isTreeModelType(ModelType type) {
         switch (type) {
             case CONTEXT:
@@ -483,7 +484,7 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
     public void loadParameters(Properties properties) {
         PropertyMap p = new PropertyMap(properties);
 
-        this.setLastSync(p.getCalendarProperty("organitask.synchronizer.last_sync"));
+        this.setLastSync(p.getCalendarProperty("plugin.organitask.synchronizer.last_sync"));
     }
 
     @Override
@@ -491,7 +492,7 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
         PropertyMap p = new PropertyMap(properties);
 
         p.setCalendarProperty(
-                "organitask.synchronizer.last_sync",
+                "plugin.organitask.synchronizer.last_sync",
                 this.getLastSync());
     }
 
