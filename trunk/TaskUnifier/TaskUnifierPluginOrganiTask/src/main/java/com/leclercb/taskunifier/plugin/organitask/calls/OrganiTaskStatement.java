@@ -131,7 +131,7 @@ public class OrganiTaskStatement {
         }
     }
 
-    public ContextBean[] getDeletedContexts() throws SynchronizerException {
+    public ModelBean[] getDeletedContexts() throws SynchronizerException {
         try {
             this.checkConnection();
             return callGetDeletedContexts.getDeletedContexts(this.connection.getAccessToken());
@@ -141,7 +141,7 @@ public class OrganiTaskStatement {
         }
     }
 
-    public FolderBean[] getDeletedFolders() throws SynchronizerException {
+    public ModelBean[] getDeletedFolders() throws SynchronizerException {
         try {
             this.checkConnection();
             return callGetDeletedFolders.getDeletedFolders(this.connection.getAccessToken());
@@ -151,7 +151,7 @@ public class OrganiTaskStatement {
         }
     }
 
-    public GoalBean[] getDeletedGoals() throws SynchronizerException {
+    public ModelBean[] getDeletedGoals() throws SynchronizerException {
         try {
             this.checkConnection();
             return callGetDeletedGoals.getDeletedGoals(this.connection.getAccessToken());
@@ -161,7 +161,7 @@ public class OrganiTaskStatement {
         }
     }
 
-    public NoteBean[] getDeletedNotes() throws SynchronizerException {
+    public ModelBean[] getDeletedNotes() throws SynchronizerException {
         try {
             this.checkConnection();
             return callGetDeletedNotes.getDeletedNotes(this.connection.getAccessToken());
@@ -171,7 +171,7 @@ public class OrganiTaskStatement {
         }
     }
 
-    public TaskBean[] getDeletedTasks() throws SynchronizerException {
+    public ModelBean[] getDeletedTasks() throws SynchronizerException {
         try {
             this.checkConnection();
             return callGetDeletedTasks.getDeletedTasks(this.connection.getAccessToken());

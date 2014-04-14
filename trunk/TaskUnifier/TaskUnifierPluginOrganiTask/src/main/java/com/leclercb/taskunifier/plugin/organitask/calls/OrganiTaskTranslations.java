@@ -9,6 +9,8 @@ import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.enums.GoalLevel;
+import com.leclercb.taskunifier.api.models.enums.TaskPriority;
+import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.api.models.utils.ModelFactoryUtils;
 import com.leclercb.taskunifier.gui.plugins.PluginApi;
 
@@ -60,6 +62,22 @@ final class OrganiTaskTranslations {
             return "LIFE";
 
         return "SHORT";
+    }
+
+    public static TaskRepeatFrom translateTaskRepeatFrom(String repeatFrom) {
+        return TaskRepeatFrom.valueOf(repeatFrom);
+    }
+
+    public static String translateTaskRepeatFrom(TaskRepeatFrom repeatFrom) {
+        return repeatFrom.name();
+    }
+
+    public static TaskPriority translateTaskPriority(String priority) {
+        return TaskPriority.valueOf(priority);
+    }
+
+    public static String translateTaskPriority(TaskPriority priority) {
+        return priority.name();
     }
 
     public static ModelId getModelOrCreateShell(

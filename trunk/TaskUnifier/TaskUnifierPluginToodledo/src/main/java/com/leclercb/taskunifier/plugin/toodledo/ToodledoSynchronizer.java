@@ -173,6 +173,16 @@ public class ToodledoSynchronizer extends AbstractSynchronizer {
 		this.lastGoalEdit = this.accountInfo.getLastGoalEdit();
 		this.lastLocationEdit = this.accountInfo.getLastLocationEdit();
 	}
+
+    @Override
+    protected boolean isTreeModelType(ModelType type) {
+        switch (type) {
+            case TASK:
+                return true;
+            default:
+                return false;
+        }
+    }
 	
 	@Override
 	protected boolean isUpdatedModels(ModelType type)

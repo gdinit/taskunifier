@@ -67,7 +67,7 @@ public class GoogleCalGuiPlugin extends GoogleCalPlugin implements SynchronizerG
 	
 	@Override
 	public int getPluginApiVersion() {
-		return 40; // See: Constants.PLUGIN_API_VERSION
+		return 41; // See: Constants.PLUGIN_API_VERSION
 	}
 	
 	@Override

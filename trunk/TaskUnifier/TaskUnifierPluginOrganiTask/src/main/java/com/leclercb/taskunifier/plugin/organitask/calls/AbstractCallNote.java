@@ -75,6 +75,7 @@ abstract class AbstractCallNote extends AbstractCall {
 
         bean.getModelReferenceIds().put("organitask", node.path("id").asText());
         bean.setModelStatus(ModelStatus.LOADED);
+        bean.setModelCreationDate(OrganiTaskTranslations.translateUTCDate(node.path("creation_date").asLong()));
         bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").asLong()));
         bean.setTitle(node.path("title").asText());
         bean.setFolder(OrganiTaskTranslations.getModelOrCreateShell(

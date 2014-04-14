@@ -11,6 +11,7 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.ContextFactory;
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.ModelStatus;
+import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.beans.ContextBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerParsingException;
@@ -36,7 +37,7 @@ abstract class AbstractCallContext extends AbstractCall {
             JsonNode root = mapper.readTree(content);
 
             List<ContextBean> contexts = new ArrayList<ContextBean>();
-            contexts = this.getContextBeans(root, null);
+            contexts = this.getContextBeans(root);
 
             return contexts.toArray(new ContextBean[0]);
         } catch (Exception e) {
@@ -49,7 +50,7 @@ abstract class AbstractCallContext extends AbstractCall {
         }
     }
 
-    private List<ContextBean> getContextBeans(JsonNode node, ModelId parentId) {
+    private List<ContextBean> getContextBeans(JsonNode node) {
         List<ContextBean> contexts = new ArrayList<ContextBean>();
 
         if (node.isArray()) {
@@ -58,28 +59,31 @@ abstract class AbstractCallContext extends AbstractCall {
             while (iterator.hasNext()) {
                 JsonNode item = iterator.next();
 
-                ContextBean bean = this.getContextBean(item, parentId);
+                ContextBean bean = this.getContextBean(item);
                 contexts.add(bean);
-                contexts.addAll(this.getContextBeans(item.path("contexts"), bean.getModelId()));
+                contexts.addAll(this.getContextBeans(item.path("contexts")));
             }
         } else {
-            ContextBean bean = this.getContextBean(node, parentId);
+            ContextBean bean = this.getContextBean(node);
             contexts.add(bean);
 
             if (node.has("contexts") && node.path("contexts").isArray())
-                contexts.addAll(this.getContextBeans(node.path("contexts"), bean.getModelId()));
+                contexts.addAll(this.getContextBeans(node.path("contexts")));
         }
 
         return contexts;
     }
 
-    private ContextBean getContextBean(JsonNode node, ModelId parentId) {
+    private ContextBean getContextBean(JsonNode node) {
         ContextBean bean = ContextFactory.getInstance().createOriginalBean();
 
         bean.getModelReferenceIds().put("organitask", node.path("id").asText());
         bean.setModelStatus(ModelStatus.LOADED);
+        bean.setModelCreationDate(OrganiTaskTranslations.translateUTCDate(node.path("creation_date").asLong()));
         bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").asLong()));
-        bean.setParent(parentId);
+        bean.setParent(OrganiTaskTranslations.getModelOrCreateShell(
+                ModelType.CONTEXT,
+                node.path("parent_id").asText()));
         bean.setTitle(node.path("title").asText());
 
         return bean;
