@@ -37,16 +37,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Calendar;
 
 import com.leclercb.commons.api.logger.ApiLogger;
-import com.leclercb.taskunifier.api.models.AbstractBasicModel;
-import com.leclercb.taskunifier.api.models.Context;
-import com.leclercb.taskunifier.api.models.Folder;
-import com.leclercb.taskunifier.api.models.Goal;
-import com.leclercb.taskunifier.api.models.Location;
-import com.leclercb.taskunifier.api.models.ModelId;
-import com.leclercb.taskunifier.api.models.ModelList;
-import com.leclercb.taskunifier.api.models.ModelStatus;
-import com.leclercb.taskunifier.api.models.TagList;
-import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.api.models.*;
 import com.leclercb.taskunifier.api.models.beans.TaskBean;
 import com.leclercb.taskunifier.api.models.beans.converters.ContextListConverter;
 import com.leclercb.taskunifier.api.models.beans.converters.FolderConverter;
@@ -156,7 +147,7 @@ public class TaskTemplate extends AbstractBasicModel implements Template<Task, T
 	private TaskRepeatFrom taskRepeatFrom;
 	
 	@XStreamAlias("taskstatus")
-	private String taskStatus;
+	private TaskStatus taskStatus;
 	
 	@XStreamAlias("tasklength")
 	private Integer taskLength;
@@ -436,7 +427,7 @@ public class TaskTemplate extends AbstractBasicModel implements Template<Task, T
 			task.setRepeatFrom(this.taskRepeatFrom);
 		
 		if (this.taskStatus != null)
-			task.setStatus(this.taskStatus);
+			task.setStatus(this.taskStatus.getModelId());
 		
 		if (this.taskLength != null)
 			task.setLength(this.taskLength);
@@ -670,12 +661,12 @@ public class TaskTemplate extends AbstractBasicModel implements Template<Task, T
 				taskRepeatFrom);
 	}
 	
-	public String getTaskStatus() {
+	public TaskStatus getTaskStatus() {
 		return this.taskStatus;
 	}
 	
-	public void setTaskStatus(String taskStatus) {
-		String oldTaskStatus = this.taskStatus;
+	public void setTaskStatus(TaskStatus taskStatus) {
+        TaskStatus oldTaskStatus = this.taskStatus;
 		this.taskStatus = taskStatus;
 		this.updateProperty(PROP_TASK_STATUS, oldTaskStatus, taskStatus);
 	}

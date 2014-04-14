@@ -37,6 +37,7 @@ public class NetworkShareSynchronizer extends AbstractSynchronizer {
     private List<LocationBean> locationBeans;
     private List<NoteBean> noteBeans;
     private List<TaskBean> taskBeans;
+    private List<TaskStatusBean> taskStatusBeans;
 
     private ModelList<?> notSharedFolders;
 
@@ -65,6 +66,7 @@ public class NetworkShareSynchronizer extends AbstractSynchronizer {
         this.locationBeans = new ArrayList<LocationBean>();
         this.noteBeans = new ArrayList<NoteBean>();
         this.taskBeans = new ArrayList<TaskBean>();
+        this.taskStatusBeans = new ArrayList<TaskStatusBean>();
 
         try {
             for (String f : c.getSharedFiles()) {
@@ -114,6 +116,12 @@ public class NetworkShareSynchronizer extends AbstractSynchronizer {
                                 this.taskBeans,
                                 TaskFactory.getInstance().decodeBeansFromXML(
                                         zip.getInputStream(entry)));
+
+                    if (entry.getName().equals("task_statuses.xml"))
+                        this.addIfNewer(
+                                this.taskStatusBeans,
+                                TaskStatusFactory.getInstance().decodeBeansFromXML(
+                                        zip.getInputStream(entry)));
                 }
             }
         } catch (Exception e) {
@@ -132,6 +140,7 @@ public class NetworkShareSynchronizer extends AbstractSynchronizer {
                 ModelType.FOLDER,
                 ModelType.GOAL,
                 ModelType.LOCATION,
+                ModelType.TASK_STATUS,
                 ModelType.NOTE,
                 ModelType.TASK});
 
@@ -237,6 +246,15 @@ public class NetworkShareSynchronizer extends AbstractSynchronizer {
             this.writeIntoZip(
                     zos,
                     "tasks.xml",
+                    new ByteArrayInputStream(output.toByteArray()));
+
+            // TASK STATUSES
+            output = new ByteArrayOutputStream();
+            TaskStatusFactory.getInstance().encodeToXML(output);
+
+            this.writeIntoZip(
+                    zos,
+                    "task_statuses.xml",
                     new ByteArrayInputStream(output.toByteArray()));
         } catch (Exception e) {
             throw new SynchronizerException(false, e.getMessage(), e);
@@ -364,6 +382,11 @@ public class NetworkShareSynchronizer extends AbstractSynchronizer {
                     if (bean.getModelStatus().isEndUserStatus())
                         list.add(bean);
                 break;
+            case TASK_STATUS:
+                for (ModelBean bean : this.taskStatusBeans)
+                    if (bean.getModelStatus().isEndUserStatus())
+                        list.add(bean);
+                break;
         }
 
         return list;
@@ -413,6 +436,12 @@ public class NetworkShareSynchronizer extends AbstractSynchronizer {
                 break;
             case TASK:
                 for (ModelBean bean : this.taskBeans)
+                    if (bean.getModelStatus() == ModelStatus.TO_DELETE
+                            || bean.getModelStatus() == ModelStatus.DELETED)
+                        list.add(bean);
+                break;
+            case TASK_STATUS:
+                for (ModelBean bean : this.taskStatusBeans)
                     if (bean.getModelStatus() == ModelStatus.TO_DELETE
                             || bean.getModelStatus() == ModelStatus.DELETED)
                         list.add(bean);

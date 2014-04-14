@@ -259,6 +259,7 @@ public final class NoteGrouperUtils {
             case LOCATIONS:
             case NOTE:
             case TASK:
+            case TASK_STATUS:
                 List<?> models = null;
 
                 switch (element.getProperty().getType()) {
@@ -286,6 +287,9 @@ public final class NoteGrouperUtils {
                         break;
                     case TASK:
                         models = ModelFactoryUtils.getFactory(ModelType.TASK).getList();
+                        break;
+                    case TASK_STATUS:
+                        models = ModelFactoryUtils.getFactory(ModelType.TASK_STATUS).getList();
                         break;
                     default:
                         break;

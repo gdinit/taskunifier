@@ -41,16 +41,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.leclercb.commons.api.utils.CheckUtils;
-import com.leclercb.taskunifier.api.models.Context;
-import com.leclercb.taskunifier.api.models.ContextFactory;
-import com.leclercb.taskunifier.api.models.Folder;
-import com.leclercb.taskunifier.api.models.FolderFactory;
-import com.leclercb.taskunifier.api.models.Goal;
-import com.leclercb.taskunifier.api.models.GoalFactory;
-import com.leclercb.taskunifier.api.models.Location;
-import com.leclercb.taskunifier.api.models.LocationFactory;
-import com.leclercb.taskunifier.api.models.TagList;
-import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.api.models.*;
 import com.leclercb.taskunifier.api.models.beans.ModelBeanList;
 import com.leclercb.taskunifier.api.models.beans.TaskBean;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
@@ -63,7 +54,6 @@ import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
-import com.leclercb.taskunifier.gui.utils.TaskStatusList;
 
 public class ActionAddQuickTask extends AbstractViewAction {
 	
@@ -240,13 +230,14 @@ public class ActionAddQuickTask extends AbstractViewAction {
 	}
 	
 	private static void findStatusPriority(String title, TaskBean bean) {
-		for (String status : TaskStatusList.getInstance().getStatuses()) {
-			if (status.toLowerCase().startsWith(title)) {
-				if (bean.getStatus() == null
-						|| status.toLowerCase().equals(title))
-					bean.setStatus(status);
-			}
-		}
+        List<TaskStatus> taskStatuses = TaskStatusFactory.getInstance().getList();
+        for (TaskStatus taskStatus : taskStatuses) {
+            if (taskStatus.getModelStatus().isEndUserStatus()) {
+                if (taskStatus.getTitle().toLowerCase().startsWith(title)) {
+                    bean.setStatus(taskStatus.getModelId());
+                }
+            }
+        }
 		
 		for (TaskPriority priority : TaskPriority.values()) {
 			String p = TranslationsUtils.translateTaskPriority(priority);

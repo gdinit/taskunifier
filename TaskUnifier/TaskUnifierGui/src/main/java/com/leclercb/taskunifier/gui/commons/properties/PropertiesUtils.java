@@ -34,14 +34,7 @@ package com.leclercb.taskunifier.gui.commons.properties;
 
 import com.leclercb.commons.api.properties.PropertyMap;
 import com.leclercb.commons.api.properties.coders.EnumCoder;
-import com.leclercb.taskunifier.api.models.Contact;
-import com.leclercb.taskunifier.api.models.Context;
-import com.leclercb.taskunifier.api.models.Folder;
-import com.leclercb.taskunifier.api.models.Goal;
-import com.leclercb.taskunifier.api.models.Location;
-import com.leclercb.taskunifier.api.models.ModelType;
-import com.leclercb.taskunifier.api.models.Note;
-import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.api.models.*;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.api.properties.ModelIdCoder;
@@ -79,6 +72,9 @@ public final class PropertiesUtils {
 		PropertyMap.addDefaultCoder(new ModelCoder<Task>(
 				Task.class,
 				ModelType.TASK));
+        PropertyMap.addDefaultCoder(new ModelCoder<TaskStatus>(
+                TaskStatus.class,
+                ModelType.TASK_STATUS));
 		
 		PropertyMap.addDefaultCoder(new EnumCoder<TaskPriority>(
 				TaskPriority.class));

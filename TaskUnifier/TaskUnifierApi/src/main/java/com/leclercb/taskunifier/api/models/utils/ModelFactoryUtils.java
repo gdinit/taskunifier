@@ -32,25 +32,8 @@
  */
 package com.leclercb.taskunifier.api.models.utils;
 
-import com.leclercb.taskunifier.api.models.ContactFactory;
-import com.leclercb.taskunifier.api.models.ContextFactory;
-import com.leclercb.taskunifier.api.models.FolderFactory;
-import com.leclercb.taskunifier.api.models.GoalFactory;
-import com.leclercb.taskunifier.api.models.LocationFactory;
-import com.leclercb.taskunifier.api.models.Model;
-import com.leclercb.taskunifier.api.models.ModelFactory;
-import com.leclercb.taskunifier.api.models.ModelId;
-import com.leclercb.taskunifier.api.models.ModelType;
-import com.leclercb.taskunifier.api.models.NoteFactory;
-import com.leclercb.taskunifier.api.models.TaskFactory;
-import com.leclercb.taskunifier.api.models.beans.ContactBean;
-import com.leclercb.taskunifier.api.models.beans.ContextBean;
-import com.leclercb.taskunifier.api.models.beans.FolderBean;
-import com.leclercb.taskunifier.api.models.beans.GoalBean;
-import com.leclercb.taskunifier.api.models.beans.LocationBean;
-import com.leclercb.taskunifier.api.models.beans.ModelBean;
-import com.leclercb.taskunifier.api.models.beans.NoteBean;
-import com.leclercb.taskunifier.api.models.beans.TaskBean;
+import com.leclercb.taskunifier.api.models.*;
+import com.leclercb.taskunifier.api.models.beans.*;
 
 public final class ModelFactoryUtils {
 	
@@ -94,6 +77,10 @@ public final class ModelFactoryUtils {
 				return TaskFactory.getInstance().create(
 						(TaskBean) bean,
 						loadReferenceIds);
+            case TASK_STATUS:
+                return TaskStatusFactory.getInstance().create(
+                        (TaskStatusBean) bean,
+                        loadReferenceIds);
 			default:
 				return null;
 		}
@@ -118,6 +105,8 @@ public final class ModelFactoryUtils {
 				return NoteFactory.getInstance().get(modelId);
 			case TASK:
 				return TaskFactory.getInstance().get(modelId);
+            case TASK_STATUS:
+                return TaskStatusFactory.getInstance().get(modelId);
 			default:
 				return null;
 		}
@@ -142,6 +131,8 @@ public final class ModelFactoryUtils {
 				return NoteFactory.getInstance();
 			case TASK:
 				return TaskFactory.getInstance();
+            case TASK_STATUS:
+                return TaskStatusFactory.getInstance();
 			default:
 				return null;
 		}

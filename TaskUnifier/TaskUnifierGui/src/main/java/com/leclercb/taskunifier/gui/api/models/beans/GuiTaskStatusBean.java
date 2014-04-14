@@ -2,22 +2,22 @@
  * TaskUnifier
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  *   - Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- * 
+ *
  *   - Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- * 
+ *
  *   - Neither the name of TaskUnifier or the names of its
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
  * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -30,29 +30,47 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.components.configuration;
+package com.leclercb.taskunifier.gui.api.models.beans;
 
-import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationField;
-import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationGroup;
-import com.leclercb.taskunifier.gui.components.configuration.api.ConfigurationTab;
-import com.leclercb.taskunifier.gui.components.configuration.api.DefaultConfigurationPanel;
-import com.leclercb.taskunifier.gui.components.configuration.fields.lists.TaskStatusesFieldType;
+import com.leclercb.taskunifier.api.models.ModelId;
+import com.leclercb.taskunifier.api.models.beans.TaskStatusBean;
+import com.leclercb.taskunifier.gui.api.models.beans.converters.ColorConverter;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamConverter;
 
-public class TaskStatusesConfigurationPanel extends DefaultConfigurationPanel {
-	
-	public TaskStatusesConfigurationPanel(ConfigurationGroup configuration) {
-		super(ConfigurationTab.TASK_STATUSES, configuration);
-		
-		this.initialize();
-		this.pack();
-	}
-	
-	private void initialize() {
-		this.addField(new ConfigurationField(
-				"TASK_STATUSES",
-				null,
-				false,
-				new TaskStatusesFieldType()));
-	}
-	
+import java.awt.*;
+
+public class GuiTaskStatusBean extends TaskStatusBean implements GuiModelBean {
+
+    @XStreamAlias("color")
+    @XStreamConverter(ColorConverter.class)
+    private Color color;
+
+    public GuiTaskStatusBean() {
+        this((ModelId) null);
+    }
+
+    public GuiTaskStatusBean(ModelId modelId) {
+        super(modelId);
+
+        this.setColor(null);
+    }
+
+    public GuiTaskStatusBean(TaskStatusBean bean) {
+        super(bean);
+
+        if (bean instanceof GuiTaskStatusBean)
+            this.setColor(((GuiTaskStatusBean) bean).getColor());
+    }
+
+    @Override
+    public Color getColor() {
+        return this.color;
+    }
+
+    @Override
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
 }

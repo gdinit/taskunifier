@@ -30,43 +30,31 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.settings;
+package com.leclercb.taskunifier.gui.commons.models;
+
+import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
+import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
+import com.leclercb.taskunifier.api.models.TaskStatus;
+import com.leclercb.taskunifier.api.models.TaskStatusFactory;
 
 import java.util.List;
 
-import com.leclercb.taskunifier.api.models.DeprecatedModelId;
-import com.leclercb.taskunifier.api.models.Model;
-import com.leclercb.taskunifier.api.models.ModelFactory;
-import com.leclercb.taskunifier.api.models.ModelType;
-import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.api.models.TaskFactory;
-import com.leclercb.taskunifier.api.models.utils.ModelFactoryUtils;
+public class TaskStatusModel extends AbstractBasicModelSortedModel {
 
-@SuppressWarnings("deprecation")
-public final class ModelVersion {
-	
-	private ModelVersion() {
-		
-	}
-	
-	public static void updateModels() {
-		addModelReferenceId();
-	}
-	
-	private static void addModelReferenceId() {
-		for (ModelType type : ModelType.values()) {
-			ModelFactory<?, ?, ?, ?> factory = ModelFactoryUtils.getFactory(type);
-			for (Object object : factory.getList()) {
-				Model model = (Model) object;
-				
-				if (model.getModelId() instanceof DeprecatedModelId)
-					if (!((DeprecatedModelId) model.getModelId()).isNew())
-						if (model.getModelReferenceId("toodledo") == null)
-							model.addModelReferenceId(
-									"toodledo",
-									model.getModelId().getId());
-			}
-		}
-	}
-	
+    public TaskStatusModel(boolean firstNull) {
+        if (firstNull)
+            this.addElement(null);
+
+        List<TaskStatus> taskStatuses = TaskStatusFactory.getInstance().getList();
+        for (TaskStatus taskStatus : taskStatuses)
+            this.addElement(taskStatus);
+
+        TaskStatusFactory.getInstance().addListChangeListener(
+                new WeakListChangeListener(TaskStatusFactory.getInstance(), this));
+        TaskStatusFactory.getInstance().addPropertyChangeListener(
+                new WeakPropertyChangeListener(
+                        TaskStatusFactory.getInstance(),
+                        this));
+    }
+
 }

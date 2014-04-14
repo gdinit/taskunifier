@@ -59,6 +59,8 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import com.leclercb.taskunifier.api.models.*;
+import com.leclercb.taskunifier.gui.commons.models.*;
 import org.jdesktop.swingx.renderer.DefaultListRenderer;
 
 import ca.odell.glazedlists.EventList;
@@ -68,28 +70,12 @@ import ca.odell.glazedlists.swing.EventComboBoxModel;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.commons.gui.swing.panels.ScrollablePanel;
-import com.leclercb.taskunifier.api.models.Context;
-import com.leclercb.taskunifier.api.models.Folder;
-import com.leclercb.taskunifier.api.models.Goal;
-import com.leclercb.taskunifier.api.models.Location;
-import com.leclercb.taskunifier.api.models.ModelType;
-import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.api.models.Timer;
 import com.leclercb.taskunifier.api.models.beans.TaskBean;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.gui.actions.ActionManageModels;
 import com.leclercb.taskunifier.gui.actions.ActionPostponeTaskBeans;
 import com.leclercb.taskunifier.gui.api.models.beans.GuiTaskBean;
-import com.leclercb.taskunifier.gui.commons.models.ContextModel;
-import com.leclercb.taskunifier.gui.commons.models.FolderModel;
-import com.leclercb.taskunifier.gui.commons.models.GoalModel;
-import com.leclercb.taskunifier.gui.commons.models.LocationModel;
-import com.leclercb.taskunifier.gui.commons.models.MinutesModel;
-import com.leclercb.taskunifier.gui.commons.models.TaskModel;
-import com.leclercb.taskunifier.gui.commons.models.TaskPriorityModel;
-import com.leclercb.taskunifier.gui.commons.models.TaskRepeatFromModel;
-import com.leclercb.taskunifier.gui.commons.models.TaskRepeatModel;
 import com.leclercb.taskunifier.gui.commons.values.StringValueMinutes;
 import com.leclercb.taskunifier.gui.components.modelnote.HTMLEditorInterface;
 import com.leclercb.taskunifier.gui.components.modelnote.editors.WysiwygHTMLEditorPane;
@@ -111,7 +97,6 @@ import com.leclercb.taskunifier.gui.utils.DateTimeFormatUtils;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.TaskCustomColumnList;
-import com.leclercb.taskunifier.gui.utils.TaskStatusList;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JTextFieldDateEditor;
 
@@ -316,7 +301,7 @@ public class BatchTaskEditPanel extends ScrollablePanel {
 			
 			if (this.taskStatusCheckBox.isSelected()) {
 				for (Task task : this.tasks) {
-					task.setStatus((String) this.taskStatus.getSelectedItem());
+					task.setStatus((TaskStatus) this.taskStatus.getSelectedItem());
 				}
 			}
 			
@@ -549,7 +534,7 @@ public class BatchTaskEditPanel extends ScrollablePanel {
 		this.taskRepeatFrom = ComponentFactory.createTaskRepeatFromComboBox(
 				null,
 				true);
-		this.taskStatus = ComponentFactory.createTaskStatusComboBox(null, true);
+		this.taskStatus = ComponentFactory.createModelComboBox(null, true);
 		this.taskLength = new JSpinner();
 		this.taskTimer = new TUTimerField(true);
 		this.taskPriority = ComponentFactory.createTaskPriorityComboBox(
@@ -708,10 +693,7 @@ public class BatchTaskEditPanel extends ScrollablePanel {
 		}
 		
 		// Task Status
-		EventList<String> eventList = new SortedList<String>(
-				TaskStatusList.getInstance().getEventList());
-		
-		this.taskStatus.setModel(new EventComboBoxModel<String>(eventList));
+		this.taskStatus.setModel(new TaskStatusModel(true));
 		
 		if (TaskColumnList.getInstance().get(TaskColumnList.STATUS).isUsed()) {
 			nbInserted++;
@@ -1056,7 +1038,7 @@ public class BatchTaskEditPanel extends ScrollablePanel {
 			this.taskDueDateReminder.setSelectedItem(0);
 			this.taskRepeat.setSelectedItem("");
 			this.taskRepeatFrom.setSelectedItem(TaskRepeatFrom.DUE_DATE);
-			this.taskStatus.setSelectedItem("");
+			this.taskStatus.setSelectedItem(null);
 			this.taskLength.setValue(0);
 			this.taskTimer.setTimer(new Timer());
 			this.taskPriority.setSelectedItem(TaskPriority.NEGATIVE);

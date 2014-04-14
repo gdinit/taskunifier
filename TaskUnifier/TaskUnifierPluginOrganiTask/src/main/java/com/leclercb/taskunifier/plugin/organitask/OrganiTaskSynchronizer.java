@@ -67,6 +67,7 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
                 ModelType.GOAL,
                 ModelType.NOTE,
                 ModelType.CONTACT,
+                ModelType.TASK_STATUS,
                 ModelType.NOTE,
                 ModelType.TASK});
 
@@ -148,6 +149,11 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
             return beans;
         }
 
+        if (type == ModelType.TASK_STATUS) {
+            beans.addAll(Arrays.asList(this.statement.getTaskStatuses(this.lastSync)));
+            return beans;
+        }
+
         return null;
     }
 
@@ -189,6 +195,12 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
         if (type == ModelType.TASK) {
             for (Model model : models) {
                 ids.add(this.statement.addTask((Task) model, false).getModelReferenceIds().get("organitask"));
+            }
+        }
+
+        if (type == ModelType.TASK_STATUS) {
+            for (Model model : models) {
+                ids.add(this.statement.addTaskStatus((TaskStatus) model, false).getModelReferenceIds().get("organitask"));
             }
         }
 
@@ -257,6 +269,14 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 
             return;
         }
+
+        if (type == ModelType.TASK_STATUS) {
+            for (Model model : models) {
+                this.statement.editTaskStatus((TaskStatus) model, false);
+            }
+
+            return;
+        }
     }
 
     @Override
@@ -305,6 +325,14 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 
             return;
         }
+
+        if (type == ModelType.TASK_STATUS) {
+            for (Model model : models) {
+                this.statement.deleteTaskStatus((TaskStatus) model);
+            }
+
+            return;
+        }
     }
 
     @Override
@@ -334,6 +362,10 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 
         if (type == ModelType.TASK) {
             deletedModels.addAll(Arrays.asList(this.statement.getDeletedTasks()));
+        }
+
+        if (type == ModelType.TASK_STATUS) {
+            deletedModels.addAll(Arrays.asList(this.statement.getDeletedTaskStatuses()));
         }
 
         return deletedModels;

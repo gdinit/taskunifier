@@ -47,8 +47,7 @@ import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 public class ListsConfigurationPanel extends ConfigurationPanel {
 	
 	private JTabbedPane tabbedPane;
-	
-	private ConfigurationPanel taskStatusesConfigurationPanel;
+
 	private ConfigurationPanel taskPostponeListConfigurationPanel;
 	private ConfigurationPanel taskSnoozeListConfigurationPanel;
 	
@@ -64,20 +63,9 @@ public class ListsConfigurationPanel extends ConfigurationPanel {
 		
 		this.tabbedPane = new JTabbedPane();
 		this.add(this.tabbedPane, BorderLayout.CENTER);
-		
-		this.initializeTaskStatusesPanel();
+
 		this.initializeTaskPostponeListPanel();
 		this.initializeTaskSnoozeListPanel();
-	}
-	
-	private void initializeTaskStatusesPanel() {
-		this.taskStatusesConfigurationPanel = new TaskStatusesConfigurationPanel(
-				this);
-		this.tabbedPane.addTab(
-				Translations.getString("configuration.tab.task_statuses"),
-				ComponentFactory.createJScrollPane(
-						this.taskStatusesConfigurationPanel,
-						false));
 	}
 	
 	private void initializeTaskPostponeListPanel() {
@@ -109,13 +97,6 @@ public class ListsConfigurationPanel extends ConfigurationPanel {
 		
 		int i = 0;
 		
-		if (this.taskStatusesConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
-			this.tabbedPane.setSelectedIndex(i);
-			return true;
-		}
-		
-		i++;
-		
 		if (this.taskPostponeListConfigurationPanel.setSelectedConfigurationTab(configurationTab)) {
 			this.tabbedPane.setSelectedIndex(i);
 			return true;
@@ -133,14 +114,12 @@ public class ListsConfigurationPanel extends ConfigurationPanel {
 	
 	@Override
 	public void saveAndApplyConfig() {
-		this.taskStatusesConfigurationPanel.saveAndApplyConfig();
 		this.taskPostponeListConfigurationPanel.saveAndApplyConfig();
 		this.taskSnoozeListConfigurationPanel.saveAndApplyConfig();
 	}
 	
 	@Override
 	public void cancelConfig() {
-		this.taskStatusesConfigurationPanel.cancelConfig();
 		this.taskPostponeListConfigurationPanel.cancelConfig();
 		this.taskSnoozeListConfigurationPanel.cancelConfig();
 	}
