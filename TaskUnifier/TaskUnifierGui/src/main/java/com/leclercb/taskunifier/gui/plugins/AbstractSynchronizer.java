@@ -518,16 +518,29 @@ public abstract class AbstractSynchronizer implements Synchronizer {
         }
     }
 
-    private void removeShells(ModelType type) {
-        ModelFactory<?, ?, ?, ?> factory = ModelFactoryUtils.getFactory(type);
+    private void removeShells(final ModelType type) throws SynchronizerException {
+        try {
+            ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
 
-        for (Model model : factory.getList()) {
-            if (model.getModelStatus() == ModelStatus.SHELL) {
-                factory.markDeleted(model.getModelId());
+                @Override
+                public Void call() {
+                    ModelFactory<?, ?, ?, ?> factory = ModelFactoryUtils.getFactory(type);
 
-                PluginLogger.getLogger().info(
-                        "Delete " + type + " shell: " + model.getModelId());
-            }
+                    for (Model model : factory.getList()) {
+                        if (model.getModelStatus() == ModelStatus.SHELL) {
+                            factory.markDeleted(model.getModelId());
+
+                            PluginLogger.getLogger().info(
+                                    "Delete " + type + " shell: " + model.getModelId());
+                        }
+                    }
+
+                    return null;
+                }
+
+            });
+        } catch (Exception e) {
+            throw new SynchronizerException(false, e.getMessage(), e);
         }
     }
 

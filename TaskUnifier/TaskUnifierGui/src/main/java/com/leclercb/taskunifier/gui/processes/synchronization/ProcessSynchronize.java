@@ -32,17 +32,6 @@
  */
 package com.leclercb.taskunifier.gui.processes.synchronization;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-
-import com.leclercb.taskunifier.gui.actions.ActionSave;
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
-
 import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
@@ -55,6 +44,7 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerSettingsExcepti
 import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerDefaultProgressMessage;
 import com.leclercb.taskunifier.gui.actions.ActionPluginConfiguration;
 import com.leclercb.taskunifier.gui.actions.ActionRefresh;
+import com.leclercb.taskunifier.gui.actions.ActionSave;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.constants.Constants;
@@ -68,6 +58,15 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.BackupUtils;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
 
 public class ProcessSynchronize implements Process<Void> {
 
@@ -137,7 +136,16 @@ public class ProcessSynchronize implements Process<Void> {
                                 + plugin.getId());
 
                 if (type == Type.SYNCHRONIZE) {
-                    ActionSave.save();
+                    ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
+
+                        @Override
+                        public Void call() {
+                            ActionSave.save();
+
+                            return null;
+                        }
+
+                    });
 
                     if (Main.getSettings().getBooleanProperty("backup.backup_before_sync")) {
                         ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
