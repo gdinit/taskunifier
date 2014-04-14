@@ -23,6 +23,9 @@ final class OrganiTaskTranslations {
     }
 
     public static Calendar translateUTCDate(long timeStamp) {
+        if (timeStamp == 0)
+            return null;
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(timeStamp * 1000);
         return calendar;

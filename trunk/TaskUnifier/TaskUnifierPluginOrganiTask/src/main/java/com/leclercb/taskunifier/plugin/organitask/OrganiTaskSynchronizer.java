@@ -182,7 +182,7 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 
         if (type == ModelType.NOTE) {
             for (Model model : models) {
-                ids.add(this.statement.addNote((Note) model, false).getModelReferenceIds().get("organitask"));
+                ids.add(this.statement.addNote((Note) model).getModelReferenceIds().get("organitask"));
             }
         }
 
@@ -240,11 +240,7 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 
         if (type == ModelType.NOTE) {
             for (Model model : models) {
-                this.statement.editNote((Note) model, false);
-            }
-
-            for (Model model : models) {
-                this.statement.editNoteParent((Note) model);
+                this.statement.editNote((Note) model);
             }
 
             return;

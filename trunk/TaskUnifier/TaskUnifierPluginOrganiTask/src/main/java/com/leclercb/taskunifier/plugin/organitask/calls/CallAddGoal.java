@@ -20,6 +20,12 @@ final class CallAddGoal extends AbstractCallGoal {
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
+
+        if (syncParent && goal.getParent() != null && goal.getParent().getModelReferenceId("organitask") != null)
+            node.put("parent_id", goal.getParent().getModelReferenceId("organitask"));
+        else
+            node.put("parent_id", (String) null);
+
         node.put("title", goal.getTitle());
         node.put("level", OrganiTaskTranslations.translateGoalLevel(goal.getLevel()));
 

@@ -23,11 +23,14 @@ final class CallEditGoal extends AbstractCallGoal {
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
+
+        if (syncParent && goal.getParent() != null && goal.getParent().getModelReferenceId("organitask") != null)
+            node.put("parent_id", goal.getParent().getModelReferenceId("organitask"));
+        else
+            node.put("parent_id", (String) null);
+
         node.put("title", goal.getTitle());
         node.put("level", OrganiTaskTranslations.translateGoalLevel(goal.getLevel()));
-
-        if (syncParent)
-            node.put("parent_id", goal.getModelReferenceId("organitask"));
 
         String content = super.call("PUT", "/goals/" + goal.getModelReferenceId("organitask"), accessToken, node.toString());
 
@@ -43,7 +46,11 @@ final class CallEditGoal extends AbstractCallGoal {
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
-        node.put("parent_id", goal.getModelReferenceId("organitask"));
+
+        if (goal.getParent() != null && goal.getParent().getModelReferenceId("organitask") != null)
+            node.put("parent_id", goal.getParent().getModelReferenceId("organitask"));
+        else
+            node.put("parent_id", (String) null);
 
         String content = super.call("PUT", "/goals/" + goal.getModelReferenceId("organitask"), accessToken, node.toString());
 

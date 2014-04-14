@@ -23,10 +23,13 @@ final class CallEditContext extends AbstractCallContext {
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
-        node.put("title", context.getTitle());
 
-        if (syncParent)
-            node.put("parent_id", context.getModelReferenceId("organitask"));
+        if (syncParent && context.getParent() != null && context.getParent().getModelReferenceId("organitask") != null)
+            node.put("parent_id", context.getParent().getModelReferenceId("organitask"));
+        else
+            node.put("parent_id", (String) null);
+
+        node.put("title", context.getTitle());
 
         String content = super.call("PUT", "/contexts/" + context.getModelReferenceId("organitask"), accessToken, node.toString());
 
@@ -42,7 +45,11 @@ final class CallEditContext extends AbstractCallContext {
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
-        node.put("parent_id", context.getModelReferenceId("organitask"));
+
+        if (context.getParent() != null && context.getParent().getModelReferenceId("organitask") != null)
+            node.put("parent_id", context.getParent().getModelReferenceId("organitask"));
+        else
+            node.put("parent_id", (String) null);
 
         String content = super.call("PUT", "/contexts/" + context.getModelReferenceId("organitask"), accessToken, node.toString());
 
