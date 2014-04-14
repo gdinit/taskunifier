@@ -215,10 +215,13 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
 
         for (Context context : contexts) {
             if (context.getModelStatus().isEndUserStatus()) {
-                DefaultMutableTreeNode node = this.contextCategory;
+                DefaultMutableTreeNode node = null;
 
                 if (context.getParent() != null)
                     node = this.findItemFromModel(context.getParent());
+
+                if (node == null)
+                    node = this.contextCategory;
 
                 node.add(new ModelItem(ModelType.CONTEXT, context));
             }
@@ -270,10 +273,13 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
         for (Folder folder : folders) {
             if (folder.getModelStatus().isEndUserStatus()) {
                 if (!folder.isSelfOrParentArchived()) {
-                    DefaultMutableTreeNode node = this.folderCategory;
+                    DefaultMutableTreeNode node = null;
 
                     if (folder.getParent() != null)
                         node = this.findItemFromModel(folder.getParent());
+
+                    if (node == null)
+                        node = this.folderCategory;
 
                     node.add(new ModelItem(ModelType.FOLDER, folder));
                 }
@@ -326,10 +332,13 @@ public class TaskSearcherTreeModel extends DefaultTreeModel implements ListChang
         for (Goal goal : goals) {
             if (goal.getModelStatus().isEndUserStatus()) {
                 if (!goal.isSelfOrParentArchived()) {
-                    DefaultMutableTreeNode node = this.goalCategory;
+                    DefaultMutableTreeNode node = null;
 
                     if (goal.getParent() != null)
                         node = this.findItemFromModel(goal.getParent());
+
+                    if (node == null)
+                        node = this.goalCategory;
 
                     node.add(new ModelItem(ModelType.GOAL, goal));
                 }
