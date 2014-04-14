@@ -150,10 +150,13 @@ public class NoteSearcherTreeModel extends DefaultTreeModel implements ListChang
         for (Folder folder : folders) {
             if (folder.getModelStatus().isEndUserStatus()) {
                 if (!folder.isSelfOrParentArchived()) {
-                    DefaultMutableTreeNode node = this.folderCategory;
+                    DefaultMutableTreeNode node = null;
 
                     if (folder.getParent() != null)
                         node = this.findItemFromFolder(folder.getParent());
+
+                    if (node == null)
+                        node = this.folderCategory;
 
                     node.add(new FolderItem(folder));
                 }
