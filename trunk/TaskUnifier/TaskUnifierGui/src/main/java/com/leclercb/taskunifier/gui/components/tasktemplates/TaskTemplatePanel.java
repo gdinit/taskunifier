@@ -54,6 +54,8 @@ import javax.swing.SpinnerNumberModel;
 
 import com.jgoodies.binding.value.BindingConverter;
 import com.jgoodies.binding.value.ConverterValueModel;
+import com.leclercb.taskunifier.api.models.*;
+import com.leclercb.taskunifier.gui.commons.models.*;
 import com.leclercb.taskunifier.gui.main.frames.ShortcutKey;
 import org.jdesktop.swingx.renderer.DefaultListRenderer;
 
@@ -67,22 +69,11 @@ import com.jgoodies.binding.beans.BeanAdapter;
 import com.jgoodies.binding.value.ValueModel;
 import com.leclercb.commons.gui.swing.panels.ScrollablePanel;
 import com.leclercb.commons.gui.utils.FormatterUtils;
-import com.leclercb.taskunifier.api.models.BasicModel;
-import com.leclercb.taskunifier.api.models.Context;
-import com.leclercb.taskunifier.api.models.Folder;
-import com.leclercb.taskunifier.api.models.Goal;
-import com.leclercb.taskunifier.api.models.Location;
-import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
 import com.leclercb.taskunifier.gui.actions.ActionManageModels;
 import com.leclercb.taskunifier.gui.commons.converters.TemplateTimeConverter;
-import com.leclercb.taskunifier.gui.commons.models.FolderModel;
-import com.leclercb.taskunifier.gui.commons.models.MinutesModel;
-import com.leclercb.taskunifier.gui.commons.models.TaskPriorityModel;
-import com.leclercb.taskunifier.gui.commons.models.TaskRepeatFromModel;
-import com.leclercb.taskunifier.gui.commons.models.TaskRepeatModel;
 import com.leclercb.taskunifier.gui.commons.values.StringValueMinutes;
 import com.leclercb.taskunifier.gui.components.modelnote.HTMLEditorInterface;
 import com.leclercb.taskunifier.gui.components.modelnote.editors.WysiwygHTMLEditorPane;
@@ -94,7 +85,6 @@ import com.leclercb.taskunifier.gui.swing.TUSpinnerTimeEditor;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
-import com.leclercb.taskunifier.gui.utils.TaskStatusList;
 
 public class TaskTemplatePanel extends ScrollablePanel {
 
@@ -203,7 +193,7 @@ public class TaskTemplatePanel extends ScrollablePanel {
         this.taskRepeatFrom = ComponentFactory.createTaskRepeatFromComboBox(
                 null,
                 true);
-        this.taskStatus = ComponentFactory.createTaskStatusComboBox(null, true);
+        this.taskStatus = ComponentFactory.createModelComboBox(null, true);
         this.taskLength = new JSpinner();
         this.taskPriority = ComponentFactory.createTaskPriorityComboBox(
                 null,
@@ -524,9 +514,8 @@ public class TaskTemplatePanel extends ScrollablePanel {
                 taskRepeatFromModel));
 
         ValueModel taskStatusModel = this.adapter.getValueModel(TaskTemplate.PROP_TASK_STATUS);
-        TaskTemplatePanel.this.taskStatus.setModel(new ComboBoxAdapter<String>(
-                new EventComboBoxModel<String>(new SortedList<String>(
-                        TaskStatusList.getInstance().getEventList())),
+        TaskTemplatePanel.this.taskStatus.setModel(new ComboBoxAdapter<TaskStatus>(
+                new TaskStatusModel(true),
                 taskStatusModel));
 
         ValueModel taskLengthModel = this.adapter.getValueModel(TaskTemplate.PROP_TASK_LENGTH);

@@ -32,182 +32,176 @@
  */
 package com.leclercb.taskunifier.gui.components.models;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.KeyStroke;
-
-import org.jdesktop.swingx.JXHeader;
-
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.Tag;
 import com.leclercb.taskunifier.gui.components.models.lists.IModelList;
 import com.leclercb.taskunifier.gui.components.models.lists.ITagList;
-import com.leclercb.taskunifier.gui.components.models.panels.ContactConfigurationPanel;
-import com.leclercb.taskunifier.gui.components.models.panels.ContextConfigurationPanel;
-import com.leclercb.taskunifier.gui.components.models.panels.FolderConfigurationPanel;
-import com.leclercb.taskunifier.gui.components.models.panels.GoalConfigurationPanel;
-import com.leclercb.taskunifier.gui.components.models.panels.LocationConfigurationPanel;
-import com.leclercb.taskunifier.gui.components.models.panels.TagConfigurationPanel;
+import com.leclercb.taskunifier.gui.components.models.panels.*;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
+import org.jdesktop.swingx.JXHeader;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 public class ModelConfigurationDialogPanel extends TUDialogPanel {
-	
-	private static ModelConfigurationDialogPanel INSTANCE = null;
-	
-	protected static ModelConfigurationDialogPanel getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new ModelConfigurationDialogPanel();
-		
-		return INSTANCE;
-	}
-	
-	private JTabbedPane tabbedPane;
-	
-	private ActionListener okListener;
-	
-	private ModelConfigurationDialogPanel() {
-		this.initialize();
-	}
-	
-	public void setSelectedModelConfigurationTab(ModelConfigurationTab tab) {
-		CheckUtils.isNotNull(tab);
-		this.tabbedPane.setSelectedIndex(tab.ordinal());
-	}
-	
-	public void addNewModel(ModelType type) {
-		int index = modelTypeToTabIndex(type);
-		
-		if (index == -1)
-			return;
-		
-		this.tabbedPane.setSelectedIndex(index);
-		
-		IModelList list = (IModelList) this.tabbedPane.getSelectedComponent();
-		list.addNewModel();
-	}
-	
-	public void setSelectedModel(ModelType type, Model model) {
-		int index = modelTypeToTabIndex(type);
-		
-		if (index == -1)
-			return;
-		
-		this.tabbedPane.setSelectedIndex(index);
-		
-		if (model != null) {
-			IModelList list = (IModelList) this.tabbedPane.getSelectedComponent();
-			list.setSelectedModel(model);
-		}
-	}
-	
-	public void setSelectedTag(Tag tag) {
-		this.tabbedPane.setSelectedIndex(5);
-		
-		ITagList list = (ITagList) this.tabbedPane.getSelectedComponent();
-		list.setSelectedTag(tag);
-	}
-	
-	private void initialize() {
-		this.setLayout(new BorderLayout());
-		
-		JXHeader header = new JXHeader();
-		header.setTitle(Translations.getString("header.title.manage_models"));
-		header.setDescription(Translations.getString("header.description.manage_models"));
-		header.setIcon(ImageUtils.getResourceImage("folder.png", 32, 32));
-		
-		JPanel tabbedPanel = new JPanel(new BorderLayout());
-		tabbedPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		
-		this.tabbedPane = new JTabbedPane();
-		
-		this.tabbedPane.addTab(
-				Translations.getString("general.contacts"),
-				new ContactConfigurationPanel());
-		
-		this.tabbedPane.addTab(
-				Translations.getString("general.contexts"),
-				new ContextConfigurationPanel());
-		
-		this.tabbedPane.addTab(
-				Translations.getString("general.folders"),
-				new FolderConfigurationPanel());
-		
-		this.tabbedPane.addTab(
-				Translations.getString("general.goals"),
-				new GoalConfigurationPanel());
-		
-		this.tabbedPane.addTab(
-				Translations.getString("general.locations"),
-				new LocationConfigurationPanel());
-		
-		this.tabbedPane.addTab(
-				Translations.getString("general.task.tags"),
-				new TagConfigurationPanel());
-		
-		tabbedPanel.add(this.tabbedPane);
-		
-		this.add(header, BorderLayout.NORTH);
-		this.add(tabbedPanel, BorderLayout.CENTER);
-		
-		this.initializeButtonsPanel();
-	}
-	
-	private void initializeButtonsPanel() {
-		this.okListener = new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				ModelConfigurationDialogPanel.this.getDialog().setVisible(false);
-			}
-			
-		};
-		
-		JButton okButton = new TUOkButton(this.okListener);
-		
-		this.setButtons(okButton, okButton);
-	}
-	
-	private static int modelTypeToTabIndex(ModelType type) {
-		if (type == null)
-			return -1;
-		
-		switch (type) {
-			case CONTACT:
-				return 0;
-			case CONTEXT:
-				return 1;
-			case FOLDER:
-				return 2;
-			case GOAL:
-				return 3;
-			case LOCATION:
-				return 4;
-			case NOTE:
-			case TASK:
-			default:
-				return -1;
-		}
-	}
-	
-	@Override
-	protected void dialogLoaded() {
-		this.getDialog().getRootPane().registerKeyboardAction(
-				this.okListener,
-				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-				JComponent.WHEN_IN_FOCUSED_WINDOW);
-	}
-	
+
+    private static ModelConfigurationDialogPanel INSTANCE = null;
+
+    protected static ModelConfigurationDialogPanel getInstance() {
+        if (INSTANCE == null)
+            INSTANCE = new ModelConfigurationDialogPanel();
+
+        return INSTANCE;
+    }
+
+    private JTabbedPane tabbedPane;
+
+    private ActionListener okListener;
+
+    private ModelConfigurationDialogPanel() {
+        this.initialize();
+    }
+
+    public void setSelectedModelConfigurationTab(ModelConfigurationTab tab) {
+        CheckUtils.isNotNull(tab);
+        this.tabbedPane.setSelectedIndex(tab.ordinal());
+    }
+
+    public void addNewModel(ModelType type) {
+        int index = modelTypeToTabIndex(type);
+
+        if (index == -1)
+            return;
+
+        this.tabbedPane.setSelectedIndex(index);
+
+        IModelList list = (IModelList) this.tabbedPane.getSelectedComponent();
+        list.addNewModel();
+    }
+
+    public void setSelectedModel(ModelType type, Model model) {
+        int index = modelTypeToTabIndex(type);
+
+        if (index == -1)
+            return;
+
+        this.tabbedPane.setSelectedIndex(index);
+
+        if (model != null) {
+            IModelList list = (IModelList) this.tabbedPane.getSelectedComponent();
+            list.setSelectedModel(model);
+        }
+    }
+
+    public void setSelectedTag(Tag tag) {
+        this.tabbedPane.setSelectedIndex(5);
+
+        ITagList list = (ITagList) this.tabbedPane.getSelectedComponent();
+        list.setSelectedTag(tag);
+    }
+
+    private void initialize() {
+        this.setLayout(new BorderLayout());
+
+        JXHeader header = new JXHeader();
+        header.setTitle(Translations.getString("header.title.manage_models"));
+        header.setDescription(Translations.getString("header.description.manage_models"));
+        header.setIcon(ImageUtils.getResourceImage("folder.png", 32, 32));
+
+        JPanel tabbedPanel = new JPanel(new BorderLayout());
+        tabbedPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        this.tabbedPane = new JTabbedPane();
+
+        this.tabbedPane.addTab(
+                Translations.getString("general.contacts"),
+                new ContactConfigurationPanel());
+
+        this.tabbedPane.addTab(
+                Translations.getString("general.contexts"),
+                new ContextConfigurationPanel());
+
+        this.tabbedPane.addTab(
+                Translations.getString("general.folders"),
+                new FolderConfigurationPanel());
+
+        this.tabbedPane.addTab(
+                Translations.getString("general.goals"),
+                new GoalConfigurationPanel());
+
+        this.tabbedPane.addTab(
+                Translations.getString("general.locations"),
+                new LocationConfigurationPanel());
+
+        this.tabbedPane.addTab(
+                Translations.getString("general.task_statuses"),
+                new TaskStatusConfigurationPanel());
+
+        this.tabbedPane.addTab(
+                Translations.getString("general.task.tags"),
+                new TagConfigurationPanel());
+
+        tabbedPanel.add(this.tabbedPane);
+
+        this.add(header, BorderLayout.NORTH);
+        this.add(tabbedPanel, BorderLayout.CENTER);
+
+        this.initializeButtonsPanel();
+    }
+
+    private void initializeButtonsPanel() {
+        this.okListener = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                ModelConfigurationDialogPanel.this.getDialog().setVisible(false);
+            }
+
+        };
+
+        JButton okButton = new TUOkButton(this.okListener);
+
+        this.setButtons(okButton, okButton);
+    }
+
+    private static int modelTypeToTabIndex(ModelType type) {
+        if (type == null)
+            return -1;
+
+        switch (type) {
+            case CONTACT:
+                return 0;
+            case CONTEXT:
+                return 1;
+            case FOLDER:
+                return 2;
+            case GOAL:
+                return 3;
+            case LOCATION:
+                return 4;
+            case TASK_STATUS:
+                return 5;
+            case NOTE:
+            case TASK:
+            default:
+                return -1;
+        }
+    }
+
+    @Override
+    protected void dialogLoaded() {
+        this.getDialog().getRootPane().registerKeyboardAction(
+                this.okListener,
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
+    }
+
 }

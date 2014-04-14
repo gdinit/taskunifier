@@ -40,6 +40,7 @@ public enum ModelType {
 	GOAL,
 	LOCATION,
 	NOTE,
-	TASK;
+	TASK,
+    TASK_STATUS;
 	
 }

@@ -40,13 +40,7 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 
 import com.leclercb.commons.gui.logger.GuiLogger;
-import com.leclercb.taskunifier.api.models.ContactFactory;
-import com.leclercb.taskunifier.api.models.ContextFactory;
-import com.leclercb.taskunifier.api.models.FolderFactory;
-import com.leclercb.taskunifier.api.models.GoalFactory;
-import com.leclercb.taskunifier.api.models.LocationFactory;
-import com.leclercb.taskunifier.api.models.NoteFactory;
-import com.leclercb.taskunifier.api.models.TaskFactory;
+import com.leclercb.taskunifier.api.models.*;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplateFactory;
 import com.leclercb.taskunifier.gui.actions.ActionResetGeneralSearchers;
 import com.leclercb.taskunifier.gui.api.rules.TaskRuleFactory;
@@ -228,6 +222,30 @@ public final class MainLoadFiles {
 					Translations.getString("general.error"),
 					JOptionPane.ERROR_MESSAGE);
 		}
+
+        try {
+            TaskStatusFactory.getInstance().deleteAll();
+
+            TaskStatusFactory.getInstance().decodeFromXML(
+                    new FileInputStream(folder
+                            + File.separator
+                            + "task_statuses"
+                            + suffix
+                            + ".xml"));
+        } catch (FileNotFoundException e) {
+
+        } catch (Exception e) {
+            GuiLogger.getLogger().log(
+                    Level.SEVERE,
+                    "Error while loading task statuses",
+                    e);
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    e.getMessage(),
+                    Translations.getString("general.error"),
+                    JOptionPane.ERROR_MESSAGE);
+        }
 		
 		try {
 			NoteFactory.getInstance().deleteAll();

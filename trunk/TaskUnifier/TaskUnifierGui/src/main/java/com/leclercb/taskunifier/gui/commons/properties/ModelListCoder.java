@@ -38,17 +38,7 @@ import java.util.List;
 import javax.help.UnsupportedOperationException;
 
 import com.leclercb.commons.api.properties.PropertiesCoder;
-import com.leclercb.taskunifier.api.models.Contact;
-import com.leclercb.taskunifier.api.models.Context;
-import com.leclercb.taskunifier.api.models.Folder;
-import com.leclercb.taskunifier.api.models.Goal;
-import com.leclercb.taskunifier.api.models.Location;
-import com.leclercb.taskunifier.api.models.Model;
-import com.leclercb.taskunifier.api.models.ModelId;
-import com.leclercb.taskunifier.api.models.ModelList;
-import com.leclercb.taskunifier.api.models.ModelType;
-import com.leclercb.taskunifier.api.models.Note;
-import com.leclercb.taskunifier.api.models.Task;
+import com.leclercb.taskunifier.api.models.*;
 import com.leclercb.taskunifier.api.models.utils.ModelFactoryUtils;
 
 public class ModelListCoder extends PropertiesCoder<ModelList> {
@@ -135,6 +125,12 @@ public class ModelListCoder extends PropertiesCoder<ModelList> {
 					taskModelList.add((Task) model);
 				
 				return taskModelList;
+            case TASK_STATUS:
+                ModelList<TaskStatus> taskStatusModelList = new ModelList<TaskStatus>(type);
+                for (Model model : list)
+                    taskStatusModelList.add((TaskStatus) model);
+
+                return taskStatusModelList;
 			default:
 				throw new UnsupportedOperationException();
 		}

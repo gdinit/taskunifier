@@ -89,6 +89,8 @@ public final class TranslationsUtils {
 					return Translations.getString("general.notes");
 				case TASK:
 					return Translations.getString("general.tasks");
+                case TASK_STATUS:
+                    return Translations.getString("general.task_statuses");
 			}
 		}
 		
@@ -107,6 +109,8 @@ public final class TranslationsUtils {
 				return Translations.getString("general.note");
 			case TASK:
 				return Translations.getString("general.task");
+            case TASK_STATUS:
+                return Translations.getString("general.task_status");
 		}
 		
 		return "#" + type.name() + "#";

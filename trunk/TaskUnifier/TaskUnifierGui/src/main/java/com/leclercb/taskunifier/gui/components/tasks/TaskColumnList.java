@@ -39,22 +39,12 @@ import javax.swing.SwingConstants;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import com.leclercb.taskunifier.api.models.*;
+import com.leclercb.taskunifier.gui.commons.editors.TaskStatusEditor;
 import org.jdesktop.swingx.renderer.DefaultTableRenderer;
 import org.jdesktop.swingx.renderer.MappedValue;
 import org.jdesktop.swingx.renderer.StringValues;
 
-import com.leclercb.taskunifier.api.models.BasicModel;
-import com.leclercb.taskunifier.api.models.Context;
-import com.leclercb.taskunifier.api.models.Folder;
-import com.leclercb.taskunifier.api.models.Goal;
-import com.leclercb.taskunifier.api.models.Location;
-import com.leclercb.taskunifier.api.models.Model;
-import com.leclercb.taskunifier.api.models.ModelList;
-import com.leclercb.taskunifier.api.models.ModelNote;
-import com.leclercb.taskunifier.api.models.ModelParent;
-import com.leclercb.taskunifier.api.models.TagList;
-import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.api.models.Timer;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.gui.api.accessor.DefaultPropertyAccessor;
@@ -63,7 +53,6 @@ import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorList;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
 import com.leclercb.taskunifier.gui.api.models.GuiTask;
 import com.leclercb.taskunifier.gui.commons.editors.RepeatEditor;
-import com.leclercb.taskunifier.gui.commons.editors.StatusEditor;
 import com.leclercb.taskunifier.gui.commons.editors.TitleEditor;
 import com.leclercb.taskunifier.gui.commons.renderers.TaskShowChildrenRenderer;
 import com.leclercb.taskunifier.gui.commons.values.IconValueEdit;
@@ -826,39 +815,22 @@ public class TaskColumnList extends PropertyAccessorList<Task> {
 		this.add(new DefaultPropertyAccessor<Task>(
 				"STATUS",
 				"task.field.status",
-				PropertyAccessorType.STRING,
+				PropertyAccessorType.TASK_STATUS,
 				Task.PROP_STATUS,
 				Translations.getString("general.task.status"),
 				true,
 				true,
 				false) {
-			
-			private TableCellEditor editor;
-			
-			@Override
-			public TableCellEditor getCellEditor() {
-				if (this.editor == null) {
-					this.editor = new StatusEditor();
-				}
-				
-				return this.editor;
-			}
-			
-			@Override
-			public String getPropertyAsString(Task model) {
-				Object value = this.getProperty(model);
-				return StringValueTaskStatus.INSTANCE.getString(value);
-			}
-			
-			@Override
-			public Object getProperty(Task model) {
-				return model.getStatus();
-			}
-			
-			@Override
-			public void setProperty(Task model, Object value) {
-				model.setStatus((String) value);
-			}
+
+            @Override
+            public Object getProperty(Task model) {
+                return model.getStatus();
+            }
+
+            @Override
+            public void setProperty(Task model, Object value) {
+                model.setStatus((TaskStatus) value);
+            }
 			
 		});
 		

@@ -300,6 +300,7 @@ public final class TaskGrouperUtils {
             case LOCATIONS:
             case NOTE:
             case TASK:
+            case TASK_STATUS:
                 List<?> models = null;
 
                 switch (element.getProperty().getType()) {
@@ -327,6 +328,9 @@ public final class TaskGrouperUtils {
                         break;
                     case TASK:
                         models = ModelFactoryUtils.getFactory(ModelType.TASK).getList();
+                        break;
+                    case TASK_STATUS:
+                        models = ModelFactoryUtils.getFactory(ModelType.TASK_STATUS).getList();
                         break;
                     default:
                         break;
@@ -407,40 +411,6 @@ public final class TaskGrouperUtils {
                 searchers.add(s);
 
                 break;
-            case STRING:
-                if (element.getProperty().equals(
-                        TaskColumnList.getInstance().get(TaskColumnList.STATUS))) {
-                    List<String> statuses = TaskStatusList.getInstance().getStatuses();
-
-                    for (String status : statuses) {
-                        s = searcher.clone();
-                        setTitle(element, s, status);
-                        addMainFilter(
-                                s,
-                                new TaskFilterElement(
-                                        element.getProperty(),
-                                        StringCondition.EQUALS,
-                                        status,
-                                        false));
-                        searchers.add(s);
-                    }
-
-                    s = searcher.clone();
-                    setTitle(
-                            element,
-                            s,
-                            Translations.getString("general.no_value"));
-                    addMainFilter(
-                            s,
-                            new TaskFilterElement(
-                                    element.getProperty(),
-                                    StringCondition.EQUALS,
-                                    null,
-                                    false));
-                    searchers.add(s);
-
-                    break;
-                }
             default:
                 s = searcher.clone();
                 setTitle(element, s, element.getProperty().toString());

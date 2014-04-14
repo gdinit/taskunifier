@@ -39,13 +39,7 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 
 import com.leclercb.commons.gui.logger.GuiLogger;
-import com.leclercb.taskunifier.api.models.ContactFactory;
-import com.leclercb.taskunifier.api.models.ContextFactory;
-import com.leclercb.taskunifier.api.models.FolderFactory;
-import com.leclercb.taskunifier.api.models.GoalFactory;
-import com.leclercb.taskunifier.api.models.LocationFactory;
-import com.leclercb.taskunifier.api.models.NoteFactory;
-import com.leclercb.taskunifier.api.models.TaskFactory;
+import com.leclercb.taskunifier.api.models.*;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplateFactory;
 import com.leclercb.taskunifier.gui.api.rules.TaskRuleFactory;
 import com.leclercb.taskunifier.gui.api.searchers.coders.NoteSearcherFactoryXMLCoder;
@@ -169,11 +163,11 @@ public final class MainSaveFiles {
 		
 		try {
 			ContactFactory.getInstance().encodeToXML(
-					new FileOutputStream(folder
-							+ File.separator
-							+ "contacts"
-							+ suffix
-							+ ".xml"));
+                    new FileOutputStream(folder
+                            + File.separator
+                            + "contacts"
+                            + suffix
+                            + ".xml"));
 			
 			GuiLogger.getLogger().log(Level.INFO, "Saving contacts: " + folder);
 		} catch (Exception e) {
@@ -183,19 +177,19 @@ public final class MainSaveFiles {
 					e);
 			
 			JOptionPane.showMessageDialog(
-					null,
-					e.getMessage(),
-					Translations.getString("general.error"),
-					JOptionPane.ERROR_MESSAGE);
+                    null,
+                    e.getMessage(),
+                    Translations.getString("general.error"),
+                    JOptionPane.ERROR_MESSAGE);
 		}
 		
 		try {
 			ContextFactory.getInstance().encodeToXML(
-					new FileOutputStream(folder
-							+ File.separator
-							+ "contexts"
-							+ suffix
-							+ ".xml"));
+                    new FileOutputStream(folder
+                            + File.separator
+                            + "contexts"
+                            + suffix
+                            + ".xml"));
 			
 			GuiLogger.getLogger().log(Level.INFO, "Saving contexts: " + folder);
 		} catch (Exception e) {
@@ -205,10 +199,10 @@ public final class MainSaveFiles {
 					e);
 			
 			JOptionPane.showMessageDialog(
-					null,
-					e.getMessage(),
-					Translations.getString("general.error"),
-					JOptionPane.ERROR_MESSAGE);
+                    null,
+                    e.getMessage(),
+                    Translations.getString("general.error"),
+                    JOptionPane.ERROR_MESSAGE);
 		}
 		
 		try {
@@ -254,7 +248,7 @@ public final class MainSaveFiles {
 					Translations.getString("general.error"),
 					JOptionPane.ERROR_MESSAGE);
 		}
-		
+
 		try {
 			LocationFactory.getInstance().encodeToXML(
 					new FileOutputStream(folder
@@ -262,20 +256,42 @@ public final class MainSaveFiles {
 							+ "locations"
 							+ suffix
 							+ ".xml"));
-			
+
 			GuiLogger.getLogger().log(Level.INFO, "Saving locations: " + folder);
 		} catch (Exception e) {
 			GuiLogger.getLogger().log(
 					Level.SEVERE,
 					"Error while saving locations",
 					e);
-			
+
 			JOptionPane.showMessageDialog(
 					null,
 					e.getMessage(),
 					Translations.getString("general.error"),
 					JOptionPane.ERROR_MESSAGE);
 		}
+
+        try {
+            TaskStatusFactory.getInstance().encodeToXML(
+                    new FileOutputStream(folder
+                            + File.separator
+                            + "task_statuses"
+                            + suffix
+                            + ".xml"));
+
+            GuiLogger.getLogger().log(Level.INFO, "Saving task statuses: " + folder);
+        } catch (Exception e) {
+            GuiLogger.getLogger().log(
+                    Level.SEVERE,
+                    "Error while saving task statuses",
+                    e);
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    e.getMessage(),
+                    Translations.getString("general.error"),
+                    JOptionPane.ERROR_MESSAGE);
+        }
 		
 		try {
 			NoteFactory.getInstance().encodeToXML(

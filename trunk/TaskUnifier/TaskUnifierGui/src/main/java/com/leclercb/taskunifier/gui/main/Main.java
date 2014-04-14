@@ -47,6 +47,9 @@ import java.util.logging.Level;
 import javax.swing.JOptionPane;
 import javax.swing.RepaintManager;
 
+import com.leclercb.taskunifier.api.models.*;
+import com.leclercb.taskunifier.gui.api.models.*;
+import com.leclercb.taskunifier.gui.api.models.beans.*;
 import org.apache.commons.lang3.SystemUtils;
 
 import com.leclercb.commons.api.event.action.ActionSupport;
@@ -63,31 +66,9 @@ import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelUtils;
 import com.leclercb.commons.gui.swing.lookandfeel.types.DefaultLookAndFeelDescriptor;
 import com.leclercb.commons.gui.utils.CheckThreadViolationRepaintManager;
-import com.leclercb.taskunifier.api.models.ContactFactory;
-import com.leclercb.taskunifier.api.models.ContextFactory;
-import com.leclercb.taskunifier.api.models.FolderFactory;
-import com.leclercb.taskunifier.api.models.GoalFactory;
-import com.leclercb.taskunifier.api.models.LocationFactory;
-import com.leclercb.taskunifier.api.models.NoteFactory;
-import com.leclercb.taskunifier.api.models.TaskFactory;
 import com.leclercb.taskunifier.gui.actions.ActionAddTask;
 import com.leclercb.taskunifier.gui.actions.ActionImportComFile;
 import com.leclercb.taskunifier.gui.actions.ActionQuit;
-import com.leclercb.taskunifier.gui.api.models.GuiContact;
-import com.leclercb.taskunifier.gui.api.models.GuiContext;
-import com.leclercb.taskunifier.gui.api.models.GuiFolder;
-import com.leclercb.taskunifier.gui.api.models.GuiGoal;
-import com.leclercb.taskunifier.gui.api.models.GuiLocation;
-import com.leclercb.taskunifier.gui.api.models.GuiNote;
-import com.leclercb.taskunifier.gui.api.models.GuiTask;
-import com.leclercb.taskunifier.gui.api.models.beans.ComBean;
-import com.leclercb.taskunifier.gui.api.models.beans.GuiContactBean;
-import com.leclercb.taskunifier.gui.api.models.beans.GuiContextBean;
-import com.leclercb.taskunifier.gui.api.models.beans.GuiFolderBean;
-import com.leclercb.taskunifier.gui.api.models.beans.GuiGoalBean;
-import com.leclercb.taskunifier.gui.api.models.beans.GuiLocationBean;
-import com.leclercb.taskunifier.gui.api.models.beans.GuiNoteBean;
-import com.leclercb.taskunifier.gui.api.models.beans.GuiTaskBean;
 import com.leclercb.taskunifier.gui.api.plugins.exc.PluginException;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
@@ -615,6 +596,9 @@ public class Main {
 		LocationFactory.initializeWithClass(
 				GuiLocation.class,
 				GuiLocationBean.class);
+        TaskStatusFactory.initializeWithClass(
+                GuiTaskStatus.class,
+                GuiTaskStatusBean.class);
 		NoteFactory.initializeWithClass(GuiNote.class, GuiNoteBean.class);
 		TaskFactory.initializeWithClass(GuiTask.class, GuiTaskBean.class);
 		
