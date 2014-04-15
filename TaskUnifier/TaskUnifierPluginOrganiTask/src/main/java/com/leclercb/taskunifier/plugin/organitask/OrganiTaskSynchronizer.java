@@ -200,7 +200,7 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 
         if (type == ModelType.TASK_STATUS) {
             for (Model model : models) {
-                ids.add(this.statement.addTaskStatus((TaskStatus) model, false).getModelReferenceIds().get("organitask"));
+                ids.add(this.statement.addTaskStatus((TaskStatus) model).getModelReferenceIds().get("organitask"));
             }
         }
 
@@ -272,7 +272,7 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
 
         if (type == ModelType.TASK_STATUS) {
             for (Model model : models) {
-                this.statement.editTaskStatus((TaskStatus) model, false);
+                this.statement.editTaskStatus((TaskStatus) model);
             }
 
             return;

@@ -26,30 +26,35 @@ public class OrganiTaskStatement {
     private static CallGetGoals callGetGoals = new CallGetGoals();
     private static CallGetNotes callGetNotes = new CallGetNotes();
     private static CallGetTasks callGetTasks = new CallGetTasks();
+    private static CallGetTaskStatuses callGetTaskStatuses = new CallGetTaskStatuses();
 
     private static CallGetDeletedContexts callGetDeletedContexts = new CallGetDeletedContexts();
     private static CallGetDeletedFolders callGetDeletedFolders = new CallGetDeletedFolders();
     private static CallGetDeletedGoals callGetDeletedGoals = new CallGetDeletedGoals();
     private static CallGetDeletedNotes callGetDeletedNotes = new CallGetDeletedNotes();
     private static CallGetDeletedTasks callGetDeletedTasks = new CallGetDeletedTasks();
+    private static CallGetDeletedTaskStatuses callGetDeletedTaskStatuses = new CallGetDeletedTaskStatuses();
 
     private static CallAddContext callAddContext = new CallAddContext();
     private static CallAddFolder callAddFolder = new CallAddFolder();
     private static CallAddGoal callAddGoal = new CallAddGoal();
     private static CallAddNote callAddNote = new CallAddNote();
     private static CallAddTask callAddTask = new CallAddTask();
+    private static CallAddTaskStatus callAddTaskStatus = new CallAddTaskStatus();
 
     private static CallEditContext callEditContext = new CallEditContext();
     private static CallEditFolder callEditFolder = new CallEditFolder();
     private static CallEditGoal callEditGoal = new CallEditGoal();
     private static CallEditNote callEditNote = new CallEditNote();
     private static CallEditTask callEditTask = new CallEditTask();
+    private static CallEditTaskStatus callEditTaskStatus = new CallEditTaskStatus();
 
     private static CallDeleteContext callDeleteContext = new CallDeleteContext();
     private static CallDeleteFolder callDeleteFolder = new CallDeleteFolder();
     private static CallDeleteGoal callDeleteGoal = new CallDeleteGoal();
     private static CallDeleteNote callDeleteNote = new CallDeleteNote();
     private static CallDeleteTask callDeleteTask = new CallDeleteTask();
+    private static CallDeleteTaskStatus callDeleteTaskStatus = new CallDeleteTaskStatus();
 
     public static OrganiTaskToken getToken(String code) throws SynchronizerException {
         return callGetToken.getToken(code);
@@ -131,6 +136,17 @@ public class OrganiTaskStatement {
         }
     }
 
+    public TaskStatusBean[] getTaskStatuses(Calendar updatedAfter)
+            throws SynchronizerException {
+        try {
+            this.checkConnection();
+            return callGetTaskStatuses.getTaskStatuses(this.connection.getAccessToken(), updatedAfter);
+        } catch (OrganiTaskConnectionException e) {
+            this.connection.reconnect();
+            return callGetTaskStatuses.getTaskStatuses(this.connection.getAccessToken(), updatedAfter);
+        }
+    }
+
     public ModelBean[] getDeletedContexts() throws SynchronizerException {
         try {
             this.checkConnection();
@@ -178,6 +194,16 @@ public class OrganiTaskStatement {
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
             return callGetDeletedTasks.getDeletedTasks(this.connection.getAccessToken());
+        }
+    }
+
+    public ModelBean[] getDeletedTaskStatuses() throws SynchronizerException {
+        try {
+            this.checkConnection();
+            return callGetDeletedTaskStatuses.getDeletedTaskStatuses(this.connection.getAccessToken());
+        } catch (OrganiTaskConnectionException e) {
+            this.connection.reconnect();
+            return callGetDeletedTaskStatuses.getDeletedTaskStatuses(this.connection.getAccessToken());
         }
     }
 
@@ -263,6 +289,20 @@ public class OrganiTaskStatement {
         }
     }
 
+    public TaskStatusBean addTaskStatus(TaskStatus taskStatus) throws SynchronizerException {
+        try {
+            this.checkConnection();
+            return callAddTaskStatus.addTaskStatus(
+                    this.connection.getAccessToken(),
+                    taskStatus);
+        } catch (OrganiTaskConnectionException e) {
+            this.connection.reconnect();
+            return callAddTaskStatus.addTaskStatus(
+                    this.connection.getAccessToken(),
+                    taskStatus);
+        }
+    }
+
     public void editContext(Context context, boolean syncParent)
             throws SynchronizerException {
         try {
@@ -342,6 +382,20 @@ public class OrganiTaskStatement {
                     this.connection.getAccessToken(),
                     task,
                     syncParent);
+        }
+    }
+
+    public void editTaskStatus(TaskStatus taskStatus) throws SynchronizerException {
+        try {
+            this.checkConnection();
+            callEditTaskStatus.editTaskStatus(
+                    this.connection.getAccessToken(),
+                    taskStatus);
+        } catch (OrganiTaskConnectionException e) {
+            this.connection.reconnect();
+            callEditTaskStatus.editTaskStatus(
+                    this.connection.getAccessToken(),
+                    taskStatus);
         }
     }
 
@@ -473,6 +527,21 @@ public class OrganiTaskStatement {
             callDeleteTask.deleteTask(
                     this.connection.getAccessToken(),
                     task);
+        }
+    }
+
+    public void deleteTaskStatus(TaskStatus taskStatus)
+            throws SynchronizerException {
+        try {
+            this.checkConnection();
+            callDeleteTaskStatus.deleteTaskStatus(
+                    this.connection.getAccessToken(),
+                    taskStatus);
+        } catch (OrganiTaskConnectionException e) {
+            this.connection.reconnect();
+            callDeleteTaskStatus.deleteTaskStatus(
+                    this.connection.getAccessToken(),
+                    taskStatus);
         }
     }
 
