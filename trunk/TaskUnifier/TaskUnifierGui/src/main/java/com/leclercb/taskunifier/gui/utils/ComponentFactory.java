@@ -205,38 +205,6 @@ public final class ComponentFactory {
 		return comboBox;
 	}
 	
-	public static JXComboBox createTaskStatusComboBox(
-			ComboBoxModel model,
-			boolean autoComplete) {
-		JXComboBox comboBox = new JXComboBox();
-		
-		comboBox.setEditable(false);
-		
-		if (model != null)
-			comboBox.setModel(model);
-		
-		comboBox.setRenderer(new DefaultListRenderer(
-				StringValueTaskStatus.INSTANCE));
-		
-		if (autoComplete) {
-			AutoCompleteDecorator.decorate(
-					comboBox,
-					new ObjectToStringConverter() {
-						
-						@Override
-						public String getPreferredStringForItem(Object item) {
-							if (item == null)
-								return null;
-							
-							return StringValueTaskStatus.INSTANCE.getString(item);
-						}
-						
-					});
-		}
-		
-		return comboBox;
-	}
-	
 	public static JScrollPane createJScrollPane(
 			JComponent component,
 			boolean border) {
