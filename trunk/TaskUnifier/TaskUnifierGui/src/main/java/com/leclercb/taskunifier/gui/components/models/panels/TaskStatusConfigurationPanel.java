@@ -209,6 +209,8 @@ public class TaskStatusConfigurationPanel extends JSplitPane implements IModelLi
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
         if (SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().getStatusValues() == null) {
+            this.enabled = false;
+
             taskStatusTitle.setEnabled(false);
             taskStatusColor.setEnabled(false);
             removeColor.setEnabled(false);
@@ -216,6 +218,8 @@ public class TaskStatusConfigurationPanel extends JSplitPane implements IModelLi
             this.modelList.getAddButton().setEnabled(false);
             this.modelList.getRemoveButton().setEnabled(false);
         } else {
+            this.enabled = true;
+
             this.modelList.getAddButton().setEnabled(true);
             this.modelList.getRemoveButton().setEnabled(true);
         }
