@@ -12,6 +12,8 @@
 		
 		<tocitem text="TaskUnifier Pro" target="taskunifier_pro" />
 
+        <tocitem text="OrganiTask" target="organitask" />
+
 		<tocitem text="Views">
 
 			<tocitem text="Calendar" target="view_calendar" />

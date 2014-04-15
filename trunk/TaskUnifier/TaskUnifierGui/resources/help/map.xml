@@ -39,5 +39,6 @@
 	<mapID target="view_calendar" url="pages/view_calendar.html" />
 	<mapID target="view_notes" url="pages/view_notes.html" />
 	<mapID target="view_tasks" url="pages/view_tasks.html" />
+    <mapID target="organitask" url="pages/organitask.html" />
 	
 </map>
