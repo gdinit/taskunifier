@@ -36,6 +36,7 @@ import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.binding.beans.BeanAdapter;
 import com.jgoodies.binding.value.ConverterValueModel;
 import com.jgoodies.binding.value.ValueModel;
+import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.TaskStatus;
@@ -46,10 +47,12 @@ import com.leclercb.taskunifier.gui.commons.converters.ColorConverter;
 import com.leclercb.taskunifier.gui.commons.models.TaskStatusModel;
 import com.leclercb.taskunifier.gui.components.models.lists.IModelList;
 import com.leclercb.taskunifier.gui.components.models.lists.ModelList;
+import com.leclercb.taskunifier.gui.main.Main;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
+import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
 import org.jdesktop.swingx.JXColorSelectionButton;
 
 import javax.swing.*;
@@ -57,12 +60,20 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-public class TaskStatusConfigurationPanel extends JSplitPane implements IModelList {
+public class TaskStatusConfigurationPanel extends JSplitPane implements IModelList, PropertyChangeListener {
 
     private ModelList modelList;
+    private boolean enabled;
+
+    private JTextField taskStatusTitle;
+    private JXColorSelectionButton taskStatusColor;
+    private JButton removeColor;
 
     public TaskStatusConfigurationPanel() {
+        this.enabled = true;
         this.initialize();
     }
 
@@ -85,14 +96,14 @@ public class TaskStatusConfigurationPanel extends JSplitPane implements IModelLi
         this.setBorder(null);
 
         // Initialize Fields
-        final JTextField taskStatusTitle = new JTextField();
-        final JXColorSelectionButton taskStatusColor = new JXColorSelectionButton();
-        final JButton removeColor = new JButton();
+        this.taskStatusTitle = new JTextField();
+        this.taskStatusColor = new JXColorSelectionButton();
+        this.removeColor = new JButton();
 
         // Set Disabled
-        taskStatusTitle.setEnabled(false);
-        taskStatusColor.setEnabled(false);
-        removeColor.setEnabled(false);
+        this.taskStatusTitle.setEnabled(false);
+        this.taskStatusColor.setEnabled(false);
+        this.removeColor.setEnabled(false);
 
         // Initialize Model List
         this.modelList = new ModelList(new TaskStatusModel(false) {
@@ -142,9 +153,9 @@ public class TaskStatusConfigurationPanel extends JSplitPane implements IModelLi
 
                 this.adapter.setBean(model != null ? (TaskStatus) model : null);
 
-                taskStatusTitle.setEnabled(model != null);
-                taskStatusColor.setEnabled(model != null);
-                removeColor.setEnabled(model != null);
+                taskStatusTitle.setEnabled(model != null && TaskStatusConfigurationPanel.this.enabled);
+                taskStatusColor.setEnabled(model != null && TaskStatusConfigurationPanel.this.enabled);
+                removeColor.setEnabled(model != null && TaskStatusConfigurationPanel.this.enabled);
             }
 
         };
@@ -189,6 +200,25 @@ public class TaskStatusConfigurationPanel extends JSplitPane implements IModelLi
         rightPanel.add(builder.getPanel(), BorderLayout.CENTER);
 
         this.setDividerLocation(200);
+
+        Main.getUserSettings().addPropertyChangeListener(
+                "plugin.synchronizer.id",
+                new WeakPropertyChangeListener(Main.getUserSettings(), this));
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+        if (SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().getStatusValues() == null) {
+            taskStatusTitle.setEnabled(false);
+            taskStatusColor.setEnabled(false);
+            removeColor.setEnabled(false);
+
+            this.modelList.getAddButton().setEnabled(false);
+            this.modelList.getRemoveButton().setEnabled(false);
+        } else {
+            this.modelList.getAddButton().setEnabled(true);
+            this.modelList.getRemoveButton().setEnabled(true);
+        }
     }
 
 }

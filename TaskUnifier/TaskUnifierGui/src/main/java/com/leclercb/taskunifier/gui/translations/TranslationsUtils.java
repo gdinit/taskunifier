@@ -365,6 +365,8 @@ public final class TranslationsUtils {
 				return Translations.getString("property_accessor_type.task_priority");
 			case TASK_REPEAT_FROM:
 				return Translations.getString("property_accessor_type.task_repeat_from");
+            case TASK_STATUS:
+                return Translations.getString("property_accessor_type.task_status");
 			case TIME:
 				return Translations.getString("property_accessor_type.time");
 			case TIMER:
