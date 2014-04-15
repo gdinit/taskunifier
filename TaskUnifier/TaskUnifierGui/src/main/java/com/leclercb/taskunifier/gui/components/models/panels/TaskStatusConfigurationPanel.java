@@ -68,12 +68,12 @@ public class TaskStatusConfigurationPanel extends JSplitPane implements IModelLi
     private ModelList modelList;
     private boolean enabled;
 
+    private JLabel taskStatusLabel;
     private JTextField taskStatusTitle;
     private JXColorSelectionButton taskStatusColor;
     private JButton removeColor;
 
     public TaskStatusConfigurationPanel() {
-        this.enabled = true;
         this.initialize();
     }
 
@@ -96,11 +96,18 @@ public class TaskStatusConfigurationPanel extends JSplitPane implements IModelLi
         this.setBorder(null);
 
         // Initialize Fields
+        this.taskStatusLabel = new JLabel(Translations.getString(
+                "configuration.list.task_statuses.cannot_modify",
+                SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().getApiName()));
+        this.taskStatusLabel.setForeground(Color.RED);
+
         this.taskStatusTitle = new JTextField();
         this.taskStatusColor = new JXColorSelectionButton();
         this.removeColor = new JButton();
 
         // Set Disabled
+
+        this.taskStatusLabel.setVisible(false);
         this.taskStatusTitle.setEnabled(false);
         this.taskStatusColor.setEnabled(false);
         this.removeColor.setEnabled(false);
@@ -172,6 +179,9 @@ public class TaskStatusConfigurationPanel extends JSplitPane implements IModelLi
         FormBuilder builder = new FormBuilder(
                 "right:pref, 4dlu, fill:default:grow");
 
+        // TaskStatus Label
+        builder.appendI15d(null, false, this.taskStatusLabel);
+
         // TaskStatus Title
         builder.appendI15d("general.task_status.title", true, taskStatusTitle);
 
@@ -204,24 +214,29 @@ public class TaskStatusConfigurationPanel extends JSplitPane implements IModelLi
         Main.getUserSettings().addPropertyChangeListener(
                 "plugin.synchronizer.id",
                 new WeakPropertyChangeListener(Main.getUserSettings(), this));
+
+        this.propertyChange(null);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-        if (SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().getStatusValues() == null) {
+        if (SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().getStatusValues() != null) {
             this.enabled = false;
 
-            taskStatusTitle.setEnabled(false);
-            taskStatusColor.setEnabled(false);
-            removeColor.setEnabled(false);
+            this.taskStatusLabel.setVisible(true);
+            this.taskStatusTitle.setEnabled(false);
+            this.taskStatusColor.setEnabled(false);
+            this.removeColor.setEnabled(false);
 
-            this.modelList.getAddButton().setEnabled(false);
-            this.modelList.getRemoveButton().setEnabled(false);
+            this.modelList.getAddButton().setVisible(false);
+            this.modelList.getRemoveButton().setVisible(false);
         } else {
             this.enabled = true;
 
-            this.modelList.getAddButton().setEnabled(true);
-            this.modelList.getRemoveButton().setEnabled(true);
+            this.taskStatusLabel.setVisible(false);
+
+            this.modelList.getAddButton().setVisible(true);
+            this.modelList.getRemoveButton().setVisible(true);
         }
     }
 
