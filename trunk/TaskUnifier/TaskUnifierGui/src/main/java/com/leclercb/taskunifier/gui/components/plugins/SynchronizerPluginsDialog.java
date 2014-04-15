@@ -36,22 +36,30 @@ import com.leclercb.taskunifier.gui.swing.TUDialog;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
 public class SynchronizerPluginsDialog extends TUDialog {
-	
-	public SynchronizerPluginsDialog() {
-		super(SynchronizerPluginsDialogPanel.getInstance());
-		
-		this.initialize();
-	}
-	
-	private void initialize() {
-		this.setModal(true);
-		this.setTitle(Translations.getString("general.manage_synchronizer_plugins"));
-		this.setSize(650, 400);
-		this.setResizable(true);
-		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
-		
-		if (this.getOwner() != null)
-			this.setLocationRelativeTo(this.getOwner());
-	}
-	
+
+    public SynchronizerPluginsDialog() {
+        super(SynchronizerPluginsDialogPanel.getInstance());
+
+        this.initialize();
+    }
+
+    public boolean isWelcome() {
+        return ((SynchronizerPluginsDialogPanel) this.getDialogPanel()).isWelcome();
+    }
+
+    public void setWelcome(boolean welcome) {
+        ((SynchronizerPluginsDialogPanel) this.getDialogPanel()).setWelcome(welcome);
+    }
+
+    private void initialize() {
+        this.setModal(true);
+        this.setTitle(Translations.getString("general.manage_synchronizer_plugins"));
+        this.setSize(650, 400);
+        this.setResizable(true);
+        this.setDefaultCloseOperation(HIDE_ON_CLOSE);
+
+        if (this.getOwner() != null)
+            this.setLocationRelativeTo(this.getOwner());
+    }
+
 }
