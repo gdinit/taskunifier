@@ -77,8 +77,12 @@ public class TUDialog extends JDialog implements SavePropertiesListener {
 		
 		this.initializeDialogPanel();
 	}
-	
-	private void initialize() {
+
+    public TUDialogPanel getDialogPanel() {
+        return dialogPanel;
+    }
+
+    private void initialize() {
 		this.setIconImage(ImageUtils.getResourceImage("logo.png").getImage());
 		
 		Main.getSettings().addSavePropertiesListener(

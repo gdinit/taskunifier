@@ -32,97 +32,129 @@
  */
 package com.leclercb.taskunifier.gui.components.plugins;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
-import org.jdesktop.swingx.JXHeader;
-
 import com.leclercb.taskunifier.gui.components.help.Help;
+import com.leclercb.taskunifier.gui.plugins.PluginApi;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCancelButton;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
+import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
+import org.jdesktop.swingx.JXHeader;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class SynchronizerPluginsDialogPanel extends TUDialogPanel {
-	
-	private static SynchronizerPluginsDialogPanel INSTANCE;
-	
-	protected static SynchronizerPluginsDialogPanel getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new SynchronizerPluginsDialogPanel();
-		
-		return INSTANCE;
-	}
-	
-	private PluginsPanel pluginsPanel;
-	
-	private SynchronizerPluginsDialogPanel() {
-		this.initialize();
-	}
-	
-	private void initialize() {
-		this.setLayout(new BorderLayout());
-		
-		JXHeader header = new JXHeader();
-		header.setTitle(Translations.getString("header.title.manage_synchronizer_plugins"));
-		header.setDescription(Translations.getString("header.description.manage_synchronizer_plugins"));
-		header.setIcon(ImageUtils.getResourceImage("settings.png", 32, 32));
-		this.add(header, BorderLayout.NORTH);
-		
-		this.pluginsPanel = new PluginsPanel(false, true);
-		
-		JPanel mainPanel = new JPanel(new BorderLayout());
-		mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 0, 10));
-		mainPanel.add(this.pluginsPanel, BorderLayout.CENTER);
-		
-		this.add(mainPanel, BorderLayout.CENTER);
-		
-		this.initializeButtonsPanel();
-	}
-	
-	private void initializeButtonsPanel() {
-		ActionListener listener = new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				if (event.getActionCommand().equals("OK")) {
-					SynchronizerPluginsDialogPanel.this.pluginsPanel.installSelectedPlugin();
-				}
-				
-				SynchronizerPluginsDialogPanel.this.getDialog().setVisible(
-						false);
-			}
-			
-		};
-		
-		JButton helpButton = Help.getInstance().getHelpButton("synchronization");
-		JButton okButton = new TUOkButton(listener);
-		JButton cancelButton = new TUCancelButton(listener);
-		
-		this.pluginsPanel.getButtonsPanel().addButton(helpButton);
-		this.pluginsPanel.getButtonsPanel().addButton(okButton);
-		this.pluginsPanel.getButtonsPanel().addButton(cancelButton);
-	}
-	
-	@Override
-	protected void dialogLoaded() {
-		this.getDialog().addWindowListener(new WindowAdapter() {
-			
-			@Override
-			public void windowOpened(WindowEvent e) {
-				if (!SynchronizerPluginsDialogPanel.this.pluginsPanel.isPluginListLoaded())
-					SynchronizerPluginsDialogPanel.this.pluginsPanel.reloadPlugins();
-			}
-			
-		});
-	}
-	
+
+    private static SynchronizerPluginsDialogPanel INSTANCE;
+
+    protected static SynchronizerPluginsDialogPanel getInstance() {
+        if (INSTANCE == null)
+            INSTANCE = new SynchronizerPluginsDialogPanel();
+
+        return INSTANCE;
+    }
+
+    private PluginsPanel pluginsPanel;
+    private boolean welcome;
+
+    private SynchronizerPluginsDialogPanel() {
+        this.initialize();
+    }
+
+    public boolean isWelcome() {
+        return welcome;
+    }
+
+    public void setWelcome(boolean welcome) {
+        this.welcome = welcome;
+    }
+
+    private void initialize() {
+        this.setLayout(new BorderLayout());
+
+        JXHeader header = new JXHeader();
+        header.setTitle(Translations.getString("header.title.manage_synchronizer_plugins"));
+        header.setDescription(Translations.getString("header.description.manage_synchronizer_plugins"));
+        header.setIcon(ImageUtils.getResourceImage("settings.png", 32, 32));
+        this.add(header, BorderLayout.NORTH);
+
+        this.pluginsPanel = new PluginsPanel(false, true);
+
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 0, 10));
+        mainPanel.add(this.pluginsPanel, BorderLayout.CENTER);
+
+        this.add(mainPanel, BorderLayout.CENTER);
+
+        this.initializeButtonsPanel();
+    }
+
+    private void initializeButtonsPanel() {
+        ActionListener listener = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                if (event.getActionCommand().equals("OK")) {
+                    if (!isWelcome()) {
+                        String[] options = new String[]{
+                                Translations.getString("general.ok"),
+                                Translations.getString("general.cancel")};
+
+                        int result = JOptionPane.showOptionDialog(
+                                PluginApi.getCurrentWindow(),
+                                Translations.getString(
+                                        "plugin.synchronizer.remove_all_data",
+                                        SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().getApiName(),
+                                        SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().getApiName(),
+                                        SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().getApiName()),
+                                Translations.getString("general.question"),
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.INFORMATION_MESSAGE,
+                                null,
+                                options,
+                                options[0]);
+
+                        if (result == 0) {
+                            SynchronizerUtils.resetAllConnections();
+                            SynchronizerUtils.resetAllSynchronizersAndDeleteModels();
+                        }
+                    }
+
+                    SynchronizerPluginsDialogPanel.this.pluginsPanel.installSelectedPlugin();
+                }
+
+                SynchronizerPluginsDialogPanel.this.getDialog().setVisible(
+                        false);
+            }
+
+        };
+
+        JButton helpButton = Help.getInstance().getHelpButton("synchronization");
+        JButton okButton = new TUOkButton(listener);
+        JButton cancelButton = new TUCancelButton(listener);
+
+        this.pluginsPanel.getButtonsPanel().addButton(helpButton);
+        this.pluginsPanel.getButtonsPanel().addButton(okButton);
+        this.pluginsPanel.getButtonsPanel().addButton(cancelButton);
+    }
+
+    @Override
+    protected void dialogLoaded() {
+        this.getDialog().addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowOpened(WindowEvent e) {
+                if (!SynchronizerPluginsDialogPanel.this.pluginsPanel.isPluginListLoaded())
+                    SynchronizerPluginsDialogPanel.this.pluginsPanel.reloadPlugins();
+            }
+
+        });
+    }
+
 }

@@ -135,7 +135,7 @@ public class WelcomeDialog extends TUDialog implements ConfigurationGroup {
 							
 							@Override
 							public void display() {
-								ActionManageSynchronizerPlugins.manageSynchronizerPlugins();
+								ActionManageSynchronizerPlugins.manageSynchronizerPlugins(true);
 							}
 							
 						}));

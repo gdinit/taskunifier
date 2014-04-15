@@ -32,39 +32,44 @@
  */
 package com.leclercb.taskunifier.gui.actions;
 
-import java.awt.event.ActionEvent;
-
 import com.leclercb.taskunifier.gui.components.plugins.SynchronizerPluginsDialog;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
+import java.awt.event.ActionEvent;
+
 public class ActionManageSynchronizerPlugins extends AbstractViewAction {
-	
-	public ActionManageSynchronizerPlugins(int width, int height) {
-		super(
-				Translations.getString("action.manage_synchronizer_plugins"),
-				ImageUtils.getResourceImage("download.png", width, height));
-		
-		this.putValue(
-				SHORT_DESCRIPTION,
-				Translations.getString("action.manage_synchronizer_plugins"));
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		ActionManageSynchronizerPlugins.manageSynchronizerPlugins();
-	}
-	
-	public static void manageSynchronizerPlugins() {
-		if (Synchronizing.getInstance().isSynchronizing()) {
-			Synchronizing.getInstance().showSynchronizingMessage();
-			return;
-		}
-		
-		SynchronizerPluginsDialog dialog = new SynchronizerPluginsDialog();
-		dialog.setVisible(true);
-		dialog.dispose();
-	}
-	
+
+    public ActionManageSynchronizerPlugins(int width, int height) {
+        super(
+                Translations.getString("action.manage_synchronizer_plugins"),
+                ImageUtils.getResourceImage("download.png", width, height));
+
+        this.putValue(
+                SHORT_DESCRIPTION,
+                Translations.getString("action.manage_synchronizer_plugins"));
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        ActionManageSynchronizerPlugins.manageSynchronizerPlugins(false);
+    }
+
+    public static void manageSynchronizerPlugins() {
+        manageSynchronizerPlugins(false);
+    }
+
+    public static void manageSynchronizerPlugins(boolean welcome) {
+        if (Synchronizing.getInstance().isSynchronizing()) {
+            Synchronizing.getInstance().showSynchronizingMessage();
+            return;
+        }
+
+        SynchronizerPluginsDialog dialog = new SynchronizerPluginsDialog();
+        dialog.setWelcome(welcome);
+        dialog.setVisible(true);
+        dialog.dispose();
+    }
+
 }

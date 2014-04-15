@@ -41,20 +41,13 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 
+import com.leclercb.taskunifier.api.models.*;
 import org.apache.commons.lang3.StringUtils;
 
 import com.leclercb.commons.api.event.propertychange.PropertyChangeEventExtended;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.gui.logger.GuiLogger;
-import com.leclercb.taskunifier.api.models.ContactFactory;
-import com.leclercb.taskunifier.api.models.ContextFactory;
-import com.leclercb.taskunifier.api.models.FolderFactory;
-import com.leclercb.taskunifier.api.models.GoalFactory;
-import com.leclercb.taskunifier.api.models.LocationFactory;
-import com.leclercb.taskunifier.api.models.NoteFactory;
-import com.leclercb.taskunifier.api.models.Task;
-import com.leclercb.taskunifier.api.models.TaskFactory;
 import com.leclercb.taskunifier.gui.api.rules.TaskRuleFactory;
 import com.leclercb.taskunifier.gui.api.synchronizer.SynchronizerGuiPlugin;
 import com.leclercb.taskunifier.gui.api.synchronizer.dummy.DummyGuiPlugin;
@@ -414,6 +407,7 @@ public final class SynchronizerUtils {
 			FolderFactory.getInstance().deleteAll();
 			GoalFactory.getInstance().deleteAll();
 			LocationFactory.getInstance().deleteAll();
+            TaskStatusFactory.getInstance().deleteAll();
 			NoteFactory.getInstance().deleteAll();
 			TaskFactory.getInstance().deleteAll();
 			

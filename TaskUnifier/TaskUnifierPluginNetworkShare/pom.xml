@@ -4,13 +4,13 @@
 
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier-plugin-networkshare</artifactId>
-    <version>1.7</version>
+    <version>1.8</version>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>com.leclercb</groupId>
         <artifactId>taskunifier</artifactId>
-        <version>4.1.1</version>
+        <version>4.2.0</version>
     </parent>
 
     <name>TaskUnifier Plugin Network Share</name>

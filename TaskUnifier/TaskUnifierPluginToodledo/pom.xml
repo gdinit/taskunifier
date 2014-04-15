@@ -4,13 +4,13 @@
 
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier-plugin-toodledo</artifactId>
-    <version>8.5</version>
+    <version>8.6</version>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>com.leclercb</groupId>
         <artifactId>taskunifier</artifactId>
-        <version>4.1.1</version>
+        <version>4.2.0</version>
     </parent>
 
     <name>TaskUnifier Plugin Toodledo</name>
