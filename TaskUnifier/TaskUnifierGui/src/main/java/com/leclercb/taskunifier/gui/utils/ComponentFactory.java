@@ -32,31 +32,6 @@
  */
 package com.leclercb.taskunifier.gui.utils;
 
-import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.ComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JMenu;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.plaf.basic.BasicSplitPaneUI;
-
-import com.leclercb.taskunifier.gui.main.Main;
-import org.apache.commons.lang3.SystemUtils;
-import org.jdesktop.swingx.JXComboBox;
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
-import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
-import org.jdesktop.swingx.renderer.DefaultListRenderer;
-
 import com.explodingpixels.macwidgets.IAppWidgetFactory;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelUtils;
@@ -64,331 +39,353 @@ import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.gui.actions.ActionPostponeTaskBeans;
 import com.leclercb.taskunifier.gui.actions.ActionPostponeTasks;
 import com.leclercb.taskunifier.gui.actions.PostponeType;
-import com.leclercb.taskunifier.gui.commons.values.IconValueModel;
-import com.leclercb.taskunifier.gui.commons.values.IconValueTaskPriority;
-import com.leclercb.taskunifier.gui.commons.values.StringValueModel;
-import com.leclercb.taskunifier.gui.commons.values.StringValueTaskPriority;
-import com.leclercb.taskunifier.gui.commons.values.StringValueTaskRepeatFrom;
-import com.leclercb.taskunifier.gui.commons.values.StringValueTaskStatus;
+import com.leclercb.taskunifier.gui.commons.values.*;
 import com.leclercb.taskunifier.gui.translations.Translations;
+import org.apache.commons.lang3.SystemUtils;
+import org.jdesktop.swingx.JXComboBox;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
+import org.jdesktop.swingx.renderer.DefaultListRenderer;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.plaf.basic.BasicSplitPaneUI;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public final class ComponentFactory {
-	
-	private ComponentFactory() {
-		
-	}
-	
-	public static void createRepeatComboBox(JComboBox repeatComboBox) {
-		CheckUtils.isNotNull(repeatComboBox);
-		
-		repeatComboBox.setEditable(true);
-		
-		final JTextField repeatTextField = (JTextField) repeatComboBox.getEditor().getEditorComponent();
-		repeatTextField.getDocument().addDocumentListener(
-				new DocumentListener() {
-					
-					@Override
-					public void removeUpdate(DocumentEvent event) {
-						this.update();
-					}
-					
-					@Override
-					public void insertUpdate(DocumentEvent event) {
-						this.update();
-					}
-					
-					@Override
-					public void changedUpdate(DocumentEvent event) {
-						this.update();
-					}
-					
-					private void update() {
-						if (SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().isValidRepeatValue(
-								repeatTextField.getText()))
-							repeatTextField.setForeground(Color.BLACK);
-						else
-							repeatTextField.setForeground(Color.RED);
-					}
-					
-				});
-	}
-	
-	public static JXComboBox createModelComboBox(
-			ComboBoxModel model,
-			boolean autoComplete) {
-		JXComboBox comboBox = new JXComboBox();
-		
-		if (model != null)
-			comboBox.setModel(model);
-		
-		comboBox.setRenderer(new DefaultListRenderer(
-				StringValueModel.INSTANCE_INDENTED,
-				IconValueModel.INSTANCE));
-		
-		if (autoComplete) {
-			AutoCompleteDecorator.decorate(
-					comboBox,
-					new ObjectToStringConverter() {
-						
-						@Override
-						public String getPreferredStringForItem(Object item) {
-							if (item == null)
-								return null;
-							
-							return ((Model) item).getTitle();
-						}
-						
-					});
-		}
-		
-		return comboBox;
-	}
-	
-	public static JXComboBox createTaskPriorityComboBox(
-			ComboBoxModel model,
-			boolean autoComplete) {
-		JXComboBox comboBox = new JXComboBox();
-		
-		if (model != null)
-			comboBox.setModel(model);
-		
-		comboBox.setRenderer(new DefaultListRenderer(
-				StringValueTaskPriority.INSTANCE,
-				IconValueTaskPriority.INSTANCE));
-		
-		if (autoComplete) {
-			AutoCompleteDecorator.decorate(
-					comboBox,
-					new ObjectToStringConverter() {
-						
-						@Override
-						public String getPreferredStringForItem(Object item) {
-							if (item == null)
-								return null;
-							
-							return StringValueTaskPriority.INSTANCE.getString(item);
-						}
-						
-					});
-		}
-		
-		return comboBox;
-	}
-	
-	public static JXComboBox createTaskRepeatFromComboBox(
-			ComboBoxModel model,
-			boolean autoComplete) {
-		JXComboBox comboBox = new JXComboBox();
-		
-		if (model != null)
-			comboBox.setModel(model);
-		
-		comboBox.setRenderer(new DefaultListRenderer(
-				StringValueTaskRepeatFrom.INSTANCE));
-		
-		if (autoComplete) {
-			AutoCompleteDecorator.decorate(
-					comboBox,
-					new ObjectToStringConverter() {
-						
-						@Override
-						public String getPreferredStringForItem(Object item) {
-							if (item == null)
-								return null;
-							
-							return StringValueTaskRepeatFrom.INSTANCE.getString(item);
-						}
-						
-					});
-		}
-		
-		return comboBox;
-	}
-	
-	public static JScrollPane createJScrollPane(
-			JComponent component,
-			boolean border) {
-		JScrollPane scrollPane = new JScrollPane(component);
-		
-		if (SystemUtils.IS_OS_MAC && LookAndFeelUtils.isSytemLookAndFeel())
-			IAppWidgetFactory.makeIAppScrollPane(scrollPane);
-		
-		if (border)
-			scrollPane.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-		else
-			scrollPane.setBorder(BorderFactory.createEmptyBorder());
-		
-		return scrollPane;
-	}
-	
-	public static JSplitPane createThinJSplitPane(int orientation, int dividerSize) {
-		JSplitPane splitPane = new JSplitPane(orientation);
-		
-		splitPane.setContinuousLayout(true);
-		splitPane.setDividerSize(dividerSize);
-		((BasicSplitPaneUI) splitPane.getUI()).getDivider().setBorder(
-				BorderFactory.createMatteBorder(0, 1, 0, 0, new Color(0xa5a5a5)));
-		splitPane.setBorder(BorderFactory.createEmptyBorder());
-		
-		return splitPane;
-	}
-	
-	public static JMenu createPostponeMenu() {
-		final JMenu postponeMenu = new JMenu(
-				Translations.getString("action.postpone_tasks"));
-		final JMenu postponeStartDateMenu = new JMenu(
-				Translations.getString("general.task.start_date"));
-		final JMenu postponeDueDateMenu = new JMenu(
-				Translations.getString("general.task.due_date"));
-		final JMenu postponeBothMenu = new JMenu(
-				Translations.getString("action.postpone_tasks.both"));
-		
-		postponeMenu.setToolTipText(Translations.getString("action.postpone_tasks"));
-		postponeMenu.setIcon(ImageUtils.getResourceImage("calendar.png", 16, 16));
-		
-		postponeStartDateMenu.setToolTipText(Translations.getString("general.task.start_date"));
-		postponeStartDateMenu.setIcon(ImageUtils.getResourceImage(
-				"calendar.png",
-				16,
-				16));
-		
-		postponeDueDateMenu.setToolTipText(Translations.getString("general.task.due_date"));
-		postponeDueDateMenu.setIcon(ImageUtils.getResourceImage(
-				"calendar.png",
-				16,
-				16));
-		
-		postponeBothMenu.setToolTipText(Translations.getString("action.postpone_tasks.both"));
-		postponeBothMenu.setIcon(ImageUtils.getResourceImage(
-				"calendar.png",
-				16,
-				16));
-		
-		ActionPostponeTasks[] actions = null;
-		
-		actions = ActionPostponeTasks.createDefaultActions(
-				16,
-				16,
-				null,
-				PostponeType.START_DATE);
-		
-		for (ActionPostponeTasks action : actions) {
-			postponeStartDateMenu.add(action);
-		}
-		
-		actions = ActionPostponeTasks.createDefaultActions(
-				16,
-				16,
-				null,
-				PostponeType.DUE_DATE);
-		
-		for (ActionPostponeTasks action : actions) {
-			postponeDueDateMenu.add(action);
-		}
-		
-		actions = ActionPostponeTasks.createDefaultActions(
-				16,
-				16,
-				null,
-				PostponeType.BOTH);
-		
-		for (ActionPostponeTasks action : actions) {
-			postponeBothMenu.add(action);
-		}
-		
-		postponeMenu.add(postponeStartDateMenu);
-		postponeMenu.add(postponeDueDateMenu);
-		postponeMenu.add(postponeBothMenu);
-		
-		return postponeMenu;
-	}
-	
-	public static JButton createPostponeButton(
-			final int width,
-			final int height,
-			ActionListener listener) {
-		final JButton button = new JButton();
-		
-		button.setText(Translations.getString("action.postpone_tasks"));
-		button.setToolTipText(Translations.getString("action.postpone_tasks"));
-		button.setIcon(ImageUtils.getResourceImage(
-				"calendar.png",
-				width,
-				height));
-		
-		final JPopupMenu postponeMenu = new JPopupMenu();
-		
-		final JMenu postponeStartDateMenu = new JMenu(
-				Translations.getString("general.task.start_date"));
-		final JMenu postponeDueDateMenu = new JMenu(
-				Translations.getString("general.task.due_date"));
-		final JMenu postponeBothMenu = new JMenu(
-				Translations.getString("action.postpone_tasks.both"));
-		
-		postponeStartDateMenu.setToolTipText(Translations.getString("general.task.start_date"));
-		postponeStartDateMenu.setIcon(ImageUtils.getResourceImage(
-				"calendar.png",
-				16,
-				16));
-		
-		postponeDueDateMenu.setToolTipText(Translations.getString("general.task.due_date"));
-		postponeDueDateMenu.setIcon(ImageUtils.getResourceImage(
-				"calendar.png",
-				16,
-				16));
-		
-		postponeBothMenu.setToolTipText(Translations.getString("action.postpone_tasks.both"));
-		postponeBothMenu.setIcon(ImageUtils.getResourceImage(
-				"calendar.png",
-				16,
-				16));
-		
-		ActionPostponeTaskBeans[] actions = null;
-		
-		actions = ActionPostponeTaskBeans.createDefaultActions(
-				listener,
-				PostponeType.START_DATE,
-				16,
-				16);
-		
-		for (ActionPostponeTaskBeans action : actions) {
-			postponeStartDateMenu.add(action);
-		}
-		
-		actions = ActionPostponeTaskBeans.createDefaultActions(
-				listener,
-				PostponeType.DUE_DATE,
-				16,
-				16);
-		
-		for (ActionPostponeTaskBeans action : actions) {
-			postponeDueDateMenu.add(action);
-		}
-		
-		actions = ActionPostponeTaskBeans.createDefaultActions(
-				listener,
-				PostponeType.BOTH,
-				16,
-				16);
-		
-		for (ActionPostponeTaskBeans action : actions) {
-			postponeBothMenu.add(action);
-		}
-		
-		postponeMenu.add(postponeStartDateMenu);
-		postponeMenu.add(postponeDueDateMenu);
-		postponeMenu.add(postponeBothMenu);
-		
-		button.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				postponeMenu.show(button, 0, 0);
-			}
-			
-		});
-		
-		return button;
-	}
-	
+
+    private ComponentFactory() {
+
+    }
+
+    public static void createRepeatComboBox(JComboBox repeatComboBox) {
+        CheckUtils.isNotNull(repeatComboBox);
+
+        repeatComboBox.setEditable(true);
+
+        final JTextField repeatTextField = (JTextField) repeatComboBox.getEditor().getEditorComponent();
+        repeatTextField.getDocument().addDocumentListener(
+                new DocumentListener() {
+
+                    @Override
+                    public void removeUpdate(DocumentEvent event) {
+                        this.update();
+                    }
+
+                    @Override
+                    public void insertUpdate(DocumentEvent event) {
+                        this.update();
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent event) {
+                        this.update();
+                    }
+
+                    private void update() {
+                        if (SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().isValidRepeatValue(
+                                repeatTextField.getText()))
+                            repeatTextField.setForeground(Color.BLACK);
+                        else
+                            repeatTextField.setForeground(Color.RED);
+                    }
+
+                });
+    }
+
+    public static JXComboBox createModelComboBox(
+            ComboBoxModel model,
+            boolean autoComplete) {
+        JXComboBox comboBox = new JXComboBox();
+
+        if (model != null)
+            comboBox.setModel(model);
+
+        comboBox.setRenderer(new DefaultListRenderer(
+                StringValueModel.INSTANCE_INDENTED,
+                IconValueModel.INSTANCE));
+
+        if (autoComplete) {
+            AutoCompleteDecorator.decorate(
+                    comboBox,
+                    new ObjectToStringConverter() {
+
+                        @Override
+                        public String getPreferredStringForItem(Object item) {
+                            if (item == null)
+                                return null;
+
+                            return ((Model) item).getTitle();
+                        }
+
+                    });
+        }
+
+        return comboBox;
+    }
+
+    public static JXComboBox createTaskPriorityComboBox(
+            ComboBoxModel model,
+            boolean autoComplete) {
+        JXComboBox comboBox = new JXComboBox();
+
+        if (model != null)
+            comboBox.setModel(model);
+
+        comboBox.setRenderer(new DefaultListRenderer(
+                StringValueTaskPriority.INSTANCE,
+                IconValueTaskPriority.INSTANCE));
+
+        if (autoComplete) {
+            AutoCompleteDecorator.decorate(
+                    comboBox,
+                    new ObjectToStringConverter() {
+
+                        @Override
+                        public String getPreferredStringForItem(Object item) {
+                            if (item == null)
+                                return null;
+
+                            return StringValueTaskPriority.INSTANCE.getString(item);
+                        }
+
+                    });
+        }
+
+        return comboBox;
+    }
+
+    public static JXComboBox createTaskRepeatFromComboBox(
+            ComboBoxModel model,
+            boolean autoComplete) {
+        JXComboBox comboBox = new JXComboBox();
+
+        if (model != null)
+            comboBox.setModel(model);
+
+        comboBox.setRenderer(new DefaultListRenderer(
+                StringValueTaskRepeatFrom.INSTANCE));
+
+        if (autoComplete) {
+            AutoCompleteDecorator.decorate(
+                    comboBox,
+                    new ObjectToStringConverter() {
+
+                        @Override
+                        public String getPreferredStringForItem(Object item) {
+                            if (item == null)
+                                return null;
+
+                            return StringValueTaskRepeatFrom.INSTANCE.getString(item);
+                        }
+
+                    });
+        }
+
+        return comboBox;
+    }
+
+    public static JScrollPane createJScrollPane(
+            JComponent component,
+            boolean border,
+            boolean defaultBackgroundColor) {
+        JScrollPane scrollPane = createJScrollPane(component, border);
+
+        if (defaultBackgroundColor) {
+            scrollPane.getViewport().setOpaque(true);
+            scrollPane.getViewport().setBackground(UIManager.getColor("Panel.background"));
+        }
+
+        return scrollPane;
+    }
+
+    public static JScrollPane createJScrollPane(
+            JComponent component,
+            boolean border) {
+        JScrollPane scrollPane = new JScrollPane(component);
+
+        if (SystemUtils.IS_OS_MAC && LookAndFeelUtils.isSytemLookAndFeel())
+            IAppWidgetFactory.makeIAppScrollPane(scrollPane);
+
+        if (border)
+            scrollPane.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        else
+            scrollPane.setBorder(BorderFactory.createEmptyBorder());
+
+        return scrollPane;
+    }
+
+    public static JSplitPane createThinJSplitPane(int orientation, int dividerSize) {
+        JSplitPane splitPane = new JSplitPane(orientation);
+
+        splitPane.setContinuousLayout(true);
+        splitPane.setDividerSize(dividerSize);
+        ((BasicSplitPaneUI) splitPane.getUI()).getDivider().setBorder(
+                BorderFactory.createMatteBorder(0, 1, 0, 0, new Color(0xa5a5a5)));
+        splitPane.setBorder(BorderFactory.createEmptyBorder());
+
+        return splitPane;
+    }
+
+    public static JMenu createPostponeMenu() {
+        final JMenu postponeMenu = new JMenu(
+                Translations.getString("action.postpone_tasks"));
+        final JMenu postponeStartDateMenu = new JMenu(
+                Translations.getString("general.task.start_date"));
+        final JMenu postponeDueDateMenu = new JMenu(
+                Translations.getString("general.task.due_date"));
+        final JMenu postponeBothMenu = new JMenu(
+                Translations.getString("action.postpone_tasks.both"));
+
+        postponeMenu.setToolTipText(Translations.getString("action.postpone_tasks"));
+        postponeMenu.setIcon(ImageUtils.getResourceImage("calendar.png", 16, 16));
+
+        postponeStartDateMenu.setToolTipText(Translations.getString("general.task.start_date"));
+        postponeStartDateMenu.setIcon(ImageUtils.getResourceImage(
+                "calendar.png",
+                16,
+                16));
+
+        postponeDueDateMenu.setToolTipText(Translations.getString("general.task.due_date"));
+        postponeDueDateMenu.setIcon(ImageUtils.getResourceImage(
+                "calendar.png",
+                16,
+                16));
+
+        postponeBothMenu.setToolTipText(Translations.getString("action.postpone_tasks.both"));
+        postponeBothMenu.setIcon(ImageUtils.getResourceImage(
+                "calendar.png",
+                16,
+                16));
+
+        ActionPostponeTasks[] actions = null;
+
+        actions = ActionPostponeTasks.createDefaultActions(
+                16,
+                16,
+                null,
+                PostponeType.START_DATE);
+
+        for (ActionPostponeTasks action : actions) {
+            postponeStartDateMenu.add(action);
+        }
+
+        actions = ActionPostponeTasks.createDefaultActions(
+                16,
+                16,
+                null,
+                PostponeType.DUE_DATE);
+
+        for (ActionPostponeTasks action : actions) {
+            postponeDueDateMenu.add(action);
+        }
+
+        actions = ActionPostponeTasks.createDefaultActions(
+                16,
+                16,
+                null,
+                PostponeType.BOTH);
+
+        for (ActionPostponeTasks action : actions) {
+            postponeBothMenu.add(action);
+        }
+
+        postponeMenu.add(postponeStartDateMenu);
+        postponeMenu.add(postponeDueDateMenu);
+        postponeMenu.add(postponeBothMenu);
+
+        return postponeMenu;
+    }
+
+    public static JButton createPostponeButton(
+            final int width,
+            final int height,
+            ActionListener listener) {
+        final JButton button = new JButton();
+
+        button.setText(Translations.getString("action.postpone_tasks"));
+        button.setToolTipText(Translations.getString("action.postpone_tasks"));
+        button.setIcon(ImageUtils.getResourceImage(
+                "calendar.png",
+                width,
+                height));
+
+        final JPopupMenu postponeMenu = new JPopupMenu();
+
+        final JMenu postponeStartDateMenu = new JMenu(
+                Translations.getString("general.task.start_date"));
+        final JMenu postponeDueDateMenu = new JMenu(
+                Translations.getString("general.task.due_date"));
+        final JMenu postponeBothMenu = new JMenu(
+                Translations.getString("action.postpone_tasks.both"));
+
+        postponeStartDateMenu.setToolTipText(Translations.getString("general.task.start_date"));
+        postponeStartDateMenu.setIcon(ImageUtils.getResourceImage(
+                "calendar.png",
+                16,
+                16));
+
+        postponeDueDateMenu.setToolTipText(Translations.getString("general.task.due_date"));
+        postponeDueDateMenu.setIcon(ImageUtils.getResourceImage(
+                "calendar.png",
+                16,
+                16));
+
+        postponeBothMenu.setToolTipText(Translations.getString("action.postpone_tasks.both"));
+        postponeBothMenu.setIcon(ImageUtils.getResourceImage(
+                "calendar.png",
+                16,
+                16));
+
+        ActionPostponeTaskBeans[] actions = null;
+
+        actions = ActionPostponeTaskBeans.createDefaultActions(
+                listener,
+                PostponeType.START_DATE,
+                16,
+                16);
+
+        for (ActionPostponeTaskBeans action : actions) {
+            postponeStartDateMenu.add(action);
+        }
+
+        actions = ActionPostponeTaskBeans.createDefaultActions(
+                listener,
+                PostponeType.DUE_DATE,
+                16,
+                16);
+
+        for (ActionPostponeTaskBeans action : actions) {
+            postponeDueDateMenu.add(action);
+        }
+
+        actions = ActionPostponeTaskBeans.createDefaultActions(
+                listener,
+                PostponeType.BOTH,
+                16,
+                16);
+
+        for (ActionPostponeTaskBeans action : actions) {
+            postponeBothMenu.add(action);
+        }
+
+        postponeMenu.add(postponeStartDateMenu);
+        postponeMenu.add(postponeDueDateMenu);
+        postponeMenu.add(postponeBothMenu);
+
+        button.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                postponeMenu.show(button, 0, 0);
+            }
+
+        });
+
+        return button;
+    }
+
 }
