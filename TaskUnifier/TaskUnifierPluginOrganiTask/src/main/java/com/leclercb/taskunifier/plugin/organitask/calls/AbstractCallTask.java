@@ -74,39 +74,39 @@ abstract class AbstractCallTask extends AbstractCall {
     private TaskBean getTaskBean(JsonNode node) {
         TaskBean bean = TaskFactory.getInstance().createOriginalBean();
 
-        bean.getModelReferenceIds().put("organitask", node.path("id").asText());
+        bean.getModelReferenceIds().put("organitask", node.path("id").textValue());
         bean.setModelStatus(ModelStatus.LOADED);
         bean.setModelCreationDate(OrganiTaskTranslations.translateUTCDate(node.path("creation_date").asLong()));
         bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").asLong()));
-        bean.setTitle(node.path("title").asText());
+        bean.setTitle(node.path("title").textValue());
         bean.setCompleted(node.path("completed").asBoolean());
         bean.setCompletedOn(OrganiTaskTranslations.translateUTCDate(node.path("completion_date").asLong()));
         bean.setStar(node.path("star").asBoolean());
-        bean.setTags(TagList.fromString(node.path("tags").asText()));
+        bean.setTags(TagList.fromString(node.path("tags").textValue()));
         bean.getContexts().add(OrganiTaskTranslations.getModelOrCreateShell(
                 ModelType.CONTEXT,
-                node.path("context_id").asText()));
+                node.path("context_id").textValue()));
         bean.setFolder(OrganiTaskTranslations.getModelOrCreateShell(
                 ModelType.FOLDER,
-                node.path("folder_id").asText()));
+                node.path("folder_id").textValue()));
         bean.getGoals().add(OrganiTaskTranslations.getModelOrCreateShell(
                 ModelType.GOAL,
-                node.path("goal_id").asText()));
+                node.path("goal_id").textValue()));
         bean.setParent(OrganiTaskTranslations.getModelOrCreateShell(
                 ModelType.TASK,
-                node.path("parent_id").asText()));
+                node.path("parent_id").textValue()));
         bean.setStatus(OrganiTaskTranslations.getModelOrCreateShell(
                 ModelType.TASK_STATUS,
-                node.path("task_status_id").asText()));
+                node.path("task_status_id").textValue()));
         bean.setStartDate(OrganiTaskTranslations.translateUTCDate(node.path("start_date").asLong()));
         bean.setDueDate(OrganiTaskTranslations.translateUTCDate(node.path("due_date").asLong()));
         bean.setStartDateReminder(node.path("start_date_reminder").asInt());
         bean.setDueDateReminder(node.path("due_date_reminder").asInt());
         bean.setLength(node.path("duration").asInt());
-        bean.setRepeatFrom(OrganiTaskTranslations.translateTaskRepeatFrom(node.path("repeat_from").asText()));
+        bean.setRepeatFrom(OrganiTaskTranslations.translateTaskRepeatFrom(node.path("repeat_from").textValue()));
         bean.setProgress(node.path("progress").asInt() / 100);
-        bean.setPriority(OrganiTaskTranslations.translateTaskPriority(node.path("priority").asText()));
-        bean.setNote(node.path("note").asText());
+        bean.setPriority(OrganiTaskTranslations.translateTaskPriority(node.path("priority").textValue()));
+        bean.setNote(node.path("note").textValue());
 
         return bean;
     }

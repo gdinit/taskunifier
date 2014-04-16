@@ -47,18 +47,18 @@ final class CallGetAuthInfo extends AbstractCall {
 
             OrganiTaskAuthInfo token = new OrganiTaskAuthInfo();
 
-            token.setLocale(root.path("locale").asText());
-            token.setTeamMemberId(root.path("team_member_id").asInt());
-            token.setUserId(root.path("user_id").asInt());
-            token.setTeamId(root.path("team_id").asInt());
+            token.setLocale(root.path("locale").textValue());
+            token.setTeamMemberId(root.path("team_member_id").asLong());
+            token.setUserId(root.path("user_id").asLong());
+            token.setTeamId(root.path("team_id").asLong());
             token.setTeamMain(root.path("team_main").asBoolean());
-            token.setOfferId(root.path("offer_id").asInt());
-            token.setRole(root.path("role").asText());
-            token.setAccountType(root.path("account_type").asText());
+            token.setOfferId(root.path("offer_id").asLong());
+            token.setRole(root.path("role").textValue());
+            token.setAccountType(root.path("account_type").textValue());
             token.setPoints(root.path("points").asInt());
-            token.setUserEmail(root.path("user_email").asText());
-            token.setTeamTitle(root.path("team_title").asText());
-            token.setSubscriptionValidity(root.path("subscription_validity").asInt());
+            token.setUserEmail(root.path("user_email").textValue());
+            token.setTeamTitle(root.path("team_title").textValue());
+            token.setSubscriptionValidity(root.path("subscription_validity").asLong());
             token.setSubscriptionDaysLeft(root.path("subscription_days_left").asInt());
 
             return token;

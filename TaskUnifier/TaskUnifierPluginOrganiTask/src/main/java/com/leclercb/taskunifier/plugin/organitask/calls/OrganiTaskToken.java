@@ -8,7 +8,7 @@ package com.leclercb.taskunifier.plugin.organitask.calls;
 public final class OrganiTaskToken {
 
     private String accessToken;
-    private int expiresIn;
+    private long expiresIn;
     private String tokenType;
     private String scope;
     private String refreshToken;
@@ -25,11 +25,11 @@ public final class OrganiTaskToken {
         this.accessToken = accessToken;
     }
 
-    public int getExpiresIn() {
+    public long getExpiresIn() {
         return expiresIn;
     }
 
-    public void setExpiresIn(int expiresIn) {
+    public void setExpiresIn(long expiresIn) {
         this.expiresIn = expiresIn;
     }
 

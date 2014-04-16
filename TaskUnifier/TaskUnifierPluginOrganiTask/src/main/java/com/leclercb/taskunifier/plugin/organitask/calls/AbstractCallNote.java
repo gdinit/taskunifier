@@ -73,15 +73,15 @@ abstract class AbstractCallNote extends AbstractCall {
     private NoteBean getNoteBean(JsonNode node) {
         NoteBean bean = NoteFactory.getInstance().createOriginalBean();
 
-        bean.getModelReferenceIds().put("organitask", node.path("id").asText());
+        bean.getModelReferenceIds().put("organitask", node.path("id").textValue());
         bean.setModelStatus(ModelStatus.LOADED);
         bean.setModelCreationDate(OrganiTaskTranslations.translateUTCDate(node.path("creation_date").asLong()));
         bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").asLong()));
-        bean.setTitle(node.path("title").asText());
+        bean.setTitle(node.path("title").textValue());
         bean.setFolder(OrganiTaskTranslations.getModelOrCreateShell(
                 ModelType.FOLDER,
-                node.path("folder_id").asText()));
-        bean.setNote(node.path("note").asText());
+                node.path("folder_id").textValue()));
+        bean.setNote(node.path("note").textValue());
 
         return bean;
     }

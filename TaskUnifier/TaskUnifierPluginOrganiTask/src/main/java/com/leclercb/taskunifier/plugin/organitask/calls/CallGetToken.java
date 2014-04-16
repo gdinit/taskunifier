@@ -67,11 +67,11 @@ final class CallGetToken extends AbstractCall {
 
             OrganiTaskToken token = new OrganiTaskToken();
 
-            token.setAccessToken(root.path("access_token").asText());
-            token.setExpiresIn(root.path("expires_in").asInt());
-            token.setTokenType(root.path("token_type").asText());
-            token.setScope(root.path("scope").asText());
-            token.setRefreshToken(root.path("refresh_token").asText());
+            token.setAccessToken(root.path("access_token").textValue());
+            token.setExpiresIn(root.path("expires_in").asLong());
+            token.setTokenType(root.path("token_type").textValue());
+            token.setScope(root.path("scope").textValue());
+            token.setRefreshToken(root.path("refresh_token").textValue());
 
             return token;
         } catch (Exception e) {

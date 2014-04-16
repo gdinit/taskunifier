@@ -79,17 +79,17 @@ abstract class AbstractCallContext extends AbstractCall {
     private ContextBean getContextBean(JsonNode node) {
         ContextBean bean = ContextFactory.getInstance().createOriginalBean();
 
-        bean.getModelReferenceIds().put("organitask", node.path("id").asText());
+        bean.getModelReferenceIds().put("organitask", node.path("id").textValue());
         bean.setModelStatus(ModelStatus.LOADED);
         bean.setModelCreationDate(OrganiTaskTranslations.translateUTCDate(node.path("creation_date").asLong()));
         bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").asLong()));
         bean.setParent(OrganiTaskTranslations.getModelOrCreateShell(
                 ModelType.CONTEXT,
-                node.path("parent_id").asText()));
-        bean.setTitle(node.path("title").asText());
+                node.path("parent_id").textValue()));
+        bean.setTitle(node.path("title").textValue());
 
         if (bean instanceof GuiModelBean) {
-            ((GuiModelBean) bean).setColor(OrganiTaskTranslations.translateColor(node.path("color").asText()));
+            ((GuiModelBean) bean).setColor(OrganiTaskTranslations.translateColor(node.path("color").textValue()));
         }
 
         return bean;
