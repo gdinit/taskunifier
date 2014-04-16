@@ -8,11 +8,11 @@ package com.leclercb.taskunifier.plugin.organitask.calls;
 public final class OrganiTaskAuthInfo {
 
     private String locale;
-    private int teamMemberId;
-    private int userId;
-    private int teamId;
+    private long teamMemberId;
+    private long userId;
+    private long teamId;
     private boolean teamMain;
-    private int offerId;
+    private long offerId;
     private String role;
     private String accountType;
     private int points;
@@ -33,27 +33,27 @@ public final class OrganiTaskAuthInfo {
         this.locale = locale;
     }
 
-    public int getTeamMemberId() {
+    public long getTeamMemberId() {
         return teamMemberId;
     }
 
-    public void setTeamMemberId(int teamMemberId) {
+    public void setTeamMemberId(long teamMemberId) {
         this.teamMemberId = teamMemberId;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
-    public int getTeamId() {
+    public long getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(int teamId) {
+    public void setTeamId(long teamId) {
         this.teamId = teamId;
     }
 
@@ -65,11 +65,11 @@ public final class OrganiTaskAuthInfo {
         this.teamMain = teamMain;
     }
 
-    public int getOfferId() {
+    public long getOfferId() {
         return offerId;
     }
 
-    public void setOfferId(int offerId) {
+    public void setOfferId(long offerId) {
         this.offerId = offerId;
     }
 

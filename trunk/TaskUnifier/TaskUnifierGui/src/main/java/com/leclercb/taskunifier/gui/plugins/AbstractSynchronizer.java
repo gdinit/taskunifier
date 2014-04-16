@@ -37,6 +37,7 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.models.*;
 import com.leclercb.taskunifier.api.models.beans.ModelBean;
+import com.leclercb.taskunifier.api.models.beans.ModelParentBean;
 import com.leclercb.taskunifier.api.models.beans.TaskBean;
 import com.leclercb.taskunifier.api.models.utils.ModelFactoryUtils;
 import com.leclercb.taskunifier.api.synchronizer.Connection;
@@ -454,21 +455,21 @@ public abstract class AbstractSynchronizer implements Synchronizer {
             modelsToSync.clear();
 
             // Replace Updated Models
-            if (type == ModelType.TASK) {
+            if (this.isTreeModelType(type)) {
                 Collections.sort(updatedModels, new Comparator<ModelBean>() {
 
                     @Override
                     public int compare(ModelBean o1, ModelBean o2) {
-                        TaskBean t1 = (TaskBean) o1;
-                        TaskBean t2 = (TaskBean) o2;
+                        ModelParentBean m1 = (ModelParentBean) o1;
+                        ModelParentBean m2 = (ModelParentBean) o2;
 
-                        if (t1.getParent() == null && t2.getParent() == null)
+                        if (m1.getParent() == null && m2.getParent() == null)
                             return 0;
 
-                        if (t1.getParent() != null && t2.getParent() != null)
+                        if (m1.getParent() != null && m2.getParent() != null)
                             return 0;
 
-                        if (t1.getParent() == null)
+                        if (m1.getParent() == null)
                             return -1;
 
                         return 1;

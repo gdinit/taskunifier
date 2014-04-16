@@ -99,11 +99,14 @@ final class OrganiTaskTranslations {
     public static ModelId getModelOrCreateShell(
             final ModelType modelType,
             final String foreignId) {
+        if (foreignId == null || foreignId.length() == 0)
+            return null;
+
         Model model = ModelFactoryUtils.getFactory(modelType).get(
                 "organitask",
                 foreignId);
 
-        if (model == null && foreignId != null && foreignId.length() != 0) {
+        if (model == null) {
             PluginApi.invokeAndWait(new Runnable() {
 
                 @Override
