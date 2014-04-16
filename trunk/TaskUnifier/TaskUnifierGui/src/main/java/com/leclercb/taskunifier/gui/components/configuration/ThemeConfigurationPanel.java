@@ -94,7 +94,8 @@ public class ThemeConfigurationPanel extends ConfigurationPanel implements Actio
 				Translations.getString("configuration.tab.general"),
 				ComponentFactory.createJScrollPane(
 						this.generalConfigurationPanel,
-						false));
+						false,
+                        true));
 	}
 	
 	private void initializeTaskCustomColumnListPanel() {
@@ -115,7 +116,8 @@ public class ThemeConfigurationPanel extends ConfigurationPanel implements Actio
 						Translations.getString("configuration.tab.task_custom_column_list"),
 						ComponentFactory.createJScrollPane(
 								this.taskCustomColumnListConfigurationPanel,
-								false));
+								false,
+                                true));
 				this.taskCustomColumnListConfigurationIndex = this.tabbedPane.getTabCount() - 1;
 			}
 		} else {
@@ -133,7 +135,8 @@ public class ThemeConfigurationPanel extends ConfigurationPanel implements Actio
 				Translations.getString("configuration.tab.note_columns"),
 				ComponentFactory.createJScrollPane(
 						this.noteColumnsConfigurationPanel,
-						false));
+						false,
+                        true));
 	}
 	
 	private void initializeTaskColumnsPanel() {
@@ -143,7 +146,8 @@ public class ThemeConfigurationPanel extends ConfigurationPanel implements Actio
 				Translations.getString("configuration.tab.task_columns"),
 				ComponentFactory.createJScrollPane(
 						this.taskColumnsConfigurationPanel,
-						false));
+						false,
+                        true));
 	}
 	
 	private void initializeNoteFieldsPanel() {
@@ -153,7 +157,8 @@ public class ThemeConfigurationPanel extends ConfigurationPanel implements Actio
 				Translations.getString("configuration.tab.note_fields"),
 				ComponentFactory.createJScrollPane(
 						this.noteFieldsConfigurationPanel,
-						false));
+						false,
+                        true));
 	}
 	
 	private void initializeTaskFieldsPanel() {
@@ -173,7 +178,8 @@ public class ThemeConfigurationPanel extends ConfigurationPanel implements Actio
 				Translations.getString("configuration.tab.priority"),
 				ComponentFactory.createJScrollPane(
 						this.priorityConfigurationPanel,
-						false));
+						false,
+                        true));
 	}
 	
 	private void initializeImportancePanel() {
@@ -183,7 +189,8 @@ public class ThemeConfigurationPanel extends ConfigurationPanel implements Actio
 				Translations.getString("configuration.tab.importance"),
 				ComponentFactory.createJScrollPane(
 						this.importanceConfigurationPanel,
-						false));
+						false,
+                        true));
 	}
 	
 	@Override

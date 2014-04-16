@@ -161,7 +161,8 @@ public class PluginConfigurationDialogPanel extends TUDialogPanel implements Con
 		
 		this.pluginContainerPanel.add(ComponentFactory.createJScrollPane(
 				this.pluginConfigurationPanel,
-				false), BorderLayout.CENTER);
+				false,
+                true), BorderLayout.CENTER);
 		
 		this.pluginContainerPanel.validate();
 		

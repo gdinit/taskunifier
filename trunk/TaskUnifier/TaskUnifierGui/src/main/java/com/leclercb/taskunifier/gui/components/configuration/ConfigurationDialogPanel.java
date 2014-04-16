@@ -266,7 +266,8 @@ public class ConfigurationDialogPanel extends TUDialogPanel implements Configura
 				Translations.getString("configuration.tab.general"),
 				ComponentFactory.createJScrollPane(
 						this.generalConfigurationPanel,
-						false));
+						false,
+                        true));
 	}
 	
 	private void initializeDatePanel() {
@@ -278,7 +279,8 @@ public class ConfigurationDialogPanel extends TUDialogPanel implements Configura
 				Translations.getString("configuration.tab.date"),
 				ComponentFactory.createJScrollPane(
 						this.dateConfigurationPanel,
-						false));
+						false,
+                        true));
 	}
 	
 	private void initializeBackupPanel() {
@@ -287,7 +289,8 @@ public class ConfigurationDialogPanel extends TUDialogPanel implements Configura
 				Translations.getString("configuration.tab.backup"),
 				ComponentFactory.createJScrollPane(
 						this.backupConfigurationPanel,
-						false));
+						false,
+                        true));
 	}
 	
 	private void initializeProxyPanel() {
@@ -296,7 +299,8 @@ public class ConfigurationDialogPanel extends TUDialogPanel implements Configura
 				Translations.getString("configuration.tab.proxy"),
 				ComponentFactory.createJScrollPane(
 						this.proxyConfigurationPanel,
-						false));
+						false,
+                        true));
 	}
 	
 	private void initializeSearcherPanel() {
@@ -305,7 +309,8 @@ public class ConfigurationDialogPanel extends TUDialogPanel implements Configura
 				Translations.getString("configuration.tab.searcher"),
 				ComponentFactory.createJScrollPane(
 						this.searcherConfigurationPanel,
-						false));
+						false,
+                        true));
 	}
 	
 	private void initializeThemePanel() {
@@ -321,7 +326,8 @@ public class ConfigurationDialogPanel extends TUDialogPanel implements Configura
 				Translations.getString("configuration.tab.toolbar"),
 				ComponentFactory.createJScrollPane(
 						this.toolbarConfigurationPanel,
-						false));
+						false,
+                        true));
 	}
 	
 	private void initializeListsPanel() {
@@ -330,7 +336,8 @@ public class ConfigurationDialogPanel extends TUDialogPanel implements Configura
 				Translations.getString("configuration.tab.lists"),
 				ComponentFactory.createJScrollPane(
 						this.listsConfigurationPanel,
-						false));
+						false,
+                        true));
 	}
 	
 	private void initializePublicationPanel() {
@@ -340,7 +347,8 @@ public class ConfigurationDialogPanel extends TUDialogPanel implements Configura
 				Translations.getString("configuration.tab.publication"),
 				ComponentFactory.createJScrollPane(
 						this.publicationConfigurationPanel,
-						false));
+						false,
+                        true));
 	}
 	
 	private void initializeSynchronizationPanel() {
@@ -351,7 +359,8 @@ public class ConfigurationDialogPanel extends TUDialogPanel implements Configura
 				Translations.getString("configuration.tab.synchronization"),
 				ComponentFactory.createJScrollPane(
 						this.synchronizationConfigurationPanel,
-						false));
+						false,
+                        true));
 	}
 	
 	private void initializeAdvancedPanel() {
@@ -360,7 +369,8 @@ public class ConfigurationDialogPanel extends TUDialogPanel implements Configura
 				Translations.getString("configuration.tab.advanced"),
 				ComponentFactory.createJScrollPane(
 						this.advancedConfigurationPanel,
-						false));
+						false,
+                        true));
 	}
 	
 	@Override
