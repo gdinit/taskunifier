@@ -75,7 +75,8 @@ public class ListsConfigurationPanel extends ConfigurationPanel {
 				Translations.getString("configuration.tab.task_postpone_list"),
 				ComponentFactory.createJScrollPane(
 						this.taskPostponeListConfigurationPanel,
-						false));
+						false,
+                        true));
 	}
 	
 	private void initializeTaskSnoozeListPanel() {
@@ -85,7 +86,8 @@ public class ListsConfigurationPanel extends ConfigurationPanel {
 				Translations.getString("configuration.tab.task_snooze_list"),
 				ComponentFactory.createJScrollPane(
 						this.taskSnoozeListConfigurationPanel,
-						false));
+						false,
+                        true));
 	}
 	
 	@Override
