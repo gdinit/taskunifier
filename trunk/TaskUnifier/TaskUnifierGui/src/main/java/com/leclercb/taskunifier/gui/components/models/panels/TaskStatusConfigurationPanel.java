@@ -220,7 +220,7 @@ public class TaskStatusConfigurationPanel extends JSplitPane implements IModelLi
 
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-        if (SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().getStatusValues() != null) {
+        if (!SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().allowCustomTaskStatuses()) {
             this.enabled = false;
 
             this.taskStatusLabel.setVisible(true);
