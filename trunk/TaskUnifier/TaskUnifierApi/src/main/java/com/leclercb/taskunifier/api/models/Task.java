@@ -48,6 +48,7 @@ import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Calendar;
+import java.util.List;
 
 public class Task extends AbstractModelParent<Task> implements ModelNote, PropertyChangeListener, ListChangeListener {
 
@@ -227,11 +228,29 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
 
         TaskStatus status = null;
 
-        if (bean.getStatus() != null) {
-            status = TaskStatusFactory.getInstance().get(bean.getStatus());
-            if (status == null)
-                status = TaskStatusFactory.getInstance().createShell(
-                        bean.getStatus());
+        if (bean.getDeprecatedStatus() != null && bean.getDeprecatedStatus().length() != 0) {
+            List<TaskStatus> taskStatuses = TaskStatusFactory.getInstance().getList();
+
+            for (TaskStatus taskStatus : taskStatuses) {
+                if (!taskStatus.getModelStatus().isEndUserStatus())
+                    continue;
+
+                if (taskStatus.getTitle().equalsIgnoreCase(bean.getDeprecatedStatus())) {
+                    status = taskStatus;
+                    break;
+                }
+            }
+
+            if (status == null) {
+                status = TaskStatusFactory.getInstance().create(bean.getDeprecatedStatus());
+            }
+        } else {
+            if (bean.getStatus() != null) {
+                status = TaskStatusFactory.getInstance().get(bean.getStatus());
+                if (status == null)
+                    status = TaskStatusFactory.getInstance().createShell(
+                            bean.getStatus());
+            }
         }
 
         this.setTags(bean.getTags());
