@@ -5,6 +5,7 @@
  */
 package com.leclercb.taskunifier.plugin.organitask.calls;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.commons.api.utils.HttpUtils;
@@ -127,6 +128,13 @@ abstract class AbstractCall {
         } catch (Exception e) {
             throw new SynchronizerHttpException(false, 0, e.getMessage(), e);
         }
+    }
+
+    public String getNodeTextValue(JsonNode node) {
+        if (node.isNull())
+            return null;
+
+        return node.asText();
     }
 
 }
