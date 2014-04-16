@@ -103,7 +103,7 @@ public class TaskBean extends AbstractModelParentBean {
     @XStreamAlias("repeatfrom")
     private TaskRepeatFrom repeatFrom;
 
-    @XStreamAlias("task_status")
+    @XStreamAlias("taskstatus")
     private ModelId status;
 
     @XStreamAlias("status")

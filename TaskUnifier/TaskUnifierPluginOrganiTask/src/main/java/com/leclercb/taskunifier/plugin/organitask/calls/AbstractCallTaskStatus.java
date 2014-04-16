@@ -13,7 +13,9 @@ import com.leclercb.taskunifier.api.models.TaskStatusFactory;
 import com.leclercb.taskunifier.api.models.beans.TaskStatusBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerParsingException;
+import com.leclercb.taskunifier.gui.api.models.beans.GuiModelBean;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -76,6 +78,10 @@ abstract class AbstractCallTaskStatus extends AbstractCall {
         bean.setModelCreationDate(OrganiTaskTranslations.translateUTCDate(node.path("creation_date").asLong()));
         bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").asLong()));
         bean.setTitle(node.path("title").asText());
+
+        if (bean instanceof GuiModelBean) {
+            ((GuiModelBean) bean).setColor(OrganiTaskTranslations.translateColor(node.path("color").asText()));
+        }
 
         return bean;
     }

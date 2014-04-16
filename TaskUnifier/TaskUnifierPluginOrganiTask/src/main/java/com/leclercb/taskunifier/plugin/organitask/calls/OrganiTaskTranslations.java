@@ -14,6 +14,7 @@ import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.api.models.utils.ModelFactoryUtils;
 import com.leclercb.taskunifier.gui.plugins.PluginApi;
 
+import java.awt.*;
 import java.util.Calendar;
 
 final class OrganiTaskTranslations {
@@ -36,6 +37,18 @@ final class OrganiTaskTranslations {
             return 0;
 
         return calendar.getTimeInMillis() / 1000;
+    }
+
+    public static Color translateColor(String color) {
+        return Color.decode(color);
+    }
+
+    public static String translateColor(Color color) {
+        if (color == null)
+            return null;
+
+        String rgb = Integer.toHexString(color.getRGB());
+        return rgb.substring(2, rgb.length());
     }
 
     public static GoalLevel translateGoalLevel(String level) {

@@ -11,6 +11,7 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Goal;
 import com.leclercb.taskunifier.api.models.beans.GoalBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
+import com.leclercb.taskunifier.gui.api.models.GuiModel;
 
 final class CallAddGoal extends AbstractCallGoal {
 
@@ -28,6 +29,10 @@ final class CallAddGoal extends AbstractCallGoal {
 
         node.put("title", goal.getTitle());
         node.put("level", OrganiTaskTranslations.translateGoalLevel(goal.getLevel()));
+
+        if (goal instanceof GuiModel) {
+            node.put("color", OrganiTaskTranslations.translateColor(((GuiModel) goal).getColor()));
+        }
 
         String content = super.call("POST", "/goals", accessToken, node.toString());
 

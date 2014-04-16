@@ -15,7 +15,9 @@ import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.beans.GoalBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerParsingException;
+import com.leclercb.taskunifier.gui.api.models.beans.GuiModelBean;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -86,6 +88,10 @@ abstract class AbstractCallGoal extends AbstractCall {
                 node.path("parent_id").asText()));
         bean.setTitle(node.path("title").asText());
         bean.setLevel(OrganiTaskTranslations.translateGoalLevel(node.path("level").asText()));
+
+        if (bean instanceof GuiModelBean) {
+            ((GuiModelBean) bean).setColor(OrganiTaskTranslations.translateColor(node.path("color").asText()));
+        }
 
         return bean;
     }
