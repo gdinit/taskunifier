@@ -14,17 +14,21 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 final class CallGetDeletedNotes extends AbstractCallDeleted {
 
-    public ModelBean[] getDeletedNotes(String accessToken)
+    public ModelBean[] getDeletedNotes(String accessToken, Calendar deletedAfter)
             throws SynchronizerException {
         CheckUtils.isNotNull(accessToken);
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("access_token", accessToken));
         params.add(new BasicNameValuePair("deleted", "true"));
+
+        if (deletedAfter != null)
+            params.add(new BasicNameValuePair("deletion_date", OrganiTaskTranslations.translateUTCDate(deletedAfter) + ""));
 
         String content = super.callGet("/notes", params);
 

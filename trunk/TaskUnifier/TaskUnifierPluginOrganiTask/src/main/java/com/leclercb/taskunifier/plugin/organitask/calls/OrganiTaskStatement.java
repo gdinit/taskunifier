@@ -147,63 +147,63 @@ public class OrganiTaskStatement {
         }
     }
 
-    public ModelBean[] getDeletedContexts() throws SynchronizerException {
+    public ModelBean[] getDeletedContexts(Calendar deletedAfter) throws SynchronizerException {
         try {
             this.checkConnection();
-            return callGetDeletedContexts.getDeletedContexts(this.connection.getAccessToken());
+            return callGetDeletedContexts.getDeletedContexts(this.connection.getAccessToken(), deletedAfter);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
-            return callGetDeletedContexts.getDeletedContexts(this.connection.getAccessToken());
+            return callGetDeletedContexts.getDeletedContexts(this.connection.getAccessToken(), deletedAfter);
         }
     }
 
-    public ModelBean[] getDeletedFolders() throws SynchronizerException {
+    public ModelBean[] getDeletedFolders(Calendar deletedAfter) throws SynchronizerException {
         try {
             this.checkConnection();
-            return callGetDeletedFolders.getDeletedFolders(this.connection.getAccessToken());
+            return callGetDeletedFolders.getDeletedFolders(this.connection.getAccessToken(), deletedAfter);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
-            return callGetDeletedFolders.getDeletedFolders(this.connection.getAccessToken());
+            return callGetDeletedFolders.getDeletedFolders(this.connection.getAccessToken(), deletedAfter);
         }
     }
 
-    public ModelBean[] getDeletedGoals() throws SynchronizerException {
+    public ModelBean[] getDeletedGoals(Calendar deletedAfter) throws SynchronizerException {
         try {
             this.checkConnection();
-            return callGetDeletedGoals.getDeletedGoals(this.connection.getAccessToken());
+            return callGetDeletedGoals.getDeletedGoals(this.connection.getAccessToken(), deletedAfter);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
-            return callGetDeletedGoals.getDeletedGoals(this.connection.getAccessToken());
+            return callGetDeletedGoals.getDeletedGoals(this.connection.getAccessToken(), deletedAfter);
         }
     }
 
-    public ModelBean[] getDeletedNotes() throws SynchronizerException {
+    public ModelBean[] getDeletedNotes(Calendar deletedAfter) throws SynchronizerException {
         try {
             this.checkConnection();
-            return callGetDeletedNotes.getDeletedNotes(this.connection.getAccessToken());
+            return callGetDeletedNotes.getDeletedNotes(this.connection.getAccessToken(), deletedAfter);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
-            return callGetDeletedNotes.getDeletedNotes(this.connection.getAccessToken());
+            return callGetDeletedNotes.getDeletedNotes(this.connection.getAccessToken(), deletedAfter);
         }
     }
 
-    public ModelBean[] getDeletedTasks() throws SynchronizerException {
+    public ModelBean[] getDeletedTasks(Calendar deletedAfter) throws SynchronizerException {
         try {
             this.checkConnection();
-            return callGetDeletedTasks.getDeletedTasks(this.connection.getAccessToken());
+            return callGetDeletedTasks.getDeletedTasks(this.connection.getAccessToken(), deletedAfter);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
-            return callGetDeletedTasks.getDeletedTasks(this.connection.getAccessToken());
+            return callGetDeletedTasks.getDeletedTasks(this.connection.getAccessToken(), deletedAfter);
         }
     }
 
-    public ModelBean[] getDeletedTaskStatuses() throws SynchronizerException {
+    public ModelBean[] getDeletedTaskStatuses(Calendar deletedAfter) throws SynchronizerException {
         try {
             this.checkConnection();
-            return callGetDeletedTaskStatuses.getDeletedTaskStatuses(this.connection.getAccessToken());
+            return callGetDeletedTaskStatuses.getDeletedTaskStatuses(this.connection.getAccessToken(), deletedAfter);
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
-            return callGetDeletedTaskStatuses.getDeletedTaskStatuses(this.connection.getAccessToken());
+            return callGetDeletedTaskStatuses.getDeletedTaskStatuses(this.connection.getAccessToken(), deletedAfter);
         }
     }
 
