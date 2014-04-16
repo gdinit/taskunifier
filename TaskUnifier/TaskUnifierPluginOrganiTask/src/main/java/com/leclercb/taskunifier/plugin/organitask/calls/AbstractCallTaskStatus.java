@@ -73,14 +73,14 @@ abstract class AbstractCallTaskStatus extends AbstractCall {
     private TaskStatusBean getTaskStatusBean(JsonNode node) {
         TaskStatusBean bean = TaskStatusFactory.getInstance().createOriginalBean();
 
-        bean.getModelReferenceIds().put("organitask", node.path("id").textValue());
+        bean.getModelReferenceIds().put("organitask", this.getNodeTextValue(node.path("id")));
         bean.setModelStatus(ModelStatus.LOADED);
         bean.setModelCreationDate(OrganiTaskTranslations.translateUTCDate(node.path("creation_date").asLong()));
         bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").asLong()));
-        bean.setTitle(node.path("title").textValue());
+        bean.setTitle(this.getNodeTextValue(node.path("title")));
 
         if (bean instanceof GuiModelBean) {
-            ((GuiModelBean) bean).setColor(OrganiTaskTranslations.translateColor(node.path("color").textValue()));
+            ((GuiModelBean) bean).setColor(OrganiTaskTranslations.translateColor(this.getNodeTextValue(node.path("color"))));
         }
 
         return bean;
