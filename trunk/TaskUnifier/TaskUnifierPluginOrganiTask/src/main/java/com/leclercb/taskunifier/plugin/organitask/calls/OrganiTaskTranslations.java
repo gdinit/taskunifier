@@ -23,8 +23,8 @@ final class OrganiTaskTranslations {
 
     }
 
-    public static Calendar translateUTCDate(long timeStamp) {
-        if (timeStamp == 0)
+    public static Calendar translateUTCDate(Long timeStamp) {
+        if (timeStamp == null || timeStamp == 0)
             return null;
 
         Calendar calendar = Calendar.getInstance();
@@ -32,9 +32,9 @@ final class OrganiTaskTranslations {
         return calendar;
     }
 
-    public static long translateUTCDate(Calendar calendar) {
+    public static Long translateUTCDate(Calendar calendar) {
         if (calendar == null)
-            return 0;
+            return null;
 
         return calendar.getTimeInMillis() / 1000;
     }
@@ -48,7 +48,7 @@ final class OrganiTaskTranslations {
             return null;
 
         String rgb = Integer.toHexString(color.getRGB());
-        return rgb.substring(2, rgb.length());
+        return rgb.substring(2, rgb.length()).toUpperCase();
     }
 
     public static GoalLevel translateGoalLevel(String level) {
