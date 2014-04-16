@@ -345,27 +345,27 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
         }
 
         if (type == ModelType.CONTEXT) {
-            deletedModels.addAll(Arrays.asList(this.statement.getDeletedContexts()));
+            deletedModels.addAll(Arrays.asList(this.statement.getDeletedContexts(this.lastSync)));
         }
 
         if (type == ModelType.FOLDER) {
-            deletedModels.addAll(Arrays.asList(this.statement.getDeletedFolders()));
+            deletedModels.addAll(Arrays.asList(this.statement.getDeletedFolders(this.lastSync)));
         }
 
         if (type == ModelType.GOAL) {
-            deletedModels.addAll(Arrays.asList(this.statement.getDeletedGoals()));
+            deletedModels.addAll(Arrays.asList(this.statement.getDeletedGoals(this.lastSync)));
         }
 
         if (type == ModelType.NOTE) {
-            deletedModels.addAll(Arrays.asList(this.statement.getDeletedNotes()));
+            deletedModels.addAll(Arrays.asList(this.statement.getDeletedNotes(this.lastSync)));
         }
 
         if (type == ModelType.TASK) {
-            deletedModels.addAll(Arrays.asList(this.statement.getDeletedTasks()));
+            deletedModels.addAll(Arrays.asList(this.statement.getDeletedTasks(this.lastSync)));
         }
 
         if (type == ModelType.TASK_STATUS) {
-            deletedModels.addAll(Arrays.asList(this.statement.getDeletedTaskStatuses()));
+            deletedModels.addAll(Arrays.asList(this.statement.getDeletedTaskStatuses(this.lastSync)));
         }
 
         return deletedModels;
