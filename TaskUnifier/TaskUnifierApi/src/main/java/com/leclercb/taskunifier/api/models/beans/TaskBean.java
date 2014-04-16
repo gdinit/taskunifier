@@ -103,8 +103,11 @@ public class TaskBean extends AbstractModelParentBean {
     @XStreamAlias("repeatfrom")
     private TaskRepeatFrom repeatFrom;
 
-    @XStreamAlias("status")
+    @XStreamAlias("task_status")
     private ModelId status;
+
+    @XStreamAlias("status")
+    private String deprecatedStatus;
 
     @XStreamAlias("length")
     private int length;
@@ -153,6 +156,7 @@ public class TaskBean extends AbstractModelParentBean {
         this.setRepeat(null);
         this.setRepeatFrom(TaskRepeatFrom.DUE_DATE);
         this.setStatus(null);
+        this.setDeprecatedStatus(null);
         this.setLength(0);
         this.setTimer(new Timer());
         this.setPriority(TaskPriority.LOW);
@@ -181,6 +185,7 @@ public class TaskBean extends AbstractModelParentBean {
         this.setRepeat(bean.getRepeat());
         this.setRepeatFrom(bean.getRepeatFrom());
         this.setStatus(bean.getStatus());
+        this.setDeprecatedStatus(bean.getDeprecatedStatus());
         this.setLength(bean.getLength());
         this.setTimer(bean.getTimer());
         this.setPriority(bean.getPriority());
@@ -335,6 +340,14 @@ public class TaskBean extends AbstractModelParentBean {
 
     public void setStatus(ModelId status) {
         this.status = status;
+    }
+
+    public String getDeprecatedStatus() {
+        return deprecatedStatus;
+    }
+
+    public void setDeprecatedStatus(String deprecatedStatus) {
+        this.deprecatedStatus = deprecatedStatus;
     }
 
     public int getLength() {

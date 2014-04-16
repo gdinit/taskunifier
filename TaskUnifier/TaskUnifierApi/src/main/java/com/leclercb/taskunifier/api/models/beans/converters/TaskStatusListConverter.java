@@ -2,22 +2,22 @@
  * TaskUnifier
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  *   - Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- * 
+ *
  *   - Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- * 
+ *
  *   - Neither the name of TaskUnifier or the names of its
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
  * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -30,27 +30,19 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.api.searchers.filters.conditions.converter;
+package com.leclercb.taskunifier.api.models.beans.converters;
 
-import com.leclercb.taskunifier.api.models.beans.converters.*;
+import com.leclercb.taskunifier.api.models.ModelType;
+import com.leclercb.taskunifier.api.models.TaskStatus;
 import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
 import com.thoughtworks.xstream.mapper.Mapper;
 
-public class ConditionValueConverter extends MultiConverter {
-	
-	public ConditionValueConverter(
-			Mapper mapper,
-			ReflectionProvider reflectionProvider) {
-		this.addConverter(ContactConverter.INSTANCE);
-		this.addConverter(ContextConverter.INSTANCE);
-		this.addConverter(FolderConverter.INSTANCE);
-		this.addConverter(GoalConverter.INSTANCE);
-		this.addConverter(LocationConverter.INSTANCE);
-		this.addConverter(NoteConverter.INSTANCE);
-		this.addConverter(TaskConverter.INSTANCE);
-        this.addConverter(TaskStatusConverter.INSTANCE);
-		this.addConverter(NumberConverter.INSTANCE);
-		this.addConverter(StringConverter.INSTANCE);
-	}
-	
+public class TaskStatusListConverter extends ModelListConverter<TaskStatus> {
+
+    public TaskStatusListConverter(
+            Mapper mapper,
+            ReflectionProvider reflectionProvider) {
+        super(ModelType.TASK_STATUS, mapper, reflectionProvider);
+    }
+
 }

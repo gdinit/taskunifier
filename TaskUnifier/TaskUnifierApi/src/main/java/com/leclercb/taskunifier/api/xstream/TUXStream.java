@@ -51,43 +51,8 @@ public class TUXStream extends XStream {
 	
 	public TUXStream(
 			ReflectionProvider reflectionProvider,
-			HierarchicalStreamDriver driver,
-			ClassLoader classLoader,
-			Mapper mapper,
-			ConverterLookup converterLookup,
-			ConverterRegistry converterRegistry) {
-		super(
-				reflectionProvider,
-				driver,
-				classLoader,
-				mapper,
-				converterLookup,
-				converterRegistry);
-	}
-	
-	public TUXStream(
-			ReflectionProvider reflectionProvider,
-			HierarchicalStreamDriver driver,
-			ClassLoader classLoader,
-			Mapper mapper) {
-		super(reflectionProvider, driver, classLoader, mapper);
-	}
-	
-	public TUXStream(
-			ReflectionProvider reflectionProvider,
-			HierarchicalStreamDriver driver,
-			ClassLoader classLoader) {
-		super(reflectionProvider, driver, classLoader);
-	}
-	
-	public TUXStream(
-			ReflectionProvider reflectionProvider,
 			HierarchicalStreamDriver hierarchicalStreamDriver) {
 		super(reflectionProvider, hierarchicalStreamDriver);
-	}
-	
-	public TUXStream(ReflectionProvider reflectionProvider) {
-		super(reflectionProvider);
 	}
 	
 }
