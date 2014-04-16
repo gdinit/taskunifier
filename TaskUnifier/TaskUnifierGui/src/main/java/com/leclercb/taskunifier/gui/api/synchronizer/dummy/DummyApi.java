@@ -57,12 +57,7 @@ public class DummyApi extends SynchronizerApi {
 	protected DummyApi() {
 		super("DUMMY", "No Synchronization", "http://www.taskunifier.com");
 	}
-	
-	@Override
-	public String[] getStatusValues() {
-		return null;
-	}
-	
+
 	@Override
 	public String[] getDefaultRepeatValues() {
 		return new String[] {

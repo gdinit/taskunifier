@@ -115,24 +115,13 @@ public final class ToodledoApi extends SynchronizerApi {
 		CheckUtils.isNotNull(apiUrl);
 		this.apiUrl = apiUrl;
 	}
-	
-	@Override
-	public String[] getStatusValues() {
-		return new String[] {
-				"None",
-				"Next Action",
-				"Active",
-				"Planning",
-				"Delegated",
-				"Waiting",
-				"Hold",
-				"Postponed",
-				"Someday",
-				"Cancelled",
-				"Reference" };
-	}
-	
-	@Override
+
+    @Override
+    public boolean allowCustomTaskStatuses() {
+        return false;
+    }
+
+    @Override
 	public String[] getDefaultRepeatValues() {
 		return new String[] {
 				" ",
