@@ -11,6 +11,7 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Folder;
 import com.leclercb.taskunifier.api.models.beans.FolderBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
+import com.leclercb.taskunifier.gui.api.models.GuiModel;
 
 final class CallEditFolder extends AbstractCallFolder {
 
@@ -30,6 +31,10 @@ final class CallEditFolder extends AbstractCallFolder {
             node.put("parent_id", (String) null);
 
         node.put("title", folder.getTitle());
+
+        if (folder instanceof GuiModel) {
+            node.put("color", OrganiTaskTranslations.translateColor(((GuiModel) folder).getColor()));
+        }
 
         String content = super.call("PUT", "/folders/" + folder.getModelReferenceId("organitask"), accessToken, node.toString());
 

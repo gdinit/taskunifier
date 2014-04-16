@@ -95,6 +95,9 @@ abstract class AbstractCallTask extends AbstractCall {
         bean.setParent(OrganiTaskTranslations.getModelOrCreateShell(
                 ModelType.TASK,
                 node.path("parent_id").asText()));
+        bean.setStatus(OrganiTaskTranslations.getModelOrCreateShell(
+                ModelType.TASK_STATUS,
+                node.path("task_status_id").asText()));
         bean.setStartDate(OrganiTaskTranslations.translateUTCDate(node.path("start_date").asLong()));
         bean.setDueDate(OrganiTaskTranslations.translateUTCDate(node.path("due_date").asLong()));
         bean.setStartDateReminder(node.path("start_date_reminder").asInt());

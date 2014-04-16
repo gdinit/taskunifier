@@ -50,6 +50,11 @@ final class CallEditTask extends AbstractCallTask {
         else
             node.put("goal_id", (String) null);
 
+        if (task.getStatus() != null && task.getStatus().getModelReferenceId("organitask") != null)
+            node.put("task_status_id", task.getStatus().getModelReferenceId("organitask"));
+        else
+            node.put("task_status_id", (String) null);
+
         node.put("start_date", OrganiTaskTranslations.translateUTCDate(task.getStartDate()));
         node.put("due_date", OrganiTaskTranslations.translateUTCDate(task.getDueDate()));
         node.put("start_date_reminder", task.getStartDateReminder());
