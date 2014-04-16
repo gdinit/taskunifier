@@ -32,7 +32,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
-final class ToodledoTranslations {
+public final class ToodledoTranslations {
 
     private ToodledoTranslations() {
 
@@ -541,6 +541,51 @@ final class ToodledoTranslations {
         }
 
         return (model == null ? null : model.getModelId());
+    }
+
+    public static void createDefaultTaskStatuses() {
+        if (!foundTaskStatus("None"))
+            TaskStatusFactory.getInstance().create("None");
+
+        if (!foundTaskStatus("Next Action"))
+            TaskStatusFactory.getInstance().create("Next Action");
+
+        if (!foundTaskStatus("Active"))
+            TaskStatusFactory.getInstance().create("Active");
+
+        if (!foundTaskStatus("Planning"))
+            TaskStatusFactory.getInstance().create("Planning");
+
+        if (!foundTaskStatus("Delegated"))
+            TaskStatusFactory.getInstance().create("Delegated");
+
+        if (!foundTaskStatus("Waiting"))
+            TaskStatusFactory.getInstance().create("Waiting");
+
+        if (!foundTaskStatus("Hold"))
+            TaskStatusFactory.getInstance().create("Hold");
+
+        if (!foundTaskStatus("Postponed"))
+            TaskStatusFactory.getInstance().create("Postponed");
+
+        if (!foundTaskStatus("Someday"))
+            TaskStatusFactory.getInstance().create("Someday");
+
+        if (!foundTaskStatus("Cancelled"))
+            TaskStatusFactory.getInstance().create("Cancelled");
+
+        if (!foundTaskStatus("Reference"))
+            TaskStatusFactory.getInstance().create("Reference");
+    }
+
+    private static boolean foundTaskStatus(String status) {
+        List<TaskStatus> list = TaskStatusFactory.getInstance().getList();
+
+        for (TaskStatus taskStatus : list)
+            if (taskStatus.getTitle().equalsIgnoreCase(status))
+                return true;
+
+        return false;
     }
 
 }

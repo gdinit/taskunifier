@@ -13,6 +13,7 @@ import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
+import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoTranslations;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -147,6 +148,8 @@ public class ToodledoSynchronizer extends AbstractSynchronizer {
 	@Override
 	public void synchronize(SynchronizerChoice choice, ProgressMonitor monitor)
 			throws SynchronizerException {
+        ToodledoTranslations.createDefaultTaskStatuses();
+
 		this.addedTasks = null;
 		this.accountInfo = ((ToodledoConnection) this.getConnection()).getAccountInfo();
 		
