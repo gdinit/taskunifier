@@ -32,7 +32,10 @@
  */
 package com.leclercb.taskunifier.api.models.beans;
 
-import com.leclercb.taskunifier.api.models.*;
+import com.leclercb.taskunifier.api.models.ModelId;
+import com.leclercb.taskunifier.api.models.ModelType;
+import com.leclercb.taskunifier.api.models.TagList;
+import com.leclercb.taskunifier.api.models.Timer;
 import com.leclercb.taskunifier.api.models.beans.converters.CalendarConverter;
 import com.leclercb.taskunifier.api.models.beans.converters.TagListConverter;
 import com.leclercb.taskunifier.api.models.beans.converters.TimerConverter;
@@ -103,7 +106,7 @@ public class TaskBean extends AbstractModelParentBean {
     @XStreamAlias("repeatfrom")
     private TaskRepeatFrom repeatFrom;
 
-    @XStreamAlias("taskstatus")
+    @XStreamAlias("status_v2")
     private ModelId status;
 
     @XStreamAlias("status")

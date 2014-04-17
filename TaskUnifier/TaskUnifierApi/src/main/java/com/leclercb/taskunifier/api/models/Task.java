@@ -635,12 +635,32 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
     }
 
     public void setStatus(TaskStatus status) {
+        this.setStatus(status, false);
+    }
+
+    private void setStatus(TaskStatus status, boolean silent) {
         if (!this.checkBeforeSet(this.getStatus(), status))
             return;
 
+        if (status != null) {
+            if (status.getModelStatus().equals(ModelStatus.TO_DELETE)
+                    || status.getModelStatus().equals(ModelStatus.DELETED)) {
+                ApiLogger.getLogger().severe(
+                        "You cannot assign a deleted model");
+                status = null;
+            }
+        }
+
+        if (this.status != null)
+            this.status.removePropertyChangeListener(this);
+
         TaskStatus oldStatus = this.status;
         this.status = status;
-        this.updateProperty(PROP_STATUS, oldStatus, status);
+
+        if (this.status != null)
+            this.status.addPropertyChangeListener(this);
+
+        this.updateProperty(PROP_STATUS, oldStatus, status, silent);
     }
 
     public int getLength() {
