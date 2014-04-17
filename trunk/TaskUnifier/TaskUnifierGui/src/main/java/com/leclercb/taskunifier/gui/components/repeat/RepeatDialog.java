@@ -55,7 +55,7 @@ public class RepeatDialog extends TUDialog {
     private void initialize() {
         this.setModal(true);
         this.setTitle(Translations.getString("general.repeat"));
-        this.setSize(700, 400);
+        this.setSize(700, 500);
         this.setResizable(true);
         this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 
