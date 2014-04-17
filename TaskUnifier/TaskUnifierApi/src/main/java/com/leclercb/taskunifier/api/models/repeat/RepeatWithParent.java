@@ -30,54 +30,22 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package com.leclercb.taskunifier.api.models.repeat;
 
-import com.leclercb.commons.api.utils.CheckUtils;
-import com.leclercb.commons.api.utils.DateUtils;
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.Calendar;
 
-public class RepeatEveryX implements Repeat {
+public class RepeatWithParent implements Repeat {
 
-    private int type;
-    private int value;
+    public RepeatWithParent() {
 
-    public RepeatEveryX(int type, int value) {
-        this.setType(type);
-        this.setValue(value);
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        if (type != Calendar.DAY_OF_MONTH && type != Calendar.WEEK_OF_YEAR && type != Calendar.MONTH && type != Calendar.YEAR)
-            throw new IllegalArgumentException("Invalid type");
-
-        this.type = type;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        CheckUtils.isPositive(value);
-        this.value = value;
     }
 
     @Override
     public Calendar getNextDate(Calendar calendar) {
-        if (calendar == null)
-            return null;
-
-        Calendar c = DateUtils.cloneCalendar(calendar);
-        c.add(this.type, this.value);
-
-        return c;
+        return null;
     }
 
     @Override
@@ -86,13 +54,8 @@ public class RepeatEveryX implements Repeat {
             return true;
         }
 
-        if (o instanceof RepeatEveryX) {
-            RepeatEveryX r = (RepeatEveryX) o;
-
-            return new EqualsBuilder()
-                    .append(this.type, r.type)
-                    .append(this.value, r.value)
-                    .isEquals();
+        if (o instanceof RepeatWithParent) {
+            return true;
         }
 
         return false;
@@ -101,9 +64,6 @@ public class RepeatEveryX implements Repeat {
     @Override
     public final int hashCode() {
         HashCodeBuilder hashCode = new HashCodeBuilder();
-        hashCode.append(this.type);
-        hashCode.append(this.value);
-
         return hashCode.toHashCode();
     }
 
