@@ -36,6 +36,7 @@ import com.leclercb.taskunifier.api.models.repeat.Repeat;
 import com.leclercb.taskunifier.api.models.repeat.RepeatEveryX;
 import com.leclercb.taskunifier.api.models.repeat.RepeatEveryXWeekOnDays;
 import com.leclercb.taskunifier.gui.commons.values.StringValueDayOfWeek;
+import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
 import org.apache.commons.lang3.ArrayUtils;
 import org.jdesktop.swingx.JXComboBox;
@@ -144,21 +145,21 @@ public class DailyPanel extends JPanel implements RepeatPanel {
         group.add(everyDay);
 
         builder.append(everyDay);
-        builder.append(new JLabel("Every day"));
+        builder.append(new JLabel(Translations.getString("repeat.daily.every_day")));
 
         // Every weekday
         everyWeekday = new JRadioButton();
         group.add(everyWeekday);
 
         builder.append(everyWeekday);
-        builder.append(new JLabel("Every weekday"));
+        builder.append(new JLabel(Translations.getString("repeat.daily.every_weekday")));
 
         // Every weekend
         everyWeekend = new JRadioButton();
         group.add(everyWeekend);
 
         builder.append(everyWeekend);
-        builder.append(new JLabel("Every weekend"));
+        builder.append(new JLabel(Translations.getString("repeat.daily.every_weekend")));
 
         // Every X days
         everyXDays = new JRadioButton();
@@ -170,9 +171,9 @@ public class DailyPanel extends JPanel implements RepeatPanel {
 
         panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        panel.add(new JLabel("Every"));
+        panel.add(new JLabel(Translations.getString("repeat.daily.every_x_days.part1")));
         panel.add(everyXDays_X);
-        panel.add(new JLabel("day(s)"));
+        panel.add(new JLabel(Translations.getString("repeat.daily.every_x_days.part2")));
 
         builder.append(everyXDays);
         builder.append(panel);
@@ -185,8 +186,9 @@ public class DailyPanel extends JPanel implements RepeatPanel {
 
         panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        panel.add(new JLabel("Every"));
+        panel.add(new JLabel(Translations.getString("repeat.daily.every_day_of_week.part1")));
         panel.add(everyDayOfWeek_X);
+        panel.add(new JLabel(Translations.getString("repeat.daily.every_day_of_week.part2")));
 
         builder.append(everyDayOfWeek);
         builder.append(panel);

@@ -401,7 +401,10 @@ public final class TranslationsUtils {
             for (int i = 0; i < ((RepeatEveryXWeekOnDays) repeat).getDays().length; i++)
                 days.add(StringValueDayOfWeek.INSTANCE.getString(((RepeatEveryXWeekOnDays) repeat).getDays()[i]));
 
-            return Translations.getString("repeat.every_x_weeks_on", StringUtils.join(days));
+            return Translations.getString(
+                    "repeat.every_x_weeks_on",
+                    ((RepeatEveryXWeekOnDays) repeat).getValue(),
+                    StringUtils.join(days));
         }
 
         if (repeat instanceof RepeatEveryXMonthOnDayX) {
