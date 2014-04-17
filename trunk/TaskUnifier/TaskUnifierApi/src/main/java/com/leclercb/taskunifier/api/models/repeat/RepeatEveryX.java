@@ -34,6 +34,7 @@ package com.leclercb.taskunifier.api.models.repeat;
 
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.DateUtils;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -41,8 +42,15 @@ import java.util.Calendar;
 
 public class RepeatEveryX implements Repeat {
 
+    @XStreamAlias("type")
     private int type;
+
+    @XStreamAlias("value")
     private int value;
+
+    public RepeatEveryX() {
+        this(Calendar.DAY_OF_MONTH, 1);
+    }
 
     public RepeatEveryX(int type, int value) {
         this.setType(type);

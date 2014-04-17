@@ -139,7 +139,7 @@ public class TaskTemplate extends AbstractBasicModel implements Template<Task, T
     @XStreamAlias("taskreminder")
     private Integer taskDueDateReminder;
 
-    @XStreamAlias("taskrepeat_v2")
+    @XStreamAlias("taskrepeat-v2")
     private Repeat taskRepeat;
 
     @XStreamAlias("taskrepeatfrom")
@@ -148,7 +148,7 @@ public class TaskTemplate extends AbstractBasicModel implements Template<Task, T
     @XStreamAlias("taskstatusforce")
     private boolean taskStatusForce;
 
-    @XStreamAlias("taskstatus_v2")
+    @XStreamAlias("taskstatus-v2")
     @XStreamConverter(TaskStatusConverter.class)
     private TaskStatus taskStatus;
 

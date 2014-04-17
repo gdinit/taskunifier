@@ -35,6 +35,7 @@ package com.leclercb.taskunifier.api.models.repeat;
 
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.DateUtils;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -44,9 +45,18 @@ import java.util.List;
 
 public class RepeatEveryXMonthOnWeekX implements Repeat {
 
+    @XStreamAlias("value")
     private int value;
+
+    @XStreamAlias("day")
     private int day;
+
+    @XStreamAlias("week")
     private int week;
+
+    public RepeatEveryXMonthOnWeekX() {
+        this(1, 1, Calendar.MONDAY);
+    }
 
     public RepeatEveryXMonthOnWeekX(int value, int week, int day) {
         this.setValue(value);
