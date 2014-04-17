@@ -74,7 +74,6 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
         this.createContactsNote();
         this.createDeletedContactsNote();
 
-        this.authInfo = this.statement.getAuthInfo();
         this.lastSync = Calendar.getInstance();
     }
 
