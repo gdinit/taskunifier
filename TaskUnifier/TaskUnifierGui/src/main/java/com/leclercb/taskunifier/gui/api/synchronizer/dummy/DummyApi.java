@@ -32,89 +32,60 @@
  */
 package com.leclercb.taskunifier.gui.api.synchronizer.dummy;
 
-import java.util.Properties;
-
 import com.leclercb.taskunifier.api.models.Model;
-import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.synchronizer.Connection;
 import com.leclercb.taskunifier.api.synchronizer.Synchronizer;
 import com.leclercb.taskunifier.api.synchronizer.SynchronizerApi;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
-import com.leclercb.taskunifier.gui.plugins.PluginRepeatUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 
-public class DummyApi extends SynchronizerApi {
-	
-	private static DummyApi INSTANCE;
-	
-	public static final DummyApi getInstance() {
-		if (INSTANCE == null)
-			INSTANCE = new DummyApi();
-		
-		return INSTANCE;
-	}
-	
-	protected DummyApi() {
-		super("DUMMY", "No Synchronization", "http://www.taskunifier.com");
-	}
+import java.util.Properties;
 
-	@Override
-	public String[] getDefaultRepeatValues() {
-		return new String[] {
-				" ",
-				"Daily",
-				"Every 2 days",
-				"Every 3 days",
-				"Weekly",
-				"Biweekly",
-				"Monthly",
-				"Bimonthly",
-				"Quarterly",
-				"Semiannually",
-				"Yearly",
-				"With Parent" };
-	}
-	
-	@Override
-	public boolean isValidRepeatValue(String repeat) {
-		return PluginRepeatUtils.isValidRepeatValue(repeat);
-	}
-	
-	@Override
-	public void createRepeatTask(Task task) {
-		PluginRepeatUtils.createRepeatTask(task);
-	}
-	
-	@Override
-	public void flagAsNew(Model model) {
-		
-	}
-	
-	@Override
-	public Connection getConnection(Properties properties)
-			throws SynchronizerException {
-		throw new SynchronizerException(
-				true,
-				Translations.getString("synchronizer.select_an_api"));
-	}
-	
-	@Override
-	public Synchronizer getSynchronizer(
-			Properties properties,
-			Connection connection) throws SynchronizerException {
-		throw new SynchronizerException(
-				true,
-				Translations.getString("synchronizer.select_an_api"));
-	}
-	
-	@Override
-	public void resetConnectionParameters(Properties properties) {
-		
-	}
-	
-	@Override
-	public void resetSynchronizerParameters(Properties properties) {
-		
-	}
-	
+public class DummyApi extends SynchronizerApi {
+
+    private static DummyApi INSTANCE;
+
+    public static final DummyApi getInstance() {
+        if (INSTANCE == null)
+            INSTANCE = new DummyApi();
+
+        return INSTANCE;
+    }
+
+    protected DummyApi() {
+        super("DUMMY", "No Synchronization", "http://www.taskunifier.com");
+    }
+
+    @Override
+    public void flagAsNew(Model model) {
+
+    }
+
+    @Override
+    public Connection getConnection(Properties properties)
+            throws SynchronizerException {
+        throw new SynchronizerException(
+                true,
+                Translations.getString("synchronizer.select_an_api"));
+    }
+
+    @Override
+    public Synchronizer getSynchronizer(
+            Properties properties,
+            Connection connection) throws SynchronizerException {
+        throw new SynchronizerException(
+                true,
+                Translations.getString("synchronizer.select_an_api"));
+    }
+
+    @Override
+    public void resetConnectionParameters(Properties properties) {
+
+    }
+
+    @Override
+    public void resetSynchronizerParameters(Properties properties) {
+
+    }
+
 }

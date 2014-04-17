@@ -799,7 +799,6 @@ public class TaskTable extends JXTable implements TaskTableView, PropertyChangeL
                 new TaskAlternateHighlighter(),
                 new TaskCompletedHighlighter(),
                 new TaskTitleHighlighter(),
-                new TaskRepeatHighlighter(),
                 new TaskDueTodayHighlighter(),
                 new TaskOverDueHighlighter(),
                 new TaskSelectedHighlighter(),

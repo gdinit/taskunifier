@@ -33,7 +33,6 @@
 package com.leclercb.taskunifier.gui.utils;
 
 import com.explodingpixels.macwidgets.IAppWidgetFactory;
-import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.gui.swing.lookandfeel.LookAndFeelUtils;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.gui.actions.ActionPostponeTaskBeans;
@@ -48,8 +47,6 @@ import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 import org.jdesktop.swingx.renderer.DefaultListRenderer;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -59,41 +56,6 @@ public final class ComponentFactory {
 
     private ComponentFactory() {
 
-    }
-
-    public static void createRepeatComboBox(JComboBox repeatComboBox) {
-        CheckUtils.isNotNull(repeatComboBox);
-
-        repeatComboBox.setEditable(true);
-
-        final JTextField repeatTextField = (JTextField) repeatComboBox.getEditor().getEditorComponent();
-        repeatTextField.getDocument().addDocumentListener(
-                new DocumentListener() {
-
-                    @Override
-                    public void removeUpdate(DocumentEvent event) {
-                        this.update();
-                    }
-
-                    @Override
-                    public void insertUpdate(DocumentEvent event) {
-                        this.update();
-                    }
-
-                    @Override
-                    public void changedUpdate(DocumentEvent event) {
-                        this.update();
-                    }
-
-                    private void update() {
-                        if (SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().isValidRepeatValue(
-                                repeatTextField.getText()))
-                            repeatTextField.setForeground(Color.BLACK);
-                        else
-                            repeatTextField.setForeground(Color.RED);
-                    }
-
-                });
     }
 
     public static JXComboBox createModelComboBox(
