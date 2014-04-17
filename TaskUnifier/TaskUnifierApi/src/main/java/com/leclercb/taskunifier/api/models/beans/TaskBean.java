@@ -41,6 +41,7 @@ import com.leclercb.taskunifier.api.models.beans.converters.TagListConverter;
 import com.leclercb.taskunifier.api.models.beans.converters.TimerConverter;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
+import com.leclercb.taskunifier.api.models.repeat.Repeat;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
 
@@ -100,8 +101,11 @@ public class TaskBean extends AbstractModelParentBean {
     @XStreamAlias("reminder")
     private int dueDateReminder;
 
+    @XStreamAlias("repeat_v2")
+    private Repeat repeat;
+
     @XStreamAlias("repeat")
-    private String repeat;
+    private String repeatV1;
 
     @XStreamAlias("repeatfrom")
     private TaskRepeatFrom repeatFrom;
@@ -110,7 +114,7 @@ public class TaskBean extends AbstractModelParentBean {
     private ModelId status;
 
     @XStreamAlias("status")
-    private String deprecatedStatus;
+    private String statusV1;
 
     @XStreamAlias("length")
     private int length;
@@ -157,9 +161,10 @@ public class TaskBean extends AbstractModelParentBean {
         this.setDueDate(null);
         this.setDueDateReminder(0);
         this.setRepeat(null);
+        this.setRepeatV1(null);
         this.setRepeatFrom(TaskRepeatFrom.DUE_DATE);
         this.setStatus(null);
-        this.setDeprecatedStatus(null);
+        this.setStatusV1(null);
         this.setLength(0);
         this.setTimer(new Timer());
         this.setPriority(TaskPriority.LOW);
@@ -186,9 +191,10 @@ public class TaskBean extends AbstractModelParentBean {
         this.setDueDate(bean.getDueDate());
         this.setDueDateReminder(bean.getDueDateReminder());
         this.setRepeat(bean.getRepeat());
+        this.setRepeatV1(bean.getRepeatV1());
         this.setRepeatFrom(bean.getRepeatFrom());
         this.setStatus(bean.getStatus());
-        this.setDeprecatedStatus(bean.getDeprecatedStatus());
+        this.setStatusV1(bean.getStatusV1());
         this.setLength(bean.getLength());
         this.setTimer(bean.getTimer());
         this.setPriority(bean.getPriority());
@@ -321,12 +327,20 @@ public class TaskBean extends AbstractModelParentBean {
         this.dueDateReminder = dueDateReminder;
     }
 
-    public String getRepeat() {
+    public Repeat getRepeat() {
         return this.repeat;
     }
 
-    public void setRepeat(String repeat) {
+    public void setRepeat(Repeat repeat) {
         this.repeat = repeat;
+    }
+
+    public String getRepeatV1() {
+        return this.repeatV1;
+    }
+
+    public void setRepeatV1(String repeatV1) {
+        this.repeatV1 = repeatV1;
     }
 
     public TaskRepeatFrom getRepeatFrom() {
@@ -345,12 +359,12 @@ public class TaskBean extends AbstractModelParentBean {
         this.status = status;
     }
 
-    public String getDeprecatedStatus() {
-        return deprecatedStatus;
+    public String getStatusV1() {
+        return statusV1;
     }
 
-    public void setDeprecatedStatus(String deprecatedStatus) {
-        this.deprecatedStatus = deprecatedStatus;
+    public void setStatusV1(String statusV1) {
+        this.statusV1 = statusV1;
     }
 
     public int getLength() {

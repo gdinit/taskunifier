@@ -44,6 +44,8 @@ import com.leclercb.taskunifier.api.models.beans.ModelBean;
 import com.leclercb.taskunifier.api.models.beans.TaskBean;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
+import com.leclercb.taskunifier.api.models.repeat.DeprecatedRepeatConverter;
+import com.leclercb.taskunifier.api.models.repeat.Repeat;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -87,7 +89,7 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
     private int startDateReminder;
     private Calendar dueDate;
     private int dueDateReminder;
-    private String repeat;
+    private Repeat repeat;
     private TaskRepeatFrom repeatFrom;
     private TaskStatus status;
     private int length;
@@ -226,23 +228,31 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
                         bean.getFolder());
         }
 
+        Repeat repeat = null;
+
+        if (bean.getRepeatV1() != null && bean.getRepeatV1().length() != 0) {
+            repeat = DeprecatedRepeatConverter.getRepeat(bean.getRepeatV1());
+        } else {
+            repeat = bean.getRepeat();
+        }
+
         TaskStatus status = null;
 
-        if (bean.getDeprecatedStatus() != null && bean.getDeprecatedStatus().length() != 0) {
+        if (bean.getStatusV1() != null && bean.getStatusV1().length() != 0) {
             List<TaskStatus> taskStatuses = TaskStatusFactory.getInstance().getList();
 
             for (TaskStatus taskStatus : taskStatuses) {
                 if (!taskStatus.getModelStatus().isEndUserStatus())
                     continue;
 
-                if (taskStatus.getTitle().equalsIgnoreCase(bean.getDeprecatedStatus())) {
+                if (taskStatus.getTitle().equalsIgnoreCase(bean.getStatusV1())) {
                     status = taskStatus;
                     break;
                 }
             }
 
             if (status == null) {
-                status = TaskStatusFactory.getInstance().create(bean.getDeprecatedStatus());
+                status = TaskStatusFactory.getInstance().create(bean.getStatusV1());
             }
         } else {
             if (bean.getStatus() != null) {
@@ -266,7 +276,7 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
         this.setStartDateReminder(bean.getStartDateReminder());
         this.setDueDate(bean.getDueDate());
         this.setDueDateReminder(bean.getDueDateReminder());
-        this.setRepeat(bean.getRepeat());
+        this.setRepeat(repeat);
         this.setRepeatFrom(bean.getRepeatFrom());
         this.setStatus(status);
         this.setLength(bean.getLength());
@@ -599,18 +609,15 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
                 dueDateReminder);
     }
 
-    public String getRepeat() {
+    public Repeat getRepeat() {
         return this.repeat;
     }
 
-    public void setRepeat(String repeat) {
+    public void setRepeat(Repeat repeat) {
         if (!this.checkBeforeSet(this.getRepeat(), repeat))
             return;
 
-        if (repeat != null)
-            repeat = repeat.trim();
-
-        String oldRepeat = this.repeat;
+        Repeat oldRepeat = this.repeat;
         this.repeat = repeat;
         this.updateProperty(PROP_REPEAT, oldRepeat, repeat);
     }
