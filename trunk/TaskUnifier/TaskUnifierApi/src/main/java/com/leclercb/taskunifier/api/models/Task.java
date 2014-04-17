@@ -836,7 +836,8 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
     }
 
     private Task repeat(Repeat repeat) {
-        CheckUtils.isNotNull(repeat);
+        if (repeat == null)
+            return null;
 
         Calendar startDate = null;
         Calendar dueDate = null;
