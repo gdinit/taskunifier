@@ -139,12 +139,12 @@ public class RepeatEveryXMonthOnWeekX implements Repeat {
         c.set(Calendar.DAY_OF_MONTH, 1);
 
         while (c.get(Calendar.DAY_OF_WEEK) != day) {
-            c.add(Calendar.DATE, 1);
+            c.add(Calendar.DAY_OF_MONTH, 1);
         }
 
         while (c.get(Calendar.MONTH) == month) {
             days.add(DateUtils.cloneCalendar(c));
-            c.add(Calendar.DATE, 7);
+            c.add(Calendar.DAY_OF_MONTH, 7);
         }
 
         if (days.size() == 4) {
