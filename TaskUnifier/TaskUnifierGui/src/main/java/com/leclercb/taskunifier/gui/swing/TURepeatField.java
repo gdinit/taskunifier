@@ -46,7 +46,7 @@ public class TURepeatField extends JPanel {
 
     public static final String PROP_REPEAT = "repeat";
 
-    private JLabel label;
+    private JTextField label;
     private JButton button;
     private Repeat repeat;
 
@@ -74,7 +74,8 @@ public class TURepeatField extends JPanel {
         this.setOpaque(false);
         this.setLayout(new BorderLayout());
 
-        this.label = new JLabel();
+        this.label = new JTextField();
+        this.label.setEditable(false);
 
         this.button = new JButton(ImageUtils.getResourceImage("repeat.png", 16, 16));
         this.button.addActionListener(new ActionListener() {
