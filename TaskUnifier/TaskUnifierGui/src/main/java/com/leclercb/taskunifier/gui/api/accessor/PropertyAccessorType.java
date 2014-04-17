@@ -38,6 +38,7 @@ import com.leclercb.taskunifier.api.models.*;
 import com.leclercb.taskunifier.api.models.Timer;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
+import com.leclercb.taskunifier.api.models.repeat.Repeat;
 import com.leclercb.taskunifier.gui.commons.comparators.BasicModelComparator;
 import com.leclercb.taskunifier.gui.commons.editors.*;
 import com.leclercb.taskunifier.gui.commons.renderers.ModelListRenderer;
@@ -83,6 +84,7 @@ public enum PropertyAccessorType {
     TAGS(String.class, true),
     TIME(Integer.class, false),
     TIMER(Timer.class, false),
+    REPEAT(Repeat.class, false),
     VOID(Void.class, false);
 
     private Class<?> type;
@@ -146,6 +148,8 @@ public enum PropertyAccessorType {
             case TAGS:
                 return null;
             case TIMER:
+                return null;
+            case REPEAT:
                 return null;
             case CONTACT:
                 return null;
@@ -212,6 +216,8 @@ public enum PropertyAccessorType {
                 return (value == null ? null : value.toString());
             case TIMER:
                 return StringValueTimer.INSTANCE.getString(value);
+            case REPEAT:
+                return StringValueRepeat.INSTANCE.getString(value);
             case CONTACT:
                 return StringValueModel.INSTANCE.getString(value);
             case CONTEXT:
@@ -295,6 +301,9 @@ public enum PropertyAccessorType {
                 this.comparator = null;
                 break;
             case TIMER:
+                this.comparator = null;
+                break;
+            case REPEAT:
                 this.comparator = null;
                 break;
             case CONTACT:
@@ -416,6 +425,11 @@ public enum PropertyAccessorType {
                         StringValueTimer.INSTANCE,
                         IconValueTimer.INSTANCE));
                 break;
+            case REPEAT:
+                this.renderer = new DefaultTableRenderer(new MappedValue(
+                        StringValueRepeat.INSTANCE,
+                        IconValueRepeat.INSTANCE));
+                break;
             case CONTACT:
                 this.renderer = new DefaultTableRenderer(new MappedValue(
                         StringValueModel.INSTANCE,
@@ -532,6 +546,9 @@ public enum PropertyAccessorType {
                 break;
             case TIMER:
                 this.editor = new TimerEditor();
+                break;
+            case REPEAT:
+                this.editor = new RepeatEditor();
                 break;
             case CONTACT:
                 this.editor = new ContactEditor();

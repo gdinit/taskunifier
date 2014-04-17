@@ -32,29 +32,26 @@
  */
 package com.leclercb.taskunifier.gui.commons.values;
 
-import javax.swing.Icon;
-
+import com.leclercb.taskunifier.api.models.repeat.Repeat;
+import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import org.jdesktop.swingx.renderer.IconValue;
 
-import com.leclercb.taskunifier.gui.utils.ImageUtils;
+import javax.swing.*;
 
 public class IconValueRepeat implements IconValue {
-	
-	public static final IconValueRepeat INSTANCE = new IconValueRepeat();
-	
-	private IconValueRepeat() {
-		
-	}
-	
-	@Override
-	public Icon getIcon(Object value) {
-		if (value == null || !(value instanceof String))
-			return null;
-		
-		if (((String) value).trim().length() == 0)
-			return null;
-		else
-			return ImageUtils.getResourceImage("repeat.png", 16, 16);
-	}
-	
+
+    public static final IconValueRepeat INSTANCE = new IconValueRepeat();
+
+    private IconValueRepeat() {
+
+    }
+
+    @Override
+    public Icon getIcon(Object value) {
+        if (value == null || !(value instanceof Repeat))
+            return null;
+
+        return ImageUtils.getResourceImage("repeat.png", 16, 16);
+    }
+
 }
