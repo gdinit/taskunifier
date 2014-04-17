@@ -1,9 +1,11 @@
 HISTORY
 -------
 
-Version 4.1.1
+Version 4.2.0
     - Minor:
         - Auto-save before sync
+        - Task status revamp
+        - Repeat window
         - Synchronize with OrganiTask
 
 Version 4.1.0
