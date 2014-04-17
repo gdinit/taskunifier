@@ -34,7 +34,6 @@ package com.leclercb.taskunifier.api.synchronizer;
 
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Model;
-import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 
 import java.util.Properties;
@@ -122,18 +121,6 @@ public abstract class SynchronizerApi {
 
     public boolean allowCustomTaskStatuses() {
         return true;
-    }
-
-    public String[] getDefaultRepeatValues() {
-        return new String[0];
-    }
-
-    public boolean isValidRepeatValue(String repeat) {
-        return false;
-    }
-
-    public void createRepeatTask(Task task) {
-
     }
 
     public abstract void flagAsNew(Model model);
