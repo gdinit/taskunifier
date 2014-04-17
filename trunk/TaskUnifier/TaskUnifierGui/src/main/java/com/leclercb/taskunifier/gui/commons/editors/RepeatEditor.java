@@ -32,51 +32,49 @@
  */
 package com.leclercb.taskunifier.gui.commons.editors;
 
-import java.awt.Color;
-import java.awt.Component;
+import com.leclercb.taskunifier.api.models.repeat.Repeat;
+import com.leclercb.taskunifier.gui.swing.TURepeatField;
 
-import javax.swing.DefaultCellEditor;
-import javax.swing.JComboBox;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.*;
+import javax.swing.table.TableCellEditor;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.EventObject;
 
-import com.leclercb.taskunifier.gui.commons.models.TaskRepeatModel;
-import com.leclercb.taskunifier.gui.utils.ComponentFactory;
-import com.leclercb.taskunifier.gui.utils.SynchronizerUtils;
+public class RepeatEditor extends AbstractCellEditor implements TableCellEditor {
 
-public class RepeatEditor extends DefaultCellEditor {
-	
-	public RepeatEditor() {
-		super(new JComboBox(new TaskRepeatModel(false)));
-		
-		final JComboBox repeatField = (JComboBox) this.getComponent();
-		ComponentFactory.createRepeatComboBox(repeatField);
-	}
-	
-	@Override
-	public Component getTableCellEditorComponent(
-			JTable table,
-			Object value,
-			boolean isSelected,
-			int row,
-			int col) {
-		Component component = super.getTableCellEditorComponent(
-				table,
-				value,
-				isSelected,
-				row,
-				col);
-		
-		final JComboBox repeatField = (JComboBox) this.getComponent();
-		final JTextField repeatTextField = (JTextField) repeatField.getEditor().getEditorComponent();
-		
-		if (SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().isValidRepeatValue(
-				(this.getCellEditorValue() == null ? null : this.getCellEditorValue().toString())))
-			repeatTextField.setForeground(Color.BLACK);
-		else
-			repeatTextField.setForeground(Color.RED);
-		
-		return component;
-	}
-	
+    private TURepeatField repeatField;
+
+    public RepeatEditor() {
+        this.repeatField = new TURepeatField();
+    }
+
+    @Override
+    public Component getTableCellEditorComponent(
+            JTable table,
+            Object value,
+            boolean isSelected,
+            int row,
+            int col) {
+        this.repeatField.setRepeat((Repeat) value);
+        return this.repeatField;
+    }
+
+    @Override
+    public Object getCellEditorValue() {
+        return this.repeatField.getRepeat();
+    }
+
+    @Override
+    public boolean isCellEditable(EventObject anEvent) {
+        if (anEvent instanceof MouseEvent) {
+            MouseEvent event = (MouseEvent) anEvent;
+
+            if (event.getClickCount() != 1)
+                return false;
+        }
+
+        return super.isCellEditable(anEvent);
+    }
+
 }

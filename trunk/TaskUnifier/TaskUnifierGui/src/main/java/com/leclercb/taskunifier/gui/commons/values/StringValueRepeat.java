@@ -32,22 +32,24 @@
  */
 package com.leclercb.taskunifier.gui.commons.values;
 
+import com.leclercb.taskunifier.api.models.repeat.Repeat;
+import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 import org.jdesktop.swingx.renderer.StringValue;
 
-public class StringValueTaskRepeat implements StringValue {
-	
-	public static final StringValueTaskRepeat INSTANCE = new StringValueTaskRepeat();
-	
-	private StringValueTaskRepeat() {
-		
-	}
-	
-	@Override
-	public String getString(Object value) {
-		if (!(value instanceof String))
-			return " ";
-		
-		return (String) value;
-	}
-	
+public class StringValueRepeat implements StringValue {
+
+    public static final StringValueRepeat INSTANCE = new StringValueRepeat();
+
+    private StringValueRepeat() {
+
+    }
+
+    @Override
+    public String getString(Object value) {
+        if (value == null || !(value instanceof Repeat))
+            return " ";
+
+        return TranslationsUtils.translateRepeat((Repeat) value);
+    }
+
 }

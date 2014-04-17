@@ -38,6 +38,7 @@ import com.leclercb.taskunifier.api.models.beans.TaskBean;
 import com.leclercb.taskunifier.api.models.beans.converters.*;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
+import com.leclercb.taskunifier.api.models.repeat.Repeat;
 import com.leclercb.taskunifier.api.models.templates.converters.TaskTemplateConverter;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
@@ -138,8 +139,8 @@ public class TaskTemplate extends AbstractBasicModel implements Template<Task, T
     @XStreamAlias("taskreminder")
     private Integer taskDueDateReminder;
 
-    @XStreamAlias("taskrepeat")
-    private String taskRepeat;
+    @XStreamAlias("taskrepeat_v2")
+    private Repeat taskRepeat;
 
     @XStreamAlias("taskrepeatfrom")
     private TaskRepeatFrom taskRepeatFrom;
@@ -329,7 +330,7 @@ public class TaskTemplate extends AbstractBasicModel implements Template<Task, T
         if (this.taskStartDateReminder != null)
             task.setStartDateReminder(this.taskStartDateReminder);
 
-        if (this.taskRepeat != null && this.taskRepeat.length() != 0)
+        if (this.taskRepeat != null)
             task.setRepeat(this.taskRepeat);
 
         if (this.taskRepeatFrom != null)
@@ -422,7 +423,7 @@ public class TaskTemplate extends AbstractBasicModel implements Template<Task, T
         if (this.taskStartDateReminder != null)
             task.setStartDateReminder(this.taskStartDateReminder);
 
-        if (this.taskRepeat != null && this.taskRepeat.length() != 0)
+        if (this.taskRepeat != null)
             task.setRepeat(this.taskRepeat);
 
         if (this.taskRepeatFrom != null)
@@ -640,12 +641,12 @@ public class TaskTemplate extends AbstractBasicModel implements Template<Task, T
                 taskStartDateReminder);
     }
 
-    public String getTaskRepeat() {
+    public Repeat getTaskRepeat() {
         return this.taskRepeat;
     }
 
-    public void setTaskRepeat(String taskRepeat) {
-        String oldTaskRepeat = this.taskRepeat;
+    public void setTaskRepeat(Repeat taskRepeat) {
+        Repeat oldTaskRepeat = this.taskRepeat;
         this.taskRepeat = taskRepeat;
         this.updateProperty(PROP_TASK_REPEAT, oldTaskRepeat, taskRepeat);
     }
