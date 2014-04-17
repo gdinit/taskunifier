@@ -58,7 +58,7 @@ public class RepeatEveryXMonthOnWeekX implements Repeat {
         return value;
     }
 
-    public void setValue(int value) {
+    private void setValue(int value) {
         CheckUtils.isPositive(value);
         this.value = value;
     }
@@ -67,7 +67,7 @@ public class RepeatEveryXMonthOnWeekX implements Repeat {
         return day;
     }
 
-    public void setDay(int day) {
+    private void setDay(int day) {
         if (day < Calendar.SUNDAY || day > Calendar.SATURDAY)
             throw new IllegalArgumentException("Invalid day of week");
 
@@ -78,7 +78,7 @@ public class RepeatEveryXMonthOnWeekX implements Repeat {
         return week;
     }
 
-    public void setWeek(int week) {
+    private void setWeek(int week) {
         if (week < -1 || week > 4 || week == 0)
             throw new IllegalArgumentException("Invalid week of month");
 

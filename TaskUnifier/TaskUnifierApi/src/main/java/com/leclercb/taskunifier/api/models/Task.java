@@ -46,6 +46,7 @@ import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.api.models.repeat.DeprecatedRepeatConverter;
 import com.leclercb.taskunifier.api.models.repeat.Repeat;
+import com.leclercb.taskunifier.api.models.repeat.RepeatWithParent;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -828,6 +829,113 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
         if (event.getSource() instanceof FileItem) {
             this.updateProperty(PROP_FILES, null, this.files, true);
         }
+    }
+
+    public Task repeat() {
+        return this.repeat(this.getRepeat());
+    }
+
+    private Task repeat(Repeat repeat) {
+        CheckUtils.isNotNull(repeat);
+
+        Calendar startDate = null;
+        Calendar dueDate = null;
+
+        if (this.getRepeatFrom() == TaskRepeatFrom.COMPLETION_DATE) {
+            if (this.getDueDate() != null) {
+                dueDate = DateUtils.cloneCalendar(this.getDueDate());
+                Calendar completedOn = DateUtils.cloneCalendar(this.getCompletedOn());
+                completedOn.set(
+                        completedOn.get(Calendar.YEAR),
+                        completedOn.get(Calendar.MONTH),
+                        completedOn.get(Calendar.DAY_OF_MONTH),
+                        dueDate.get(Calendar.HOUR_OF_DAY),
+                        dueDate.get(Calendar.MINUTE),
+                        dueDate.get(Calendar.SECOND));
+
+                dueDate = repeat.getNextDate(completedOn);
+            }
+
+            if (this.getStartDate() != null && this.getDueDate() == null) {
+                startDate = DateUtils.cloneCalendar(this.getStartDate());
+                Calendar completedOn = DateUtils.cloneCalendar(this.getCompletedOn());
+                completedOn.set(
+                        completedOn.get(Calendar.YEAR),
+                        completedOn.get(Calendar.MONTH),
+                        completedOn.get(Calendar.DAY_OF_MONTH),
+                        startDate.get(Calendar.HOUR_OF_DAY),
+                        startDate.get(Calendar.MINUTE),
+                        startDate.get(Calendar.SECOND));
+
+                startDate = repeat.getNextDate(completedOn);
+            }
+
+            if (this.getStartDate() != null && this.getDueDate() != null) {
+                startDate = Calendar.getInstance();
+                startDate.setTimeInMillis(dueDate.getTimeInMillis()
+                        - (this.getDueDate().getTimeInMillis() - this.getStartDate().getTimeInMillis()));
+            }
+
+            if (this.getStartDate() == null && this.getDueDate() == null) {
+                Calendar completedOn = DateUtils.cloneCalendar(this.getCompletedOn());
+                dueDate = repeat.getNextDate(completedOn);
+            }
+        }
+
+        if (this.getRepeatFrom() == TaskRepeatFrom.DUE_DATE) {
+            if (this.getStartDate() != null)
+                startDate = repeat.getNextDate(this.getStartDate());
+
+            if (this.getDueDate() != null)
+                dueDate = repeat.getNextDate(this.getDueDate());
+        }
+
+        if (startDate == null && dueDate == null)
+            return null;
+
+        Task newTask = TaskFactory.getInstance().create(this);
+        newTask.setCompleted(false);
+        newTask.setStartDate(startDate);
+        newTask.setDueDate(dueDate);
+        newTask.setRepeat(this.getRepeat());
+
+        List<Task> tasks = this.getChildren();
+        for (Task subtask : tasks) {
+            if (subtask.getRepeat() instanceof RepeatWithParent) {
+                if (!subtask.isCompleted())
+                    subtask.setCompleted(true);
+
+                Repeat newRepeat = newTask.getRepeat();
+                if (subtask.getRepeat() instanceof RepeatWithParent)
+                    newRepeat = repeat;
+
+                Task newSubtask = subtask.repeat(newRepeat);
+
+                if (newSubtask != null) {
+                    newSubtask.setCompleted(false);
+                    newSubtask.setParent(newTask);
+                } else {
+                    subtask.setCompleted(false);
+                    subtask.setParent(newTask);
+                }
+
+                continue;
+            }
+
+            if (!subtask.isCompleted() && subtask.getRepeat() != null) {
+                subtask.setParent(newTask);
+                continue;
+            }
+
+            if (!subtask.isCompleted()) {
+                subtask.setCompleted(true);
+                continue;
+            }
+        }
+
+        this.setRepeat(null);
+
+        return newTask;
     }
 
 }

@@ -53,7 +53,7 @@ public class RepeatEveryXMonthOnDayX implements Repeat {
         return value;
     }
 
-    public void setValue(int value) {
+    private void setValue(int value) {
         CheckUtils.isPositive(value);
         this.value = value;
     }
@@ -62,7 +62,7 @@ public class RepeatEveryXMonthOnDayX implements Repeat {
         return day;
     }
 
-    public void setDay(int day) {
+    private void setDay(int day) {
         if (day < 1 || day > 31)
             throw new IllegalArgumentException("Invalid day of week");
 

@@ -53,7 +53,7 @@ public class RepeatEveryX implements Repeat {
         return type;
     }
 
-    public void setType(int type) {
+    private void setType(int type) {
         if (type != Calendar.DAY_OF_MONTH && type != Calendar.WEEK_OF_YEAR && type != Calendar.MONTH && type != Calendar.YEAR)
             throw new IllegalArgumentException("Invalid type");
 
@@ -64,7 +64,7 @@ public class RepeatEveryX implements Repeat {
         return value;
     }
 
-    public void setValue(int value) {
+    private void setValue(int value) {
         CheckUtils.isPositive(value);
         this.value = value;
     }
