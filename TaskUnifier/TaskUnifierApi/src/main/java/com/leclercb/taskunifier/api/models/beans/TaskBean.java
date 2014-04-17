@@ -101,7 +101,7 @@ public class TaskBean extends AbstractModelParentBean {
     @XStreamAlias("reminder")
     private int dueDateReminder;
 
-    @XStreamAlias("repeat_v2")
+    @XStreamAlias("repeat-v2")
     private Repeat repeat;
 
     @XStreamAlias("repeat")
@@ -110,7 +110,7 @@ public class TaskBean extends AbstractModelParentBean {
     @XStreamAlias("repeatfrom")
     private TaskRepeatFrom repeatFrom;
 
-    @XStreamAlias("status_v2")
+    @XStreamAlias("status-v2")
     private ModelId status;
 
     @XStreamAlias("status")

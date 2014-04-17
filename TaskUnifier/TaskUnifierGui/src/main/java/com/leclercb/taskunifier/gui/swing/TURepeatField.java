@@ -89,6 +89,8 @@ public class TURepeatField extends JPanel {
                 TURepeatField.this.repeat = dialog.getRepeat();
                 dialog.dispose();
 
+                TURepeatField.this.label.setText(StringValueRepeat.INSTANCE.getString(TURepeatField.this.repeat));
+
                 TURepeatField.this.firePropertyChange(TURepeatField.PROP_REPEAT, oldRepeat, TURepeatField.this.repeat);
             }
 
