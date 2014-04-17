@@ -35,13 +35,11 @@ package com.leclercb.taskunifier.api.models.repeat;
 
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.DateUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 
 public class RepeatEveryXWeekOnDays implements Repeat {
 
@@ -82,20 +80,16 @@ public class RepeatEveryXWeekOnDays implements Repeat {
         if (calendar == null)
             return null;
 
-        List<Integer> list = new ArrayList<Integer>();
-        for (int i = 0; i < this.days.length; i++)
-            list.add(this.days[i]);
-
         Calendar c = DateUtils.cloneCalendar(calendar);
         c.add(Calendar.DAY_OF_MONTH, this.value * 7);
 
-        if (Arrays.asList(this.days).contains(c.get(Calendar.DAY_OF_WEEK)))
+        if (ArrayUtils.contains(this.days, c.get(Calendar.DAY_OF_WEEK)))
             return c;
         else
             c.add(Calendar.DAY_OF_MONTH, -7);
 
         for (int i = 1; i <= 7; i++) {
-            if (Arrays.asList(this.days).contains(c.get(Calendar.DAY_OF_WEEK)))
+            if (ArrayUtils.contains(this.days, c.get(Calendar.DAY_OF_WEEK)))
                 break;
 
             c.add(Calendar.DAY_OF_MONTH, 1);

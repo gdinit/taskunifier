@@ -30,72 +30,36 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.leclercb.taskunifier.gui.swing;
+package com.leclercb.taskunifier.gui.components.repeat;
 
 import com.leclercb.taskunifier.api.models.repeat.Repeat;
-import com.leclercb.taskunifier.gui.commons.values.StringValueRepeat;
-import com.leclercb.taskunifier.gui.components.repeat.RepeatDialog;
-import com.leclercb.taskunifier.gui.utils.ImageUtils;
+import com.leclercb.taskunifier.gui.swing.TUDialog;
+import com.leclercb.taskunifier.gui.translations.Translations;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+public class RepeatDialog extends TUDialog {
 
-public class TURepeatField extends JPanel {
+    public RepeatDialog() {
+        super(RepeatDialogPanel.getInstance());
 
-    public static final String PROP_REPEAT = "repeat";
-
-    private JLabel label;
-    private JButton button;
-    private Repeat repeat;
-
-    public TURepeatField() {
         this.initialize();
     }
 
     public Repeat getRepeat() {
-        return this.repeat;
+        return ((RepeatDialogPanel) this.getDialogPanel()).getRepeat();
     }
 
     public void setRepeat(Repeat repeat) {
-        this.repeat = repeat;
-        this.label.setText(StringValueRepeat.INSTANCE.getString(repeat));
-    }
-
-    @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
-        this.label.setEnabled(enabled);
-        this.button.setEnabled(enabled);
+        ((RepeatDialogPanel) this.getDialogPanel()).setRepeat(repeat);
     }
 
     private void initialize() {
-        this.setOpaque(false);
-        this.setLayout(new BorderLayout());
+        this.setModal(true);
+        this.setTitle(Translations.getString("general.repeat"));
+        this.setSize(700, 400);
+        this.setResizable(true);
+        this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 
-        this.label = new JLabel();
-
-        this.button = new JButton(ImageUtils.getResourceImage("repeat.png", 16, 16));
-        this.button.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                Repeat oldRepeat = TURepeatField.this.repeat;
-
-                RepeatDialog dialog = new RepeatDialog();
-                dialog.setRepeat(TURepeatField.this.repeat);
-                dialog.setVisible(true);
-                TURepeatField.this.repeat = dialog.getRepeat();
-                dialog.dispose();
-
-                TURepeatField.this.firePropertyChange(TURepeatField.PROP_REPEAT, oldRepeat, TURepeatField.this.repeat);
-            }
-
-        });
-
-        this.add(this.label, BorderLayout.CENTER);
-        this.add(this.button, BorderLayout.EAST);
+        this.loadWindowSettings("window.repeat");
     }
 
 }
