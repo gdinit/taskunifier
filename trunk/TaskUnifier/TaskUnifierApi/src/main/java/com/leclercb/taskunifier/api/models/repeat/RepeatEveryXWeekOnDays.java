@@ -57,7 +57,7 @@ public class RepeatEveryXWeekOnDays implements Repeat {
         return value;
     }
 
-    public void setValue(int value) {
+    private void setValue(int value) {
         CheckUtils.isPositive(value);
         this.value = value;
     }
@@ -66,7 +66,7 @@ public class RepeatEveryXWeekOnDays implements Repeat {
         return days;
     }
 
-    public void setDays(int[] days) {
+    private void setDays(int[] days) {
         CheckUtils.isNotNull(days);
 
         for (int day : days) {
