@@ -48,15 +48,15 @@ public class WeeklyPanel extends JPanel implements RepeatPanel {
 
     private JRadioButton everyXWeeks;
     private JSpinner everyXWeeks_X;
-    private JRadioButton everyXWeeksOnDayX;
-    private JSpinner everyXWeeksOnDayX_X;
-    private JCheckBox everyXWeeksOnDayX_MO;
-    private JCheckBox everyXWeeksOnDayX_TU;
-    private JCheckBox everyXWeeksOnDayX_WE;
-    private JCheckBox everyXWeeksOnDayX_TH;
-    private JCheckBox everyXWeeksOnDayX_FR;
-    private JCheckBox everyXWeeksOnDayX_SA;
-    private JCheckBox everyXWeeksOnDayX_SU;
+    private JRadioButton everyXWeeksOnDaysX;
+    private JSpinner everyXWeeksOnDaysX_X;
+    private JCheckBox everyXWeeksOnDaysX_MO;
+    private JCheckBox everyXWeeksOnDaysX_TU;
+    private JCheckBox everyXWeeksOnDaysX_WE;
+    private JCheckBox everyXWeeksOnDaysX_TH;
+    private JCheckBox everyXWeeksOnDaysX_FR;
+    private JCheckBox everyXWeeksOnDaysX_SA;
+    private JCheckBox everyXWeeksOnDaysX_SU;
 
     public WeeklyPanel() {
         this.initialize();
@@ -67,31 +67,31 @@ public class WeeklyPanel extends JPanel implements RepeatPanel {
         if (this.everyXWeeks.isSelected())
             return new RepeatEveryX(Calendar.WEEK_OF_YEAR, (Integer) everyXWeeks_X.getValue());
 
-        if (this.everyXWeeksOnDayX.isSelected()) {
+        if (this.everyXWeeksOnDaysX.isSelected()) {
             int[] days = new int[0];
 
-            if (everyXWeeksOnDayX_MO.isSelected())
+            if (everyXWeeksOnDaysX_MO.isSelected())
                 days = ArrayUtils.add(days, Calendar.MONDAY);
 
-            if (everyXWeeksOnDayX_TU.isSelected())
+            if (everyXWeeksOnDaysX_TU.isSelected())
                 days = ArrayUtils.add(days, Calendar.TUESDAY);
 
-            if (everyXWeeksOnDayX_WE.isSelected())
+            if (everyXWeeksOnDaysX_WE.isSelected())
                 days = ArrayUtils.add(days, Calendar.WEDNESDAY);
 
-            if (everyXWeeksOnDayX_TH.isSelected())
+            if (everyXWeeksOnDaysX_TH.isSelected())
                 days = ArrayUtils.add(days, Calendar.THURSDAY);
 
-            if (everyXWeeksOnDayX_FR.isSelected())
+            if (everyXWeeksOnDaysX_FR.isSelected())
                 days = ArrayUtils.add(days, Calendar.FRIDAY);
 
-            if (everyXWeeksOnDayX_SA.isSelected())
+            if (everyXWeeksOnDaysX_SA.isSelected())
                 days = ArrayUtils.add(days, Calendar.SATURDAY);
 
-            if (everyXWeeksOnDayX_SU.isSelected())
+            if (everyXWeeksOnDaysX_SU.isSelected())
                 days = ArrayUtils.add(days, Calendar.SUNDAY);
 
-            return new RepeatEveryXWeekOnDays((Integer) everyXWeeksOnDayX_X.getValue(), days);
+            return new RepeatEveryXWeekOnDays((Integer) everyXWeeksOnDaysX_X.getValue(), days);
         }
 
         return null;
@@ -100,15 +100,15 @@ public class WeeklyPanel extends JPanel implements RepeatPanel {
     @Override
     public boolean setRepeat(Repeat repeat) {
         this.everyXWeeks_X.setValue(1);
-        this.everyXWeeksOnDayX_X.setValue(1);
+        this.everyXWeeksOnDaysX_X.setValue(1);
 
-        this.everyXWeeksOnDayX_MO.setSelected(false);
-        this.everyXWeeksOnDayX_TU.setSelected(false);
-        this.everyXWeeksOnDayX_WE.setSelected(false);
-        this.everyXWeeksOnDayX_TH.setSelected(false);
-        this.everyXWeeksOnDayX_FR.setSelected(false);
-        this.everyXWeeksOnDayX_SA.setSelected(false);
-        this.everyXWeeksOnDayX_SU.setSelected(false);
+        this.everyXWeeksOnDaysX_MO.setSelected(false);
+        this.everyXWeeksOnDaysX_TU.setSelected(false);
+        this.everyXWeeksOnDaysX_WE.setSelected(false);
+        this.everyXWeeksOnDaysX_TH.setSelected(false);
+        this.everyXWeeksOnDaysX_FR.setSelected(false);
+        this.everyXWeeksOnDaysX_SA.setSelected(false);
+        this.everyXWeeksOnDaysX_SU.setSelected(false);
 
         if (repeat instanceof RepeatEveryX) {
             RepeatEveryX r = (RepeatEveryX) repeat;
@@ -123,29 +123,29 @@ public class WeeklyPanel extends JPanel implements RepeatPanel {
         if (repeat instanceof RepeatEveryXWeekOnDays) {
             RepeatEveryXWeekOnDays r = (RepeatEveryXWeekOnDays) repeat;
 
-            this.everyXWeeksOnDayX.setSelected(true);
-            this.everyXWeeksOnDayX_X.setValue(r.getValue());
+            this.everyXWeeksOnDaysX.setSelected(true);
+            this.everyXWeeksOnDaysX_X.setValue(r.getValue());
 
             if (ArrayUtils.contains(r.getDays(), Calendar.MONDAY))
-                this.everyXWeeksOnDayX_MO.setSelected(true);
+                this.everyXWeeksOnDaysX_MO.setSelected(true);
 
             if (ArrayUtils.contains(r.getDays(), Calendar.TUESDAY))
-                this.everyXWeeksOnDayX_TU.setSelected(true);
+                this.everyXWeeksOnDaysX_TU.setSelected(true);
 
             if (ArrayUtils.contains(r.getDays(), Calendar.WEDNESDAY))
-                this.everyXWeeksOnDayX_WE.setSelected(true);
+                this.everyXWeeksOnDaysX_WE.setSelected(true);
 
             if (ArrayUtils.contains(r.getDays(), Calendar.THURSDAY))
-                this.everyXWeeksOnDayX_TH.setSelected(true);
+                this.everyXWeeksOnDaysX_TH.setSelected(true);
 
             if (ArrayUtils.contains(r.getDays(), Calendar.FRIDAY))
-                this.everyXWeeksOnDayX_FR.setSelected(true);
+                this.everyXWeeksOnDaysX_FR.setSelected(true);
 
             if (ArrayUtils.contains(r.getDays(), Calendar.SATURDAY))
-                this.everyXWeeksOnDayX_SA.setSelected(true);
+                this.everyXWeeksOnDaysX_SA.setSelected(true);
 
             if (ArrayUtils.contains(r.getDays(), Calendar.SUNDAY))
-                this.everyXWeeksOnDayX_SU.setSelected(true);
+                this.everyXWeeksOnDaysX_SU.setSelected(true);
 
             return true;
         }
@@ -161,7 +161,7 @@ public class WeeklyPanel extends JPanel implements RepeatPanel {
         ButtonGroup group = new ButtonGroup();
         JPanel panel;
 
-        // Every X days
+        // Every X weeks
         everyXWeeks = new JRadioButton();
         group.add(everyXWeeks);
 
@@ -178,49 +178,49 @@ public class WeeklyPanel extends JPanel implements RepeatPanel {
         builder.append(everyXWeeks);
         builder.append(panel);
 
-        // Every day of week
-        everyXWeeksOnDayX = new JRadioButton();
-        group.add(everyXWeeksOnDayX);
+        // Every X weeks on days X
+        everyXWeeksOnDaysX = new JRadioButton();
+        group.add(everyXWeeksOnDaysX);
 
-        everyXWeeksOnDayX_X = new JSpinner();
-        everyXWeeksOnDayX_X.setModel(new SpinnerNumberModel(1, 1, 1000, 1));
-        everyXWeeksOnDayX_X.setEditor(new JSpinner.NumberEditor(everyXWeeksOnDayX_X, "0"));
+        everyXWeeksOnDaysX_X = new JSpinner();
+        everyXWeeksOnDaysX_X.setModel(new SpinnerNumberModel(1, 1, 1000, 1));
+        everyXWeeksOnDaysX_X.setEditor(new JSpinner.NumberEditor(everyXWeeksOnDaysX_X, "0"));
 
         panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.LEFT));
         panel.add(new JLabel("Every"));
-        panel.add(everyXWeeksOnDayX_X);
+        panel.add(everyXWeeksOnDaysX_X);
 
-        builder.append(everyXWeeksOnDayX);
+        builder.append(everyXWeeksOnDaysX);
         builder.append(panel);
 
-        this.everyXWeeksOnDayX_MO = new JCheckBox(Translations.getString("date.monday"));
+        this.everyXWeeksOnDaysX_MO = new JCheckBox(Translations.getString("date.monday"));
         builder.append(new JLabel());
-        builder.append(this.everyXWeeksOnDayX_MO);
+        builder.append(this.everyXWeeksOnDaysX_MO);
 
-        this.everyXWeeksOnDayX_TU = new JCheckBox(Translations.getString("date.tuesday"));
+        this.everyXWeeksOnDaysX_TU = new JCheckBox(Translations.getString("date.tuesday"));
         builder.append(new JLabel());
-        builder.append(this.everyXWeeksOnDayX_TU);
+        builder.append(this.everyXWeeksOnDaysX_TU);
 
-        this.everyXWeeksOnDayX_WE = new JCheckBox(Translations.getString("date.wednesday"));
+        this.everyXWeeksOnDaysX_WE = new JCheckBox(Translations.getString("date.wednesday"));
         builder.append(new JLabel());
-        builder.append(this.everyXWeeksOnDayX_WE);
+        builder.append(this.everyXWeeksOnDaysX_WE);
 
-        this.everyXWeeksOnDayX_TH = new JCheckBox(Translations.getString("date.thursday"));
+        this.everyXWeeksOnDaysX_TH = new JCheckBox(Translations.getString("date.thursday"));
         builder.append(new JLabel());
-        builder.append(this.everyXWeeksOnDayX_TH);
+        builder.append(this.everyXWeeksOnDaysX_TH);
 
-        this.everyXWeeksOnDayX_FR = new JCheckBox(Translations.getString("date.friday"));
+        this.everyXWeeksOnDaysX_FR = new JCheckBox(Translations.getString("date.friday"));
         builder.append(new JLabel());
-        builder.append(this.everyXWeeksOnDayX_FR);
+        builder.append(this.everyXWeeksOnDaysX_FR);
 
-        this.everyXWeeksOnDayX_SA = new JCheckBox(Translations.getString("date.saturday"));
+        this.everyXWeeksOnDaysX_SA = new JCheckBox(Translations.getString("date.saturday"));
         builder.append(new JLabel());
-        builder.append(this.everyXWeeksOnDayX_SA);
+        builder.append(this.everyXWeeksOnDaysX_SA);
 
-        this.everyXWeeksOnDayX_SU = new JCheckBox(Translations.getString("date.sunday"));
+        this.everyXWeeksOnDaysX_SU = new JCheckBox(Translations.getString("date.sunday"));
         builder.append(new JLabel());
-        builder.append(this.everyXWeeksOnDayX_SU);
+        builder.append(this.everyXWeeksOnDaysX_SU);
 
         this.add(builder.getPanel(), BorderLayout.CENTER);
     }

@@ -34,7 +34,9 @@ package com.leclercb.taskunifier.gui.components.repeat;
 
 import com.leclercb.taskunifier.api.models.repeat.Repeat;
 import com.leclercb.taskunifier.gui.components.repeat.panels.DailyPanel;
+import com.leclercb.taskunifier.gui.components.repeat.panels.MonthlyPanel;
 import com.leclercb.taskunifier.gui.components.repeat.panels.WeeklyPanel;
+import com.leclercb.taskunifier.gui.components.repeat.panels.YearlyPanel;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
@@ -66,6 +68,8 @@ public class RepeatDialogPanel extends TUDialogPanel {
 
     private DailyPanel dailyPanel;
     private WeeklyPanel weeklyPanel;
+    private MonthlyPanel monthlyPanel;
+    private YearlyPanel yearlyPanel;
 
     private Repeat repeat;
 
@@ -85,6 +89,10 @@ public class RepeatDialogPanel extends TUDialogPanel {
                 return dailyPanel.getRepeat();
             case 1:
                 return weeklyPanel.getRepeat();
+            case 2:
+                return monthlyPanel.getRepeat();
+            case 3:
+                return yearlyPanel.getRepeat();
             default:
                 return null;
         }
@@ -98,6 +106,16 @@ public class RepeatDialogPanel extends TUDialogPanel {
 
         if (weeklyPanel.setRepeat(repeat)) {
             tabbedPane.setSelectedIndex(1);
+            return;
+        }
+
+        if (monthlyPanel.setRepeat(repeat)) {
+            tabbedPane.setSelectedIndex(2);
+            return;
+        }
+
+        if (weeklyPanel.setRepeat(repeat)) {
+            tabbedPane.setSelectedIndex(3);
             return;
         }
     }
@@ -123,6 +141,8 @@ public class RepeatDialogPanel extends TUDialogPanel {
 
         this.initializeDailyPanel();
         this.initializeWeeklyPanel();
+        this.initializeMonthlyPanel();
+        this.initializeYearlyPanel();
     }
 
     private void initializeButtonsPanel() {
@@ -169,6 +189,26 @@ public class RepeatDialogPanel extends TUDialogPanel {
                 Translations.getString("repeat.tab.weekly"),
                 ComponentFactory.createJScrollPane(
                         this.weeklyPanel,
+                        false,
+                        true));
+    }
+
+    private void initializeMonthlyPanel() {
+        this.monthlyPanel = new MonthlyPanel();
+        this.tabbedPane.addTab(
+                Translations.getString("repeat.tab.monthly"),
+                ComponentFactory.createJScrollPane(
+                        this.monthlyPanel,
+                        false,
+                        true));
+    }
+
+    private void initializeYearlyPanel() {
+        this.yearlyPanel = new YearlyPanel();
+        this.tabbedPane.addTab(
+                Translations.getString("repeat.tab.yearly"),
+                ComponentFactory.createJScrollPane(
+                        this.yearlyPanel,
                         false,
                         true));
     }
