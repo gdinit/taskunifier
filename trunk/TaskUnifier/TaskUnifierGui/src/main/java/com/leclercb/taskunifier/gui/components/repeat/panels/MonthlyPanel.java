@@ -35,6 +35,7 @@ package com.leclercb.taskunifier.gui.components.repeat.panels;
 
 import com.leclercb.taskunifier.api.models.repeat.Repeat;
 import com.leclercb.taskunifier.api.models.repeat.RepeatEveryX;
+import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
 
 import javax.swing.*;
@@ -93,9 +94,9 @@ public class MonthlyPanel extends JPanel implements RepeatPanel {
 
         panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        panel.add(new JLabel("Every"));
+        panel.add(new JLabel(Translations.getString("repeat.daily.every_x_months.part1")));
         panel.add(everyXMonths_X);
-        panel.add(new JLabel("month(s)"));
+        panel.add(new JLabel(Translations.getString("repeat.daily.every_x_months.part2")));
 
         builder.append(everyXMonths);
         builder.append(panel);

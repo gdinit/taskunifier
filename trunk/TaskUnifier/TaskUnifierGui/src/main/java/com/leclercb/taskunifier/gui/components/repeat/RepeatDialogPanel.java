@@ -33,6 +33,7 @@
 package com.leclercb.taskunifier.gui.components.repeat;
 
 import com.leclercb.taskunifier.api.models.repeat.Repeat;
+import com.leclercb.taskunifier.api.models.repeat.RepeatWithParent;
 import com.leclercb.taskunifier.gui.components.repeat.panels.DailyPanel;
 import com.leclercb.taskunifier.gui.components.repeat.panels.MonthlyPanel;
 import com.leclercb.taskunifier.gui.components.repeat.panels.WeeklyPanel;
@@ -41,8 +42,6 @@ import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUOkButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
-import com.leclercb.taskunifier.gui.utils.ImageUtils;
-import org.jdesktop.swingx.JXHeader;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,6 +62,7 @@ public class RepeatDialogPanel extends TUDialogPanel {
 
     private ActionListener okListener;
     private ActionListener noRepeatListener;
+    private ActionListener withParentListener;
 
     private JTabbedPane tabbedPane;
 
@@ -123,18 +123,12 @@ public class RepeatDialogPanel extends TUDialogPanel {
     private void initialize() {
         this.setLayout(new BorderLayout());
 
-        JXHeader header = new JXHeader();
-        header.setTitle(Translations.getString("header.title.repeat"));
-        header.setDescription(Translations.getString("header.description.repeat"));
-        header.setIcon(ImageUtils.getResourceImage("repeat.png", 32, 32));
-
         this.tabbedPane = new JTabbedPane();
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel.add(this.tabbedPane, BorderLayout.CENTER);
 
-        this.add(header, BorderLayout.NORTH);
         this.add(panel, BorderLayout.CENTER);
 
         this.initializeButtonsPanel();
@@ -166,11 +160,25 @@ public class RepeatDialogPanel extends TUDialogPanel {
 
         };
 
+        this.withParentListener = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                RepeatDialogPanel.this.repeat = new RepeatWithParent();
+                RepeatDialogPanel.this.getDialog().setVisible(false);
+            }
+
+        };
+
         JButton okButton = new TUOkButton(this.okListener);
-        JButton noRepeatButton = new JButton(Translations.getString("general.cancel"));
+
+        JButton noRepeatButton = new JButton(Translations.getString("repeat.no_repeat"));
         noRepeatButton.addActionListener(this.noRepeatListener);
 
-        this.setButtons(okButton, okButton, noRepeatButton);
+        JButton withParentButton = new JButton(Translations.getString("repeat.with_parent"));
+        withParentButton.addActionListener(this.withParentListener);
+
+        this.setButtons(okButton, okButton, noRepeatButton, withParentButton);
     }
 
     private void initializeDailyPanel() {

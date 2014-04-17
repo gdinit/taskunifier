@@ -171,9 +171,9 @@ public class WeeklyPanel extends JPanel implements RepeatPanel {
 
         panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        panel.add(new JLabel("Every"));
+        panel.add(new JLabel(Translations.getString("repeat.daily.every_x_weeks.part1")));
         panel.add(everyXWeeks_X);
-        panel.add(new JLabel("week(s)"));
+        panel.add(new JLabel(Translations.getString("repeat.daily.every_x_weeks.part2")));
 
         builder.append(everyXWeeks);
         builder.append(panel);
@@ -188,8 +188,9 @@ public class WeeklyPanel extends JPanel implements RepeatPanel {
 
         panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        panel.add(new JLabel("Every"));
+        panel.add(new JLabel(Translations.getString("repeat.daily.every_x_weeks_on.part1")));
         panel.add(everyXWeeksOnDaysX_X);
+        panel.add(new JLabel(Translations.getString("repeat.daily.every_x_weeks_on.part2")));
 
         builder.append(everyXWeeksOnDaysX);
         builder.append(panel);
