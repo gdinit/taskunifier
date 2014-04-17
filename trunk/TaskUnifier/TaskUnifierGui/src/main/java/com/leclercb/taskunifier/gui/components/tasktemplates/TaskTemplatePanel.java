@@ -32,59 +32,41 @@
  */
 package com.leclercb.taskunifier.gui.components.tasktemplates;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Date;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.SpinnerDateModel;
-import javax.swing.SpinnerNumberModel;
-
-import com.jgoodies.binding.value.BindingConverter;
-import com.jgoodies.binding.value.ConverterValueModel;
-import com.leclercb.taskunifier.api.models.*;
-import com.leclercb.taskunifier.gui.commons.models.*;
-import com.leclercb.taskunifier.gui.main.frames.ShortcutKey;
-import org.jdesktop.swingx.renderer.DefaultListRenderer;
-
-import ca.odell.glazedlists.SortedList;
-import ca.odell.glazedlists.swing.EventComboBoxModel;
-
 import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.binding.adapter.ComboBoxAdapter;
 import com.jgoodies.binding.adapter.SpinnerAdapterFactory;
 import com.jgoodies.binding.beans.BeanAdapter;
+import com.jgoodies.binding.value.BindingConverter;
+import com.jgoodies.binding.value.ConverterValueModel;
 import com.jgoodies.binding.value.ValueModel;
 import com.leclercb.commons.gui.swing.panels.ScrollablePanel;
 import com.leclercb.commons.gui.utils.FormatterUtils;
+import com.leclercb.taskunifier.api.models.*;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplate;
 import com.leclercb.taskunifier.gui.actions.ActionManageModels;
 import com.leclercb.taskunifier.gui.commons.converters.TemplateTimeConverter;
+import com.leclercb.taskunifier.gui.commons.models.*;
 import com.leclercb.taskunifier.gui.commons.values.StringValueMinutes;
 import com.leclercb.taskunifier.gui.components.modelnote.HTMLEditorInterface;
 import com.leclercb.taskunifier.gui.components.modelnote.editors.WysiwygHTMLEditorPane;
 import com.leclercb.taskunifier.gui.components.models.ModelConfigurationTab;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.main.frames.ShortcutKey;
 import com.leclercb.taskunifier.gui.swing.TUModelListField;
+import com.leclercb.taskunifier.gui.swing.TURepeatField;
 import com.leclercb.taskunifier.gui.swing.TUShortcutField;
 import com.leclercb.taskunifier.gui.swing.TUSpinnerTimeEditor;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
+import org.jdesktop.swingx.renderer.DefaultListRenderer;
+
+import javax.swing.*;
+import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 public class TaskTemplatePanel extends ScrollablePanel {
 
@@ -109,7 +91,7 @@ public class TaskTemplatePanel extends ScrollablePanel {
     private JSpinner taskDueTime;
     private JComboBox taskStartDateReminder;
     private JComboBox taskDueDateReminder;
-    private JComboBox taskRepeat;
+    private TURepeatField taskRepeat;
     private JComboBox taskRepeatFrom;
     private JComboBox taskStatus;
     private JSpinner taskLength;
@@ -189,7 +171,7 @@ public class TaskTemplatePanel extends ScrollablePanel {
         this.taskDueTime = new JSpinner();
         this.taskStartDateReminder = new JComboBox();
         this.taskDueDateReminder = new JComboBox();
-        this.taskRepeat = new JComboBox();
+        this.taskRepeat = new TURepeatField();
         this.taskRepeatFrom = ComponentFactory.createTaskRepeatFromComboBox(
                 null,
                 true);
@@ -360,8 +342,6 @@ public class TaskTemplatePanel extends ScrollablePanel {
         builder.appendI15d("general.task.length", true, this.taskLength);
 
         // Task Repeat
-        ComponentFactory.createRepeatComboBox(this.taskRepeat);
-
         builder.appendI15d("general.task.repeat", true, this.taskRepeat);
 
         // Task Repeat From
@@ -504,9 +484,10 @@ public class TaskTemplatePanel extends ScrollablePanel {
                 new ConverterValueModel(taskStartDateReminderModel, taskStartDateReminderConverter)));
 
         ValueModel taskRepeatModel = this.adapter.getValueModel(TaskTemplate.PROP_TASK_REPEAT);
-        TaskTemplatePanel.this.taskRepeat.setModel(new ComboBoxAdapter<String>(
-                new TaskRepeatModel(false),
-                taskRepeatModel));
+        Bindings.bind(
+                TaskTemplatePanel.this.taskRepeat,
+                TURepeatField.PROP_REPEAT,
+                taskRepeatModel);
 
         ValueModel taskRepeatFromModel = this.adapter.getValueModel(TaskTemplate.PROP_TASK_REPEAT_FROM);
         TaskTemplatePanel.this.taskRepeatFrom.setModel(new ComboBoxAdapter<TaskRepeatFrom>(
