@@ -64,7 +64,9 @@ public class RepeatEveryXWeekOnDays implements Repeat {
     }
 
     private void setValue(int value) {
-        CheckUtils.isPositive(value);
+        if (value < 1 || value > 1000)
+            throw new IllegalArgumentException("Invalid value");
+
         this.value = value;
     }
 

@@ -32,7 +32,6 @@
  */
 package com.leclercb.taskunifier.api.models.repeat;
 
-import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.DateUtils;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -73,7 +72,9 @@ public class RepeatEveryX implements Repeat {
     }
 
     private void setValue(int value) {
-        CheckUtils.isPositive(value);
+        if (value < 1 || value > 1000)
+            throw new IllegalArgumentException("Invalid value");
+
         this.value = value;
     }
 
