@@ -23,7 +23,7 @@ public class RepeatConverter {
             ObjectMapper mapper = new ObjectMapper();
             ObjectNode node = mapper.createObjectNode();
 
-            node.put("unit", 'p');
+            node.put("unit", "p");
 
             return node.toString();
         }
@@ -31,20 +31,20 @@ public class RepeatConverter {
         if (repeat instanceof RepeatEveryX) {
             RepeatEveryX r = (RepeatEveryX) repeat;
 
-            char unit = 'd';
+            String unit = "d";
 
             switch (r.getType()) {
                 case Calendar.DAY_OF_MONTH:
-                    unit = 'd';
+                    unit = "d";
                     break;
                 case Calendar.WEEK_OF_YEAR:
-                    unit = 'w';
+                    unit = "w";
                     break;
                 case Calendar.MONTH:
-                    unit = 'm';
+                    unit = "m";
                     break;
                 case Calendar.YEAR:
-                    unit = 'y';
+                    unit = "y";
                     break;
             }
 
@@ -67,6 +67,7 @@ public class RepeatConverter {
             for (int day : r.getDays())
                 daysNode.add(day - 1);
 
+            node.put("unit", "w");
             node.put("value", r.getValue());
             node.put("days", daysNode);
 
@@ -79,6 +80,7 @@ public class RepeatConverter {
             ObjectMapper mapper = new ObjectMapper();
             ObjectNode node = mapper.createObjectNode();
 
+            node.put("unit", "m");
             node.put("value", r.getValue());
             node.put("day", r.getDay());
 
@@ -91,6 +93,7 @@ public class RepeatConverter {
             ObjectMapper mapper = new ObjectMapper();
             ObjectNode node = mapper.createObjectNode();
 
+            node.put("unit", "m");
             node.put("value", r.getValue());
             node.put("day", r.getDay() - 1);
             node.put("week", r.getWeek());
@@ -134,7 +137,7 @@ public class RepeatConverter {
 
             if (root.get("unit").asText().equals("m")) {
                 if (root.get("day") != null && root.get("week") != null) {
-                    return new RepeatEveryXMonthOnWeekX(root.get("value").asInt(), root.get("day").asInt() + 1, root.get("week").asInt());
+                    return new RepeatEveryXMonthOnWeekX(root.get("value").asInt(), root.get("week").asInt(), root.get("day").asInt() + 1);
                 }
 
                 if (root.get("day") != null) {
