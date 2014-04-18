@@ -118,6 +118,9 @@ public class RepeatDialogPanel extends TUDialogPanel {
             tabbedPane.setSelectedIndex(3);
             return;
         }
+
+        tabbedPane.setSelectedIndex(0);
+        return;
     }
 
     private void initialize() {
