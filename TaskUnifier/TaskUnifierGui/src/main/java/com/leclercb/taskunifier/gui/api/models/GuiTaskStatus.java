@@ -85,7 +85,7 @@ public class GuiTaskStatus extends TaskStatus implements GuiModel {
 
         Color oldColor = this.color;
         this.color = color;
-        this.updateProperty(PROP_COLOR, oldColor, color, false, false);
+        this.updateProperty(PROP_COLOR, oldColor, color, true, false);
     }
 
 }

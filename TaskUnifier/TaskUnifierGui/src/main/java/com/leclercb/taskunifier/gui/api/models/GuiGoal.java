@@ -32,8 +32,6 @@
  */
 package com.leclercb.taskunifier.gui.api.models;
 
-import java.awt.Color;
-
 import com.leclercb.taskunifier.api.models.Goal;
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.beans.GoalBean;
@@ -41,60 +39,62 @@ import com.leclercb.taskunifier.api.models.beans.ModelBean;
 import com.leclercb.taskunifier.api.models.enums.GoalLevel;
 import com.leclercb.taskunifier.gui.api.models.beans.GuiGoalBean;
 
+import java.awt.*;
+
 public class GuiGoal extends Goal implements GuiModel {
-	
-	private Color color;
-	
-	public GuiGoal(GoalBean bean, boolean loadReferenceIds) {
-		super(bean, loadReferenceIds);
-	}
-	
-	public GuiGoal(String title) {
-		super(title);
-	}
-	
-	public GuiGoal(String title, GoalLevel level) {
-		super(title, level);
-	}
-	
-	public GuiGoal(ModelId modelId, String title) {
-		super(modelId, title);
-	}
-	
-	public GuiGoal(ModelId modelId, String title, GoalLevel level) {
-		super(modelId, title, level);
-	}
-	
-	@Override
-	public void loadBean(ModelBean bean, boolean loadReferenceIds) {
-		if (bean instanceof GuiGoalBean)
-			this.setColor(((GuiGoalBean) bean).getColor());
-		
-		super.loadBean(bean, loadReferenceIds);
-	}
-	
-	@Override
-	public GuiGoalBean toBean() {
-		GuiGoalBean bean = (GuiGoalBean) super.toBean();
-		
-		bean.setColor(this.getColor());
-		
-		return bean;
-	}
-	
-	@Override
-	public Color getColor() {
-		return this.color;
-	}
-	
-	@Override
-	public void setColor(Color color) {
-		if (!this.checkBeforeSet(this.getColor(), color))
-			return;
-		
-		Color oldColor = this.color;
-		this.color = color;
-		this.updateProperty(PROP_COLOR, oldColor, color, false, false);
-	}
-	
+
+    private Color color;
+
+    public GuiGoal(GoalBean bean, boolean loadReferenceIds) {
+        super(bean, loadReferenceIds);
+    }
+
+    public GuiGoal(String title) {
+        super(title);
+    }
+
+    public GuiGoal(String title, GoalLevel level) {
+        super(title, level);
+    }
+
+    public GuiGoal(ModelId modelId, String title) {
+        super(modelId, title);
+    }
+
+    public GuiGoal(ModelId modelId, String title, GoalLevel level) {
+        super(modelId, title, level);
+    }
+
+    @Override
+    public void loadBean(ModelBean bean, boolean loadReferenceIds) {
+        if (bean instanceof GuiGoalBean)
+            this.setColor(((GuiGoalBean) bean).getColor());
+
+        super.loadBean(bean, loadReferenceIds);
+    }
+
+    @Override
+    public GuiGoalBean toBean() {
+        GuiGoalBean bean = (GuiGoalBean) super.toBean();
+
+        bean.setColor(this.getColor());
+
+        return bean;
+    }
+
+    @Override
+    public Color getColor() {
+        return this.color;
+    }
+
+    @Override
+    public void setColor(Color color) {
+        if (!this.checkBeforeSet(this.getColor(), color))
+            return;
+
+        Color oldColor = this.color;
+        this.color = color;
+        this.updateProperty(PROP_COLOR, oldColor, color, true, false);
+    }
+
 }
