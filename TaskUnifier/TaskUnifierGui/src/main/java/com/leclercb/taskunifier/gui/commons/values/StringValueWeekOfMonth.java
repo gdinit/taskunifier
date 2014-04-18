@@ -58,7 +58,7 @@ public class StringValueWeekOfMonth implements StringValue {
             return Translations.getString("date.week.second");
 
         if (week == 3)
-            return Translations.getString("date.week.thrid");
+            return Translations.getString("date.week.third");
 
         if (week == 4)
             return Translations.getString("date.week.fourth");
