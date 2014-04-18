@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.ContextFactory;
-import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.ModelStatus;
 import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.beans.ContextBean;
@@ -17,7 +16,6 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerParsingException;
 import com.leclercb.taskunifier.gui.api.models.beans.GuiModelBean;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -63,14 +61,14 @@ abstract class AbstractCallContext extends AbstractCall {
 
                 ContextBean bean = this.getContextBean(item);
                 contexts.add(bean);
-                contexts.addAll(this.getContextBeans(item.path("contexts")));
+                contexts.addAll(this.getContextBeans(item.get("contexts")));
             }
         } else {
             ContextBean bean = this.getContextBean(node);
             contexts.add(bean);
 
-            if (node.has("contexts") && node.path("contexts").isArray())
-                contexts.addAll(this.getContextBeans(node.path("contexts")));
+            if (node.has("contexts") && node.get("contexts").isArray())
+                contexts.addAll(this.getContextBeans(node.get("contexts")));
         }
 
         return contexts;
@@ -79,17 +77,17 @@ abstract class AbstractCallContext extends AbstractCall {
     private ContextBean getContextBean(JsonNode node) {
         ContextBean bean = ContextFactory.getInstance().createOriginalBean();
 
-        bean.getModelReferenceIds().put("organitask", this.getNodeTextValue(node.path("id")));
+        bean.getModelReferenceIds().put("organitask", this.getNodeTextValue(node.get("id")));
         bean.setModelStatus(ModelStatus.LOADED);
-        bean.setModelCreationDate(OrganiTaskTranslations.translateUTCDate(node.path("creation_date").asLong()));
-        bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").asLong()));
+        bean.setModelCreationDate(OrganiTaskTranslations.translateUTCDate(node.get("creation_date").asLong()));
+        bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.get("update_date").asLong()));
         bean.setParent(OrganiTaskTranslations.getModelOrCreateShell(
                 ModelType.CONTEXT,
-                this.getNodeTextValue(node.path("parent_id"))));
-        bean.setTitle(this.getNodeTextValue(node.path("title")));
+                this.getNodeTextValue(node.get("parent_id"))));
+        bean.setTitle(this.getNodeTextValue(node.get("title")));
 
         if (bean instanceof GuiModelBean) {
-            ((GuiModelBean) bean).setColor(OrganiTaskTranslations.translateColor(this.getNodeTextValue(node.path("color"))));
+            ((GuiModelBean) bean).setColor(OrganiTaskTranslations.translateColor(this.getNodeTextValue(node.get("color"))));
         }
 
         return bean;
