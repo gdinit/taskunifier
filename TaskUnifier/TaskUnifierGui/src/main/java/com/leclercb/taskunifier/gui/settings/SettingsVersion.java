@@ -33,6 +33,7 @@
 package com.leclercb.taskunifier.gui.settings;
 
 import com.leclercb.commons.gui.logger.GuiLogger;
+import com.leclercb.taskunifier.api.models.TaskStatus;
 import com.leclercb.taskunifier.api.models.TaskStatusFactory;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
@@ -40,6 +41,7 @@ import com.leclercb.taskunifier.gui.resources.Resources;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 
@@ -64,7 +66,7 @@ public final class SettingsVersion {
             version = updateSettings_2_4_0_to_3_0_0();
 
         if (version.compareTo("4.1.0") <= 0)
-            version = updateSettings_4_1_0_to_4_1_1();
+            version = updateSettings_4_1_0_to_4_2_0();
 
         cleanSettings();
 
@@ -557,7 +559,7 @@ public final class SettingsVersion {
         return "3.0.0";
     }
 
-    private static String updateSettings_4_1_0_to_4_1_1() {
+    private static String updateSettings_4_1_0_to_4_2_0() {
         Main.getActionSupport().addActionListener(new ActionListener() {
 
             @Override
@@ -566,7 +568,16 @@ public final class SettingsVersion {
                     String taskStatuses = Main.getSettings().getStringProperty("taskstatuses");
 
                     String[] items = taskStatuses.split(";");
+
+                    main:
                     for (String item : items) {
+                        List<TaskStatus> list = TaskStatusFactory.getInstance().getList();
+
+                        for (TaskStatus status : list) {
+                            if (status.getTitle().equalsIgnoreCase(item.trim()))
+                                continue main;
+                        }
+
                         TaskStatusFactory.getInstance().create(item.trim());
                     }
                 }
@@ -574,7 +585,7 @@ public final class SettingsVersion {
 
         });
 
-        return "4.1.1";
+        return "4.2.0";
     }
 
 }
