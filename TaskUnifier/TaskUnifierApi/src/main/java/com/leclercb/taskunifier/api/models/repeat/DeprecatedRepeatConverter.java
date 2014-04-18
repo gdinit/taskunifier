@@ -118,7 +118,7 @@ public class DeprecatedRepeatConverter {
     }
 
     private static Repeat getRepeatFromString1(String repeat) {
-        return null;
+        return new RepeatWithParent();
     }
 
     private static Repeat getRepeatFromString2(String repeat) {
