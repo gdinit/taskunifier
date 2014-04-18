@@ -63,6 +63,9 @@ public class YearlyPanel extends JPanel implements RepeatPanel {
     public boolean setRepeat(Repeat repeat) {
         this.everyXYears_X.setValue(1);
 
+        if (repeat == null)
+            return false;
+
         if (repeat instanceof RepeatEveryX) {
             RepeatEveryX r = (RepeatEveryX) repeat;
 

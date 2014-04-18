@@ -110,6 +110,9 @@ public class WeeklyPanel extends JPanel implements RepeatPanel {
         this.everyXWeeksOnDaysX_SA.setSelected(false);
         this.everyXWeeksOnDaysX_SU.setSelected(false);
 
+        if (repeat == null)
+            return false;
+
         if (repeat instanceof RepeatEveryX) {
             RepeatEveryX r = (RepeatEveryX) repeat;
 

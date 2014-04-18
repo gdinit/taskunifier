@@ -83,7 +83,10 @@ public class DailyPanel extends JPanel implements RepeatPanel {
     @Override
     public boolean setRepeat(Repeat repeat) {
         this.everyXDays_X.setValue(1);
-        this.everyDayOfWeek_X.setSelectedItem(1);
+        this.everyDayOfWeek_X.setSelectedItem(Calendar.MONDAY);
+
+        if (repeat == null)
+            return false;
 
         if (repeat instanceof RepeatEveryX) {
             RepeatEveryX r = (RepeatEveryX) repeat;
