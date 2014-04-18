@@ -404,7 +404,7 @@ public final class TranslationsUtils {
             return Translations.getString(
                     "repeat.every_x_weeks_on",
                     ((RepeatEveryXWeekOnDays) repeat).getValue(),
-                    StringUtils.join(days));
+                    StringUtils.join(days, ", "));
         }
 
         if (repeat instanceof RepeatEveryXMonthOnDayX) {

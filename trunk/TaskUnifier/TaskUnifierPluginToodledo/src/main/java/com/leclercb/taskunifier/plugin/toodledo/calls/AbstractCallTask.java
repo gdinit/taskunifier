@@ -65,8 +65,9 @@ abstract class AbstractCallTask extends AbstractCall {
      * </task>
      * </tasks>
      *
-     * @param url
-     * @param inputStream
+     * @param tasks
+     * @param content
+     * @param accountInfo
      * @return
      * @throws SynchronizerException
      */
@@ -387,7 +388,7 @@ abstract class AbstractCallTask extends AbstractCall {
 
                 bean.setDueDateReminder(dueDateReminder);
                 bean.setStartDateReminder(startDateReminder);
-                bean.setRepeat(repeat);
+                bean.setRepeat(RepeatConverter.getRepeat(repeat));
                 bean.setRepeatFrom(repeatFrom);
                 bean.setStatus(status);
                 bean.setLength(length);
