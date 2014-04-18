@@ -818,6 +818,15 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
                 this.setFolder(null, true);
         }
 
+        if (event.getSource() instanceof TaskStatus
+                && event.getPropertyName().equals(PROP_MODEL_STATUS)) {
+            TaskStatus status = (TaskStatus) event.getSource();
+
+            if (status.getModelStatus().equals(ModelStatus.TO_DELETE)
+                    || status.getModelStatus().equals(ModelStatus.DELETED))
+                this.setStatus(null, true);
+        }
+
         if (event.getSource() instanceof ContactItem) {
             this.updateProperty(PROP_CONTACTS, null, this.contacts, true);
         }

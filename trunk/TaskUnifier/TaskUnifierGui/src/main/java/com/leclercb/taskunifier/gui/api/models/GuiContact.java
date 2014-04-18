@@ -32,60 +32,60 @@
  */
 package com.leclercb.taskunifier.gui.api.models;
 
-import java.awt.Color;
-
 import com.leclercb.taskunifier.api.models.Contact;
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.beans.ContactBean;
 import com.leclercb.taskunifier.api.models.beans.ModelBean;
 import com.leclercb.taskunifier.gui.api.models.beans.GuiContactBean;
 
+import java.awt.*;
+
 public class GuiContact extends Contact implements GuiModel {
-	
-	private Color color;
-	
-	public GuiContact(ContactBean bean, boolean loadReferenceIds) {
-		super(bean, loadReferenceIds);
-	}
-	
-	public GuiContact(String title) {
-		super(title);
-	}
-	
-	public GuiContact(ModelId modelId, String title) {
-		super(modelId, title);
-	}
-	
-	@Override
-	public void loadBean(ModelBean bean, boolean loadReferenceIds) {
-		if (bean instanceof GuiContactBean)
-			this.setColor(((GuiContactBean) bean).getColor());
-		
-		super.loadBean(bean, loadReferenceIds);
-	}
-	
-	@Override
-	public GuiContactBean toBean() {
-		GuiContactBean bean = (GuiContactBean) super.toBean();
-		
-		bean.setColor(this.getColor());
-		
-		return bean;
-	}
-	
-	@Override
-	public Color getColor() {
-		return this.color;
-	}
-	
-	@Override
-	public void setColor(Color color) {
-		if (!this.checkBeforeSet(this.getColor(), color))
-			return;
-		
-		Color oldColor = this.color;
-		this.color = color;
-		this.updateProperty(PROP_COLOR, oldColor, color, false, false);
-	}
-	
+
+    private Color color;
+
+    public GuiContact(ContactBean bean, boolean loadReferenceIds) {
+        super(bean, loadReferenceIds);
+    }
+
+    public GuiContact(String title) {
+        super(title);
+    }
+
+    public GuiContact(ModelId modelId, String title) {
+        super(modelId, title);
+    }
+
+    @Override
+    public void loadBean(ModelBean bean, boolean loadReferenceIds) {
+        if (bean instanceof GuiContactBean)
+            this.setColor(((GuiContactBean) bean).getColor());
+
+        super.loadBean(bean, loadReferenceIds);
+    }
+
+    @Override
+    public GuiContactBean toBean() {
+        GuiContactBean bean = (GuiContactBean) super.toBean();
+
+        bean.setColor(this.getColor());
+
+        return bean;
+    }
+
+    @Override
+    public Color getColor() {
+        return this.color;
+    }
+
+    @Override
+    public void setColor(Color color) {
+        if (!this.checkBeforeSet(this.getColor(), color))
+            return;
+
+        Color oldColor = this.color;
+        this.color = color;
+        this.updateProperty(PROP_COLOR, oldColor, color, true, false);
+    }
+
 }

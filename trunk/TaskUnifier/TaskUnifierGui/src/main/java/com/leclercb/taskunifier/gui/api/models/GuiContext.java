@@ -32,60 +32,60 @@
  */
 package com.leclercb.taskunifier.gui.api.models;
 
-import java.awt.Color;
-
 import com.leclercb.taskunifier.api.models.Context;
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.beans.ContextBean;
 import com.leclercb.taskunifier.api.models.beans.ModelBean;
 import com.leclercb.taskunifier.gui.api.models.beans.GuiContextBean;
 
+import java.awt.*;
+
 public class GuiContext extends Context implements GuiModel {
-	
-	private Color color;
-	
-	public GuiContext(ContextBean bean, boolean loadReferenceIds) {
-		super(bean, loadReferenceIds);
-	}
-	
-	public GuiContext(String title) {
-		super(title);
-	}
-	
-	public GuiContext(ModelId modelId, String title) {
-		super(modelId, title);
-	}
-	
-	@Override
-	public void loadBean(ModelBean bean, boolean loadReferenceIds) {
-		if (bean instanceof GuiContextBean)
-			this.setColor(((GuiContextBean) bean).getColor());
-		
-		super.loadBean(bean, loadReferenceIds);
-	}
-	
-	@Override
-	public GuiContextBean toBean() {
-		GuiContextBean bean = (GuiContextBean) super.toBean();
-		
-		bean.setColor(this.getColor());
-		
-		return bean;
-	}
-	
-	@Override
-	public Color getColor() {
-		return this.color;
-	}
-	
-	@Override
-	public void setColor(Color color) {
-		if (!this.checkBeforeSet(this.getColor(), color))
-			return;
-		
-		Color oldColor = this.color;
-		this.color = color;
-		this.updateProperty(PROP_COLOR, oldColor, color, false, false);
-	}
-	
+
+    private Color color;
+
+    public GuiContext(ContextBean bean, boolean loadReferenceIds) {
+        super(bean, loadReferenceIds);
+    }
+
+    public GuiContext(String title) {
+        super(title);
+    }
+
+    public GuiContext(ModelId modelId, String title) {
+        super(modelId, title);
+    }
+
+    @Override
+    public void loadBean(ModelBean bean, boolean loadReferenceIds) {
+        if (bean instanceof GuiContextBean)
+            this.setColor(((GuiContextBean) bean).getColor());
+
+        super.loadBean(bean, loadReferenceIds);
+    }
+
+    @Override
+    public GuiContextBean toBean() {
+        GuiContextBean bean = (GuiContextBean) super.toBean();
+
+        bean.setColor(this.getColor());
+
+        return bean;
+    }
+
+    @Override
+    public Color getColor() {
+        return this.color;
+    }
+
+    @Override
+    public void setColor(Color color) {
+        if (!this.checkBeforeSet(this.getColor(), color))
+            return;
+
+        Color oldColor = this.color;
+        this.color = color;
+        this.updateProperty(PROP_COLOR, oldColor, color, true, false);
+    }
+
 }

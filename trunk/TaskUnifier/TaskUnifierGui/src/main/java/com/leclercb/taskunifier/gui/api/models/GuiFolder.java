@@ -32,60 +32,60 @@
  */
 package com.leclercb.taskunifier.gui.api.models;
 
-import java.awt.Color;
-
 import com.leclercb.taskunifier.api.models.Folder;
 import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.beans.FolderBean;
 import com.leclercb.taskunifier.api.models.beans.ModelBean;
 import com.leclercb.taskunifier.gui.api.models.beans.GuiFolderBean;
 
+import java.awt.*;
+
 public class GuiFolder extends Folder implements GuiModel {
-	
-	private Color color;
-	
-	public GuiFolder(FolderBean bean, boolean loadReferenceIds) {
-		super(bean, loadReferenceIds);
-	}
-	
-	public GuiFolder(String title) {
-		super(title);
-	}
-	
-	public GuiFolder(ModelId modelId, String title) {
-		super(modelId, title);
-	}
-	
-	@Override
-	public void loadBean(ModelBean bean, boolean loadReferenceIds) {
-		if (bean instanceof GuiFolderBean)
-			this.setColor(((GuiFolderBean) bean).getColor());
-		
-		super.loadBean(bean, loadReferenceIds);
-	}
-	
-	@Override
-	public GuiFolderBean toBean() {
-		GuiFolderBean bean = (GuiFolderBean) super.toBean();
-		
-		bean.setColor(this.getColor());
-		
-		return bean;
-	}
-	
-	@Override
-	public Color getColor() {
-		return this.color;
-	}
-	
-	@Override
-	public void setColor(Color color) {
-		if (!this.checkBeforeSet(this.getColor(), color))
-			return;
-		
-		Color oldColor = this.color;
-		this.color = color;
-		this.updateProperty(PROP_COLOR, oldColor, color, false, false);
-	}
-	
+
+    private Color color;
+
+    public GuiFolder(FolderBean bean, boolean loadReferenceIds) {
+        super(bean, loadReferenceIds);
+    }
+
+    public GuiFolder(String title) {
+        super(title);
+    }
+
+    public GuiFolder(ModelId modelId, String title) {
+        super(modelId, title);
+    }
+
+    @Override
+    public void loadBean(ModelBean bean, boolean loadReferenceIds) {
+        if (bean instanceof GuiFolderBean)
+            this.setColor(((GuiFolderBean) bean).getColor());
+
+        super.loadBean(bean, loadReferenceIds);
+    }
+
+    @Override
+    public GuiFolderBean toBean() {
+        GuiFolderBean bean = (GuiFolderBean) super.toBean();
+
+        bean.setColor(this.getColor());
+
+        return bean;
+    }
+
+    @Override
+    public Color getColor() {
+        return this.color;
+    }
+
+    @Override
+    public void setColor(Color color) {
+        if (!this.checkBeforeSet(this.getColor(), color))
+            return;
+
+        Color oldColor = this.color;
+        this.color = color;
+        this.updateProperty(PROP_COLOR, oldColor, color, true, false);
+    }
+
 }
