@@ -57,6 +57,7 @@ final class CallAddTask extends AbstractCallTask {
         node.put("start_date_reminder", task.getStartDateReminder());
         node.put("due_date_reminder", task.getDueDateReminder());
         node.put("duration", task.getLength());
+        node.put("repeat", RepeatConverter.getRepeat(task.getRepeat()));
         node.put("repeat_from", OrganiTaskTranslations.translateTaskRepeatFrom(task.getRepeatFrom()));
         node.put("progress", (int) (task.getProgress() * 100));
         node.put("priority", OrganiTaskTranslations.translateTaskPriority(task.getPriority()));
