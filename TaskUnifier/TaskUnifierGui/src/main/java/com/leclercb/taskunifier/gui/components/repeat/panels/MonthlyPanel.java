@@ -111,6 +111,8 @@ public class MonthlyPanel extends JPanel implements RepeatPanel {
             this.everyXMonthsDayY.setSelected(true);
             this.everyXMonthsDayY_X.setValue(r.getValue());
             this.everyXMonthsDayY_Y.setValue(r.getDay());
+
+            return true;
         }
 
         if (repeat instanceof RepeatEveryXMonthOnWeekX) {
@@ -120,6 +122,8 @@ public class MonthlyPanel extends JPanel implements RepeatPanel {
             this.everyXMonthsDayYWeekZ_X.setValue(r.getValue());
             this.everyXMonthsDayYWeekZ_Y.setSelectedItem(r.getDay());
             this.everyXMonthsDayYWeekZ_Z.setSelectedItem(r.getWeek());
+
+            return true;
         }
 
         return false;

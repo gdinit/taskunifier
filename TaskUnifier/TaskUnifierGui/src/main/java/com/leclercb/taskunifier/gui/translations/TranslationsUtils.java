@@ -410,16 +410,16 @@ public final class TranslationsUtils {
         if (repeat instanceof RepeatEveryXMonthOnDayX) {
             return Translations.getString(
                     "repeat.every_x_months_day_x",
-                    ((RepeatEveryXMonthOnDayX) repeat).getValue(),
-                    ((RepeatEveryXMonthOnDayX) repeat).getDay());
+                    ((RepeatEveryXMonthOnDayX) repeat).getDay(),
+                    ((RepeatEveryXMonthOnDayX) repeat).getValue());
         }
 
         if (repeat instanceof RepeatEveryXMonthOnWeekX) {
             return Translations.getString(
                     "repeat.every_x_months_day_of_week",
-                    ((RepeatEveryXMonthOnWeekX) repeat).getValue(),
+                    StringValueWeekOfMonth.INSTANCE.getString(((RepeatEveryXMonthOnWeekX) repeat).getWeek()),
                     StringValueDayOfWeek.INSTANCE.getString(((RepeatEveryXMonthOnWeekX) repeat).getDay()),
-                    StringValueWeekOfMonth.INSTANCE.getString(((RepeatEveryXMonthOnWeekX) repeat).getWeek()));
+                    ((RepeatEveryXMonthOnWeekX) repeat).getValue());
         }
 
         return "#" + repeat.getClass().getSimpleName() + "#";
