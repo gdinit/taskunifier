@@ -14,7 +14,6 @@ import com.leclercb.taskunifier.plugin.organitask.OrganiTaskApi;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,11 +66,11 @@ final class CallGetToken extends AbstractCall {
 
             OrganiTaskToken token = new OrganiTaskToken();
 
-            token.setAccessToken(root.path("access_token").textValue());
-            token.setExpiresIn(root.path("expires_in").asLong());
-            token.setTokenType(root.path("token_type").textValue());
-            token.setScope(root.path("scope").textValue());
-            token.setRefreshToken(root.path("refresh_token").textValue());
+            token.setAccessToken(root.get("access_token").textValue());
+            token.setExpiresIn(root.get("expires_in").asLong());
+            token.setTokenType(root.get("token_type").textValue());
+            token.setScope(root.get("scope").textValue());
+            token.setRefreshToken(root.get("refresh_token").textValue());
 
             return token;
         } catch (Exception e) {

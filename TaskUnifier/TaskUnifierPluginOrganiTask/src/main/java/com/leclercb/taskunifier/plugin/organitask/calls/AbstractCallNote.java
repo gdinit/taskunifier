@@ -8,7 +8,6 @@ package com.leclercb.taskunifier.plugin.organitask.calls;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leclercb.commons.api.utils.CheckUtils;
-import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.ModelStatus;
 import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.NoteFactory;
@@ -73,15 +72,15 @@ abstract class AbstractCallNote extends AbstractCall {
     private NoteBean getNoteBean(JsonNode node) {
         NoteBean bean = NoteFactory.getInstance().createOriginalBean();
 
-        bean.getModelReferenceIds().put("organitask", this.getNodeTextValue(node.path("id")));
+        bean.getModelReferenceIds().put("organitask", this.getNodeTextValue(node.get("id")));
         bean.setModelStatus(ModelStatus.LOADED);
-        bean.setModelCreationDate(OrganiTaskTranslations.translateUTCDate(node.path("creation_date").asLong()));
-        bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").asLong()));
-        bean.setTitle(this.getNodeTextValue(node.path("title")));
+        bean.setModelCreationDate(OrganiTaskTranslations.translateUTCDate(node.get("creation_date").asLong()));
+        bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.get("update_date").asLong()));
+        bean.setTitle(this.getNodeTextValue(node.get("title")));
         bean.setFolder(OrganiTaskTranslations.getModelOrCreateShell(
                 ModelType.FOLDER,
-                this.getNodeTextValue(node.path("folder_id"))));
-        bean.setNote(this.getNodeTextValue(node.path("note")));
+                this.getNodeTextValue(node.get("folder_id"))));
+        bean.setNote(this.getNodeTextValue(node.get("note")));
 
         return bean;
     }

@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.FolderFactory;
-import com.leclercb.taskunifier.api.models.ModelId;
 import com.leclercb.taskunifier.api.models.ModelStatus;
 import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.beans.FolderBean;
@@ -17,7 +16,6 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerParsingException;
 import com.leclercb.taskunifier.gui.api.models.beans.GuiModelBean;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -63,14 +61,14 @@ abstract class AbstractCallFolder extends AbstractCall {
 
                 FolderBean bean = this.getFolderBean(item);
                 folders.add(bean);
-                folders.addAll(this.getFolderBeans(item.path("folders")));
+                folders.addAll(this.getFolderBeans(item.get("folders")));
             }
         } else {
             FolderBean bean = this.getFolderBean(node);
             folders.add(bean);
 
-            if (node.has("folders") && node.path("folders").isArray())
-                folders.addAll(this.getFolderBeans(node.path("folders")));
+            if (node.has("folders") && node.get("folders").isArray())
+                folders.addAll(this.getFolderBeans(node.get("folders")));
         }
 
         return folders;
@@ -79,17 +77,17 @@ abstract class AbstractCallFolder extends AbstractCall {
     private FolderBean getFolderBean(JsonNode node) {
         FolderBean bean = FolderFactory.getInstance().createOriginalBean();
 
-        bean.getModelReferenceIds().put("organitask", this.getNodeTextValue(node.path("id")));
+        bean.getModelReferenceIds().put("organitask", this.getNodeTextValue(node.get("id")));
         bean.setModelStatus(ModelStatus.LOADED);
-        bean.setModelCreationDate(OrganiTaskTranslations.translateUTCDate(node.path("creation_date").asLong()));
-        bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.path("update_date").asLong()));
+        bean.setModelCreationDate(OrganiTaskTranslations.translateUTCDate(node.get("creation_date").asLong()));
+        bean.setModelUpdateDate(OrganiTaskTranslations.translateUTCDate(node.get("update_date").asLong()));
         bean.setParent(OrganiTaskTranslations.getModelOrCreateShell(
                 ModelType.FOLDER,
-                this.getNodeTextValue(node.path("parent_id"))));
-        bean.setTitle(this.getNodeTextValue(node.path("title")));
+                this.getNodeTextValue(node.get("parent_id"))));
+        bean.setTitle(this.getNodeTextValue(node.get("title")));
 
         if (bean instanceof GuiModelBean) {
-            ((GuiModelBean) bean).setColor(OrganiTaskTranslations.translateColor(this.getNodeTextValue(node.path("color"))));
+            ((GuiModelBean) bean).setColor(OrganiTaskTranslations.translateColor(this.getNodeTextValue(node.get("color"))));
         }
 
         return bean;
