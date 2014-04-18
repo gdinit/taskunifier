@@ -262,8 +262,10 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
                 this.statement.editTask((Task) model, false);
             }
 
-            for (Model model : models) {
-                this.statement.editTaskParent((Task) model);
+            if (!this.authInfo.getAccountType().equals("FREE")) {
+                for (Model model : models) {
+                    this.statement.editTaskParent((Task) model);
+                }
             }
 
             return;

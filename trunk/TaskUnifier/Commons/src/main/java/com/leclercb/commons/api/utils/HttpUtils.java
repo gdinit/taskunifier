@@ -32,18 +32,13 @@
  */
 package com.leclercb.commons.api.utils;
 
-import java.io.InputStream;
-import java.net.Authenticator;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.PasswordAuthentication;
-import java.net.Proxy;
-import java.net.URI;
-import java.util.List;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
+
+import java.io.InputStream;
+import java.net.*;
+import java.util.List;
 
 public final class HttpUtils {
 
@@ -147,10 +142,7 @@ public final class HttpUtils {
                     + " - "
                     + connection.getResponseMessage());
 
-        byte[] bytes = null;
-
-        if (connection.getResponseCode() >= 200 && connection.getResponseCode() < 300)
-            bytes = IOUtils.toByteArray(inputStream);
+        byte[] bytes = IOUtils.toByteArray(inputStream);
 
         return new HttpResponse(
                 connection.getResponseCode(),

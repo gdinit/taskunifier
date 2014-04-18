@@ -6,6 +6,7 @@
 package com.leclercb.taskunifier.plugin.organitask.calls;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.commons.api.utils.HttpUtils;
@@ -99,12 +100,12 @@ abstract class AbstractCall {
                             true,
                             OrganiTaskApi.getInstance().getApiId(),
                             response.getCode() + "",
-                            response.getMessage());
+                            response.getMessage() + ": " + this.getErrorMessage(response.getContent()));
                 } else {
                     throw new SynchronizerHttpException(
                             false,
                             response.getCode(),
-                            response.getMessage());
+                            response.getMessage() + ": " + this.getErrorMessage(response.getContent()));
                 }
             }
 
@@ -135,6 +136,20 @@ abstract class AbstractCall {
             return null;
 
         return node.asText();
+    }
+
+    private String getErrorMessage(String content) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(content);
+
+            if (root.get("message") != null)
+                return root.get("message").asText();
+
+            return "";
+        } catch (Exception e) {
+            return "";
+        }
     }
 
 }
