@@ -101,6 +101,8 @@ public class SynchronizerPluginsDialogPanel extends TUDialogPanel {
             @Override
             public void actionPerformed(ActionEvent event) {
                 if (event.getActionCommand().equals("OK")) {
+                    SynchronizerPluginsDialogPanel.this.pluginsPanel.installSelectedPlugin();
+
                     if (!isWelcome()) {
                         String[] options = new String[]{
                                 Translations.getString("general.ok"),
@@ -125,8 +127,6 @@ public class SynchronizerPluginsDialogPanel extends TUDialogPanel {
                             SynchronizerUtils.resetAllSynchronizersAndDeleteModels();
                         }
                     }
-
-                    SynchronizerPluginsDialogPanel.this.pluginsPanel.installSelectedPlugin();
                 }
 
                 SynchronizerPluginsDialogPanel.this.getDialog().setVisible(
