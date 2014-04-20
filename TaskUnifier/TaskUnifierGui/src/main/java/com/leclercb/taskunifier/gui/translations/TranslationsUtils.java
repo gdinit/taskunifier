@@ -311,6 +311,15 @@ public final class TranslationsUtils {
             }
         }
 
+        if (condition instanceof RepeatCondition) {
+            switch ((RepeatCondition) condition) {
+                case EQUALS:
+                    return Translations.getString("filter_condition.equals");
+                case NOT_EQUALS:
+                    return Translations.getString("filter_condition.not_equals");
+            }
+        }
+
         return "#" + condition.name() + "#";
     }
 

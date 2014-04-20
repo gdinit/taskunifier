@@ -36,6 +36,7 @@ import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
+import com.leclercb.taskunifier.api.models.repeat.Repeat;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessor;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorList;
 import com.leclercb.taskunifier.gui.api.accessor.PropertyAccessorType;
@@ -44,6 +45,7 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.FilterElement;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.*;
 import com.leclercb.taskunifier.gui.commons.models.*;
 import com.leclercb.taskunifier.gui.commons.values.*;
+import com.leclercb.taskunifier.gui.swing.TURepeatField;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.FormBuilder;
 import org.jdesktop.swingx.JXComboBox;
@@ -69,6 +71,7 @@ public class DefaultFilterElementPanel<M extends Model, F extends Filter<M, F, F
     private JXComboBox elementCondition;
     private JXComboBox elementValueCb;
     private JTextField elementValueTf;
+    private TURepeatField elementValueRf;
     private JCheckBox elementCompareModel;
 
     public DefaultFilterElementPanel(PropertyAccessorList<M> list) {
@@ -100,8 +103,10 @@ public class DefaultFilterElementPanel<M extends Model, F extends Filter<M, F, F
 
             if (this.elementValueCb.isVisible())
                 elementValue = this.elementValueCb.getSelectedItem();
-            else
+            else if (this.elementValueTf.isVisible())
                 elementValue = this.elementValueTf.getText();
+            else
+                elementValue = this.elementValueRf.getRepeat();
 
             Object value = null;
 
@@ -166,6 +171,9 @@ public class DefaultFilterElementPanel<M extends Model, F extends Filter<M, F, F
                 case TASK_REPEAT_FROM:
                     value = elementValue;
                     break;
+                case REPEAT:
+                    value = elementValue;
+                    break;
                 default:
                     value = elementValue;
                     break;
@@ -205,16 +213,19 @@ public class DefaultFilterElementPanel<M extends Model, F extends Filter<M, F, F
 
         this.elementValueCb.setVisible(false);
         this.elementValueTf.setVisible(false);
+        this.elementValueRf.setVisible(false);
 
         this.elementColumn.setEnabled(column != null);
         this.elementCondition.setEnabled(column != null);
         this.elementValueCb.setEnabled(column != null);
         this.elementValueTf.setEnabled(column != null);
+        this.elementValueRf.setEnabled(column != null);
 
         this.elementColumn.setModel(new DefaultComboBoxModel());
         this.elementCondition.setModel(new DefaultComboBoxModel());
         this.elementValueCb.setModel(new DefaultComboBoxModel());
         this.elementValueTf.setText("");
+        this.elementValueRf.setRepeat(null);
 
         if (column == null) {
             this.elementValueTf.setVisible(true);
@@ -425,6 +436,11 @@ public class DefaultFilterElementPanel<M extends Model, F extends Filter<M, F, F
                 this.elementValueCb.setSelectedItem(value == null ? TaskRepeatFrom.DUE_DATE : value);
                 this.elementValueCb.setVisible(true);
                 break;
+            case REPEAT:
+                this.elementCondition.setModel(new DefaultComboBoxModel(
+                        RepeatCondition.values()));
+                this.elementValueRf.setRepeat((Repeat) value);
+                this.elementValueRf.setVisible(true);
             default:
                 break;
         }
@@ -523,6 +539,9 @@ public class DefaultFilterElementPanel<M extends Model, F extends Filter<M, F, F
         this.elementValueTf = new JTextField();
         this.elementValueTf.setEnabled(false);
 
+        this.elementValueRf = new TURepeatField();
+        this.elementValueRf.setEnabled(false);
+
         this.elementCompareModel = new JCheckBox(
                 Translations.getString("searcheredit.element.compare_model"));
         this.elementCompareModel.setVisible(this.allowCompareModel);
@@ -531,6 +550,7 @@ public class DefaultFilterElementPanel<M extends Model, F extends Filter<M, F, F
         valuePanel.setLayout(new BoxLayout(valuePanel, BoxLayout.Y_AXIS));
         valuePanel.add(this.elementValueCb);
         valuePanel.add(this.elementValueTf);
+        valuePanel.add(this.elementValueRf);
         valuePanel.add(this.elementCompareModel);
 
         builder.append(valuePanel);

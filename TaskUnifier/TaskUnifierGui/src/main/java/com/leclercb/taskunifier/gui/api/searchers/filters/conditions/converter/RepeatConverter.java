@@ -2,22 +2,22 @@
  * TaskUnifier
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  *   - Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- * 
+ *
  *   - Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- * 
+ *
  *   - Neither the name of TaskUnifier or the names of its
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
  * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -32,26 +32,41 @@
  */
 package com.leclercb.taskunifier.gui.api.searchers.filters.conditions.converter;
 
-import com.leclercb.taskunifier.api.models.beans.converters.*;
-import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
-import com.thoughtworks.xstream.mapper.Mapper;
+import com.leclercb.taskunifier.api.models.repeat.Repeat;
+import com.thoughtworks.xstream.converters.SingleValueConverter;
 
-public class ConditionValueConverter extends MultiConverter {
+public class RepeatConverter implements SingleValueConverter {
 
-    public ConditionValueConverter(
-            Mapper mapper,
-            ReflectionProvider reflectionProvider) {
-        this.addConverter(ContactConverter.INSTANCE);
-        this.addConverter(ContextConverter.INSTANCE);
-        this.addConverter(FolderConverter.INSTANCE);
-        this.addConverter(GoalConverter.INSTANCE);
-        this.addConverter(LocationConverter.INSTANCE);
-        this.addConverter(NoteConverter.INSTANCE);
-        this.addConverter(TaskConverter.INSTANCE);
-        this.addConverter(TaskStatusConverter.INSTANCE);
-        this.addConverter(NumberConverter.INSTANCE);
-        this.addConverter(RepeatConverter.INSTANCE);
-        this.addConverter(StringConverter.INSTANCE);
+    public static RepeatConverter INSTANCE = new RepeatConverter();
+
+    public RepeatConverter() {
+
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public boolean canConvert(Class cls) {
+        return Repeat.class.isAssignableFrom(cls);
+    }
+
+    @Override
+    public Object fromString(String value) {
+        if (value == null || value.length() == 0)
+            return null;
+
+        try {
+            return com.leclercb.taskunifier.gui.api.repeat.RepeatConverter.getRepeat(value);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public String toString(Object value) {
+        if (value == null || !(value instanceof Repeat))
+            return null;
+
+        return com.leclercb.taskunifier.gui.api.repeat.RepeatConverter.getRepeat((Repeat) value);
     }
 
 }
