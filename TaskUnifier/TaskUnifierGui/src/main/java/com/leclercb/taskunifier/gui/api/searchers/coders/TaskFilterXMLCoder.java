@@ -180,6 +180,14 @@ public class TaskFilterXMLCoder extends AbstractXMLCoder<TaskFilter> {
                             value = valueStr;
                         }
 
+                        if (column.getId().equals(TaskColumnList.STATUS) || column.getId().equals(TaskColumnList.REPEAT)) {
+                            if (condition == StringCondition.EQUALS)
+                                condition = StringCondition.CONTAINS;
+
+                            if (condition == StringCondition.NOT_EQUALS)
+                                condition = StringCondition.DOES_NOT_CONTAIN;
+                        }
+
                         element = new TaskFilterElement(
                                 column,
                                 condition,
