@@ -32,251 +32,249 @@
  */
 package com.leclercb.taskunifier.gui.api.accessor;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Comparator;
-
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
-
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupport;
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.gui.main.Main;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Comparator;
 
 public abstract class DefaultPropertyAccessor<T> implements PropertyAccessor<T>, PropertyChangeListener, PropertyChangeSupported {
-	
-	private PropertyChangeSupport propertyChangeSupport;
-	
-	private String name;
-	private String label;
-	private PropertyAccessorType type;
-	private String fieldSettingsPropertyName;
-	private String propertyName;
-	private boolean usable;
-	private boolean used;
-	private boolean editable;
-	private boolean sortable;
-	
-	public DefaultPropertyAccessor(
-			String name,
-			String fieldSettingsPropertyName,
-			PropertyAccessorType type,
-			String propertyName,
-			String label,
-			boolean editable,
-			boolean usable,
-			boolean sortable) {
-		this.propertyChangeSupport = new PropertyChangeSupport(this);
-		
-		this.setName(name);
-		this.setFieldSettingsPropertyName(fieldSettingsPropertyName);
-		this.setType(type);
-		this.setPropertyName(propertyName);
-		this.setLabel(label);
-		this.setEditable(editable);
-		this.setUsable(usable);
-		this.setSortable(sortable);
-		
-		if (this.fieldSettingsPropertyName == null) {
-			this.setUsed(false);
-		} else {
-			this.setUsed(Main.getSettings().getBooleanProperty(
-					fieldSettingsPropertyName + ".used",
-					true));
-			
-			Main.getSettings().addPropertyChangeListener(
-					fieldSettingsPropertyName + ".used",
-					new WeakPropertyChangeListener(Main.getSettings(), this));
-		}
-	}
-	
-	@Override
-	public String getId() {
-		return this.name;
-	}
-	
-	private void setName(String name) {
-		CheckUtils.isNotNull(name);
-		this.name = name;
-	}
-	
-	@Override
-	public String getLabel() {
-		return this.label;
-	}
-	
-	private void setLabel(String label) {
-		CheckUtils.isNotNull(label);
-		this.label = label;
-	}
-	
-	@Override
-	public PropertyAccessorType getType() {
-		return this.type;
-	}
-	
-	private void setType(PropertyAccessorType type) {
-		CheckUtils.isNotNull(type);
-		this.type = type;
-	}
-	
-	@Override
-	public String getFieldSettingsPropertyName() {
-		return this.fieldSettingsPropertyName;
-	}
-	
-	private void setFieldSettingsPropertyName(String fieldSettingsPropertyName) {
-		this.fieldSettingsPropertyName = fieldSettingsPropertyName;
-	}
-	
-	@Override
-	public String getPropertyName() {
-		return this.propertyName;
-	}
-	
-	private void setPropertyName(String propertyName) {
-		this.propertyName = propertyName;
-	}
-	
-	@Override
-	public boolean isUsable() {
-		return this.usable;
-	}
-	
-	private void setUsable(boolean usable) {
-		this.usable = usable;
-	}
-	
-	@Override
-	public boolean isUsed() {
-		return this.used;
-	}
-	
-	@Override
-	public void setUsed(boolean used) {
-		if (used == this.isUsed())
-			return;
-		
-		boolean oldUsed = this.isUsed();
-		this.used = used;
-		
-		if (this.fieldSettingsPropertyName != null) {
-			Main.getSettings().setBooleanProperty(
-					this.fieldSettingsPropertyName + ".used",
-					used);
-		}
-		
-		this.propertyChangeSupport.firePropertyChange(PROP_USED, oldUsed, used);
-	}
-	
-	@Override
-	public boolean isEditable() {
-		return this.editable;
-	}
-	
-	private void setEditable(boolean editable) {
-		this.editable = editable;
-	}
-	
-	@Override
-	public boolean isSortable() {
-		return this.sortable;
-	}
-	
-	private void setSortable(boolean sortable) {
-		this.sortable = sortable;
-	}
-	
-	@Override
-	public Comparator<?> getComparator() {
-		return this.type.getComparator();
-	}
-	
-	@Override
-	public TableCellRenderer getCellRenderer() {
-		return this.type.getCellRenderer();
-	}
-	
-	@Override
-	public TableCellEditor getCellEditor() {
-		return this.type.getCellEditor();
-	}
-	
-	@Override
-	public String getPropertyAsString(T object) {
-		CheckUtils.isNotNull(object);
-		
-		Object value = this.getProperty(object);
-		return this.type.convertPropertyToString(value);
-	}
-	
-	@Override
-	public String toString() {
-		return this.label;
-	}
-	
-	@Override
-	public boolean equals(Object o) {
-		if (o == this) {
-			return true;
-		}
-		
-		if (o instanceof PropertyAccessor) {
-			PropertyAccessor<?> pa = (PropertyAccessor<?>) o;
-			
-			return new EqualsBuilder().append(this.getId(), pa.getId()).isEquals();
-		}
-		
-		return false;
-	}
-	
-	@Override
-	public int hashCode() {
-		HashCodeBuilder hashCode = new HashCodeBuilder();
-		hashCode.append(this.getId());
-		
-		return hashCode.toHashCode();
-	}
-	
-	@Override
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		this.propertyChangeSupport.addPropertyChangeListener(listener);
-	}
-	
-	@Override
-	public void addPropertyChangeListener(
-			String propertyName,
-			PropertyChangeListener listener) {
-		this.propertyChangeSupport.addPropertyChangeListener(
-				propertyName,
-				listener);
-	}
-	
-	@Override
-	public void removePropertyChangeListener(PropertyChangeListener listener) {
-		this.propertyChangeSupport.removePropertyChangeListener(listener);
-	}
-	
-	@Override
-	public void removePropertyChangeListener(
-			String propertyName,
-			PropertyChangeListener listener) {
-		this.propertyChangeSupport.removePropertyChangeListener(
-				propertyName,
-				listener);
-	}
-	
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getNewValue() == null)
-			this.setUsed(false);
-		else
-			this.setUsed((Boolean) evt.getNewValue());
-	}
-	
+
+    private PropertyChangeSupport propertyChangeSupport;
+
+    private String id;
+    private String label;
+    private PropertyAccessorType type;
+    private String fieldSettingsPropertyName;
+    private String propertyName;
+    private boolean usable;
+    private boolean used;
+    private boolean editable;
+    private boolean sortable;
+
+    public DefaultPropertyAccessor(
+            String id,
+            String fieldSettingsPropertyName,
+            PropertyAccessorType type,
+            String propertyName,
+            String label,
+            boolean editable,
+            boolean usable,
+            boolean sortable) {
+        this.propertyChangeSupport = new PropertyChangeSupport(this);
+
+        this.setId(id);
+        this.setFieldSettingsPropertyName(fieldSettingsPropertyName);
+        this.setType(type);
+        this.setPropertyName(propertyName);
+        this.setLabel(label);
+        this.setEditable(editable);
+        this.setUsable(usable);
+        this.setSortable(sortable);
+
+        if (this.fieldSettingsPropertyName == null) {
+            this.setUsed(false);
+        } else {
+            this.setUsed(Main.getSettings().getBooleanProperty(
+                    fieldSettingsPropertyName + ".used",
+                    true));
+
+            Main.getSettings().addPropertyChangeListener(
+                    fieldSettingsPropertyName + ".used",
+                    new WeakPropertyChangeListener(Main.getSettings(), this));
+        }
+    }
+
+    @Override
+    public String getId() {
+        return this.id;
+    }
+
+    private void setId(String id) {
+        CheckUtils.isNotNull(id);
+        this.id = id;
+    }
+
+    @Override
+    public String getLabel() {
+        return this.label;
+    }
+
+    private void setLabel(String label) {
+        CheckUtils.isNotNull(label);
+        this.label = label;
+    }
+
+    @Override
+    public PropertyAccessorType getType() {
+        return this.type;
+    }
+
+    private void setType(PropertyAccessorType type) {
+        CheckUtils.isNotNull(type);
+        this.type = type;
+    }
+
+    @Override
+    public String getFieldSettingsPropertyName() {
+        return this.fieldSettingsPropertyName;
+    }
+
+    private void setFieldSettingsPropertyName(String fieldSettingsPropertyName) {
+        this.fieldSettingsPropertyName = fieldSettingsPropertyName;
+    }
+
+    @Override
+    public String getPropertyName() {
+        return this.propertyName;
+    }
+
+    private void setPropertyName(String propertyName) {
+        this.propertyName = propertyName;
+    }
+
+    @Override
+    public boolean isUsable() {
+        return this.usable;
+    }
+
+    private void setUsable(boolean usable) {
+        this.usable = usable;
+    }
+
+    @Override
+    public boolean isUsed() {
+        return this.used;
+    }
+
+    @Override
+    public void setUsed(boolean used) {
+        if (used == this.isUsed())
+            return;
+
+        boolean oldUsed = this.isUsed();
+        this.used = used;
+
+        if (this.fieldSettingsPropertyName != null) {
+            Main.getSettings().setBooleanProperty(
+                    this.fieldSettingsPropertyName + ".used",
+                    used);
+        }
+
+        this.propertyChangeSupport.firePropertyChange(PROP_USED, oldUsed, used);
+    }
+
+    @Override
+    public boolean isEditable() {
+        return this.editable;
+    }
+
+    private void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+
+    @Override
+    public boolean isSortable() {
+        return this.sortable;
+    }
+
+    private void setSortable(boolean sortable) {
+        this.sortable = sortable;
+    }
+
+    @Override
+    public Comparator<?> getComparator() {
+        return this.type.getComparator();
+    }
+
+    @Override
+    public TableCellRenderer getCellRenderer() {
+        return this.type.getCellRenderer();
+    }
+
+    @Override
+    public TableCellEditor getCellEditor() {
+        return this.type.getCellEditor();
+    }
+
+    @Override
+    public String getPropertyAsString(T object) {
+        CheckUtils.isNotNull(object);
+
+        Object value = this.getProperty(object);
+        return this.type.convertPropertyToString(value);
+    }
+
+    @Override
+    public String toString() {
+        return this.label;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (o instanceof PropertyAccessor) {
+            PropertyAccessor<?> pa = (PropertyAccessor<?>) o;
+
+            return new EqualsBuilder().append(this.getId(), pa.getId()).isEquals();
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        HashCodeBuilder hashCode = new HashCodeBuilder();
+        hashCode.append(this.getId());
+
+        return hashCode.toHashCode();
+    }
+
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        this.propertyChangeSupport.addPropertyChangeListener(listener);
+    }
+
+    @Override
+    public void addPropertyChangeListener(
+            String propertyName,
+            PropertyChangeListener listener) {
+        this.propertyChangeSupport.addPropertyChangeListener(
+                propertyName,
+                listener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        this.propertyChangeSupport.removePropertyChangeListener(listener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(
+            String propertyName,
+            PropertyChangeListener listener) {
+        this.propertyChangeSupport.removePropertyChangeListener(
+                propertyName,
+                listener);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getNewValue() == null)
+            this.setUsed(false);
+        else
+            this.setUsed((Boolean) evt.getNewValue());
+    }
+
 }
