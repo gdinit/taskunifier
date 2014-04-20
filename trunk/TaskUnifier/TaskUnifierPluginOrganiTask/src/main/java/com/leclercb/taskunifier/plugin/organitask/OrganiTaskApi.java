@@ -48,10 +48,10 @@ public final class OrganiTaskApi extends SynchronizerApi {
     private String clientSecret;
 
     private OrganiTaskApi() {
-        super("ORGANITASK", "OrganiTask", "http://localhost:8888/OrganiTaskSymfony/web/app_dev.php");
+        super("ORGANITASK", "OrganiTask", "http://www.organitask.com");
 
-        this.setApiUrl("localhost:8888/OrganiTaskSymfony/web/app_dev.php/api/v1");
-        this.setWebUrl("http://localhost:8888/OrganiTaskSymfony/web/app_dev.php");
+        this.setApiUrl("www.organitask.com/api/v1");
+        this.setWebUrl("http://www.organitask.com");
         this.setClientId("");
         this.setClientRandomId("");
         this.setClientSecret("");
