@@ -101,9 +101,9 @@ public class SynchronizerPluginsDialogPanel extends TUDialogPanel {
             @Override
             public void actionPerformed(ActionEvent event) {
                 if (event.getActionCommand().equals("OK")) {
-                    SynchronizerPluginsDialogPanel.this.pluginsPanel.installSelectedPlugin();
+                    boolean installed = SynchronizerPluginsDialogPanel.this.pluginsPanel.installSelectedPlugin();
 
-                    if (!isWelcome()) {
+                    if (!isWelcome() && installed) {
                         String[] options = new String[]{
                                 Translations.getString("general.ok"),
                                 Translations.getString("general.cancel")};
