@@ -32,15 +32,6 @@
  */
 package com.leclercb.taskunifier.gui.swing;
 
-import java.awt.BorderLayout;
-import java.awt.Point;
-import java.awt.Window;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
-import java.util.logging.Level;
-
-import javax.swing.JDialog;
-
 import com.leclercb.commons.api.properties.events.SavePropertiesListener;
 import com.leclercb.commons.api.properties.events.WeakSavePropertiesListener;
 import com.leclercb.commons.api.utils.CheckUtils;
@@ -51,141 +42,153 @@ import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
+import java.util.logging.Level;
+
 public class TUDialog extends JDialog implements SavePropertiesListener {
-	
-	private String windowProperty;
-	
-	private TUDialogPanel dialogPanel;
-	
-	public TUDialog() {
-		this((Window) null);
-	}
-	
-	public TUDialog(Window owner) {
-		super(owner);
-		
-		this.windowProperty = null;
-		
-		this.initialize();
-	}
-	
-	public TUDialog(TUDialogPanel dialogPanel) {
-		this(FrameUtils.getCurrentWindow());
-		
-		CheckUtils.isNotNull(dialogPanel);
-		this.dialogPanel = dialogPanel;
-		
-		this.initializeDialogPanel();
-	}
+
+    private String windowProperty;
+
+    private TUDialogPanel dialogPanel;
+
+    public TUDialog() {
+        this((Window) null);
+    }
+
+    public TUDialog(Window owner) {
+        super(owner);
+
+        this.windowProperty = null;
+
+        this.initialize();
+    }
+
+    public TUDialog(TUDialogPanel dialogPanel) {
+        this(FrameUtils.getCurrentWindow());
+
+        CheckUtils.isNotNull(dialogPanel);
+        this.dialogPanel = dialogPanel;
+
+        this.initializeDialogPanel();
+    }
 
     public TUDialogPanel getDialogPanel() {
         return dialogPanel;
     }
 
     private void initialize() {
-		this.setIconImage(ImageUtils.getResourceImage("logo.png").getImage());
-		
-		Main.getSettings().addSavePropertiesListener(
-				new WeakSavePropertiesListener(Main.getSettings(), this));
-		
-		this.addWindowFocusListener(new WindowFocusListener() {
-			
-			@Override
-			public void windowGainedFocus(WindowEvent event) {
-				FrameUtils.setCurrentWindow(TUDialog.this);
-			}
-			
-			@Override
-			public void windowLostFocus(WindowEvent event) {
-				
-			}
-			
-		});
-	}
-	
-	private void initializeDialogPanel() {
-		this.setLayout(new BorderLayout());
-		
-		this.add(this.dialogPanel, BorderLayout.CENTER);
-		this.dialogPanel.setDialog(this);
-		
-		if (this.dialogPanel.getButtons() != null
-				&& this.dialogPanel.getButtons().length != 0) {
-			TUButtonsPanel buttonsPanel = new TUButtonsPanel(
-					this.dialogPanel.getButtons());
-			this.add(buttonsPanel, BorderLayout.SOUTH);
-		}
-		
-		if (this.dialogPanel.getDefaultButton() != null) {
-			this.getRootPane().setDefaultButton(
-					this.dialogPanel.getDefaultButton());
-		}
-		
-		this.pack();
-	}
-	
-	@Override
-	public void dispose() {
-		if (this.dialogPanel != null)
-			this.dialogPanel.setDialog(null);
-		
-		super.dispose();
-	}
-	
-	public void loadWindowSettings(final String windowProperty) {
-		try {
-			CheckUtils.isNotNull(windowProperty);
-			this.windowProperty = windowProperty;
-			
-			int width = Main.getSettings().getIntegerProperty(
-					this.windowProperty + ".width");
-			int height = Main.getSettings().getIntegerProperty(
-					this.windowProperty + ".height");
-			int locationX = Main.getSettings().getIntegerProperty(
-					this.windowProperty + ".location_x");
-			int locationY = Main.getSettings().getIntegerProperty(
-					this.windowProperty + ".location_y");
-			
-			this.setSize(width, height);
-			
-			if (ScreenUtils.isLocationInScreen(new Point(locationX, locationY)))
-				this.setLocation(locationX, locationY);
-			else if (this.getOwner() != null)
-				this.setLocationRelativeTo(this.getOwner());
-			else
-				this.setLocation(0, 0);
-		} catch (Exception e) {
-			GuiLogger.getLogger().log(
-					Level.SEVERE,
-					"Cannot load window settings",
-					e);
-		}
-	}
-	
-	@Override
-	public void saveProperties() {
-		try {
-			if (this.windowProperty == null)
-				return;
-			
-			Main.getSettings().setIntegerProperty(
-					this.windowProperty + ".width",
-					TUDialog.this.getWidth());
-			Main.getSettings().setIntegerProperty(
-					this.windowProperty + ".height",
-					TUDialog.this.getHeight());
-			Main.getSettings().setIntegerProperty(
-					this.windowProperty + ".location_x",
-					TUDialog.this.getX());
-			Main.getSettings().setIntegerProperty(
-					this.windowProperty + ".location_y",
-					TUDialog.this.getY());
-		} catch (Exception e) {
-			GuiLogger.getLogger().log(
-					Level.SEVERE,
-					"Cannot save dialog settings",
-					e);
-		}
-	}
-	
+        this.setIconImage(ImageUtils.getResourceImage("logo.png").getImage());
+
+        Main.getSettings().addSavePropertiesListener(
+                new WeakSavePropertiesListener(Main.getSettings(), this));
+
+        this.addWindowFocusListener(new WindowFocusListener() {
+
+            @Override
+            public void windowGainedFocus(WindowEvent event) {
+                FrameUtils.setCurrentWindow(TUDialog.this);
+            }
+
+            @Override
+            public void windowLostFocus(WindowEvent event) {
+
+            }
+
+        });
+    }
+
+    private void initializeDialogPanel() {
+        this.setLayout(new BorderLayout());
+
+        this.add(this.dialogPanel, BorderLayout.CENTER);
+        this.dialogPanel.setDialog(this);
+
+        if (this.dialogPanel.getButtons() != null
+                && this.dialogPanel.getButtons().length != 0) {
+            TUButtonsPanel buttonsPanel = new TUButtonsPanel(
+                    this.dialogPanel.getButtons());
+            this.add(buttonsPanel, BorderLayout.SOUTH);
+        }
+
+        if (this.dialogPanel.getDefaultButton() != null) {
+            this.getRootPane().setDefaultButton(
+                    this.dialogPanel.getDefaultButton());
+        }
+
+        this.pack();
+    }
+
+    @Override
+    public void dispose() {
+        if (this.dialogPanel != null)
+            this.dialogPanel.setDialog(null);
+
+        super.dispose();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        this.saveProperties();
+        super.setVisible(b);
+    }
+
+    public void loadWindowSettings(final String windowProperty) {
+        try {
+            CheckUtils.isNotNull(windowProperty);
+            this.windowProperty = windowProperty;
+
+            int width = Main.getSettings().getIntegerProperty(
+                    this.windowProperty + ".width");
+            int height = Main.getSettings().getIntegerProperty(
+                    this.windowProperty + ".height");
+            int locationX = Main.getSettings().getIntegerProperty(
+                    this.windowProperty + ".location_x");
+            int locationY = Main.getSettings().getIntegerProperty(
+                    this.windowProperty + ".location_y");
+
+            this.setSize(width, height);
+
+            if (ScreenUtils.isLocationInScreen(new Point(locationX, locationY)))
+                this.setLocation(locationX, locationY);
+            else if (this.getOwner() != null)
+                this.setLocationRelativeTo(this.getOwner());
+            else
+                this.setLocation(0, 0);
+        } catch (Exception e) {
+            GuiLogger.getLogger().log(
+                    Level.SEVERE,
+                    "Cannot load window settings",
+                    e);
+        }
+    }
+
+    @Override
+    public void saveProperties() {
+        try {
+            if (this.windowProperty == null)
+                return;
+
+            Main.getSettings().setIntegerProperty(
+                    this.windowProperty + ".width",
+                    TUDialog.this.getWidth());
+            Main.getSettings().setIntegerProperty(
+                    this.windowProperty + ".height",
+                    TUDialog.this.getHeight());
+            Main.getSettings().setIntegerProperty(
+                    this.windowProperty + ".location_x",
+                    TUDialog.this.getX());
+            Main.getSettings().setIntegerProperty(
+                    this.windowProperty + ".location_y",
+                    TUDialog.this.getY());
+        } catch (Exception e) {
+            GuiLogger.getLogger().log(
+                    Level.SEVERE,
+                    "Cannot save dialog settings",
+                    e);
+        }
+    }
+
 }
