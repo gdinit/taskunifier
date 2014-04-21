@@ -114,6 +114,7 @@ public class SynchronizerPluginsDialogPanel extends TUDialogPanel {
                                         "plugin.synchronizer.remove_all_data",
                                         SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().getApiName(),
                                         SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().getApiName(),
+                                        SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().getApiName(),
                                         SynchronizerUtils.getSynchronizerPlugin().getSynchronizerApi().getApiName()),
                                 Translations.getString("general.question"),
                                 JOptionPane.YES_NO_OPTION,
