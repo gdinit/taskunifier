@@ -2,11 +2,13 @@ HISTORY
 -------
 
 Version 4.2.0
+    - Major:
+        - Task status revamp
+        - Powerful repeat window
+        - Synchronize with OrganiTask
     - Minor:
         - Auto-save before sync
-        - Task status revamp
-        - Repeat window
-        - Synchronize with OrganiTask
+        - Window positioning improvement
 
 Version 4.1.0
     - Minor:
