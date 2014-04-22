@@ -279,7 +279,8 @@ abstract class AbstractCallTask extends AbstractCall {
                             }
 
                             if (meta.containsKey("parent")) {
-                                if (!accountInfo.isProMember())
+                                if (!accountInfo.isProMember() ||
+                                        (PluginApi.getUserSettings().getBooleanProperty("toodledo.sub_tasks") != null && PluginApi.getUserSettings().getBooleanProperty("toodledo.sub_tasks")))
                                     parent = meta.getStringProperty("parent");
                             }
 

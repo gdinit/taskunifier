@@ -1,3 +1,6 @@
+Version 8.7
+    - Multi-level sub-tasks option
+
 Version 8.6
 	- Update for TaskUnifier 4.2.0
 
