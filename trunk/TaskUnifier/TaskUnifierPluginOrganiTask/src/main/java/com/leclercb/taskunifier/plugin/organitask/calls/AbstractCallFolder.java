@@ -75,7 +75,7 @@ abstract class AbstractCallFolder extends AbstractCall {
     }
 
     private FolderBean getFolderBean(JsonNode node) {
-        FolderBean bean = FolderFactory.getInstance().createOriginalBean();
+        FolderBean bean = FolderFactory.getInstance().createBean();
 
         bean.getModelReferenceIds().put("organitask", this.getNodeTextValue(node.get("id")));
         bean.setModelStatus(ModelStatus.LOADED);

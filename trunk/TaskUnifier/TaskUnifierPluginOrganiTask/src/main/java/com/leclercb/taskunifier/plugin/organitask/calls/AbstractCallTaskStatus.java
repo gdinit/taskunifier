@@ -70,7 +70,7 @@ abstract class AbstractCallTaskStatus extends AbstractCall {
     }
 
     private TaskStatusBean getTaskStatusBean(JsonNode node) {
-        TaskStatusBean bean = TaskStatusFactory.getInstance().createOriginalBean();
+        TaskStatusBean bean = TaskStatusFactory.getInstance().createBean();
 
         bean.getModelReferenceIds().put("organitask", this.getNodeTextValue(node.get("id")));
         bean.setModelStatus(ModelStatus.LOADED);
