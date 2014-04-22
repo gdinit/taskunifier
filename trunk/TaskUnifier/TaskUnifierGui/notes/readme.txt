@@ -3,7 +3,7 @@ HISTORY
 
 Version 4.2.1
     - Minor:
-        - Bug fixed: Load model color
+        -
 
 Version 4.2.0
     - Major:

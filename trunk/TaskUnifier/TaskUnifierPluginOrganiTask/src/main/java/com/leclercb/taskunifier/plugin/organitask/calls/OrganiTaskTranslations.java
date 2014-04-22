@@ -40,7 +40,17 @@ final class OrganiTaskTranslations {
     }
 
     public static Color translateColor(String color) {
-        return Color.decode(color);
+        if (color == null || color.length() == 0)
+            return null;
+
+        try {
+            if (!color.startsWith("#"))
+                color = '#' + color;
+
+            return Color.decode(color);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public static String translateColor(Color color) {
