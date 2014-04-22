@@ -75,7 +75,7 @@ abstract class AbstractCallTask extends AbstractCall {
     }
 
     private TaskBean getTaskBean(JsonNode node) {
-        TaskBean bean = TaskFactory.getInstance().createOriginalBean();
+        TaskBean bean = TaskFactory.getInstance().createBean();
 
         bean.getModelReferenceIds().put("organitask", this.getNodeTextValue(node.get("id")));
         bean.setModelStatus(ModelStatus.LOADED);

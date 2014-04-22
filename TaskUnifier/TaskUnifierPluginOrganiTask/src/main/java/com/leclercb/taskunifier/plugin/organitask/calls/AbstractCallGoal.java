@@ -75,7 +75,7 @@ abstract class AbstractCallGoal extends AbstractCall {
     }
 
     private GoalBean getGoalBean(JsonNode node) {
-        GoalBean bean = GoalFactory.getInstance().createOriginalBean();
+        GoalBean bean = GoalFactory.getInstance().createBean();
 
         bean.getModelReferenceIds().put("organitask", this.getNodeTextValue(node.get("id")));
         bean.setModelStatus(ModelStatus.LOADED);

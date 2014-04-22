@@ -75,7 +75,7 @@ abstract class AbstractCallContext extends AbstractCall {
     }
 
     private ContextBean getContextBean(JsonNode node) {
-        ContextBean bean = ContextFactory.getInstance().createOriginalBean();
+        ContextBean bean = ContextFactory.getInstance().createBean();
 
         bean.getModelReferenceIds().put("organitask", this.getNodeTextValue(node.get("id")));
         bean.setModelStatus(ModelStatus.LOADED);

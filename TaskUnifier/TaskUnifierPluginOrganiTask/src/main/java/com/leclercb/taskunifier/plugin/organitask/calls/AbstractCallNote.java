@@ -70,7 +70,7 @@ abstract class AbstractCallNote extends AbstractCall {
     }
 
     private NoteBean getNoteBean(JsonNode node) {
-        NoteBean bean = NoteFactory.getInstance().createOriginalBean();
+        NoteBean bean = NoteFactory.getInstance().createBean();
 
         bean.getModelReferenceIds().put("organitask", this.getNodeTextValue(node.get("id")));
         bean.setModelStatus(ModelStatus.LOADED);
