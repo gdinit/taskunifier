@@ -1,5 +1,5 @@
 Version 8.6
-	- Update for TaskUnifier 4.1.1
+	- Update for TaskUnifier 4.2.0
 
 Version 8.5
 	- Update for TaskUnifier 4.1.0
