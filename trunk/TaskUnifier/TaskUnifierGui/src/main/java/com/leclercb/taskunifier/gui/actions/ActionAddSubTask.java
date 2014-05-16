@@ -32,12 +32,6 @@
  */
 package com.leclercb.taskunifier.gui.actions;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-
-import javax.swing.KeyStroke;
-
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
@@ -46,100 +40,110 @@ import com.leclercb.taskunifier.api.models.templates.TaskTemplateFactory;
 import com.leclercb.taskunifier.gui.components.views.ViewType;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
 public class ActionAddSubTask extends AbstractViewTaskSelectionAction {
-	
-	public ActionAddSubTask(int width, int height) {
-		super(
-				Translations.getString("action.add_subtask"),
-				ImageUtils.getResourceImage("subtask.png", width, height));
-		
-		this.putValue(
-				SHORT_DESCRIPTION,
-				Translations.getString("action.add_subtask"));
-		
-		this.putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(
-				KeyEvent.VK_K,
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-	}
-	
-	@Override
-	public boolean shouldBeEnabled() {
-		if (!super.shouldBeEnabled())
-			return false;
-		
-		return ViewUtils.getSelectedTasks().length == 1;
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (ViewUtils.getSelectedTasks().length == 1)
-			ActionAddSubTask.addSubTask(ViewUtils.getSelectedTasks()[0], true);
-	}
-	
-	public static Task addSubTask(Task parent, boolean edit) {
-		return addSubTask(
-				TaskTemplateFactory.getInstance().getDefaultTemplate(),
-				parent,
-				edit);
-	}
-	
-	public static Task addSubTask(
-			TaskTemplate template,
-			Task parent,
-			boolean edit) {
-		CheckUtils.isNotNull(parent);
-		
-		ViewType viewType = ViewUtils.getCurrentViewType();
-		
-		TaskTemplate searcherTemplate = null;
-		
-		if (viewType != ViewType.TASKS && viewType != ViewType.CALENDAR) {
-			ViewUtils.setTaskView(true);
-			viewType = ViewUtils.getCurrentViewType();
-		} else {
-			searcherTemplate = null;
-			
-			if (ViewUtils.getSelectedTaskSearcher() != null)
-				searcherTemplate = ViewUtils.getSelectedTaskSearcher().getTemplate();
-		}
-		
-		Task task = TaskFactory.getInstance().create(
-				Translations.getString("task.default.title"));
-		
-		if (template != null)
-			template.applyTo(task);
-		
-		if (searcherTemplate != null)
-			searcherTemplate.applyTo(task);
-		
-		task.setParent(parent);
-		task.getContexts().addAll(parent.getContexts());
-		task.setFolder(parent.getFolder());
-		task.getGoals().addAll(parent.getGoals());
-		task.getLocations().addAll(parent.getLocations());
-		
-		ViewUtils.addExtraTasks(task);
-		
-		if (edit) {
-			if (viewType == ViewType.CALENDAR
-					|| Main.getSettings().getBooleanProperty(
-							"task.show_edit_window_on_add")) {
-				if (!ActionEditTasks.editTasks(new Task[] { task }, true))
-					TaskFactory.getInstance().markDeleted(task);
-			} else {
-				ViewUtils.getCurrentTaskView().getTaskTableView().setSelectedTaskAndStartEdit(
-						task);
-			}
-		} else {
-			if (viewType == ViewType.TASKS)
-				ViewUtils.getCurrentTaskView().getTaskTableView().setSelectedTasks(
-						new Task[] { task });
-		}
-		
-		return task;
-	}
-	
+
+    public ActionAddSubTask(int width, int height) {
+        super(
+                Translations.getString("action.add_subtask"),
+                ImageUtils.getResourceImage("subtask.png", width, height));
+
+        this.putValue(
+                SHORT_DESCRIPTION,
+                Translations.getString("action.add_subtask"));
+
+        this.putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(
+                KeyEvent.VK_K,
+                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+    }
+
+    @Override
+    public boolean shouldBeEnabled() {
+        if (!super.shouldBeEnabled())
+            return false;
+
+        return ViewUtils.getSelectedTasks().length == 1;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (ViewUtils.getSelectedTasks().length == 1)
+            ActionAddSubTask.addSubTask(ViewUtils.getSelectedTasks()[0], true);
+    }
+
+    public static Task addSubTask(Task parent, boolean edit) {
+        return addSubTask(
+                TaskTemplateFactory.getInstance().getDefaultTemplate(),
+                parent,
+                edit);
+    }
+
+    public static Task addSubTask(
+            TaskTemplate template,
+            Task parent,
+            boolean edit) {
+        CheckUtils.isNotNull(parent);
+
+        ViewType viewType = ViewUtils.getCurrentViewType();
+
+        TaskTemplate searcherTemplate = null;
+
+        if (viewType != ViewType.TASKS && viewType != ViewType.CALENDAR) {
+            ViewUtils.setTaskView(true);
+            viewType = ViewUtils.getCurrentViewType();
+        } else {
+            searcherTemplate = null;
+
+            if (ViewUtils.getSelectedTaskSearcher() != null)
+                searcherTemplate = ViewUtils.getSelectedTaskSearcher().getTemplate();
+        }
+
+        final Task task = TaskFactory.getInstance().create(
+                Translations.getString("task.default.title"));
+
+        if (template != null)
+            template.applyTo(task);
+
+        if (searcherTemplate != null)
+            searcherTemplate.applyTo(task);
+
+        task.setParent(parent);
+        task.getContexts().addAll(parent.getContexts());
+        task.setFolder(parent.getFolder());
+        task.getGoals().addAll(parent.getGoals());
+        task.getLocations().addAll(parent.getLocations());
+
+        ViewUtils.addExtraTasks(task);
+
+        if (edit) {
+            if (viewType == ViewType.CALENDAR
+                    || Main.getSettings().getBooleanProperty(
+                    "task.show_edit_window_on_add")) {
+                if (!ActionEditTasks.editTasks(new Task[]{task}, true))
+                    TaskFactory.getInstance().markDeleted(task);
+            } else {
+                ProcessUtils.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        ViewUtils.getCurrentTaskView().getTaskTableView().setSelectedTaskAndStartEdit(task);
+                    }
+                });
+            }
+        } else {
+            if (viewType == ViewType.TASKS)
+                ViewUtils.getCurrentTaskView().getTaskTableView().setSelectedTasks(
+                        new Task[]{task});
+        }
+
+        return task;
+    }
+
 }

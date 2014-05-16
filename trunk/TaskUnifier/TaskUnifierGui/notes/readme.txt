@@ -4,6 +4,9 @@ HISTORY
 Version 4.2.1
     - Minor:
         - Bug fixed: Load task templates
+    - Minor:
+        - Add copy plain text action in note editor
+        - BF 392: Add sub task title selection issue
 
 Version 4.2.0
     - Major:
