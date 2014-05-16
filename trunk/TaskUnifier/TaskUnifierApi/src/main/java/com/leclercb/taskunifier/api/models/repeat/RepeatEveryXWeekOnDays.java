@@ -92,11 +92,7 @@ public class RepeatEveryXWeekOnDays implements Repeat {
 
         Calendar c = DateUtils.cloneCalendar(calendar);
         c.add(Calendar.DAY_OF_MONTH, this.value * 7);
-
-        if (ArrayUtils.contains(this.days, c.get(Calendar.DAY_OF_WEEK)))
-            return c;
-        else
-            c.add(Calendar.DAY_OF_MONTH, -7);
+        c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek());
 
         for (int i = 1; i <= 7; i++) {
             if (ArrayUtils.contains(this.days, c.get(Calendar.DAY_OF_WEEK)))
