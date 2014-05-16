@@ -103,6 +103,14 @@ public class ReminderPanel extends JPanel {
 
     private void dismiss(Task[] tasks) {
         for (Task task : tasks) {
+            if (TaskUtils.isInDueDateReminderZone(task)) {
+                task.setDueDateReminder(0);
+            }
+
+            if (TaskUtils.isInStartDateReminderZone(task)) {
+                task.setStartDateReminder(0);
+            }
+
             this.reminderList.removeTask(task);
         }
 
