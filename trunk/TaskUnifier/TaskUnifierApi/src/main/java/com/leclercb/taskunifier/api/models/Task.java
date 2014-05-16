@@ -566,8 +566,6 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
     }
 
     public void setStartDateReminder(int startDateReminder) {
-        CheckUtils.isPositive(startDateReminder);
-
         if (!this.checkBeforeSet(this.getStartDateReminder(), startDateReminder))
             return;
 
@@ -597,8 +595,6 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
     }
 
     public void setDueDateReminder(int dueDateReminder) {
-        CheckUtils.isPositive(dueDateReminder);
-
         if (!this.checkBeforeSet(this.getDueDateReminder(), dueDateReminder))
             return;
 
