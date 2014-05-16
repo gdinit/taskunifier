@@ -32,40 +32,6 @@
  */
 package com.leclercb.taskunifier.gui.components.modelnote.editors;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GraphicsEnvironment;
-import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.util.Calendar;
-
-import javax.swing.Action;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-import javax.swing.text.JTextComponent;
-import javax.swing.text.html.HTML;
-
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.jdesktop.swingx.JXEditorPane;
-
 import com.leclercb.commons.api.event.propertychange.PropertyChangeSupported;
 import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.commons.api.utils.EqualsUtils;
@@ -75,6 +41,7 @@ import com.leclercb.taskunifier.gui.actions.ActionPaste;
 import com.leclercb.taskunifier.gui.commons.listeners.PopupTriggerMouseListener;
 import com.leclercb.taskunifier.gui.commons.values.StringValueCalendar;
 import com.leclercb.taskunifier.gui.components.modelnote.HTMLEditorInterface;
+import com.leclercb.taskunifier.gui.components.modelnote.actions.ActionCopyPlainText;
 import com.leclercb.taskunifier.gui.components.modelnote.converters.HTML2Text;
 import com.leclercb.taskunifier.gui.components.modelnote.converters.Text2HTML;
 import com.leclercb.taskunifier.gui.components.modelnote.editors.draganddrop.ModelNoteTransferHandler;
@@ -85,6 +52,24 @@ import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.DesktopUtils;
 import com.leclercb.taskunifier.gui.utils.ProtocolUtils;
 import com.leclercb.taskunifier.gui.utils.UndoSupport;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.jdesktop.swingx.JXEditorPane;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.html.HTML;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.util.Calendar;
 
 public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface, PropertyChangeSupported, PropertyChangeListener {
 	
@@ -347,7 +332,8 @@ public class WysiwygHTMLEditorPane extends JPanel implements HTMLEditorInterface
 		JPopupMenu menu = new JPopupMenu();
 		
 		menu.add(new ActionCopy(16, 16));
-		menu.add(new ActionCut(16, 16));
+        menu.add(new ActionCopyPlainText(this.htmlNote, 16, 16));
+        menu.add(new ActionCut(16, 16));
 		menu.add(new ActionPaste(16, 16));
 		
 		component.addMouseListener(new PopupTriggerMouseListener(
