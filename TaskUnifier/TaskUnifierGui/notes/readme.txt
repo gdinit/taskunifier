@@ -2,7 +2,8 @@ HISTORY
 -------
 
 Version 4.2.1
-    - Minor:
+    - Major:
+        - SR 68: Reminders not displayed
         - Bug fixed: Load task templates
     - Minor:
         - Add copy plain text action in note editor
