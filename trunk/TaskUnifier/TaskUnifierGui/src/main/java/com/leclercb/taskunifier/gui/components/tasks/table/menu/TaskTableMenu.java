@@ -32,13 +32,6 @@
  */
 package com.leclercb.taskunifier.gui.components.tasks.table.menu;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
@@ -46,24 +39,15 @@ import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.ModelStatus;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplateFactory;
-import com.leclercb.taskunifier.gui.actions.ActionAddSubTask;
-import com.leclercb.taskunifier.gui.actions.ActionAddSubTaskAtSameLevel;
-import com.leclercb.taskunifier.gui.actions.ActionAddTask;
-import com.leclercb.taskunifier.gui.actions.ActionAddTemplateTask;
-import com.leclercb.taskunifier.gui.actions.ActionCollapseAll;
-import com.leclercb.taskunifier.gui.actions.ActionCreateTaskTemplateFromTask;
-import com.leclercb.taskunifier.gui.actions.ActionDelete;
-import com.leclercb.taskunifier.gui.actions.ActionDuplicateTasks;
-import com.leclercb.taskunifier.gui.actions.ActionEditTasks;
-import com.leclercb.taskunifier.gui.actions.ActionExpandAll;
-import com.leclercb.taskunifier.gui.actions.ActionMailTo;
-import com.leclercb.taskunifier.gui.actions.ActionPrintSelectedModels;
-import com.leclercb.taskunifier.gui.actions.ActionRefresh;
-import com.leclercb.taskunifier.gui.actions.ActionSelectParentTasks;
+import com.leclercb.taskunifier.gui.actions.*;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.TemplateUtils;
+
+import javax.swing.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 public class TaskTableMenu extends JPopupMenu implements ListChangeListener, PropertyChangeListener {
 	
@@ -92,7 +76,8 @@ public class TaskTableMenu extends JPopupMenu implements ListChangeListener, Pro
 		this.add(new JMenuItem(new ActionSelectParentTasks(16, 16)));
 		this.addSeparator();
 		this.add(new ActionCreateTaskTemplateFromTask(16, 16));
-		this.add(new ActionMailTo(16, 16));
+        this.add(new ActionCreateNoteFromTask(16, 16));
+        this.add(new ActionMailTo(16, 16));
 		this.add(new ActionPrintSelectedModels(16, 16));
 		this.addSeparator();
 		this.add(new ActionDelete(16, 16));
