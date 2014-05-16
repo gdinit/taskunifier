@@ -10,6 +10,7 @@ import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.synchronizer.Connection;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerConnectionException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
+import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerHttpException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerSettingsException;
 import com.leclercb.taskunifier.gui.plugins.PluginApi;
 import com.leclercb.taskunifier.gui.utils.DesktopUtils;
@@ -120,12 +121,22 @@ public class OrganiTaskConnection implements Connection {
                 try {
                     this.authInfo = this.statement.getAuthInfo();
                 } catch (OrganiTaskConnectionException e) {
-                    token = OrganiTaskStatement.refreshToken(this.refreshToken);
+                    try {
+                        token = OrganiTaskStatement.refreshToken(this.refreshToken);
 
-                    this.accessToken = token.getAccessToken();
-                    this.refreshToken = token.getRefreshToken();
+                        this.accessToken = token.getAccessToken();
+                        this.refreshToken = token.getRefreshToken();
 
-                    this.authInfo = this.statement.getAuthInfo();
+                        this.authInfo = this.statement.getAuthInfo();
+                    } catch (SynchronizerHttpException e2) {
+                        if (e2.getCode() == 400) {
+                            this.accessToken = null;
+                            this.refreshToken = null;
+
+                            this.connect();
+                            return;
+                        }
+                    }
                 }
             }
 

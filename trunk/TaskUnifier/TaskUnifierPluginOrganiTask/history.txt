@@ -1,3 +1,6 @@
+Version 1.2
+    - Refresh expired token issue
+
 Version 1.1
 	- Load colors from OrganiTask
 
