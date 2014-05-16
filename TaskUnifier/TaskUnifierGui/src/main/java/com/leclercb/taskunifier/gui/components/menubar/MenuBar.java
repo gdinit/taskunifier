@@ -32,13 +32,6 @@
  */
 package com.leclercb.taskunifier.gui.components.menubar;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-
 import com.leclercb.commons.api.event.listchange.ListChangeEvent;
 import com.leclercb.commons.api.event.listchange.ListChangeListener;
 import com.leclercb.commons.api.event.listchange.WeakListChangeListener;
@@ -46,74 +39,7 @@ import com.leclercb.commons.api.event.propertychange.WeakPropertyChangeListener;
 import com.leclercb.taskunifier.api.models.BasicModel;
 import com.leclercb.taskunifier.api.models.ModelStatus;
 import com.leclercb.taskunifier.api.models.templates.TaskTemplateFactory;
-import com.leclercb.taskunifier.gui.actions.ActionAbout;
-import com.leclercb.taskunifier.gui.actions.ActionAddNote;
-import com.leclercb.taskunifier.gui.actions.ActionAddSubTask;
-import com.leclercb.taskunifier.gui.actions.ActionAddSubTaskAtSameLevel;
-import com.leclercb.taskunifier.gui.actions.ActionAddTab;
-import com.leclercb.taskunifier.gui.actions.ActionAddTask;
-import com.leclercb.taskunifier.gui.actions.ActionAddTemplateTask;
-import com.leclercb.taskunifier.gui.actions.ActionBatchAddTasks;
-import com.leclercb.taskunifier.gui.actions.ActionChangeDataFolderLocation;
-import com.leclercb.taskunifier.gui.actions.ActionChangeView;
-import com.leclercb.taskunifier.gui.actions.ActionCheckPluginVersion;
-import com.leclercb.taskunifier.gui.actions.ActionCheckVersion;
-import com.leclercb.taskunifier.gui.actions.ActionCloseWindow;
-import com.leclercb.taskunifier.gui.actions.ActionCollapseAll;
-import com.leclercb.taskunifier.gui.actions.ActionCompleteTasks;
-import com.leclercb.taskunifier.gui.actions.ActionConfiguration;
-import com.leclercb.taskunifier.gui.actions.ActionCopy;
-import com.leclercb.taskunifier.gui.actions.ActionCreateNewBackup;
-import com.leclercb.taskunifier.gui.actions.ActionCreateTaskTemplateFromTask;
-import com.leclercb.taskunifier.gui.actions.ActionCut;
-import com.leclercb.taskunifier.gui.actions.ActionDelete;
-import com.leclercb.taskunifier.gui.actions.ActionDonate;
-import com.leclercb.taskunifier.gui.actions.ActionDuplicateNotes;
-import com.leclercb.taskunifier.gui.actions.ActionDuplicateTasks;
-import com.leclercb.taskunifier.gui.actions.ActionEditTasks;
-import com.leclercb.taskunifier.gui.actions.ActionExpandAll;
-import com.leclercb.taskunifier.gui.actions.ActionExportModels;
-import com.leclercb.taskunifier.gui.actions.ActionExportNoteSearchers;
-import com.leclercb.taskunifier.gui.actions.ActionExportSettings;
-import com.leclercb.taskunifier.gui.actions.ActionExportTaskRules;
-import com.leclercb.taskunifier.gui.actions.ActionExportTaskSearchers;
-import com.leclercb.taskunifier.gui.actions.ActionExportTaskTemplates;
-import com.leclercb.taskunifier.gui.actions.ActionExportVCard;
-import com.leclercb.taskunifier.gui.actions.ActionGetLogs;
-import com.leclercb.taskunifier.gui.actions.ActionHelp;
-import com.leclercb.taskunifier.gui.actions.ActionImportComFile;
-import com.leclercb.taskunifier.gui.actions.ActionImportModels;
-import com.leclercb.taskunifier.gui.actions.ActionImportNoteSearchers;
-import com.leclercb.taskunifier.gui.actions.ActionImportSettings;
-import com.leclercb.taskunifier.gui.actions.ActionImportTaskRules;
-import com.leclercb.taskunifier.gui.actions.ActionImportTaskSearchers;
-import com.leclercb.taskunifier.gui.actions.ActionImportTaskTemplates;
-import com.leclercb.taskunifier.gui.actions.ActionImportVCard;
-import com.leclercb.taskunifier.gui.actions.ActionLogBug;
-import com.leclercb.taskunifier.gui.actions.ActionLogFeatureRequest;
-import com.leclercb.taskunifier.gui.actions.ActionMailTo;
-import com.leclercb.taskunifier.gui.actions.ActionManageBackups;
-import com.leclercb.taskunifier.gui.actions.ActionManageLicense;
-import com.leclercb.taskunifier.gui.actions.ActionManageModels;
-import com.leclercb.taskunifier.gui.actions.ActionManagePublisherPlugins;
-import com.leclercb.taskunifier.gui.actions.ActionManageSynchronizerPlugins;
-import com.leclercb.taskunifier.gui.actions.ActionManageTaskCustomColumns;
-import com.leclercb.taskunifier.gui.actions.ActionManageTaskRules;
-import com.leclercb.taskunifier.gui.actions.ActionManageTaskTemplates;
-import com.leclercb.taskunifier.gui.actions.ActionManageUsers;
-import com.leclercb.taskunifier.gui.actions.ActionNewWindow;
-import com.leclercb.taskunifier.gui.actions.ActionOpenForum;
-import com.leclercb.taskunifier.gui.actions.ActionPaste;
-import com.leclercb.taskunifier.gui.actions.ActionPrint;
-import com.leclercb.taskunifier.gui.actions.ActionPrintSelectedModels;
-import com.leclercb.taskunifier.gui.actions.ActionQuit;
-import com.leclercb.taskunifier.gui.actions.ActionRefresh;
-import com.leclercb.taskunifier.gui.actions.ActionReview;
-import com.leclercb.taskunifier.gui.actions.ActionScheduledSync;
-import com.leclercb.taskunifier.gui.actions.ActionSearch;
-import com.leclercb.taskunifier.gui.actions.ActionSelectParentTasks;
-import com.leclercb.taskunifier.gui.actions.ActionShowTips;
-import com.leclercb.taskunifier.gui.actions.ActionTaskReminders;
+import com.leclercb.taskunifier.gui.actions.*;
 import com.leclercb.taskunifier.gui.actions.publish.ActionPublish;
 import com.leclercb.taskunifier.gui.actions.synchronize.ActionSynchronize;
 import com.leclercb.taskunifier.gui.actions.synchronize.ActionSynchronizeAndPublish;
@@ -124,6 +50,10 @@ import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ComponentFactory;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 import com.leclercb.taskunifier.gui.utils.TemplateUtils;
+
+import javax.swing.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 public class MenuBar extends JMenuBar implements ListChangeListener, PropertyChangeListener {
 	
@@ -285,7 +215,8 @@ public class MenuBar extends JMenuBar implements ListChangeListener, PropertyCha
 			tasksMenu.add(new ActionManageTaskRules(16, 16));
 		tasksMenu.add(new ActionManageTaskTemplates(16, 16));
 		tasksMenu.add(new ActionCreateTaskTemplateFromTask(16, 16));
-		tasksMenu.add(new ActionTaskReminders(16, 16));
+        tasksMenu.add(new ActionCreateNoteFromTask(16, 16));
+        tasksMenu.add(new ActionTaskReminders(16, 16));
 		
 		tasksMenu.addSeparator();
 		
