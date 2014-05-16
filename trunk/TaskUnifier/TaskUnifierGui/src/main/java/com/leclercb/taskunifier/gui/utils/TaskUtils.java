@@ -195,7 +195,8 @@ public final class TaskUtils {
         dueDateReminder.add(Calendar.MINUTE, -task.getDueDateReminder());
 
         if (now.compareTo(dueDateReminder) >= 0)
-            if (Main.getSettings().getBooleanProperty("reminder.show_overdue_tasks"))
+            if (now.compareTo(dueDate) <= 0
+                    || Main.getSettings().getBooleanProperty("reminder.show_overdue_tasks"))
                 return true;
 
         Calendar exitDate = Main.getSettings().getCalendarProperty(
