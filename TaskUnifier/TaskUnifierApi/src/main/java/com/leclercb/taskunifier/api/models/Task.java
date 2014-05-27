@@ -912,7 +912,7 @@ public class Task extends AbstractModelParent<Task> implements ModelNote, Proper
                     subtask.setCompleted(true);
 
                 Repeat newRepeat = newTask.getRepeat();
-                if (subtask.getRepeat() instanceof RepeatWithParent)
+                if (newRepeat instanceof RepeatWithParent)
                     newRepeat = repeat;
 
                 Task newSubtask = subtask.repeat(newRepeat);
