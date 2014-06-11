@@ -5,20 +5,9 @@
  */
 package com.leclercb.taskunifier.plugin.googlecal;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Properties;
-import java.util.TimeZone;
-
 import com.google.api.client.util.DateTime;
-import com.google.api.services.calendar.model.CalendarList;
-import com.google.api.services.calendar.model.CalendarListEntry;
-import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.*;
 import com.google.api.services.calendar.model.Event.Reminders;
-import com.google.api.services.calendar.model.EventDateTime;
-import com.google.api.services.calendar.model.EventReminder;
-import com.google.api.services.calendar.model.Events;
 import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.DateUtils;
@@ -35,6 +24,9 @@ import com.leclercb.taskunifier.api.synchronizer.progress.messages.SynchronizerU
 import com.leclercb.taskunifier.gui.plugins.PluginApi;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
 import com.leclercb.taskunifier.plugin.googlecal.translations.PluginTranslations;
+
+import java.util.*;
+import java.util.Calendar;
 
 public class GoogleCalSynchronizer implements Synchronizer {
 	
@@ -499,9 +491,9 @@ public class GoogleCalSynchronizer implements Synchronizer {
 		String startDateReminderMethod = PluginApi.getUserSettings().getStringProperty(
 				"plugin.googlecal.start_date_reminder_method",
 				"email");
-		
-		if (task.getStartDateReminder() != 0) {
-			EventReminder reminder = new EventReminder();
+
+        if (task.getStartDateReminder() != 0 && !EqualsUtils.equals("none", startDateReminderMethod)) {
+            EventReminder reminder = new EventReminder();
 			reminder.setMethod(startDateReminderMethod);
 			reminder.setMinutes(task.getStartDateReminder());
 			reminders.add(reminder);
@@ -510,9 +502,9 @@ public class GoogleCalSynchronizer implements Synchronizer {
 		String dueDateReminderMethod = PluginApi.getUserSettings().getStringProperty(
 				"plugin.googlecal.due_date_reminder_method",
 				"email");
-		
-		if (task.getDueDateReminder() != 0) {
-			EventReminder reminder = new EventReminder();
+
+        if (task.getDueDateReminder() != 0 && !EqualsUtils.equals("none", dueDateReminderMethod)) {
+            EventReminder reminder = new EventReminder();
 			reminder.setMethod(dueDateReminderMethod);
 			reminder.setMinutes(task.getDueDateReminder());
 			reminders.add(reminder);
