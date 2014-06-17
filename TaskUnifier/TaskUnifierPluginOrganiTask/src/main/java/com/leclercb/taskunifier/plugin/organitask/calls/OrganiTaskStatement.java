@@ -56,6 +56,8 @@ public class OrganiTaskStatement {
     private static CallDeleteTask callDeleteTask = new CallDeleteTask();
     private static CallDeleteTaskStatus callDeleteTaskStatus = new CallDeleteTaskStatus();
 
+    private static CallSync callSync = new CallSync();
+
     public static OrganiTaskToken getToken(String code) throws SynchronizerException {
         return callGetToken.getToken(code);
     }
@@ -542,6 +544,26 @@ public class OrganiTaskStatement {
             callDeleteTaskStatus.deleteTaskStatus(
                     this.connection.getAccessToken(),
                     taskStatus);
+        }
+    }
+
+    public void syncStart() throws SynchronizerException {
+        try {
+            this.checkConnection();
+            callSync.syncStart();
+        } catch (OrganiTaskConnectionException e) {
+            this.connection.reconnect();
+            callSync.syncStart();
+        }
+    }
+
+    public void syncEnd() throws SynchronizerException {
+        try {
+            this.checkConnection();
+            callSync.syncEnd();
+        } catch (OrganiTaskConnectionException e) {
+            this.connection.reconnect();
+            callSync.syncEnd();
         }
     }
 

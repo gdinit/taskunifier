@@ -61,6 +61,8 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
         this.addedTasks = null;
         this.authInfo = ((OrganiTaskConnection) this.getConnection()).getAuthInfo();
 
+        this.statement.syncStart();
+
         this.synchronizeModels(choice, monitor, new ModelType[]{
                 ModelType.CONTEXT,
                 ModelType.FOLDER,
@@ -70,6 +72,8 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
                 ModelType.TASK_STATUS,
                 ModelType.NOTE,
                 ModelType.TASK});
+
+        this.statement.syncEnd();
 
         this.createContactsNote();
         this.createDeletedContactsNote();
