@@ -550,20 +550,20 @@ public class OrganiTaskStatement {
     public void syncStart() throws SynchronizerException {
         try {
             this.checkConnection();
-            callSync.syncStart();
+            callSync.syncStart(this.connection.getAccessToken());
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
-            callSync.syncStart();
+            callSync.syncStart(this.connection.getAccessToken());
         }
     }
 
     public void syncEnd() throws SynchronizerException {
         try {
             this.checkConnection();
-            callSync.syncEnd();
+            callSync.syncEnd(this.connection.getAccessToken());
         } catch (OrganiTaskConnectionException e) {
             this.connection.reconnect();
-            callSync.syncEnd();
+            callSync.syncEnd(this.connection.getAccessToken());
         }
     }
 
