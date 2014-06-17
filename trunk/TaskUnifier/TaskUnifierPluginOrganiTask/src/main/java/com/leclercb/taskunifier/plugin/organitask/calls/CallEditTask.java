@@ -57,8 +57,8 @@ final class CallEditTask extends AbstractCallTask {
 
         node.put("start_date", OrganiTaskTranslations.translateUTCDate(task.getStartDate()));
         node.put("due_date", OrganiTaskTranslations.translateUTCDate(task.getDueDate()));
-        node.put("start_date_reminder", task.getStartDateReminder());
-        node.put("due_date_reminder", task.getDueDateReminder());
+        node.put("start_date_reminder", (task.getStartDateReminder() < 0 ? 0 : task.getStartDateReminder()));
+        node.put("due_date_reminder", (task.getDueDateReminder() < 0 ? 0 : task.getDueDateReminder()));
         node.put("duration", task.getLength());
         node.put("repeat", RepeatConverter.getRepeat(task.getRepeat()));
         node.put("repeat_from", OrganiTaskTranslations.translateTaskRepeatFrom(task.getRepeatFrom()));
