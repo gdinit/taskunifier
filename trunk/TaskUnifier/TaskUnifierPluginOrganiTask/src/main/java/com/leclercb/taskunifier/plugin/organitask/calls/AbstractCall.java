@@ -67,6 +67,9 @@ abstract class AbstractCall {
             List<NameValuePair> params,
             String body) throws SynchronizerException {
         try {
+            if (params == null)
+                params = new ArrayList<NameValuePair>();
+
             URI uri = URIUtils.createURI(
                     this.getScheme(),
                     OrganiTaskApi.getInstance().getApiUrl(),
