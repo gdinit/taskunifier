@@ -1,6 +1,12 @@
 HISTORY
 -------
 
+Version 4.2.2
+    - Major:
+        - Bug fixed: HTTP encoding issue
+    - Minor:
+        - BF 390: Repeat every x week on days issue
+
 Version 4.2.1
     - Major:
         - SR 68: Reminders not displayed

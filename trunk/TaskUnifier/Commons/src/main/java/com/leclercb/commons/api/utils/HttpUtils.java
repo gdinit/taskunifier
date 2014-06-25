@@ -126,7 +126,8 @@ public final class HttpUtils {
             connection.setDoOutput(true);
             IOUtils.write(
                     body,
-                    connection.getOutputStream());
+                    connection.getOutputStream(),
+                    "UTF-8");
         }
 
         InputStream inputStream = null;
