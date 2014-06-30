@@ -1,7 +1,7 @@
 HISTORY
 -------
 
-Version 4.2.2
+Version 4.3.0
     - Major:
         - Bug fixed: HTTP encoding issue
         - Update for new TaskUnifier website
