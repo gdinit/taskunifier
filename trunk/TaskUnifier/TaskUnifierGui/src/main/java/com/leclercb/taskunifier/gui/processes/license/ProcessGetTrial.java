@@ -32,25 +32,12 @@
  */
 package com.leclercb.taskunifier.gui.processes.license;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.logging.Level;
-
-import javax.swing.JOptionPane;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.jdesktop.swingx.JXErrorPane;
-import org.jdesktop.swingx.error.ErrorInfo;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.leclercb.commons.api.progress.DefaultProgressMessage;
 import com.leclercb.commons.api.progress.ProgressMonitor;
 import com.leclercb.commons.api.utils.CheckUtils;
-import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.commons.gui.logger.GuiLogger;
 import com.leclercb.taskunifier.gui.constants.Constants;
@@ -61,192 +48,184 @@ import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.processes.Worker;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.HttpUtils;
+import org.jdesktop.swingx.JXErrorPane;
+import org.jdesktop.swingx.error.ErrorInfo;
+
+import javax.swing.*;
+import java.net.URI;
+import java.util.concurrent.Callable;
+import java.util.logging.Level;
 
 public class ProcessGetTrial implements Process<HttpResponse> {
-	
-	private boolean showSuccess;
-	private boolean showFailure;
-	
-	private String firstName;
-	private String lastName;
-	private String email;
-	
-	public ProcessGetTrial(
-			boolean showSuccess,
-			boolean showFailure,
-			String firstName,
-			String lastName,
-			String email) {
-		this.setShowSuccess(showSuccess);
-		this.setShowFailure(showFailure);
-		
-		this.setFirstName(firstName);
-		this.setLastName(lastName);
-		this.setEmail(email);
-	}
-	
-	public boolean isShowSuccess() {
-		return this.showSuccess;
-	}
-	
-	public void setShowSuccess(boolean showSuccess) {
-		this.showSuccess = showSuccess;
-	}
-	
-	public boolean isShowFailure() {
-		return this.showFailure;
-	}
-	
-	public void setShowFailure(boolean showFailure) {
-		this.showFailure = showFailure;
-	}
-	
-	public String getFirstName() {
-		return this.firstName;
-	}
-	
-	public void setFirstName(String firstName) {
-		CheckUtils.isNotNull(firstName);
-		this.firstName = firstName;
-	}
-	
-	public String getLastName() {
-		return this.lastName;
-	}
-	
-	public void setLastName(String lastName) {
-		CheckUtils.isNotNull(lastName);
-		this.lastName = lastName;
-	}
-	
-	public String getEmail() {
-		return this.email;
-	}
-	
-	public void setEmail(String email) {
-		CheckUtils.isNotNull(email);
-		this.email = email;
-	}
-	
-	@Override
-	public HttpResponse execute(final Worker<?> worker) throws Exception {
-		final ProgressMonitor monitor = worker.getEDTMonitor();
-		
-		monitor.addMessage(new DefaultProgressMessage(
-				Translations.getString("license.get_trial")));
-		
-		HttpResponse response = worker.executeInterruptibleAction(
-				new Callable<HttpResponse>() {
-					
-					@Override
-					public HttpResponse call() throws Exception {
-						List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-						
-						parameters.add(new BasicNameValuePair(
-								"item",
-								Constants.ITEM_TRIAL_ID + ""));
-						parameters.add(new BasicNameValuePair(
-								"first_name",
-								ProcessGetTrial.this.firstName));
-						parameters.add(new BasicNameValuePair(
-								"last_name",
-								ProcessGetTrial.this.lastName));
-						parameters.add(new BasicNameValuePair(
-								"email",
-								ProcessGetTrial.this.email));
-						parameters.add(new BasicNameValuePair(
-								"user_id",
-								Main.getCurrentUserId()));
-						
-						return HttpUtils.getHttpPostResponse(new URI(
-								Constants.GET_TRIAL_URL), parameters);
-					}
-					
-				},
-				Constants.TIMEOUT_HTTP_CALL);
-		
-		if (worker.isCancelled())
-			return null;
-		
-		if (!response.isSuccessfull()) {
-			this.showResult(
-					null,
-					"An error occurred while retrieving the license key");
-			return response;
-		}
-		
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode node = mapper.readTree(response.getContent());
-		
-		String code = node.get("code").asText();
-		String message = node.get("message").asText();
-		
-		if (this.showSuccess && EqualsUtils.equals(code, "0"))
-			this.showResult(code, message);
-		
-		if (this.showFailure && !EqualsUtils.equals(code, "0"))
-			this.showResult(code, message);
-		
-		return response;
-	}
-	
-	@Override
-	public void done(Worker<?> worker) {
-		
-	}
-	
-	private void showResult(final String code, final String message)
-			throws Exception {
-		ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
-			
-			@Override
-			public Void call() {
-				if (EqualsUtils.equals(code, "0")) {
-					JOptionPane.showMessageDialog(
-							FrameUtils.getCurrentWindow(),
-							message,
-							Translations.getString("general.information"),
-							JOptionPane.INFORMATION_MESSAGE);
-				} else {
-					ErrorInfo info = new ErrorInfo(
-							Translations.getString("general.error"),
-							message,
-							null,
-							"GUI",
-							null,
-							Level.INFO,
-							null);
-					
-					JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
-				}
-				
-				return null;
-			}
-			
-		});
-	}
-	
-	public static String getLicense(HttpResponse response) {
-		if (!response.isSuccessfull())
-			return null;
-		
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			JsonNode node = mapper.readTree(response.getContent());
-			
-			String code = node.get("code").asText();
-			String license = null;
-			
-			if (EqualsUtils.equals(code, "0")) {
-				license = node.get("data").get("license").asText();
-			}
-			
-			return license;
-		} catch (Exception e) {
-			GuiLogger.getLogger().log(Level.WARNING, "Cannot read license", e);
-			
-			return null;
-		}
-	}
-	
+
+    private boolean showSuccess;
+    private boolean showFailure;
+
+    private String firstName;
+    private String lastName;
+    private String email;
+
+    public ProcessGetTrial(
+            boolean showSuccess,
+            boolean showFailure,
+            String firstName,
+            String lastName,
+            String email) {
+        this.setShowSuccess(showSuccess);
+        this.setShowFailure(showFailure);
+
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
+        this.setEmail(email);
+    }
+
+    public boolean isShowSuccess() {
+        return this.showSuccess;
+    }
+
+    public void setShowSuccess(boolean showSuccess) {
+        this.showSuccess = showSuccess;
+    }
+
+    public boolean isShowFailure() {
+        return this.showFailure;
+    }
+
+    public void setShowFailure(boolean showFailure) {
+        this.showFailure = showFailure;
+    }
+
+    public String getFirstName() {
+        return this.firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        CheckUtils.isNotNull(firstName);
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return this.lastName;
+    }
+
+    public void setLastName(String lastName) {
+        CheckUtils.isNotNull(lastName);
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        CheckUtils.isNotNull(email);
+        this.email = email;
+    }
+
+    @Override
+    public HttpResponse execute(final Worker<?> worker) throws Exception {
+        final ProgressMonitor monitor = worker.getEDTMonitor();
+
+        monitor.addMessage(new DefaultProgressMessage(
+                Translations.getString("license.get_trial")));
+
+        HttpResponse response = worker.executeInterruptibleAction(
+                new Callable<HttpResponse>() {
+
+                    @Override
+                    public HttpResponse call() throws Exception {
+                        ObjectMapper mapper = new ObjectMapper();
+                        ObjectNode node = mapper.createObjectNode();
+
+                        node.put("item_id", Constants.ITEM_TRIAL_ID);
+                        node.put("customer_id", Main.getCurrentUserId());
+                        node.put("customer_email", ProcessGetTrial.this.email);
+                        node.put("first_name", ProcessGetTrial.this.firstName);
+                        node.put("last_name", ProcessGetTrial.this.lastName);
+
+                        return HttpUtils.getHttpResponse(
+                                "POST",
+                                new URI(Constants.GET_TRIAL_URL),
+                                node.toString(),
+                                "application/json");
+                    }
+
+                },
+                Constants.TIMEOUT_HTTP_CALL);
+
+        if (worker.isCancelled())
+            return null;
+
+        this.showResult(response);
+
+        return response;
+    }
+
+    @Override
+    public void done(Worker<?> worker) {
+
+    }
+
+    private void showResult(final HttpResponse response)
+            throws Exception {
+        if (response.isSuccessfull() && !this.showSuccess)
+            return;
+
+        if (!response.isSuccessfull() && !this.showFailure)
+            return;
+
+        ProcessUtils.executeOrInvokeAndWait(new Callable<Void>() {
+
+            @Override
+            public Void call() {
+                if (response.isSuccessfull()) {
+                    JOptionPane.showMessageDialog(
+                            FrameUtils.getCurrentWindow(),
+                            "Trial license has been sent to your email address",
+                            Translations.getString("general.information"),
+                            JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    String message;
+
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        JsonNode node = mapper.readTree(response.getContent());
+
+                        message = node.get("message").asText();
+                    } catch (Exception e) {
+                        message = "An error occurred while retrieving the license key";
+                    }
+
+                    ErrorInfo info = new ErrorInfo(
+                            Translations.getString("general.error"),
+                            message,
+                            null,
+                            "GUI",
+                            null,
+                            Level.INFO,
+                            null);
+
+                    JXErrorPane.showDialog(FrameUtils.getCurrentWindow(), info);
+                }
+
+                return null;
+            }
+
+        });
+    }
+
+    public static String getLicense(HttpResponse response) {
+        if (!response.isSuccessfull())
+            return null;
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode node = mapper.readTree(response.getContent());
+            return node.get("license").asText();
+        } catch (Exception e) {
+            GuiLogger.getLogger().log(Level.WARNING, "Cannot read license", e);
+            return null;
+        }
+    }
+
 }

@@ -94,14 +94,14 @@ public final class Constants {
     public static final boolean BETA = false;
     public static final String DEFAULT_SUFFIX = "_v3";
     public static final int PLUGIN_API_VERSION = 41;
-    public static final int ITEM_TRIAL_ID = 11;
+    public static final int ITEM_TRIAL_ID = 2;
 
     public static final String PLUGINS_FILE = "http://www.taskunifier.com/plugins/plugins.xml?_dc=" + Calendar.getInstance().getTimeInMillis();
     public static final String VERSION_FILE = "http://www.taskunifier.com/version.txt";
-    public static final String PRO_URL = "http://www.taskunifier.com/pages/pro";
-    public static final String BUY_URL = "http://www.taskunifier.com/pages/pro#buy";
-    public static final String GET_TRIAL_URL = "http://www.taskunifier.com/services/trial_license";
-    public static final String DOWNLOAD_URL = "http://www.taskunifier.com/pages/download";
+    public static final String PRO_URL = "http://www.taskunifier.com/web/en/app";
+    public static final String BUY_URL = "http://www.taskunifier.com/web/en/app";
+    public static final String GET_TRIAL_URL = "http://www.taskunifier.com/api/v1/trial_license";
+    public static final String DOWNLOAD_URL = "http://www.taskunifier.com/web/en/app";
     public static final String DONATE_URL = "http://sourceforge.net/p/taskunifier/donate/";
     public static final String REVIEW_URL = "http://sourceforge.net/p/taskunifier/reviews/";
     public static final String FORUM_URL = "http://sourceforge.net/p/taskunifier/discussion/";
