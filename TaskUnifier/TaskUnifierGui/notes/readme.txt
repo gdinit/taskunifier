@@ -4,6 +4,7 @@ HISTORY
 Version 4.2.2
     - Major:
         - Bug fixed: HTTP encoding issue
+        - Update for new TaskUnifier website
     - Minor:
         - BF 390: Repeat every x week on days issue
 
