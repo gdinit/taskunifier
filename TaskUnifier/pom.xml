@@ -11,7 +11,7 @@
     <description>TaskUnifier Project</description>
 
     <properties>
-        <directory.web>../../TaskUnifierWebSite</directory.web>
+        <directory.web>../../TaskUnifierSymfony/web</directory.web>
     </properties>
 
     <developers>
