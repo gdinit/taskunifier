@@ -99,7 +99,7 @@ public final class Constants {
     public static final String PLUGINS_FILE = "http://www.taskunifier.com/plugins/plugins.xml?_dc=" + Calendar.getInstance().getTimeInMillis();
     public static final String VERSION_FILE = "http://www.taskunifier.com/version.txt";
     public static final String PRO_URL = "http://www.taskunifier.com/web/en/app";
-    public static final String BUY_URL = "http://www.taskunifier.com/web/en/app";
+    public static final String BUY_URL = "http://www.taskunifier.com/web/en/buy";
     public static final String GET_TRIAL_URL = "http://www.taskunifier.com/api/v1/trial_license";
     public static final String DOWNLOAD_URL = "http://www.taskunifier.com/web/en/app";
     public static final String DONATE_URL = "http://sourceforge.net/p/taskunifier/donate/";
