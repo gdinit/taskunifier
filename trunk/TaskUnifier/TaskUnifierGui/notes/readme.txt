@@ -1,6 +1,10 @@
 HISTORY
 -------
 
+Version 4.3.1
+    - Major
+        - Bug fixed: Synchronization encoding issue
+
 Version 4.3.0
     - Major:
         - Bug fixed: HTTP encoding issue
