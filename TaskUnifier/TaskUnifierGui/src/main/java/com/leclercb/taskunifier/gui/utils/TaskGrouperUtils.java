@@ -35,7 +35,6 @@ package com.leclercb.taskunifier.gui.utils;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.models.ModelType;
 import com.leclercb.taskunifier.api.models.Tag;
-import com.leclercb.taskunifier.api.models.TagList;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
 import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.api.models.utils.ModelFactoryUtils;
@@ -46,9 +45,9 @@ import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilter;
 import com.leclercb.taskunifier.gui.api.searchers.filters.TaskFilterElement;
 import com.leclercb.taskunifier.gui.api.searchers.filters.conditions.*;
 import com.leclercb.taskunifier.gui.api.searchers.groupers.TaskGrouperElement;
+import com.leclercb.taskunifier.gui.commons.comparators.BasicModelComparator;
 import com.leclercb.taskunifier.gui.commons.values.StringValueMinutes;
 import com.leclercb.taskunifier.gui.commons.values.StringValuePercentage;
-import com.leclercb.taskunifier.gui.components.tasks.TaskColumnList;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.translations.TranslationsUtils;
 
@@ -301,54 +300,61 @@ public final class TaskGrouperUtils {
             case NOTE:
             case TASK:
             case TASK_STATUS:
-                List<?> models = null;
+                List<?> list = null;
 
                 switch (element.getProperty().getType()) {
                     case CONTACT:
-                        models = ModelFactoryUtils.getFactory(ModelType.CONTACT).getList();
+                        list = ModelFactoryUtils.getFactory(ModelType.CONTACT).getList();
                         break;
                     case CONTEXT:
                     case CONTEXTS:
-                        models = ModelFactoryUtils.getFactory(ModelType.CONTEXT).getList();
+                        list = ModelFactoryUtils.getFactory(ModelType.CONTEXT).getList();
                         break;
                     case FOLDER:
-                        models = ModelFactoryUtils.getFactory(ModelType.FOLDER).getList();
+                        list = ModelFactoryUtils.getFactory(ModelType.FOLDER).getList();
                         break;
                     case GOAL:
                     case GOALS:
-                        models = ModelFactoryUtils.getFactory(ModelType.GOAL).getList();
+                        list = ModelFactoryUtils.getFactory(ModelType.GOAL).getList();
                         break;
                     case LOCATION:
                     case LOCATIONS:
-                        models = ModelFactoryUtils.getFactory(
+                        list = ModelFactoryUtils.getFactory(
                                 ModelType.LOCATION).getList();
                         break;
                     case NOTE:
-                        models = ModelFactoryUtils.getFactory(ModelType.NOTE).getList();
+                        list = ModelFactoryUtils.getFactory(ModelType.NOTE).getList();
                         break;
                     case TASK:
-                        models = ModelFactoryUtils.getFactory(ModelType.TASK).getList();
+                        list = ModelFactoryUtils.getFactory(ModelType.TASK).getList();
                         break;
                     case TASK_STATUS:
-                        models = ModelFactoryUtils.getFactory(ModelType.TASK_STATUS).getList();
+                        list = ModelFactoryUtils.getFactory(ModelType.TASK_STATUS).getList();
                         break;
                     default:
                         break;
                 }
 
-                if (models != null) {
-                    for (Object o : models) {
-                        if (!((Model) o).getModelStatus().isEndUserStatus())
+                if (list != null) {
+                    List<Model> models = new ArrayList<Model>();
+
+                    for (Object o : list)
+                        models.add((Model) o);
+
+                    Collections.sort(models, BasicModelComparator.INSTANCE_NO_INDENT_NULL_LAST);
+
+                    for (Model m : models) {
+                        if (!m.getModelStatus().isEndUserStatus())
                             continue;
 
                         s = searcher.clone();
-                        setTitle(element, s, o.toString());
+                        setTitle(element, s, m.toString());
                         addMainFilter(
                                 s,
                                 new TaskFilterElement(
                                         element.getProperty(),
                                         ModelCondition.EQUALS,
-                                        o,
+                                        m,
                                         false));
                         searchers.add(s);
                     }
@@ -386,7 +392,8 @@ public final class TaskGrouperUtils {
 
                 break;
             case TAGS:
-                TagList tags = TaskTagList.getInstance().getTags();
+                List<Tag> tags = TaskTagList.getInstance().getTags().asList();
+                Collections.sort(tags);
 
                 for (Tag tag : tags) {
                     s = searcher.clone();
