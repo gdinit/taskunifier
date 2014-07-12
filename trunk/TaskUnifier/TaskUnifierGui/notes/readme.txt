@@ -2,8 +2,8 @@ HISTORY
 -------
 
 Version 4.3.1
-    - Major
-        - Bug fixed: Synchronization encoding issue
+    - Minor
+        - Bug fixed: Group by - ASC/DESC
 
 Version 4.3.0
     - Major:
