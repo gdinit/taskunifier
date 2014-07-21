@@ -48,6 +48,7 @@ import com.leclercb.taskunifier.api.models.templates.TaskTemplateFactory;
 import com.leclercb.taskunifier.gui.components.views.ViewType;
 import com.leclercb.taskunifier.gui.components.views.ViewUtils;
 import com.leclercb.taskunifier.gui.main.Main;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
@@ -94,7 +95,7 @@ public class ActionAddTask extends AbstractViewAction {
 				searcherTemplate = ViewUtils.getSelectedTaskSearcher().getTemplate();
 		}
 		
-		Task task = TaskFactory.getInstance().create(
+		final Task task = TaskFactory.getInstance().create(
 				Translations.getString("task.default.title"));
 		
 		if (template != null)
@@ -115,8 +116,12 @@ public class ActionAddTask extends AbstractViewAction {
 				if (!ActionEditTasks.editTasks(new Task[] { task }, true))
 					TaskFactory.getInstance().markDeleted(task);
 			} else {
-				ViewUtils.getCurrentTaskView().getTaskTableView().setSelectedTaskAndStartEdit(
-						task);
+				ProcessUtils.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        ViewUtils.getCurrentTaskView().getTaskTableView().setSelectedTaskAndStartEdit(task);
+                    }
+                });
 			}
 		} else {
 			if (viewType == ViewType.TASKS)
@@ -135,7 +140,7 @@ public class ActionAddTask extends AbstractViewAction {
 			viewType = ViewUtils.getCurrentViewType();
 		}
 		
-		Task task = TaskFactory.getInstance().create(
+		final Task task = TaskFactory.getInstance().create(
 				Translations.getString("task.default.title"));
 		
 		if (taskBean != null) {
@@ -155,8 +160,12 @@ public class ActionAddTask extends AbstractViewAction {
 				if (!ActionEditTasks.editTasks(new Task[] { task }, true))
 					TaskFactory.getInstance().markDeleted(task);
 			} else {
-				ViewUtils.getCurrentTaskView().getTaskTableView().setSelectedTaskAndStartEdit(
-						task);
+                ProcessUtils.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        ViewUtils.getCurrentTaskView().getTaskTableView().setSelectedTaskAndStartEdit(task);
+                    }
+                });
 			}
 		} else {
 			if (viewType == ViewType.TASKS)
