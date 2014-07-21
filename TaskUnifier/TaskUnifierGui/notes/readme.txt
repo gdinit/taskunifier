@@ -3,8 +3,9 @@ HISTORY
 
 Version 4.3.1
     - Minor
-        - BF 397: Shortcut add task focus
         - BF 382: Group by - ASC/DESC
+        - BF 494: Modal reminder window
+        - BF 397: Shortcut add task focus
         - Improved status bar translations
 
 Version 4.3.0
