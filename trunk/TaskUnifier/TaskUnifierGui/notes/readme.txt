@@ -2,10 +2,11 @@ HISTORY
 -------
 
 Version 4.3.1
-    - Minor
+    - Major:
+        - BF 401: Snooze not working
+    - Minor:
         - BF 382: Group by - ASC/DESC
         - BF 397: Shortcut add task focus
-        - BF 401: Snooze not working
         - BF 494: Modal reminder window
         - Improved status bar translations
 
