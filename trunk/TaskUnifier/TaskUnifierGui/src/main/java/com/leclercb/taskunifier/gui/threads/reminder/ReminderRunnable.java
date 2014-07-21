@@ -46,6 +46,7 @@ import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.api.models.TaskFactory;
 import com.leclercb.taskunifier.gui.actions.ActionTaskReminders;
 import com.leclercb.taskunifier.gui.components.reminder.ReminderDialog;
+import com.leclercb.taskunifier.gui.components.reminder.ReminderDialogPanel;
 import com.leclercb.taskunifier.gui.components.synchronize.Synchronizing;
 import com.leclercb.taskunifier.gui.constants.Constants;
 import com.leclercb.taskunifier.gui.main.Main;
@@ -101,7 +102,7 @@ class ReminderRunnable implements Runnable, PropertyChangeListener, ListChangeLi
 									ReminderRunnable.this.notifiedTasks.remove(task);
 									ReminderRunnable.this.notifiedTasks.add(task);
 									
-									ReminderDialog.getInstance().getReminderPanel().getReminderList().addTask(
+									ReminderDialogPanel.getInstance().getReminderList().addTask(
 											task);
 									
 									Constants.PROGRESS_MONITOR.addMessage(new ReminderDefaultProgressMessage(
@@ -129,7 +130,7 @@ class ReminderRunnable implements Runnable, PropertyChangeListener, ListChangeLi
 	@Override
 	public void listChange(ListChangeEvent evt) {
 		if (evt.getChangeType() == ListChangeEvent.VALUE_REMOVED) {
-			ReminderDialog.getInstance().getReminderPanel().getReminderList().removeTask(
+            ReminderDialogPanel.getInstance().getReminderList().removeTask(
 					(Task) evt.getValue());
 			this.notifiedTasks.remove(evt.getValue());
 		}
@@ -143,7 +144,7 @@ class ReminderRunnable implements Runnable, PropertyChangeListener, ListChangeLi
 				|| evt.getPropertyName().equals(Task.PROP_START_DATE_REMINDER)
 				|| evt.getPropertyName().equals(Task.PROP_COMPLETED)
 				|| !((Task) evt.getSource()).getModelStatus().isEndUserStatus()) {
-			ReminderDialog.getInstance().getReminderPanel().getReminderList().removeTask(
+            ReminderDialogPanel.getInstance().getReminderList().removeTask(
 					(Task) evt.getSource());
 			this.notifiedTasks.remove(evt.getSource());
 		}
