@@ -137,13 +137,19 @@ final class CallAddTask extends AbstractCallTask {
                 else
                     jsonObject.put("parent", "0");
 
-                if (task.isCompleted())
+                if (task.isCompleted()) {
+                    Calendar completed = DateUtils.cloneCalendar(task.getCompletedOn());
+                    completed.set(Calendar.HOUR_OF_DAY, 12);
+                    completed.set(Calendar.MINUTE, 0);
+                    completed.set(Calendar.SECOND, 0);
+
                     jsonObject.put(
                             "completed",
                             ToodledoTranslations.translateGMTDate(task.getCompletedOn())
                                     + "");
-                else
+                } else {
                     jsonObject.put("completed", "0");
+                }
 
                 if (task.getDueDate() != null) {
                     Calendar dueDate = DateUtils.cloneCalendar(task.getDueDate());

@@ -4,7 +4,7 @@ HISTORY
 Version 4.3.1
     - Minor
         - BF 397: Shortcut add task focus
-        - Bug fixed: Group by - ASC/DESC
+        - BF 382: Group by - ASC/DESC
         - Improved status bar translations
 
 Version 4.3.0

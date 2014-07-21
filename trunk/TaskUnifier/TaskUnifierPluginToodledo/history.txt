@@ -1,3 +1,6 @@
+Version 8.8
+    - BF 380: Completion date issue
+
 Version 8.7
     - Multi-level sub-tasks option
 
