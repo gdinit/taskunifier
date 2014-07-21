@@ -34,6 +34,7 @@ package com.leclercb.taskunifier.gui.components.reminder;
 
 import com.leclercb.commons.api.event.action.ActionSupport;
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.commons.api.utils.DateUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.actions.ActionPostponeTasksMenu;
 import com.leclercb.taskunifier.gui.commons.comparators.TimeValueComparator;
@@ -49,6 +50,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -91,11 +93,11 @@ public class ReminderDialogPanel extends TUDialogPanel {
     private void snooze(Task[] tasks, SnoozeItem item) {
         for (Task task : tasks) {
             if (TaskUtils.isInDueDateReminderZone(task)) {
-                task.setDueDateReminder(task.getDueDateReminder() - item.getAmountInMinutes());
+                task.setDueDateReminder((int) DateUtils.getDiffInMinutes(Calendar.getInstance(), task.getDueDate()) - item.getAmountInMinutes());
             }
 
             if (TaskUtils.isInStartDateReminderZone(task)) {
-                task.setStartDateReminder(task.getStartDateReminder() - item.getAmountInMinutes());
+                task.setStartDateReminder((int) DateUtils.getDiffInMinutes(Calendar.getInstance(), task.getStartDate()) - item.getAmountInMinutes());
             }
         }
 

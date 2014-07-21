@@ -40,6 +40,8 @@ import java.awt.event.ActionEvent;
 
 public class ActionTaskReminders extends AbstractViewAction {
 
+    private static ReminderDialog DIALOG = null;
+
     public ActionTaskReminders(int width, int height) {
         super(
                 Translations.getString("action.task_reminders"),
@@ -56,9 +58,12 @@ public class ActionTaskReminders extends AbstractViewAction {
     }
 
     public static void taskReminders() {
-        ReminderDialog dialog = new ReminderDialog();
-        dialog.setVisible(true);
-        dialog.dispose();
+        if (DIALOG == null) {
+            DIALOG = new ReminderDialog();
+            DIALOG.setVisible(true);
+            DIALOG.dispose();
+            DIALOG = null;
+        }
     }
 
 }
