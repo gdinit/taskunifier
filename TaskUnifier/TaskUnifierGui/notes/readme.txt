@@ -1,6 +1,9 @@
 HISTORY
 -------
 
+Version 4.3.2
+    - Major: OSX Yosemite ready
+
 Version 4.3.1
     - Major:
         - BF 401: Snooze not working

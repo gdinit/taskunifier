@@ -46,7 +46,7 @@ public class AboutDialog extends TUDialog {
 	private void initialize() {
 		this.setModal(true);
 		this.setTitle(Translations.getString("general.about"));
-		this.setSize(600, 350);
+		this.setSize(700, 500);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		
