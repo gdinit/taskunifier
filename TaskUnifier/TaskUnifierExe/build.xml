@@ -165,7 +165,7 @@
                 copyright="2014, Benjamin Leclerc"
                 applicationCategory="public.app-category.productivity">
 
-            <runtime dir="/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home"/>
+            <runtime dir="/Library/Java/JavaVirtualMachines/jdk1.8.0_11.jdk/Contents/Home"/>
 
             <arch name="x86_64"/>
             <arch name="i386"/>
@@ -189,7 +189,7 @@
             <option value="-Xdock:icon=Contents/Resources/icon.icns"/>
 
             <option value="-Dcom.leclercb.taskunifier.resource_folder=$APP_ROOT/Contents/Resources/resources"/>
-            <option value="-Dcom.leclercb.taskunifier.mac_app_store=true"/>
+            <option value="-Dcom.leclercb.taskunifier.mac_app_store=false"/>
 
             <option value="-Dapple.laf.useScreenMenuBar=true"/>
             <option value="-Dcom.apple.macos.useScreenMenuBar=true"/>
@@ -202,7 +202,7 @@
 
         <chmod dir="${directory.exe}/temp" includes="**/JavaAppLauncher" perm="755"/>
 
-        <delete file="${directory.exe}/temp/TaskUnifier.app/Contents/PlugIns/jdk1.7.0_09.jdk/Contents/Info.plist"/>
+        <delete file="${directory.exe}/temp/TaskUnifier.app/Contents/PlugIns/jdk1.8.0_11.jdk/Contents/Info.plist"/>
 
         <copy todir="${directory.exe}/temp/TaskUnifier.app/Contents/Resources">
             <fileset dir="${directory.gui}">
@@ -243,7 +243,7 @@
                 copyright="2014, Benjamin Leclerc"
                 applicationCategory="public.app-category.productivity">
 
-            <runtime dir="/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home"/>
+            <runtime dir="/Library/Java/JavaVirtualMachines/jdk1.8.0_11.jdk/Contents/Home"/>
 
             <arch name="x86_64"/>
             <arch name="i386"/>
@@ -282,7 +282,7 @@
 
         <copy file="${directory.exe}/scripts/mac/container-migration.plist" tofile="${directory.exe}/temp/TaskUnifier.app/Contents/Resources/container-migration.plist"/>
 
-        <delete file="${directory.exe}/temp/TaskUnifier.app/Contents/PlugIns/jdk1.7.0_09.jdk/Contents/Info.plist"/>
+        <delete file="${directory.exe}/temp/TaskUnifier.app/Contents/PlugIns/jdk1.8.0_11.jdk/Contents/Info.plist"/>
 
         <copy todir="${directory.exe}/temp/TaskUnifier.app/Contents/Resources">
             <fileset dir="${directory.gui}">
