@@ -10,6 +10,7 @@
 	<taskdef resource="net/jtools/classloadertask/antlib.xml" classpath="${directory.exe}/tools/ant-classloadertask/ant-classloadertask.jar"/>
 	<taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" classpath="${directory.exe}/tools/jarbundler/jarbundler-2.2.0.jar"/>
 	<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${directory.exe}/tools/launch4j/launch4j.jar:${directory.exe}/tools/launch4j/xstream.jar" />
+    <taskdef name="bundleapp" classname="com.oracle.appbundler.AppBundlerTask" classpath="${directory.exe}/tools/appbundler/appbundler-1.0ea.jar"/>
 	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		<classpath>
@@ -146,6 +147,164 @@
 
 		<antcall target="clean"/>
 	</target>
+
+    <target depends="taskunifier-version-underscored, check-os" name="create-mac-app-bundle-binary" if="isMac">
+        <echo message="Creating mac app file..."/>
+        <antcall target="clean"/>
+        <mkdir dir="${directory.exe}/temp"/>
+
+        <bundleapp
+                outputdirectory="${directory.exe}/temp"
+                name="TaskUnifier"
+                displayname="TaskUnifier"
+                identifier="com.leclercb.taskunifier"
+                shortversion="${taskunifier.general.version}"
+                version="${taskunifier.general.version}"
+                icon="${directory.gui}/resources/icon.icns"
+                mainclassname="com.leclercb.taskunifier.gui.main.Main"
+                copyright="2014, Benjamin Leclerc"
+                applicationCategory="public.app-category.productivity">
+
+            <runtime dir="/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home"/>
+
+            <arch name="x86_64"/>
+            <arch name="i386"/>
+
+            <jarfileset dir="${directory.gui}/target">
+                <include name="taskunifier-gui-${taskunifier.version}.jar" />
+            </jarfileset>
+
+            <jarfileset dir="${directory.gui}">
+                <include name="dependencies/" />
+                <exclude name="dependencies/AppleJavaExtensions-*.jar" />
+            </jarfileset>
+
+            <bundledocument extensions="tue"
+                            icon="${directory.gui}/resources/icon.icns"
+                            name="TaskUnifier Exchange files"
+                            role="editor"
+                            isPackage="true">
+            </bundledocument>
+
+            <option value="-Xdock:icon=Contents/Resources/icon.icns"/>
+
+            <option value="-Dcom.leclercb.taskunifier.resource_folder=$APP_ROOT/Contents/Resources/resources"/>
+            <option value="-Dcom.leclercb.taskunifier.mac_app_store=true"/>
+
+            <option value="-Dapple.laf.useScreenMenuBar=true"/>
+            <option value="-Dcom.apple.macos.useScreenMenuBar=true"/>
+            <option value="-Dcom.apple.macos.use-file-dialog-packages=true"/>
+            <option value="-Dcom.apple.mrj.application.apple.menu.about.name=TaskUnifier"/>
+
+            <option value="-Xmx512m"/>
+
+        </bundleapp>
+
+        <chmod dir="${directory.exe}/temp" includes="**/JavaAppLauncher" perm="755"/>
+
+        <delete file="${directory.exe}/temp/TaskUnifier.app/Contents/PlugIns/jdk1.7.0_09.jdk/Contents/Info.plist"/>
+
+        <copy todir="${directory.exe}/temp/TaskUnifier.app/Contents/Resources">
+            <fileset dir="${directory.gui}">
+                <include name="notes/" />
+                <include name="resources/" />
+            </fileset>
+        </copy>
+
+        <echo message="Signing mac app..."/>
+        <exec executable="${directory.exe}/scripts/mac_codesign.sh" failonerror="true">
+            <arg line="-a"/>
+        </exec>
+
+        <mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
+
+        <echo message="Creating mac dmg file..."/>
+        <exec executable="${directory.exe}/scripts/mac_create_dmg.sh" failonerror="true">
+            <arg line="${taskunifier.version.underscored}"/>
+        </exec>
+
+        <antcall target="clean"/>
+    </target>
+
+    <target depends="taskunifier-version-underscored, check-os" name="create-mac-app-store-binary" if="isMac">
+        <echo message="Creating mac app file..."/>
+        <antcall target="clean"/>
+        <mkdir dir="${directory.exe}/temp"/>
+
+        <bundleapp
+                outputdirectory="${directory.exe}/temp"
+                name="TaskUnifier"
+                displayname="TaskUnifier"
+                identifier="com.leclercb.taskunifier"
+                shortversion="${taskunifier.general.version}"
+                version="${taskunifier.general.version}"
+                icon="${directory.gui}/resources/icon.icns"
+                mainclassname="com.leclercb.taskunifier.gui.main.Main"
+                copyright="2014, Benjamin Leclerc"
+                applicationCategory="public.app-category.productivity">
+
+            <runtime dir="/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home"/>
+
+            <arch name="x86_64"/>
+            <arch name="i386"/>
+
+            <jarfileset dir="${directory.gui}/target">
+                <include name="taskunifier-gui-${taskunifier.version}.jar" />
+            </jarfileset>
+
+            <jarfileset dir="${directory.gui}">
+                <include name="dependencies/" />
+                <exclude name="dependencies/AppleJavaExtensions-*.jar" />
+            </jarfileset>
+
+            <bundledocument extensions="tue"
+                            icon="${directory.gui}/resources/icon.icns"
+                            name="TaskUnifier Exchange files"
+                            role="editor"
+                            isPackage="true">
+            </bundledocument>
+
+            <option value="-Xdock:icon=Contents/Resources/icon.icns"/>
+
+            <option value="-Dcom.leclercb.taskunifier.resource_folder=$APP_ROOT/Contents/Resources/resources"/>
+            <option value="-Dcom.leclercb.taskunifier.mac_app_store=true"/>
+
+            <option value="-Dapple.laf.useScreenMenuBar=true"/>
+            <option value="-Dcom.apple.macos.useScreenMenuBar=true"/>
+            <option value="-Dcom.apple.macos.use-file-dialog-packages=true"/>
+            <option value="-Dcom.apple.mrj.application.apple.menu.about.name=TaskUnifier"/>
+
+            <option value="-Xmx512m"/>
+
+        </bundleapp>
+
+        <chmod dir="${directory.exe}/temp" includes="**/JavaAppLauncher" perm="755"/>
+
+        <copy file="${directory.exe}/scripts/mac/container-migration.plist" tofile="${directory.exe}/temp/TaskUnifier.app/Contents/Resources/container-migration.plist"/>
+
+        <delete file="${directory.exe}/temp/TaskUnifier.app/Contents/PlugIns/jdk1.7.0_09.jdk/Contents/Info.plist"/>
+
+        <copy todir="${directory.exe}/temp/TaskUnifier.app/Contents/Resources">
+            <fileset dir="${directory.gui}">
+                <include name="notes/" />
+                <include name="resources/" />
+            </fileset>
+        </copy>
+
+        <echo message="Signing mac app..."/>
+        <exec executable="${directory.exe}/scripts/mac_codesign.sh" failonerror="true">
+            <arg line="-a"/>
+        </exec>
+
+        <mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
+
+        <echo message="Creating mac pkg file..."/>
+        <exec executable="${directory.exe}/scripts/mac_create_pkg.sh" failonerror="true">
+            <arg line="${taskunifier.version.underscored}"/>
+        </exec>
+
+        <antcall target="clean"/>
+    </target>
 	
 	<target depends="taskunifier-version-underscored, check-os" name="create-windows-binary" if="isWindows">
 		<echo message="Creating windows zip file..."/>
