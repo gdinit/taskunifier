@@ -192,7 +192,7 @@
             <option value="-Xdock:icon=Contents/Resources/icon.icns"/>
 
             <option value="-Dcom.leclercb.taskunifier.resource_folder=$APP_ROOT/Contents/Resources/resources"/>
-            <option value="-Dcom.leclercb.taskunifier.data_folder=/Users/leclercb/Library/Application Support/TaskUnifier"/>
+            <option value="-Dcom.leclercb.taskunifier.data_folder=~/Library/Application Support/TaskUnifier"/>
             <option value="-Dcom.leclercb.taskunifier.mac_app_store=false"/>
 
             <option value="-Dapple.laf.useScreenMenuBar=true"/>
