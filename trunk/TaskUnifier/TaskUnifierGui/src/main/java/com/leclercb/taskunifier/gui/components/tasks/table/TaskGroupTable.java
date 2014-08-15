@@ -384,7 +384,7 @@ public class TaskGroupTable extends JXPanel implements TaskTableView, ModelSelec
                     false);
             scrollPane.setOpaque(false);
             scrollPane.getViewport().setOpaque(false);
-            scrollPane.getVerticalScrollBar().setUnitIncrement(10);
+            scrollPane.getVerticalScrollBar().setUnitIncrement(20);
 
             this.add(scrollPane, BorderLayout.CENTER);
         } else {
