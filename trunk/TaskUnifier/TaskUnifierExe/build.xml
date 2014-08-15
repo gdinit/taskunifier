@@ -222,8 +222,10 @@
         <mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
 
         <echo message="Creating mac dmg file..."/>
+        <chmod file="${directory.exe}/scripts/mac_create_dmg.sh" perm="+x"/>
         <exec executable="${directory.exe}/scripts/mac_create_dmg.sh" failonerror="true">
             <arg line="${taskunifier.version.underscored}"/>
+            <arg line="-b"/>
         </exec>
 
         <antcall target="clean"/>
@@ -307,6 +309,7 @@
         <mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
 
         <echo message="Creating mac pkg file..."/>
+        <chmod file="${directory.exe}/scripts/mac_create_pkg.sh" perm="+x"/>
         <exec executable="${directory.exe}/scripts/mac_create_pkg.sh" failonerror="true">
             <arg line="${taskunifier.version.underscored}"/>
         </exec>
