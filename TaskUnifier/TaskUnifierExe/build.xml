@@ -206,7 +206,10 @@
 
         <chmod dir="${directory.exe}/temp" includes="**/JavaAppLauncher" perm="755"/>
 
-        <delete file="${directory.exe}/temp/TaskUnifier.app/Contents/PlugIns/jdk1.8.0_11.jdk/Contents/Info.plist"/>
+        <!-- <delete file="${directory.exe}/temp/TaskUnifier.app/Contents/PlugIns/jdk1.8.0_11.jdk/Contents/Info.plist"/> -->
+
+        <delete file="${directory.exe}/temp/TaskUnifier.app/Contents/PlugIns/jdk1.8.0_11.jdk/Contents/MacOS/libjli.dylib"/>
+        <copy file="${directory.exe}/temp/TaskUnifier.app/Contents/PlugIns/jdk1.8.0_11.jdk/Contents/Home/jre/lib/jli/libjli.dylib" tofile="${directory.exe}/temp/TaskUnifier.app/Contents/PlugIns/jdk1.8.0_11.jdk/Contents/MacOS/libjli.dylib"/>
 
         <copy todir="${directory.exe}/temp/TaskUnifier.app/Contents/Resources">
             <fileset dir="${directory.gui}">
