@@ -24,7 +24,7 @@ BASEDIR="$BASEDIR/.."
 APPFILE="$BASEDIR/temp/TaskUnifier.app"
 DMGFILE="$BASEDIR/binaries/TaskUnifier_$1/TaskUnifier_$1_mac.dmg"
 
-if [ $MACAPPSTORE == 1 ]
+if [ $MACAPPBUNDLE == 1 ]
 then
     DMGFILE="$BASEDIR/binaries/TaskUnifier_$1/TaskUnifier_$1_mac_bundle.dmg"
 fi
