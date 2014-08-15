@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project basedir="." default="create-sources-binaries" name="TaskUnifierExe">
-	
+
     <property environment="env"/>
-	
+
 	<property file="build.properties"/>
-	
+
 	<property file="${directory.gui}/src/main/resources/com/leclercb/taskunifier/gui/resources/general.properties" prefix="taskunifier.general"/>
-	
+
 	<taskdef resource="net/jtools/classloadertask/antlib.xml" classpath="${directory.exe}/tools/ant-classloadertask/ant-classloadertask.jar"/>
 	<taskdef name="jarbundler" classname="net.sourceforge.jarbundler.JarBundler" classpath="${directory.exe}/tools/jarbundler/jarbundler-2.2.0.jar"/>
 	<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${directory.exe}/tools/launch4j/launch4j.jar:${directory.exe}/tools/launch4j/xstream.jar" />
     <taskdef name="bundleapp" classname="com.oracle.appbundler.AppBundlerTask" classpath="${directory.exe}/tools/appbundler/appbundler-1.0ea.jar"/>
-	
+
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
 		<classpath>
 			<pathelement location="${directory.exe}/tools/ant-contrib/ant-contrib-1.0b3.jar"/>
 		</classpath>
 	</taskdef>
-	
+
 	<classloader loader="system" classpath="${directory.exe}/tools/commons-net/commons-net-2.2.jar"/>
 	<classloader loader="system" classpath="${directory.exe}/tools/jsch/jsch-0.1.44.jar"/>
-	
+
 	<target name="create-sources-binaries">
 		<antcall target="create-sources"/>
 		<antcall target="create-binaries"/>
 	</target>
-	
+
 	<target depends="taskunifier-version-underscored" name="create-sources">
 		<echo message="Deleting existing sources..."/>
 		<delete file="${directory.exe}/sources/TaskUnifier_${taskunifier.version.underscored}_src.zip"/>
-		
+
 		<echo message="Creating sources zip file..."/>
 		<zip destfile="${directory.exe}/sources/TaskUnifier_${taskunifier.version.underscored}_src.zip">
 		    <zipfileset dir="${directory.api}" prefix="TaskUnifierApi">
@@ -43,17 +43,17 @@
 		    </zipfileset>
 		</zip>
 	</target>
-	
+
 	<target name="create-binaries">
 		<echo message="Deleting existing binaries..."/>
 		<delete dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
-		
+
 		<antcall target="create-linux-binary"/>
 		<antcall target="create-mac-binary"/>
 		<antcall target="create-windows-binary"/>
 		<antcall target="create-other-binary"/>
 	</target>
-	
+
     <target depends="taskunifier-version-underscored" name="create-binary">
     	<antcall target="clean"/>
     	<mkdir dir="${directory.exe}/temp"/>
@@ -69,7 +69,7 @@
     		<fileset dir="${directory.gui}/resources"/>
     	</copy>
     </target>
-	
+
     <target depends="taskunifier-version-underscored" name="create-linux-binary">
 		<echo message="Creating linux tar file..."/>
     	<antcall target="create-binary"/>
@@ -87,12 +87,12 @@
 		</tar>
 		<antcall target="clean"/>
     </target>
-	
+
 	<target depends="taskunifier-version-underscored, check-os" name="create-mac-binary" if="isMac">
 		<echo message="Creating mac app file..."/>
 		<antcall target="clean"/>
 		<mkdir dir="${directory.exe}/temp"/>
-		
+
 		<jarbundler dir="${directory.exe}/temp"
 			name="TaskUnifier"
 			shortname="TaskUnifier"
@@ -104,41 +104,41 @@
 			bundleid="com.leclercb.taskunifier"
 			infostring="TaskUnifier ${taskunifier.general.version} for Mac OS X"
 			vmoptions="-Xmx512m">
-			
+
 			<javaproperty name="apple.laf.useScreenMenuBar" value="true"/>
 			<javaproperty name="com.leclercb.taskunifier.resource_folder" value="$APP_PACKAGE/Contents/Resources/resources"/>
 			<javaproperty name="com.leclercb.taskunifier.data_folder" value="$USER_HOME/Library/Application Support/TaskUnifier"/>
-			
+
 			<jarfileset dir="${directory.gui}/target">
 				<include name="taskunifier-gui-${taskunifier.general.version}.jar" />
 			</jarfileset>
-			
+
 			<jarfileset dir="${directory.gui}">
 				<include name="dependencies/" />
 				<exclude name="dependencies/AppleJavaExtensions-*.jar" />
 			</jarfileset>
-			
+
 			<documenttype name="TaskUnifier Exchange files"
 				extensions="tue"
 				mimetypes="application/tue"
 				iconFile="${directory.gui}/resources/icon.icns"
 				role="Editor"/>
-			
+
 			<resourcefileset dir="${directory.gui}">
 				<include name="notes/" />
 				<include name="resources/" />
 			</resourcefileset>
-		
+
 		</jarbundler>
-		
+
 		<chmod dir="${directory.exe}/temp" includes="**/JavaApplicationStub" perm="755"/>
-		
+
 		<echo message="Signing mac app..."/>
         <chmod file="${directory.exe}/scripts/mac_codesign.sh" perm="+x"/>
 		<exec executable="${directory.exe}/scripts/mac_codesign.sh" failonerror="true"/>
-		
+
 		<mkdir dir="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}"/>
-		
+
 		<echo message="Creating mac dmg file..."/>
         <chmod file="${directory.exe}/scripts/mac_create_dmg.sh" perm="+x"/>
 		<exec executable="${directory.exe}/scripts/mac_create_dmg.sh" failonerror="true">
@@ -192,12 +192,12 @@
             <option value="-Xdock:icon=Contents/Resources/icon.icns"/>
 
             <option value="-Dcom.leclercb.taskunifier.resource_folder=$APP_ROOT/Contents/Resources/resources"/>
-            <option value="-Dcom.leclercb.taskunifier.data_folder=~/Library/Application Support/TaskUnifier"/>
-            <option value="-Dcom.leclercb.taskunifier.mac_app_store=false"/>
+            <option value="-Dcom.leclercb.taskunifier.mac_app_bundle=true"/>
 
             <option value="-Dapple.laf.useScreenMenuBar=true"/>
             <option value="-Dcom.apple.macos.useScreenMenuBar=true"/>
             <option value="-Dcom.apple.macos.use-file-dialog-packages=true"/>
+            <option value="-Dapple.awt.application.name=TaskUnifier"/>
             <option value="-Dcom.apple.mrj.application.apple.menu.about.name=TaskUnifier"/>
 
             <option value="-Xmx512m"/>
@@ -234,7 +234,19 @@
         <antcall target="clean"/>
         <mkdir dir="${directory.exe}/temp"/>
 
+        <path id="mac-app-bundle.path">
+            <fileset dir="${directory.gui}/target">
+                <include name="taskunifier-gui-${taskunifier.general.version}.jar" />
+            </fileset>
+
+            <fileset dir="${directory.gui}">
+                <include name="dependencies/" />
+                <exclude name="dependencies/AppleJavaExtensions-*.jar" />
+            </fileset>
+        </path>
+
         <bundleapp
+                classpathref="mac-app-bundle.path"
                 outputdirectory="${directory.exe}/temp"
                 name="TaskUnifier"
                 displayname="TaskUnifier"
@@ -251,15 +263,6 @@
             <arch name="x86_64"/>
             <arch name="i386"/>
 
-            <jarfileset dir="${directory.gui}/target">
-                <include name="taskunifier-gui-${taskunifier.general.version}.jar" />
-            </jarfileset>
-
-            <jarfileset dir="${directory.gui}">
-                <include name="dependencies/" />
-                <exclude name="dependencies/AppleJavaExtensions-*.jar" />
-            </jarfileset>
-
             <bundledocument extensions="tue"
                             icon="${directory.gui}/resources/icon.icns"
                             name="TaskUnifier Exchange files"
@@ -275,6 +278,7 @@
             <option value="-Dapple.laf.useScreenMenuBar=true"/>
             <option value="-Dcom.apple.macos.useScreenMenuBar=true"/>
             <option value="-Dcom.apple.macos.use-file-dialog-packages=true"/>
+            <option value="-Dapple.awt.application.name=TaskUnifier"/>
             <option value="-Dcom.apple.mrj.application.apple.menu.about.name=TaskUnifier"/>
 
             <option value="-Xmx512m"/>
@@ -309,7 +313,7 @@
 
         <antcall target="clean"/>
     </target>
-	
+
 	<target depends="taskunifier-version-underscored, check-os" name="create-windows-binary" if="isWindows">
 		<echo message="Creating windows zip file..."/>
     	<antcall target="create-binary"/>
@@ -318,7 +322,7 @@
 	    <zip destfile="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/TaskUnifier_${taskunifier.version.underscored}_windows.zip" basedir="${directory.exe}/temp"/>
 		<antcall target="create-installer-windows"/>
 	</target>
-	
+
 	<target depends="taskunifier-version-underscored, check-os" name="create-installer-windows" if="isWindows">
 		<echo message="Creating windows installer zip file..."/>
 		<exec dir="." executable="cmd">
@@ -327,7 +331,7 @@
 		<zip destfile="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/TaskUnifier_${taskunifier.version.underscored}_installer_windows.zip" basedir="${directory.exe}/temp" includes="setup.exe"/>
 		<antcall target="clean"/>
 	</target>
-	
+
 	<target depends="taskunifier-version-underscored" name="create-other-binary">
 		<echo message="Creating other zip file..."/>
     	<antcall target="create-binary"/>
@@ -335,12 +339,12 @@
 	    <zip destfile="${directory.exe}/binaries/TaskUnifier_${taskunifier.version.underscored}/TaskUnifier_${taskunifier.version.underscored}_other.zip" basedir="${directory.exe}/temp"/>
 		<antcall target="clean"/>
 	</target>
-	
+
 	<target name="clean">
 		<delete dir="${directory.exe}/temp"/>
 		<delete file="${directory.gui}/resources/taskunifier.properties"/>
 	</target>
-	
+
 	<target name="check-os">
 		<condition property="isMac">
 			<os family="mac"/>
@@ -349,23 +353,23 @@
 			<os family="windows"/>
 		</condition>
 	</target>
-	
+
 	<target name="taskunifier-version-underscored">
-		<propertyregex 
-			property="taskunifier.version.underscored" 
+		<propertyregex
+			property="taskunifier.version.underscored"
 			override="false"
-			input="${taskunifier.general.version}" 
+			input="${taskunifier.general.version}"
 			regexp="\."
 			replace="_"
 			global="true"/>
 	</target>
-	
+
 	<target name="upload-sources-binaries-version">
 		<antcall target="upload-sources"/>
 		<antcall target="upload-binaries"/>
 		<antcall target="upload-version"/>
 	</target>
-	
+
 	<target depends="taskunifier-version-underscored" name="upload-sources">
 		<echo message="Uploading sources..."/>
 		<scp password="${sourceforge.password}" todir="leclercb,taskunifier@frs.sourceforge.net:/home/frs/project/t/ta/taskunifier/sources" trust="true">
@@ -374,7 +378,7 @@
 			</fileset>
 		</scp>
 	</target>
-	
+
 	<target depends="taskunifier-version-underscored" name="upload-binaries">
 		<echo message="Uploading binaries..."/>
 		<scp password="${sourceforge.password}" todir="leclercb,taskunifier@frs.sourceforge.net:/home/frs/project/t/ta/taskunifier" trust="true">
@@ -406,7 +410,7 @@
 			</fileset>
 		</scp>
 	</target>
-	
+
 	<target depends="taskunifier-version-underscored" name="upload-version">
 		<echo message="Uploading version..."/>
 		<antcall target="clean"/>
@@ -417,5 +421,5 @@
     	<copy file="${directory.gui}/notes/history.txt" tofile="${directory.web}/history.txt"/>
 		<antcall target="clean"/>
 	</target>
-	
+
 </project>
