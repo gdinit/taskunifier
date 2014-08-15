@@ -30,15 +30,6 @@ if [ $MACAPPSTORE == 0 ]
 then
 
     echo "NORMAL MAC VERSION"
-
-    echo "Codesign application file ""$APPFILE""..."
-	
-	codesign -v -f -s "Developer ID Application: Benjamin Leclerc"  $APPFILE
-	
-	if [ $? != 0 ]
-	then
-		exit $?
-	fi
 	
 	echo "Codesign sign all libraries..."
 	
@@ -47,6 +38,15 @@ then
 	echo "Verify all libraries have been signed..."
 	
 	find $APPFILE/Contents/ \( -name "*.jar" -or -name "*.dylib" \) -exec codesign --verbose --verify {} \;
+
+    echo "Codesign application file ""$APPFILE""..."
+
+	codesign -v -f -s "Developer ID Application: Benjamin Leclerc" $APPFILE
+
+	if [ $? != 0 ]
+	then
+		exit $?
+	fi
 	
 	exit 0
 	
@@ -56,15 +56,6 @@ if [ $MACAPPSTORE == 1 ]
 then
 
     echo "MAC APP STORE VERSION"
-
-	echo "Codesign application file ""$APPFILE""..."
-	
-	codesign -v -f -s "3rd Party Mac Developer Application: Benjamin Leclerc" --entitlements $BASEDIR/scripts/mac/entitlements.plist $APPFILE
-	
-	if [ $? != 0 ]
-	then
-		exit $?
-	fi
 	
 	echo "Codesign sign all libraries..."
 	
@@ -73,6 +64,15 @@ then
 	echo "Verify all libraries have been signed..."
 	
 	find $APPFILE/Contents/ \( -name "*.jar" -or -name "*.dylib" \) -exec codesign --verbose --verify {} \;
+
+	echo "Codesign application file ""$APPFILE""..."
+
+	codesign -v -f -s "3rd Party Mac Developer Application: Benjamin Leclerc" --entitlements $BASEDIR/scripts/mac/entitlements.plist $APPFILE
+
+	if [ $? != 0 ]
+	then
+		exit $?
+	fi
 	
 	exit 0
 	
