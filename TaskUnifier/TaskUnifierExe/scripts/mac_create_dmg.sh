@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ $# != 1 ]
+if [ $# -gt 2 ]
 then
 	echo "Usage: $0 version [-b]"
 	exit 1
