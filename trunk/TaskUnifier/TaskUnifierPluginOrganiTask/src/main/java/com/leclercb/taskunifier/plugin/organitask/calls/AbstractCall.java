@@ -104,6 +104,8 @@ abstract class AbstractCall {
                             OrganiTaskApi.getInstance().getApiId(),
                             response.getCode() + "",
                             response.getMessage() + ": " + this.getErrorMessage(response.getContent()));
+                } else if (response.getCode() == 404) {
+                    // Do nothing if 404
                 } else {
                     throw new SynchronizerHttpException(
                             false,
