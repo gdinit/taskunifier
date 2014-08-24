@@ -3,7 +3,7 @@ HISTORY
 
 Version 4.3.2
     - Major:
-        - OSX Yosemite ready
+        - OSX Yosemite release
     - Minor:
         - Scroll speed of task table
 
