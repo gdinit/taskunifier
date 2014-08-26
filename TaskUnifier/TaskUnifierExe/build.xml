@@ -55,6 +55,7 @@
 
         <antcall target="create-linux-binary"/>
         <antcall target="create-mac-binary"/>
+        <antcall target="create-mac-app-bundle-binary"/>
         <antcall target="create-windows-binary"/>
         <antcall target="create-other-binary"/>
     </target>
@@ -152,7 +153,7 @@
         <echo message="Creating mac dmg file..."/>
         <chmod file="${directory.exe}/scripts/mac_create_dmg.sh" perm="+x"/>
         <exec executable="${directory.exe}/scripts/mac_create_dmg.sh" failonerror="true">
-            <arg line="${taskunifier.version.underscored}"/>
+            <arg line="-v &quot;${taskunifier.version.underscored}&quot;"/>
         </exec>
 
         <antcall target="clean"/>
@@ -238,7 +239,7 @@
         <echo message="Creating mac dmg file..."/>
         <chmod file="${directory.exe}/scripts/mac_create_dmg.sh" perm="+x"/>
         <exec executable="${directory.exe}/scripts/mac_create_dmg.sh" failonerror="true">
-            <arg line="${taskunifier.version.underscored}"/>
+            <arg line="-v &quot;${taskunifier.version.underscored}&quot;"/>
             <arg line="-b"/>
         </exec>
 
