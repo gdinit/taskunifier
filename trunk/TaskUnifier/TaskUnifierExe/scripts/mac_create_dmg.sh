@@ -6,7 +6,7 @@ MACAPPBUNDLE=0
 while getopts ":v::b" opt; do
 	case $opt in
 	    v)
-	        VERSION="$OPTARG"
+	        VERSION="${OPTARG}"
 	        ;;
 		b)
 			MACAPPBUNDLE=1
