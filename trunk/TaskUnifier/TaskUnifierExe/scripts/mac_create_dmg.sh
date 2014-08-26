@@ -1,36 +1,31 @@
 #!/bin/sh
 
-if [ $# -gt 2 ]
-then
-	echo "Usage: $0 -v=version [-b]"
-	exit 1
-fi
-
 VERSION="1.0"
 MACAPPBUNDLE=0
 
 while getopts ":v::b" opt; do
 	case $opt in
 	    v)
-	        VERSION=$OPTARG
+	        VERSION="$OPTARG"
 	        ;;
 		b)
 			MACAPPBUNDLE=1
 			;;
 		\?)
-			MACAPPBUNDLE=0
-			;;
+			echo "Usage: $0 -v version [-b]"
+            exit 1
+            ;;
 	esac
 done
 
 BASEDIR=`dirname $0`
 BASEDIR="$BASEDIR/.."
 APPFILE="$BASEDIR/temp/TaskUnifier.app"
-DMGFILE="$BASEDIR/binaries/TaskUnifier_$VERSION/TaskUnifier_$VERSION_mac.dmg"
+DMGFILE="$BASEDIR/binaries/TaskUnifier_${VERSION}/TaskUnifier_${VERSION}_mac.dmg"
 
 if [ $MACAPPBUNDLE == 1 ]
 then
-    DMGFILE="$BASEDIR/binaries/TaskUnifier_$VERSION/TaskUnifier_$VERSION_mac_bundle.dmg"
+    DMGFILE="$BASEDIR/binaries/TaskUnifier_${VERSION}/TaskUnifier_${VERSION}_mac_bundle.dmg"
 fi
 
 echo "Creating DMG file $DMGFILE"

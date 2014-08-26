@@ -1,11 +1,5 @@
 #!/bin/sh
 
-if [ $# -gt 1 ]
-then
-	echo "Usage: $0 [-a]"
-	exit 1
-fi
-
 MACAPPSTORE=0
 
 while getopts ":a" opt; do
@@ -14,8 +8,9 @@ while getopts ":a" opt; do
 			MACAPPSTORE=1
 			;;
 		\?)
-			MACAPPSTORE=0
-			;;
+            echo "Usage: $0 [-a]"
+            exit 1
+            ;;
 	esac
 done
 
