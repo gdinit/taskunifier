@@ -5,6 +5,7 @@
  */
 package com.leclercb.taskunifier.plugin.toodledo.calls;
 
+import java.net.URI;
 import java.util.Calendar;
 import java.util.List;
 
@@ -28,11 +29,8 @@ import com.leclercb.taskunifier.plugin.toodledo.ToodledoConnection;
 import com.leclercb.taskunifier.plugin.toodledo.calls.exc.ToodledoConnectionException;
 
 public class ToodledoStatement {
-	
-	private static CallGetUserId callGetUserId = new CallGetUserId();
-	private static CallCreateAccount callCreateAccount = new CallCreateAccount();
-	private static CallGetToken callGetToken = new CallGetToken();
-	private static CallGetKey callGetKey = new CallGetKey();
+
+    private static CallAuthorize callAuthorize = new CallAuthorize();
 	private static CallGetAccountInfo callGetAccountInfo = new CallGetAccountInfo();
 	private static CallGetContexts callGetContexts = new CallGetContexts();
 	private static CallGetFolders callGetFolders = new CallGetFolders();
@@ -63,23 +61,8 @@ public class ToodledoStatement {
 	private static CallDeleteNote callDeleteNote = new CallDeleteNote();
 	private static CallDeleteTask callDeleteTask = new CallDeleteTask();
 	
-	public static String createAccount(String email, String password)
-			throws SynchronizerException {
-		return callCreateAccount.createAccount(email, password);
-	}
-	
-	public static String getUserId(String email, String password)
-			throws SynchronizerException {
-		return callGetUserId.getUserId(email, password);
-	}
-	
-	public static String getToken(String userId) throws SynchronizerException {
-		return callGetToken.getToken(userId);
-	}
-	
-	public static String getKey(String password, String token)
-			throws SynchronizerException {
-		return callGetKey.getKey(password, token);
+	public static URI getAuthorizeUrl() throws SynchronizerException {
+		return callAuthorize.getAuthorizeUrl();
 	}
 	
 	private ToodledoConnection connection;

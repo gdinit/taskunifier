@@ -35,7 +35,7 @@ final class CallAddLocation extends AbstractCallLocation {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/locations/add.php", params);
+		String content = super.callGet(scheme, "/3/locations/add.php", params);
 		
 		return this.getResponseMessage(location, accountInfo, content)[0].getModelReferenceIds().get(
 				"toodledo");

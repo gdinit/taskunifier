@@ -36,7 +36,7 @@ final class CallDeleteLocation extends AbstractCallDelete {
 		String scheme = super.getScheme(accountInfo);
 		String content = super.callGet(
 				scheme,
-				"/2/locations/delete.php",
+				"/3/locations/delete.php",
 				params);
 		
 		String id = null;

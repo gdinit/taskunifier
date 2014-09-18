@@ -32,8 +32,9 @@ abstract class AbstractCallFolder extends AbstractCall {
 	 * <archived>0</archived> <order>1</order> <name>Shopping</name> </folder>
 	 * </folders>
 	 * 
-	 * @param url
-	 * @param inputStream
+	 * @param folder
+	 * @param accountInfo
+     * @param content
 	 * @return
 	 * @throws SynchronizerException
 	 */

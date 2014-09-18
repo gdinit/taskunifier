@@ -167,8 +167,8 @@ public class ToodledoSynchronizer extends AbstractSynchronizer {
 		this.createDeletedContactsNote();
 		
 		this.accountInfo = this.statement.getAccountInfo();
-		this.lastNoteEdit = this.accountInfo.getLastNotebookEdit();
-		this.lastNoteDelete = this.accountInfo.getLastNotebookDelete();
+		this.lastNoteEdit = this.accountInfo.getLastNoteEdit();
+		this.lastNoteDelete = this.accountInfo.getLastNoteDelete();
 		this.lastTaskEdit = this.accountInfo.getLastTaskEdit();
 		this.lastTaskDelete = this.accountInfo.getLastTaskDelete();
 		this.lastContextEdit = this.accountInfo.getLastContextEdit();
@@ -236,7 +236,7 @@ public class ToodledoSynchronizer extends AbstractSynchronizer {
 		
 		if (type == ModelType.NOTE) {
 			if (this.lastNoteEdit == null
-					|| this.accountInfo.getLastNotebookEdit().compareTo(
+					|| this.accountInfo.getLastNoteEdit().compareTo(
 							this.lastNoteEdit) > 0) {
 				return true;
 			}
@@ -326,7 +326,7 @@ public class ToodledoSynchronizer extends AbstractSynchronizer {
 		
 		if (type == ModelType.NOTE) {
 			if (this.lastNoteEdit == null
-					|| this.accountInfo.getLastNotebookEdit().compareTo(
+					|| this.accountInfo.getLastNoteEdit().compareTo(
 							this.lastNoteEdit) > 0) {
 				if (this.lastNoteEdit == null) {
 					beans.addAll(Arrays.asList(this.statement.getNotes(this.accountInfo)));
@@ -712,7 +712,7 @@ public class ToodledoSynchronizer extends AbstractSynchronizer {
 		
 		if (type == ModelType.NOTE) {
 			if (this.lastNoteDelete == null
-					|| this.accountInfo.getLastNotebookDelete().compareTo(
+					|| this.accountInfo.getLastNoteDelete().compareTo(
 							this.lastNoteDelete) > 0) {
 				deletedModels.addAll(Arrays.asList(this.statement.getDeletedNotes(
 						this.accountInfo,

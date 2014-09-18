@@ -74,7 +74,7 @@ final class CallDeleteTask extends AbstractCall {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callPost(scheme, "/2/tasks/delete.php", params);
+		String content = super.callPost(scheme, "/3/tasks/delete.php", params);
 		
 		List<ModelId> deletedIds = this.getResponseMessage(tasks, content);
 		
@@ -87,8 +87,8 @@ final class CallDeleteTask extends AbstractCall {
 	/**
 	 * Example : <deleted> <id>1234</id> <id>1235</id> </deleted>
 	 * 
-	 * @param url
-	 * @param inputStream
+	 * @param tasks
+	 * @param content
 	 * @return
 	 * @throws SynchronizerException
 	 */

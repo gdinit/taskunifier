@@ -32,8 +32,9 @@ abstract class AbstractCallGoal extends AbstractCall {
 	 * Example : <goal> <id>123</id> <name>Get a Raise</name> <level>0</level>
 	 * <archived>1</archived> <contributes>0</contributes> <note></note> </goal>
 	 * 
-	 * @param url
-	 * @param inputStream
+	 * @param goal
+	 * @param accountInfo
+     * @param content
 	 * @return
 	 * @throws SynchronizerException
 	 */

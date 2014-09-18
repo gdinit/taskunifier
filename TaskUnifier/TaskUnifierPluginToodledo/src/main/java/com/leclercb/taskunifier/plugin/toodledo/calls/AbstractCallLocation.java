@@ -32,8 +32,9 @@ abstract class AbstractCallLocation extends AbstractCall {
 	 * <lon>-45.678</lon> <name>Work</name> <description>123 Main Street
 	 * </description> </location> </locations>
 	 * 
-	 * @param url
-	 * @param inputStream
+	 * @param location
+	 * @param accountInfo
+     * @param content
 	 * @return
 	 * @throws SynchronizerException
 	 */

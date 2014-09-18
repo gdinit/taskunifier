@@ -258,7 +258,7 @@ final class CallAddTask extends AbstractCallTask {
         params.add(new BasicNameValuePair("f", "xml"));
 
         String scheme = super.getScheme(accountInfo);
-        String content = super.callPost(scheme, "/2/tasks/add.php", params);
+        String content = super.callPost(scheme, "/3/tasks/add.php", params);
 
         ToodledoTaskList tTasks = this.getResponseMessage(
                 tasks,

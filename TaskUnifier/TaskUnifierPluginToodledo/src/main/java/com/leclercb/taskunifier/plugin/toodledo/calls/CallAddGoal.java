@@ -43,7 +43,7 @@ final class CallAddGoal extends AbstractCallGoal {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/goals/add.php", params);
+		String content = super.callGet(scheme, "/3/goals/add.php", params);
 		
 		return this.getResponseMessage(goal, accountInfo, content)[0].getModelReferenceIds().get(
 				"toodledo");

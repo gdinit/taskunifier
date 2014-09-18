@@ -31,8 +31,8 @@ abstract class AbstractCallContext extends AbstractCall {
 	 * Example : <contexts> <context> <id>123</id> <name>Work</name> </context>
 	 * </contexts>
 	 * 
-	 * @param url
-	 * @param inputStream
+	 * @param context
+     * @param accountInfo
 	 * @return
 	 * @throws SynchronizerException
 	 */

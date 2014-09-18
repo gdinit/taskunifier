@@ -37,7 +37,7 @@ final class CallEditContext extends AbstractCallContext {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/contexts/edit.php", params);
+		String content = super.callGet(scheme, "/3/contexts/edit.php", params);
 		
 		ContextBean[] contexts = this.getResponseMessage(
 				context,

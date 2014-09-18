@@ -48,7 +48,7 @@ final class CallEditGoal extends AbstractCallGoal {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/goals/edit.php", params);
+		String content = super.callGet(scheme, "/3/goals/edit.php", params);
 		
 		GoalBean[] goals = this.getResponseMessage(goal, accountInfo, content);
 		

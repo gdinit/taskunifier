@@ -68,7 +68,7 @@ final class CallDeleteNote extends AbstractCall {
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("key", key));
-		params.add(new BasicNameValuePair("notebooks", "[\""
+		params.add(new BasicNameValuePair("notes", "[\""
 				+ StringUtils.join(ids, "\",\"")
 				+ "\"]"));
 		params.add(new BasicNameValuePair("f", "xml"));
@@ -76,7 +76,7 @@ final class CallDeleteNote extends AbstractCall {
 		String scheme = super.getScheme(accountInfo);
 		String content = super.callPost(
 				scheme,
-				"/2/notebooks/delete.php",
+				"/3/notes/delete.php",
 				params);
 		
 		List<ModelId> deletedIds = this.getResponseMessage(notes, content);
@@ -90,8 +90,8 @@ final class CallDeleteNote extends AbstractCall {
 	/**
 	 * Example : <deleted> <id>1234</id> <id>1235</id> </deleted>
 	 * 
-	 * @param url
-	 * @param inputStream
+	 * @param notes
+	 * @param content
 	 * @return
 	 * @throws SynchronizerException
 	 */

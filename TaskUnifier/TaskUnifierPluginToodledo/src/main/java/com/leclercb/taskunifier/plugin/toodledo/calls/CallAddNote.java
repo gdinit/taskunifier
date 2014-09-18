@@ -86,11 +86,11 @@ final class CallAddNote extends AbstractCallNote {
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("key", key));
-		params.add(new BasicNameValuePair("notebooks", jsonArray.toString()));
+		params.add(new BasicNameValuePair("notes", jsonArray.toString()));
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callPost(scheme, "/2/notebooks/add.php", params);
+		String content = super.callPost(scheme, "/3/notes/add.php", params);
 		
 		ToodledoNoteList tNotes = this.getResponseMessage(notes, content);
 		

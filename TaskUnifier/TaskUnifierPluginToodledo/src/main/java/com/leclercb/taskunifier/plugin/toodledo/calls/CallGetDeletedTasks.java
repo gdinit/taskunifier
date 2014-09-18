@@ -47,7 +47,7 @@ final class CallGetDeletedTasks extends AbstractCall {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/tasks/deleted.php", params);
+		String content = super.callGet(scheme, "/3/tasks/deleted.php", params);
 		
 		return this.getResponseMessage(content);
 	}
@@ -65,8 +65,7 @@ final class CallGetDeletedTasks extends AbstractCall {
 	 * </task>
 	 * </deleted>
 	 * 
-	 * @param url
-	 * @param inputStream
+	 * @param content
 	 * @return
 	 * @throws SynchronizerException
 	 */
