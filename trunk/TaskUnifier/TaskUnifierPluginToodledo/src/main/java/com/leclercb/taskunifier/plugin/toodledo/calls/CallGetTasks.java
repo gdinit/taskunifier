@@ -61,7 +61,7 @@ final class CallGetTasks extends AbstractCallTask {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/tasks/get.php", params);
+		String content = super.callGet(scheme, "/3/tasks/get.php", params);
 		
 		return this.getResponseMessage(null, content, accountInfo);
 	}
@@ -117,7 +117,7 @@ final class CallGetTasks extends AbstractCallTask {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/tasks/get.php", params);
+		String content = super.callGet(scheme, "/3/tasks/get.php", params);
 		
 		return this.getResponseMessage(null, content, accountInfo);
 	}
@@ -183,7 +183,7 @@ final class CallGetTasks extends AbstractCallTask {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/tasks/get.php", params);
+		String content = super.callGet(scheme, "/3/tasks/get.php", params);
 		
 		return this.getResponseMessage(null, content, accountInfo);
 	}

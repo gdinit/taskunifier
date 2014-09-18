@@ -30,7 +30,7 @@ final class CallAddContext extends AbstractCallContext {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/contexts/add.php", params);
+		String content = super.callGet(scheme, "/3/contexts/add.php", params);
 		
 		return this.getResponseMessage(context, accountInfo, content)[0].getModelReferenceIds().get(
 				"toodledo");

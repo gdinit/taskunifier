@@ -27,7 +27,7 @@ final class CallGetFolders extends AbstractCallFolder {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/folders/get.php", params);
+		String content = super.callGet(scheme, "/3/folders/get.php", params);
 		
 		return this.getResponseMessage(null, accountInfo, content);
 	}

@@ -26,9 +26,10 @@ abstract class AbstractCallDelete extends AbstractCall {
 	/**
 	 * Example :
 	 * <deleted>12345</deleted>
-	 * 
-	 * @param url
-	 * @param inputStream
+	 *
+     * @param model
+     * @param type
+     * @param content
 	 * @return
 	 * @throws SynchronizerException
 	 */

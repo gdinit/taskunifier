@@ -92,7 +92,7 @@ final class CallEditTaskParent extends AbstractCallTask {
         params.add(new BasicNameValuePair("f", "xml"));
 
         String scheme = super.getScheme(accountInfo);
-        String content = super.callPost(scheme, "/2/tasks/edit.php", params);
+        String content = super.callPost(scheme, "/3/tasks/edit.php", params);
 
         this.getResponseMessage(tasks, content, accountInfo);
     }

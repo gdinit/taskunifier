@@ -40,7 +40,7 @@ final class CallEditFolder extends AbstractCallFolder {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/folders/edit.php", params);
+		String content = super.callGet(scheme, "/3/folders/edit.php", params);
 		
 		FolderBean[] folders = this.getResponseMessage(
 				folder,

@@ -59,7 +59,7 @@ final class CallGetNotes extends AbstractCallNote {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/notebooks/get.php", params);
+		String content = super.callGet(scheme, "/3/notes/get.php", params);
 		
 		return this.getResponseMessage(null, content);
 	}
@@ -124,7 +124,7 @@ final class CallGetNotes extends AbstractCallNote {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/notebooks/get.php", params);
+		String content = super.callGet(scheme, "/3/notes/get.php", params);
 		
 		return this.getResponseMessage(null, content);
 	}

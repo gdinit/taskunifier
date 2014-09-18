@@ -27,7 +27,7 @@ final class CallGetGoals extends AbstractCallGoal {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/goals/get.php", params);
+		String content = super.callGet(scheme, "/3/goals/get.php", params);
 		
 		return this.getResponseMessage(null, accountInfo, content);
 	}

@@ -33,7 +33,7 @@ final class CallAddFolder extends AbstractCallFolder {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/folders/add.php", params);
+		String content = super.callGet(scheme, "/3/folders/add.php", params);
 		
 		return this.getResponseMessage(folder, accountInfo, content)[0].getModelReferenceIds().get(
 				"toodledo");

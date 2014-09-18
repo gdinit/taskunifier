@@ -34,7 +34,7 @@ final class CallGetAccountInfo extends AbstractCall {
 		params.add(new BasicNameValuePair("key", key));
 		params.add(new BasicNameValuePair("f", "xml"));
 		
-		String content = super.callGet("http", "/2/account/get.php", params);
+		String content = super.callGet("http", "/3/account/get.php", params);
 		
 		return this.getResponseMessage(content);
 	}
@@ -57,12 +57,11 @@ final class CallGetAccountInfo extends AbstractCall {
 	 * <lastedit_location>1280441959</lastedit_location>
 	 * <lastedit_task>1281458832</lastedit_task>
 	 * <lastdelete_task>1280898329</lastdelete_task>
-	 * <lastedit_notebook>1280894728</lastedit_notebook>
-	 * <lastdelete_notebook>1280894728</lastdelete_notebook>
+	 * <lastedit_note>1280894728</lastedit_note>
+	 * <lastdelete_note>1280894728</lastdelete_note>
 	 * </account>
 	 * 
-	 * @param url
-	 * @param inputStream
+	 * @param content
 	 * @return
 	 * @throws SynchronizerException
 	 */
@@ -137,11 +136,11 @@ final class CallGetAccountInfo extends AbstractCall {
 				if (nInfo.getNodeName().equals("lastedit_location"))
 					accountInfo.setLastLocationEdit(ToodledoTranslations.translateGMTDate(Long.parseLong(nInfo.getTextContent())));
 				
-				if (nInfo.getNodeName().equals("lastedit_notebook"))
-					accountInfo.setLastNotebookEdit(ToodledoTranslations.translateGMTDate(Long.parseLong(nInfo.getTextContent())));
+				if (nInfo.getNodeName().equals("lastedit_note"))
+					accountInfo.setLastNoteEdit(ToodledoTranslations.translateGMTDate(Long.parseLong(nInfo.getTextContent())));
 				
-				if (nInfo.getNodeName().equals("lastdelete_notebook"))
-					accountInfo.setLastNotebookDelete(ToodledoTranslations.translateGMTDate(Long.parseLong(nInfo.getTextContent())));
+				if (nInfo.getNodeName().equals("lastdelete_note"))
+					accountInfo.setLastNoteDelete(ToodledoTranslations.translateGMTDate(Long.parseLong(nInfo.getTextContent())));
 				
 				if (nInfo.getNodeName().equals("lastedit_task"))
 					accountInfo.setLastTaskEdit(ToodledoTranslations.translateGMTDate(Long.parseLong(nInfo.getTextContent())));

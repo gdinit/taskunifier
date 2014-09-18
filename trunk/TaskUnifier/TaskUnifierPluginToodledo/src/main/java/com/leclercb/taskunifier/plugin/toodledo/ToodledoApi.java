@@ -30,7 +30,7 @@ import java.util.Properties;
  * ToodledoApi.getInstance().setVersion("");
  * ToodledoApi.getInstance().setApiKey("");
  * <p/>
- * http://api.toodledo.com/2/index.php
+ * http://api.toodledo.com/3/index.php
  *
  * @author leclercb
  */
@@ -117,11 +117,6 @@ public final class ToodledoApi extends SynchronizerApi {
     @Override
     public boolean allowCustomTaskStatuses() {
         return false;
-    }
-
-    public void createAccount(String email, String password)
-            throws SynchronizerException {
-        ToodledoStatement.createAccount(email, password);
     }
 
     @Override

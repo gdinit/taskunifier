@@ -34,7 +34,7 @@ final class CallDeleteFolder extends AbstractCallDelete {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/folders/delete.php", params);
+		String content = super.callGet(scheme, "/3/folders/delete.php", params);
 		
 		String id = null;
 		

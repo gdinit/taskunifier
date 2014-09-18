@@ -49,7 +49,7 @@ final class CallGetDeletedNotes extends AbstractCall {
 		String scheme = super.getScheme(accountInfo);
 		String content = super.callGet(
 				scheme,
-				"/2/notebooks/deleted.php",
+				"/3/notes/deleted.php",
 				params);
 		
 		return this.getResponseMessage(content);
@@ -58,18 +58,17 @@ final class CallGetDeletedNotes extends AbstractCall {
 	/**
 	 * Example :
 	 * <deleted num="2">
-	 * <notebook>
+	 * <note>
 	 * <id>12345</id>
 	 * <stamp>2008-02-25 07:46:42</stamp>
-	 * </notebook>
-	 * <notebook>
+	 * </note>
+	 * <note>
 	 * <id>67890</id>
 	 * <stamp>2008-03-12 14:11:12</stamp>
-	 * </notebook>
+	 * </note>
 	 * </deleted>
 	 * 
-	 * @param url
-	 * @param inputStream
+	 * @param content
 	 * @return
 	 * @throws SynchronizerException
 	 */

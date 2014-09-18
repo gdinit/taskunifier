@@ -27,8 +27,8 @@ public final class ToodledoAccountInfo {
 	private Calendar lastContextEdit;
 	private Calendar lastLocationEdit;
 	private Calendar lastGoalEdit;
-	private Calendar lastNotebookEdit;
-	private Calendar lastNotebookDelete;
+	private Calendar lastNoteEdit;
+	private Calendar lastNoteDelete;
 	
 	protected ToodledoAccountInfo() {
 		
@@ -154,20 +154,20 @@ public final class ToodledoAccountInfo {
 		this.lastGoalEdit = lastGoalEdit;
 	}
 	
-	public Calendar getLastNotebookEdit() {
-		return this.lastNotebookEdit;
+	public Calendar getLastNoteEdit() {
+		return this.lastNoteEdit;
 	}
 	
-	protected void setLastNotebookEdit(Calendar lastNotebookEdit) {
-		this.lastNotebookEdit = lastNotebookEdit;
+	protected void setLastNoteEdit(Calendar lastNoteEdit) {
+		this.lastNoteEdit = lastNoteEdit;
 	}
 	
-	public Calendar getLastNotebookDelete() {
-		return this.lastNotebookDelete;
+	public Calendar getLastNoteDelete() {
+		return this.lastNoteDelete;
 	}
 	
-	protected void setLastNotebookDelete(Calendar lastNotebookDelete) {
-		this.lastNotebookDelete = lastNotebookDelete;
+	protected void setLastNoteDelete(Calendar lastNoteDelete) {
+		this.lastNoteDelete = lastNoteDelete;
 	}
 	
 	@Override
@@ -204,10 +204,10 @@ public final class ToodledoAccountInfo {
 		buffer.append("Last Goal Edit: "
 				+ dateFormat.format(this.lastGoalEdit.getTime())
 				+ "\n");
-		buffer.append("Last Notebook Edit: "
-				+ dateFormat.format(this.lastNotebookEdit.getTime()));
-		buffer.append("Last Notebook Delete: "
-				+ dateFormat.format(this.lastNotebookDelete.getTime()));
+		buffer.append("Last Note Edit: "
+				+ dateFormat.format(this.lastNoteEdit.getTime()));
+		buffer.append("Last Note Delete: "
+				+ dateFormat.format(this.lastNoteDelete.getTime()));
 		
 		return buffer.toString();
 	}

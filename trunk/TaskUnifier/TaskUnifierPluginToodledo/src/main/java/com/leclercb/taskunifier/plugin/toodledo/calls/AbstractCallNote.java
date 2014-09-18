@@ -32,17 +32,17 @@ abstract class AbstractCallNote extends AbstractCall {
 	
 	/**
 	 * Example :
-	 * <notebooks num="2" total="2">
-	 * <notebook>
+	 * <notes num="2" total="2">
+	 * <note>
 	 * <id>1234</id>
 	 * <title>My Ideas</title>
 	 * <folder>123</folder>
 	 * <private>0</private>
 	 * <modified>1234567890</modified>
 	 * <added>1234567890</added>
-	 * <text>The text of my notebook</text>
-	 * </notebook>
-	 * <notebook>
+	 * <text>The text of my note</text>
+	 * </note>
+	 * <note>
 	 * <id>1235</id>
 	 * <title>Favorite Movies</title>
 	 * <folder>123</folder>
@@ -50,9 +50,10 @@ abstract class AbstractCallNote extends AbstractCall {
 	 * <modified>1234567890</modified>
 	 * <added>1234567890</added>
 	 * <text>Star Wars</text>
-	 * </notebook>
-	 * </notebooks>
-	 * 
+	 * </note>
+	 * </notes>
+	 *
+     * @param notes
 	 * @param content
 	 * @return
 	 * @throws SynchronizerException
@@ -73,7 +74,7 @@ abstract class AbstractCallNote extends AbstractCall {
 			reader.close();
 			NodeList childNodes = document.getChildNodes();
 			
-			if (!childNodes.item(0).getNodeName().equals("notebooks"))
+			if (!childNodes.item(0).getNodeName().equals("notes"))
 				this.throwResponseError(
 						notes,
 						ToodledoErrorType.NOTE,
@@ -90,7 +91,7 @@ abstract class AbstractCallNote extends AbstractCall {
 			ToodledoNoteList beans = new ToodledoNoteList(total);
 			
 			for (int i = 0; i < nNotes.getLength(); i++) {
-				if (!nNotes.item(i).getNodeName().equals("notebook"))
+				if (!nNotes.item(i).getNodeName().equals("note"))
 					this.throwResponseError(
 							(i < notes.size() ? notes.get(i) : null),
 							ToodledoErrorType.NOTE,

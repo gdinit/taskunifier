@@ -42,7 +42,7 @@ final class CallEditLocation extends AbstractCallLocation {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/locations/edit.php", params);
+		String content = super.callGet(scheme, "/3/locations/edit.php", params);
 		
 		LocationBean[] locations = this.getResponseMessage(
 				location,

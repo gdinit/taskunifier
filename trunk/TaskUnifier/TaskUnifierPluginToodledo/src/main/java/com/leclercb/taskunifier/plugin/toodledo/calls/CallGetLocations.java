@@ -28,7 +28,7 @@ final class CallGetLocations extends AbstractCallLocation {
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);
-		String content = super.callGet(scheme, "/2/locations/get.php", params);
+		String content = super.callGet(scheme, "/3/locations/get.php", params);
 		
 		return this.getResponseMessage(null, accountInfo, content);
 	}
