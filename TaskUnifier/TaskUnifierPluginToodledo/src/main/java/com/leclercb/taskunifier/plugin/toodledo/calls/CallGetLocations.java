@@ -19,12 +19,12 @@ final class CallGetLocations extends AbstractCallLocation {
 	
 	public LocationBean[] getLocations(
 			ToodledoAccountInfo accountInfo,
-			String key) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+			String accessToken) throws SynchronizerException {
+		CheckUtils.isNotNull(accessToken);
 		CheckUtils.isNotNull(accountInfo);
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String scheme = super.getScheme(accountInfo);

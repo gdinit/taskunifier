@@ -27,7 +27,7 @@ final class CallEditTask extends AbstractCallTask {
 
     public void editTask(
             ToodledoAccountInfo accountInfo,
-            String key,
+            String accessToken,
             Task task,
             boolean syncSubTasks,
             boolean syncMeta) throws SynchronizerException {
@@ -35,7 +35,7 @@ final class CallEditTask extends AbstractCallTask {
 
         this.editTasks(
                 accountInfo,
-                key,
+                accessToken,
                 new Task[]{task},
                 syncSubTasks,
                 syncMeta);
@@ -43,7 +43,7 @@ final class CallEditTask extends AbstractCallTask {
 
     public void editTasks(
             ToodledoAccountInfo accountInfo,
-            String key,
+            String accessToken,
             Task[] tasks,
             boolean syncSubTasks,
             boolean syncMeta) throws SynchronizerException {
@@ -52,18 +52,18 @@ final class CallEditTask extends AbstractCallTask {
             List<Task> list = taskList.subList(
                     0,
                     (MAX > taskList.size() ? taskList.size() : MAX));
-            this.editTasksMax(accountInfo, key, list, syncSubTasks, syncMeta);
+            this.editTasksMax(accountInfo, accessToken, list, syncSubTasks, syncMeta);
             list.clear();
         }
     }
 
     private void editTasksMax(
             ToodledoAccountInfo accountInfo,
-            String key,
+            String accessToken,
             List<Task> tasks,
             boolean syncSubTasks,
             boolean syncMeta) throws SynchronizerException {
-        CheckUtils.isNotNull(key);
+        CheckUtils.isNotNull(accessToken);
         CheckUtils.isNotNull(tasks);
 
         for (Task task : tasks)
@@ -252,7 +252,7 @@ final class CallEditTask extends AbstractCallTask {
         }
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("key", key));
+        params.add(new BasicNameValuePair("access_token", accessToken));
         params.add(new BasicNameValuePair("tasks", jsonArray.toString()));
         params.add(new BasicNameValuePair("f", "xml"));
 

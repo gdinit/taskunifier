@@ -23,32 +23,32 @@ final class CallEditNote extends AbstractCallNote {
 	
 	private static final int MAX = 10;
 	
-	public void editNote(ToodledoAccountInfo accountInfo, String key, Note note)
+	public void editNote(ToodledoAccountInfo accountInfo, String accessToken, Note note)
 			throws SynchronizerException {
 		CheckUtils.isNotNull(note);
 		
-		this.editNotes(accountInfo, key, new Note[] { note });
+		this.editNotes(accountInfo, accessToken, new Note[] { note });
 	}
 	
 	public void editNotes(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			Note[] notes) throws SynchronizerException {
 		List<Note> noteList = new ArrayList<Note>(Arrays.asList(notes));
 		while (noteList.size() != 0) {
 			List<Note> list = noteList.subList(
 					0,
 					(MAX > noteList.size() ? noteList.size() : MAX));
-			this.editNotesMax(accountInfo, key, list);
+			this.editNotesMax(accountInfo, accessToken, list);
 			list.clear();
 		}
 	}
 	
 	private void editNotesMax(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			List<Note> notes) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		CheckUtils.isNotNull(notes);
 		
 		for (Note note : notes)
@@ -84,7 +84,7 @@ final class CallEditNote extends AbstractCallNote {
 		}
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair("notes", jsonArray.toString()));
 		params.add(new BasicNameValuePair("f", "xml"));
 		

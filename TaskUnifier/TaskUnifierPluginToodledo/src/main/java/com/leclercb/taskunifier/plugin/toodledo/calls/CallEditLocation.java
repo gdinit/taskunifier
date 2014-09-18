@@ -20,16 +20,16 @@ final class CallEditLocation extends AbstractCallLocation {
 	
 	public void editLocation(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			Location location) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		CheckUtils.isNotNull(location);
 		
 		if (location.getModelReferenceId("toodledo") == null)
 			throw new IllegalArgumentException("You cannot edit a new location");
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair(
 				"id",
 				location.getModelReferenceId("toodledo")));

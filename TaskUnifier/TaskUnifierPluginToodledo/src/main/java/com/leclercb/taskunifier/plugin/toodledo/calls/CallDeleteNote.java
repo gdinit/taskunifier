@@ -33,32 +33,32 @@ final class CallDeleteNote extends AbstractCall {
 	
 	public void deleteNote(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			Note note) throws SynchronizerException {
 		CheckUtils.isNotNull(note);
 		
-		this.deleteNotes(accountInfo, key, new Note[] { note });
+		this.deleteNotes(accountInfo, accessToken, new Note[] { note });
 	}
 	
 	public void deleteNotes(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			Note[] notes) throws SynchronizerException {
 		List<Note> noteList = new ArrayList<Note>(Arrays.asList(notes));
 		while (noteList.size() != 0) {
 			List<Note> list = noteList.subList(
 					0,
 					(MAX > noteList.size() ? noteList.size() : MAX));
-			this.deleteNotesMax(accountInfo, key, list);
+			this.deleteNotesMax(accountInfo, accessToken, list);
 			list.clear();
 		}
 	}
 	
 	private void deleteNotesMax(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			List<Note> notes) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		CheckUtils.isNotNull(notes);
 		
 		List<String> ids = new ArrayList<String>();
@@ -67,7 +67,7 @@ final class CallDeleteNote extends AbstractCall {
 		}
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair("notes", "[\""
 				+ StringUtils.join(ids, "\",\"")
 				+ "\"]"));

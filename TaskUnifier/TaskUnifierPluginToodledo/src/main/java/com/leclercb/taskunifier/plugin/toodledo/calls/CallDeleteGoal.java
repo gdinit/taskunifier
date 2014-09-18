@@ -21,13 +21,13 @@ final class CallDeleteGoal extends AbstractCallDelete {
 	
 	public void deleteGoal(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			Goal goal) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		CheckUtils.isNotNull(goal);
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair(
 				"id",
 				goal.getModelReferenceId("toodledo")));

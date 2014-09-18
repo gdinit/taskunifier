@@ -19,13 +19,13 @@ final class CallAddLocation extends AbstractCallLocation {
 	
 	public String addLocation(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			Location location) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		CheckUtils.isNotNull(location);
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair("name", location.getTitle()));
 		params.add(new BasicNameValuePair(
 				"description",

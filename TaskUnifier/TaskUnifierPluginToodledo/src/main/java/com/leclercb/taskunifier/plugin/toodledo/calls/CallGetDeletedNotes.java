@@ -32,12 +32,12 @@ final class CallGetDeletedNotes extends AbstractCall {
 	
 	public NoteBean[] getDeletedNotes(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			Calendar deletedAfter) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		
 		if (deletedAfter != null)
 			params.add(new BasicNameValuePair(

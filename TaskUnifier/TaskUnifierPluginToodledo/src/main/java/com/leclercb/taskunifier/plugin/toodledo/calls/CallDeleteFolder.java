@@ -21,13 +21,13 @@ final class CallDeleteFolder extends AbstractCallDelete {
 	
 	public void deleteFolder(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			Folder folder) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		CheckUtils.isNotNull(folder);
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair(
 				"id",
 				folder.getModelReferenceId("toodledo")));

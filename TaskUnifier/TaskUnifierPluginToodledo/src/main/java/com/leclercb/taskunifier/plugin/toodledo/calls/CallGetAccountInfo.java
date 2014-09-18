@@ -26,12 +26,12 @@ import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoErrors.ToodledoErr
 
 final class CallGetAccountInfo extends AbstractCall {
 	
-	public ToodledoAccountInfo getAccountInfo(String key)
+	public ToodledoAccountInfo getAccountInfo(String accessToken)
 			throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair("f", "xml"));
 		
 		String content = super.callGet("http", "/3/account/get.php", params);
