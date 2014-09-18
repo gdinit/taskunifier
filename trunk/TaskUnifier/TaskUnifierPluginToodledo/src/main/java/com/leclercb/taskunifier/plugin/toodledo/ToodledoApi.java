@@ -12,7 +12,6 @@ import com.leclercb.taskunifier.api.synchronizer.Connection;
 import com.leclercb.taskunifier.api.synchronizer.SynchronizerApi;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoErrors;
-import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoStatement;
 import com.leclercb.taskunifier.plugin.toodledo.calls.exc.ToodledoSettingsException;
 import org.apache.commons.lang3.SystemUtils;
 
@@ -26,7 +25,7 @@ import java.util.Properties;
  * You have to set the values for the application id,
  * the version and the api key.
  * <p/>
- * ToodledoApi.getInstance().setApplicationId("");
+ * ToodledoApi.getInstance().setClientId("");
  * ToodledoApi.getInstance().setVersion("");
  * ToodledoApi.getInstance().setApiKey("");
  * <p/>
@@ -45,7 +44,7 @@ public final class ToodledoApi extends SynchronizerApi {
         return INSTANCE;
     }
 
-    private String applicationId;
+    private String clientId;
     private int version;
     private String device;
     private int os;
@@ -55,7 +54,7 @@ public final class ToodledoApi extends SynchronizerApi {
     private ToodledoApi() {
         super("TOODLEDO", "Toodledo", "http://www.toodledo.com");
 
-        this.setApplicationId("");
+        this.setClientId("");
         this.setVersion(0);
         this.setDevice(getDeviceFromSystemUtils());
         this.setOS(getOSFromSystemUtils());
@@ -63,13 +62,13 @@ public final class ToodledoApi extends SynchronizerApi {
         this.setApiUrl("api.toodledo.com");
     }
 
-    public String getApplicationId() {
-        return this.applicationId;
+    public String getClientId() {
+        return this.clientId;
     }
 
-    public void setApplicationId(String applicationId) {
-        CheckUtils.isNotNull(applicationId);
-        this.applicationId = applicationId;
+    public void setClientId(String clientId) {
+        CheckUtils.isNotNull(clientId);
+        this.clientId = clientId;
     }
 
     public int getVersion() {

@@ -57,7 +57,7 @@ final class CallToken extends AbstractCall {
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("response_type", "code"));
-        params.add(new BasicNameValuePair("appid", ToodledoApi.getInstance().getApplicationId()));
+        params.add(new BasicNameValuePair("appid", ToodledoApi.getInstance().getClientId()));
         params.add(new BasicNameValuePair("vers", ""
                 + ToodledoApi.getInstance().getVersion()));
         if (ToodledoApi.getInstance().getDevice() != null)
