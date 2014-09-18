@@ -30,7 +30,7 @@ import com.leclercb.taskunifier.plugin.toodledo.calls.exc.ToodledoConnectionExce
 
 public class ToodledoStatement {
 
-    private static CallOAuth callAuthorize = new CallOAuth();
+    private static CallOAuth callOAuth = new CallOAuth();
 	private static CallGetAccountInfo callGetAccountInfo = new CallGetAccountInfo();
 	private static CallGetContexts callGetContexts = new CallGetContexts();
 	private static CallGetFolders callGetFolders = new CallGetFolders();
@@ -62,8 +62,12 @@ public class ToodledoStatement {
 	private static CallDeleteTask callDeleteTask = new CallDeleteTask();
 	
 	public static URI getAuthorizeUrl() throws SynchronizerException {
-		return callAuthorize.getAuthorizeUrl();
+		return callOAuth.getAuthorizeUrl();
 	}
+
+    public static ToodledoToken getToken(String code) throws SynchronizerException {
+        return callOAuth.getAccessToken(code);
+    }
 	
 	private ToodledoConnection connection;
 	

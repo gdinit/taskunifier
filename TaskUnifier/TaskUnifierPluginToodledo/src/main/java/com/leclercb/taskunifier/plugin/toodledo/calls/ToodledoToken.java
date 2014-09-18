@@ -32,7 +32,7 @@
  */
 package com.leclercb.taskunifier.plugin.toodledo.calls;
 
-public final class ToodledoOAuthInfo {
+public final class ToodledoToken {
 
     private String accessToken;
     private int expiresIn;
@@ -40,7 +40,7 @@ public final class ToodledoOAuthInfo {
     private String scope;
     private String refreshToken;
 
-    protected ToodledoOAuthInfo() {
+    protected ToodledoToken() {
 
     }
 
