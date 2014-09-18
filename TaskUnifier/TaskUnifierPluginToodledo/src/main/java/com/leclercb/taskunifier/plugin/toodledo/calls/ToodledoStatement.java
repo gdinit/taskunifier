@@ -30,7 +30,7 @@ import com.leclercb.taskunifier.plugin.toodledo.calls.exc.ToodledoConnectionExce
 
 public class ToodledoStatement {
 
-    private static CallAuthorize callAuthorize = new CallAuthorize();
+    private static CallOAuth callAuthorize = new CallOAuth();
 	private static CallGetAccountInfo callGetAccountInfo = new CallGetAccountInfo();
 	private static CallGetContexts callGetContexts = new CallGetContexts();
 	private static CallGetFolders callGetFolders = new CallGetFolders();

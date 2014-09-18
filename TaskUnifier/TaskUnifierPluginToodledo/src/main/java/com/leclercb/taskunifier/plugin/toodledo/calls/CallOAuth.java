@@ -6,6 +6,9 @@
 package com.leclercb.taskunifier.plugin.toodledo.calls;
 
 import com.leclercb.commons.api.utils.CheckUtils;
+import com.leclercb.taskunifier.api.models.FolderFactory;
+import com.leclercb.taskunifier.api.models.ModelStatus;
+import com.leclercb.taskunifier.api.models.beans.FolderBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerHttpException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerParsingException;
@@ -28,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-final class CallAuthorize extends AbstractCall {
+final class CallOAuth extends AbstractCall {
 
     public URI getAuthorizeUrl() throws SynchronizerException {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -52,14 +55,32 @@ final class CallAuthorize extends AbstractCall {
         }
     }
 
+    public ToodledoOAuthInfo getAccessToken(String code) throws SynchronizerException {
+        CheckUtils.isNotNull(code);
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("grant_type", "authorization_code"));
+        params.add(new BasicNameValuePair("code", code));
+        params.add(new BasicNameValuePair("vers", "" + ToodledoApi.getInstance().getVersion()));
+        if (ToodledoApi.getInstance().getDevice() != null)
+            params.add(new BasicNameValuePair("device", "" + ToodledoApi.getInstance().getDevice()));
+        params.add(new BasicNameValuePair("os", "" + ToodledoApi.getInstance().getOS()));
+        params.add(new BasicNameValuePair("f", "xml"));
+
+        String scheme = super.getScheme();
+        String content = super.callGet(scheme, "/3/account/token.php", params);
+
+        return this.getResponseMessage(content);
+    }
+
     /**
      * Example : <token>td12345678901234</token>
      *
      * @param content
      * @return
-     * @throws SynchronizerException
+     * @throws com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException
      */
-    private String getResponseMessage(String content)
+    private ToodledoOAuthInfo getResponseMessage(String content)
             throws SynchronizerException {
         CheckUtils.isNotNull(content);
 
@@ -74,15 +95,36 @@ final class CallAuthorize extends AbstractCall {
             reader.close();
             NodeList childNodes = document.getChildNodes();
 
-            Node nToken = childNodes.item(0);
-
-            if (!nToken.getNodeName().equals("token"))
+            if (!childNodes.item(0).getNodeName().equals("response"))
                 this.throwResponseError(
-                        ToodledoErrorType.ACCOUNT,
+                        ToodledoErrorType.GENERAL,
                         content,
-                        nToken);
+                        childNodes.item(0));
 
-            return nToken.getTextContent();
+            NodeList nOAuth = childNodes.item(0).getChildNodes();
+
+            ToodledoOAuthInfo oAuthInfo = new ToodledoOAuthInfo();
+
+            for (int i = 0; i < nOAuth.getLength(); i++) {
+                Node nInfo = nOAuth.item(i);
+
+                if (nInfo.getNodeName().equals("access_token"))
+                    oAuthInfo.setRefreshToken(nInfo.getTextContent());
+
+                if (nInfo.getNodeName().equals("expires_in"))
+                    oAuthInfo.setExpiresIn(Integer.parseInt(nInfo.getTextContent()));
+
+                if (nInfo.getNodeName().equals("token_type"))
+                    oAuthInfo.setTokenType(nInfo.getTextContent());
+
+                if (nInfo.getNodeName().equals("scope"))
+                    oAuthInfo.setScope(nInfo.getTextContent());
+
+                if (nInfo.getNodeName().equals("refresh_token"))
+                    oAuthInfo.setRefreshToken(nInfo.getTextContent());
+            }
+
+            return oAuthInfo;
         } catch (SynchronizerException e) {
             throw e;
         } catch (Exception e) {
