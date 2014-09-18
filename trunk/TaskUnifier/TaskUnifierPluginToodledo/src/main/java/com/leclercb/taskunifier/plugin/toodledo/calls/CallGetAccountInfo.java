@@ -101,6 +101,9 @@ final class CallGetAccountInfo extends AbstractCall {
 				
 				if (nInfo.getNodeName().equals("pro"))
 					accountInfo.setProMember(!nInfo.getTextContent().equals("0"));
+
+                if (nInfo.getNodeName().equals("email"))
+                    accountInfo.setEmail(nInfo.getTextContent());
 				
 				if (nInfo.getNodeName().equals("dateformat"))
 					accountInfo.setDateFormat(ToodledoTranslations.translateDateFormat(Integer.parseInt(nInfo.getTextContent())));

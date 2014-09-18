@@ -15,6 +15,7 @@ public final class ToodledoAccountInfo {
 	private String userId;
 	private String alias;
 	private boolean proMember;
+    private String email;
 	private String dateFormat;
 	private int timeZone;
 	private int showTabNums;
@@ -57,6 +58,14 @@ public final class ToodledoAccountInfo {
 	protected void setProMember(boolean proMember) {
 		this.proMember = proMember;
 	}
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    protected void setEmail(String email) {
+        this.email = email;
+    }
 	
 	public String getDateFormat() {
 		return this.dateFormat;
@@ -180,6 +189,7 @@ public final class ToodledoAccountInfo {
 		buffer.append("UserId: " + this.userId + "\n");
 		buffer.append("Alias: " + this.alias + "\n");
 		buffer.append("Pro Member: " + this.proMember + "\n");
+        buffer.append("Email: " + this.email + "\n");
 		buffer.append("Date Format: " + dateFormat + "\n");
 		buffer.append("Time Zone: " + this.timeZone + "\n");
 		buffer.append("Show Tab Numbers: " + this.showTabNums + "\n");

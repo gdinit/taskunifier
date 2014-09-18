@@ -22,69 +22,43 @@ public class ToodledoConnection implements Connection {
 	private ToodledoAccountInfo accountInfo;
 	
 	private boolean connected;
-	
-	private String email;
-	private String password;
-	private String userId;
-	
-	private String token;
-	private Calendar tokenCreationDate;
-	
-	private String key;
-	
-	ToodledoConnection(String email, String password) {
-		CheckUtils.isNotNull(email);
-		CheckUtils.isNotNull(password);
-		
-		this.email = email;
-		this.password = password;
-		this.userId = null;
-		this.token = null;
-		this.tokenCreationDate = null;
-		this.key = null;
-		
-		this.connected = false;
-		
-		this.statement = new ToodledoStatement(this);
-		this.accountInfo = null;
-	}
-	
-	@Override
-	public boolean isConnected() {
-		return this.connected;
-	}
-	
-	public String getEmail() {
-		return this.email;
-	}
-	
-	public String getPassword() {
-		return this.password;
-	}
-	
-	public String getUserId() {
-		return this.userId;
-	}
-	
-	public String getToken() {
-		return this.token;
-	}
-	
-	public Calendar getTokenCreationDate() {
-		return this.tokenCreationDate;
-	}
-	
-	public String getKey() {
-		return this.key;
-	}
-	
-	public ToodledoStatement getStatement() {
-		return this.statement;
-	}
-	
-	public ToodledoAccountInfo getAccountInfo() {
-		return this.accountInfo;
-	}
+
+    private String code;
+
+    private String accessToken;
+    private String refreshToken;
+
+    ToodledoConnection() {
+        this.connected = false;
+
+        this.code = null;
+
+        this.accessToken = null;
+        this.refreshToken = null;
+
+        this.statement = new ToodledoStatement(this);
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public ToodledoStatement getStatement() {
+        return this.statement;
+    }
+
+    public ToodledoAccountInfo getAccountInfo() {
+        return this.accountInfo;
+    }
+
+    @Override
+    public boolean isConnected() {
+        return this.connected;
+    }
 	
 	@Override
 	public void connect() throws SynchronizerException {
