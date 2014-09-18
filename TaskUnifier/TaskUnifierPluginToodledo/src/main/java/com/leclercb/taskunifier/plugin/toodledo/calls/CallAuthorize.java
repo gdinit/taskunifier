@@ -33,7 +33,7 @@ final class CallAuthorize extends AbstractCall {
     public URI getAuthorizeUrl() throws SynchronizerException {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("response_type", "code"));
-        params.add(new BasicNameValuePair("client_id", ToodledoApi.getInstance().getApplicationId()));
+        params.add(new BasicNameValuePair("client_id", ToodledoApi.getInstance().getClientId()));
         params.add(new BasicNameValuePair("state", UUID.randomUUID().toString()));
         params.add(new BasicNameValuePair("scope", "basic tasks notes write"));
 

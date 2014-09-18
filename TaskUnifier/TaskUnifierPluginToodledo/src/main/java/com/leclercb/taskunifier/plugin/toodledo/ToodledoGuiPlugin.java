@@ -27,7 +27,7 @@ public class ToodledoGuiPlugin extends ToodledoPlugin implements SynchronizerGui
 
     public ToodledoGuiPlugin() {
         PluginTranslations.setLocale(PluginApi.getLocale());
-        ToodledoApi.getInstance().setApplicationId("taskunifier");
+        ToodledoApi.getInstance().setClientId("taskunifier3");
         ToodledoApi.getInstance().setVersion(getVersionFromConstants());
 
         try {
