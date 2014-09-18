@@ -28,7 +28,7 @@ final class CallAddTask extends AbstractCallTask {
 
     public List<String> addTask(
             ToodledoAccountInfo accountInfo,
-            String key,
+            String accessToken,
             Task task,
             boolean syncSubTasks,
             boolean syncMeta) throws SynchronizerException {
@@ -36,7 +36,7 @@ final class CallAddTask extends AbstractCallTask {
 
         return this.addTasks(
                 accountInfo,
-                key,
+                accessToken,
                 new Task[]{task},
                 syncSubTasks,
                 syncMeta);
@@ -44,7 +44,7 @@ final class CallAddTask extends AbstractCallTask {
 
     public List<String> addTasks(
             ToodledoAccountInfo accountInfo,
-            String key,
+            String accessToken,
             Task[] tasks,
             boolean syncSubTasks,
             boolean syncMeta) throws SynchronizerException {
@@ -56,7 +56,7 @@ final class CallAddTask extends AbstractCallTask {
                     (MAX > taskList.size() ? taskList.size() : MAX));
             ids.addAll(this.addTasksMax(
                     accountInfo,
-                    key,
+                    accessToken,
                     list,
                     syncSubTasks,
                     syncMeta));
@@ -68,11 +68,11 @@ final class CallAddTask extends AbstractCallTask {
 
     private List<String> addTasksMax(
             ToodledoAccountInfo accountInfo,
-            String key,
+            String accessToken,
             List<Task> tasks,
             boolean syncSubTasks,
             boolean syncMeta) throws SynchronizerException {
-        CheckUtils.isNotNull(key);
+        CheckUtils.isNotNull(accessToken);
         CheckUtils.isNotNull(tasks);
 
         JSONArray jsonArray = new JSONArray();
@@ -253,7 +253,7 @@ final class CallAddTask extends AbstractCallTask {
         }
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("key", key));
+        params.add(new BasicNameValuePair("access_token", accessToken));
         params.add(new BasicNameValuePair("tasks", jsonArray.toString()));
         params.add(new BasicNameValuePair("f", "xml"));
 

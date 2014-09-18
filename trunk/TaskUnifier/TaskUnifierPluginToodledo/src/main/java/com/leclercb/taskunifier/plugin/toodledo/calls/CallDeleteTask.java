@@ -33,32 +33,32 @@ final class CallDeleteTask extends AbstractCall {
 	
 	public void deleteTask(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			Task task) throws SynchronizerException {
 		CheckUtils.isNotNull(task);
 		
-		this.deleteTasks(accountInfo, key, new Task[] { task });
+		this.deleteTasks(accountInfo, accessToken, new Task[] { task });
 	}
 	
 	public void deleteTasks(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			Task[] tasks) throws SynchronizerException {
 		List<Task> taskList = new ArrayList<Task>(Arrays.asList(tasks));
 		while (taskList.size() != 0) {
 			List<Task> list = taskList.subList(
 					0,
 					(MAX > taskList.size() ? taskList.size() : MAX));
-			this.deleteTasksMax(accountInfo, key, list);
+			this.deleteTasksMax(accountInfo, accessToken, list);
 			list.clear();
 		}
 	}
 	
 	private void deleteTasksMax(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			List<Task> tasks) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		CheckUtils.isNotNull(tasks);
 		
 		List<String> ids = new ArrayList<String>();
@@ -67,7 +67,7 @@ final class CallDeleteTask extends AbstractCall {
 		}
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair("tasks", "[\""
 				+ StringUtils.join(ids, "\",\"")
 				+ "\"]"));

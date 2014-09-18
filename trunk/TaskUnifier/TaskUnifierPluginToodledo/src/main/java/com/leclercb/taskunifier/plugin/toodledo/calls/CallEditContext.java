@@ -20,16 +20,16 @@ final class CallEditContext extends AbstractCallContext {
 	
 	public void editContext(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			Context context) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		CheckUtils.isNotNull(context);
 		
 		if (context.getModelReferenceId("toodledo") == null)
 			throw new IllegalArgumentException("You cannot edit a new context");
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair(
 				"id",
 				context.getModelReferenceId("toodledo")));

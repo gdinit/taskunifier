@@ -18,16 +18,16 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 
 final class CallEditGoal extends AbstractCallGoal {
 	
-	public void editGoal(ToodledoAccountInfo accountInfo, String key, Goal goal)
+	public void editGoal(ToodledoAccountInfo accountInfo, String accessToken, Goal goal)
 			throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		CheckUtils.isNotNull(goal);
 		
 		if (goal.getModelReferenceId("toodledo") == null)
 			throw new IllegalArgumentException("You cannot edit a new goal");
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair(
 				"id",
 				goal.getModelReferenceId("toodledo")));

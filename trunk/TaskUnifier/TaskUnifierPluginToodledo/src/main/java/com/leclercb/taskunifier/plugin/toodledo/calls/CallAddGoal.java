@@ -17,13 +17,13 @@ import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 
 final class CallAddGoal extends AbstractCallGoal {
 	
-	public String addGoal(ToodledoAccountInfo accountInfo, String key, Goal goal)
+	public String addGoal(ToodledoAccountInfo accountInfo, String accessToken, Goal goal)
 			throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		CheckUtils.isNotNull(goal);
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair("name", goal.getTitle()));
 		params.add(new BasicNameValuePair(
 				"level",

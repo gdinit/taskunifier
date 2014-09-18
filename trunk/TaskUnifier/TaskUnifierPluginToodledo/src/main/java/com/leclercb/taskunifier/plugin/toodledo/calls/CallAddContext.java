@@ -19,13 +19,13 @@ final class CallAddContext extends AbstractCallContext {
 	
 	public String addContext(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			Context context) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		CheckUtils.isNotNull(context);
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair("name", context.getTitle()));
 		params.add(new BasicNameValuePair("f", "xml"));
 		

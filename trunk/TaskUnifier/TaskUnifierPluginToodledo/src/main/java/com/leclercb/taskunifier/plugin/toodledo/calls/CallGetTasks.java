@@ -26,20 +26,20 @@ final class CallGetTasks extends AbstractCallTask {
 	public TaskBean[] getTasks(
 			ToodledoAccountInfo accountInfo,
 			ToodledoConnection connection,
-			String key) throws SynchronizerException {
+			String accessToken) throws SynchronizerException {
 		int start = 0;
-		ToodledoTaskList list = this.getTasks(accountInfo, key, start, NUM);
+		ToodledoTaskList list = this.getTasks(accountInfo, accessToken, start, NUM);
 		while (list.getTotal() != list.size()) {
 			start = start + NUM;
 			
 			try {
-				list.addAll(this.getTasks(accountInfo, key, start, NUM));
+				list.addAll(this.getTasks(accountInfo, accessToken, start, NUM));
 			} catch (SynchronizerConnectionException e) {
 				connection.disconnect();
 				connection.connect();
-				key = connection.getKey();
+				accessToken = connection.getAccessToken();
 				
-				list.addAll(this.getTasks(accountInfo, key, start, NUM));
+				list.addAll(this.getTasks(accountInfo, accessToken, start, NUM));
 			}
 		}
 		
@@ -48,13 +48,13 @@ final class CallGetTasks extends AbstractCallTask {
 	
 	private ToodledoTaskList getTasks(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			int start,
 			int num) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair("start", start + ""));
 		params.add(new BasicNameValuePair("num", num + ""));
 		params.add(new BasicNameValuePair("fields", FIELDS));
@@ -69,11 +69,11 @@ final class CallGetTasks extends AbstractCallTask {
 	public TaskBean[] getTasksNotCompleted(
 			ToodledoAccountInfo accountInfo,
 			ToodledoConnection connection,
-			String key) throws SynchronizerException {
+			String accessToken) throws SynchronizerException {
 		int start = 0;
 		ToodledoTaskList list = this.getTasksNotCompleted(
 				accountInfo,
-				key,
+				accessToken,
 				start,
 				NUM);
 		while (list.getTotal() != list.size()) {
@@ -82,17 +82,17 @@ final class CallGetTasks extends AbstractCallTask {
 			try {
 				list.addAll(this.getTasksNotCompleted(
 						accountInfo,
-						key,
+						accessToken,
 						start,
 						NUM));
 			} catch (SynchronizerConnectionException e) {
 				connection.disconnect();
 				connection.connect();
-				key = connection.getKey();
+				accessToken = connection.getAccessToken();
 				
 				list.addAll(this.getTasksNotCompleted(
 						accountInfo,
-						key,
+						accessToken,
 						start,
 						NUM));
 			}
@@ -103,13 +103,13 @@ final class CallGetTasks extends AbstractCallTask {
 	
 	private ToodledoTaskList getTasksNotCompleted(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			int start,
 			int num) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair("start", start + ""));
 		params.add(new BasicNameValuePair("num", num + ""));
 		params.add(new BasicNameValuePair("comp", "0"));
@@ -125,12 +125,12 @@ final class CallGetTasks extends AbstractCallTask {
 	public TaskBean[] getTasksModifiedAfter(
 			ToodledoAccountInfo accountInfo,
 			ToodledoConnection connection,
-			String key,
+			String accessToken,
 			Calendar modifiedAfter) throws SynchronizerException {
 		int start = 0;
 		ToodledoTaskList list = this.getTasksModifiedAfter(
 				accountInfo,
-				key,
+				accessToken,
 				modifiedAfter,
 				start,
 				NUM);
@@ -140,18 +140,18 @@ final class CallGetTasks extends AbstractCallTask {
 			try {
 				list.addAll(this.getTasksModifiedAfter(
 						accountInfo,
-						key,
+						accessToken,
 						modifiedAfter,
 						start,
 						NUM));
 			} catch (SynchronizerConnectionException e) {
 				connection.disconnect();
 				connection.connect();
-				key = connection.getKey();
+				accessToken = connection.getAccessToken();
 				
 				list.addAll(this.getTasksModifiedAfter(
 						accountInfo,
-						key,
+						accessToken,
 						modifiedAfter,
 						start,
 						NUM));
@@ -163,14 +163,14 @@ final class CallGetTasks extends AbstractCallTask {
 	
 	private ToodledoTaskList getTasksModifiedAfter(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			Calendar modifiedAfter,
 			int start,
 			int num) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair("start", start + ""));
 		params.add(new BasicNameValuePair("num", num + ""));
 		params.add(new BasicNameValuePair("fields", FIELDS));

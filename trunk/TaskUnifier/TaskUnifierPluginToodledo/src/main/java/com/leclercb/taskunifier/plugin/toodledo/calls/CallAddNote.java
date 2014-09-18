@@ -26,16 +26,16 @@ final class CallAddNote extends AbstractCallNote {
 	
 	public List<String> addNote(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			Note note) throws SynchronizerException {
 		CheckUtils.isNotNull(note);
 		
-		return this.addNotes(accountInfo, key, new Note[] { note });
+		return this.addNotes(accountInfo, accessToken, new Note[] { note });
 	}
 	
 	public List<String> addNotes(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			Note[] notes) throws SynchronizerException {
 		List<String> ids = new ArrayList<String>();
 		List<Note> noteList = new ArrayList<Note>(Arrays.asList(notes));
@@ -43,7 +43,7 @@ final class CallAddNote extends AbstractCallNote {
 			List<Note> list = noteList.subList(
 					0,
 					(MAX > noteList.size() ? noteList.size() : MAX));
-			ids.addAll(this.addNotesMax(accountInfo, key, list));
+			ids.addAll(this.addNotesMax(accountInfo, accessToken, list));
 			list.clear();
 		}
 		
@@ -52,9 +52,9 @@ final class CallAddNote extends AbstractCallNote {
 	
 	private List<String> addNotesMax(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			List<Note> notes) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		CheckUtils.isNotNull(notes);
 		
 		JSONArray jsonArray = new JSONArray();
@@ -85,7 +85,7 @@ final class CallAddNote extends AbstractCallNote {
 		}
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair("notes", jsonArray.toString()));
 		params.add(new BasicNameValuePair("f", "xml"));
 		

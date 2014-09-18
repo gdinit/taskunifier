@@ -30,7 +30,7 @@ import java.util.UUID;
 
 final class CallOAuth extends AbstractCall {
 
-    public URI getAuthorizeUrl() throws SynchronizerException {
+    public String getAuthorizeUrl() throws SynchronizerException {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("response_type", "code"));
         params.add(new BasicNameValuePair("client_id", ToodledoApi.getInstance().getClientId()));
@@ -46,18 +46,36 @@ final class CallOAuth extends AbstractCall {
                     -1,
                     "/3/account/authorize.php",
                     URLEncodedUtils.format(params, "UTF-8"),
-                    null);
+                    null).toString();
         } catch (Exception e) {
             throw new SynchronizerHttpException(false, 0, e.getMessage(), e);
         }
     }
 
-    public ToodledoToken getAccessToken(String code) throws SynchronizerException {
+    public ToodledoToken getToken(String code) throws SynchronizerException {
         CheckUtils.isNotNull(code);
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("grant_type", "authorization_code"));
         params.add(new BasicNameValuePair("code", code));
+        params.add(new BasicNameValuePair("vers", "" + ToodledoApi.getInstance().getVersion()));
+        if (ToodledoApi.getInstance().getDevice() != null)
+            params.add(new BasicNameValuePair("device", "" + ToodledoApi.getInstance().getDevice()));
+        params.add(new BasicNameValuePair("os", "" + ToodledoApi.getInstance().getOS()));
+        params.add(new BasicNameValuePair("f", "xml"));
+
+        String scheme = super.getScheme();
+        String content = super.callGet(scheme, "/3/account/token.php", params);
+
+        return this.getResponseMessage(content);
+    }
+
+    public ToodledoToken refreshToken(String refreshToken) throws SynchronizerException {
+        CheckUtils.isNotNull(refreshToken);
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("grant_type", "refresh_token"));
+        params.add(new BasicNameValuePair("refresh_token", refreshToken));
         params.add(new BasicNameValuePair("vers", "" + ToodledoApi.getInstance().getVersion()));
         if (ToodledoApi.getInstance().getDevice() != null)
             params.add(new BasicNameValuePair("device", "" + ToodledoApi.getInstance().getDevice()));

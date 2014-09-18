@@ -24,32 +24,32 @@ final class CallEditTaskParent extends AbstractCallTask {
 
     public void editTaskParent(
             ToodledoAccountInfo accountInfo,
-            String key,
+            String accessToken,
             Task task) throws SynchronizerException {
         CheckUtils.isNotNull(task);
 
-        this.editTasksParent(accountInfo, key, new Task[]{task});
+        this.editTasksParent(accountInfo, accessToken, new Task[]{task});
     }
 
     public void editTasksParent(
             ToodledoAccountInfo accountInfo,
-            String key,
+            String accessToken,
             Task[] tasks) throws SynchronizerException {
         List<Task> taskList = new ArrayList<Task>(Arrays.asList(tasks));
         while (taskList.size() != 0) {
             List<Task> list = taskList.subList(
                     0,
                     (MAX > taskList.size() ? taskList.size() : MAX));
-            this.editTasksParentMax(accountInfo, key, list);
+            this.editTasksParentMax(accountInfo, accessToken, list);
             list.clear();
         }
     }
 
     private void editTasksParentMax(
             ToodledoAccountInfo accountInfo,
-            String key,
+            String accessToken,
             List<Task> tasks) throws SynchronizerException {
-        CheckUtils.isNotNull(key);
+        CheckUtils.isNotNull(accessToken);
         CheckUtils.isNotNull(tasks);
 
         for (Task task : tasks)
@@ -87,7 +87,7 @@ final class CallEditTaskParent extends AbstractCallTask {
         }
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("key", key));
+        params.add(new BasicNameValuePair("access_token", accessToken));
         params.add(new BasicNameValuePair("tasks", jsonArray.toString()));
         params.add(new BasicNameValuePair("f", "xml"));
 

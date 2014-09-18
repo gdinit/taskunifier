@@ -20,16 +20,16 @@ final class CallEditFolder extends AbstractCallFolder {
 	
 	public void editFolder(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			Folder folder) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		CheckUtils.isNotNull(folder);
 		
 		if (folder.getModelReferenceId("toodledo") == null)
 			throw new IllegalArgumentException("You cannot edit a new folder");
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair(
 				"id",
 				folder.getModelReferenceId("toodledo")));

@@ -25,20 +25,20 @@ final class CallGetNotes extends AbstractCallNote {
 	public NoteBean[] getNotes(
 			ToodledoAccountInfo accountInfo,
 			ToodledoConnection connection,
-			String key) throws SynchronizerException {
+			String accessToken) throws SynchronizerException {
 		int start = 0;
-		ToodledoNoteList list = this.getNotes(accountInfo, key, start, NUM);
+		ToodledoNoteList list = this.getNotes(accountInfo, accessToken, start, NUM);
 		while (list.getTotal() != list.size()) {
 			start = start + NUM;
 			
 			try {
-				list.addAll(this.getNotes(accountInfo, key, start, NUM));
+				list.addAll(this.getNotes(accountInfo, accessToken, start, NUM));
 			} catch (SynchronizerConnectionException e) {
 				connection.disconnect();
 				connection.connect();
-				key = connection.getKey();
+				accessToken = connection.getAccessToken();
 				
-				list.addAll(this.getNotes(accountInfo, key, start, NUM));
+				list.addAll(this.getNotes(accountInfo, accessToken, start, NUM));
 			}
 		}
 		
@@ -47,13 +47,13 @@ final class CallGetNotes extends AbstractCallNote {
 	
 	private ToodledoNoteList getNotes(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			int start,
 			int num) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair("start", start + ""));
 		params.add(new BasicNameValuePair("num", num + ""));
 		params.add(new BasicNameValuePair("f", "xml"));
@@ -67,12 +67,12 @@ final class CallGetNotes extends AbstractCallNote {
 	public NoteBean[] getNotesModifiedAfter(
 			ToodledoAccountInfo accountInfo,
 			ToodledoConnection connection,
-			String key,
+			String accessToken,
 			Calendar modifiedAfter) throws SynchronizerException {
 		int start = 0;
 		ToodledoNoteList list = this.getNotesModifiedAfter(
 				accountInfo,
-				key,
+				accessToken,
 				modifiedAfter,
 				start,
 				NUM);
@@ -82,18 +82,18 @@ final class CallGetNotes extends AbstractCallNote {
 			try {
 				list.addAll(this.getNotesModifiedAfter(
 						accountInfo,
-						key,
+						accessToken,
 						modifiedAfter,
 						start,
 						NUM));
 			} catch (SynchronizerConnectionException e) {
 				connection.disconnect();
 				connection.connect();
-				key = connection.getKey();
+				accessToken = connection.getAccessToken();
 				
 				list.addAll(this.getNotesModifiedAfter(
 						accountInfo,
-						key,
+						accessToken,
 						modifiedAfter,
 						start,
 						NUM));
@@ -105,14 +105,14 @@ final class CallGetNotes extends AbstractCallNote {
 	
 	private ToodledoNoteList getNotesModifiedAfter(
 			ToodledoAccountInfo accountInfo,
-			String key,
+			String accessToken,
 			Calendar modifiedAfter,
 			int start,
 			int num) throws SynchronizerException {
-		CheckUtils.isNotNull(key);
+		CheckUtils.isNotNull(accessToken);
 		
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("key", key));
+		params.add(new BasicNameValuePair("access_token", accessToken));
 		params.add(new BasicNameValuePair("start", start + ""));
 		params.add(new BasicNameValuePair("num", num + ""));
 		
