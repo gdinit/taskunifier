@@ -6,9 +6,6 @@
 package com.leclercb.taskunifier.plugin.toodledo.calls;
 
 import com.leclercb.commons.api.utils.CheckUtils;
-import com.leclercb.taskunifier.api.models.FolderFactory;
-import com.leclercb.taskunifier.api.models.ModelStatus;
-import com.leclercb.taskunifier.api.models.beans.FolderBean;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerHttpException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerParsingException;
@@ -55,7 +52,7 @@ final class CallOAuth extends AbstractCall {
         }
     }
 
-    public ToodledoOAuthInfo getAccessToken(String code) throws SynchronizerException {
+    public ToodledoToken getAccessToken(String code) throws SynchronizerException {
         CheckUtils.isNotNull(code);
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -80,7 +77,7 @@ final class CallOAuth extends AbstractCall {
      * @return
      * @throws com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException
      */
-    private ToodledoOAuthInfo getResponseMessage(String content)
+    private ToodledoToken getResponseMessage(String content)
             throws SynchronizerException {
         CheckUtils.isNotNull(content);
 
@@ -101,30 +98,30 @@ final class CallOAuth extends AbstractCall {
                         content,
                         childNodes.item(0));
 
-            NodeList nOAuth = childNodes.item(0).getChildNodes();
+            NodeList nResponse = childNodes.item(0).getChildNodes();
 
-            ToodledoOAuthInfo oAuthInfo = new ToodledoOAuthInfo();
+            ToodledoToken token = new ToodledoToken();
 
-            for (int i = 0; i < nOAuth.getLength(); i++) {
-                Node nInfo = nOAuth.item(i);
+            for (int i = 0; i < nResponse.getLength(); i++) {
+                Node nInfo = nResponse.item(i);
 
                 if (nInfo.getNodeName().equals("access_token"))
-                    oAuthInfo.setRefreshToken(nInfo.getTextContent());
+                    token.setRefreshToken(nInfo.getTextContent());
 
                 if (nInfo.getNodeName().equals("expires_in"))
-                    oAuthInfo.setExpiresIn(Integer.parseInt(nInfo.getTextContent()));
+                    token.setExpiresIn(Integer.parseInt(nInfo.getTextContent()));
 
                 if (nInfo.getNodeName().equals("token_type"))
-                    oAuthInfo.setTokenType(nInfo.getTextContent());
+                    token.setTokenType(nInfo.getTextContent());
 
                 if (nInfo.getNodeName().equals("scope"))
-                    oAuthInfo.setScope(nInfo.getTextContent());
+                    token.setScope(nInfo.getTextContent());
 
                 if (nInfo.getNodeName().equals("refresh_token"))
-                    oAuthInfo.setRefreshToken(nInfo.getTextContent());
+                    token.setRefreshToken(nInfo.getTextContent());
             }
 
-            return oAuthInfo;
+            return token;
         } catch (SynchronizerException e) {
             throw e;
         } catch (Exception e) {
