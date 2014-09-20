@@ -139,9 +139,7 @@ public final class ToodledoApi extends SynchronizerApi {
                     null,
                     ToodledoErrors.ERROR_ACCOUNT_11);
 
-        return new ToodledoConnection(
-                p.getStringProperty("toodledo.email"),
-                p.getStringProperty("toodledo.password"));
+        return new ToodledoConnection();
     }
 
     @Override
@@ -162,9 +160,8 @@ public final class ToodledoApi extends SynchronizerApi {
         CheckUtils.isNotNull(properties);
         PropertyMap p = new PropertyMap(properties);
 
-        p.setStringProperty("toodledo.connection.userid", null);
-        p.setStringProperty("toodledo.connection.token", null);
-        p.setCalendarProperty("toodledo.connection.token_creation_date", null);
+        p.setStringProperty("plugin.toodledo.access_token", null);
+        p.setStringProperty("plugin.toodledo.refresh_token", null);
     }
 
     @Override
