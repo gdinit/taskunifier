@@ -10,6 +10,7 @@ import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.taskunifier.api.synchronizer.Connection;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerConnectionException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
+import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerHttpException;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerSettingsException;
 import com.leclercb.taskunifier.gui.plugins.PluginApi;
 import com.leclercb.taskunifier.gui.utils.DesktopUtils;
@@ -117,12 +118,22 @@ public class ToodledoConnection implements Connection {
                 try {
                     this.accountInfo = this.statement.getAccountInfo();
                 } catch (ToodledoConnectionException e) {
-                    token = ToodledoStatement.refreshToken(this.refreshToken);
+                    try {
+                        token = ToodledoStatement.refreshToken(this.refreshToken);
 
-                    this.accessToken = token.getAccessToken();
-                    this.refreshToken = token.getRefreshToken();
+                        this.accessToken = token.getAccessToken();
+                        this.refreshToken = token.getRefreshToken();
 
-                    this.accountInfo = this.statement.getAccountInfo();
+                        this.accountInfo = this.statement.getAccountInfo();
+                    } catch (SynchronizerHttpException e2) {
+                        if (e2.getCode() == 401) {
+                            this.accessToken = null;
+                            this.refreshToken = null;
+
+                            this.connect();
+                            return;
+                        }
+                    }
                 }
             }
 
