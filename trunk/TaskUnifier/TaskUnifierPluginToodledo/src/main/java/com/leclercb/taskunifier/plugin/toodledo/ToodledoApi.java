@@ -126,19 +126,6 @@ public final class ToodledoApi extends SynchronizerApi {
     @Override
     public ToodledoConnection getConnection(Properties properties)
             throws SynchronizerException {
-        CheckUtils.isNotNull(properties);
-        PropertyMap p = new PropertyMap(properties);
-
-        if (p.getStringProperty("toodledo.email") == null)
-            throw new ToodledoSettingsException(
-                    null,
-                    ToodledoErrors.ERROR_ACCOUNT_10);
-
-        if (p.getStringProperty("toodledo.password") == null)
-            throw new ToodledoSettingsException(
-                    null,
-                    ToodledoErrors.ERROR_ACCOUNT_11);
-
         return new ToodledoConnection();
     }
 
