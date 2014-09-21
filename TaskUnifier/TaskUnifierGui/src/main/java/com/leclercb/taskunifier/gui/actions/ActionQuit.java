@@ -32,13 +32,6 @@
  */
 package com.leclercb.taskunifier.gui.actions;
 
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-
-import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
-
 import com.leclercb.taskunifier.gui.actions.publish.ActionPublish;
 import com.leclercb.taskunifier.gui.actions.synchronize.ActionSynchronize;
 import com.leclercb.taskunifier.gui.actions.synchronize.ActionSynchronizeAndPublish;
@@ -49,88 +42,95 @@ import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
 public class ActionQuit extends AbstractViewAction {
-	
-	public ActionQuit(int width, int height) {
-		super(
-				Translations.getString("action.quit"),
-				ImageUtils.getResourceImage("exit.png", width, height));
-		
-		this.putValue(SHORT_DESCRIPTION, Translations.getString("action.quit"));
-		
-		this.putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(
-				KeyEvent.VK_Q,
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		ActionQuit.quit();
-	}
-	
-	public static boolean quit() {
-		return quit(false);
-	}
-	
-	public static boolean quit(boolean force) {
-		if (Main.isQuitting())
-			return true;
 
-        if (!force && Main.getUserSettings().getBooleanProperty("window.confirm_close")) {
-            String[] options = new String[] {
-                    Translations.getString("general.yes"),
-                    Translations.getString("general.no") };
+    public ActionQuit(int width, int height) {
+        super(
+                Translations.getString("action.quit"),
+                ImageUtils.getResourceImage("exit.png", width, height));
 
-            int result = JOptionPane.showOptionDialog(
-                    FrameUtils.getCurrentWindow(),
-                    Translations.getString("action.quit.confirm_close"),
-                    Translations.getString("general.question"),
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    options,
-                    options[0]);
+        this.putValue(SHORT_DESCRIPTION, Translations.getString("action.quit"));
 
-            if (result ==  JOptionPane.NO_OPTION)
-                return false;
+        this.putValue(ACCELERATOR_KEY, KeyStroke.getKeyStroke(
+                KeyEvent.VK_Q,
+                Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        ActionQuit.quit();
+    }
+
+    public static boolean quit() {
+        return quit(false);
+    }
+
+    public static boolean quit(boolean force) {
+        if (Main.isQuitting())
+            return true;
+
+        if (!force) {
+            if (Main.getSettings().getBooleanProperty("window.confirm_close")) {
+                String[] options = new String[]{
+                        Translations.getString("general.yes"),
+                        Translations.getString("general.no")};
+
+                int result = JOptionPane.showOptionDialog(
+                        FrameUtils.getCurrentWindow(),
+                        Translations.getString("action.quit.confirm_close"),
+                        Translations.getString("general.question"),
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]);
+
+                if (result != JOptionPane.YES_OPTION)
+                    return false;
+            }
         }
-		
-		if (!force) {
-			boolean syncExit = Main.getUserSettings().getBooleanProperty(
-					"synchronizer.sync_exit");
-			boolean publishExit = Main.getUserSettings().getBooleanProperty(
-					"synchronizer.publish_exit");
-			
-			if (syncExit && publishExit)
-				ActionSynchronizeAndPublish.synchronizeAndPublish(false);
-			else if (syncExit)
-				ActionSynchronize.synchronize(false);
-			else if (publishExit)
-				ActionPublish.publish(false);
-		}
-		
-		if (Synchronizing.getInstance().isSynchronizing()) {
-			if (!force)
-				Synchronizing.getInstance().showSynchronizingMessage();
-			
-			return false;
-		}
-		
-		ViewUtils.commitAll();
-		
-		Main.quit();
-		
-		return true;
-	}
-	
-	public static boolean quitAndApply() {
-		JOptionPane.showMessageDialog(
-				FrameUtils.getCurrentWindow(),
-				Translations.getString("general.quit_apply_changes"),
-				Translations.getString("general.information"),
-				JOptionPane.INFORMATION_MESSAGE);
-		
-		return quit(false);
-	}
-	
+
+        if (!force) {
+            boolean syncExit = Main.getUserSettings().getBooleanProperty(
+                    "synchronizer.sync_exit");
+            boolean publishExit = Main.getUserSettings().getBooleanProperty(
+                    "synchronizer.publish_exit");
+
+            if (syncExit && publishExit)
+                ActionSynchronizeAndPublish.synchronizeAndPublish(false);
+            else if (syncExit)
+                ActionSynchronize.synchronize(false);
+            else if (publishExit)
+                ActionPublish.publish(false);
+        }
+
+        if (Synchronizing.getInstance().isSynchronizing()) {
+            if (!force)
+                Synchronizing.getInstance().showSynchronizingMessage();
+
+            return false;
+        }
+
+        ViewUtils.commitAll();
+
+        Main.quit();
+
+        return true;
+    }
+
+    public static boolean quitAndApply() {
+        JOptionPane.showMessageDialog(
+                FrameUtils.getCurrentWindow(),
+                Translations.getString("general.quit_apply_changes"),
+                Translations.getString("general.information"),
+                JOptionPane.INFORMATION_MESSAGE);
+
+        return quit(false);
+    }
+
 }
