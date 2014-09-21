@@ -111,11 +111,20 @@ abstract class AbstractCall {
 			throw new SynchronizerHttpException(false, 0, e.getMessage(), e);
 		}
 	}
+
+    protected String callPost(
+            String scheme,
+            String path,
+            List<NameValuePair> parameters) throws SynchronizerException {
+        return this.callPost(scheme, path, parameters, null, null);
+    }
 	
 	protected String callPost(
 			String scheme,
 			String path,
-			List<NameValuePair> parameters) throws SynchronizerException {
+			List<NameValuePair> parameters,
+            String basicAuthUsername,
+            String basicAuthPassword) throws SynchronizerException {
 		try {
 			URI uri = URIUtils.createURI(
 					scheme,
@@ -131,7 +140,9 @@ abstract class AbstractCall {
 					ToodledoApi.getInstance().getProxyHost(),
 					ToodledoApi.getInstance().getProxyPort(),
 					ToodledoApi.getInstance().getProxyUsername(),
-					ToodledoApi.getInstance().getProxyPassword());
+					ToodledoApi.getInstance().getProxyPassword(),
+                    basicAuthUsername,
+                    basicAuthPassword);
 			
 			StringBuffer logMessage = new StringBuffer();
 			

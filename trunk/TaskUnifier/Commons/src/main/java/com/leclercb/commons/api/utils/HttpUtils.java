@@ -32,6 +32,7 @@
  */
 package com.leclercb.commons.api.utils;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
@@ -52,11 +53,11 @@ public final class HttpUtils {
 
     public static HttpResponse getHttpGetResponse(
             URI uri,
-            final String host,
-            final int port,
-            final String username,
-            final String password) throws Exception {
-        return getHttpResponse("GET", uri, null, null, host, port, username, password);
+            final String proxyHost,
+            final int proxyPort,
+            final String proxyUsername,
+            final String proxyPassword) throws Exception {
+        return getHttpResponse("GET", uri, null, null, proxyHost, proxyPort, proxyUsername, proxyPassword, null, null);
     }
 
     public static HttpResponse getHttpPostResponse(
@@ -68,19 +69,33 @@ public final class HttpUtils {
     public static HttpResponse getHttpPostResponse(
             URI uri,
             List<NameValuePair> parameters,
-            final String host,
-            final int port,
-            final String username,
-            final String password) throws Exception {
+            final String proxyHost,
+            final int proxyPort,
+            final String proxyUsername,
+            final String proxyPassword) throws Exception {
+        return getHttpPostResponse(uri, parameters, proxyHost, proxyPort, proxyUsername, proxyPassword, null, null);
+    }
+
+    public static HttpResponse getHttpPostResponse(
+            URI uri,
+            List<NameValuePair> parameters,
+            final String proxyHost,
+            final int proxyPort,
+            final String proxyUsername,
+            final String proxyPassword,
+            final String basicAuthUsername,
+            final String basicAuthPassword) throws Exception {
         return getHttpResponse(
                 "POST",
                 uri,
                 URLEncodedUtils.format(parameters, "UTF-8"),
                 null,
-                host,
-                port,
-                username,
-                password);
+                proxyHost,
+                proxyPort,
+                proxyUsername,
+                proxyPassword,
+                basicAuthUsername,
+                basicAuthPassword);
     }
 
     public static HttpResponse getHttpResponse(
@@ -88,32 +103,40 @@ public final class HttpUtils {
             URI uri,
             String body,
             String contentType,
-            final String host,
-            final int port,
-            final String username,
-            final String password) throws Exception {
+            final String proxyHost,
+            final int proxyPort,
+            final String proxyUsername,
+            final String proxyPassword,
+            final String basicAuthUsername,
+            final String basicAuthPassword) throws Exception {
         HttpURLConnection connection = null;
 
-        if (host == null || host.length() == 0) {
+        if (proxyHost == null || proxyHost.length() == 0) {
             connection = (HttpURLConnection) uri.toURL().openConnection();
         } else {
-            if (username != null && username.length() != 0 && password != null) {
+            if (proxyUsername != null && proxyUsername.length() != 0 && proxyPassword != null) {
                 Authenticator.setDefault(new Authenticator() {
 
                     @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(
-                                username,
-                                password.toCharArray());
+                                proxyUsername,
+                                proxyPassword.toCharArray());
                     }
 
                 });
             }
 
             Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(
-                    host,
-                    port));
+                    proxyHost,
+                    proxyPort));
             connection = (HttpURLConnection) uri.toURL().openConnection(proxy);
+        }
+
+        if (basicAuthUsername != null && basicAuthUsername.length() != 0) {
+            String authString = basicAuthUsername + ":" + basicAuthPassword;
+            byte[] authEncBytes = Base64.encodeBase64(authString.getBytes());
+            connection.setRequestProperty("Authorization", "Basic " + new String(authEncBytes));
         }
 
         connection.setRequestMethod(requestMethod);

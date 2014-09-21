@@ -37,11 +37,9 @@ final class CallOAuth extends AbstractCall {
         params.add(new BasicNameValuePair("state", UUID.randomUUID().toString()));
         params.add(new BasicNameValuePair("scope", "basic tasks notes write"));
 
-        String scheme = super.getScheme();
-
         try {
             return URIUtils.createURI(
-                    scheme,
+                    "https",
                     ToodledoApi.getInstance().getApiUrl(),
                     -1,
                     "/3/account/authorize.php",
@@ -64,8 +62,7 @@ final class CallOAuth extends AbstractCall {
         params.add(new BasicNameValuePair("os", "" + ToodledoApi.getInstance().getOS()));
         params.add(new BasicNameValuePair("f", "xml"));
 
-        String scheme = super.getScheme();
-        String content = super.callGet(scheme, "/3/account/token.php", params);
+        String content = super.callPost("https", "/3/account/token.php", params);
 
         return this.getResponseMessage(content);
     }
@@ -82,8 +79,12 @@ final class CallOAuth extends AbstractCall {
         params.add(new BasicNameValuePair("os", "" + ToodledoApi.getInstance().getOS()));
         params.add(new BasicNameValuePair("f", "xml"));
 
-        String scheme = super.getScheme();
-        String content = super.callGet(scheme, "/3/account/token.php", params);
+        String content = super.callPost(
+                "https",
+                "/3/account/token.php",
+                params,
+                ToodledoApi.getInstance().getClientId(),
+                ToodledoApi.getInstance().getApiKey());
 
         return this.getResponseMessage(content);
     }
