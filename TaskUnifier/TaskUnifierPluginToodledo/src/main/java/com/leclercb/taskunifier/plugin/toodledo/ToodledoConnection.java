@@ -70,7 +70,7 @@ public class ToodledoConnection implements Connection {
     @Override
     public void connect() throws SynchronizerException {
         String settingsEmail = PluginApi.getUserSettings().getStringProperty(
-                "plugin.toodledo.email");
+                "toodledo.email");
 
         if (settingsEmail == null || settingsEmail.length() == 0) {
             throw new SynchronizerSettingsException(
@@ -179,17 +179,17 @@ public class ToodledoConnection implements Connection {
     public void loadParameters(Properties properties) {
         PropertyMap p = new PropertyMap(properties);
 
-        this.accessToken = p.getStringProperty("plugin.toodledo.access_token");
-        this.refreshToken = p.getStringProperty("plugin.toodledo.refresh_token");
+        this.accessToken = p.getStringProperty("toodledo.connection.access_token");
+        this.refreshToken = p.getStringProperty("toodledo.connection.refresh_token");
     }
 
     @Override
     public void saveParameters(Properties properties) {
         PropertyMap p = new PropertyMap(properties);
 
-        p.setStringProperty("plugin.toodledo.access_token", this.accessToken);
+        p.setStringProperty("toodledo.connection.access_token", this.accessToken);
         p.setStringProperty(
-                "plugin.toodledo.refresh_token",
+                "toodledo.connection.refresh_token",
                 this.refreshToken);
     }
 
