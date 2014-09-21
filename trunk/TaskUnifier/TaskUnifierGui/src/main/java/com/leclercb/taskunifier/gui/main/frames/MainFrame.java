@@ -152,7 +152,7 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 			
 			@Override
 			public void windowClosing(WindowEvent event) {
-				FrameUtils.deleteFrameView(MainFrame.this);
+				FrameUtils.deleteFrameView(MainFrame.this, true);
 			}
 			
 			@Override
@@ -234,7 +234,7 @@ public class MainFrame extends JXFrame implements FrameView, SavePropertiesListe
 					MainFrame.this.mainTabbedPane.removeTabAt(index);
 					
 					if (MainFrame.this.mainTabbedPane.getTabCount() == 0) {
-						FrameUtils.deleteFrameView(MainFrame.this);
+						FrameUtils.deleteFrameView(MainFrame.this, false);
 					}
 				}
 			}

@@ -75,27 +75,6 @@ public class ActionQuit extends AbstractViewAction {
             return true;
 
         if (!force) {
-            if (Main.getSettings().getBooleanProperty("window.confirm_close")) {
-                String[] options = new String[]{
-                        Translations.getString("general.yes"),
-                        Translations.getString("general.no")};
-
-                int result = JOptionPane.showOptionDialog(
-                        FrameUtils.getCurrentWindow(),
-                        Translations.getString("action.quit.confirm_close"),
-                        Translations.getString("general.question"),
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        options,
-                        options[0]);
-
-                if (result != JOptionPane.YES_OPTION)
-                    return false;
-            }
-        }
-
-        if (!force) {
             boolean syncExit = Main.getUserSettings().getBooleanProperty(
                     "synchronizer.sync_exit");
             boolean publishExit = Main.getUserSettings().getBooleanProperty(
@@ -131,6 +110,29 @@ public class ActionQuit extends AbstractViewAction {
                 JOptionPane.INFORMATION_MESSAGE);
 
         return quit(false);
+    }
+
+    public static boolean confirmQuit() {
+        if (Main.getSettings().getBooleanProperty("window.confirm_close")) {
+            String[] options = new String[]{
+                    Translations.getString("general.yes"),
+                    Translations.getString("general.no")};
+
+            int result = JOptionPane.showOptionDialog(
+                    FrameUtils.getCurrentWindow(),
+                    Translations.getString("action.quit.confirm_close"),
+                    Translations.getString("general.question"),
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[0]);
+
+            if (result != JOptionPane.YES_OPTION)
+                return false;
+        }
+
+        return true;
     }
 
 }
