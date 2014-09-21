@@ -130,7 +130,7 @@ final class CallOAuth extends AbstractCall {
                 Node nInfo = nResponse.item(i);
 
                 if (nInfo.getNodeName().equals("access_token"))
-                    token.setRefreshToken(nInfo.getTextContent());
+                    token.setAccessToken(nInfo.getTextContent());
 
                 if (nInfo.getNodeName().equals("expires_in"))
                     token.setExpiresIn(Integer.parseInt(nInfo.getTextContent()));
