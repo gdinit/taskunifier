@@ -98,7 +98,7 @@ public class GeneralConfigurationPanel extends DefaultConfigurationPanel {
             this.addField(new ConfigurationField(
                     "CONFIRM_CLOSE",
                     null,
-                    true,
+                    false,
                     new ConfigurationFieldType.CheckBox(
                             Main.getSettings(),
                             "window.confirm_close",

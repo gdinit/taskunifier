@@ -70,7 +70,7 @@ public class ActionCloseWindow extends AbstractViewAction {
 		if (currentFrameView == null)
 			return;
 		
-		FrameUtils.deleteFrameView(currentFrameView);
+		FrameUtils.deleteFrameView(currentFrameView, true);
 	}
 	
 }
