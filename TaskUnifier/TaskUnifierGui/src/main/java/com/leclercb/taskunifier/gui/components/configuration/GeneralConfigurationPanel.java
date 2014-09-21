@@ -94,6 +94,15 @@ public class GeneralConfigurationPanel extends DefaultConfigurationPanel {
 							Main.getSettings(),
 							"window.minimize_to_system_tray",
 							Translations.getString("configuration.general.minimize_to_system_tray"))));
+
+            this.addField(new ConfigurationField(
+                    "CONFIRM_CLOSE",
+                    null,
+                    true,
+                    new ConfigurationFieldType.CheckBox(
+                            Main.getSettings(),
+                            "window.confirm_close",
+                            Translations.getString("configuration.general.confirm_close"))));
 			
 			this.addField(new ConfigurationField(
 					"SEPARATOR_2",
