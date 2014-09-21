@@ -69,7 +69,9 @@ public final class HttpUtils {
                     Main.getSettings().getStringProperty("proxy.host"),
                     Main.getSettings().getIntegerProperty("proxy.port"),
                     Main.getSettings().getStringProperty("proxy.login"),
-                    Main.getSettings().getStringProperty("proxy.password"));
+                    Main.getSettings().getStringProperty("proxy.password"),
+                    null,
+                    null);
         } else {
             return com.leclercb.commons.api.utils.HttpUtils.getHttpResponse(
                     requestMethod,
@@ -78,6 +80,8 @@ public final class HttpUtils {
                     contentType,
                     null,
                     0,
+                    null,
+                    null,
                     null,
                     null);
         }
