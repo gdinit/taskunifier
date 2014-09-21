@@ -147,8 +147,8 @@ public final class ToodledoApi extends SynchronizerApi {
         CheckUtils.isNotNull(properties);
         PropertyMap p = new PropertyMap(properties);
 
-        p.setStringProperty("plugin.toodledo.access_token", null);
-        p.setStringProperty("plugin.toodledo.refresh_token", null);
+        p.setStringProperty("toodledo.connection.access_token", null);
+        p.setStringProperty("toodledo.connection.refresh_token", null);
     }
 
     @Override
