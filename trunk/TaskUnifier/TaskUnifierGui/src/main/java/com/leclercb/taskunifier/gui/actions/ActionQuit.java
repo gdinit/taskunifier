@@ -75,6 +75,25 @@ public class ActionQuit extends AbstractViewAction {
 	public static boolean quit(boolean force) {
 		if (Main.isQuitting())
 			return true;
+
+        if (!force && Main.getUserSettings().getBooleanProperty("window.confirm_close")) {
+            String[] options = new String[] {
+                    Translations.getString("general.yes"),
+                    Translations.getString("general.no") };
+
+            int result = JOptionPane.showOptionDialog(
+                    FrameUtils.getCurrentWindow(),
+                    Translations.getString("action.quit.confirm_close"),
+                    Translations.getString("general.question"),
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[0]);
+
+            if (result ==  JOptionPane.NO_OPTION)
+                return false;
+        }
 		
 		if (!force) {
 			boolean syncExit = Main.getUserSettings().getBooleanProperty(
