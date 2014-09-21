@@ -62,7 +62,12 @@ final class CallOAuth extends AbstractCall {
         params.add(new BasicNameValuePair("os", "" + ToodledoApi.getInstance().getOS()));
         params.add(new BasicNameValuePair("f", "xml"));
 
-        String content = super.callPost("https", "/3/account/token.php", params);
+        String content = super.callPost(
+                "https",
+                "/3/account/token.php",
+                params,
+                ToodledoApi.getInstance().getClientId(),
+                ToodledoApi.getInstance().getApiKey());
 
         return this.getResponseMessage(content);
     }
