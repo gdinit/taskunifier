@@ -32,42 +32,31 @@
  */
 package com.leclercb.taskunifier.gui.components.reminder;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
 import com.leclercb.taskunifier.gui.constants.Constants;
-import com.leclercb.taskunifier.gui.main.frames.FrameUtils;
 import com.leclercb.taskunifier.gui.swing.TUDialog;
-import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
-import com.leclercb.taskunifier.gui.swing.buttons.TUCloseButton;
 import com.leclercb.taskunifier.gui.translations.Translations;
 import com.leclercb.taskunifier.gui.utils.ImageUtils;
 
 public class ReminderDialog extends TUDialog {
-	
-	public ReminderDialog() {
+
+    public ReminderDialog() {
         super(ReminderDialogPanel.getInstance());
 
-		this.initialize();
-	}
-	
-	private void initialize() {
+        this.initialize();
+    }
+
+    private void initialize() {
         this.setModal(true);
-		this.setTitle(Constants.TITLE
+        this.setTitle(Constants.TITLE
                 + " - "
                 + Translations.getString("general.task.reminder"));
-		this.setIconImage(ImageUtils.getResourceImage("logo.png", 16, 16).getImage());
-		this.setSize(700, 400);
-		this.setResizable(true);
-		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
+        this.setIconImage(ImageUtils.getResourceImage("logo.png", 16, 16).getImage());
+        this.setSize(700, 400);
+        this.setResizable(true);
+        this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 
         if (this.getOwner() != null)
             this.setLocationRelativeTo(this.getOwner());
-	}
-	
+    }
+
 }
