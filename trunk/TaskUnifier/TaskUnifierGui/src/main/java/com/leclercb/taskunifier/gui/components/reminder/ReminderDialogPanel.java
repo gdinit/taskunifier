@@ -2,22 +2,22 @@
  * TaskUnifier
  * Copyright (c) 2013, Benjamin Leclerc
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
- * 
+ *
  *   - Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
- * 
+ *
  *   - Redistributions in binary form must reproduce the above copyright
  *     notice, this list of conditions and the following disclaimer in the
  *     documentation and/or other materials provided with the distribution.
- * 
+ *
  *   - Neither the name of TaskUnifier or the names of its
  *     contributors may be used to endorse or promote products derived
  *     from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
  * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -38,6 +38,7 @@ import com.leclercb.commons.api.utils.DateUtils;
 import com.leclercb.taskunifier.api.models.Task;
 import com.leclercb.taskunifier.gui.actions.ActionPostponeTasksMenu;
 import com.leclercb.taskunifier.gui.commons.comparators.TimeValueComparator;
+import com.leclercb.taskunifier.gui.processes.ProcessUtils;
 import com.leclercb.taskunifier.gui.swing.TUDialogPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUButtonsPanel;
 import com.leclercb.taskunifier.gui.swing.buttons.TUCloseButton;
@@ -47,6 +48,8 @@ import com.leclercb.taskunifier.gui.utils.TaskSnoozeList.SnoozeItem;
 import com.leclercb.taskunifier.gui.utils.TaskUtils;
 
 import javax.swing.*;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -148,6 +151,45 @@ public class ReminderDialogPanel extends TUDialogPanel {
 
         this.initializeDialogButtonsPanel();
         this.initializeButtonsPanel();
+
+        this.reminderList.addListDataListener(new ListDataListener() {
+
+            @Override
+            public void intervalAdded(ListDataEvent listDataEvent) {
+
+            }
+
+            @Override
+            public void intervalRemoved(final ListDataEvent listDataEvent) {
+                final ReminderList list = ReminderDialogPanel.this.getReminderList();
+
+                if (list.getTasks().length == 0) {
+                    ReminderDialogPanel.this.getDialog().setVisible(false);
+                    return;
+                }
+
+                ProcessUtils.invokeLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        if (list.getTasks().length == 0)
+                            return;
+
+                        if (list.getTasks().length <= listDataEvent.getIndex0())
+                            list.setSelectedTasks(new Task[]{list.getTasks()[list.getTasks().length - 1]});
+                        else
+                            list.setSelectedTasks(new Task[]{list.getTasks()[listDataEvent.getIndex0()]});
+                    }
+
+                });
+            }
+
+            @Override
+            public void contentsChanged(ListDataEvent listDataEvent) {
+
+            }
+
+        });
     }
 
     private void initializeDialogButtonsPanel() {
@@ -155,21 +197,10 @@ public class ReminderDialogPanel extends TUDialogPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (e.getActionCommand().equals(ReminderDialogPanel.ACTION_SNOOZE)
-                        || e.getActionCommand().equals(
-                        ReminderDialogPanel.ACTION_DISMISS)) {
-                    if (ReminderDialogPanel.this.getReminderList().getTasks().length == 0)
-                        ReminderDialogPanel.this.getDialog().setVisible(false);
-
-                    return;
-                }
-
                 ReminderDialogPanel.this.getDialog().setVisible(false);
             }
 
         };
-
-        this.addActionListener(listener);
 
         JButton closeButton = new TUCloseButton(listener);
 
