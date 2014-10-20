@@ -21,7 +21,6 @@ import com.leclercb.taskunifier.api.models.beans.TaskListBean;
 import com.leclercb.taskunifier.api.models.beans.TaskListBean.TaskItemBean;
 import com.leclercb.taskunifier.api.models.enums.GoalLevel;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
-import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.api.models.utils.ModelFactoryUtils;
 import com.leclercb.taskunifier.api.properties.ModelIdCoder;
 import com.leclercb.taskunifier.gui.plugins.PluginApi;
@@ -153,28 +152,6 @@ public final class ToodledoTranslations {
                 return TaskPriority.HIGH;
             case 3:
                 return TaskPriority.TOP;
-            default:
-                return null;
-        }
-    }
-
-    public static String translateTaskRepeatFrom(TaskRepeatFrom repeatFrom) {
-        switch (repeatFrom) {
-            case DUE_DATE:
-                return "0";
-            case COMPLETION_DATE:
-                return "1";
-            default:
-                return null;
-        }
-    }
-
-    public static TaskRepeatFrom translateTaskRepeatFrom(int repeatFrom) {
-        switch (repeatFrom) {
-            case 0:
-                return TaskRepeatFrom.DUE_DATE;
-            case 1:
-                return TaskRepeatFrom.COMPLETION_DATE;
             default:
                 return null;
         }
