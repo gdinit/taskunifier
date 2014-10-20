@@ -220,10 +220,7 @@ final class CallAddTask extends AbstractCallTask {
                 }
 
                 jsonObject.put("remind", task.getDueDateReminder() + "");
-                jsonObject.put("repeat", RepeatConverter.getRepeat(task.getRepeat()));
-                jsonObject.put(
-                        "repeatfrom",
-                        ToodledoTranslations.translateTaskRepeatFrom(task.getRepeatFrom()));
+                jsonObject.put("repeat", RepeatConverter.getRepeat(task.getRepeat(), task.getRepeatFrom()));
                 jsonObject.put(
                         "status",
                         ToodledoTranslations.translateTaskStatus(task.getStatus()));

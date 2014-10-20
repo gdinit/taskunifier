@@ -50,8 +50,7 @@ abstract class AbstractCallTask extends AbstractCall {
      * <duetime>1280877483</duetime>
      * <starttime>1280877483</starttime>
      * <remind>60</remind>
-     * <repeat>Every 1 Week</repeat>
-     * <repeatfrom>0</repeatfrom>
+     * <repeat>FREQ=DAILY</repeat>
      * <status>4</status>
      * <length>20</length>
      * <priority>2</priority>
@@ -210,11 +209,10 @@ abstract class AbstractCallTask extends AbstractCall {
                         if (syncReminderFieldValue)
                             dueDateReminder = Integer.parseInt(nTaskInfo.getTextContent());
 
-                    if (nTaskInfo.getNodeName().equals("repeat"))
+                    if (nTaskInfo.getNodeName().equals("repeat")) {
                         repeat = nTaskInfo.getTextContent();
-
-                    if (nTaskInfo.getNodeName().equals("repeatfrom"))
-                        repeatFrom = ToodledoTranslations.translateTaskRepeatFrom(Integer.parseInt(nTaskInfo.getTextContent()));
+                        repeatFrom = RepeatConverter.getRepeatFrom(nTaskInfo.getTextContent());
+                    }
 
                     if (nTaskInfo.getNodeName().equals("status"))
                         status = ToodledoTranslations.translateTaskStatus(Integer.parseInt(nTaskInfo.getTextContent())).getModelId();

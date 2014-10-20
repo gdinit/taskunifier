@@ -33,36 +33,39 @@
 
 package com.leclercb.taskunifier.plugin.toodledo.calls;
 
+import com.leclercb.taskunifier.api.models.enums.TaskRepeatFrom;
 import com.leclercb.taskunifier.api.models.repeat.*;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RepeatConverter {
 
-    public static String getRepeat(Repeat repeat) {
+    public static String getRepeat(Repeat repeat, TaskRepeatFrom repeatFrom) {
+        String fromComp = (repeatFrom == TaskRepeatFrom.COMPLETION_DATE ? ";FROMCOMP" : "");
+
         if (repeat == null)
             return "";
 
         if (repeat instanceof RepeatWithParent)
-            return "with parent";
+            return "PARENT";
 
         if (repeat instanceof RepeatEveryX) {
             RepeatEveryX r = (RepeatEveryX) repeat;
 
             switch (r.getType()) {
                 case Calendar.DAY_OF_MONTH:
-                    return "every " + r.getValue() + " days";
+                    return "FREQ=DAILY;INTERVAL=" + r.getValue() + fromComp;
                 case Calendar.WEEK_OF_YEAR:
-                    return "every " + r.getValue() + " weeks";
+                    return "FREQ=WEEKLY;INTERVAL=" + r.getValue() + fromComp;
                 case Calendar.MONTH:
-                    return "every " + r.getValue() + " months";
+                    return "FREQ=MONTHLY;INTERVAL=" + r.getValue() + fromComp;
                 case Calendar.YEAR:
-                    return "every " + r.getValue() + " years";
+                    return "FREQ=YEARLY;INTERVAL=" + r.getValue() + fromComp;
             }
 
             return "";
@@ -76,30 +79,30 @@ public class RepeatConverter {
             for (int i = 0; i < r.getDays().length; i++) {
                 switch (r.getDays()[i]) {
                     case Calendar.MONDAY:
-                        days[i] = "mon";
+                        days[i] = "MO";
                         break;
                     case Calendar.TUESDAY:
-                        days[i] = "tue";
+                        days[i] = "TU";
                         break;
                     case Calendar.WEDNESDAY:
-                        days[i] = "wed";
+                        days[i] = "WE";
                         break;
                     case Calendar.THURSDAY:
-                        days[i] = "thu";
+                        days[i] = "TH";
                         break;
                     case Calendar.FRIDAY:
-                        days[i] = "fri";
+                        days[i] = "FR";
                         break;
                     case Calendar.SATURDAY:
-                        days[i] = "sat";
+                        days[i] = "SA";
                         break;
                     case Calendar.SUNDAY:
-                        days[i] = "sun";
+                        days[i] = "SU";
                         break;
                 }
             }
 
-            return "every " + StringUtils.join(days, ", ");
+            return "FREQ=WEEKLY;BYDAY=" + StringUtils.join(days, ",") + ";INTERVAL=" + r.getValue() + fromComp;
         }
 
         if (repeat instanceof RepeatEveryXMonthOnDayX) {
@@ -109,53 +112,33 @@ public class RepeatConverter {
         if (repeat instanceof RepeatEveryXMonthOnWeekX) {
             RepeatEveryXMonthOnWeekX r = (RepeatEveryXMonthOnWeekX) repeat;
 
-            String day = "mon";
+            String day = "MO";
 
             switch (r.getDay()) {
                 case Calendar.MONDAY:
-                    day = "mon";
+                    day = "MO";
                     break;
                 case Calendar.TUESDAY:
-                    day = "tue";
+                    day = "TU";
                     break;
                 case Calendar.WEDNESDAY:
-                    day = "wed";
+                    day = "WE";
                     break;
                 case Calendar.THURSDAY:
-                    day = "thu";
+                    day = "TH";
                     break;
                 case Calendar.FRIDAY:
-                    day = "fri";
+                    day = "FR";
                     break;
                 case Calendar.SATURDAY:
-                    day = "sat";
+                    day = "SA";
                     break;
                 case Calendar.SUNDAY:
-                    day = "sun";
+                    day = "SU";
                     break;
             }
 
-            String week = "first";
-
-            switch (r.getWeek()) {
-                case 1:
-                    week = "first";
-                    break;
-                case 2:
-                    week = "second";
-                    break;
-                case 3:
-                    week = "third";
-                    break;
-                case 4:
-                    week = "fourth";
-                    break;
-                case -1:
-                    week = "last";
-                    break;
-            }
-
-            return "on the " + week + " " + day + " of each month";
+            return "FREQ=MONTHLY;BYDAY=" + r.getWeek() + day + fromComp;
         }
 
         return "";
@@ -168,35 +151,35 @@ public class RepeatConverter {
         return getRepeatFromString(repeat);
     }
 
+    public static TaskRepeatFrom getRepeatFrom(String repeat) {
+        if (!isValidRepeatValue(repeat))
+            return null;
+
+        return getRepeatFromFromString(repeat);
+    }
+
     public static boolean isValidRepeatValue(String repeat) {
         if (repeat == null || repeat.length() == 0)
             return false;
 
-        String regex = null;
+        String regex;
 
-        repeat = repeat.toLowerCase();
-
-        if (repeat.equals("with parent"))
+        if (repeat.equals("PARENT"))
             return true;
 
-        regex = "^(daily|weekly|biweekly|monthly|bimonthly|quarterly|semiannually|yearly)$".toLowerCase();
+        regex = "^FREQ=(DAILY|WEEKLY|MONTHLY|YEARLY)(;FROMCOMP)?$";
         if (repeat.matches(regex))
             return true;
 
-        regex = "^(every [0-9]+ (day|days|week|weeks|month|months|year|years))$".toLowerCase();
+        regex = "^FREQ=(DAILY|WEEKLY|MONTHLY|YEARLY);INTERVAL=([1-9][0-9]{0,2})(;FROMCOMP)?$";
         if (repeat.matches(regex))
             return true;
 
-        regex = "^((on )?the ([1-4]|1st|first|2nd|second|3rd|third|4th|fourth|last) (mon|tue|wed|thu|fri|sat|sun|monday|tuesday|wednesday|thursday|friday|saturday|sunday) of each month)$".toLowerCase();
+        regex = "^FREQ=WEEKLY;BYDAY=((MO|TU|WE|TH|FR|SA|SU)(,(MO|TU|WE|TH|FR|SA|SU))*)(;FROMCOMP)?$";
         if (repeat.matches(regex))
             return true;
 
-        String daysRegex = "(mon|tue|wed|thu|fri|sat|sun|monday|tuesday|wednesday|thursday|friday|saturday|sunday|weekend|weekday)";
-        regex = "^(every ("
-                + daysRegex
-                + "(, ?"
-                + daysRegex
-                + ")*))$".toLowerCase();
+        regex = "^FREQ=MONTHLY;BYDAY=((-?[1-4])(MO|TU|WE|TH|FR|SA|SU))(;FROMCOMP)?$";
         if (repeat.matches(regex))
             return true;
 
@@ -207,187 +190,139 @@ public class RepeatConverter {
         if (repeat == null || repeat.length() == 0)
             return null;
 
-        String regex = null;
+        String regex;
 
-        repeat = repeat.toLowerCase();
+        if (repeat.equals("PARENT"))
+            return new RepeatWithParent();
 
-        if (repeat.equals("with parent"))
-            return getRepeatFromString1(repeat);
+        regex = "^FREQ=(DAILY|WEEKLY|MONTHLY|YEARLY)(;FROMCOMP)?$";
+        if (repeat.matches(regex)) {
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(repeat);
 
-        regex = "^(daily|weekly|biweekly|monthly|bimonthly|quarterly|semiannually|yearly)$".toLowerCase();
-        if (repeat.matches(regex))
-            return getRepeatFromString2(repeat);
+            if (!matcher.find())
+                return null;
 
-        regex = "^(every ([0-9]+) (day|days|week|weeks|month|months|year|years))$".toLowerCase();
-        if (repeat.matches(regex))
-            return getRepeatFromString3(repeat);
+            if ("DAILY".equals(matcher.group(1))) {
+                return new RepeatEveryX(Calendar.DAY_OF_MONTH, 1);
+            }
 
-        regex = "^((on )?the ([1-4]|1st|first|2nd|second|3rd|third|4th|fourth|last) (mon|tue|wed|thu|fri|sat|sun|monday|tuesday|wednesday|thursday|friday|saturday|sunday) of each month)$".toLowerCase();
-        if (repeat.matches(regex))
-            return getRepeatFromString4(repeat);
+            if ("WEEKLY".equals(matcher.group(1))) {
+                return new RepeatEveryX(Calendar.WEEK_OF_YEAR, 1);
+            }
 
-        String daysRegex = "(mon|tue|wed|thu|fri|sat|sun|monday|tuesday|wednesday|thursday|friday|saturday|sunday|weekend|weekday)";
-        regex = "^(every ("
-                + daysRegex
-                + "(, ?"
-                + daysRegex
-                + ")*))$".toLowerCase();
-        if (repeat.matches(regex))
-            return getRepeatFromString5(repeat);
+            if ("MONTHLY".equals(matcher.group(1))) {
+                return new RepeatEveryX(Calendar.MONTH, 1);
+            }
 
-        return null;
-    }
-
-    private static Repeat getRepeatFromString1(String repeat) {
-        return new RepeatWithParent();
-    }
-
-    private static Repeat getRepeatFromString2(String repeat) {
-        if (repeat.equals("daily"))
-            return new RepeatEveryX(Calendar.DAY_OF_MONTH, 1);
-        else if (repeat.equals("weekly"))
-            return new RepeatEveryX(Calendar.WEEK_OF_YEAR, 1);
-        else if (repeat.equals("biweekly"))
-            return new RepeatEveryX(Calendar.WEEK_OF_YEAR, 2);
-        else if (repeat.equals("monthly"))
-            return new RepeatEveryX(Calendar.MONTH, 1);
-        else if (repeat.equals("bimonthly"))
-            return new RepeatEveryX(Calendar.MONTH, 2);
-        else if (repeat.equals("quarterly"))
-            return new RepeatEveryX(Calendar.MONTH, 3);
-        else if (repeat.equals("semiannually"))
-            return new RepeatEveryX(Calendar.MONTH, 6);
-        else if (repeat.equals("yearly"))
-            return new RepeatEveryX(Calendar.YEAR, 1);
-
-        return null;
-    }
-
-    private static Repeat getRepeatFromString3(String repeat) {
-        String regex = "^(every ([0-9]+) (day|days|week|weeks|month|months|year|years))$".toLowerCase();
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(repeat);
-
-        if (!matcher.find())
-            return null;
-
-        int value = Integer.parseInt(matcher.group(2));
-        String strType = matcher.group(3);
-        int type = Calendar.DAY_OF_MONTH;
-
-        if (strType.startsWith("day"))
-            type = Calendar.DAY_OF_MONTH;
-        else if (strType.startsWith("week"))
-            type = Calendar.WEEK_OF_YEAR;
-        else if (strType.startsWith("month"))
-            type = Calendar.MONTH;
-        else if (strType.startsWith("year"))
-            type = Calendar.YEAR;
-
-        return new RepeatEveryX(type, value);
-    }
-
-    private static Repeat getRepeatFromString4(String repeat) {
-        String regex = "^((on )?the ([1-4]|1st|first|2nd|second|3rd|third|4th|fourth|last) (mon|tue|wed|thu|fri|sat|sun|monday|tuesday|wednesday|thursday|friday|saturday|sunday) of each month)$".toLowerCase();
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(repeat);
-
-        if (!matcher.find())
-            return null;
-
-        String strWeek = matcher.group(3);
-        int week = 1;
-        String strDay = matcher.group(4);
-        int day = Calendar.MONDAY;
-
-        if (strWeek.matches("^(1|1st|first)$")) {
-            week = 1;
-        } else if (strWeek.matches("^(2|2nd|second)$")) {
-            week = 2;
-        } else if (strWeek.matches("^(3|3rd|third)$")) {
-            week = 3;
-        } else if (strWeek.matches("^(4|4th|fourth)$")) {
-            week = 4;
-        } else if (strWeek.equals("last")) {
-            week = -1;
-        }
-
-        if (strDay.startsWith("mon")) {
-            day = Calendar.MONDAY;
-        } else if (strDay.startsWith("tue")) {
-            day = Calendar.TUESDAY;
-        } else if (strDay.startsWith("wed")) {
-            day = Calendar.WEDNESDAY;
-        } else if (strDay.startsWith("thu")) {
-            day = Calendar.THURSDAY;
-        } else if (strDay.startsWith("fri")) {
-            day = Calendar.FRIDAY;
-        } else if (strDay.startsWith("sat")) {
-            day = Calendar.SATURDAY;
-        } else if (strDay.startsWith("sun")) {
-            day = Calendar.SUNDAY;
-        }
-
-        return new RepeatEveryXMonthOnWeekX(1, week, day);
-    }
-
-    private static Repeat getRepeatFromString5(String repeat) {
-        String daysRegex = "(mon|tue|wed|thu|fri|sat|sun|monday|tuesday|wednesday|thursday|friday|saturday|sunday|weekend|weekday)";
-        String regex = "^(every ("
-                + daysRegex
-                + "(, ?"
-                + daysRegex
-                + ")*))$".toLowerCase();
-
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(repeat);
-
-        if (!matcher.find())
-            return null;
-
-        String[] strDays = matcher.group(2).split(",");
-        Set<Integer> days = new HashSet<Integer>();
-
-        for (String strField : strDays) {
-            strField = strField.trim();
-
-            if (strField.startsWith("mon")) {
-                days.add(Calendar.MONDAY);
-            } else if (strField.startsWith("tue")) {
-                days.add(Calendar.TUESDAY);
-            } else if (strField.startsWith("wed")) {
-                days.add(Calendar.WEDNESDAY);
-            } else if (strField.startsWith("thu")) {
-                days.add(Calendar.THURSDAY);
-            } else if (strField.startsWith("fri")) {
-                days.add(Calendar.FRIDAY);
-            } else if (strField.startsWith("sat")) {
-                days.add(Calendar.SATURDAY);
-            } else if (strField.startsWith("sun")) {
-                days.add(Calendar.SUNDAY);
-            } else if (strField.equals("weekend")) {
-                days.add(Calendar.SATURDAY);
-                days.add(Calendar.SUNDAY);
-            } else if (strField.equals("weekday")) {
-                days.add(Calendar.MONDAY);
-                days.add(Calendar.TUESDAY);
-                days.add(Calendar.WEDNESDAY);
-                days.add(Calendar.THURSDAY);
-                days.add(Calendar.FRIDAY);
+            if ("YEARLY".equals(matcher.group(1))) {
+                return new RepeatEveryX(Calendar.YEAR, 1);
             }
         }
 
-        if (days.size() == 0)
-            return null;
+        regex = "^FREQ=(DAILY|WEEKLY|MONTHLY|YEARLY);INTERVAL=([1-9][0-9]{0,2})(;FROMCOMP)?$";
+        if (repeat.matches(regex)) {
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(repeat);
 
-        int[] daysArray = new int[days.size()];
-        int i = 0;
+            if (!matcher.find())
+                return null;
 
-        for (Integer day : days) {
-            daysArray[i++] = day;
+            if ("DAILY".equals(matcher.group(1))) {
+                return new RepeatEveryX(Calendar.DAY_OF_MONTH, Integer.parseInt(matcher.group(2)));
+            }
+
+            if ("WEEKLY".equals(matcher.group(1))) {
+                return new RepeatEveryX(Calendar.WEEK_OF_YEAR, Integer.parseInt(matcher.group(2)));
+            }
+
+            if ("MONTHLY".equals(matcher.group(1))) {
+                return new RepeatEveryX(Calendar.MONTH, Integer.parseInt(matcher.group(2)));
+            }
+
+            if ("YEARLY".equals(matcher.group(1))) {
+                return new RepeatEveryX(Calendar.YEAR, Integer.parseInt(matcher.group(2)));
+            }
         }
 
-        return new RepeatEveryXWeekOnDays(1, daysArray);
+        regex = "^FREQ=WEEKLY;BYDAY=((MO|TU|WE|TH|FR|SA|SU)(,(MO|TU|WE|TH|FR|SA|SU))*)(;FROMCOMP)?$";
+        if (repeat.matches(regex)) {
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(repeat);
+
+            if (!matcher.find())
+                return null;
+
+            List<Integer> days = new ArrayList<Integer>();
+            String[] split = matcher.group(1).split(",");
+
+            for (String token : split) {
+                token = token.trim();
+
+                if ("MO".equals(token))
+                    days.add(Calendar.MONDAY);
+                else if ("TU".equals(token))
+                    days.add(Calendar.TUESDAY);
+                else if ("WE".equals(token))
+                    days.add(Calendar.WEDNESDAY);
+                else if ("TH".equals(token))
+                    days.add(Calendar.THURSDAY);
+                else if ("FR".equals(token))
+                    days.add(Calendar.FRIDAY);
+                else if ("SA".equals(token))
+                    days.add(Calendar.SATURDAY);
+                else if ("SU".equals(token))
+                    days.add(Calendar.SUNDAY);
+            }
+
+            int[] dayArray = new int[days.size()];
+            for (int i = 0; i < days.size(); i++)
+                dayArray[i] = days.get(i);
+
+            return new RepeatEveryXWeekOnDays(1, dayArray);
+        }
+
+        regex = "^FREQ=MONTHLY;BYDAY=((-?[1-4])(MO|TU|WE|TH|FR|SA|SU))(;FROMCOMP)?$";
+        if (repeat.matches(regex)) {
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(repeat);
+
+            if (!matcher.find())
+                return null;
+
+            int day = Calendar.MONDAY;
+            String token = matcher.group(3);
+
+            if ("MO".equals(token))
+                day = Calendar.MONDAY;
+            else if ("TU".equals(token))
+                day = Calendar.TUESDAY;
+            else if ("WE".equals(token))
+                day = Calendar.WEDNESDAY;
+            else if ("TH".equals(token))
+                day = Calendar.THURSDAY;
+            else if ("FR".equals(token))
+                day = Calendar.FRIDAY;
+            else if ("SA".equals(token))
+                day = Calendar.SATURDAY;
+            else if ("SU".equals(token))
+                day = Calendar.SUNDAY;
+
+            return new RepeatEveryXMonthOnWeekX(1, Integer.parseInt(matcher.group(2)), day);
+        }
+
+        return null;
+    }
+
+    private static TaskRepeatFrom getRepeatFromFromString(String repeat) {
+        if (repeat == null || repeat.length() == 0)
+            return null;
+
+        String regex = ";FROMCOMP$";
+        if (repeat.matches(regex))
+            return TaskRepeatFrom.COMPLETION_DATE;
+
+        return TaskRepeatFrom.DUE_DATE;
     }
 
 }
