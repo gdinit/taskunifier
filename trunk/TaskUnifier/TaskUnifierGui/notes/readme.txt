@@ -2,8 +2,6 @@ HISTORY
 -------
 
 Version 4.3.3
-    - Major:
-        - Toodledo API v3 upgrade
     - Minor:
         - FR 421: Confirm exit option
         - FR 435: Select next task in reminder window
