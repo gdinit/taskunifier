@@ -72,10 +72,7 @@ final class CallEditTaskParent extends AbstractCallTask {
                 else
                     jsonObject.put("parent", "0");
 
-                jsonObject.put("repeat", RepeatConverter.getRepeat(task.getRepeat()));
-                jsonObject.put(
-                        "repeatfrom",
-                        ToodledoTranslations.translateTaskRepeatFrom(task.getRepeatFrom()));
+                jsonObject.put("repeat", RepeatConverter.getRepeat(task.getRepeat(), task.getRepeatFrom()));
 
                 jsonArray.put(jsonObject);
             }
