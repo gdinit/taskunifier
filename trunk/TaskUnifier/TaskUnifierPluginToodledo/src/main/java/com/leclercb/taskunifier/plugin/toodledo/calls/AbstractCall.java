@@ -5,17 +5,6 @@
  */
 package com.leclercb.taskunifier.plugin.toodledo.calls;
 
-import java.net.NoRouteToHostException;
-import java.net.URI;
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.w3c.dom.Node;
-
 import com.leclercb.commons.api.utils.EqualsUtils;
 import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.commons.api.utils.HttpUtils;
@@ -29,6 +18,16 @@ import com.leclercb.taskunifier.gui.plugins.PluginApi;
 import com.leclercb.taskunifier.gui.plugins.PluginLogger;
 import com.leclercb.taskunifier.plugin.toodledo.ToodledoApi;
 import com.leclercb.taskunifier.plugin.toodledo.calls.ToodledoErrors.ToodledoErrorType;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URIUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.w3c.dom.Node;
+
+import java.net.NoRouteToHostException;
+import java.net.URI;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.List;
 
 abstract class AbstractCall {
 	
@@ -87,12 +86,9 @@ abstract class AbstractCall {
 			if (!response.isSuccessfull()) {
 				PluginLogger.getLogger().warning(
 						response.getCode() + ": " + response.getMessage());
-				
-				throw new SynchronizerHttpException(
-						false,
-						response.getCode(),
-						response.getMessage());
-			}
+
+                this.throwResponseError(response);
+            }
 			
 			PluginLogger.getLogger().fine(response.getContent());
 			
@@ -160,12 +156,9 @@ abstract class AbstractCall {
 			if (!response.isSuccessfull()) {
 				PluginLogger.getLogger().warning(
 						response.getCode() + ": " + response.getMessage());
-				
-				throw new SynchronizerHttpException(
-						false,
-						response.getCode(),
-						response.getMessage());
-			}
+
+                this.throwResponseError(response);
+            }
 			
 			PluginLogger.getLogger().fine(response.getContent());
 			
@@ -184,8 +177,12 @@ abstract class AbstractCall {
 			throw new SynchronizerHttpException(false, 0, e.getMessage(), e);
 		}
 	}
-	
-	protected void throwResponseError(
+
+    protected void throwResponseError(HttpResponse response) throws SynchronizerException {
+        ToodledoErrors.throwError(response);
+    }
+
+    protected void throwResponseError(
 			ToodledoErrorType type,
 			String content,
 			Node errorNode) throws SynchronizerException {

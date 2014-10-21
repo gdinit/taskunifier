@@ -5,8 +5,11 @@
  */
 package com.leclercb.taskunifier.plugin.toodledo.calls;
 
+import com.leclercb.commons.api.utils.HttpResponse;
 import com.leclercb.taskunifier.api.models.Model;
 import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerApiException;
+import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerException;
+import com.leclercb.taskunifier.api.synchronizer.exc.SynchronizerHttpException;
 import com.leclercb.taskunifier.plugin.toodledo.ToodledoApi;
 import com.leclercb.taskunifier.plugin.toodledo.calls.exc.ToodledoApiException;
 import com.leclercb.taskunifier.plugin.toodledo.calls.exc.ToodledoConnectionException;
@@ -17,14 +20,14 @@ import java.util.List;
 public enum ToodledoErrors {
 
     ERROR_GENERAL_0(ToodledoErrorType.GENERAL, ToodledoErrorException.API_EXCEPTION, 0, false, "errors.general.0"),
-    ERROR_GENERAL_1(ToodledoErrorType.GENERAL, ToodledoErrorException.API_EXCEPTION, 1, false, "errors.general.1"),
-    ERROR_GENERAL_2(ToodledoErrorType.GENERAL, ToodledoErrorException.CONNECTION_EXCEPTION, 2, false, "errors.general.2"),
-    ERROR_GENERAL_3(ToodledoErrorType.GENERAL, ToodledoErrorException.API_EXCEPTION, 3, true, "errors.general.3"),
-    ERROR_GENERAL_4(ToodledoErrorType.GENERAL, ToodledoErrorException.API_EXCEPTION, 4, true, "errors.general.4"),
+    ERROR_GENERAL_1(ToodledoErrorType.GENERAL, ToodledoErrorException.API_EXCEPTION, 1, 401, false, "errors.general.1"),
+    ERROR_GENERAL_2(ToodledoErrorType.GENERAL, ToodledoErrorException.CONNECTION_EXCEPTION, 2, 401, false, "errors.general.2"),
+    ERROR_GENERAL_3(ToodledoErrorType.GENERAL, ToodledoErrorException.API_EXCEPTION, 3, 429, true, "errors.general.3"),
+    ERROR_GENERAL_4(ToodledoErrorType.GENERAL, ToodledoErrorException.API_EXCEPTION, 4, 503, true, "errors.general.4"),
 
     ERROR_ACCOUNT_101(ToodledoErrorType.ACCOUNT, ToodledoErrorException.API_EXCEPTION, 101, false, "errors.account.101"),
     ERROR_ACCOUNT_102(ToodledoErrorType.ACCOUNT, ToodledoErrorException.API_EXCEPTION, 102, false, "errors.account.102"),
-    ERROR_ACCOUNT_103(ToodledoErrorType.ACCOUNT, ToodledoErrorException.API_EXCEPTION, 103, true, "errors.account.103"),
+    ERROR_ACCOUNT_103(ToodledoErrorType.ACCOUNT, ToodledoErrorException.API_EXCEPTION, 103, 429, true, "errors.account.103"),
 
     ERROR_FOLDER_201(ToodledoErrorType.FOLDER, ToodledoErrorException.API_EXCEPTION, 201, true, "errors.folder.201"),
     ERROR_FOLDER_202(ToodledoErrorType.FOLDER, ToodledoErrorException.API_EXCEPTION, 202, true, "errors.folder.202"),
@@ -84,6 +87,7 @@ public enum ToodledoErrors {
     private ToodledoErrorType type;
     private ToodledoErrorException exception;
     private int code;
+    private int httpCode;
     private boolean expected;
     private String translation;
 
@@ -93,9 +97,20 @@ public enum ToodledoErrors {
             int code,
             boolean expected,
             String translation) {
+        this(type, exception, code, 200, expected, translation);
+    }
+
+    private ToodledoErrors(
+            ToodledoErrorType type,
+            ToodledoErrorException exception,
+            int code,
+            int httpCode,
+            boolean expected,
+            String translation) {
         this.type = type;
         this.exception = exception;
         this.code = code;
+        this.httpCode = httpCode;
         this.expected = expected;
         this.translation = translation;
     }
@@ -112,12 +127,28 @@ public enum ToodledoErrors {
         return this.code;
     }
 
+    public int getHttpCode() {
+        return httpCode;
+    }
+
     public boolean isExpected() {
         return this.expected;
     }
 
     public String getTranslation() {
         return this.translation;
+    }
+
+    public void throwError()
+            throws SynchronizerApiException {
+        switch (this.exception) {
+            case CONNECTION_EXCEPTION:
+                throw new ToodledoConnectionException(null, this);
+            case API_EXCEPTION:
+                throw new ToodledoApiException(null, this);
+            case SETTINGS_EXCEPTION:
+                throw new ToodledoSettingsException(null, this);
+        }
     }
 
     public <M extends Model> void throwError(List<M> models)
@@ -130,6 +161,17 @@ public enum ToodledoErrors {
             case SETTINGS_EXCEPTION:
                 throw new ToodledoSettingsException(models, this);
         }
+    }
+
+    public static void throwError(HttpResponse response) throws SynchronizerException {
+        for (ToodledoErrors error : ToodledoErrors.values())
+            if (response.getCode() == error.getHttpCode())
+                error.throwError();
+
+        throw new SynchronizerHttpException(
+                false,
+                response.getCode(),
+                response.getMessage());
     }
 
     public static <M extends Model> void throwError(
