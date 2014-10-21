@@ -153,7 +153,7 @@ public class RepeatConverter {
 
     public static TaskRepeatFrom getRepeatFrom(String repeat) {
         if (!isValidRepeatValue(repeat))
-            return null;
+            return TaskRepeatFrom.DUE_DATE;
 
         return getRepeatFromFromString(repeat);
     }
@@ -316,7 +316,7 @@ public class RepeatConverter {
 
     private static TaskRepeatFrom getRepeatFromFromString(String repeat) {
         if (repeat == null || repeat.length() == 0)
-            return null;
+            return TaskRepeatFrom.DUE_DATE;
 
         String regex = ";FROMCOMP$";
         if (repeat.matches(regex))
