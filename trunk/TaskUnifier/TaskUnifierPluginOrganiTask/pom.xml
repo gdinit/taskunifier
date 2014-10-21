@@ -1,11 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier-plugin-organitask</artifactId>
-    <version>1.5</version>
+    <version>1.6</version>
     <packaging>jar</packaging>
 
     <parent>
@@ -57,17 +56,12 @@
                                 <phase>package</phase>
                                 <configuration>
                                     <target>
-                                        <taskdef resource="net/sf/antcontrib/antcontrib.properties"
-                                                 classpathref="maven.plugin.classpath"/>
+                                        <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath"/>
 
-                                        <propertyregex property="project.version.underscored" override="false"
-                                                       input="${project.version}" regexp="\." replace="_"
-                                                       global="true"/>
+                                        <propertyregex property="project.version.underscored" override="false" input="${project.version}" regexp="\." replace="_" global="true"/>
 
-                                        <copy file="${basedir}/history.txt"
-                                              tofile="${directory.web}/plugins/organitask/files/history_${project.version.underscored}.txt"/>
-                                        <copy file="${basedir}/target/taskunifier-plugin-organitask-${project.version}.jar"
-                                              tofile="${directory.web}/plugins/organitask/files/TaskUnifierPluginOrganiTask_${project.version.underscored}.jar"/>
+                                        <copy file="${basedir}/history.txt" tofile="${directory.web}/plugins/organitask/files/history_${project.version.underscored}.txt"/>
+                                        <copy file="${basedir}/target/taskunifier-plugin-organitask-${project.version}.jar" tofile="${directory.web}/plugins/organitask/files/TaskUnifierPluginOrganiTask_${project.version.underscored}.jar"/>
                                     </target>
                                 </configuration>
                                 <goals>
