@@ -5,7 +5,7 @@
 
     <groupId>com.leclercb</groupId>
     <artifactId>taskunifier-plugin-toodledo</artifactId>
-    <version>9.2</version>
+    <version>9.3</version>
     <packaging>jar</packaging>
 
     <parent>

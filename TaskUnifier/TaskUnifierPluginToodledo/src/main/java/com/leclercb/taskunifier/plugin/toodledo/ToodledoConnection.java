@@ -133,6 +133,8 @@ public class ToodledoConnection implements Connection {
                             this.connect();
                             return;
                         }
+
+                        throw e2;
                     }
                 }
             }
