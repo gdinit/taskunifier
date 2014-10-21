@@ -20,14 +20,14 @@ import java.util.List;
 public enum ToodledoErrors {
 
     ERROR_GENERAL_0(ToodledoErrorType.GENERAL, ToodledoErrorException.API_EXCEPTION, 0, false, "errors.general.0"),
-    ERROR_GENERAL_1(ToodledoErrorType.GENERAL, ToodledoErrorException.API_EXCEPTION, 1, 401, false, "errors.general.1"),
+    ERROR_GENERAL_1(ToodledoErrorType.GENERAL, ToodledoErrorException.API_EXCEPTION, 1, false, "errors.general.1"),
     ERROR_GENERAL_2(ToodledoErrorType.GENERAL, ToodledoErrorException.CONNECTION_EXCEPTION, 2, 401, false, "errors.general.2"),
-    ERROR_GENERAL_3(ToodledoErrorType.GENERAL, ToodledoErrorException.API_EXCEPTION, 3, 429, true, "errors.general.3"),
-    ERROR_GENERAL_4(ToodledoErrorType.GENERAL, ToodledoErrorException.API_EXCEPTION, 4, 503, true, "errors.general.4"),
+    ERROR_GENERAL_3(ToodledoErrorType.GENERAL, ToodledoErrorException.API_EXCEPTION, 3, true, "errors.general.3"),
+    ERROR_GENERAL_4(ToodledoErrorType.GENERAL, ToodledoErrorException.API_EXCEPTION, 4, true, "errors.general.4"),
 
     ERROR_ACCOUNT_101(ToodledoErrorType.ACCOUNT, ToodledoErrorException.API_EXCEPTION, 101, false, "errors.account.101"),
     ERROR_ACCOUNT_102(ToodledoErrorType.ACCOUNT, ToodledoErrorException.API_EXCEPTION, 102, false, "errors.account.102"),
-    ERROR_ACCOUNT_103(ToodledoErrorType.ACCOUNT, ToodledoErrorException.API_EXCEPTION, 103, 429, true, "errors.account.103"),
+    ERROR_ACCOUNT_103(ToodledoErrorType.ACCOUNT, ToodledoErrorException.API_EXCEPTION, 103, true, "errors.account.103"),
 
     ERROR_FOLDER_201(ToodledoErrorType.FOLDER, ToodledoErrorException.API_EXCEPTION, 201, true, "errors.folder.201"),
     ERROR_FOLDER_202(ToodledoErrorType.FOLDER, ToodledoErrorException.API_EXCEPTION, 202, true, "errors.folder.202"),
