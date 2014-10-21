@@ -136,6 +136,8 @@ public class OrganiTaskConnection implements Connection {
                             this.connect();
                             return;
                         }
+
+                        throw e2;
                     }
                 }
             }
