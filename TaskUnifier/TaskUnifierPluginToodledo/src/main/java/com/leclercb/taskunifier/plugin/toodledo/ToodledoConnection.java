@@ -126,7 +126,7 @@ public class ToodledoConnection implements Connection {
 
                         this.accountInfo = this.statement.getAccountInfo();
                     } catch (SynchronizerHttpException e2) {
-                        if (e2.getCode() == 401) {
+                        if (e2.getCode() == 400 || e2.getCode() == 401) {
                             this.accessToken = null;
                             this.refreshToken = null;
 
