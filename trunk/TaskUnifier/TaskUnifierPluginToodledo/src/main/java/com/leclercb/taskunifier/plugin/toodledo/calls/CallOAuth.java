@@ -23,7 +23,6 @@ import org.xml.sax.InputSource;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.StringReader;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -95,7 +94,14 @@ final class CallOAuth extends AbstractCall {
     }
 
     /**
-     * Example : <token>td12345678901234</token>
+     * Example :
+     * <response>
+     * <access_token>66fa5a5252fa17afdd3b84f71ccfd7c02c3fb40f</access_token>
+     * <expires_in>7200</expires_in>
+     * <token_type>Bearer</token_type>
+     * <scope>basic</scope>
+     * <refresh_token>389d276132d7d256e48e9056dd5d6d6f313be246</refresh_token>
+     * </response>
      *
      * @param content
      * @return
