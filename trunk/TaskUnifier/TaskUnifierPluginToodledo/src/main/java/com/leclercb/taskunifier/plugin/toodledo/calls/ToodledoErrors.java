@@ -171,7 +171,7 @@ public enum ToodledoErrors {
         throw new SynchronizerHttpException(
                 false,
                 response.getCode(),
-                response.getMessage());
+                response.getMessage() + ": " + response.getContent());
     }
 
     public static <M extends Model> void throwError(
