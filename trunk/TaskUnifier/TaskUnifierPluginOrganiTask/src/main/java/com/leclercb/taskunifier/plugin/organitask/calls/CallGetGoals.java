@@ -23,6 +23,7 @@ final class CallGetGoals extends AbstractCallGoal {
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("access_token", accessToken));
+        params.add(new BasicNameValuePair("flat", "true"));
 
         if (updatedAfter != null)
             params.add(new BasicNameValuePair("update_date", OrganiTaskTranslations.translateUTCDate(updatedAfter) + ""));
