@@ -34,6 +34,7 @@ package com.leclercb.taskunifier.gui.api.accessor;
 
 import com.leclercb.commons.api.utils.CheckUtils;
 import com.leclercb.commons.api.utils.CompareUtils;
+import com.leclercb.commons.api.utils.DateUtils;
 import com.leclercb.taskunifier.api.models.*;
 import com.leclercb.taskunifier.api.models.Timer;
 import com.leclercb.taskunifier.api.models.enums.TaskPriority;
@@ -599,10 +600,16 @@ public enum PropertyAccessorType {
             case STAR:
                 return CompareUtils.compare((Boolean) o1, (Boolean) o2);
             case CALENDAR_DATE:
+                return this.compareCalendars(
+                        (Calendar) o1,
+                        (Calendar) o2,
+                        true,
+                        false);
             case CALENDAR_DATE_TIME:
                 return this.compareCalendars(
                         (Calendar) o1,
                         (Calendar) o2,
+                        false,
                         false);
             case DOUBLE:
             case PERCENTAGE:
@@ -669,6 +676,7 @@ public enum PropertyAccessorType {
     private int compareCalendars(
             Calendar calendar1,
             Calendar calendar2,
+            boolean dateOnly,
             boolean raw) {
         if (calendar1 == null && calendar2 == null)
             return 0;
@@ -678,6 +686,17 @@ public enum PropertyAccessorType {
 
         if (calendar2 == null)
             return -1;
+
+        calendar1 = DateUtils.cloneCalendar(calendar1);
+        calendar2 = DateUtils.cloneCalendar(calendar2);
+
+        if (dateOnly) {
+            calendar1.set(Calendar.HOUR_OF_DAY, 0);
+            calendar1.set(Calendar.MINUTE, 0);
+
+            calendar2.set(Calendar.HOUR_OF_DAY, 0);
+            calendar2.set(Calendar.MINUTE, 0);
+        }
 
         if (!raw) {
             calendar1.set(Calendar.SECOND, 0);
