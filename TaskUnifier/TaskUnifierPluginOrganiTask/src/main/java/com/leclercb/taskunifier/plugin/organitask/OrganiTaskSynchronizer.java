@@ -175,17 +175,29 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
             for (Model model : models) {
                 ids.add(this.statement.addContext((Context) model, false).getModelReferenceIds().get("organitask"));
             }
+
+            for (Model model : models) {
+                this.statement.editContextParent((Context) model);
+            }
         }
 
         if (type == ModelType.FOLDER) {
             for (Model model : models) {
                 ids.add(this.statement.addFolder((Folder) model, false).getModelReferenceIds().get("organitask"));
             }
+
+            for (Model model : models) {
+                this.statement.editFolderParent((Folder) model);
+            }
         }
 
         if (type == ModelType.GOAL) {
             for (Model model : models) {
                 ids.add(this.statement.addGoal((Goal) model, false).getModelReferenceIds().get("organitask"));
+            }
+
+            for (Model model : models) {
+                this.statement.editGoalParent((Goal) model);
             }
         }
 
@@ -198,6 +210,12 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
         if (type == ModelType.TASK) {
             for (Model model : models) {
                 ids.add(this.statement.addTask((Task) model, false).getModelReferenceIds().get("organitask"));
+            }
+
+            if (!this.authInfo.getAccountType().equals("FREE")) {
+                for (Model model : models) {
+                    this.statement.editTaskParent((Task) model);
+                }
             }
         }
 
