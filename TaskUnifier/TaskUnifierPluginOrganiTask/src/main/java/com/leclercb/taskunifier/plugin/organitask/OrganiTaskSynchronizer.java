@@ -32,7 +32,7 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
     private OrganiTaskStatement statement;
     private OrganiTaskAuthInfo authInfo;
 
-    private List<Task> addedTasks;
+    private List<Model> addedModels;
 
     private Calendar lastSync;
 
@@ -58,7 +58,7 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
     @Override
     public void synchronize(SynchronizerChoice choice, ProgressMonitor monitor)
             throws SynchronizerException {
-        this.addedTasks = null;
+        this.addedModels = null;
         this.authInfo = ((OrganiTaskConnection) this.getConnection()).getAuthInfo();
 
         this.statement.syncStart();
@@ -163,6 +163,7 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
     @Override
     protected List<String> addModels(ModelType type, List<Model> models)
             throws SynchronizerException {
+        this.addedModels = null;
         List<String> ids = new ArrayList<String>();
 
         if (type == ModelType.CONTACT) {
@@ -172,32 +173,26 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
         }
 
         if (type == ModelType.CONTEXT) {
-            for (Model model : models) {
-                ids.add(this.statement.addContext((Context) model, false).getModelReferenceIds().get("organitask"));
-            }
+            this.addedModels = new ArrayList<Model>(models);
 
             for (Model model : models) {
-                this.statement.editContextParent((Context) model);
+                ids.add(this.statement.addContext((Context) model, false).getModelReferenceIds().get("organitask"));
             }
         }
 
         if (type == ModelType.FOLDER) {
-            for (Model model : models) {
-                ids.add(this.statement.addFolder((Folder) model, false).getModelReferenceIds().get("organitask"));
-            }
+            this.addedModels = new ArrayList<Model>(models);
 
             for (Model model : models) {
-                this.statement.editFolderParent((Folder) model);
+                ids.add(this.statement.addFolder((Folder) model, false).getModelReferenceIds().get("organitask"));
             }
         }
 
         if (type == ModelType.GOAL) {
-            for (Model model : models) {
-                ids.add(this.statement.addGoal((Goal) model, false).getModelReferenceIds().get("organitask"));
-            }
+            this.addedModels = new ArrayList<Model>(models);
 
             for (Model model : models) {
-                this.statement.editGoalParent((Goal) model);
+                ids.add(this.statement.addGoal((Goal) model, false).getModelReferenceIds().get("organitask"));
             }
         }
 
@@ -208,14 +203,10 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
         }
 
         if (type == ModelType.TASK) {
+            this.addedModels = new ArrayList<Model>(models);
+
             for (Model model : models) {
                 ids.add(this.statement.addTask((Task) model, false).getModelReferenceIds().get("organitask"));
-            }
-
-            if (!this.authInfo.getAccountType().equals("FREE")) {
-                for (Model model : models) {
-                    this.statement.editTaskParent((Task) model);
-                }
             }
         }
 
@@ -240,6 +231,8 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
                 this.statement.editContext((Context) model, false);
             }
 
+            models.addAll(this.addedModels);
+
             for (Model model : models) {
                 this.statement.editContextParent((Context) model);
             }
@@ -252,6 +245,8 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
                 this.statement.editFolder((Folder) model, false);
             }
 
+            models.addAll(this.addedModels);
+
             for (Model model : models) {
                 this.statement.editFolderParent((Folder) model);
             }
@@ -263,6 +258,8 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
             for (Model model : models) {
                 this.statement.editGoal((Goal) model, false);
             }
+
+            models.addAll(this.addedModels);
 
             for (Model model : models) {
                 this.statement.editGoalParent((Goal) model);
@@ -283,6 +280,8 @@ public class OrganiTaskSynchronizer extends AbstractSynchronizer {
             for (Model model : models) {
                 this.statement.editTask((Task) model, false);
             }
+
+            models.addAll(this.addedModels);
 
             if (!this.authInfo.getAccountType().equals("FREE")) {
                 for (Model model : models) {
