@@ -1,6 +1,10 @@
 HISTORY
 -------
 
+Version 4.3.4
+    - Minor:
+        - Sort order of dates without time
+
 Version 4.3.3
     - Major:
         - Toodledo API v3 upgrade
