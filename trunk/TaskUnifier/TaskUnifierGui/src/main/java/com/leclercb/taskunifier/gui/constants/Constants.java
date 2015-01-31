@@ -96,19 +96,19 @@ public final class Constants {
     public static final int PLUGIN_API_VERSION = 41;
     public static final int ITEM_TRIAL_ID = 2;
 
-    public static final String PLUGINS_FILE = "http://www.taskunifier.com/plugins/plugins.xml?_dc=" + Calendar.getInstance().getTimeInMillis();
-    public static final String VERSION_FILE = "http://www.taskunifier.com/version.txt";
-    public static final String PRO_URL = "http://www.taskunifier.com/web/en/app";
-    public static final String BUY_URL = "http://www.taskunifier.com/web/en/buy";
-    public static final String GET_TRIAL_URL = "http://www.taskunifier.com/api/v1/trial_license";
-    public static final String DOWNLOAD_URL = "http://www.taskunifier.com/web/en/app";
+    public static final String PLUGINS_FILE = "http://taskunifier.sourceforge.net/plugins.xml?_dc=" + Calendar.getInstance().getTimeInMillis();
+    public static final String VERSION_FILE = "http://taskunifier.sourceforge.net/version.txt";
+    public static final String PRO_URL = null;
+    public static final String BUY_URL = null;
+    public static final String GET_TRIAL_URL = null;
+    public static final String DOWNLOAD_URL = "http://sourceforge.net/projects/taskunifier/";
     public static final String DONATE_URL = "http://sourceforge.net/p/taskunifier/donate/";
     public static final String REVIEW_URL = "http://sourceforge.net/p/taskunifier/reviews/";
     public static final String FORUM_URL = "http://sourceforge.net/p/taskunifier/discussion/";
     public static final String BUGS_URL = "http://sourceforge.net/p/taskunifier/bugs/";
     public static final String FEATURE_REQUESTS_URL = "http://sourceforge.net/p/taskunifier/feature-requests/";
     public static final String SUPPORT_REQUESTS_URL = "http://sourceforge.net/p/taskunifier/support-requests/";
-    public static final String TEST_CONNECTION_URL = "http://www.taskunifier.com";
+    public static final String TEST_CONNECTION_URL = "http://taskunifier.sourceforge.net";
 
     public static final int TIMEOUT_HTTP_CALL = 30000;
 
