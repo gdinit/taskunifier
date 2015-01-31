@@ -78,8 +78,8 @@ public class MenuBar extends JMenuBar implements ListChangeListener, PropertyCha
 		JMenu fileMenu = new JMenu(Translations.getString("menu.file"));
 		this.add(fileMenu);
 		
-		fileMenu.add(new ActionManageLicense(16, 16));
-		fileMenu.addSeparator();
+		//fileMenu.add(new ActionManageLicense(16, 16));
+		//fileMenu.addSeparator();
 		
 		fileMenu.add(new ActionNewWindow(16, 16));
 		fileMenu.add(new ActionCloseWindow(16, 16));

@@ -285,7 +285,7 @@ public class Main {
 			loadProxies();
 			MainSplashScreen.getInstance().update("Loading locale...");
 			loadLocale();
-			MainSplashScreen.getInstance().update("Checking pro license...");
+			//MainSplashScreen.getInstance().update("Checking pro license...");
 			loadProVersion();
 			MainSplashScreen.getInstance().update("Loading models...");
 			loadModels();
@@ -577,9 +577,8 @@ public class Main {
 	
 	private static void loadProVersion() {
 		try {
-			License.setLicenseValidator(new UserIdLicenseValidator());
-			
-			LicenseUtils.checkLicense();
+			//License.setLicenseValidator(new UserIdLicenseValidator());
+			//LicenseUtils.checkLicense();
 			
 			PRO_VERSION = true;
 		} catch (Exception e) {

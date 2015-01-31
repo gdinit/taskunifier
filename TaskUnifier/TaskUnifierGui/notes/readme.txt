@@ -2,6 +2,8 @@ HISTORY
 -------
 
 Version 4.3.4
+    - Major:
+        - TaskUnifier Pro becomes free !
     - Minor:
         - Sort order of dates without time
 

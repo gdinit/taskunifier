@@ -170,7 +170,7 @@ public class ProcessSynchronize implements Process<Void> {
                                 plugin.getSynchronizerApi().getApiName()),
                         ImageUtils.getResourceImage("connection.png", 16, 16)));
 
-                Connection connection = null;
+                Connection connection;
 
                 try {
                     connection = plugin.getSynchronizerApi().getConnection(
@@ -197,8 +197,6 @@ public class ProcessSynchronize implements Process<Void> {
                             finalConnection.connect();
                             return null;
                         }
-
-                        ;
 
                     });
                 } catch (ExecutionException e) {
