@@ -110,7 +110,7 @@ public enum ActionList {
     LOG_SUPPORT_REQUEST(Translations.getString("action.log_support_request"), null, false),
     MAIL_TO(Translations.getString("action.mail_to"), "mail.png", true),
     MANAGE_BACKUPS(Translations.getString("action.manage_backups"), "save.png", true),
-    MANAGE_LICENSE(Translations.getString("action.manage_license"), "key.png", true),
+    //MANAGE_LICENSE(Translations.getString("action.manage_license"), "key.png", true),
     MANAGE_MODELS(Translations.getString("action.manage_models"), "folder.png", true),
     MANAGE_PUBLISHER_PLUGINS(Translations.getString("action.manage_publisher_plugins"), "download.png", true),
     MANAGE_SYNCHRONIZER_PLUGINS(Translations.getString("action.manage_synchronizer_plugins"), "download.png", true),
@@ -313,8 +313,8 @@ public enum ActionList {
                 return new ActionMailTo(width, height);
             case MANAGE_BACKUPS:
                 return new ActionManageBackups(width, height);
-            case MANAGE_LICENSE:
-                return new ActionManageLicense(width, height);
+            //case MANAGE_LICENSE:
+                //return new ActionManageLicense(width, height);
             case MANAGE_MODELS:
                 return new ActionManageModels(width, height);
             case MANAGE_PUBLISHER_PLUGINS:
